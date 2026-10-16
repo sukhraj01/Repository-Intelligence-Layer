@@ -1,0 +1,15 @@
+# ril/retrieval/
+
+**Planned files:** `bm25_index.py`, `dense_encoder.py`, `hybrid_retriever.py`, `ranking.py`.
+Design: `docs/09_architecture.md` "Offline indexing" / "Online retrieval".
+
+- BM25: identifier splitting (camelCase, snake_case); name / signature / docstring / body as
+  separately weighted fields; k₁=1.2, b=0.75 (tune b).
+- Dense: encode units; **flat exact** index (never ANN — ANN recall must not be a confound).
+- Structural: `γ^dist(ℓ,u)` hop decay from the query location, γ≈0.5 (PPR second).
+- Fusion: **RRF, k=60** (rank-based; no per-corpus retuning).
+- Rerank: cross-encoder over the top 100 (ADR-009 — include but measure).
+- `assemble()`: dedupe overlapping units, order for truncation survival, attach callee signatures,
+  hard token budget. **Byte-identical across RQ2 arms** (reproducibility test).
+
+Every stage registers with the latency harness. Depends on: `parsing/`, `config/`.

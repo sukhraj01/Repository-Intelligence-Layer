@@ -1,0 +1,59 @@
+# ADR-001: Training pool
+
+- **Status:** Proposed — **not decided**
+- **Date opened:** 2026-10-12
+- **Decide by:** end of week 2 (all ten decisions)
+- **Decided by:** _pending — team_
+- **Master doc:** open decision #1 (`docs/12_open_decisions.md`)
+- **Affects:** RQ2 (all arms), leakage tests, `ril/training/data_loader.py`
+
+## Context
+CORE-Bench releases evaluation data only; its 53,301-PR SFT set was not released, so "train on CORE-Bench supervision" has no referent. The pool must be repository-disjoint from CORE-Bench L2/L3 and SWE-bench Verified. SweLoc (SweRank) is released and purpose-built for issue localization; an own PR-mined set (merged PRs closing an issue; issue text = query; functions touched by the patch = positives; other functions in the repo = negatives, hard ones mined by similarity) is the contamination-safe replication and the one piece that must be built.
+
+## Alternatives considered
+- SweLoc
+- Own PR-mined set
+- Both
+
+## Master doc's recommendation (a recommendation, not a decision)
+Both — SweLoc to avoid being blocked, own set for contamination safety.
+
+## Decision
+_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
+`provisional: ADR-001` (never in `configs/frozen/`) until the decision is made.
+
+## Rationale
+_Pending._
+
+## Trade-offs
+_Pending._
+
+## Evidence to gather
+- [ ] Size, licence and access path of SweLoc; whether it can be fetched on Ada (docs/COMPUTE.md).
+- [ ] How many SweLoc instances / repositories survive the repo-level held-out filter (needs `specs/held_out_repos.md` output).
+- [ ] Estimated effort and yield of the PR-mining recipe on repositories post-dating the base model's cutoff.
+
+## Related benchmarks
+_None yet._
+
+## References
+See `docs/11_references.md`.
+
+## Conditions to revisit
+_Pending._
+
+## Addenda
+
+### 2026-10-17 — public-page check (not a decision)
+- The master doc describes SweLoc as released. The public pages checked do not show a dataset release:
+  the SweRank README documents how SweLoc is *collected* (`src/collect/collect_data.sh`,
+  `negative_mining.sh`, output `repo_contrastive_mined_filtered.jsonl`) and links only models and
+  the SWE-bench-Lite / Loc-Bench evaluation data; the paper's Hugging Face page says "Code, Data and
+  Models: Coming soon!" and lists no dataset; the follow-up paper (arXiv:2512.20482) says its
+  multilingual extension (4,060 repositories, 56,279 PRs, 155,663 instances) "will be released" at the
+  same GitHub repository. A Hugging Face search for "SweLoc" returns nothing.
+- Consequence if confirmed: "SweLoc" is obtainable only by running the published collection scripts,
+  which makes the "both" option closer to "one pipeline, two scales". The wave-1 audit should confirm
+  or refute availability before any pool is chosen.
+- The CORE-Bench paper states its 628-repository SFT set is "disjoint from the SWE-bench family" and
+  does not state that the SFT data is released.

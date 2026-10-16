@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Environment & secrets
+.env
+.env.*
+*.key
+.ssh/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Data — large, rebuilt by scripts on Ada. data/held_out/ IS tracked (small, an experimental artifact).
+data/raw/*
+data/processed/*
+data/index/*
+data/checkpoints/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/index/.gitkeep
+!data/checkpoints/.gitkeep
+
+# Model artifacts and archives
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+*.npy
+*.npz
+*.parquet
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.jsonl.gz
+# Small test fixtures are tracked even when their extension is ignored above
+# (an earlier project lost fixtures to a blanket *.zip rule and failed on a fresh clone).
+!tests/fixtures/**
+
+# Slurm output
+slurm-*.out
+slurm-*.err
+logs_slurm/
+
+# LaTeX build products (sources are tracked)
+reports/**/*.aux
+reports/**/*.log
+reports/**/*.out
+reports/**/*.toc
+reports/**/*.bbl
+reports/**/*.blg
+reports/**/*.fls
+reports/**/*.fdb_latexmk
+reports/**/*.synctex.gz
+
+# Tracked on purpose (do not ignore): results/latency/*.csv, results/logs/, RESULTS.md, decisions/

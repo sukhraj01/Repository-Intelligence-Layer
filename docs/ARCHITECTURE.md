@@ -1,0 +1,185 @@
+# System Architecture
+
+**Last updated:** 2026-10-12
+**Status:** Design only — no component is implemented. This file is **live**: update it whenever a
+boundary changes. The static design rationale is in `09_architecture.md` (derived from the master doc).
+
+---
+
+# System overview
+
+RIL is a retrieval layer over a Python repository, plus the training and evaluation machinery for a
+controlled study of retriever supervision (RQ2) and its effect on a fixed coding agent (RQ3).
+
+```python
+context = engine.retrieve(location, task, max_results=20, max_tokens=4096)
+```
+
+(Interface shape per the master doc; exact types are fixed when the CodeUnit and parser land.)
+
+# Design goals
+
+Optimised for: reproducibility; **a frozen, controllable retrieval stack** (only supervision varies);
+comparability across arms; measurable per-stage latency; engineering clarity.
+Deliberately **not** optimised for: production serving, distributed execution, multi-language support,
+approximate-NN scale. These trade-offs follow from the study's goals.
+
+# Architectural principles
+
+1. One variable moves per experiment; everything else is frozen and hashed.
+2. Reproducibility before performance; optimise only after bottlenecks are measured.
+3. Explicit interfaces (`CodeUnit` is the only shared data type between components).
+4. Rank-based fusion (RRF) so the stack needs no per-corpus retuning.
+5. Exact search (flat index) so ANN recall is never a confound.
+6. Benchmark before replacing a component; record latency before every commit.
+7. Prefer reversible decisions early; document decisions before they become tribal knowledge.
+
+# System data flow
+
+```text
+Held-out repo list (CORE-Bench L2/L3 + SWE-bench Verified)
+        │  (built first; repo-level disjointness)
+        ▼
+Training pool: SweLoc  +  own PR-mined set   ──filter by held-out list──►  pool + counts
+        │
+        ▼
+Supervision arm  (RAW | FILTER | WEIGHT | CURRICULUM)   ← quality signal: SweRank K-rank
+        │  matched optimizer updates (target 20,000), ≥3 seeds
+        ▼
+Encoder checkpoint (only box that changes between arms)
+        ▼
+OFFLINE per repo:  parse → CodeUnits → call/import/inherit graph → BM25 fields → dense vectors (flat index)
+        ▼
+ONLINE:  interpret(query) → BM25 | dense | graph neighbours → RRF(k=60) → cross-encoder rerank → assemble(token budget)
+        ▼
+Evaluation:  CORE-Bench L2/L3 (chunk-level metrics)   →   Agent (fixed scaffold, model, seed)  →  resolved rate
+        ▼
+Analysis:  retrieval-vs-reasoning failure split · paired McNemar · latency Pareto
+```
+
+# Components
+
+Each component below lists purpose, responsibilities, dependencies, artifacts, interface, consumers,
+assumptions, limitations and governing decisions. **Interfaces marked TBD are fixed by the first
+implementation and then written here.**
+
+## parsing (`ril/parsing/`)
+
+- **Purpose:** turn a repository into `CodeUnit`s and a typed relationship graph.
+- **Files:** `repository_parser.py`, `code_unit.py`, `call_graph.py`.
+- **Responsibilities:** walk the repo skipping `__pycache__`, `.git`, vendored and generated files; parse with `ast`; emit `CodeUnit`s; build call, import, inherit graphs; **record edge-recovery coverage** (expected 70–85%; must be measured and reported).
+- **Dependencies:** `config/`.
+- **Artifacts:** per-repo unit table and graph under `data/index/<repo_id>/` (gitignored).
+- **Interface:** `CodeUnit` per `specs/code_unit.md`; parse/graph functions TBD.
+- **Consumers:** retrieval (all three signals), training data builder, evaluation harness.
+- **Assumptions:** Python-only; static analysis is incomplete (dynamic dispatch, `getattr`, decorators, monkey-patching, duck typing produce unresolvable edges).
+- **Limitations:** edge recovery <100% — a candidate explanation if RQ1 finds structural signal weak.
+- **Governing decisions:** ADR-003 (graph role), ADR-004 (granularity).
+
+## retrieval (`ril/retrieval/`)
+
+- **Purpose:** the online path — three candidate generators, fusion, rerank, assembly.
+- **Files:** `bm25_index.py`, `dense_encoder.py`, `hybrid_retriever.py`, `ranking.py`.
+- **Responsibilities:** BM25 over identifier-split, field-weighted text (k₁=1.2, b=0.75, tune b); dense encode + flat exact search; structural score `γ^dist` (γ≈0.5) from the graph; **RRF (k=60)**; cross-encoder rerank of the top 100; `assemble()` — dedupe overlapping units, order for truncation survival, attach callee signatures, fit a hard token budget.
+- **Dependencies:** `parsing/`, `config/`.
+- **Consumers:** evaluation, bench, analysis, the agent.
+- **Assumptions:** flat exact index is cheap at 10³–10⁵ units per repo; RRF needs no retuning.
+- **Limitations:** rerank likely dominates latency (hypothesis: ~500–1000 ms for 100 candidates vs a few ms for the rest).
+- **Invariant:** `assemble()` is **byte-identical across RQ2 arms** (reproducibility test).
+- **Governing decisions:** ADR-003, ADR-006 (encoder), ADR-009 (rerank).
+
+## training (`ril/training/`)
+
+- **Purpose:** produce the four supervision-arm encoders under matched optimizer updates.
+- **Files:** `contrastive_loss.py`, `training.py`, `data_loader.py`, `supervision.py`.
+- **Responsibilities:** multi-positive InfoNCE (τ=0.05) with repository-local hard negatives; arm logic (RAW/FILTER/WEIGHT/CURRICULUM) isolated in `supervision.py`; K-rank quality signal from a **separately pretrained** encoder; record compute cost, unique examples seen, effective epochs for every run.
+- **Dependencies:** `parsing/`, `config/`; imports the encoder *class* from `retrieval/`, never trained weights, for K-rank.
+- **Defaults:** mean pooling (masked), lr 2e-5 linear decay, 10% warmup, 20,000 updates, max length 512, ≥3 seeds.
+- **Assumptions:** the training pool is repository-disjoint from all evaluation repos.
+- **Limitations:** FILTER reuses data more at equal updates (data-budget confound) — reported, plus a subsampled-RAW control.
+- **Governing decisions:** ADR-001 (pool), ADR-002 (quality signal), ADR-006 (base encoder).
+
+## evaluation (`ril/evaluation/`)
+
+- **Purpose:** retrieval metrics on CORE-Bench and agent integration for RQ3.
+- **Files:** `metrics.py`, `core_bench.py`, `agent_integration.py`.
+- **Responsibilities:** nDCG@10, MRR, Recall@10 at CORE-Bench chunk granularity (any additional metric, e.g. Recall@100, is a metric-definition decision for the team); loaders for `LEVEL-2/<dataset>/<repository>/{corpus,queries,qrels}.jsonl`; run the fixed agent with each retriever; log, per failure, whether the gold-patch file was in the retrieved context.
+- **Dependencies:** `retrieval/`, `parsing/`, `config/`.
+- **Assumptions:** same instances carry retrieval qrels and executable tests (L2 ∩ Verified), enabling paired per-instance analysis.
+- **Limitations:** gold locations derived from patches are approximate targets.
+- **Governing decisions:** ADR-005 (benchmark), ADR-007 (scaffold), ADR-008 (base LLM).
+
+## bench (`ril/bench/`)
+
+- **Purpose:** latency and throughput measurement; the per-commit harness.
+- **Files:** `latency_harness.py`, `profile_stages.py`.
+- **Responsibilities:** see `specs/latency_harness.md`. Per-stage p50/p95/p99, hardware spec, append-only CSV, regression failure.
+- **Dependencies:** may call everything; nothing calls back.
+
+## analysis (`ril/analysis/`)
+
+- **Purpose:** error analysis, statistics, figures.
+- **Files:** `error_analysis.py`, `visualization.py`.
+- **Dependencies:** reads `results/` only.
+
+## config (`ril/config/`)
+
+- **Purpose:** parameters and paths; depends on nothing.
+- **Files:** `parameters.py`, `paths.py`.
+- **Invariant:** the frozen configuration is hashed and recorded with every run; `configs/frozen/` is immutable after the freeze.
+
+---
+
+# Decision traceability
+
+| Component | Governing ADRs |
+|---|---|
+| parsing | ADR-003, ADR-004 |
+| retrieval | ADR-003, ADR-004, ADR-006, ADR-009 |
+| training | ADR-001, ADR-002, ADR-006 |
+| evaluation | ADR-004, ADR-005, ADR-007, ADR-008 |
+| packaging / CLI | ADR-010 |
+
+# Cross-cutting concerns
+
+- **Configuration:** centralised in `ril/config/` + `configs/`; environment-independent execution.
+- **Logging:** structured, execution-traceable; no `print`.
+- **Reproducibility:** seeds, dataset versioning (`provenance.json`), config hashing.
+- **Experiment tracking:** saved configs, metrics with CIs, artifacts, benchmark history (`RESULTS.md`).
+- **Testing:** unit, integration, leakage, reproducibility.
+- **Error handling:** explicit failures, helpful diagnostics.
+
+# Architectural assumptions
+
+| Assumption | Rationale | Validation | Risk |
+|---|---|---|---|
+| Flat exact search is fast enough per repo | 10³–10⁵ units × 768 dims | measure with the latency harness / RQ1 | low |
+| Static call-graph recovers 70–85% of edges | typical for Python `ast` analysis | measure per `specs/parse_one_repo.md` | medium — drives RQ1 interpretation |
+| Cross-encoder dominates latency | ~100 candidates through a transformer | profile per stage | medium — shapes where to optimise |
+| RRF needs no per-corpus retuning | rank-only | verify on L2 vs L3 | low |
+| Chunk metrics + function-level internals can coexist | CORE-Bench averages ~15,000 chunks/repo | ADR-004 | medium |
+
+# Known limits and expected bottlenecks
+
+*To be filled with measured numbers after week 3 (Performance / Memory / Storage / Accuracy).*
+Expected at 10×: reranking; indexing throughput for L2-scale corpora; disk on Ada.
+
+# Architecture changelog
+
+## 2026-10-12 — Scaffold
+
+- **What changed:** repository scaffold created; component boundaries recorded from the master doc.
+- **Why:** start implementation from a documented design.
+- **Impact:** none on behaviour (no code yet).
+- **Related ADR:** ADR-001 … ADR-010 (stubs, all `Proposed`).
+- **Benchmark:** not applicable.
+
+# Architecture health checklist
+
+When modifying this architecture, verify:
+
+- [ ] Interfaces remain explicit; `CodeUnit` remains the only shared data type.
+- [ ] Components remain loosely coupled; the dependency rule in `ril/README.md` still holds.
+- [ ] The retrieval stack that RQ2 holds frozen has not been changed after the freeze.
+- [ ] New decisions are captured in ADRs; benchmarks exist for performance-sensitive changes.
+- [ ] Latency row recorded; changelog updated; documentation reflects the implementation.
