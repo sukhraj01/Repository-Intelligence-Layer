@@ -12,7 +12,7 @@ RQ3 cannot start until RQ2 has produced at least two distinguishable checkpoints
 Week-1 deliverables, in order (contracts in `specs/`):
 
 - [x] Repo bootstrap: package skeleton, tooling, git, commit-hook stub
-- [ ] Freeze the CodeUnit schema and write it down (`specs/code_unit.md`)
+- [ ] Freeze the CodeUnit schema and write it down (`specs/code_unit.md`) (draft v0 implemented and tested; awaiting answers to the eight questions)
 - [x] Reach the data sources and read their formats: access probes, CORE-Bench listing and samples, metadata of Verified / Loc-Bench, SweLoc search (`knowledge/datasets/`)
 - [ ] Build the held-out repository list from CORE-Bench L2/L3 and SWE-bench Verified (`specs/held_out_repos.md`)
 - [ ] Filter any candidate training pool against it; record how many instances survive (`specs/held_out_repos.md`)

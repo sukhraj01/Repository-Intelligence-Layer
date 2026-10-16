@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled · **Tasks completed:** 2
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled · **Tasks completed:** 3
 
 ---
 
@@ -22,7 +22,7 @@ working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, 
 | Package `ril/`, `pyproject.toml`, `Makefile`, tests, ruff, `mypy --strict` | done | Python 3.11 pinned; Poetry venv in `.venv`; Ada path (`uv`) documented in the Makefile header |
 | `ril/config` (paths, `RunConfig` + hash), `ril/util` (seed, logger, sanity) | done | no experiment parameters yet |
 | Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh` as `pre-commit.d/10-latency`; not installed yet |
-| CodeUnit schema (frozen) | not started | `specs/code_unit.md` is a draft; needs engineer sign-off |
+| CodeUnit schema | draft implemented, **not frozen** | `ril/parsing/code_unit.py` (+ unit and reproducibility tests) per `specs/code_unit.md` DRAFT v0, `CODEUNIT_SCHEMA_VERSION = "v0-draft"`; eight open questions Q13-Q20 below; freeze is the engineer's sign-off |
 | Data access and formats (CORE-Bench, Verified, Loc-Bench, SweLoc search, CoRNStack/CSN schemas) | done | `knowledge/datasets/*.md`, `results/tables/`, `scripts/ada/README.md`; Ada reachable non-interactively |
 | Held-out repository list, filter, leakage tests | not started | needs canonical repo names per CORE-Bench folder (folder names are truncated) |
 | Latency harness | **not built** | `make bench` / `make bench-check` print "latency harness: not built" |
@@ -32,7 +32,7 @@ working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, 
 
 ## Next task
 
-Held-out repository list, filter and leakage tests (`specs/held_out_repos.md`, steps 3-5 of the held-out brief), then the
+Engineer: close Q13-Q20 and freeze the CodeUnit (set the spec status, bump the version, write the ADR). Then: held-out repository list, filter and leakage tests (`specs/held_out_repos.md`, steps 3-5 of the held-out brief), then the
 latency harness, then parsing one repository. Start from `knowledge/datasets/core_bench.md`: derive owner/name per CORE-Bench
 folder from the query ids (stream `queries.jsonl` heads on Ada; folder names are truncated), not from folder names.
 
@@ -55,6 +55,15 @@ no confirmed SweLoc pool (Q7).
 | Q10 | The "repos" figures 632 / 97 are folder counts; 154 folder names are truncated (`pylint`, `scikit`, `django` holding `django-helpdesk`). Distinct canonical repositories are unknown until query ids are read; two repositories may share one folder | held-out list | measure on Ada (next task) |
 | Q11 | CORE-Bench chunk ids are random UUIDs with no path or line span, chunks are 4,096-char text windows, and each query scores against its own `filtered_corpus_id` candidate list (19k-25k ids for django) rather than the whole folder corpus. Chunk-to-CodeUnit mapping and the matching evaluation protocol need a decision | CodeUnit, ADR-004, evaluation | engineer |
 | Q12 | CORE-Bench L3 labels are LLM-judged (paper); L2 labels are chunk-vs-patch alignment | RQ3 interpretation | note in report |
+| Q13 | CodeUnit Q1: what do `calls` / `called_by` / `tests` / `configs` hold? Options: unit ids / qualified names / paths. Proposal: unit ids (unresolved targets dropped and counted in edge-recovery coverage); `configs` = repo-relative file paths | parser, graph | engineer, freeze |
+| Q14 | CodeUnit Q2: `repo_id` form. Options: `owner/name` / `owner/name@commit` / folder name (unusable: truncated, Q10). Proposal: `owner/name` (compare case-folded), commit kept in the index manifest | held-out filter | engineer, freeze |
+| Q15 | CodeUnit Q3: nested defs, lambdas, properties, decorators, class attributes. Flask at the flask-5014 base commit: 513 nested defs, 613 decorated, 16 property-like, 24 lambdas, 114 class attributes, `Flask` class 2,124 lines. Proposal: top-level functions, classes, methods only (nested folded into the parent, decorators in the span, lambdas and class attributes never units); class `source` (full vs header-only) is unresolved | parser, ADR-004 | engineer, freeze |
+| Q16 | CodeUnit Q4: chunk link (ADR-004). Of 160 sampled L2/L3 positives (3 Verified repos), 111 overlap one function/method, 28 overlap 2+, 5 only a class, 16 no definition (module-level), 39 cut a unit at the window edge. Options: `chunk_id` field / derived mapping table / chunk-level only. Proposal: derived table built by the evaluation loader at the instance base commit, schema unchanged; module-level code needs an ADR-004 answer (a new unit type would change the schema) | evaluation, ADR-004 | engineer, freeze |
+| Q17 | CodeUnit Q5: `last_modified`. Options: last-touching commit time / mtime / empty / snapshot time. Proposal: commit time (ISO-8601 UTC) when full history exists, else `""`; never mtime (breaks byte-identity) | reproducibility | engineer, freeze |
+| Q18 | CodeUnit Q6: `is_test`. Options: path rule / name rule / framework markers. Proposal: file-level path rule (component `tests` or `test`, or `test_*.py`, `*_test.py`, `conftest.py`); `examples/` is not test | parser | engineer, freeze |
+| Q19 | CodeUnit Q7: `tests` filled at parse time or by the graph extension? Proposal: graph extension (weeks 7-10); `[]` until then, and empty does not mean untested | graph | engineer, freeze |
+| Q20 | CodeUnit Q8: `id` format. Options: `file::Qual.name` / `file:Qual.name` / both with a mapping. Proposal: `::` as in the master example, repo-relative posix path, deterministic `#<start_line>` suffix only on same-name collisions (the suffix rule is part of the question) | everything | engineer, freeze |
+| Q21 | CORE-Bench evaluation by unit needs the checkout at each instance base commit; base commits were available only for Verified instances (SWE-bench parquet), unknown for the other sub-datasets. Which sub-datasets enter the evaluation? | evaluation, Q11 | engineer |
 
 Resolved this block: Q2 (Ada reaches HF and GitHub; 6.5 to 8.9 MB/s on a 50 MB range request, see `docs/COMPUTE.md`), Q6 (home has
 24 GB free; L2+L3 originals 17.0 GB, whole repository 32.2 GB).

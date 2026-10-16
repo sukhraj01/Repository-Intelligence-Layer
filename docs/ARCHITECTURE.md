@@ -1,6 +1,6 @@
 # System Architecture
 
-**Last updated:** 2026-10-12
+**Last updated:** 2026-10-17
 **Status:** Package skeleton, config, paths and utilities exist; no research component is implemented. This file is **live**: update it whenever a
 boundary changes. The static design rationale is in `09_architecture.md` (derived from the master doc).
 
@@ -70,7 +70,7 @@ implementation and then written here.**
 - **Responsibilities:** walk the repo skipping `__pycache__`, `.git`, vendored and generated files; parse with `ast`; emit `CodeUnit`s; build call, import, inherit graphs; **record edge-recovery coverage** (expected 70–85%; must be measured and reported).
 - **Dependencies:** `config/`.
 - **Artifacts:** per-repo unit table and graph under `data/index/<repo_id>/` (gitignored).
-- **Interface:** `CodeUnit` per `specs/code_unit.md`; parse/graph functions TBD.
+- **Interface:** `ril.parsing.code_unit.CodeUnit` (dataclass, fields exactly as `specs/code_unit.md`, DRAFT v0) with `CODEUNIT_SCHEMA_VERSION = "v0-draft"`, `validate()`, `to_dict()` / `from_dict()` (strict: missing or unknown keys are errors), `to_json()` / `from_json()`, and `units_to_jsonl()` / `units_from_jsonl()`. Serialization is canonical (sorted keys, compact separators, UTF-8, list order kept as given). Validation: non-empty `id`, `unit_type` in {function, method, class}, `end_line >= start_line`, `loc >= 0`. The meaning of `id`, `repo_id`, the relationship lists, `is_test` and `last_modified` is open (eight questions in the spec) and is not enforced by the type. Parse/graph functions TBD.
 - **Consumers:** retrieval (all three signals), training data builder, evaluation harness.
 - **Assumptions:** Python-only; static analysis is incomplete (dynamic dispatch, `getattr`, decorators, monkey-patching, duck typing produce unresolvable edges).
 - **Limitations:** edge recovery <100% — a candidate explanation if RQ1 finds structural signal weak.

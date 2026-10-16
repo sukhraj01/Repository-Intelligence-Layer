@@ -1,0 +1,26 @@
+{
+ "session": "2026-10-17-03 codeunit",
+ "date": "2026-10-17",
+ "seed": null,
+ "seed_note": "deterministic: exact substring match of chunk text against a checkout at the SWE-bench Verified base_commit, then ast span overlap",
+ "hardware": "Ada login node ada-gw1.iiit.ac.in (python 3.9.25), CPU only",
+ "scripts_sha256_prefix": {"map5.py": "ab66b8b76633", "flask_struct.py": "c58971778d6f", "allpos.py": "5e664086cdd4"},
+ "method": "for each qrel positive of the sampled SWE-bench_Verified folders, locate the chunk text in .py files of the repository at the instance base commit (exact substring; first 200 chars when the chunk is longer), compute its line span, list ast function/method/class definitions whose span overlaps it. Counts only; no dataset text.",
+ "leaf_unit": "function or method definition (nested functions counted as leaf units); class_only = overlaps a class span but no function/method; zero_units = overlaps no definition (module-level code)",
+ "per_folder": {
+  "LEVEL-2/pallets__flask": {"positives": 1, "one_leaf_unit": 1, "two_plus_leaf_units": 0, "class_only": 0, "zero_units": 0, "cuts_a_unit_boundary": 0, "text_found_in_more_than_one_file": 0, "no_py_match": 0},
+  "LEVEL-2/psf__requests": {"positives": 13, "one_leaf_unit": 9, "two_plus_leaf_units": 2, "class_only": 0, "zero_units": 2, "cuts_a_unit_boundary": 0, "text_found_in_more_than_one_file": 0, "no_py_match": 0},
+  "LEVEL-2/mwaskom__seaborn": {"positives": 5, "one_leaf_unit": 2, "two_plus_leaf_units": 2, "class_only": 0, "zero_units": 1, "cuts_a_unit_boundary": 1, "text_found_in_more_than_one_file": 0, "no_py_match": 0},
+  "LEVEL-3/pallets__flask": {"positives": 21, "one_leaf_unit": 12, "two_plus_leaf_units": 6, "class_only": 2, "zero_units": 1, "cuts_a_unit_boundary": 12, "text_found_in_more_than_one_file": 2, "in_test_path": 3, "no_py_match": 0},
+  "LEVEL-3/psf__requests": {"positives": 87, "one_leaf_unit": 68, "two_plus_leaf_units": 6, "class_only": 3, "zero_units": 10, "cuts_a_unit_boundary": 10, "text_found_in_more_than_one_file": 0, "in_test_path": 7, "no_py_match": 0},
+  "LEVEL-3/mwaskom__seaborn": {"positives": 33, "one_leaf_unit": 19, "two_plus_leaf_units": 12, "class_only": 0, "zero_units": 2, "cuts_a_unit_boundary": 16, "text_found_in_more_than_one_file": 0, "no_py_match": 0}
+ },
+ "totals": {"positives": 160, "one_leaf_unit": 111, "two_plus_leaf_units": 28, "class_only": 5, "zero_units": 16, "no_py_match": 0},
+ "pallets__flask_at_base_commit_of_flask_5014": {
+  "py_files": 80, "py_files_by_top_dir": {"src": 22, "tests": 40, "docs": 1, "examples": 17},
+  "units_by_dir_and_type": {"src": {"class": 49, "method": 268, "function": 93}, "tests": {"function": 874, "class": 107, "method": 113}, "docs": {"function": 2}, "examples": {"function": 57, "class": 3, "method": 4}},
+  "functions_nested_in_function_or_method": 513, "decorated_defs": 613, "property_like_defs": 16, "lambdas": 24, "class_level_assignments": 114,
+  "non_py_files_by_extension": {".rst": 84, ".html": 20, ".txt": 13, ".in": 9, ".png": 9, ".md": 6, ".yaml": 5, ".toml": 5},
+  "conftest_files": 3
+ }
+}
