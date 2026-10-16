@@ -4,34 +4,36 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-12 · **Milestone:** M0 — scaffold only · **Tasks completed:** 0
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped · **Tasks completed:** 1
 
 ---
 
 ## One-line status
 
-Research design is locked (Master Project Document rev 16, 2026-10-11) and the repository scaffold
-exists. **No code has been written.** Week 1 starts with the repository bootstrap (`docs/ROADMAP.md`).
+Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is now a
+working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass.
+**No research code exists.** Latency harness: **not built** (commits are exempt until it is).
 
 ## What is built
 
 | Layer | State | Notes |
 |---|---|---|
 | Repo scaffold: folders, docs split from master, ADR stubs, specs | done | |
-| Python package (`ril/`), `pyproject.toml`, `Makefile`, hooks | not started | `docs/ROADMAP.md` week 1 |
-| CodeUnit schema (frozen) | not started | `specs/code_unit.md` is a draft of the master doc's schema; needs engineer sign-off |
+| Package `ril/`, `pyproject.toml`, `Makefile`, tests, ruff, `mypy --strict` | done | Python 3.11 pinned; Poetry venv in `.venv`; Ada path (`uv`) documented in the Makefile header |
+| `ril/config` (paths, `RunConfig` + hash), `ril/util` (seed, logger, sanity) | done | no experiment parameters yet |
+| Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh` as `pre-commit.d/10-latency`; not installed yet |
+| CodeUnit schema (frozen) | not started | `specs/code_unit.md` is a draft; needs engineer sign-off |
 | Held-out repository list | not started | `specs/held_out_repos.md`, needs Ada |
-| Latency harness | **not built** | `specs/latency_harness.md`; commits are exempt from the latency rule until it exists |
+| Latency harness | **not built** | `make bench` / `make bench-check` print "latency harness: not built" |
 | Parser / call graph / BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
 | Evaluation (CORE-Bench loaders, metrics), agent integration | not started | |
 
 ## Next task
 
-Bootstrap the Python package: skeleton, `pyproject.toml`, `Makefile`, lint/test tooling and a
-commit-hook stub — no research code. Then, in order: CodeUnit schema (`specs/code_unit.md`),
-held-out repositories (`specs/held_out_repos.md`), latency harness (`specs/latency_harness.md`),
-parse one real repository (`specs/parse_one_repo.md`), evidence for ADR-001…010 (`decisions/`).
+CodeUnit schema: `specs/code_unit.md` (propose and freeze the CodeUnit schema). Then, in order: held-out repositories
+(`specs/held_out_repos.md`), latency harness (`specs/latency_harness.md`), parse one real repository
+(`specs/parse_one_repo.md`), evidence for ADR-001…010 (`decisions/`).
 
 ## Blockers
 

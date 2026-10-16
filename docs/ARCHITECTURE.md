@@ -1,7 +1,7 @@
 # System Architecture
 
 **Last updated:** 2026-10-12
-**Status:** Design only — no component is implemented. This file is **live**: update it whenever a
+**Status:** Package skeleton, config, paths and utilities exist; no research component is implemented. This file is **live**: update it whenever a
 boundary changes. The static design rationale is in `09_architecture.md` (derived from the master doc).
 
 ---
@@ -126,6 +126,8 @@ implementation and then written here.**
 
 - **Purpose:** parameters and paths; depends on nothing.
 - **Files:** `parameters.py`, `paths.py`.
+- **Implemented (bootstrap):** `paths.py` resolves every location from the repository root (no absolute paths); the data root can be redirected with `RIL_DATA_ROOT`. `parameters.py` holds `RunConfig` (seed, name): a frozen dataclass loaded from YAML with a stable SHA-256 `config_hash()`. Experiment parameters are added by the components that own them, in `configs/`, not as code defaults.
+- **Shared utilities:** `ril/util/` (`set_seed`, project logger, environment sanity checks) is a leaf package that any component may import; it depends on nothing internal.
 - **Invariant:** the frozen configuration is hashed and recorded with every run; `configs/frozen/` is immutable after the freeze.
 
 ---
@@ -173,6 +175,14 @@ Expected at 10×: reranking; indexing throughput for L2-scale corpora; disk on A
 - **Impact:** none on behaviour (no code yet).
 - **Related ADR:** ADR-001 … ADR-010 (stubs, all `Proposed`).
 - **Benchmark:** not applicable.
+
+## 2026-10-17 — Package skeleton
+
+- **What changed:** `ril/` is an installable package (Python 3.11 pinned); `config/` (paths, run config) and `util/` (seed, logger, sanity checks) implemented; tests, lint and type checks wired through `make`.
+- **Why:** give every later component a tested place to land.
+- **Impact:** none on behaviour (no research code).
+- **Related ADR:** none.
+- **Benchmark:** not applicable (latency harness not built).
 
 # Architecture health checklist
 

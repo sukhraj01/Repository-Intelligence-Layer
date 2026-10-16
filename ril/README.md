@@ -1,7 +1,8 @@
 # ril/ — the package
 
-Python 3.11, type-hinted, `mypy --strict`. `__init__.py` files and tooling arrive in the
-week-1 bootstrap; until then each subdirectory holds only a README stating its contract.
+Python 3.11, type-hinted, `mypy --strict`. Each subpackage has an `__init__.py`; module files are
+added by the work that owns them. `config/` and `util/` (seed, logger, sanity checks) are
+implemented; the other subpackages hold a README stating their contract.
 Design: `docs/ARCHITECTURE.md` (live) and `docs/09_architecture.md` (master-derived).
 
 ```

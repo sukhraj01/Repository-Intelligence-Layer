@@ -1,0 +1,45 @@
+[project]
+name = "ril"
+version = "0.0.0"
+description = "Repository Intelligence Layer: repository-level code retrieval and a study of retriever supervision."
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "numpy>=1.26",
+    "pyyaml>=6.0",
+]
+
+[tool.poetry]
+packages = [{ include = "ril" }]
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0"
+pytest-cov = ">=5.0"
+ruff = ">=0.6"
+mypy = ">=1.10"
+types-pyyaml = ">=6.0"
+
+[build-system]
+requires = ["poetry-core>=2.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "T20"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ril"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["ril"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "slow: long-running tests excluded from `make test`",
+]
