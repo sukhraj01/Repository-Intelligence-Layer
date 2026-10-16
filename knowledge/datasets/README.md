@@ -9,9 +9,9 @@ writes `data/raw/<dataset>/provenance.json`.
 | SweLoc (SweRank) | A — primary training pool candidate | purpose-built for issue localization; master doc says released, public pages say otherwise | not published as `SweLoc`; undocumented candidate `gangiswag/train_data` listed, see `sweloc.md` |
 | Own PR-mined set | A — contamination-safe replication | merged PRs closing an issue; issue text = query; patch-touched functions = positives | not built |
 | CodeSearchNet | A — transfer-gap arm | ~2M comment–code pairs, 6 languages | schema checked, has `repository_name`, see `codesearchnet.md` |
-| CORE-Bench L2 | C — primary retrieval metric | 632 repos, 5,061 queries, 9,377,120 chunks; layout `LEVEL-2/<dataset>/<repository>/{corpus,queries,qrels}.jsonl` | listed and format-sampled, see `core_bench.md` |
-| CORE-Bench L3 | C — structural/graph question | 97 repos, 2,580 queries, 2,609,581 chunks | listed and format-sampled, see `core_bench.md` |
-| CORE-Bench L2/L3 REWRITE | C — free query-rewriting ablation | paper reports rewriting can hurt | listed and format-sampled, see `core_bench.md` |
+| CORE-Bench L2 | C — primary retrieval metric | 632 repos, 5,061 queries, 9,377,120 chunks; layout `LEVEL-2/<dataset>/<repository>/{corpus,queries,qrels}.jsonl` | listed, formats sampled, counts re-measured from all files, repositories resolved (605 distinct), see `core_bench.md` |
+| CORE-Bench L3 | C — structural/graph question | 97 repos, 2,580 queries, 2,609,581 chunks | counts re-measured; 92 distinct repositories, all inside L2's; see `core_bench.md` |
+| CORE-Bench L2/L3 REWRITE | C — free query-rewriting ablation | paper reports rewriting can hurt | same queries and repositories as the originals; qrels differ in 94 folders (81 missing, 13 shorter), see `core_bench.md` |
 | CORE-Bench L1 | context only | 172,961 queries; 2,412,296 corpus items | not needed |
 | Loc-Bench | C — contamination check, category balance | 660 examples (bug 282, feature 203, security 31, performance 144), post-Oct-2024 | metadata read; V1 560 / V0.2 660 rows, see `loc_bench.md` |
 | CoIR | C — generalization (cut first if behind) | 10 datasets, 8 retrieval tasks, ~2M documents | not fetched |

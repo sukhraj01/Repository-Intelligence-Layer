@@ -1,0 +1,32 @@
+level,scope,statistic,card,paper,measured,note
+L2,ALL,repos (folders),632,same as card,632,folders counted in listing and queries files
+L2,ALL,distinct canonical repositories,not stated,not stated,605,from instance ids; case-folded owner/name
+L2,ALL,queries,"5,061",same as card,"5,061",rows of queries.jsonl
+L2,ALL,corpus chunks,"9,377,120",same as card,"9,377,120",rows of corpus.jsonl
+L2,ALL,qrels,"52,712",same as card,"52,712",rows of qrels.jsonl
+L2,ALL,rels per query,10.42,same as card,10.42,qrels rows / query rows
+L2,ALL,mean chunk length (chars),"1,004.9","about 1,005 (L2) / 1,155 (L3), unit unstated","1,004.9",mean len(text) over all chunks; unit of the card figure is not stated
+L2,ALL,mean query length (chars),"1,558.5",not stated,"1,558.5",mean len(text) over queries; unit of the card figure is not stated
+L3,ALL,repos (folders),97,same as card,97,folders counted in listing and queries files
+L3,ALL,distinct canonical repositories,not stated,not stated,92,from instance ids; case-folded owner/name
+L3,ALL,queries,"2,580",same as card,"2,580",rows of queries.jsonl
+L3,ALL,corpus chunks,"2,609,581",same as card,"2,609,581",rows of corpus.jsonl
+L3,ALL,qrels,"106,479",same as card,"106,479",rows of qrels.jsonl
+L3,ALL,rels per query,41.27,same as card,41.27,qrels rows / query rows
+L3,ALL,mean chunk length (chars),"1,154.8","about 1,005 (L2) / 1,155 (L3), unit unstated","1,154.8",mean len(text) over all chunks; unit of the card figure is not stated
+L3,ALL,mean query length (chars),"1,074.4",not stated,"1,074.4",mean len(text) over queries; unit of the card figure is not stated
+L2,SWE-bench_Verified,repos / queries / chunks / qrels (card),"12 / 432 / 398,397 / 1,173",same as card,"12 folders (12 distinct repos) / 432 / 398,397 / 1,173",measured from the files
+L2,SWE-bench_Pro,repos / queries / chunks / qrels (card),"10 / 632 / 586,719 / 8,088",same as card,"10 folders (10 distinct repos) / 632 / 586,719 / 8,088",measured from the files
+L2,SWE-bench-Live,repos / queries / chunks / qrels (card),"209 / 1623 / 1,229,695 / 14,028",same as card,"209 folders (213 distinct repos) / 1,623 / 1,229,695 / 14,028",measured from the files
+L2,SWE-Bench-plus-plus,repos / queries / chunks / qrels (card),"319 / 442 / 5,365,829 / 6,197",same as card,"319 folders (338 distinct repos) / 442 / 5,365,829 / 6,197",measured from the files
+L2,SWE-bench-plus,repos / queries / chunks / qrels (card),"6 / 207 / 57,320 / 1,483",same as card,"6 folders (6 distinct repos) / 207 / 57,320 / 1,483",measured from the files
+L2,Multi-SWE-bench,repos / queries / chunks / qrels (card),"35 / 1449 / 858,042 / 20,384",same as card,"35 folders (39 distinct repos) / 1,449 / 858,042 / 20,384",measured from the files
+L2,SWE-bench_Multilingual,repos / queries / chunks / qrels (card),"41 / 276 / 881,118 / 1,359",same as card,"41 folders (41 distinct repos) / 276 / 881,118 / 1,359",measured from the files
+L3,SWE-bench_Verified,repos / queries / chunks / qrels (card),"12 / 302 / 372,258 / 8,928",same as card,"12 folders (12 distinct repos) / 302 / 372,258 / 8,928",measured from the files
+L3,SWE-bench_Pro,repos / queries / chunks / qrels (card),"10 / 585 / 509,200 / 14,987",same as card,"10 folders (10 distinct repos) / 585 / 509,200 / 14,987",measured from the files
+L3,Multi-SWE-bench,repos / queries / chunks / qrels (card),"35 / 1445 / 857,861 / 77,293",same as card,"35 folders (39 distinct repos) / 1,445 / 857,861 / 77,293",measured from the files
+L3,SWE-bench_Multilingual,repos / queries / chunks / qrels (card),"40 / 248 / 870,262 / 5,271",same as card,"40 folders (40 distinct repos) / 248 / 870,262 / 5,271",measured from the files
+Verified,SWE-bench Verified,rows / distinct repos,500 / 12,same as card,500 / 12,parquet metadata
+L2/L3,Rewrite,qrels rows vs original (L2 / L3),share qrels with originals,same as card,"51,258 vs 52,712 (L2); 101,145 vs 106,479 (L3)",81 Rewrite folders (SWE-bench_Multilingual) hold no qrels file; 13 other folders hold fewer qrels rows than their original (158 rows in all); query id sets are identical in all folders (0 differ)
+SFT,paper,repos / queries,n/a,"628 / 53,301",not measurable,SFT data is not in the package; paper_reported
+L2,BM25,nDCG@10 / Recall@100,13.0 / 38.8,same as card,not run in this project,to be measured when the evaluation loader exists

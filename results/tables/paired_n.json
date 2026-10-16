@@ -1,0 +1,110 @@
+{
+ "all_datasets_distinct_ids": {
+  "L2": 5035,
+  "L2_and_L3": 2567,
+  "L3": 2567
+ },
+ "all_datasets_rows": {
+  "L2": 5061,
+  "L3": 2580
+ },
+ "l2_and_l3_verified": 302,
+ "l2_ids_not_in_verified_metadata": 0,
+ "l2_verified": 432,
+ "l3_ids_in_l2_by_dataset": {
+  "Multi-SWE-bench": [
+   1445,
+   1445
+  ],
+  "SWE-bench_Multilingual": [
+   248,
+   248
+  ],
+  "SWE-bench_Pro": [
+   585,
+   585
+  ],
+  "SWE-bench_Verified": [
+   302,
+   302
+  ]
+ },
+ "l3_ids_not_in_verified_metadata": 0,
+ "l3_verified": 302,
+ "l3_verified_not_in_l2_verified": 0,
+ "per_repository_verified": {
+  "astropy/astropy": {
+   "l2": 22,
+   "l2_and_l3": 11,
+   "l3": 11,
+   "verified": 22
+  },
+  "django/django": {
+   "l2": 188,
+   "l2_and_l3": 136,
+   "l3": 136,
+   "verified": 231
+  },
+  "matplotlib/matplotlib": {
+   "l2": 32,
+   "l2_and_l3": 24,
+   "l3": 24,
+   "verified": 34
+  },
+  "mwaskom/seaborn": {
+   "l2": 2,
+   "l2_and_l3": 1,
+   "l3": 1,
+   "verified": 2
+  },
+  "pallets/flask": {
+   "l2": 1,
+   "l2_and_l3": 1,
+   "l3": 1,
+   "verified": 1
+  },
+  "psf/requests": {
+   "l2": 8,
+   "l2_and_l3": 5,
+   "l3": 5,
+   "verified": 8
+  },
+  "pydata/xarray": {
+   "l2": 18,
+   "l2_and_l3": 13,
+   "l3": 13,
+   "verified": 22
+  },
+  "pylint-dev/pylint": {
+   "l2": 9,
+   "l2_and_l3": 3,
+   "l3": 3,
+   "verified": 10
+  },
+  "pytest-dev/pytest": {
+   "l2": 15,
+   "l2_and_l3": 10,
+   "l3": 10,
+   "verified": 19
+  },
+  "scikit-learn/scikit-learn": {
+   "l2": 26,
+   "l2_and_l3": 21,
+   "l3": 21,
+   "verified": 32
+  },
+  "sphinx-doc/sphinx": {
+   "l2": 42,
+   "l2_and_l3": 26,
+   "l3": 26,
+   "verified": 44
+  },
+  "sympy/sympy": {
+   "l2": 69,
+   "l2_and_l3": 51,
+   "l3": 51,
+   "verified": 75
+  }
+ },
+ "verified_rows": 500
+}

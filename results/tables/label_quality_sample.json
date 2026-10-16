@@ -1,0 +1,307 @@
+{
+ "class_counts": {
+  "code": 50,
+  "imports": 3
+ },
+ "class_counts_by_repo": {
+  "astropy__astropy": {
+   "code": 12
+  },
+  "matplotlib__matplotlib": {
+   "code": 22,
+   "imports": 1
+  },
+  "mwaskom__seaborn": {
+   "code": 2,
+   "imports": 1
+  },
+  "psf__requests": {
+   "code": 7,
+   "imports": 1
+  },
+  "pydata__xarray": {
+   "code": 7
+  }
+ },
+ "classifier": "line-ratio text heuristic (imports>=60%, comments>=60%, test markers, config key/section, rst markers), crude",
+ "instances_per_repo_population": {
+  "astropy__astropy": 22,
+  "matplotlib__matplotlib": 32,
+  "mwaskom__seaborn": 2,
+  "pallets__flask": 1,
+  "psf__requests": 8,
+  "pydata__xarray": 18
+ },
+ "n_sample": 30,
+ "per_instance": [
+  {
+   "instance": "astropy__astropy-13453",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "astropy__astropy-13579",
+   "kinds": {
+    "code": 2
+   },
+   "positives": 2,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "astropy__astropy-13977",
+   "kinds": {
+    "code": 2
+   },
+   "positives": 2,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "astropy__astropy-14508",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "astropy__astropy-7336",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "astropy__astropy-7606",
+   "kinds": {
+    "code": 2
+   },
+   "positives": 2,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "astropy__astropy-8872",
+   "kinds": {
+    "code": 3
+   },
+   "positives": 3,
+   "repo": "astropy__astropy"
+  },
+  {
+   "instance": "matplotlib__matplotlib-13989",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-21568",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-22871",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-23314",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-23412",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-24026",
+   "kinds": {
+    "code": 2,
+    "imports": 1
+   },
+   "positives": 3,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-24149",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-24570",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-24627",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-25122",
+   "kinds": {
+    "code": 2
+   },
+   "positives": 2,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-25332",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-25479",
+   "kinds": {
+    "code": 4
+   },
+   "positives": 4,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-26113",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-26291",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "matplotlib__matplotlib-26466",
+   "kinds": {
+    "code": 3
+   },
+   "positives": 3,
+   "repo": "matplotlib__matplotlib"
+  },
+  {
+   "instance": "mwaskom__seaborn-3069",
+   "kinds": {
+    "code": 2,
+    "imports": 1
+   },
+   "positives": 3,
+   "repo": "mwaskom__seaborn"
+  },
+  {
+   "instance": "psf__requests-1142",
+   "kinds": {
+    "code": 3
+   },
+   "positives": 3,
+   "repo": "psf__requests"
+  },
+  {
+   "instance": "psf__requests-2317",
+   "kinds": {
+    "code": 1,
+    "imports": 1
+   },
+   "positives": 2,
+   "repo": "psf__requests"
+  },
+  {
+   "instance": "psf__requests-2931",
+   "kinds": {
+    "code": 2
+   },
+   "positives": 2,
+   "repo": "psf__requests"
+  },
+  {
+   "instance": "psf__requests-6028",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "psf__requests"
+  },
+  {
+   "instance": "pydata__xarray-2905",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "pydata__xarray"
+  },
+  {
+   "instance": "pydata__xarray-3151",
+   "kinds": {
+    "code": 1
+   },
+   "positives": 1,
+   "repo": "pydata__xarray"
+  },
+  {
+   "instance": "pydata__xarray-3993",
+   "kinds": {
+    "code": 5
+   },
+   "positives": 5,
+   "repo": "pydata__xarray"
+  }
+ ],
+ "population_single_vs_multiple_instances": {
+  "multiple": 39,
+  "single": 44
+ },
+ "positive_chunk_mean_chars": 1932.4716981132076,
+ "positive_chunk_starts_at_def": 35,
+ "positive_chunk_starts_elsewhere": 18,
+ "positives_in_sample": 53,
+ "repos": [
+  "astropy__astropy",
+  "matplotlib__matplotlib",
+  "pydata__xarray",
+  "pallets__flask",
+  "psf__requests",
+  "mwaskom__seaborn"
+ ],
+ "sample_instances_per_repo": {
+  "astropy__astropy": 7,
+  "matplotlib__matplotlib": 15,
+  "mwaskom__seaborn": 1,
+  "psf__requests": 4,
+  "pydata__xarray": 3
+ },
+ "sample_multiple_positive": 13,
+ "sample_single_positive": 17,
+ "seed": 0
+}

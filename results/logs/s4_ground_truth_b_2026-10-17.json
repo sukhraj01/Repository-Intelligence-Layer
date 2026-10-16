@@ -1,0 +1,228 @@
+{
+ "date": "2026-10-17",
+ "hardware": {
+  "ada": "ada-gw1 login (Xeon Gold 5215, python 3.9) and gnode002 via u22/low; CPU only",
+  "local": "Apple macOS 24.6 (Darwin), 8 GB class box, no GPU; aggregation only"
+ },
+ "input_sha256_prefix": {
+  "corpus_stats_all.json": "ce71049df103",
+  "ids_all.json": "fe1aeb107c8e",
+  "manifest.json": "7c2b41be2c28",
+  "meta_ids.json": "ca8d8ad15908",
+  "pool_csn_repos.json": "a04a747a93fe",
+  "pool_gangiswag_repos.json": "bf9c47f773db",
+  "query_stats_all.json": "2d8d39b72227"
+ },
+ "runs": [
+  {
+   "result": "1,458 folders (L2, L3, Rewrite L2/L3): query ids and qrels rows; 6,065,040,177 B of queries.jsonl and 35,094,386 B of qrels.jsonl streamed, only ids and counts kept",
+   "run_id": "s4-core-bench-instance-ids",
+   "seconds": 1175,
+   "where": "ada gnode002, u22/low, 4 CPU, job 24595"
+  },
+  {
+   "result": "729 L2/L3 corpus.jsonl streamed (13,801,911,834 B): 11,986,701 rows, mean chars, longest chunk",
+   "run_id": "s4-core-bench-corpus-stats",
+   "seconds": 1017,
+   "where": "ada gnode002, u22/low, 4 CPU, job 24596"
+  },
+  {
+   "result": "729 L2/L3 queries.jsonl: mean query chars, candidate-list sizes; 3 folders retried after DNS errors",
+   "run_id": "s4-core-bench-query-stats",
+   "seconds": 314,
+   "where": "ada gnode002, u22/low, 4 CPU, jobs 24605 and 24606"
+  },
+  {
+   "result": "CodeSearchNet python 457,461 rows / 13,590 repositories; gangiswag candidate 24,285 instance dirs / 2,448 repositories",
+   "run_id": "s4-pool-repo-counts",
+   "seconds": 77,
+   "where": "ada gnode002, u22/low, job 24604 (24597 and 24602 failed: venv built on the login node's python 3.9 does not run on the nodes' python 3.10)"
+  },
+  {
+   "result": "30 sampled L2 Verified instances over six repositories, 53 positives classified (numbers only)",
+   "run_id": "s4-label-quality",
+   "seconds": null,
+   "where": "ada login node, seed 0"
+  },
+  {
+   "result": "same-name-other-owner pool repositories looked up; stopped by the 60 requests per hour limit",
+   "run_id": "s4-github-name-check",
+   "seconds": null,
+   "where": "ada login node, unauthenticated GitHub API"
+  },
+  {
+   "result": "605 repositories, sha256 recorded in data/held_out/held_out_repos.sha256",
+   "run_id": "s4-held-out-list",
+   "seconds": null,
+   "where": "local, scripts/build_held_out.py"
+  }
+ ],
+ "script_sha256_prefix": {
+  "ril/training/held_out.py": "c870d1bcecb7",
+  "ril/training/held_out_build.py": "6bebfb2444ae",
+  "scripts/ada/core_bench_corpus_stats.py": "6d5a585b55c6",
+  "scripts/ada/core_bench_instance_ids.py": "ce96e4ebfb4f",
+  "scripts/ada/core_bench_query_stats.py": "9d00d8b6b67e",
+  "scripts/ada/export_meta_ids.py": "b43326dbf174",
+  "scripts/ada/github_repo_check.py": "6603cb9510e9",
+  "scripts/ada/label_quality_sample.py": "5d02dd7cb421",
+  "scripts/ada/pool_repo_counts.py": "3db828d976ef",
+  "scripts/build_held_out.py": "c776ada563bb"
+ },
+ "seed": 0,
+ "seed_note": "no randomness except the label-quality sample (seed 0, run on the cluster)",
+ "session": "2026-10-17-04 ground-truth-b",
+ "summary": {
+  "candidate_list_sizes": {
+   "LEVEL-2": {
+    "max": 348310,
+    "mean_candidates_per_query": 9782.8,
+    "min": 32,
+    "queries": 5061
+   },
+   "LEVEL-3": {
+    "max": 139977,
+    "mean_candidates_per_query": 11391.5,
+    "min": 32,
+    "queries": 2580
+   }
+  },
+  "case_groups": [
+   [
+    "Flexget__Flexget",
+    "flexget__flexget"
+   ],
+   [
+    "Kozea__WeasyPrint",
+    "kozea__weasyprint"
+   ],
+   [
+    "PyPSA__PyPSA",
+    "pypsa__pypsa"
+   ]
+  ],
+  "config_hash": "1d6a4a651435",
+  "folders_multi_repo": {
+   "L2": 17,
+   "L3": 2
+  },
+  "folders_not_equal_repo": {
+   "L2": 242,
+   "L3": 17
+  },
+  "folders_without_dunder": {
+   "L2": 143,
+   "L3": 11
+  },
+  "held_out_repos": 605,
+  "held_out_sha256": "7ba5c9d8d27dd9a92092dff04275fc2b6ec4c15e5641c834ddc6d93a9f477783",
+  "l2_distinct": 605,
+  "l2_folders": 632,
+  "l2_l3_overlap": 92,
+  "l3_distinct": 92,
+  "l3_folders": 97,
+  "label_quality": {
+   "classes": {
+    "code": 50,
+    "imports": 3
+   },
+   "n": 30,
+   "seed": 0
+  },
+  "loc_bench": {
+   "Loc-Bench_V0.2": {
+    "in_held": 41,
+    "repos": 210,
+    "rows": 660
+   },
+   "Loc-Bench_V1": {
+    "in_held": 37,
+    "repos": 165,
+    "rows": 560
+   }
+  },
+  "paired": 432,
+  "pools": {
+   "codesearchnet_python": {
+    "after": [
+     449440,
+     13546
+    ],
+    "before": [
+     457461,
+     13590
+    ],
+    "checked": 51,
+    "dropped_repos": 44,
+    "extra_inst": 1603,
+    "forks_of_held_out": 0,
+    "n_dropped_instances": 8021,
+    "no_longer_exist": 2,
+    "proxy": 51,
+    "proxy_inst": 3532,
+    "rename_after": [
+     447837,
+     13530
+    ],
+    "renamed_into_held_out": 16,
+    "unchecked": 0,
+    "with_loc": [
+     445640,
+     13534
+    ]
+   },
+   "gangiswag_train_data_python": {
+    "after": [
+     20854,
+     2359
+    ],
+    "before": [
+     24285,
+     2448
+    ],
+    "checked": 10,
+    "dropped_repos": 89,
+    "extra_inst": 54,
+    "forks_of_held_out": 0,
+    "n_dropped_instances": 3431,
+    "no_longer_exist": 0,
+    "proxy": 10,
+    "proxy_inst": 81,
+    "rename_after": [
+     20800,
+     2356
+    ],
+    "renamed_into_held_out": 3,
+    "unchecked": 0,
+    "with_loc": [
+     20854,
+     2359
+    ]
+   }
+  },
+  "rewrite_extra_repos": 0,
+  "rewrite_note": "81 Rewrite folders (SWE-bench_Multilingual) hold no qrels file; 13 other folders hold fewer qrels rows than their original (158 rows in all); query id sets are identical in all folders (0 differ)",
+  "totals": {
+   "LEVEL-2": {
+    "chars": 9422954763,
+    "corpus": 9377120,
+    "folders": 632,
+    "q_chars": 7887501,
+    "q_n": 5061,
+    "qrels": 52712,
+    "queries": 5061
+   },
+   "LEVEL-3": {
+    "chars": 3013565538,
+    "corpus": 2609581,
+    "folders": 97,
+    "q_chars": 2772016,
+    "q_n": 2580,
+    "qrels": 106479,
+    "queries": 2580
+   }
+  },
+  "unresolved": 0,
+  "verified": 12
+ }
+}

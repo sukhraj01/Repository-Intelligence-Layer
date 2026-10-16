@@ -41,4 +41,8 @@ See `docs/11_references.md`.
 _Pending._
 
 ## Addenda
-_None._
+
+### 2026-10-17 — Loc-Bench against the held-out list (evidence, no decision)
+- Loc-Bench V1 has 165 repositories: 37 are already in the held-out list (CORE-Bench L2/L3 or Verified), 128 are not. V0.2 has 210: 41 in the list, 169 not.
+- If Loc-Bench repositories were also held out, CodeSearchNet python would drop from 449,440 to 445,640 instances (13,546 to 13,534 repositories); the `gangiswag/train_data` python candidate would not change (none of the 169 outside repositories occurs in it).
+- Not decided here: whether Loc-Bench is held out (Open question Q9). Source: `data/held_out/report.md`, `knowledge/datasets/loc_bench.md`.

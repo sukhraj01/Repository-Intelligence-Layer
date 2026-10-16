@@ -42,6 +42,21 @@ standard library. Work directory on Ada: `~/ril_s2/` (`scripts/`, `raw/`, `logs/
 | `analyze_core_bench_sample.py` | field/format statistics (numbers only) | `python3 -I analyze_core_bench_sample.py <data root> out.json` |
 | `zip_remote_listing.py`, `zip_remote_extract.py` | list or extract single members of a remote zip by Range request | `python3 zip_remote_listing.py <url> out.json` |
 
+Held-out list and audit jobs (all CPU, streamed, numbers and ids only; each skips finished work):
+
+| Script | What | Exact command |
+|---|---|---|
+| `core_bench_instance_ids.py` / `.sbatch` | query ids and qrels counts of every L2/L3/Rewrite folder (6.1 GB streamed) | `cd ~ && sbatch ril_s2/scripts/core_bench_instance_ids.sbatch`, then `python3 -I ril_s2/scripts/merge_json_dir.py ril_s2/raw/ids ril_s2/raw/ids_all.json` |
+| `core_bench_corpus_stats.py` / `.sbatch` | corpus rows, characters and longest chunk per L2/L3 folder (13.8 GB streamed) | `sbatch ril_s2/scripts/core_bench_corpus_stats.sbatch`, then `merge_json_dir.py` on `raw/corpus_stats` |
+| `core_bench_query_stats.py` / `.sbatch` | mean query length and candidate-list sizes | `sbatch ril_s2/scripts/core_bench_query_stats.sbatch` (writes `raw/query_stats_all.json`; rerun to retry folders that failed) |
+| `pool_repo_counts.py` / `.sbatch` | per-repository counts: CodeSearchNet python (580 MB parquet, deleted afterwards) and the `gangiswag/train_data` candidate (from the zip listing) | `sbatch ril_s2/scripts/pool_repo_counts.sbatch` |
+| `export_meta_ids.py` | (repo, instance_id) pairs of Verified and Loc-Bench | `venv_pa/bin/python -I ril_s2/scripts/export_meta_ids.py out.json <parquet>...` |
+| `label_quality_sample.py` | seeded sample of L2 instances, positive chunks classified, counts only | `python3 -I label_quality_sample.py <root> out.json 0 30 <repo>...` |
+| `github_repo_check.py` | current name, fork status and fork-network root of a short repository list (unauthenticated, 60 per hour) | `python3 -I github_repo_check.py repos.txt out.json` |
+| `merge_json_dir.py` | merges per-folder JSON into one file keyed by path (case-variant folder names collide on macOS) | `python3 -I merge_json_dir.py <dir> <out.json>` |
+
+Locally, `python -I scripts/build_held_out.py` turns the merged files into `data/held_out/` and `results/tables/`.
+
 `scripts/core_bench_listing_tables.py` (run locally, `python3 -I`) turns the listing and the dataset's
 `manifest.json` into the count and size tables under `results/tables/`.
 

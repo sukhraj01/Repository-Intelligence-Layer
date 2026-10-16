@@ -64,3 +64,16 @@ _Pending._
 - No dataset named SweLoc is published on the Hugging Face Hub (name and author searches) or linked from the SweRank repository.
 - `gangiswag/train_data` (no card; created 2025-09-23) holds a function-level, BEIR-style training set: 56,279 instances in 10 languages, 24,285 of them Python from 2,448 repository directories, with `repo` and `base_commit` in query metadata. Whether its Python part is the SweLoc of the SweRank paper is unconfirmed. Details: `knowledge/datasets/sweloc.md`.
 - The published collection recipe computes the positive's rank with `cornstack/CodeRankEmbed` (a separately pretrained encoder) and keeps instances whose positive ranks 0 to 10 and negatives ranked 3 to 25.
+
+## Addendum 2026-10-17 — survival under the held-out list (evidence, no decision)
+
+The held-out list has 605 repositories (CORE-Bench L2 union L3 union SWE-bench Verified; `data/held_out/report.md`). Applied by repository to the pools that can be identified by repository:
+
+| Pool | Instances before / after | Repositories before / after | Note |
+|---|---|---|---|
+| `gangiswag/train_data` python (candidate, unconfirmed as SweLoc) | 24,285 / 20,854 (85.87%) | 2,448 / 2,359 (96.36%) | 89 held-out repositories present; 3 more surviving repositories are renamed forms of held-out ones (54 instances) |
+| CodeSearchNet python | 457,461 / 449,440 (98.25%) | 13,590 / 13,546 (99.68%) | 44 held-out repositories present; 16 more survivors are renamed forms of held-out ones (1,603 rows), for example `pycqa/pylint` |
+| CoRNStack python | not filterable | not filterable | no repository identifier in the schema |
+
+Exact-name filtering is not sufficient for pools built before a repository was renamed; whether renamed repositories and forks are held out is Open question Q8 (fork / near-duplicate rule). Details: `data/held_out/pool_filter_report_*.md`, `knowledge/datasets/sweloc.md`.
+
