@@ -57,3 +57,10 @@ _Pending._
   or refute availability before any pool is chosen.
 - The CORE-Bench paper states its 628-repository SFT set is "disjoint from the SWE-bench family" and
   does not state that the SFT data is released.
+
+
+## Addendum 2026-10-17 — availability evidence (no decision)
+
+- No dataset named SweLoc is published on the Hugging Face Hub (name and author searches) or linked from the SweRank repository.
+- `gangiswag/train_data` (no card; created 2025-09-23) holds a function-level, BEIR-style training set: 56,279 instances in 10 languages, 24,285 of them Python from 2,448 repository directories, with `repo` and `base_commit` in query metadata. Whether its Python part is the SweLoc of the SweRank paper is unconfirmed. Details: `knowledge/datasets/sweloc.md`.
+- The published collection recipe computes the positive's rank with `cornstack/CodeRankEmbed` (a separately pretrained encoder) and keeps instances whose positive ranks 0 to 10 and negatives ranked 3 to 25.

@@ -72,4 +72,9 @@ margin, go to Ada immediately; do not try locally first.
 
 | date | what was verified | result |
 |---|---|---|
-| — | nothing verified for this project yet | — |
+| 2026-10-17 | `ssh -o BatchMode=yes ada hostname` works non-interactively (key auth, login node `ada-gw1.iiit.ac.in`, python 3.9.25, no `uv`, no pyarrow/pandas/huggingface_hub) | verified |
+| 2026-10-17 | Login node reaches huggingface.co (0.10 s HEAD), github.com (0.17 s), pypi.org (0.07 s), raw.githubusercontent.com (30 s once, 0.35 s from a compute node) | verified |
+| 2026-10-17 | HF throughput, 50 MB HTTP Range request: login node 8.87 MB/s, compute node gnode002 6.46 MB/s (not throttled to the KB/s seen in earlier projects) | measured, `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | Slurm: `srun -p u22 -A research -q low` works; `-p u22-cpu` is rejected for account `research` ("Invalid account or account/partition combination"); `--output=%h/...` is not expanded (creates a literal `%h` directory), use a path relative to the submit directory | verified |
+| 2026-10-17 | Space: `$HOME` = `ada5:/home2` 50 GB, 27 GB used, 24 GB free. `quota -s` reports a different filesystem (`/share1`, 25 GB soft quota, 3.6 MB used). CORE-Bench whole repo is 32.2 GB (does not fit); L2+L3 originals 17.0 GB (fits, leaves about 7 GB) | measured |
+| 2026-10-17 | Tree listing: `GET /api/datasets/<id>/tree/main/<path>?recursive=true&limit=1000` paginates via the `Link` header; adding `expand=true` with `limit=1000` returns HTTP 400 | verified |

@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped · **Tasks completed:** 1
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled · **Tasks completed:** 2
 
 ---
 
@@ -23,7 +23,8 @@ working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, 
 | `ril/config` (paths, `RunConfig` + hash), `ril/util` (seed, logger, sanity) | done | no experiment parameters yet |
 | Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh` as `pre-commit.d/10-latency`; not installed yet |
 | CodeUnit schema (frozen) | not started | `specs/code_unit.md` is a draft; needs engineer sign-off |
-| Held-out repository list | not started | `specs/held_out_repos.md`, needs Ada |
+| Data access and formats (CORE-Bench, Verified, Loc-Bench, SweLoc search, CoRNStack/CSN schemas) | done | `knowledge/datasets/*.md`, `results/tables/`, `scripts/ada/README.md`; Ada reachable non-interactively |
+| Held-out repository list, filter, leakage tests | not started | needs canonical repo names per CORE-Bench folder (folder names are truncated) |
 | Latency harness | **not built** | `make bench` / `make bench-check` print "latency harness: not built" |
 | Parser / call graph / BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
@@ -31,25 +32,32 @@ working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, 
 
 ## Next task
 
-CodeUnit schema: `specs/code_unit.md` (propose and freeze the CodeUnit schema). Then, in order: held-out repositories
-(`specs/held_out_repos.md`), latency harness (`specs/latency_harness.md`), parse one real repository
-(`specs/parse_one_repo.md`), evidence for ADR-001…010 (`decisions/`).
+Held-out repository list, filter and leakage tests (`specs/held_out_repos.md`, steps 3-5 of the held-out brief), then the
+latency harness, then parsing one repository. Start from `knowledge/datasets/core_bench.md`: derive owner/name per CORE-Bench
+folder from the query ids (stream `queries.jsonl` heads on Ada; folder names are truncated), not from folder names.
 
 ## Blockers
 
-None.
+None for code. Data: the CORE-Bench corpora beyond the nine sample folders are not on Ada (commands in `scripts/ada/README.md`);
+no confirmed SweLoc pool (Q7).
 
 ## Open questions
 
 | # | Question | Blocks | Resolve by |
 |---|---|---|---|
 | Q1 | Which team member is Person A / B / C (owners in `docs/ROADMAP.md`)? | ownership columns | engineer, week 1 |
-| Q2 | Can Ada's compute nodes reach Hugging Face / GitHub, and at what throughput? Drives how CORE-Bench and SweLoc are fetched | held-out repo job | probe from Ada while building the held-out list |
-| Q3 | Does a docs-only commit need a fresh latency row, or may it reference the previous row? The professor said "before every commit" | commit hook design | engineer, before the latency harness closes |
-| Q4 | GitHub remote(s) for the team repo. The engineer supplies them and performs every push; until then the repo has no remote | publishing only | engineer |
-| Q5 | ADR-001…ADR-010 (training pool, quality signal, graph role, granularity, benchmark, encoder, scaffold, LLM, rerank, usable-by-others) | frozen config, RQ2 start | team, end of week 2 |
-| Q6 | Disk budget on Ada for CORE-Bench L2/L3 corpora (9.4M + 2.6M chunks; the data card lists 32.2 GB for the whole package) vs `$HOME` quota | held-out repo job | measure on Ada before fetching |
-| Q7 | Drift from the master doc: it lists SweLoc as released, but no public dataset release was found (collection scripts only; see ADR-001 addendum). Is SweLoc obtainable, or is the pool built with the published scripts? Also: Loc-Bench is 560 rows in `Loc-Bench_V1`, 660 in `Loc-Bench_V0.2` | ADR-001, pool filter | engineer; confirm in the ground-truth audit |
+| Q3 | Does a docs-only commit need a fresh latency row, or may it reference the previous row? | commit hook design | engineer, before the latency harness closes |
+| Q4 | GitHub remote(s) for the team repo; the engineer performs every push | publishing only | engineer |
+| Q5 | ADR-001...ADR-010 (training pool, quality signal, graph role, granularity, benchmark, encoder, scaffold, LLM, rerank, usable-by-others) | frozen config, RQ2 start | team, end of week 2 |
+| Q7 | SweLoc: master doc says released; no dataset by that name exists. Candidate `gangiswag/train_data` (no card; 56,279 instances, Python 24,285 / 2,448 repo dirs; function-level; `repo` in metadata). Is it the intended pool, or is the pool built with the published scripts? Also Loc-Bench: 560 rows (V1) vs 660 (V0.2), category counts differ from the master doc | ADR-001, pool filter | engineer; options and evidence in `decisions/ADR-001` addendum |
+| Q8 | Fork / near-duplicate rule for the held-out list (report both, do not choose) | held-out list | engineer |
+| Q9 | Is Loc-Bench held out of training? Its repos overlap Verified repos (django, sympy, sklearn, ...) | ADR-005 | engineer |
+| Q10 | The "repos" figures 632 / 97 are folder counts; 154 folder names are truncated (`pylint`, `scikit`, `django` holding `django-helpdesk`). Distinct canonical repositories are unknown until query ids are read; two repositories may share one folder | held-out list | measure on Ada (next task) |
+| Q11 | CORE-Bench chunk ids are random UUIDs with no path or line span, chunks are 4,096-char text windows, and each query scores against its own `filtered_corpus_id` candidate list (19k-25k ids for django) rather than the whole folder corpus. Chunk-to-CodeUnit mapping and the matching evaluation protocol need a decision | CodeUnit, ADR-004, evaluation | engineer |
+| Q12 | CORE-Bench L3 labels are LLM-judged (paper); L2 labels are chunk-vs-patch alignment | RQ3 interpretation | note in report |
+
+Resolved this block: Q2 (Ada reaches HF and GitHub; 6.5 to 8.9 MB/s on a 50 MB range request, see `docs/COMPUTE.md`), Q6 (home has
+24 GB free; L2+L3 originals 17.0 GB, whole repository 32.2 GB).
 
 ## Carried debt
 

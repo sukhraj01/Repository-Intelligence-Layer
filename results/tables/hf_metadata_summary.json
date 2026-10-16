@@ -1,0 +1,215 @@
+{
+ "princeton-nlp_SWE-bench_Verified/test-00000-of-00001": {
+  "rows": 500,
+  "columns": [
+   "repo",
+   "instance_id",
+   "base_commit",
+   "patch",
+   "test_patch",
+   "problem_statement",
+   "hints_text",
+   "created_at",
+   "version",
+   "FAIL_TO_PASS",
+   "PASS_TO_PASS",
+   "environment_setup_commit",
+   "difficulty"
+  ],
+  "schema": {
+   "repo": "string",
+   "instance_id": "string",
+   "base_commit": "string",
+   "patch": "string",
+   "test_patch": "string",
+   "problem_statement": "string",
+   "hints_text": "string",
+   "created_at": "string",
+   "version": "string",
+   "FAIL_TO_PASS": "string",
+   "PASS_TO_PASS": "string",
+   "environment_setup_commit": "string",
+   "difficulty": "string"
+  },
+  "distinct_repos": 12,
+  "repos": {
+   "astropy/astropy": 22,
+   "django/django": 231,
+   "matplotlib/matplotlib": 34,
+   "mwaskom/seaborn": 2,
+   "pallets/flask": 1,
+   "psf/requests": 8,
+   "pydata/xarray": 22,
+   "pylint-dev/pylint": 10,
+   "pytest-dev/pytest": 19,
+   "scikit-learn/scikit-learn": 32,
+   "sphinx-doc/sphinx": 44,
+   "sympy/sympy": 75
+  },
+  "distinct_instance_ids": 500,
+  "id_examples": [
+   "astropy__astropy-12907",
+   "astropy__astropy-13033",
+   "astropy__astropy-13236"
+  ],
+  "created_at_min_max": [
+   "2013-01-25T05:19:16Z",
+   "2023-08-07T19:30:22Z"
+  ]
+ },
+ "czlll_Loc-Bench_V1/test-00000-of-00001": {
+  "rows": 560,
+  "columns": [
+   "repo",
+   "instance_id",
+   "base_commit",
+   "patch",
+   "test_patch",
+   "problem_statement",
+   "hints_text",
+   "created_at",
+   "labels",
+   "category",
+   "edit_functions",
+   "added_functions",
+   "edit_functions_length",
+   "__index_level_0__"
+  ],
+  "schema": {
+   "repo": "string",
+   "instance_id": "string",
+   "base_commit": "string",
+   "patch": "string",
+   "test_patch": "string",
+   "problem_statement": "string",
+   "hints_text": "string",
+   "created_at": "int64",
+   "labels": "list<element: string>",
+   "category": "string",
+   "edit_functions": "list<element: string>",
+   "added_functions": "list<element: string>",
+   "edit_functions_length": "int64",
+   "__index_level_0__": "int64"
+  },
+  "distinct_repos": 165,
+  "repos": "omitted from tracked copy (165/210 names; regenerate from the parquet)",
+  "distinct_instance_ids": 560,
+  "id_examples": [
+   "UXARRAY__uxarray-1117",
+   "ultralytics__ultralytics-17810",
+   "Chainlit__chainlit-1575"
+  ],
+  "category": {
+   "Performance Issue": 139,
+   "Bug Report": 242,
+   "Security Vulnerability": 29,
+   "Feature Request": 150
+  },
+  "created_at_min_max": [
+   "1446914517000",
+   "1738967972000"
+  ]
+ },
+ "czlll_Loc-Bench_V0.2/test-00000-of-00001": {
+  "rows": 660,
+  "columns": [
+   "repo",
+   "instance_id",
+   "base_commit",
+   "patch",
+   "test_patch",
+   "problem_statement",
+   "hints_text",
+   "created_at",
+   "labels",
+   "category",
+   "edit_functions",
+   "added_functions",
+   "edit_functions_length"
+  ],
+  "schema": {
+   "repo": "string",
+   "instance_id": "string",
+   "base_commit": "string",
+   "patch": "string",
+   "test_patch": "string",
+   "problem_statement": "string",
+   "hints_text": "string",
+   "created_at": "int64",
+   "labels": "list<element: string>",
+   "category": "string",
+   "edit_functions": "list<element: string>",
+   "added_functions": "list<element: string>",
+   "edit_functions_length": "int64"
+  },
+  "distinct_repos": 210,
+  "repos": "omitted from tracked copy (165/210 names; regenerate from the parquet)",
+  "distinct_instance_ids": 660,
+  "id_examples": [
+   "joselc__life-sim-first-try-2",
+   "UXARRAY__uxarray-1117",
+   "nautobot__nautobot-6832"
+  ],
+  "category": {
+   "Feature Request": 216,
+   "Performance Issue": 140,
+   "Bug Report": 275,
+   "Security Vulnerability": 29
+  },
+  "created_at_min_max": [
+   "1446914517000",
+   "1739100868000"
+  ]
+ },
+ "czlll_Loc-Bench_V0.2/split-00000-of-00001": {
+  "rows": 660,
+  "columns": [
+   "repo",
+   "instance_id",
+   "base_commit",
+   "patch",
+   "test_patch",
+   "problem_statement",
+   "hints_text",
+   "created_at",
+   "labels",
+   "category",
+   "edit_functions",
+   "added_functions",
+   "edit_functions_length"
+  ],
+  "schema": {
+   "repo": "string",
+   "instance_id": "string",
+   "base_commit": "string",
+   "patch": "string",
+   "test_patch": "string",
+   "problem_statement": "string",
+   "hints_text": "string",
+   "created_at": "int64",
+   "labels": "list<element: string>",
+   "category": "string",
+   "edit_functions": "list<element: string>",
+   "added_functions": "list<element: string>",
+   "edit_functions_length": "int64"
+  },
+  "distinct_repos": 210,
+  "repos": "omitted from tracked copy (165/210 names; regenerate from the parquet)",
+  "distinct_instance_ids": 660,
+  "id_examples": [
+   "joselc__life-sim-first-try-2",
+   "UXARRAY__uxarray-1117",
+   "nautobot__nautobot-6832"
+  ],
+  "category": {
+   "Feature Request": 216,
+   "Performance Issue": 140,
+   "Bug Report": 275,
+   "Security Vulnerability": 29
+  },
+  "created_at_min_max": [
+   "1446914517000",
+   "1739100868000"
+  ]
+ }
+}

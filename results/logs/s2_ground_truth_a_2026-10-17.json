@@ -1,0 +1,131 @@
+{
+ "session": "2026-10-17-02 ground-truth-a",
+ "date": "2026-10-17",
+ "seed": null,
+ "seed_note": "no randomness anywhere in these runs; all outputs are deterministic functions of the remote files",
+ "hardware": {
+  "local": "Apple macOS 24.6.0 (Darwin), 8 GB class dev box, no GPU; used only for listing aggregation, git and reading code",
+  "ada_login": "ada-gw1.iiit.ac.in (Intel Xeon Gold 5215 @ 2.50GHz, python 3.9.25); all fetches and HTTP probes ran here or on compute nodes",
+  "ada_compute": "gnode002 via srun -p u22 -A research -q low (2 CPU, 4 GB)"
+ },
+ "script_sha256_prefix": {
+  "scripts/ada/hf_list_tree.py": "89d7ace3094d",
+  "scripts/ada/hf_fetch.py": "df257b3d8d14",
+  "scripts/ada/probe_net.py": "301fcc313c33",
+  "scripts/ada/analyze_core_bench_sample.py": "1768f88e29bb",
+  "scripts/ada/zip_remote_listing.py": "5f28f3e626a0",
+  "scripts/ada/zip_remote_extract.py": "17604fbc7a8e",
+  "scripts/core_bench_listing_tables.py": "d0426872454b"
+ },
+ "runs": [
+  {
+   "run_id": "s2-probe-login",
+   "where": "ada login node",
+   "kind": "measured",
+   "result": {
+    "huggingface.co_head_s": 0.096,
+    "github.com_head_s": 0.168,
+    "raw.githubusercontent.com_head_s": 30.389,
+    "pypi.org_head_s": 0.074,
+    "range_50MB_bytes_received": 50000000,
+    "range_50MB_seconds": 5.64,
+    "MB_per_s": 8.87,
+    "file": "CORE-Bench data/LEVEL-2/SWE-bench_Verified/astropy__astropy/corpus.jsonl (first 50 MB, discarded)"
+   }
+  },
+  {
+   "run_id": "s2-probe-compute",
+   "where": "ada compute node gnode002, partition u22, qos low",
+   "kind": "measured",
+   "result": {
+    "huggingface.co_head_s": 0.082,
+    "github.com_head_s": 0.325,
+    "raw.githubusercontent.com_head_s": 0.353,
+    "pypi.org_head_s": 0.062,
+    "range_50MB_seconds": 7.74,
+    "MB_per_s": 6.46,
+    "note": "partition u22-cpu rejected for account research: 'Invalid account or account/partition combination'; first raw.githubusercontent.com HEAD from login took 30 s (single sample, probably transient)"
+   }
+  },
+  {
+   "run_id": "s2-quota",
+   "where": "ada login node",
+   "kind": "measured",
+   "result": {
+    "home_fs": "ada5:/home2/[login] size 50G used 27G avail 24G (54%)",
+    "quota_cmd": "quota -s reports /share1 25000M soft / 27000M hard, 3672K used (a different filesystem from $HOME)"
+   }
+  },
+  {
+   "run_id": "s2-listing-core-bench",
+   "where": "ada login node (listing), local (aggregation)",
+   "kind": "measured",
+   "result": {
+    "entries": 7159,
+    "files": 4945,
+    "data_file_bytes": 32237587759,
+    "repo_total_bytes_incl_card_and_pdf": 32238633709,
+    "l2_l3_only_bytes": 16998825388,
+    "api": "GET /api/datasets/zhangfw123/CORE-Bench/tree/main/<path>?recursive=true&limit=1000, 8 pages",
+    "note": "expand=true together with limit=1000 returns HTTP 400; omitting expand still returns sizes"
+   }
+  },
+  {
+   "run_id": "s2-fetch-core-bench-samples",
+   "where": "ada compute job 24592 (and idempotent re-run 24593), partition u22",
+   "kind": "measured",
+   "result": {
+    "files": 33,
+    "bytes_on_disk": "11M",
+    "fetch_seconds_sum": 32.97,
+    "sha256_equals_lfs_oid_for_all_lfs_files": true
+   }
+  },
+  {
+   "run_id": "s2-format-analysis",
+   "where": "ada login node, python3 -I",
+   "kind": "measured",
+   "result": "see results/tables/core_bench_sample_analysis.json"
+  },
+  {
+   "run_id": "s2-django-queries-stream",
+   "where": "ada login node, streamed not stored",
+   "kind": "measured",
+   "result": {
+    "file": "LEVEL-2/SWE-bench_Verified/django__django/queries.jsonl",
+    "rows": 188,
+    "bytes": 173748698,
+    "filtered_corpus_id_len_min_mean_max": [
+     19049,
+     23069.9,
+     25391
+    ],
+    "share_of_bytes_in_filtered_corpus_id": 0.9985,
+    "query_text_chars_mean": 1282.3
+   }
+  },
+  {
+   "run_id": "s2-hf-metadata",
+   "where": "ada login node (fetch), local throwaway venv with pyarrow (read)",
+   "kind": "measured",
+   "result": "see results/tables/hf_metadata_summary.json"
+  },
+  {
+   "run_id": "s2-sweloc-search",
+   "where": "ada login node",
+   "kind": "measured",
+   "result": {
+    "hf_dataset_search_sweloc": 0,
+    "hf_dataset_search_swerank": 1,
+    "hf_author_Salesforce_search_swe": 0,
+    "gangiswag_train_data": "exists, no card, 3 zip files (see knowledge/datasets/sweloc.md)",
+    "train_zip_bytes": 23561667819,
+    "train_zip_members": 281406,
+    "train_instances": 56279,
+    "train_python_instances": 24285,
+    "train_python_repo_dirs": 2448
+   }
+  }
+ ],
+ "script_sha256_note": "hashes are of the versions that produced these runs; the scripts were reformatted afterwards (ruff format, noqa header, timezone import) with no logic change"
+}

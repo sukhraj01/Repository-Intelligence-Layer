@@ -17,7 +17,16 @@ Rules:
 
 | date | run_id | kind | what | config_hash | seed | hardware | headline result | log |
 |---|---|---|---|---|---|---|---|---|
-| — | — | — | no runs yet | — | — | — | — | — |
+| 2026-10-17 | s2-probe-login | measured | Ada login node reaches huggingface.co/github.com/pypi.org; 50 MB HF range request | 301fcc313c33 | none (deterministic) | ada-gw1 Xeon Gold 5215 | 8.87 MB/s (5.64 s for 50 MB) | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-probe-compute | measured | Same probe from compute node (u22, qos low) | 301fcc313c33 | none (deterministic) | ada gnode002, 2 CPU | 6.46 MB/s (7.74 s for 50 MB); u22-cpu not usable by account research | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-quota | measured | Free space on Ada home filesystem (Q6) | n/a | none (deterministic) | ada-gw1 | 24 GB avail of 50 GB (27 GB used); CORE-Bench L2+L3 originals are 17.0 GB | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-listing-core-bench | measured | CORE-Bench tree listing with byte sizes | 89d7ace3094d,d0426872454b | none (deterministic) | ada-gw1 + local | 32,238,633,709 B; 4,945 files; L2+L3 16,998,825,388 B | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-listing-vs-card | measured | Card vs manifest vs listing for L2/L3 counts | d0426872454b | none (deterministic) | local | 632/5,061/9,377,120/52,712 (L2) and 97/2,580/2,609,581/106,479 (L3) reproduced exactly by manifest; folder counts match listing | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-fetch-core-bench-samples | measured | Fetched 3 Verified repos x L2, L3, Rewrite-L2 (33 files) | df257b3d8d14,366161ecd6ca | none (deterministic) | ada gnode job 24592 | 11 MB in 33 s total; sha256 = LFS oid for all LFS files | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-format-analysis | measured | Fields, id format, qrels semantics from sample | 1768f88e29bb | none (deterministic) | ada-gw1 | corpus {_id UUID,text}; qrels binary; corpus = union of per-query filtered_corpus_id; no path/span in ids | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-django-queries-stream | measured | Why Verified queries.jsonl is large (django, streamed) | n/a | none (deterministic) | ada-gw1 | 173.7 MB, 188 queries, 99.85% of bytes are filtered_corpus_id (19,049-25,391 ids/query) | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-hf-metadata | measured | SWE-bench Verified and Loc-Bench V1/V0.2 metadata | df257b3d8d14 | none (deterministic) | ada-gw1 + local pyarrow | Verified 500 rows/12 repos; Loc-Bench V1 560 rows/165 repos, V0.2 660 rows/210 repos | `results/logs/s2_ground_truth_a_2026-10-17.json` |
+| 2026-10-17 | s2-sweloc-search | measured | SweLoc availability: HF search, GitHub, zip listings | 5f28f3e626a0 | none (deterministic) | ada-gw1 | no dataset named SweLoc; undocumented gangiswag/train_data: 56,279 instances (python 24,285) | `results/logs/s2_ground_truth_a_2026-10-17.json` |
 
 ## Published anchors (`paper_reported`)
 
