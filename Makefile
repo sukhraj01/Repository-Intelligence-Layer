@@ -11,7 +11,7 @@ PYTHON ?= python3.11
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup test test-all lint format bench bench-check hooks
+.PHONY: setup test test-all lint format bench bench-check bench-graph hooks
 
 setup:
 	poetry env use $(PYTHON)
@@ -38,6 +38,14 @@ bench:
 
 bench-check:
 	$(RUN) python scripts/bench.py check
+
+# Real parse and graph_build throughput and graph expansion latency (all storage options) for the
+# checkouts under data/raw/repos (flask, requests and, if present, django); appends to results/latency.
+bench-graph:
+	$(RUN) python -m ril.bench.graph_measure all \
+	  --repo flask=data/raw/repos/pallets__flask=pallets/flask \
+	  --repo requests=data/raw/repos/psf__requests=psf/requests \
+	  --work data/processed/p_graph/work --log-dir results/latency --out data/processed/p_graph/graph_measure.json
 
 hooks:
 	@sh scripts/hooks/install.sh

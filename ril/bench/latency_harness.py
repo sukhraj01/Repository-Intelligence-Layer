@@ -29,7 +29,14 @@ import sys
 import time
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime
+
+try:
+    from datetime import UTC
+except ImportError:  # Python 3.10 (cluster nodes)
+    from datetime import timezone
+
+    UTC = timezone.utc  # noqa: UP017
 from pathlib import Path
 from typing import Any
 
@@ -351,11 +358,14 @@ def capture_environment(config_hash: str, root: Path | None = None) -> Row:
     root = root or repo_root()
     gpu_name, gpu_driver, cuda_version = _gpu_info()
     status = _run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=root)
+    commit = _run(["git", "rev-parse", "--short", "HEAD"], cwd=root)
+    # a copy of the package without .git (the cluster) names its commit in the environment
     return {
         "timestamp_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "commit": _run(["git", "rev-parse", "--short", "HEAD"], cwd=root) or "none",
-        "dirty": 1 if status else 0,
-        "branch": _run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=root) or "none",
+        "commit": commit or os.environ.get("RIL_COMMIT", "none"),
+        "dirty": 1 if status else int(os.environ.get("RIL_DIRTY", "0")),
+        "branch": _run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=root)
+        or os.environ.get("RIL_BRANCH", "none"),
         "host": platform.node(),
         "cpu_model": _cpu_model(),
         "cpu_cores": os.cpu_count() or 0,

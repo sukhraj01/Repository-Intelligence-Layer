@@ -1,6 +1,6 @@
 # ril/bench/
 
-**Files:** `latency_harness.py`, `profile_stages.py`, `stub_stages.py` (synthetic workloads until real stages register). Contract: `specs/latency_harness.md`.
+**Files:** `latency_harness.py`, `profile_stages.py`, `stub_stages.py` (synthetic workloads until real stages register), `graph_storage.py` (storage options S1 to S7 for the RepoGraph) and `graph_measure.py` (parse, graph build and storage measurement through the harness, one process per step). Contract: `specs/latency_harness.md`.
 Design: `docs/07_latency_and_profiling.md`.
 
 The professor's standing requirement: latency/throughput profiled **per component**, recorded
