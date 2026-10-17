@@ -86,3 +86,82 @@ def test_filter_repo_counts_matches_expanded_filter() -> None:
     assert rep.instances_before == 6 and rep.instances_after == 2
     assert rep.repos_before == 2 and rep.repos_after == 1
     assert rep.dropped_repos == {"django/django": 4}
+
+
+# --- list schema 2: current-name resolution (D1), Loc-Bench tier (D3), fork sensitivity ----------
+
+from ril.training.held_out import (  # noqa: E402
+    HeldOutLists,
+    is_held_out,
+    load_held_out_lists,
+    rule_counts,
+)
+
+_LISTS = HeldOutLists(
+    core=frozenset({"pylint-dev/pylint", "pallets/flask"}),
+    loc_bench=frozenset({"extra/locbench-repo"}),
+    aliases={},
+)
+_POOL = {
+    "pylint-dev/pylint": 5,  # exact
+    "pycqa/pylint": 3,  # renamed into a held-out repository
+    "extra/locbench-repo": 2,  # Loc-Bench tier
+    "someone/flask-fork": 4,  # fork of a held-out repository
+    "nobody/unrelated": 10,
+}
+
+
+def test_rule_counts_are_cumulative_and_fork_is_sensitivity_only() -> None:
+    rows = {
+        r.rule: r
+        for r in rule_counts(
+            _POOL,
+            _LISTS,
+            pool_aliases={"pycqa/pylint": "pylint-dev/pylint"},
+            pool_forks={"someone/flask-fork": ("pallets/flask",)},
+        )
+    }
+    assert rows["exact"].instances_after == 24 - 5
+    assert rows["+current_name"].instances_after == 24 - 5 - 3
+    assert rows["+loc_bench"].instances_after == 24 - 5 - 3 - 2
+    assert rows["sensitivity: +fork_network"].instances_after == 24 - 5 - 3 - 2 - 4
+    assert rows["+loc_bench"].repos_after == 2
+
+
+def test_without_aliases_the_current_name_rule_changes_nothing() -> None:
+    rows = {r.rule: r for r in rule_counts(_POOL, _LISTS, {}, {})}
+    assert rows["exact"].instances_after == rows["+current_name"].instances_after
+
+
+def test_held_out_side_rename_is_matched_through_its_alias() -> None:
+    lists = HeldOutLists(frozenset({"old/name"}), frozenset(), {"old/name": "new/name"})
+    kept, dropped, _ = filter_pool(
+        [{"r": "new/name"}, {"r": "other/x"}], lists.core, lambda x: x["r"], lists.aliases
+    )
+    assert [d["r"] for d in dropped] == ["new/name"] and len(kept) == 1
+
+
+def test_filter_repo_counts_with_aliases() -> None:
+    kept, rep = filter_repo_counts(
+        {"pycqa/pylint": 3, "a/b": 1}, ["pylint-dev/pylint"], {"pycqa/pylint": "pylint-dev/pylint"}
+    )
+    assert kept == {"a/b": 1} and rep.instances_after == 1
+
+
+def test_is_held_out_is_false_for_unknown_names() -> None:
+    assert not is_held_out("a/b", {"c/d"}, {"x/y": "c/d"})
+    assert is_held_out("x/y", {"c/d"}, {"x/y": "c/d"})
+
+
+def test_loader_reads_tiers_and_switches_loc_bench_off() -> None:
+    doc = {
+        "schema_version": 2,
+        "repos": {"a/a": ["Verified"]},
+        "tiers": {"loc_bench": {"repos": {"b/b": ["Loc-Bench_V1"]}}},
+        "aliases": {"a/old": "a/a"},
+    }
+    lists = load_held_out_lists(doc)
+    assert lists.blocked() == {"a/a", "b/b"} and lists.blocked(False) == {"a/a"}
+    assert lists.aliases == {"a/old": "a/a"}
+    with pytest.raises(ValueError):
+        load_held_out_lists({"repos": {}})

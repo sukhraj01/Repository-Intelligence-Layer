@@ -1,0 +1,13 @@
+{
+ "already_final": 10,
+ "authenticated": false,
+ "cache_entries": 108,
+ "date": "2026-10-17",
+ "failed": [],
+ "looked_up": 49,
+ "names_requested": 2460,
+ "not_checked": 2401,
+ "rate_limit_after": 2,
+ "rate_limit_before": 53,
+ "stopped_by_rate_limit": true
+}

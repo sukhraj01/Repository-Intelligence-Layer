@@ -1,0 +1,672 @@
+{
+ "control_positive": {
+  "covered": 245,
+  "units_scored": 245
+ },
+ "held_out_side": {
+  "chunks": 16902,
+  "corpus_files_sha256_prefix": {
+   "LEVEL-2/SWE-bench_Verified/mwaskom__seaborn/corpus.jsonl": "b6b0bfcb2987",
+   "LEVEL-2/SWE-bench_Verified/pallets__flask/corpus.jsonl": "35afa088130f",
+   "LEVEL-2/SWE-bench_Verified/psf__requests/corpus.jsonl": "b38c78ef37c7",
+   "LEVEL-3/SWE-bench_Verified/mwaskom__seaborn/corpus.jsonl": "9bde4a424880",
+   "LEVEL-3/SWE-bench_Verified/pallets__flask/corpus.jsonl": "6919c1caba89",
+   "LEVEL-3/SWE-bench_Verified/psf__requests/corpus.jsonl": "6f0f421bd3a9",
+   "Rewrite-LEVEL-2/SWE-bench_Verified/mwaskom__seaborn/corpus.jsonl": "b6b0bfcb2987",
+   "Rewrite-LEVEL-2/SWE-bench_Verified/pallets__flask/corpus.jsonl": "35afa088130f",
+   "Rewrite-LEVEL-2/SWE-bench_Verified/psf__requests/corpus.jsonl": "b38c78ef37c7"
+  },
+  "distinct_informative_line_hashes": 49874,
+  "folders": {
+   "LEVEL-2/SWE-bench_Verified/mwaskom__seaborn": 2515,
+   "LEVEL-2/SWE-bench_Verified/pallets__flask": 1000,
+   "LEVEL-2/SWE-bench_Verified/psf__requests": 2356,
+   "LEVEL-3/SWE-bench_Verified/mwaskom__seaborn": 2425,
+   "LEVEL-3/SWE-bench_Verified/pallets__flask": 1000,
+   "LEVEL-3/SWE-bench_Verified/psf__requests": 1735,
+   "Rewrite-LEVEL-2/SWE-bench_Verified/mwaskom__seaborn": 2515,
+   "Rewrite-LEVEL-2/SWE-bench_Verified/pallets__flask": 1000,
+   "Rewrite-LEVEL-2/SWE-bench_Verified/psf__requests": 2356
+  }
+ },
+ "pool_id_round_trip": {
+  "failures_by_reason": {},
+  "ids": 16141,
+  "ok": 16141
+ },
+ "random_sample_size": 40,
+ "results": [
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "apiflask__apiflask-108",
+   "repo": "apiflask/apiflask",
+   "rows": 103,
+   "scored": 67,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "corydolphin__flask-cors-232",
+   "repo": "corydolphin/flask-cors",
+   "rows": 38,
+   "scored": 31,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "dchevell__flask-executor-45",
+   "repo": "dchevell/flask-executor",
+   "rows": 35,
+   "scored": 20,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "dopstar__requests-ntlm2-11",
+   "repo": "dopstar/requests-ntlm2",
+   "rows": 35,
+   "scored": 26,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "guillp__requests_oauth2client-16",
+   "repo": "guillp/requests_oauth2client",
+   "rows": 153,
+   "scored": 146,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "helloflask__bootstrap-flask-142",
+   "repo": "helloflask/bootstrap-flask",
+   "rows": 18,
+   "scored": 11,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "jmcarp__flask-apispec-206",
+   "repo": "jmcarp/flask-apispec",
+   "rows": 73,
+   "scored": 40,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "luolingchun__flask-openapi3-215",
+   "repo": "luolingchun/flask-openapi3",
+   "rows": 97,
+   "scored": 62,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "marshmallow-code__flask-smorest-194",
+   "repo": "marshmallow-code/flask-smorest",
+   "rows": 88,
+   "scored": 73,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "maxcountryman__flask-login-288",
+   "repo": "maxcountryman/flask-login",
+   "rows": 51,
+   "scored": 38,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "mrf345__flask_minify-35",
+   "repo": "mrf345/flask_minify",
+   "rows": 23,
+   "scored": 17,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "noirbizarre__flask-restplus-99",
+   "repo": "noirbizarre/flask-restplus",
+   "rows": 190,
+   "scored": 122,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-admin-1174",
+   "repo": "pallets-eco/flask-admin",
+   "rows": 985,
+   "scored": 587,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-alembic-41",
+   "repo": "pallets-eco/flask-alembic",
+   "rows": 45,
+   "scored": 40,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-caching-115",
+   "repo": "pallets-eco/flask-caching",
+   "rows": 141,
+   "scored": 109,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-debugtoolbar-154",
+   "repo": "pallets-eco/flask-debugtoolbar",
+   "rows": 133,
+   "scored": 64,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-security-675",
+   "repo": "pallets-eco/flask-security",
+   "rows": 481,
+   "scored": 365,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-session-38",
+   "repo": "pallets-eco/flask-session",
+   "rows": 30,
+   "scored": 20,
+   "share": 0.0
+  },
+  {
+   "covered": 6,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-sqlalchemy-537",
+   "repo": "pallets-eco/flask-sqlalchemy",
+   "rows": 91,
+   "scored": 67,
+   "share": 0.0896
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "pallets-eco__flask-wtf-573",
+   "repo": "pallets-eco/flask-wtf",
+   "rows": 46,
+   "scored": 32,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "python-babel__flask-babel-212",
+   "repo": "python-babel/flask-babel",
+   "rows": 65,
+   "scored": 42,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "python-injector__flask_injector-71",
+   "repo": "python-injector/flask_injector",
+   "rows": 32,
+   "scored": 21,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "python-restx__flask-restx-60",
+   "repo": "python-restx/flask-restx",
+   "rows": 361,
+   "scored": 259,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "requests-cache__requests-cache-225",
+   "repo": "requests-cache/requests-cache",
+   "rows": 127,
+   "scored": 95,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "requests__requests-oauthlib-93",
+   "repo": "requests/requests-oauthlib",
+   "rows": 29,
+   "scored": 27,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "rycus86__prometheus_flask_exporter-3",
+   "repo": "rycus86/prometheus_flask_exporter",
+   "rows": 19,
+   "scored": 16,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "singingwolfboy__flask-dance-364",
+   "repo": "singingwolfboy/flask-dance",
+   "rows": 129,
+   "scored": 74,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "socialwifi__jsonapi-requests-24",
+   "repo": "socialwifi/jsonapi-requests",
+   "rows": 124,
+   "scored": 41,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "vimalloc__flask-jwt-extended-460",
+   "repo": "vimalloc/flask-jwt-extended",
+   "rows": 194,
+   "scored": 105,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "targeted",
+   "member": "viniciuschiele__flask-apscheduler-227",
+   "repo": "viniciuschiele/flask-apscheduler",
+   "rows": 81,
+   "scored": 61,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "paulocheque__django-dynamic-fixture-83",
+   "repo": "paulocheque/django-dynamic-fixture",
+   "rows": 221,
+   "scored": 117,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "multiformats__py-multiaddr-22",
+   "repo": "multiformats/py-multiaddr",
+   "rows": 35,
+   "scored": 26,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "ihabunek__pdf417-py-5",
+   "repo": "ihabunek/pdf417-py",
+   "rows": 34,
+   "scored": 27,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "sendgrid__sendgrid-python-454",
+   "repo": "sendgrid/sendgrid-python",
+   "rows": 177,
+   "scored": 85,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "plasma-umass__scalene-484",
+   "repo": "plasma-umass/scalene",
+   "rows": 218,
+   "scored": 161,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "awslabs__cdk-serverless-clamscan-65",
+   "repo": "awslabs/cdk-serverless-clamscan",
+   "rows": 24,
+   "scored": 16,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "arviz-devs__xarray-einstats-56",
+   "repo": "arviz-devs/xarray-einstats",
+   "rows": 116,
+   "scored": 105,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "seperman__deepdiff-119",
+   "repo": "seperman/deepdiff",
+   "rows": 92,
+   "scored": 67,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "aws__aws-xray-sdk-python-217",
+   "repo": "aws/aws-xray-sdk-python",
+   "rows": 394,
+   "scored": 290,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "deepset-ai__haystack-core-integrations-342",
+   "repo": "deepset-ai/haystack-core-integrations",
+   "rows": 444,
+   "scored": 383,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "redis__redis-om-python-635",
+   "repo": "redis/redis-om-python",
+   "rows": 117,
+   "scored": 67,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "djrobstep__sqlakeyset-81",
+   "repo": "djrobstep/sqlakeyset",
+   "rows": 112,
+   "scored": 79,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "arighi__virtme-ng-122",
+   "repo": "arighi/virtme-ng",
+   "rows": 197,
+   "scored": 119,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "ipython__ipykernel-902",
+   "repo": "ipython/ipykernel",
+   "rows": 464,
+   "scored": 324,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "adbar__courlan-121",
+   "repo": "adbar/courlan",
+   "rows": 85,
+   "scored": 81,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "behave__behave-django-18",
+   "repo": "behave/behave-django",
+   "rows": 31,
+   "scored": 18,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "jackdewinter__application_properties-203",
+   "repo": "jackdewinter/application_properties",
+   "rows": 55,
+   "scored": 51,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "moderngl__moderngl-81",
+   "repo": "moderngl/moderngl",
+   "rows": 47,
+   "scored": 27,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "mbi__django-rosetta-195",
+   "repo": "mbi/django-rosetta",
+   "rows": 64,
+   "scored": 34,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "fhightower__ioc-finder-186",
+   "repo": "fhightower/ioc-finder",
+   "rows": 52,
+   "scored": 33,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "jupyterlab-contrib__jupyter-archive-118",
+   "repo": "jupyterlab-contrib/jupyter-archive",
+   "rows": 22,
+   "scored": 10,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "weblyzard__inscriptis-43",
+   "repo": "weblyzard/inscriptis",
+   "rows": 126,
+   "scored": 101,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "libgit2__pygit2-426",
+   "repo": "libgit2/pygit2",
+   "rows": 178,
+   "scored": 118,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "scikit-hep__fsspec-xrootd-65",
+   "repo": "scikit-hep/fsspec-xrootd",
+   "rows": 26,
+   "scored": 24,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "nolar__kopf-770",
+   "repo": "nolar/kopf",
+   "rows": 527,
+   "scored": 287,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "python-lz4__python-lz4-228",
+   "repo": "python-lz4/python-lz4",
+   "rows": 37,
+   "scored": 30,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "pyexcel__pyexcel-186",
+   "repo": "pyexcel/pyexcel",
+   "rows": 419,
+   "scored": 302,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "django-statsd__django-statsd-49",
+   "repo": "django-statsd/django-statsd",
+   "rows": 56,
+   "scored": 32,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "jmcarpenter2__swifter-192",
+   "repo": "jmcarpenter2/swifter",
+   "rows": 50,
+   "scored": 44,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "aws__aws-sam-cli-5701",
+   "repo": "aws/aws-sam-cli",
+   "rows": 2611,
+   "scored": 2081,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "huggingface__huggingface_hub-815",
+   "repo": "huggingface/huggingface_hub",
+   "rows": 546,
+   "scored": 464,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "django__daphne-275",
+   "repo": "django/daphne",
+   "rows": 64,
+   "scored": 50,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "espressif__idf-build-apps-75",
+   "repo": "espressif/idf-build-apps",
+   "rows": 109,
+   "scored": 76,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "nolze__msoffcrypto-tool-53",
+   "repo": "nolze/msoffcrypto-tool",
+   "rows": 83,
+   "scored": 66,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "sammchardy__python-binance-1449",
+   "repo": "sammchardy/python-binance",
+   "rows": 593,
+   "scored": 550,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "csparpa__pyowm-321",
+   "repo": "csparpa/pyowm",
+   "rows": 477,
+   "scored": 402,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "jpype-project__jpype-685",
+   "repo": "jpype-project/jpype",
+   "rows": 235,
+   "scored": 144,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "dbt-labs__dbt-postgres-73",
+   "repo": "dbt-labs/dbt-postgres",
+   "rows": 44,
+   "scored": 30,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "hashicorp__terraform-cdk-3592",
+   "repo": "hashicorp/terraform-cdk",
+   "rows": 61,
+   "scored": 50,
+   "share": 0.0
+  },
+  {
+   "covered": 0,
+   "kind": "random",
+   "member": "bulletphysics__bullet3-4167",
+   "repo": "bulletphysics/bullet3",
+   "rows": 2881,
+   "scored": 2083,
+   "share": 0.0
+  }
+ ],
+ "seed": 0,
+ "targeted_repos_found": 30
+}

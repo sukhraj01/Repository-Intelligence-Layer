@@ -24,10 +24,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from ril.training.held_out import (  # noqa: E402
+    HeldOutLists,
     build_held_out,
     canonical_json,
     canonical_repo,
-    filter_repo_counts,
+    rule_counts,
     sha256_hex,
 )
 from ril.training.held_out_build import (  # noqa: E402
@@ -36,6 +37,12 @@ from ril.training.held_out_build import (  # noqa: E402
     paired_n,
     pairwise_overlaps,
     repos_by_source,
+)
+from ril.training.rename_resolution import (  # noqa: E402
+    alias_map,
+    fork_roots,
+    load_cache,
+    save_cache,
 )
 
 VERIFIED_KEY = "princeton-nlp_SWE-bench_Verified/test-00000-of-00001.parquet"
@@ -216,14 +223,69 @@ def main() -> None:
         "L2:<dataset> / L3:<dataset> = CORE-Bench folders; Verified = SWE-bench Verified metadata; "
         "RW-* only if a Rewrite folder names a repository its original lacks"
     )
-    held["fork_rule"] = "not applied: exact canonical names only (open question)"
-    held["loc_bench"] = "not included (open question)"
-    body = canonical_json(held)
+    held_set = set(held["repos"])  # type: ignore[arg-type]
     out = ROOT / "data/held_out"
+
+    # --- rename cache: Wave 1 lookups are imported once, later lookups come from the cluster job
+    cache_path = out / "rename_cache.json"
+    cache = load_cache(cache_path)
+    for name, v in fork_checks.items():
+        if name not in cache and v.get("status") in (200, 404):
+            cache[name] = (
+                {"status": 404, "checked": "2026-10-17"}
+                if v["status"] == 404
+                else {
+                    "status": 200,
+                    "current": canonical_repo(v["full_name"]),
+                    "fork": bool(v.get("fork")),
+                    "parent": v.get("parent"),
+                    "source": v.get("source"),
+                    "checked": "2026-10-17",
+                }
+            )
+    save_cache(
+        cache_path,
+        cache,
+        note="names and flags only; Wave 1 lookups imported once; later lookups by scripts/ada/resolve_renames.py",
+    )
+    aliases_all = alias_map(cache)
+    held_aliases = {k: v for k, v in aliases_all.items() if k in held_set}
+
+    # --- Loc-Bench tier (D3): separate, switchable, stored without the core repositories -----
+    loc = {}
+    for name, key in LOC_KEYS.items():
+        r = {canonical_repo(a) for a, _ in meta[key]["pairs"]}
+        loc[name] = dict(
+            repos=r,
+            rows=meta[key]["rows"],
+            in_held=len(r & held_set),
+            not_in_held=sorted(r - held_set),
+        )
+    loc_tier: dict[str, list[str]] = {}
+    for name, v in sorted(loc.items()):
+        for r in v["not_in_held"]:
+            loc_tier.setdefault(r, []).append(name)
+
+    held["schema_version"] = 2
+    held["tiers"] = {
+        "core": "repos: CORE-Bench L2, L3 and SWE-bench Verified (always held out)",
+        "loc_bench": {
+            "default": "held out (decision D3); switch off with load_held_out_lists(...).blocked(False)",
+            "n_repos": len(loc_tier),
+            "repos": dict(sorted(loc_tier.items())),
+        },
+    }
+    held["aliases"] = dict(sorted(held_aliases.items()))
+    held["matching"] = (
+        "exact canonical names + current-name resolution via aliases (decision D1); "
+        "fork network is a sensitivity report only"
+    )
+    held["fork_rule"] = "sensitivity report only, never a filter (decision D1)"
+    held["loc_bench"] = "separate tier under tiers.loc_bench (decision D3)"
+    body = canonical_json(held)
     (out / "held_out_repos.json").write_bytes(body)
     digest = sha256_hex(body)
     write(out / "held_out_repos.sha256", f"{digest}  held_out_repos.json\n")
-    held_set = set(held["repos"])  # type: ignore[arg-type]
 
     # --- tables: folders, source counts, overlaps ------------------------------------------
     folder_rows = []
@@ -300,21 +362,12 @@ def main() -> None:
         [[k, v] for k, v in pw_ds.items()],
     )
 
-    # --- Loc-Bench, reported separately ------------------------------------------------
-    loc = {}
-    for name, key in LOC_KEYS.items():
-        r = {canonical_repo(a) for a, _ in meta[key]["pairs"]}
-        loc[name] = dict(
-            repos=r,
-            rows=meta[key]["rows"],
-            in_held=len(r & held_set),
-            not_in_held=sorted(r - held_set),
-        )
+    # --- Loc-Bench reference file (the tier itself is in held_out_repos.json) -------------
     write(
         ROOT / "data/processed/core_bench/reference_loc_bench_repos.json",
         json.dumps(
             {
-                "note": "reference only, not part of the held-out list (open question)",
+                "note": "reference copy of the Loc-Bench tier inputs (decision D3); the tier is in held_out_repos.json",
                 **{
                     k: {
                         "rows": v["rows"],
@@ -573,87 +626,87 @@ def main() -> None:
         cvm,
     )
 
-    # --- pool filtering ---------------------------------------------------------------------
-    loc_union = set().union(*[v["repos"] for v in loc.values()])
+    # --- pool filtering: rule counts (D1, D3) ---------------------------------------------
+    lists = HeldOutLists(
+        core=frozenset(held_set), loc_bench=frozenset(loc_tier), aliases=held_aliases
+    )
+    pool_aliases = {k: v for k, v in aliases_all.items() if k not in held_set}
+    pool_forks = fork_roots(cache)
     pool_rows = []
-    all_proxy: set[str] = set()
     pool_docs = {}
+    default_blocked_core = lists.core
     for pname, p in pools.items():
-        counts = p["repos"]
-        kept, rep = filter_repo_counts(counts, held_set)
-        kept_loc, rep_loc = filter_repo_counts(counts, held_set | loc_union)
-        names_held = {r.split("/", 1)[1] for r in held_set}
-        proxy = sorted(r for r in kept if r.split("/", 1)[1] in names_held)
-        all_proxy |= set(proxy)
-        checked = {r: fork_checks[r] for r in proxy if r in fork_checks}
-        renamed_into_held = sorted(
-            r
-            for r, v in checked.items()
-            if v.get("status") == 200
-            and canonical_repo(v["full_name"]) != r
-            and canonical_repo(v["full_name"]) in held_set
+        counts = {canonical_repo(k): v for k, v in p["repos"].items()}
+        rows = rule_counts(counts, lists, pool_aliases, pool_forks)
+        by = {r.rule: r for r in rows}
+        before = (sum(counts.values()), len(counts))
+        resolved = [r for r in counts if cache.get(r, {}).get("status") in (200, 404)]
+        resolved_inst = sum(counts[r] for r in resolved)
+        # repositories dropped by the current-name rule: those not dropped by the exact rule
+        from ril.training.held_out import is_held_out
+
+        blocked_core = set(lists.core) | {held_aliases[b] for b in lists.core if b in held_aliases}
+        al = {**held_aliases, **pool_aliases}
+        by_name = sorted(
+            r for r in counts if r not in default_blocked_core and is_held_out(r, blocked_core, al)
         )
-        forks_of_held = sorted(
-            r
-            for r, v in checked.items()
-            if v.get("fork")
-            and (
-                canonical_repo(v.get("source") or "-/-") in held_set
-                or canonical_repo(v.get("parent") or "-/-") in held_set
+        default_rows = [r for r in rows if r.rule == "+loc_bench"][0]
+        kept = {
+            r: n
+            for r, n in sorted(counts.items())
+            if not is_held_out(
+                r,
+                set(lists.core | lists.loc_bench)
+                | {al[b] for b in lists.core | lists.loc_bench if b in al},
+                al,
             )
-        )
-        extra_inst = sum(kept[r] for r in renamed_into_held)
+        }
         write(
             ROOT / "data/processed/pools" / f"{pname}_repos.json",
             json.dumps(
                 {
                     "pool": pname,
                     "held_out_sha256": digest,
-                    "rule": "exact canonical names only",
-                    "instances": rep.instances_after,
-                    "repositories": dict(kept),
+                    "rule": "exact + current-name resolution + Loc-Bench tier (list schema 2)",
+                    "instances": default_rows.instances_after,
+                    "repositories": kept,
                 },
                 indent=0,
                 sort_keys=True,
             )
             + "\n",
         )
+        top_dropped = sorted(
+            ((r, n) for r, n in counts.items() if r not in kept), key=lambda kv: (-kv[1], kv[0])
+        )[:15]
         pool_docs[pname] = dict(
-            before=(rep.instances_before, rep.repos_before),
-            after=(rep.instances_after, rep.repos_after),
-            dropped_repos=len(rep.dropped_repos),
-            top=rep.top_dropped(15),
-            with_loc=(rep_loc.instances_after, rep_loc.repos_after),
-            proxy=len(proxy),
-            proxy_inst=sum(kept[r] for r in proxy),
-            checked=len(checked),
-            renamed=renamed_into_held,
-            extra_inst=extra_inst,
-            forks=forks_of_held,
-            unchecked=len(proxy) - len(checked),
-            not_found=sorted(r for r, v in checked.items() if v.get("status") == 404),
-            rename_after=(
-                rep.instances_after - extra_inst,
-                rep.repos_after - len(renamed_into_held),
-            ),
-            n_dropped_instances=rep.instances_before - rep.instances_after,
+            before=before,
+            rules={r.rule: [r.instances_after, r.repos_after, r.repos_dropped] for r in rows},
+            exact=(by["exact"].instances_after, by["exact"].repos_after),
+            default=(default_rows.instances_after, default_rows.repos_after),
+            by_name=by_name,
+            by_name_inst=sum(counts[r] for r in by_name),
+            resolved=len(resolved),
+            resolved_inst=resolved_inst,
+            top=top_dropped,
+            forks_sensitivity=by["sensitivity: +fork_network"].repos_dropped
+            - by["+loc_bench"].repos_dropped,
         )
         pool_rows.append(
             [
                 pname,
-                rep.instances_before,
-                rep.repos_before,
-                rep.instances_after,
-                rep.repos_after,
-                f"{rep.instances_surviving_pct:.2f}",
-                f"{rep.repos_surviving_pct:.2f}",
-                len(rep.dropped_repos),
-                rep_loc.instances_after,
-                rep_loc.repos_after,
-                len(proxy),
-                len(checked),
-                len(renamed_into_held),
-                len(forks_of_held),
+                before[0],
+                before[1],
+                by["exact"].instances_after,
+                by["exact"].repos_after,
+                by["+current_name"].instances_after,
+                by["+current_name"].repos_after,
+                by["+loc_bench"].instances_after,
+                by["+loc_bench"].repos_after,
+                by["sensitivity: +fork_network"].instances_after,
+                by["sensitivity: +fork_network"].repos_after,
+                len(resolved),
+                resolved_inst,
             ]
         )
     write_csv(
@@ -664,26 +717,24 @@ def main() -> None:
             "repos_before",
             "instances_after_exact",
             "repos_after_exact",
-            "pct_instances_surviving",
-            "pct_repos_surviving",
-            "repos_dropped",
-            "instances_after_if_loc_bench_added",
-            "repos_after_if_loc_bench_added",
-            "same_name_other_owner_candidates",
-            "candidates_checked_on_github",
-            "checked_renamed_into_held_out",
-            "checked_forks_of_held_out",
+            "instances_after_current_name",
+            "repos_after_current_name",
+            "instances_after_default",
+            "repos_after_default",
+            "instances_after_if_fork_network_added",
+            "repos_after_if_fork_network_added",
+            "pool_repos_resolved",
+            "pool_instances_in_resolved_repos",
         ],
         pool_rows,
     )
-
     write(
         ROOT / "results/tables/github_name_check.json",
         json.dumps(
             {
-                "what": "same-name-other-owner pool repositories looked up on the GitHub API (name, fork, root)",
-                "checked": {r: fork_checks[r] for r in sorted(all_proxy) if r in fork_checks},
-                "not_checked_rate_limit": sorted(r for r in all_proxy if r not in fork_checks),
+                "what": "rename cache: every repository looked up on the GitHub API (data/held_out/rename_cache.json)",
+                "entries": len(cache),
+                "renamed_into_a_different_name": len(aliases_all),
             },
             indent=1,
             sort_keys=True,
@@ -700,48 +751,62 @@ def main() -> None:
             "rows are instance directories `train/python/<owner>__<name>-<PR>/`; repository names are read from directory names in the zip central directory, nothing else was fetched",
         ),
     }
+    wave1 = {  # Wave 1 lower bounds (exact filter + 10 / 51 same-name candidates resolved)
+        "gangiswag_train_data_python": dict(inst=20854, repos=2359, renamed=3, renamed_inst=54),
+        "codesearchnet_python": dict(inst=449440, repos=13546, renamed=16, renamed_inst=None),
+    }
     for pname, d in pool_docs.items():
+        w1 = wave1[pname]
         lines = [
             f"# Pool filter report: {pname}\n",
             f"Pool: {descr[pname][0]}. Unit counted: {descr[pname][1]}.\n",
-            "Held-out list: `held_out_repos.json` (exact canonical names, no fork rule, no Loc-Bench). "
+            "Held-out list: `held_out_repos.json` (schema 2): exact canonical names of the core tier, "
+            "current-name resolution (D1), Loc-Bench tier (D3); the fork network is a sensitivity row only. "
             "This is a measurement of survival, not a choice of training pool.\n",
             md_table(
-                ["", "instances", "repositories"],
                 [
-                    ["before", fmt(d["before"][0]), fmt(d["before"][1])],
-                    ["after (exact-name filter)", fmt(d["after"][0]), fmt(d["after"][1])],
-                    [
-                        "surviving",
-                        f"{100 * d['after'][0] / d['before'][0]:.2f} %",
-                        f"{100 * d['after'][1] / d['before'][1]:.2f} %",
-                    ],
+                    "rule (cumulative)",
+                    "instances after",
+                    "repositories after",
+                    "repositories dropped",
                 ],
+                [[name, fmt(v[0]), fmt(v[1]), fmt(v[2])] for name, v in d["rules"].items()],
             ),
-            f"\nHeld-out repositories present in the pool: {d['dropped_repos']}.\n\nTop dropped repositories (by instances):\n",
-            md_table(["repository", "instances"], [[r, fmt(n)] for r, n in d["top"]]),
-            "\n## Sensitivity to the two open rules (both reported, neither chosen)\n",
+            f"\nBefore: {fmt(d['before'][0])} instances, {fmt(d['before'][1])} repositories. "
+            f"Current-name resolution covers {fmt(d['resolved'])} of {fmt(d['before'][1])} pool repositories "
+            f"({fmt(d['resolved_inst'])} of {fmt(d['before'][0])} instances); every row after `exact` is a lower bound on full resolution.\n",
+            "## Before and after, against the Wave 1 lower bound\n",
             md_table(
-                ["rule", "instances after", "repositories after"],
                 [
-                    ["exact names only (above)", fmt(d["after"][0]), fmt(d["after"][1])],
+                    "",
+                    "Wave 1 (exact + same-name candidates only)",
+                    "now (exact + cached current names)",
+                ],
+                [
                     [
-                        "exact names + Loc-Bench repositories (open question)",
-                        fmt(d["with_loc"][0]),
-                        fmt(d["with_loc"][1]),
+                        "repositories resolving to a held-out repository under its current name",
+                        w1["renamed"],
+                        len(d["by_name"]),
                     ],
                     [
-                        f"exact names + current-name resolution of {d['checked']} same-name candidates checked on GitHub",
-                        fmt(d["rename_after"][0]),
-                        fmt(d["rename_after"][1]),
+                        "instances in those repositories",
+                        fmt(w1["renamed_inst"])
+                        if w1["renamed_inst"] is not None
+                        else "not counted",
+                        fmt(d["by_name_inst"]),
+                    ],
+                    [
+                        "instances after exact + current-name",
+                        "n/a",
+                        fmt(d["rules"]["+current_name"][0]),
                     ],
                 ],
             ),
-            f"\nFork / near-duplicate evidence: {d['proxy']} surviving pool repositories ({fmt(d['proxy_inst'])} instances) share a repository name with a held-out repository under a different owner. "
-            f"{d['checked']} of them were looked up through the unauthenticated GitHub API (60 requests per hour); {d['unchecked']} were not checked. "
-            f"Among the checked: {len(d['renamed'])} resolve to a held-out repository under its current name (a rename or ownership transfer, so the exact-name filter lets them through): {', '.join(d['renamed']) or 'none'}; "
-            f"{len(d['forks'])} are forks whose fork-network root or parent is held out; {len(d['not_found'])} no longer exist. "
-            "Renamed repositories whose name part differs, and forks with other names, cannot be found this way: this is a lower bound.\n",
+            f"\nRepositories that the exact filter keeps and current-name resolution drops: {', '.join(d['by_name']) or 'none'}.\n",
+            "## Top dropped repositories under the default rule set (by instances)\n",
+            md_table(["repository", "instances"], [[r, fmt(n)] for r, n in d["top"]]),
+            "\nThe fork-network row is a sensitivity report: it counts pool repositories that are forks whose parent or "
+            "source is held out, among the repositories resolved so far. It is never applied as a filter (decision D1).\n",
         ]
         write(out / f"pool_filter_report_{pname}.md", "\n".join(lines))
     write(
@@ -786,7 +851,7 @@ def main() -> None:
         + (str(len(unresolved)) if unresolved else "none")
         + ". Nothing was guessed from a folder name.\n"
         "- Union held out: all L2 datasets, all L3 datasets, the Rewrite variants (same repositories, checked below) and SWE-bench Verified metadata.\n"
-        "- Not applied: any fork or near-duplicate rule, and Loc-Bench (both are open questions; counts under each are below).\n",
+        "- List schema 2: core tier above plus current-name resolution (aliases from the rename cache, decision D1) and a separate, switchable Loc-Bench tier (decision D3). The fork network is a sensitivity report only.\n",
         f"## Result\n\n**{held['n_repos']} distinct repositories held out.**\n",
         md_table(
             [
@@ -828,7 +893,7 @@ def main() -> None:
         md_table(["pair", "shared"], [[k, v] for k, v in pw.items()]),
         f"\nL2 union L3 union Verified = {len(l2 | l3 | verified_repos)}. L3 is wholly inside L2 ({len(l3 & l2)} of {len(l3)}), and the 12 Verified repositories are inside both. "
         "The per-dataset overlap matrix is `results/tables/held_out_pairwise_overlaps.csv`.\n",
-        "## Loc-Bench (reported separately, not in the list)\n",
+        "## Loc-Bench tier (decision D3: separate and switchable)\n",
         md_table(
             ["version", "rows", "repositories", "already in the list", "not in the list"],
             [
@@ -836,7 +901,7 @@ def main() -> None:
                 for k, v in loc.items()
             ],
         ),
-        "\nWhether Loc-Bench repositories are held out of training is ADR-005 and is not decided here.\n",
+        f"\nThe tier holds {len(loc_tier)} repositories that are not in the core list (union of both versions), under `tiers.loc_bench` in `held_out_repos.json`; it is held out by default and can be switched off.\n",
         "## Paired analysis n (instance ids)\n",
         md_table(
             ["quantity", "n"],
@@ -858,12 +923,24 @@ def main() -> None:
         )
         + "\nDetails per repository: `results/tables/paired_n.json`.\n",
         "## Fork and near-duplicate counts\n",
-        "See the pool reports below. The held-out list itself is exact names only. "
-        "Measured on candidate pools: repositories that were renamed or transferred since the pool was built still carry their old name and pass an exact-name filter.\n",
+        f"Rename cache: {len(cache)} repositories looked up, {len(aliases_all)} resolve to a different name; "
+        f"{len(held_aliases)} of the held-out repositories have a known current name (the others are not yet resolved: this needs the read-only token on the cluster, see `docs/COMPUTE.md`). "
+        "The pool reports below give the counts per rule.\n",
         "## Pool reports\n",
         md_table(
-            ["pool", "instances before", "after", "repos before", "after"],
-            [[r[0], fmt(r[1]), fmt(r[3]), fmt(r[2]), fmt(r[4])] for r in pool_rows],
+            [
+                "pool",
+                "instances before",
+                "after exact",
+                "after default",
+                "repos before",
+                "after exact",
+                "after default",
+            ],
+            [
+                [r[0], fmt(r[1]), fmt(r[3]), fmt(r[7]), fmt(r[2]), fmt(r[4]), fmt(r[8])]
+                for r in pool_rows
+            ],
         )
         + "\nFiles: `pool_filter_report_<pool>.md` (CodeSearchNet python, the gangiswag candidate), `pool_filter_report_cornstack_python.md` (cannot be filtered), `pool_filter_report_sweloc.md` (does not exist).\n",
     ]
@@ -890,6 +967,7 @@ def main() -> None:
             "scripts/build_held_out.py",
             "ril/training/held_out.py",
             "ril/training/held_out_build.py",
+            "ril/training/rename_resolution.py",
             "scripts/ada/core_bench_instance_ids.py",
             "scripts/ada/core_bench_corpus_stats.py",
             "scripts/ada/core_bench_query_stats.py",
@@ -934,10 +1012,9 @@ def main() -> None:
         totals=totals,
         pools={
             name: {
-                **{k: v for k, v in d.items() if k not in ("top", "renamed", "forks", "not_found")},
-                "renamed_into_held_out": len(d["renamed"]),
-                "forks_of_held_out": len(d["forks"]),
-                "no_longer_exist": len(d["not_found"]),
+                **{k: v for k, v in d.items() if k not in ("top", "by_name")},
+                "renamed_into_held_out": len(d["by_name"]),
+                "renamed_repos": d["by_name"],
             }
             for name, d in pool_docs.items()
         },
@@ -945,6 +1022,10 @@ def main() -> None:
             k: dict(rows=v["rows"], repos=len(v["repos"]), in_held=v["in_held"])
             for k, v in loc.items()
         },
+        loc_bench_tier_repos=len(loc_tier),
+        rename_cache=dict(
+            entries=len(cache), renamed=len(aliases_all), held_out_aliases=len(held_aliases)
+        ),
         label_quality=dict(
             seed=label_q["seed"], n=label_q["n_sample"], classes=label_q["class_counts"]
         ),
@@ -957,7 +1038,7 @@ def main() -> None:
         unresolved=len(unresolved),
     )
     log = dict(
-        session="2026-10-17-04 ground-truth-b",
+        session="2026-10-17-09 d-decisions-freeze (list schema 2)",
         date="2026-10-17",
         seed=args.seed,
         seed_note="no randomness except the label-quality sample (seed 0, run on the cluster)",
@@ -971,7 +1052,7 @@ def main() -> None:
         summary=summary,
     )
     write(
-        ROOT / "results/logs/s4_ground_truth_b_2026-10-17.json",
+        ROOT / "results/logs/d_held_out_v2_2026-10-17.json",
         json.dumps(log, indent=1, sort_keys=True, default=list) + "\n",
     )
     print(

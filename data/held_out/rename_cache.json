@@ -1,0 +1,863 @@
+{
+ "entries": {
+  "airtai/faststream": {
+   "checked": "2026-10-17",
+   "current": "ag2ai/faststream",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "ajbosco/dag-factory": {
+   "checked": "2026-10-17",
+   "current": "astronomer/dag-factory",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "albu/albumentations": {
+   "checked": "2026-10-17",
+   "current": "albumentations-team/albumentations",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "aloomaio/python-sdk": {
+   "checked": "2026-10-17",
+   "status": 404
+  },
+  "anrosent/cli": {
+   "checked": "2026-10-17",
+   "current": "anrosent/cli",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "astropy/astropy": {
+   "checked": "2026-10-17",
+   "current": "astropy/astropy",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "atmos-python/atmos": {
+   "checked": "2026-10-17",
+   "current": "atmos-python/atmos",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "aws-cloudformation/cfn-lint": {
+   "checked": "2026-10-17",
+   "current": "aws-cloudformation/cfn-lint",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "configcat/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "configcat/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "crankycoder/hydra": {
+   "checked": "2026-10-17",
+   "current": "crankycoder/hydra",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "dapr/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "dapr/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "dbt-labs/dbt-core": {
+   "checked": "2026-10-17",
+   "current": "dbt-labs/dbt",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "deepset-ai/haystack": {
+   "checked": "2026-10-17",
+   "current": "deepset-ai/haystack",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "dependencies-io/cli": {
+   "checked": "2026-10-17",
+   "status": 404
+  },
+  "django-dbbackup/django-dbbackup": {
+   "checked": "2026-10-17",
+   "current": "archmonger/django-dbbackup",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "django/django": {
+   "checked": "2026-10-17",
+   "current": "django/django",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "dottxt-ai/outlines": {
+   "checked": "2026-10-17",
+   "current": "dottxt-ai/outlines",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "dynaconf/dynaconf": {
+   "checked": "2026-10-17",
+   "current": "dynaconf/dynaconf",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "encode/django-rest-framework": {
+   "checked": "2026-10-17",
+   "current": "encode/django-rest-framework",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "facebookresearch/hydra": {
+   "checked": "2026-10-17",
+   "current": "hydra-ecosystem/hydra",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "falconry/falcon": {
+   "checked": "2026-10-17",
+   "current": "falconry/falcon",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "fizzadar/pyinfra": {
+   "checked": "2026-10-17",
+   "current": "pyinfra-dev/pyinfra",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "fmfn/bayesianoptimization": {
+   "checked": "2026-10-17",
+   "current": "bayesian-optimization/bayesianoptimization",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "fsspec/filesystem_spec": {
+   "checked": "2026-10-17",
+   "current": "fsspec/filesystem_spec",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "gboeing/osmnx": {
+   "checked": "2026-10-17",
+   "current": "gboeing/osmnx",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "github/octodns": {
+   "checked": "2026-10-17",
+   "current": "octodns/octodns",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "hardbyte/python-can": {
+   "checked": "2026-10-17",
+   "current": "hardbyte/python-can",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "hchasestevens/tracing": {
+   "checked": "2026-10-17",
+   "current": "hchasestevens/tracing",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "huggingface/datasets": {
+   "checked": "2026-10-17",
+   "current": "huggingface/datasets",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "hypothesisworks/hypothesis": {
+   "checked": "2026-10-17",
+   "current": "hypothesisworks/hypothesis",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "ipinfo/python": {
+   "checked": "2026-10-17",
+   "current": "ipinfo/python",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "ipython/ipython": {
+   "checked": "2026-10-17",
+   "current": "ipython/ipython",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "jazzband/django-dbbackup": {
+   "checked": "2026-10-17",
+   "current": "archmonger/django-dbbackup",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "jjkester/django-auditlog": {
+   "checked": "2026-10-17",
+   "current": "jazzband/django-auditlog",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "joke2k/faker": {
+   "checked": "2026-10-17",
+   "current": "joke2k/faker",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "kozea/weasyprint": {
+   "checked": "2026-10-17",
+   "current": "kozea/weasyprint",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "leancloud/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "leancloud/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "lepture/authlib": {
+   "checked": "2026-10-17",
+   "current": "authlib/authlib",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "lucapinello/haystack": {
+   "checked": "2026-10-17",
+   "current": "lucapinello/haystack",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "luhnmod10/python": {
+   "checked": "2026-10-17",
+   "current": "luhnmod10/python",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "matplotlib/matplotlib": {
+   "checked": "2026-10-17",
+   "current": "matplotlib/matplotlib",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "mdanalysis/mdanalysis": {
+   "checked": "2026-10-17",
+   "current": "mdanalysis/mdanalysis",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "messense/extender": {
+   "checked": "2026-10-17",
+   "current": "messense/extender",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "mikedh/trimesh": {
+   "checked": "2026-10-17",
+   "current": "mikedh/trimesh",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "mwaskom/seaborn": {
+   "checked": "2026-10-17",
+   "current": "mwaskom/seaborn",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "narwhals-dev/narwhals": {
+   "checked": "2026-10-17",
+   "current": "narwhals-dev/narwhals",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "noxdafox/pebble": {
+   "checked": "2026-10-17",
+   "current": "noxdafox/pebble",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "ocr-d/core": {
+   "checked": "2026-10-17",
+   "current": "ocr-d/core",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "open-feature/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "open-feature/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "open-telemetry/opentelemetry-python": {
+   "checked": "2026-10-17",
+   "current": "open-telemetry/opentelemetry-python",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "optimizely/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "optimizely/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "orkohunter/keep": {
+   "checked": "2026-10-17",
+   "current": "orkohunter/keep",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pallets/click": {
+   "checked": "2026-10-17",
+   "current": "pallets/click",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pallets/flask": {
+   "checked": "2026-10-17",
+   "current": "pallets/flask",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pantsbuild/pex": {
+   "checked": "2026-10-17",
+   "current": "pex-tool/pex",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pex-tool/pex": {
+   "checked": "2026-10-17",
+   "current": "pex-tool/pex",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pgmpy/pgmpy": {
+   "checked": "2026-10-17",
+   "current": "pgmpy/pgmpy",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "psf/requests": {
+   "checked": "2026-10-17",
+   "current": "psf/requests",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pubnub/python": {
+   "checked": "2026-10-17",
+   "current": "pubnub/python",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pycqa/astroid": {
+   "checked": "2026-10-17",
+   "current": "pylint-dev/astroid",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pycqa/pylint": {
+   "checked": "2026-10-17",
+   "current": "pylint-dev/pylint",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pydata/xarray": {
+   "checked": "2026-10-17",
+   "current": "pydata/xarray",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pyinstaller/pyinstaller": {
+   "checked": "2026-10-17",
+   "current": "pyinstaller/pyinstaller",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pylint-dev/pylint": {
+   "checked": "2026-10-17",
+   "current": "pylint-dev/pylint",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pymodbus-dev/pymodbus": {
+   "checked": "2026-10-17",
+   "current": "pymodbus-dev/pymodbus",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pyomo/pyomo": {
+   "checked": "2026-10-17",
+   "current": "pyomo/pyomo",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pypa/pipenv": {
+   "checked": "2026-10-17",
+   "current": "pypa/pipenv",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pypa/pipx": {
+   "checked": "2026-10-17",
+   "current": "pypa/pipx",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pysigma/core": {
+   "checked": "2026-10-17",
+   "current": "pysigma/core",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "pytest-dev/pytest": {
+   "checked": "2026-10-17",
+   "current": "pytest-dev/pytest",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "python-pillow/pillow": {
+   "checked": "2026-10-17",
+   "current": "python-pillow/pillow",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "python-telegram-bot/python-telegram-bot": {
+   "checked": "2026-10-17",
+   "current": "python-telegram-bot/python-telegram-bot",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "qiniu/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "qiniu/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "rare-technologies/smart_open": {
+   "checked": "2026-10-17",
+   "current": "piskvorky/smart_open",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "realtimeweb/datasets": {
+   "checked": "2026-10-17",
+   "current": "realtimeweb/datasets",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "reflexsc/reflex": {
+   "checked": "2026-10-17",
+   "current": "reflexsc/reflex",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "rgmining/common": {
+   "checked": "2026-10-17",
+   "current": "rgmining/common",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "rochacbruno/dynaconf": {
+   "checked": "2026-10-17",
+   "current": "rochacbruno/dynaconf-mirror",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "rtdip/core": {
+   "checked": "2026-10-17",
+   "current": "rtdip/core",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "samuelcolvin/pydantic": {
+   "checked": "2026-10-17",
+   "current": "pydantic/pydantic",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "scikit-learn/scikit-learn": {
+   "checked": "2026-10-17",
+   "current": "scikit-learn/scikit-learn",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "sdispater/poetry": {
+   "checked": "2026-10-17",
+   "current": "python-poetry/poetry",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "sdv-dev/sdv": {
+   "checked": "2026-10-17",
+   "current": "sdv-dev/sdv",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "signaturit/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "signaturit/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "slackapi/python-slack-sdk": {
+   "checked": "2026-10-17",
+   "current": "slackapi/python-slack-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "sphinx-doc/sphinx": {
+   "checked": "2026-10-17",
+   "current": "sphinx-doc/sphinx",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "spikeinterface/spikeinterface": {
+   "checked": "2026-10-17",
+   "current": "spikeinterface/spikeinterface",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "spulec/moto": {
+   "checked": "2026-10-17",
+   "current": "getmoto/moto",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "streamlink/streamlink": {
+   "checked": "2026-10-17",
+   "current": "streamlink/streamlink",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "supercowpowers/bat": {
+   "checked": "2026-10-17",
+   "current": "supercowpowers/zat",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "swingtix/bookkeeper": {
+   "checked": "2026-10-17",
+   "current": "swingtix/bookkeeper",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "sympy/sympy": {
+   "checked": "2026-10-17",
+   "current": "sympy/sympy",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "tensorflow/datasets": {
+   "checked": "2026-10-17",
+   "current": "tensorflow/datasets",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "textualize/textual": {
+   "checked": "2026-10-17",
+   "current": "textualize/textual",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "thoth-station/python": {
+   "checked": "2026-10-17",
+   "current": "thoth-station/python",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "thumbor-community/redis": {
+   "checked": "2026-10-17",
+   "current": "thumbor-community/redis",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "torchio-project/torchio": {
+   "checked": "2026-10-17",
+   "current": "torchio-project/torchio",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "tox-dev/tox": {
+   "checked": "2026-10-17",
+   "current": "tox-dev/tox",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "tradenity/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "tradenity/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "varlink/python": {
+   "checked": "2026-10-17",
+   "current": "varlink/python",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "visualops/cli": {
+   "checked": "2026-10-17",
+   "current": "visualops/cli",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "vulndb/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "vulndb/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "warner/magic-wormhole": {
+   "checked": "2026-10-17",
+   "current": "magic-wormhole/magic-wormhole",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "watson-developer-cloud/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "watson-developer-cloud/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "wepay/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "wepay/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "wglass/lighthouse": {
+   "checked": "2026-10-17",
+   "current": "wglass/lighthouse",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "yandex-cloud/python-sdk": {
+   "checked": "2026-10-17",
+   "current": "yandex-cloud/python-sdk",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  },
+  "zalando/patroni": {
+   "checked": "2026-10-17",
+   "current": "patroni/patroni",
+   "fork": false,
+   "parent": null,
+   "source": null,
+   "status": 200
+  }
+ },
+ "note": "names and flags only; Wave 1 lookups imported once; later lookups by scripts/ada/resolve_renames.py",
+ "schema": 1,
+ "what": "current GitHub name, fork flag and fork parent/source per queried repository"
+}

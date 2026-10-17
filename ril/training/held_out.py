@@ -6,9 +6,15 @@ django function has an advantage on every django instance.
 
 Canonical repository form: ``owner/name``, case-folded (GitHub treats owner and name
 case-insensitively). ``Owner/Repo``, ``owner__repo`` and ``https://github.com/Owner/Repo.git``
-all collapse to ``owner/repo``. Whether forks and near-duplicates are also held out is an open
-design question; this module only provides the exact-name filter and accepts any held-out set,
-so the fork rule can be layered on by whoever decides it.
+all collapse to ``owner/repo``.
+
+Matching rules (decisions D1 and D3 of ``specs/held_out_repos.md``, list schema 2):
+
+* exact canonical names of the core tier (CORE-Bench L2/L3 and SWE-bench Verified);
+* plus current-name resolution: a pool repository and a held-out repository match if they are the
+  same repository under today's name (``ril.training.rename_resolution`` supplies the aliases);
+* plus the Loc-Bench tier, a separate list that can be switched off;
+* the fork network is a sensitivity report (:func:`rule_counts`) and is never a filter.
 """
 
 from __future__ import annotations
@@ -21,11 +27,10 @@ from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import TypeVar
 
+from ril.parsing.repo_id import normalize_repo_id
+
 T = TypeVar("T")
 
-_URL_RE = re.compile(
-    r"^(?:https?://)?(?:www\.)?github\.com/([^/\s]+)/([^/\s]+?)(?:\.git)?/?$", re.I
-)
 _PR_SUFFIX_RE = re.compile(r"-\d+$")
 _PRO_SUFFIX_RE = re.compile(r"-[0-9a-f]{7,40}(?:-v[0-9a-zA-Z_.]+)?$")
 
@@ -33,23 +38,10 @@ _PRO_SUFFIX_RE = re.compile(r"-[0-9a-f]{7,40}(?:-v[0-9a-zA-Z_.]+)?$")
 def canonical_repo(name: str) -> str:
     """Return the canonical ``owner/name`` (case-folded) for a repository spelling.
 
-    Accepts ``owner/name``, ``owner__name`` and a github.com URL. Raises ``ValueError`` for
-    anything else (a bare truncated folder name such as ``scikit`` has no owner and is refused
-    rather than guessed).
+    The rule lives in ``ril.parsing.repo_id`` (decision D5 of ``specs/code_unit.md``); this name
+    is kept for the held-out code and tests.
     """
-    text = name.strip()
-    m = _URL_RE.match(text)
-    if m:
-        owner, repo = m.group(1), m.group(2)
-    elif "/" in text and text.count("/") == 1:
-        owner, repo = text.split("/")
-    elif "__" in text and "/" not in text:
-        owner, repo = text.split("__", 1)
-    else:
-        raise ValueError(f"cannot read owner/name from {name!r}")
-    if not owner or not repo or repo.endswith(".git") and len(repo) == 4:
-        raise ValueError(f"cannot read owner/name from {name!r}")
-    return f"{owner}/{repo}".casefold()
+    return normalize_repo_id(name)
 
 
 def repo_from_instance_id(instance_id: str) -> str | None:
@@ -134,18 +126,36 @@ class FilterReport:
         return sorted(self.dropped_repos.items(), key=lambda kv: (-kv[1], kv[0]))[:n]
 
 
+def _blocked_keys(held_out: Iterable[str], aliases: Mapping[str, str] | None) -> set[str]:
+    """Held-out names plus their current names (when the alias map knows them)."""
+    blocked = {canonical_repo(r) for r in held_out}
+    if aliases:
+        blocked |= {aliases[b] for b in list(blocked) if b in aliases}
+    return blocked
+
+
+def is_held_out(repo: str, blocked: set[str], aliases: Mapping[str, str] | None = None) -> bool:
+    """True if ``repo`` (canonical) or its current name is in ``blocked``."""
+    if repo in blocked:
+        return True
+    return bool(aliases) and aliases.get(repo, repo) in blocked  # type: ignore[union-attr]
+
+
 def filter_pool(
     pool: Sequence[T],
     held_out: Iterable[str],
     repo_of: Callable[[T], str],
+    aliases: Mapping[str, str] | None = None,
 ) -> tuple[list[T], list[T], FilterReport]:
     """Remove every pool record whose repository is held out.
 
     ``repo_of`` returns a repository spelling for a record; it is canonicalised here, and a
     record whose repository cannot be read raises ``ValueError`` (never silently kept).
+    ``aliases`` maps old repository names to current names (decision D1): a record matches if its
+    name or its current name is held out, or if a held-out name has that current name.
     Returns ``(kept, dropped, report)``, preserving the pool order.
     """
-    blocked = {canonical_repo(r) for r in held_out}
+    blocked = _blocked_keys(held_out, aliases)
     kept: list[T] = []
     dropped: list[T] = []
     seen: set[str] = set()
@@ -154,7 +164,7 @@ def filter_pool(
     for rec in pool:
         repo = canonical_repo(repo_of(rec))
         seen.add(repo)
-        if repo in blocked:
+        if is_held_out(repo, blocked, aliases):
             dropped.append(rec)
             dropped_counts[repo] += 1
         else:
@@ -171,7 +181,9 @@ def filter_pool(
 
 
 def filter_repo_counts(
-    repo_counts: Mapping[str, int], held_out: Iterable[str]
+    repo_counts: Mapping[str, int],
+    held_out: Iterable[str],
+    aliases: Mapping[str, str] | None = None,
 ) -> tuple[dict[str, int], FilterReport]:
     """Apply the filter to a ``{repository: instance count}`` pool summary.
 
@@ -181,9 +193,9 @@ def filter_repo_counts(
     merged: Counter[str] = Counter()
     for repo, n in repo_counts.items():
         merged[canonical_repo(repo)] += n
-    blocked = {canonical_repo(r) for r in held_out}
-    kept = {r: n for r, n in sorted(merged.items()) if r not in blocked}
-    dropped = {r: n for r, n in sorted(merged.items()) if r in blocked}
+    blocked = _blocked_keys(held_out, aliases)
+    kept = {r: n for r, n in sorted(merged.items()) if not is_held_out(r, blocked, aliases)}
+    dropped = {r: n for r, n in sorted(merged.items()) if is_held_out(r, blocked, aliases)}
     report = FilterReport(
         instances_before=sum(merged.values()),
         instances_after=sum(kept.values()),
@@ -192,3 +204,87 @@ def filter_repo_counts(
         dropped_repos=dropped,
     )
     return kept, report
+
+
+@dataclass(frozen=True)
+class HeldOutLists:
+    """The tiers of the held-out list (schema 2) and the alias map used for matching.
+
+    ``core`` is CORE-Bench L2/L3 and SWE-bench Verified; ``loc_bench`` is the separate Loc-Bench
+    tier (decision D3), stored without the repositories already in ``core``.
+    """
+
+    core: frozenset[str]
+    loc_bench: frozenset[str]
+    aliases: Mapping[str, str]
+
+    def blocked(self, include_loc_bench: bool = True) -> frozenset[str]:
+        """Names a pool repository is compared against for the default rule set."""
+        return self.core | self.loc_bench if include_loc_bench else self.core
+
+
+def load_held_out_lists(doc: Mapping[str, object]) -> HeldOutLists:
+    """Read the tiers from a parsed ``held_out_repos.json`` of schema 2."""
+    if doc.get("schema_version") != 2:
+        raise ValueError(f"held-out list schema 2 expected, got {doc.get('schema_version')!r}")
+    tiers = doc["tiers"]
+    assert isinstance(tiers, dict)
+    core = frozenset(doc["repos"])  # type: ignore[call-overload]
+    loc = frozenset(tiers["loc_bench"]["repos"])
+    aliases = dict(doc.get("aliases", {}))  # type: ignore[call-overload]
+    return HeldOutLists(core=core, loc_bench=loc, aliases=aliases)
+
+
+@dataclass(frozen=True)
+class RuleRow:
+    """Survival of one pool under one cumulative rule set."""
+
+    rule: str
+    instances_after: int
+    repos_after: int
+    repos_dropped: int
+    instances_dropped: int
+
+
+def rule_counts(
+    repo_counts: Mapping[str, int],
+    lists: HeldOutLists,
+    pool_aliases: Mapping[str, str],
+    pool_forks: Mapping[str, tuple[str, ...]],
+) -> list[RuleRow]:
+    """Survival of a pool under each rule, cumulatively, plus the fork-network sensitivity row.
+
+    Rows: ``exact`` (core names), ``+current_name`` (D1, using the held-out and pool aliases),
+    ``+loc_bench`` (D3, the default rule set), and ``sensitivity: +fork_network`` (pool
+    repositories whose fork parent or source is held out; reported only, never applied).
+    ``pool_aliases`` and ``pool_forks`` cover only the repositories resolved so far, so every
+    row after ``exact`` is a lower bound on what full resolution would drop.
+    """
+    aliases = {**lists.aliases, **pool_aliases}
+    merged: Counter[str] = Counter()
+    for repo, n in repo_counts.items():
+        merged[canonical_repo(repo)] += n
+    total_inst = sum(merged.values())
+
+    def row(rule: str, drop: Callable[[str], bool]) -> RuleRow:
+        kept = {r: n for r, n in merged.items() if not drop(r)}
+        return RuleRow(
+            rule=rule,
+            instances_after=sum(kept.values()),
+            repos_after=len(kept),
+            repos_dropped=len(merged) - len(kept),
+            instances_dropped=total_inst - sum(kept.values()),
+        )
+
+    core = _blocked_keys(lists.core, aliases)
+    both = _blocked_keys(lists.core | lists.loc_bench, aliases)
+
+    def by_fork(r: str) -> bool:
+        return is_held_out(r, both, aliases) or any(x in both for x in pool_forks.get(r, ()))
+
+    return [
+        row("exact", lambda r: r in lists.core),
+        row("+current_name", lambda r: is_held_out(r, core, aliases)),
+        row("+loc_bench", lambda r: is_held_out(r, both, aliases)),
+        row("sensitivity: +fork_network", by_fork),
+    ]
