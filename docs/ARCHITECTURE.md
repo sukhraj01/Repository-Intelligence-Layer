@@ -74,7 +74,7 @@ implementation and then written here.**
 - **Consumers:** retrieval (all three signals), training data builder, evaluation harness.
 - **Assumptions:** Python-only; static analysis is incomplete (dynamic dispatch, `getattr`, decorators, monkey-patching, duck typing produce unresolvable edges).
 - **Limitations:** edge recovery <100% — a candidate explanation if RQ1 finds structural signal weak.
-- **Governing decisions:** ADR-003 (graph role), ADR-004 (granularity).
+- **Governing decisions:** ADR-003 (graph role), ADR-004 (granularity), ADR-011 (graph schema; `specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`).
 
 ## retrieval (`ril/retrieval/`)
 
@@ -136,7 +136,7 @@ implementation and then written here.**
 
 | Component | Governing ADRs |
 |---|---|
-| parsing | ADR-003, ADR-004 |
+| parsing | ADR-003, ADR-004, ADR-011, ADR-013 |
 | retrieval | ADR-003, ADR-004, ADR-006, ADR-009 |
 | training | ADR-001, ADR-002, ADR-006 |
 | evaluation | ADR-004, ADR-005, ADR-007, ADR-008 |

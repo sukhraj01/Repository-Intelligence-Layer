@@ -21,6 +21,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Read the data and training papers in full and record notes with a checked quote table (`knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench; `scripts/check_paper_note.py`)
 - [x] Read the graph papers in full and record notes (`knowledge/papers/`: LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL)
 - [x] Read the call-graph accuracy papers, the supervision papers and Agent Retrieval Bench in full; log a literature scan with a per-RQ summary (`knowledge/papers/`: PyCG, Jarvis, Sun et al., Rethinking Negative Pairs, CodeR, Agent Retrieval Bench, `LANDSCAPE.md`)
+- [x] Design the knowledge graph as a separately versioned artifact: node kinds, edge families, edge record with status, three roles, storage options (`specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made)
 - [ ] Gather evidence for decisions 1–10 (`decisions/`)
 - [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
 

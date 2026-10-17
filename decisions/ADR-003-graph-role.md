@@ -49,3 +49,13 @@ a separate typed edge store and that the CodeUnit lists `calls`, `called_by`, `t
 are projections of resolved ids only, so that signal-or-tool (this ADR) and the edge taxonomy
 (ADR-011) stay open. Experiment that could flip D4: the resolution coverage measured in the first
 parse and graph build.
+
+## Addendum 2026-10-17 — what the graph design adds (context only; no decision)
+
+`docs/GRAPH_DESIGN.md` (section 4) describes three roles with the experiment that would show the value
+of each, a latency profile for each, and what each needs from the schema. Section 9 lists nine
+questions for this ADR; the first four are: which role or roles are in the frozen configuration; how a
+graph signal enters a fusion stack fixed to rank-based RRF; whether graph-derived supervision belongs to
+RQ2; whether an agent-tool variant belongs to RQ3, which holds the agent fixed. None is answered
+there. Evidence still to gather for this ADR: the per-status coverage and the 1- and 2-hop expansion
+latency from the first graph build, and pilots M and E3.

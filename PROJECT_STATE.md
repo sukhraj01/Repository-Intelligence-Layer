@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full; CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 8
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full; CodeUnit frozen (v1); held-out list schema 2; graph design drafted (options only) · **Tasks completed:** 9
 
 ---
 
@@ -27,6 +27,7 @@ Latency harness: **not built** (commits are exempt until it is).
 | Data access, formats, statistics | done | every card statistic re-measured; `knowledge/datasets/*.md`; `scripts/ada/README.md`; Ada reachable non-interactively |
 | Held-out list, filter, leakage tests | done, list schema 2 | 605 core repositories + 169-repository Loc-Bench tier (switchable) + current-name aliases; `rule_counts`, `rename_resolution`, `content_overlap` in `ril/training/`; rebuild `python -I scripts/build_held_out.py`; resolution is partial without a token (see Blockers) |
 | Paper notes and literature scan | done for the reading plan | `knowledge/papers/`, checked quote tables (`scripts/check_paper_note.py`); `LANDSCAPE.md` |
+| RepoGraph design | DRAFT v0, options only | `specs/repo_graph.md` (own version constant `REPO_GRAPH_SCHEMA_VERSION`), `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made, no code |
 | Latency harness | **not built** | `make bench` prints "latency harness: not built" |
 | Parser / call graph / BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
@@ -52,11 +53,11 @@ Latency harness: **not built** (commits are exempt until it is).
 
 ## Next task
 
-Knowledge-graph design (session G of the second wave)
-(`specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`, ADR-011), options with evidence and no choices. Then
-the latency harness (L), the first parse and graph build (P), pilots M and E. Engineer: provide
+The latency harness (`specs/latency_harness.md`; also register the graph stages `parse`, `graph_build`,
+`graph_expand_1hop`, `graph_expand_2hop`, `mentions_extract`). Then the first parse and graph build (writes the
+per-status coverage table and the storage measurements for ADR-011), pilots M and E. Engineer: provide
 `GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2 counts);
-decide Q28; confirm Q29; settle ADR-001 to ADR-010 by end of week 2.
+decide Q28; confirm Q29; read `specs/repo_graph.md` "Open design questions" (Q30-Q32 below); settle ADR-001 to ADR-010 by end of week 2.
 
 ## Blockers
 
@@ -84,6 +85,9 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q27 | ADR-012 inputs: four non-equivalent edge-recovery measures in the literature (PyCG, Jarvis, DyPyBench, Total Recall); a test-suite tracer as oracle can mis-state precision and recall in either direction. Report several (plan) / add an in-repo-only variant / add a corpus-extension step | ADR-012, parse and graph build | engineer |
 | Q28 | Class unit `source`: full class text or header only (the `Flask` class is 2,124 lines and its methods are units). The schema is unaffected; the parser stays behind `provisional: ADR-013` until decided | parser, index size | engineer |
 | Q29 | Confirm the readings of D6 and D8 made in code: module unit fields (`<module>` name, span = file, `source` = residual lines) and `last_modified` as `YYYY-MM-DDTHH:MM:SSZ` | parser | engineer |
+| Q30 | Graph role(s) in the frozen configuration and how a graph signal enters a fusion stack fixed to rank-based RRF (hop-decay score vs ranked list vs edited candidate list); whether graph-derived supervision (structural negatives, test/config positives) is inside RQ2; whether an agent-tool variant belongs to RQ3 (agent fixed). Options and evidence: `docs/GRAPH_DESIGN.md` sections 4 and 9 | ADR-003, frozen config | team, end of week 2 |
+| Q31 | ADR-011 schema choices (`specs/repo_graph.md` Q-G3 to Q-G15): `test` as flag or kind; which files are config/document; optional edge fields (`site`, `target_text`, `count`); `external` vs `unresolved` boundary; one graph per commit vs validity ranges; resolver per family; which families are in the first stored graph; storage option (measured in the first graph build) | ADR-011, first graph build | engineer, after the build |
+| Q32 | Confirm two readings made in the graph spec: `tests(u)` = test units with a resolved `tests` edge to `u`; `configs(u)` = config paths with a resolved `configures` edge to `u` or its file | projections | engineer |
 
 Resolved this block: Q8, Q9, Q13-Q23 (decisions log above), Q26 (recorded in DEV-007). Earlier: Q10, Q2, Q6.
 

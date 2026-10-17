@@ -9,6 +9,7 @@ spec is what the work is held to.
 | `code_unit.md` | The CodeUnit schema — the one type every component reads |
 | `held_out_repos.md` | Held-out repository list + disjointness filter + leakage test |
 | `latency_harness.md` | Per-commit latency/throughput harness and its CSV contract |
+| `repo_graph.md` | The RepoGraph typed edge store: DRAFT v0, options only, own version constant |
 | `parse_one_repo.md` | Parse one real repo end to end; ten CodeUnits; edge-recovery % |
 
 Specs to add when their week arrives (do not write them early): `supervision_arms.md` (week 6),
