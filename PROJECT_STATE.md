@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full; CodeUnit frozen (v1); held-out list schema 2; graph design drafted (options only) · **Tasks completed:** 9
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full; CodeUnit frozen (v1); held-out list schema 2; graph design drafted (options only) · **Tasks completed:** 10
 
 ---
 
@@ -13,7 +13,7 @@
 Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is a working,
 empty Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass. **No retrieval
 research code exists** (the CodeUnit type, its helpers and the held-out filter are the only modules).
-Latency harness: **not built** (commits are exempt until it is).
+Latency harness: **built** (synthetic stub stages only; real stages register as they arrive).
 
 ## What is built
 
@@ -22,13 +22,13 @@ Latency harness: **not built** (commits are exempt until it is).
 | Repo scaffold: folders, docs split from master, ADR stubs, specs, folder layout | done | |
 | Package `ril/`, `pyproject.toml`, `Makefile`, tests, ruff, `mypy --strict` | done | Python 3.11 pinned; Poetry venv in `.venv`; Ada path (`uv`) in the Makefile header |
 | `ril/config`, `ril/util` | done | no experiment parameters yet |
-| Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh`; not installed yet |
+| Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh` as `10-latency` (runs `make bench-check`, stages the two CSVs; `RIL_LATENCY_HOOK=strict\|relaxed\|off`, strict default); **not installed yet** |
 | CodeUnit schema | **FROZEN v1** (ADR-013) | `ril/parsing/code_unit.py`, `unit_id.py`, `repo_id.py`, `path_rules.py` per `specs/code_unit.md` (decision log D4-D11); `unit_type` has `module`; canonical bytes pinned by a golden test; class-unit `source` open (Q28) |
 | Data access, formats, statistics | done | every card statistic re-measured; `knowledge/datasets/*.md`; `scripts/ada/README.md`; Ada reachable non-interactively |
 | Held-out list, filter, leakage tests | done, list schema 2 | 605 core repositories + 169-repository Loc-Bench tier (switchable) + current-name aliases; `rule_counts`, `rename_resolution`, `content_overlap` in `ril/training/`; rebuild `python -I scripts/build_held_out.py`; resolution is partial without a token (see Blockers) |
 | Paper notes and literature scan | done for the reading plan | `knowledge/papers/`, checked quote tables (`scripts/check_paper_note.py`); `LANDSCAPE.md` |
 | RepoGraph design | DRAFT v0, options only | `specs/repo_graph.md` (own version constant `REPO_GRAPH_SCHEMA_VERSION`), `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made, no code |
-| Latency harness | **not built** | `make bench` prints "latency harness: not built" |
+| Latency harness | **built** | `ril/bench/` (`latency_harness.py`, `profile_stages.py`, `stub_stages.py`); `make bench` / `make bench-check`; logs `results/latency/{latency,throughput}_log.csv`; stages `query_encode`, `bm25`, `dense_search`, `graph_expansion`, `graph_expand_1hop`, `graph_expand_2hop`, `rrf_fusion`, `cross_encoder_rerank`, `assemble`, `end_to_end` (latency) and `parse`, `graph_build` (throughput); thresholds provisional (Q33); a real stage replaces a stub with one `REGISTRY.register` line and a new `query_set_id` |
 | Parser / call graph / BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
 | Evaluation (CORE-Bench loaders, metrics), agent integration | not started | |
@@ -53,8 +53,7 @@ Latency harness: **not built** (commits are exempt until it is).
 
 ## Next task
 
-The latency harness (`specs/latency_harness.md`; also register the graph stages `parse`, `graph_build`,
-`graph_expand_1hop`, `graph_expand_2hop`, `mentions_extract`). Then the first parse and graph build (writes the
+The first parse and graph build (`specs/parse_one_repo.md`; time `parse` and `graph_build` through the harness with a real query set id, and register `mentions_extract` if the graph spec keeps it) (writes the
 per-status coverage table and the storage measurements for ADR-011), pilots M and E. Engineer: provide
 `GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2 counts);
 decide Q28; confirm Q29; read `specs/repo_graph.md` "Open design questions" (Q30-Q32 below); settle ADR-001 to ADR-010 by end of week 2.
@@ -74,7 +73,9 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | # | Question | Blocks | Resolve by |
 |---|---|---|---|
 | Q1 | Which team member is Person A / B / C (owners in `docs/ROADMAP.md`)? | ownership columns | engineer, week 1 |
-| Q3 | Does a docs-only commit need a fresh latency row, or may it reference the previous row? | commit hook design | engineer, before the latency harness closes |
+| Q3 | Does a docs-only commit need a fresh latency row, or may it reference the previous row? Harness implements both behind `RIL_LATENCY_HOOK` (strict default); the hook is not installed until the engineer runs `make hooks` | hook setting | engineer |
+| Q33 | Regression thresholds in `configs/bench/latency.yaml` (p50 or p95 up by more than 50% and 0.5 ms vs the previous comparable row) are conservative placeholders, `provisional: Q33`; also whether a failing run is logged (now: not, unless `--append-on-fail`) | `make bench-check`, hook | engineer, before the freeze |
+| Q34 | `parse` and `graph_build` are offline, so they sit in the throughput log (units/s), while `graph_expand_1hop/2hop` are per-query latency stages. Confirm this split, or also report build time per query-path style | stage taxonomy | engineer |
 | Q4 | GitHub remote(s) for the team repo; the engineer performs every push | publishing only | engineer |
 | Q5 | ADR-001...ADR-010 (training pool, quality signal, graph role, granularity, benchmark, encoder, scaffold, LLM, rerank, usable-by-others) | frozen config, RQ2 start | team, end of week 2 |
 | Q7 | Is the candidate pool intended, or is the pool built with the published scripts? Read in full: `gangiswag/train_data` python = SweLocMulti's Python part (SweRank+ Table 1: 2,448 repositories, 24,285 PRs, 49,973 instances), not the original SweLoc (3,387 repositories); SweRank+ states no benchmark-repository exclusion; 89 held-out repositories (3,431 PRs, 14.13%) occur in it (DEV-004). Loc-Bench: 560 rows (V1) vs 660 (V0.2) | ADR-001, pool filter | engineer; evidence in ADR-001 addenda |

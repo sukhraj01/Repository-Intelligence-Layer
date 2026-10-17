@@ -16,7 +16,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Reach the data sources and read their formats: access probes, CORE-Bench listing and samples, metadata of Verified / Loc-Bench, SweLoc search (`knowledge/datasets/`)
 - [x] Build the held-out repository list from CORE-Bench L2/L3 and SWE-bench Verified (`specs/held_out_repos.md`) (605 repositories; list schema 2 adds current-name resolution and a Loc-Bench tier of 169 more)
 - [x] Filter any candidate training pool against it; record how many instances survive (`specs/held_out_repos.md`) (CodeSearchNet python and the unconfirmed `gangiswag/train_data` candidate; CoRNStack cannot be filtered)
-- [ ] Stand up the per-commit latency harness (`specs/latency_harness.md`)
+- [x] Stand up the per-commit latency harness (`specs/latency_harness.md`) (synthetic stub stages; graph stage names registered; thresholds provisional, Q33)
 - [ ] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`)
 - [x] Read the data and training papers in full and record notes with a checked quote table (`knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench; `scripts/check_paper_note.py`)
 - [x] Read the graph papers in full and record notes (`knowledge/papers/`: LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL)

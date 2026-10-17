@@ -1,6 +1,6 @@
 # ril/bench/
 
-**Planned files:** `latency_harness.py`, `profile_stages.py`. Contract: `specs/latency_harness.md`.
+**Files:** `latency_harness.py`, `profile_stages.py`, `stub_stages.py` (synthetic workloads until real stages register). Contract: `specs/latency_harness.md`.
 Design: `docs/07_latency_and_profiling.md`.
 
 The professor's standing requirement: latency/throughput profiled **per component**, recorded

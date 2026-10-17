@@ -112,8 +112,10 @@ implementation and then written here.**
 ## bench (`ril/bench/`)
 
 - **Purpose:** latency and throughput measurement; the per-commit harness.
-- **Files:** `latency_harness.py`, `profile_stages.py`.
-- **Responsibilities:** see `specs/latency_harness.md`. Per-stage p50/p95/p99, hardware spec, append-only CSV, regression failure.
+- **Files:** `latency_harness.py`, `profile_stages.py`, `stub_stages.py`.
+- **Responsibilities:** see `specs/latency_harness.md`. Per-stage p50/p95/p99 (nearest-rank, from raw samples), hardware spec, append-only CSV, regression failure.
+- **Implemented:** a stage registry with a closed name taxonomy (`LATENCY_STAGES`: `query_encode`, `bm25`, `dense_search`, `graph_expansion`, `graph_expand_1hop`, `graph_expand_2hop`, `rrf_fusion`, `cross_encoder_rerank`, `assemble`, `end_to_end`; `THROUGHPUT_STAGES`: `parse`, `graph_build`). A real component is timed by one `REGISTRY.register(name, fn, reset=...)` line. Warm rows run the fixed query set `repeats` times and discard the first `warmup_n` calls (recorded in the log); cold rows call the stage's `reset` before every call (stage-level caches only, not the OS page cache). Batch size 1; `torch.cuda.synchronize()` brackets every timed call when a GPU exists and is skipped on a CPU-only box. Latency goes to `results/latency/latency_log.csv`, offline stages (units per second) to `throughput_log.csv`, both append-only and refused if the header differs. `make bench` measures and appends; `make bench-check` also compares with the most recent comparable row (same hardware spec, query set, cache state, stage) and exits non-zero when p50 or p95 grows past the thresholds in `configs/bench/latency.yaml` (provisional, Q33); a failing run is not appended unless `--append-on-fail`. `profile_stages.py` gives `cProfile` attribution inside a stage and `torch.profiler` when a GPU exists. The shipped stages are synthetic stubs (`stub_stages.py`, query set `synthetic-v1`); their numbers are not measurements of any component.
+- **Hook:** `make hooks` installs `scripts/hooks/latency_check.sh` as pre-commit step `10-latency`; `RIL_LATENCY_HOOK=strict|relaxed|off` selects the reading of "before every commit" (Q3), strict by default.
 - **Dependencies:** may call everything; nothing calls back.
 
 ## analysis (`ril/analysis/`)

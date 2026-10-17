@@ -1,0 +1,5 @@
+timestamp_utc,commit,dirty,branch,host,cpu_model,cpu_cores,ram_gb,gpu_name,gpu_driver,cuda_version,python,torch,config_hash,workload_id,stage,units,seconds,units_per_s
+2026-10-17T14:43:48Z,195a5ce,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006248,134437.64
+2026-10-17T14:43:48Z,195a5ce,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005202,7689227.57
+2026-10-17T14:44:01Z,195a5ce,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006218,135083.52
+2026-10-17T14:44:01Z,195a5ce,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005319,7520446.68

@@ -34,10 +34,10 @@ format:
 	$(RUN) ruff format ril tests scripts
 
 bench:
-	@sh scripts/bench_stub.sh
+	$(RUN) python scripts/bench.py run
 
 bench-check:
-	@sh scripts/bench_stub.sh
+	$(RUN) python scripts/bench.py check
 
 hooks:
 	@sh scripts/hooks/install.sh
