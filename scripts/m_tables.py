@@ -8,6 +8,7 @@ m_reach_exclusions.csv, m_family_incidence.csv and m_reach.csv.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -23,6 +24,7 @@ from ril.analysis.reach_tables import (  # noqa: E402
     kind_rows,
     match_rows,
     reach_rows,
+    run_log,
     write_rows,
 )
 
@@ -37,6 +39,10 @@ def main() -> int:
         default="results/logs/s3_codeunit_chunk_mapping_2026-10-17.json",
         help="the first label sample's per-folder counts",
     )
+    ap.add_argument("--rerun", default="", help="records of an independent second run")
+    ap.add_argument("--log", default="", help="write the run log (counts only) here")
+    ap.add_argument("--job-id", default="")
+    ap.add_argument("--code-commit", default="")
     ap.add_argument("--boot", type=int, default=BOOTSTRAP_DRAWS)
     args = ap.parse_args()
     doc = json.loads(Path(args.records).read_text(encoding="utf-8"))
@@ -54,6 +60,32 @@ def main() -> int:
         inst, seed=args.seed, draws=args.boot, label="sensitivity_several_locations"
     )
     write_rows(str(out / "m_reach.csv"), reach)
+    if args.log:
+        names = [
+            "m_match.csv",
+            "m_categories.csv",
+            "m_categories_by_folder.csv",
+            "m_kinds.csv",
+            "m_reach_exclusions.csv",
+            "m_family_incidence.csv",
+            "m_reach.csv",
+        ]
+        hashes = {n: hashlib.sha256((out / n).read_bytes()).hexdigest() for n in names}
+        rerun = json.loads(Path(args.rerun).read_text(encoding="utf-8")) if args.rerun else None
+        log = run_log(
+            doc,
+            records_sha256=hashlib.sha256(Path(args.records).read_bytes()).hexdigest(),
+            rerun=rerun,
+            tables=hashes,
+            extras={
+                "ada_job_id": args.job_id,
+                "code_commit": args.code_commit,
+                "cluster_environment": Path(args.records).with_name("env.txt").read_text(),
+            },
+        )
+        Path(args.log).write_text(
+            json.dumps(log, indent=1, sort_keys=True) + "\n", encoding="utf-8"
+        )
     return 0
 
 

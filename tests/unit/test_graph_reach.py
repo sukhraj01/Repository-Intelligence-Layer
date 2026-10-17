@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 import numpy as np
 
 from ril.analysis.reach_tables import compare
@@ -138,3 +140,29 @@ def test_compare_reports_excess_over_chance_with_intervals() -> None:
     zero = compare(np.zeros(4), np.zeros(4), np.array(["a", "a", "b", "b"]), rng, 100)
     assert zero["ratio"] is None
     assert compare(np.array([]), np.array([]), np.array([]), rng, 10) == {"n": 0}
+
+
+def test_run_log_states_whether_two_runs_agree_apart_from_timing() -> None:
+    from ril.analysis.reach_tables import comparable, run_log
+
+    doc = {
+        "pilot": "p",
+        "config_hash": "h",
+        "seed": 0,
+        "draws": 5,
+        "hardware": {"host": "a", "python": "3"},
+        "git": "g",
+        "repos": [],
+        "failures": [],
+        "instances": [{"instance": "i", "repo_id": "r/x", "build_seconds": 1.0, "positives": []}],
+    }
+    other = json.loads(json.dumps(doc))
+    other["instances"][0]["build_seconds"] = 9.0
+    other["hardware"]["host"] = "b"
+    assert comparable(doc) == comparable(other)
+    log = run_log(doc, records_sha256="x", rerun=other, tables={}, extras={})
+    assert log["determinism"] == {"second_run_identical_apart_from_timing_and_host": True}
+    other["instances"][0]["positives"] = [{"level": "L2"}]
+    log = run_log(doc, records_sha256="x", rerun=other, tables={}, extras={})
+    assert log["determinism"] == {"second_run_identical_apart_from_timing_and_host": False}
+    assert run_log(doc, records_sha256="x", rerun=None, tables={}, extras={})["determinism"] is None

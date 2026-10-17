@@ -74,9 +74,9 @@ MAX_LISTED_LOCATIONS = 10
 Record = dict[str, Any]
 
 
-def config_hash(seed: int, draws: int) -> str:
-    """SHA-256 of everything besides the data that decides the output of the pilot."""
-    payload = {
+def config_payload(seed: int, draws: int) -> Record:
+    """Everything besides the data that decides the output of the pilot."""
+    return {
         "pilot": PILOT_VERSION,
         "seed": seed,
         "draws": draws,
@@ -89,8 +89,12 @@ def config_hash(seed: int, draws: int) -> str:
         "repo_graph_schema": REPO_GRAPH_SCHEMA_VERSION,
         "codeunit_schema": CODEUNIT_SCHEMA_VERSION,
     }
-    blob = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(blob).hexdigest()
+
+
+def config_hash(seed: int, draws: int) -> str:
+    """SHA-256 of the canonical JSON of :func:`config_payload`."""
+    blob = json.dumps(config_payload(seed, draws), sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
 def hardware() -> dict[str, Any]:

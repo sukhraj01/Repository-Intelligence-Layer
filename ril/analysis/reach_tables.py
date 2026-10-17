@@ -14,6 +14,7 @@ second is the honest one and it is wide. Everything here is a pilot: small n, ex
 
 from __future__ import annotations
 
+import json
 from collections import Counter
 from collections.abc import Sequence
 from typing import Any
@@ -362,13 +363,16 @@ def reach_rows(
     """Long table: group x edge subset x hop x control, with intervals.
 
     ``label`` is ``primary`` (positives with one location) or ``sensitivity_several_locations``
-    (all located positives, first location). Groups: all new Python positives and each kind.
+    (all located positives, first location). Groups: all new Python positives, each kind and
+    each repository.
     """
     pop = reach_population(instances, allow_several_locations=label != "primary")
     rng = np.random.default_rng(seed)
     groups: list[tuple[str, list[Record]]] = [("all_python", pop)]
     for kind in PYTHON_UNIT_KINDS:
         groups.append((kind, [r for r in pop if r["kind"] == kind]))
+    for repo in sorted({r["repo"] for r in pop}):
+        groups.append((f"repo:{repo}", [r for r in pop if r["repo"] == repo]))
     rows: list[Record] = []
     exploratory = {s.name: s.exploratory for s in SUBSETS}
     for group, rs in groups:
@@ -421,3 +425,57 @@ def write_rows(path: str, rows: Sequence[Record]) -> None:
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def comparable(doc: Record) -> Record:
+    """The records without the fields allowed to differ between identical runs (timing, host)."""
+    out: Record = json.loads(json.dumps(doc))
+    for inst in out["instances"]:
+        inst.pop("build_seconds", None)
+    out.get("hardware", {}).pop("host", None)
+    return out
+
+
+def run_log(
+    doc: Record,
+    *,
+    records_sha256: str,
+    rerun: Record | None,
+    tables: dict[str, str],
+    extras: Record,
+) -> Record:
+    """The log of one pilot run: configuration, hardware, counts, determinism check, table hashes.
+
+    Counts only. ``rerun`` is the records of an independent second run of the same code; when
+    given, the log states whether the two agree apart from timing and host name.
+    """
+    inst = doc["instances"]
+    recs = all_positives(inst)
+    log: Record = {
+        "run": "m-chunk-unit-reach",
+        "label": "exploratory pilot (small n)",
+        "pilot": doc["pilot"],
+        "config_hash": doc["config_hash"],
+        "seed": doc["seed"],
+        "control_draws": doc["draws"],
+        "bootstrap_draws": BOOTSTRAP_DRAWS,
+        "hardware": doc["hardware"],
+        "git": doc["git"],
+        "repos": doc["repos"],
+        "instances": len(inst),
+        "failures": doc["failures"],
+        "records_sha256": records_sha256,
+        "positives": Counter(r["level"] for r in recs),
+        "match": match_rows(inst),
+        "categories": category_rows(inst),
+        "kinds": kind_rows(inst),
+        "exclusions": exclusion_rows(inst),
+        "determinism": None
+        if rerun is None
+        else {
+            "second_run_identical_apart_from_timing_and_host": comparable(doc) == comparable(rerun)
+        },
+        "table_sha256": tables,
+        **extras,
+    }
+    return log
