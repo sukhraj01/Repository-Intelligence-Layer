@@ -7,6 +7,10 @@ Design: `docs/06_core_bench.md`, `docs/08_experimental_design.md`.
   REWRITE variants; chunk-level granularity for reported metrics (ADR-004).
 - `metrics.py` — nDCG@10, MRR, Recall@10; one metric implementation shared by every experiment.
   Sanity check: reproduce a published CORE-Bench figure before trusting new numbers.
+- Built for pilot E1/E2: `core_bench.py` (folder loader and the chunk-level protocol, with the ranks of every positive), `metrics.py`
+  (binary-gain nDCG/Recall from ranks, bootstrap intervals), `unit_retrieval.py` (BM25 over the units of one snapshot, with and without
+  the module unit), `label_noise.py` (import-only, comment-only, documentation and edit-overlap readings of the positives),
+  `e1_run.py` (resumable runner). The metric reproduced the published BM25 row of the benchmark on Verified (`docs/EXPERIMENTS.md`).
 - `agent_integration.py` — run the fixed scaffold with each retriever; for every failure log
   **whether the gold-patch file was in the retrieved context** (retrieval vs reasoning failure);
   paired per-instance outcomes for McNemar; resolved rate per agent wall-clock.

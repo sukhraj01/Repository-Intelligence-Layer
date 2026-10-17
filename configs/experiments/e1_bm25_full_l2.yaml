@@ -1,0 +1,4449 @@
+experiment_id: E-BM25-REPRO-L2
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+bm25:
+  k1: 1.5
+  b: 0.75
+  stopwords: en (33 words)
+  stemmer: snowball english
+  token_pattern: (?u)\b\w\w+\b
+  provisional: ADR-004
+prefilter_k: 10000
+metrics:
+  ndcg_at: 10
+  recall_at: 100
+  gain: binary
+  aggregation: mean over queries
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  unit: queries
+note: 'Chunk-level BM25 over every original L2 folder (632 folders, 5,061 queries), to compare with the
+  benchmark card average. Folders are fetched one at a time and deleted after scoring. A dot in a folder name is written %2E and decoded on load. No tuning: parameters
+  are the reference defaults.'
+folders:
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: confetti__yayson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Quantco__pixi
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: theskumar__python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: alstr__todo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: GothenburgBitFactory__taskchampion
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: thomasschafer__scooter
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: xarray
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: zobweyt__textcase
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: spulec__freezegun
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: joshuadavidthomas__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: scrapy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: SYSTRAN__faster
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: bodo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: naggie__dstask
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: slackapi__slack
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: grafana__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: MechanicalSoup__MechanicalSoup
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: opensearch
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: huggingface__open
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Rudra
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: tjw
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: bayesian
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mrdaemon__exosphere
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: django__asgiref
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: openpubkey__opkssh
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: celery__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: maizzle__framework
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: zizmorcore__zizmor
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: smalaca__training
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: icereed__paperless
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: jazzband__djangorestframework
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jazzband__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: jpadilla__pyjwt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Broderick
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Secreto31126__whatsapp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: cyclotruc__gitingest
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: modelcontextprotocol__registry
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: jazzband__tablib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: max
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: AmmarAbouZor__tui
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: A2
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: EbodShojaei__bake
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: amoffat__sh
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: trailofbits__algo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: dbcli__mycli
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: olofk__fusesoc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: tcurdt__jdeb
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: gboeing__osmnx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: humanlogio__humanlog
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pasteurlabs__tesseract
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: szhsin__react
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Quantco__dataframely
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: CrowdStrike__falcon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: coderamp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ducaale__xh
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: modelcontextprotocol__python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: htmlhint__HTMLHint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: casbin__pycasbin
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Decathlon__tzatziki
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: github__safe
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pypa__twine
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: h3js__h3
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jborgers__sonar
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: scikit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: psf__requests
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: exasol__pyexasol
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: april
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: microsoft__proxy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pypa__pipx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aws__bedrock
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: prometheus__common
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: nock__nock
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Archmonger__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: spf13__cobra
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: hynek__structlog
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vitest
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: openzim__mwoffliner
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: jordansissel__fpm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: patman15__BMS_BLE
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ia
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: posit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: collective
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: OpenZeppelin__stellar
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: substratusai__kubeai
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: copier
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vert
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: qubvel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: arrow
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Lightning
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mapillary__mapillary_tools
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jenkinsci__configuration
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: goccy__go
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: kubernetes
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: TorchIO
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: brettwooldridge__HikariCP
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pallets__click
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: defold__extender
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: NewFuture__DDNS
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pynamodb__PynamoDB
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pdfminer__pdfminer.six
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: piskvorky__smart_open
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: takari__takari
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pytransitions__transitions
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: typeddjango__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: glu
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: reata__sqllineage
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: getindata__flink
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: astronomer__dag
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: probabl
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: gpbl__react
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mediathekview__MServer
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: stellar__js
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: CPMpy__cpmpy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pymodbus
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: octodns__octodns
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: QuantEcon__QuantEcon.py
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ml
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aws__serverless
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: pallets__flask
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Kozea__Radicale
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: PriorLabs__TabPFN
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: tailwindlabs__tailwindcss
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: dtolnay__cxx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: delph
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: magic
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: danielgtaylor__huma
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: modelcontextprotocol__go
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: lmstudio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: wireservice__csvkit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: dottxt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: SciTools__cartopy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: PySport__kloppy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pytorch__torchtitan
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: lektor__lektor
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: AeneasVerif__charon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: dylibso__chicory
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: praw
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: darkreader__darkreader
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pyinfra
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: simonw__llm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: gptme__gptme
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: immutable-js__immutable-js
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pathintegral
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jbangdev__jbang
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: theoehrly__fast
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: moquette
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mark3labs__mcp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: hgrecco__pint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: nonebot__nonebot2
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: serde
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: gitpython
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pallets__flask
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: jarun__buku
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: delgan__loguru
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: sharkdp__fd
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: ansible__molecule
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: eventlet__eventlet
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: katex__katex
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: i
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: fsspec__filesystem_spec
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: hardbyte__python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: waku
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: expressjs__express
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: yhirose__cpp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: rayon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pypa__cibuildwheel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: encode__starlette
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: axios__axios
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: dpkp__kafka
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: rusq__slackdump
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: TypeScriptToLua__TypeScriptToLua
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: taiga
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: tmc__langchaingo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: celery__kombu
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ros
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: authlib__authlib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: qBraid__qBraid
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: codelion__openevolve
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: albumentations
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Turfjs__turf
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: IBM__openapi
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: atlassian
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: rthalley__dnspython
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: braindecode__braindecode
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mozilla
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: apify__crawlee
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: dpkp__kafka
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: ansible__ansible
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: duckdb__pg_duckdb
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: cloudposse__atmos
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: freeopcua__opcua
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Kinto__kinto
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: srcML__srcML
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: gin-gonic__gin
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: NVIDIA__garak
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: mwaskom__seaborn
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Azure
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: burntsushi__ripgrep
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: narwhals
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: tox
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vgvassilev__clad
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: arviz
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: facebook__stylex
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: run
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: 0xMiden__miden
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: scrapinghub__dateparser
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: psf__black
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mk6i__retro
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: urllib3__urllib3
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: versity__versitygw
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: skrub
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: py
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: hirosystems__clarinet
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: a2aproject__a2a
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: kedro
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: huggingface__lighteval
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: smallrye__smallrye
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: TypeStrong__typedoc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: trpc__trpc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: agrestio__agrest
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jelmer__dulwich
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: uber__NullAway
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: facebookresearch__hydra
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: feature
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: psf__requests
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: commaai__opendbc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: huggingface__lerobot
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: xataio__pgstream
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: projectmesa__mesa
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: naver__billboard.js
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Kozea__WeasyPrint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: vega__altair
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: AgentOps
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pgmpy__pgmpy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: jupyterlab__jupyter
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: axios__axios
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: gaphor__gaphor
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aya
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: browser
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: argotorg__sourcify
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: emmercm__igir
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: usebruno__bruno
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: bpftrace__bpftrace
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: stephenberry__glaze
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: PyPSA__PyPSA
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: mlco2__codecarbon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: albumentations
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mckinsey__vizro
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pwr
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Kozea__WeasyPrint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-plus
+  folder: marshmallow
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: updatecli__updatecli
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: certtools__intelmq
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: MervinPraison__PraisonAI
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: icloud
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: software
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: huggingface__smolagents
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: open
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: dynaconf__dynaconf
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: badges__shields
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: fluxcd__flagger
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: openai__openai
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: stacklok__toolhive
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: docling
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: preactjs__preact
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: meltano__meltano
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pgmpy__pgmpy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: iterative__dvc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: anuraghazra__github
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vaadin__hilla
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: OpenMDAO__dymos
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ag2ai__faststream
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: beeware__briefcase
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: webforj__webforj
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: shapely__shapely
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pyccel__psydac
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: gruntwork
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: encode__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: MervinPraison__PraisonAI
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: sooperset__mcp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: qtile__qtile
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: toss__es
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pipecat
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: k0sproject__k0s
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: VoltCyclone__PCILeechFWGenerator
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Comfy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: lastmile
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: FuelLabs__fuels
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: jekyll__jekyll
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: expo__eas
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: wemake
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: philterd__phileas
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: huggingface__datasets
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: openfga__openfga
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: certbot__certbot
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: google__gson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: huggingface__datasets
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: meta
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: caronc__apprise
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: FlexMeasures__flexmeasures
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: iamkun__dayjs
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: handsontable__hyperformula
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: mikedh__trimesh
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ConduitIO__conduit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: sharkdp__bat
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: huggingface__huggingface_hub
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: quic
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: sharkdp__bat
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pypsa__pypsa
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: navidrome__navidrome
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: beancount__beancount
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: Kong__insomnia
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: sdv
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vuejs__eslint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: spring
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: sissbruecker__linkding
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: cloudtools__troposphere
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: HypothesisWorks__hypothesis
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: mockito__mockito
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Aider
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: integrated
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pybamm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: influxdata__influxdb
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: TheAlgorithms__Python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: nom
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: openai__openai
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aws
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pyinstaller__pyinstaller
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: facelessuser__pymdown
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vuejs__core
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: georchestra__georchestra
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: celery__celery
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: oumi
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: koxudaxi__datamodel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: camel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Unidata__MetPy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: facelessuser__pymdown
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: jqlang__jq
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: advplyr__audiobookshelf
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Flexget__Flexget
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: SciCompMod__memilio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: nilearn__nilearn
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Mintplex
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: geopandas__geopandas
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: dstackai__dstack
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: celery__celery
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: NVIDIA__NeMo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: recharts__recharts
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pytest
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: josdejong__mathjs
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: nlohmann__json
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: vuejs__core
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: absmach__supermq
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: nlohmann__json
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: falconry__falcon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: graphistry__pygraphistry
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: amtep__tiger
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: flexget__flexget
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: jqlang__jq
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Tuxemon__Tuxemon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: google__adk
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: slackapi__bolt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: SkriptLang__Skript
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: openyurtio__openyurt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: owncloud__web
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: fluent__fluentd
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: zeromicro__go
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: google__gson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: gleam
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: holoviz__panel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: SpikeInterface__spikeinterface
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: googlecontainertools__jib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: kozea__weasyprint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: external
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: ibis
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pydicom__pydicom
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: MDAnalysis__mdanalysis
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: vacanza__holidays
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: ipython__ipython
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: micronaut
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: quantumlib__Stim
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pdm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: BurntSushi__ripgrep
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: caddyserver__caddy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mesonbuild__meson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: syncthing__syncthing
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Icinga__icinga2
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: dbt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: temporalio__sdk
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: faker-ruby__faker
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: formbricks__formbricks
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pvlib__pvlib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: HypothesisWorks__hypothesis
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: aiogram__aiogram
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: networkx__networkx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jeremiah
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: instructlab__instructlab
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: urlaubsverwaltung__urlaubsverwaltung
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: jlowin__fastmcp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Textualize__textual
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: mesonbuild__meson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ftsrg__theta
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: stanford
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: traceloop__openllmetry
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ChainSafe__gossamer
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: rucio__rucio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: automattic__mongoose
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: firefox
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-plus
+  folder: pvlib__pvlib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pypa__pipenv
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: keephq__keep
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: kedro
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: equinor__ert
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: TobikoData__sqlmesh
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: firebase__firebase
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: networkx__networkx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: stanfordnlp__dspy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pylint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: kestra
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: uutils__coreutils
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: spesmilo__electrum
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: patroni__patroni
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: GoogleChrome__lighthouse
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: uutils__coreutils
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: onthegomap__planetiler
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-plus
+  folder: pylint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: streamlink__streamlink
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: cockroachdb__pebble
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_navidrome__navidrome
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: siderolabs__omni
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aquasecurity__trivy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: typescript
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: feast
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: beeware__briefcase
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: ag2ai__faststream
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: grpc__grpc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: YosysHQ__yosys
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: joke2k__faker
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: facebook__lexical
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: llamastack__llama
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: webdriverio__webdriverio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: deepset
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: projectlombok__lombok
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aeon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ChainSafe__lodestar
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: slackapi__python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: fmtlib__fmt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: OpenRefine__OpenRefine
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_future
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: CQCL__tket
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: rook__rook
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: apache__arrow
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pex
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: fonttools__fonttools
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: freqtrade__freqtrade
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: openwallet
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: eslint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: facebook__docusaurus
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: grpc__grpc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pydata__xarray
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: yamada
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: simdjson__simdjson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: IBM__mcp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: traefik__traefik
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: AxonFramework__AxonFramework
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: joke2k__faker
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: gohugoio__hugo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: quantumlib__Cirq
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: python__mypy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: IBM__mcp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: beetbox__beets
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: rust
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: webpack__webpack
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: cli__cli
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: promptfoo__promptfoo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Lightning
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: newrelic__node
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pytorch__torchtune
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: briannesbitt__carbon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pybamm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: elastic__logstash
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-plus
+  folder: pydicom__pydicom
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-plus
+  folder: pyvista__pyvista
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: pylint
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: frankframework__frankframework
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: tokio-rs__axum
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: tokio-rs__tokio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: javaparser__javaparser
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: langchain
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: vuejs__core
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: javaparser__javaparser
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: palantir__policy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pydantic__pydantic
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: home
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: yt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: fastlane__fastlane
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: rubocop__rubocop
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: mercedes
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: nushell__nushell
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: reactivex__rxjava
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: valkey-io__valkey
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: conan
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: grafana__alloy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: reflex
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: fmtlib__fmt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Altinn__altinn
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: awslabs__mcp
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: packit__ogr
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: influxdata__telegraf
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: apache__bookkeeper
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: powsybl__powsybl
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Qiskit__qiskit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: assertj__assertj
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: php-cs-fixer__php-cs-fixer
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: ponylang__ponyc
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: PrefectHQ__prefect
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: neo4j__graphql
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: apache__gravitino
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jax
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: deepset
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: geldata__gel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: TimefoldAI__timefold
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vaadin__flow
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: keras
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: coder__coder
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jesseduffield__lazygit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pyca__cryptography
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pyscf__pyscf
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: serge
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: apache__fluss
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: getmoto__moto
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: astral-sh__ruff
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: pytest
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: OffchainLabs__prysm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: laravel__framework
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: pydata__xarray
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: phpoffice__phpspreadsheet
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Pyomo__pyomo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: bridgecrewio__checkov
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: quantumlib__Cirq
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: redis__redis
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: facebook__react
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: strimzi__strimzi
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_internetarchive__openlibrary
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: babel__babel
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: eclipse
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_qutebrowser__qutebrowser
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: apache__dubbo
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: hashicorp__terraform
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: netty__netty
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: tokio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_flipt
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: scikit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: kubernetes
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: catchorg__Catch2
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: unicode
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: sphinx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: facebook__zstd
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: cli__cli
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: apache__iceberg
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: privacyidea__privacyidea
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: pydata__xarray
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: cadence
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: nushell__nushell
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: nlohmann__json
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: sphinx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: lablup__backend%2Eai
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: sympy__sympy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_NodeBB__NodeBB
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: prometheus__prometheus
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: KhronosGroup__Vulkan
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: nrwl__nx
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: istio__istio
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: helidon
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: python
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: alibaba__fastjson2
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: clap
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: dapr__java
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: sveltejs__svelte
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: micropython__micropython
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: matplotlib__matplotlib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: hapifhir__hapi
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: itwin__itwinjs
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: crate__crate
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: apache__pinot
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: ls1intum__Artemis
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-plus
+  folder: sqlfluff__sqlfluff
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: grafana__k6
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: aptos
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: jetty__jetty.project
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: hiero
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: elastic__beats
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: vitessio__vitess
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: microsoft__typescript
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: backstage__backstage
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: mrdoob__three.js
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: pingcap__tidb
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: BerriAI__litellm
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: matplotlib__matplotlib
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: keycloak__keycloak
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: scikit
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: scaleway__terraform
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: quarkusio__quarkus
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: shaka
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: cortexproject__cortex
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: apache__lucene
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: astropy__astropy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: aws
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: scylladb__scylla
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: camunda__camunda
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: trinodb__trino
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: OpenAPITools__openapi
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: gravitational__teleport
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_tutao__tutanota
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Multilingual
+  folder: apache__druid
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: sympy__sympy
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: open
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: hashicorp__terraform
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_element
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Verified
+  folder: django__django
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_ansible__ansible
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: mui__material
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: googleapis__google
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: cilium__cilium
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench_Pro
+  folder: instance_gravitational__teleport
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-bench-Live
+  folder: Azure__azure
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: Multi-SWE-bench
+  folder: fasterxml__jackson
+  repo: ''
+  levels:
+  - L2
+  units: false
+- role: full
+  dataset: SWE-Bench-plus-plus
+  folder: Azure__azure
+  repo: ''
+  levels:
+  - L2
+  units: false

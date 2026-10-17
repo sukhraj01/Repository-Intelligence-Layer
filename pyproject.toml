@@ -6,6 +6,7 @@ requires-python = ">=3.11,<3.12"
 dependencies = [
     "numpy>=1.26",
     "pyyaml>=6.0",
+    "pystemmer>=2.2",
 ]
 
 [tool.poetry]
@@ -22,6 +23,7 @@ pyarrow = ">=15.0"
 networkx = ">=3.0"
 rustworkx = ">=0.14"
 kuzu = ">=0.4"
+bm25s = ">=0.2"
 
 [build-system]
 requires = ["poetry-core>=2.0"]
@@ -44,7 +46,7 @@ files = ["ril"]
 
 [[tool.mypy.overrides]]
 # comparator and storage libraries without type information
-module = ["networkx", "pyarrow", "pyarrow.*", "rustworkx", "kuzu", "jedi"]
+module = ["networkx", "pyarrow", "pyarrow.*", "rustworkx", "kuzu", "jedi", "Stemmer", "bm25s"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
