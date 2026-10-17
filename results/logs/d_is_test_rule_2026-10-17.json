@@ -1,0 +1,68 @@
+{
+ "flask": {
+  "collected_flagged_by_rule": 21,
+  "collected_missed_by_rule": [],
+  "flagged_not_collected": 27,
+  "flagged_not_collected_kinds": {
+   "conftest": 3,
+   "other": [
+    "examples/javascript/tests/test_js_example.py",
+    "examples/tutorial/tests/test_auth.py",
+    "examples/tutorial/tests/test_blog.py",
+    "examples/tutorial/tests/test_db.py",
+    "examples/tutorial/tests/test_factory.py",
+    "tests/test_apps/cliapp/app.py",
+    "tests/test_apps/cliapp/factory.py",
+    "tests/test_apps/cliapp/importerrorapp.py",
+    "tests/test_apps/cliapp/inner1/inner2/flask.py",
+    "tests/test_apps/cliapp/multiapp.py",
+    "tests/test_apps/helloworld/hello.py",
+    "tests/test_apps/helloworld/wsgi.py",
+    "tests/test_async.py",
+    "tests/type_check/typing_app_decorators.py",
+    "tests/type_check/typing_error_handler.py",
+    "tests/type_check/typing_route.py"
+   ],
+   "package_init": 8
+  },
+  "py_files": 83,
+  "pytest_files_collection_error": 3,
+  "pytest_files_with_items": 18,
+  "pytest_summary": "319 tests collected, 3 errors in 0.95s",
+  "rule_flagged": 48
+ },
+ "requests": {
+  "collected_flagged_by_rule": 9,
+  "collected_missed_by_rule": [],
+  "flagged_not_collected": 6,
+  "flagged_not_collected_kinds": {
+   "conftest": 1,
+   "other": [
+    "tests/compat.py",
+    "tests/testserver/server.py",
+    "tests/utils.py"
+   ],
+   "package_init": 2
+  },
+  "py_files": 37,
+  "pytest_files_collection_error": 0,
+  "pytest_files_with_items": 9,
+  "pytest_summary": "635 tests collected in 0.61s",
+  "rule_flagged": 15
+ },
+ "seaborn": {
+  "collected_flagged_by_rule": 35,
+  "collected_missed_by_rule": [],
+  "flagged_not_collected": 5,
+  "flagged_not_collected_kinds": {
+   "conftest": 1,
+   "other": [],
+   "package_init": 4
+  },
+  "py_files": 152,
+  "pytest_files_collection_error": 1,
+  "pytest_files_with_items": 34,
+  "pytest_summary": "1759 tests collected, 1 error in 4.63s",
+  "rule_flagged": 40
+ }
+}

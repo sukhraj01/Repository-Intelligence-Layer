@@ -1,4 +1,4 @@
-"""Unit tests for ril.parsing.code_unit (specs/code_unit.md, DRAFT v0)."""
+"""Unit tests for ril.parsing.code_unit (specs/code_unit.md, FROZEN v1)."""
 
 import json
 from dataclasses import fields, replace
@@ -8,6 +8,7 @@ import pytest
 
 from ril.parsing.code_unit import (
     CODEUNIT_SCHEMA_VERSION,
+    UNIT_TYPES,
     CodeUnit,
     canonical_json,
     units_from_jsonl,
@@ -41,8 +42,8 @@ def make(**over: Any) -> CodeUnit:
     return CodeUnit(**base)
 
 
-def test_schema_version_is_draft() -> None:
-    assert CODEUNIT_SCHEMA_VERSION == "v0-draft"
+def test_schema_version_is_v1() -> None:
+    assert CODEUNIT_SCHEMA_VERSION == "v1"
 
 
 def test_fields_match_spec_in_order() -> None:
@@ -58,19 +59,70 @@ def test_valid_unit_types(unit_type: str) -> None:
     assert make(unit_type=unit_type).unit_type == unit_type
 
 
+def test_unit_types_are_exactly_the_frozen_enum() -> None:
+    assert UNIT_TYPES == {"function", "method", "class", "module"}
+
+
+def make_module(**over: Any) -> CodeUnit:
+    base: dict[str, Any] = {
+        "id": "pkg/mod.py::<module>",
+        "unit_type": "module",
+        "name": "<module>",
+        "qualified_name": "<module>",
+        "signature": "",
+        "docstring": None,
+        "start_line": 1,
+        "end_line": 40,
+        "is_test": False,
+    }
+    base.update(over)
+    return make(**base)
+
+
+def test_module_unit_is_valid_and_round_trips() -> None:
+    u = make_module()
+    assert CodeUnit.from_json(u.to_json()) == u
+
+
+def test_module_type_and_module_name_must_agree() -> None:
+    with pytest.raises(ValueError):
+        make_module(qualified_name="f", id="pkg/mod.py::f")
+    with pytest.raises(ValueError):
+        make(unit_type="function", qualified_name="<module>", id="pkg/mod.py::<module>")
+
+
 @pytest.mark.parametrize(
     "over",
     [
         {"end_line": 9},
         {"unit_type": "module"},
+        {"unit_type": "package"},
         {"unit_type": ""},
         {"id": ""},
+        {"id": "no-separator"},
+        {"id": "other/file.py::Cls.meth"},
+        {"id": "pkg/mod.py::Cls.other"},
         {"loc": -1},
+        {"repo_id": "Owner/Name"},
+        {"repo_id": "owner/name@abc123"},
+        {"repo_id": "owner__name"},
+        {"language": "rust"},
+        {"last_modified": "2026-10-17"},
+        {"last_modified": "2026-10-17T10:00:00+05:30"},
     ],
 )
 def test_validation_rejects(over: dict[str, Any]) -> None:
     with pytest.raises(ValueError):
         make(**over)
+
+
+def test_last_modified_accepts_empty_and_utc_z() -> None:
+    assert make(last_modified="").last_modified == ""
+    assert make(last_modified="2026-10-17T10:00:00Z").last_modified == "2026-10-17T10:00:00Z"
+
+
+def test_ordinal_suffixed_id_is_valid() -> None:
+    assert make(id="pkg/mod.py::Cls.meth#2").id.endswith("#2")
 
 
 def test_boundaries_accepted() -> None:
@@ -134,6 +186,9 @@ def test_list_order_is_preserved_not_sorted() -> None:
 
 
 def test_jsonl_round_trip() -> None:
-    units = [make(), replace(make(), id="x", name="x", docstring=None)]
+    units = [
+        make(),
+        replace(make(), id="pkg/mod.py::Cls.x", qualified_name="Cls.x", name="x", docstring=None),
+    ]
     assert units_from_jsonl(units_to_jsonl(units)) == units
     assert units_from_jsonl(b"") == []

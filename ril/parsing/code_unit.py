@@ -1,10 +1,11 @@
 """The CodeUnit: the only data type shared across component boundaries.
 
-Implements ``specs/code_unit.md`` (DRAFT v0, not frozen) and
-``docs/09_architecture.md`` ("The CodeUnit"). Fields, names and types follow the spec
-field for field. The meaning of several fields (what ``calls`` holds, the ``id`` format,
-the ``repo_id`` form, ``is_test`` rule, ...) is deliberately not fixed here: those are the
-open questions listed in the spec, and this module stores whatever strings it is given.
+Implements ``specs/code_unit.md`` (FROZEN v1) and ``docs/09_architecture.md`` ("The
+CodeUnit"). Fields, names and types follow the spec field for field. The meaning of the
+fields is fixed by the spec's decision log: ``id`` is built by ``ril.parsing.unit_id`` (D11),
+``repo_id`` by ``ril.parsing.repo_id`` (D5), ``is_test`` by ``ril.parsing.path_rules`` (D9),
+and ``calls`` / ``called_by`` / ``tests`` / ``configs`` hold resolved unit ids only (D4).
+Changing any field needs an ADR, a version bump and a re-index plan.
 
 Serialization is canonical: keys sorted, compact separators, UTF-8 without ASCII escaping,
 list order preserved exactly as given (the producer is responsible for a stable order), so
@@ -14,13 +15,22 @@ that identical units always serialize to identical bytes.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import asdict, dataclass, fields
 from typing import Any
 
-CODEUNIT_SCHEMA_VERSION = "v0-draft"
+from ril.parsing.repo_id import is_normalized_repo_id
+from ril.parsing.unit_id import MODULE_UNIT_NAME, parse_id
+
+CODEUNIT_SCHEMA_VERSION = "v1"
 """Recorded with every index (``specs/code_unit.md``, "Settled")."""
 
-UNIT_TYPES: frozenset[str] = frozenset({"function", "method", "class"})
+LANGUAGES: frozenset[str] = frozenset({"python"})
+"""The project is Python only."""
+
+_LAST_MODIFIED_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+
+UNIT_TYPES: frozenset[str] = frozenset({"function", "method", "class", "module"})
 
 _LIST_FIELDS = ("calls", "called_by", "tests", "configs")
 
@@ -67,6 +77,22 @@ class CodeUnit:
         """Raise ``ValueError`` if the unit breaks a rule stated in the spec."""
         if not self.id:
             raise ValueError("id must be non-empty")
+        parsed = parse_id(self.id)
+        if parsed.file != self.file or parsed.qualified_name != self.qualified_name:
+            raise ValueError(
+                f"id {self.id!r} does not match file {self.file!r} and "
+                f"qualified_name {self.qualified_name!r}"
+            )
+        if not is_normalized_repo_id(self.repo_id):
+            raise ValueError(f"repo_id must be a case-folded owner/name, got {self.repo_id!r}")
+        if self.language not in LANGUAGES:
+            raise ValueError(f"language {self.language!r} not in {sorted(LANGUAGES)}")
+        if self.last_modified and not _LAST_MODIFIED_RE.match(self.last_modified):
+            raise ValueError(
+                f"last_modified must be '' or YYYY-MM-DDTHH:MM:SSZ, got {self.last_modified!r}"
+            )
+        if (self.unit_type == "module") != (self.qualified_name == MODULE_UNIT_NAME):
+            raise ValueError("unit_type 'module' and qualified_name '<module>' go together")
         if self.unit_type not in UNIT_TYPES:
             raise ValueError(f"unit_type {self.unit_type!r} not in {sorted(UNIT_TYPES)}")
         if self.end_line < self.start_line:

@@ -12,9 +12,9 @@ RQ3 cannot start until RQ2 has produced at least two distinguishable checkpoints
 Week-1 deliverables, in order (contracts in `specs/`):
 
 - [x] Repo bootstrap: package skeleton, tooling, git, commit-hook stub
-- [ ] Freeze the CodeUnit schema and write it down (`specs/code_unit.md`) (draft v0 implemented and tested; awaiting answers to the eight questions)
+- [x] Freeze the CodeUnit schema and write it down (`specs/code_unit.md`) (FROZEN v1, ADR-013; id builder, repo_id normalizer and is_test rule implemented and tested; class-unit `source` still open, Q28)
 - [x] Reach the data sources and read their formats: access probes, CORE-Bench listing and samples, metadata of Verified / Loc-Bench, SweLoc search (`knowledge/datasets/`)
-- [x] Build the held-out repository list from CORE-Bench L2/L3 and SWE-bench Verified (`specs/held_out_repos.md`) (605 repositories)
+- [x] Build the held-out repository list from CORE-Bench L2/L3 and SWE-bench Verified (`specs/held_out_repos.md`) (605 repositories; list schema 2 adds current-name resolution and a Loc-Bench tier of 169 more)
 - [x] Filter any candidate training pool against it; record how many instances survive (`specs/held_out_repos.md`) (CodeSearchNet python and the unconfirmed `gangiswag/train_data` candidate; CoRNStack cannot be filtered)
 - [ ] Stand up the per-commit latency harness (`specs/latency_harness.md`)
 - [ ] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`)
