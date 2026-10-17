@@ -17,24 +17,24 @@ document, with other papers, internal); and a table of the claims that were chec
 |---|---|---|---|---|
 | CORE-Bench — Zhang et al. 2026 | 2606.11864 | Primary evaluation and framing | full, 27 pp, v3, 2026-10-17 | `core-bench-2606.11864.md` |
 | SweRank — Gangi Reddy et al. 2025 | 2505.07849 (ICLR 2026) | Training-data source (SweLoc); K-rank quality signal | full, 20 pp, v2, 2026-10-17 | `swerank-2505.07849.md` |
-| LocAgent — Chen et al. 2025 | 2503.09089 (ACL 2025) | Graph schema to adopt; Table 5 ablation | ? | — |
+| LocAgent — Chen et al. 2025 | 2503.09089 (ACL 2025) | Graph schema to adopt; Table 6 ablation (Table 5 in the first pass is the cost table) | full, 18 pp, v2, 2026-10-17 | `locagent-2503.09089.md` |
 | CoRNStack — Suresh et al. 2024 | 2412.01007 (ICLR 2025) | Closest prior work on supervision | full, 18 pp, v3, 2026-10-17 | `cornstack-2412.01007.md` |
 | SWE-bench — Jimenez et al. 2024 | 2310.06770 (ICLR 2024) | RQ3 outcome measure; mining source | full, 52 pp, v3, 2026-10-17 (no Verified section in this paper) | `swe-bench-2310.06770.md` |
 | Sun et al. 2022 | 2202.06649 (ICSE 2022) | Filtering noisy queries (+19.2% MRR) | ? | — |
 | Rethinking Negative Pairs — Li et al. 2023 | 2310.08069 (EMNLP 2023) | Soft-InfoNCE weighting | ? | — |
 | CodeR — Li et al. 2025 | 2508.11442 (NeurIPS 2025) | Curriculum (annealing) inside a recipe | ? | — |
-| KGCompass — Yang et al. 2025 | 2503.21710 | Issue node; 69.7% multi-hop | ? | — |
-| CoSIL — Jiang et al. 2025 | 2503.22424 | Graph as agent tool, training-free | ? | — |
+| KGCompass — Yang et al. 2025 | 2503.21710 | Issue node; multi-hop share (89.7% in v3; 69.7% was v1) | full, 21 pp, v3, 2026-10-17 | `kgcompass-2503.21710.md` |
+| CoSIL — Jiang et al. 2025 | 2503.22424 | Graph as agent tool, training-free | full, 17 pp, v3, 2026-10-17 | `cosil-2503.22424.md` |
 | Agent Retrieval Bench 2026 | 2607.24882 | File-level context retrieval; complementarity of signals | ? | — |
 | Agentless — Xia et al. 2024 | 2407.01489 | Candidate agent scaffold (ADR-007) | ? | — |
 | SWE-agent — Yang et al. 2024 | 2405.15793 | Alternative scaffold | ? | — |
 | OpenHands — Wang et al. 2025 | ICLR 2025 | Alternative scaffold | ? | — |
 | CodeRAG-Bench — Wang et al. 2024 | 2406.14497 | Related framing | ? | — |
 | SweRank+ — Gangi Reddy et al. 2025 | 2512.20482 | Multilingual extension of the training data; training-data table | full, 11 pp, v1, 2026-10-17 | `swerank-plus-2512.20482.md` |
-| LARGER — 2026 | 2605.16352 | Typed repository graph incl. test/docs/config links; expansion on top of lexical search | ? | — |
-| SpIDER — 2026 | 2512.16956 (ICML 2026) | Graph expansion on top of dense retrieval (closest to the signal design) | ? | — |
-| GREPO — 2026 | 2602.13921 | GNNs over repository graphs; temporal anchors | ? | — |
-| ARISE — 2026 | 2605.03117 | Repository graph with data-flow edges; call-resolution policy | ? | — |
+| LARGER — 2026 | 2605.16352 | Typed repository graph incl. test/docs/config links; expansion on top of lexical search | full, 21 pp, v1, 2026-10-17 | `larger-2605.16352.md` |
+| SpIDER — 2026 | 2512.16956 (ICML 2026) | Graph expansion on top of dense retrieval (closest to the signal design) | full, 38 pp, v3, 2026-10-17 | `spider-2512.16956.md` |
+| GREPO — 2026 | 2602.13921 | GNNs over repository graphs; temporal anchors | full, 46 pp, v1, 2026-10-17 (ten image-only pages looked at in part) | `grepo-2602.13921.md` |
+| ARISE — 2026 | 2605.03117 | Repository graph with data-flow edges; call-resolution policy | full, 13 pp, v2, 2026-10-17 | `arise-2605.03117.md` |
 | PyCG — Salis et al. 2021 | ICSE 2021 | Call-graph precision/recall on Python; basis for the edge-recovery definition | ? | — |
 | Jarvis — 2023 | ICSE 2023 | Later Python call-graph generator; comparison point | ? | — |
 

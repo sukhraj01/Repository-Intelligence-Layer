@@ -19,6 +19,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [ ] Stand up the per-commit latency harness (`specs/latency_harness.md`)
 - [ ] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`)
 - [x] Read the data and training papers in full and record notes with a checked quote table (`knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench; `scripts/check_paper_note.py`)
+- [x] Read the graph papers in full and record notes (`knowledge/papers/`: LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL)
 - [ ] Gather evidence for decisions 1–10 (`decisions/`)
 - [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
 

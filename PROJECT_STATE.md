@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; five data and training papers read in full · **Tasks completed:** 5
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twelve data, training and graph papers read in full · **Tasks completed:** 6
 
 ---
 
@@ -25,7 +25,7 @@ working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, 
 | CodeUnit schema | draft implemented, **not frozen** | `ril/parsing/code_unit.py` (+ unit and reproducibility tests) per `specs/code_unit.md` DRAFT v0, `CODEUNIT_SCHEMA_VERSION = "v0-draft"`; eight open questions Q13-Q20 below; freeze is the engineer's sign-off |
 | Data access, formats, statistics (CORE-Bench, Verified, Loc-Bench, SweLoc search, CoRNStack/CSN) | done | every card statistic re-measured and agrees (`results/tables/core_bench_card_vs_measured.csv`); `knowledge/datasets/*.md`; `scripts/ada/README.md`; Ada reachable non-interactively |
 | Held-out repository list, filter, leakage tests | done | 605 repositories in `data/held_out/` (report, pool reports); `filter_pool` and leakage helpers in `ril/training/`; `tests/leakage/` real tests; rebuild with `python -I scripts/build_held_out.py` |
-| Paper notes (data and training) | done | `knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench read in full, each with a quote table re-found in the extracted text by `scripts/check_paper_note.py` (logic in `ril/util/paper_note.py`, unit tests); remaining papers in `knowledge/papers/README.md` are not read |
+| Paper notes (data, training, graphs) | partly done | `knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench, LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL read in full, each with a quote table re-found in the extracted text by `scripts/check_paper_note.py` (logic in `ril/util/paper_note.py`, unit tests); each graph note records graph role, edge types, ablation, resolution coverage, latency and held-out handling; remaining papers in `knowledge/papers/README.md` are not read |
 | Latency harness | **not built** | `make bench` / `make bench-check` print "latency harness: not built" |
 | Parser / call graph / BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
@@ -33,7 +33,7 @@ working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, 
 
 ## Next task
 
-Next in the plan: read the graph-paper group and record notes; the items below stay with the engineer.
+Next in the plan: read the call-graph accuracy papers (PyCG, Jarvis), the supervision-quality papers and run the literature scan; the items below stay with the engineer.
 
 Engineer: close Q13-Q20 and freeze the CodeUnit (set the spec status, bump the version, write the ADR); settle Q8 (fork and rename rule)
 and Q9 (Loc-Bench) so the held-out list can be finalised. Then: the latency harness, then parsing one repository
@@ -69,6 +69,8 @@ None for code. Data: no confirmed SweLoc pool (Q7). Renames and forks can only b
 | Q21 | CORE-Bench evaluation by unit needs the checkout at each instance base commit; base commits were available only for Verified instances (SWE-bench parquet), unknown for the other sub-datasets. Which sub-datasets enter the evaluation? | evaluation, Q11 | engineer |
 | Q22 | Resolving renames and forks (Q8) at scale needs authenticated GitHub access (the unauthenticated limit of 60 requests per hour allowed 59 lookups). Should an access token be provided on Ada (never stored in the repository), and should the held-out repositories themselves be checked for renames (CORE-Bench ids carry the name at collection time)? | Q8 | engineer |
 | Q23 | Rewrite qrels are not identical to the originals: 81 Rewrite SWE-bench_Multilingual folders have no qrels file and 13 other folders have fewer rows (158 in all), although the card says Rewrite shares qrels with the originals. Score Rewrite runs against the original qrels (same query ids in every folder) or the Rewrite ones? | Rewrite evaluation | engineer |
+| Q24 | Master-document statement "tests and configuration are covered by nobody" no longer holds as worded. Read in full (R2): LARGER builds tested_by, documents and configures links with fixed confidences 0.75, 0.6, 0.5 (Table 11, p.19) and appends related tests, documentation and configuration files to search output; it reports no ablation of those links and its alignment study runs with test files dropped (p.17), so there is no published evidence either way that they help. Options: keep the claim reworded as "no ablation shows the value of test and configuration links", or drop it. Not edited in the derived docs | graph design, `docs/05`, report wording | engineer |
+| Q25 | Corrections to master-document numbers about the graph papers, found by reading: KGCompass multi-hop share is 89.7% of 146 ground-truth functions in v3 (69.7% was v1; 67.3% is the share of Lite issues with no named file or function); LocAgent Loc-Bench is 560 = 242 / 150 / 29 / 139 in v2 (660 is v1) and its ablation is Table 6; SpIDER gain is "at least 13% relative over the same encoder's dense list" (12.9% was v1); LARGER says LocBench has 5 repositories, which its own Figure 4(b) contradicts (165 measured). Derived docs not edited; decide whether to log in `docs/DEVIATIONS.md` | `docs/05`, `docs/06`, references | engineer |
 
 Resolved this block: Q10 (folder counts 632 / 97 are 605 / 92 distinct repositories, read from instance ids; L3 inside L2; Verified inside both;
 17 L2 and 2 L3 folders hold several repositories; see `data/held_out/report.md`). Earlier: Q2 (Ada reaches HF and GitHub), Q6 (24 GB free; L2+L3 originals 17.0 GB).
