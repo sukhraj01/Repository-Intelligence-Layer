@@ -17,7 +17,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Build the held-out repository list from CORE-Bench L2/L3 and SWE-bench Verified (`specs/held_out_repos.md`) (605 repositories; list schema 2 adds current-name resolution and a Loc-Bench tier of 169 more)
 - [x] Filter any candidate training pool against it; record how many instances survive (`specs/held_out_repos.md`) (CodeSearchNet python and the unconfirmed `gangiswag/train_data` candidate; CoRNStack cannot be filtered)
 - [x] Stand up the per-commit latency harness (`specs/latency_harness.md`) (synthetic stub stages; graph stage names registered; thresholds provisional, Q33)
-- [ ] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`)
+- [x] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`): flask, requests and django at Verified base commits; recovery reported under four definitions, none chosen (ADR-012); storage options measured (ADR-011 addendum)
 - [x] Read the data and training papers in full and record notes with a checked quote table (`knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench; `scripts/check_paper_note.py`)
 - [x] Read the graph papers in full and record notes (`knowledge/papers/`: LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL)
 - [x] Read the call-graph accuracy papers, the supervision papers and Agent Retrieval Bench in full; log a literature scan with a per-RQ summary (`knowledge/papers/`: PyCG, Jarvis, Sun et al., Rethinking Negative Pairs, CodeR, Agent Retrieval Bench, `LANDSCAPE.md`)
@@ -27,8 +27,8 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 1–4 — Person A: parsing, call graph, BM25
 
-- [ ] Repository parser + CodeUnit emission
-- [ ] Call / import / inherit graph with edge-recovery coverage
+- [x] Repository parser + CodeUnit emission (`ril/parsing/repository_parser.py`; first build of 2026-10-17)
+- [x] Call / import / inherit graph with edge-recovery coverage (`ril/parsing/call_graph.py`; the coverage is reported under several definitions, ADR-012)
 - [ ] BM25 index (identifier splitting, field weights, tune b)
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
@@ -84,7 +84,7 @@ still complete and defensible.
 
 | Week | Artifact | Done |
 |---|---|---|
-| 3 | Parser running on a real repository; ten CodeUnits and the edge-recovery percentage | [ ] |
+| 3 | Parser running on a real repository; ten CodeUnits and the edge-recovery percentage | [x] (reported under four definitions; ADR-012) |
 | 6 | Baseline encoder trained; a natural-language query returning the right function | [ ] |
 | 9 | RQ1 ablation table with the latency column | [ ] |
 | 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [ ] |

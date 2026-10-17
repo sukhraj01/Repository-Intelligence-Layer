@@ -416,10 +416,12 @@ Verified with one pre-stated setting. Full design in `docs/GRAPH_DESIGN.md`.
 - [x] The three roles, their schema needs, the storage options and the contain-edge disagreement with
       the settling ablation are written down.
 - [x] No design choice is made; every choice is a marked open question.
-- [ ] (Next) The first graph build fills the per-status coverage table for flask, requests and django
-      and the exploratory samples for `tests`, `configures`, `co_change`.
-- [ ] (Next) A v0-to-v1 freeze needs the engineer's decisions on Q-G1 to Q-G15, an ADR-011 status of
-      Accepted, and the storage measurements.
+- [x] The first graph build filled the per-status coverage table for flask, requests and django and the exploratory
+      samples for `tests` and `configures` (n = 60 each, precision by reading) and the `co_change` counts
+      (`results/tables/p_*.csv`, first build of 2026-10-17; ADR-012). The resolver used is the project's own `ast` resolver,
+      recorded in every graph's metadata as `own-ast-resolver/v0` (`provisional: ADR-011`, Q-G13).
+- [ ] (Next) A v0-to-v1 freeze needs the engineer's decisions on Q-G1 to Q-G15 and an ADR-011 status of
+      Accepted. The storage measurements now exist (ADR-011 addendum).
 
 ## Change control
 

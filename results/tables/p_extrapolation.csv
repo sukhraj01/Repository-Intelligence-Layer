@@ -1,0 +1,25 @@
+machine,quantity,fit_basis,predicted_before_the_run,predicted_from_the_two_small_repos,measured_django,measured_over_predicted
+ada,parse_s,source lines,,3.35,11.56,3.45
+ada,parse_s,units,,6.49,11.56,1.78
+ada,graph_build_s,source lines,,14.91,22.45,1.51
+ada,graph_build_s,units,,29.26,22.45,0.77
+ada,history_s,source lines,,0.25,1.63,6.62
+ada,history_s,units,,0.39,1.63,4.2
+ada,peak_rss_mb,source lines,,171.31,648.5,3.79
+ada,peak_rss_mb,units,,295.5,648.5,2.19
+ada,artifact_mb,source lines,,57.87,145.42,2.51
+ada,artifact_mb,units,,113.07,145.42,1.29
+ada,edges,source lines,,121662.89,224155,1.84
+ada,edges,units,,238400.91,224155,0.94
+local,parse_s,source lines,1.62,2.28,3.58,1.57
+local,parse_s,units,,4.47,3.58,0.8
+local,graph_build_s,source lines,4.45,4.71,7.32,1.55
+local,graph_build_s,units,,9.26,7.32,0.79
+local,history_s,source lines,0.63,0.46,1.71,3.75
+local,history_s,units,,0.82,1.71,2.07
+local,peak_rss_mb,source lines,197.7,190.46,591.5,3.11
+local,peak_rss_mb,units,,326.47,591.5,1.81
+local,artifact_mb,source lines,57.9,57.87,145.42,2.51
+local,artifact_mb,units,,113.07,145.42,1.29
+local,edges,source lines,121663,121662.89,224155,1.84
+local,edges,units,,238400.91,224155,0.94

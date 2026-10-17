@@ -1,0 +1,305 @@
+{
+ "class_source": "full",
+ "co_change": {
+  "commits_skipped_too_large": 84,
+  "commits_used": 8347,
+  "max_files_per_commit": 50,
+  "pairs_any_support": 85656,
+  "pairs_with_support_at_least": {
+   "2": 25378,
+   "3": 11519,
+   "5": 4130
+  }
+ },
+ "commit": "93d4c9ea1de24eb391cb2b3561b6703fd46374df",
+ "config_hash": "7dbc0359cab81e06fc976f821a3c9a37e4ef0b7f7863e627f5eb3eeee9388c28",
+ "configures_exploratory": {
+  "configures:dotted-name": 1,
+  "configures:entry-point": 2,
+  "configures:file-path": 7
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 36505,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 0,
+   "external": 3403,
+   "resolved": 13414,
+   "unresolved": 0
+  },
+  "inherit": {
+   "ambiguous": 1,
+   "external": 328,
+   "resolved": 6506,
+   "unresolved": 6
+  },
+  "invoke": {
+   "ambiguous": 31668,
+   "external": 59068,
+   "resolved": 63010,
+   "unresolved": 6733
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 3513,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 2751,
+ "files_unparseable": 1,
+ "graph_sha256": "8284bc29a5466a0e980dbf6bc45319a39831a0aac1d68310d8f2012bdfab54e9",
+ "id_collisions": 43,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 10970
+  },
+  "from-import:external": {
+   "external": 1379
+  },
+  "from-import:module": {
+   "resolved": 26
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 989
+  },
+  "from-import:reexported-external": {
+   "external": 579
+  },
+  "from-import:star": {
+   "resolved": 35
+  },
+  "from-import:submodule": {
+   "resolved": 1351
+  },
+  "import:external": {
+   "external": 1445
+  },
+  "import:module": {
+   "resolved": 43
+  }
+ },
+ "invoke_by_rule": {
+  "class:attribute-not-in-mro": {
+   "unresolved": 7
+  },
+  "class:attribute-with-unresolved-base": {
+   "unresolved": 5
+  },
+  "class:function": {
+   "resolved": 642
+  },
+  "class:inherited-from-external-base": {
+   "external": 10
+  },
+  "class:instance-call-unknown": {
+   "unresolved": 102
+  },
+  "deco:class:function": {
+   "resolved": 2
+  },
+  "deco:class:instance-call-unknown": {
+   "unresolved": 80
+  },
+  "deco:external-receiver:external": {
+   "external": 21
+  },
+  "deco:instance:function": {
+   "resolved": 55
+  },
+  "deco:module:function": {
+   "resolved": 15
+  },
+  "deco:name:callable-instance": {
+   "resolved": 3
+  },
+  "deco:name:class-instantiation": {
+   "resolved": 218
+  },
+  "deco:name:external": {
+   "external": 1127
+  },
+  "deco:name:function": {
+   "resolved": 142
+  },
+  "deco:name:undefined-name": {
+   "unresolved": 19
+  },
+  "deco:unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 32
+  },
+  "expr:callable-instance": {
+   "resolved": 98
+  },
+  "expr:callee-expression": {
+   "unresolved": 198
+  },
+  "expr:dynamic-getattr": {
+   "unresolved": 36
+  },
+  "expr:external": {
+   "external": 76
+  },
+  "expr:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "external-receiver:external": {
+   "external": 9770
+  },
+  "instance:attribute-not-in-mro": {
+   "unresolved": 1735
+  },
+  "instance:attribute-with-unresolved-base": {
+   "unresolved": 984
+  },
+  "instance:function": {
+   "resolved": 7695
+  },
+  "instance:inherited-from-external-base": {
+   "external": 61
+  },
+  "instance:name-match": {
+   "ambiguous": 63
+  },
+  "instance:no-in-repo-method-of-that-name": {
+   "external": 1
+  },
+  "module:callable-instance": {
+   "resolved": 102
+  },
+  "module:class-instantiation": {
+   "resolved": 8196
+  },
+  "module:external": {
+   "external": 9
+  },
+  "module:function": {
+   "resolved": 1687
+  },
+  "module:module-attribute-missing": {
+   "unresolved": 189
+  },
+  "module:multiple-definitions": {
+   "ambiguous": 15
+  },
+  "name:call-through-local-name": {
+   "unresolved": 975
+  },
+  "name:callable-instance": {
+   "resolved": 68
+  },
+  "name:class-instantiation": {
+   "resolved": 16747
+  },
+  "name:external": {
+   "external": 18112
+  },
+  "name:function": {
+   "resolved": 9450
+  },
+  "name:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "name:multiple-definitions": {
+   "ambiguous": 6
+  },
+  "name:nested-def": {
+   "resolved": 1578
+  },
+  "name:undefined-name": {
+   "unresolved": 539
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 1289
+  },
+  "self:attribute-with-unresolved-base": {
+   "unresolved": 35
+  },
+  "self:callable-instance": {
+   "resolved": 5
+  },
+  "self:function": {
+   "resolved": 15088
+  },
+  "self:inherited-from-external-base": {
+   "external": 25525
+  },
+  "self:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "self:name-match": {
+   "ambiguous": 15
+  },
+  "self:no-in-repo-method-of-that-name": {
+   "external": 20
+  },
+  "super:attribute-not-in-mro": {
+   "unresolved": 28
+  },
+  "super:attribute-with-unresolved-base": {
+   "unresolved": 41
+  },
+  "super:function": {
+   "resolved": 1219
+  },
+  "super:inherited-from-external-base": {
+   "external": 202
+  },
+  "super:name-match": {
+   "ambiguous": 1
+  },
+  "super:object-method": {
+   "external": 63
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 31568
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 4039
+  },
+  "unknown-receiver:too-many-name-matches": {
+   "unresolved": 468
+  }
+ },
+ "module_name_collisions": [
+  "0001_initial",
+  "apps"
+ ],
+ "nodes": 36506,
+ "repo_id": "django/django",
+ "seconds": {
+  "exploratory": 1.282,
+  "graph_build": 22.6937,
+  "history": 4.8742,
+  "parse": 12.2529
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1,
+  "dir:vendored": 3
+ },
+ "skipped_files": [],
+ "tests_exploratory": {
+  "tests:body-invokes": 14323,
+  "tests:body-invokes+name": 2093,
+  "tests:class-name-convention": 1,
+  "tests:name-convention": 1037
+ },
+ "units": 35860,
+ "units_by_type": {
+  "class": 6878,
+  "function": 1647,
+  "method": 24584,
+  "module": 2751
+ },
+ "unparseable": [
+  [
+   "tests/test_runner_apps/tagged/tests_syntax_error.py",
+   "SyntaxError: invalid decimal literal (tests_syntax_error.py, line 11)"
+  ]
+ ]
+}

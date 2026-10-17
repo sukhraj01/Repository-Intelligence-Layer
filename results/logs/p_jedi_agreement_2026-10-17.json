@@ -1,0 +1,49 @@
+{
+ "all": {
+  "agree": 207,
+  "agreement_rate": 0.69,
+  "n": 300
+ },
+ "ambiguous": {
+  "agree": 37,
+  "agreement_rate_over_answered": 0.4933,
+  "jedi_answered": 75,
+  "n": 75,
+  "outcomes": {
+   "agree-contained": 37,
+   "disagree-jedi-none": 38
+  }
+ },
+ "external": {
+  "agree": 75,
+  "agreement_rate_over_answered": 1.0,
+  "jedi_answered": 75,
+  "n": 75,
+  "outcomes": {
+   "agree-both-no-in-repo-target": 75
+  }
+ },
+ "jedi_version": "0.20.1",
+ "resolved": {
+  "agree": 75,
+  "agreement_rate_over_answered": 1.0,
+  "jedi_answered": 75,
+  "n": 75,
+  "outcomes": {
+   "agree-exact": 75
+  }
+ },
+ "sample_size": 300,
+ "seed": 0,
+ "unresolved": {
+  "agree": 20,
+  "agreement_rate_over_answered": 0.3175,
+  "jedi_answered": 63,
+  "n": 75,
+  "outcomes": {
+   "agree-both-no-in-repo-target": 20,
+   "jedi-no-answer:no-callee-position": 12,
+   "jedi-recovers-site": 43
+  }
+ }
+}

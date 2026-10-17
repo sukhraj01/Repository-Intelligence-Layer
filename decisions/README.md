@@ -21,6 +21,7 @@ that cannot wait proceeds behind `provisional: ADR-0NN` flags; no ADR is filled 
 | [ADR-009](ADR-009-cross-encoder-rerank.md) | Cross-encoder rerank | Include but measure — it likely dominates latency. | Proposed | _pending_ |
 | [ADR-010](ADR-010-usable-by-others.md) | Is RIL meant to be usable by others? | Decide now — it changes CLI, config and packaging decisions in week 1, not week 10. | Proposed | _pending_ |
 | [ADR-011](ADR-011-repo-graph-schema.md) | RepoGraph schema, edge taxonomy, storage | — (options and evidence only) | Proposed | _pending_ |
+| [ADR-012](ADR-012-edge-recovery-definitions.md) | Edge-recovery definitions | — (four definitions measured, none chosen) | Proposed | _pending_ |
 | [ADR-013](ADR-013-codeunit-v1-frozen.md) | CodeUnit v1 frozen (decisions D4-D11) | — (engineer's decisions, 2026-10-17) | Proposed (schema frozen; Q28 open) | engineer |
 
 ## Adding a new ADR

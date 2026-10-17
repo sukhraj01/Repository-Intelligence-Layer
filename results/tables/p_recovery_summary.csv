@@ -1,0 +1,46 @@
+definition,scope,quantity,n,value,source
+a,django (ada),resolved / all call sites,160479,0.3926,p_stats_django_ada
+a,django (ada),resolved / non-external,101411,0.6213,p_stats_django_ada
+a,django (ada),(resolved + ambiguous) / non-external,101411,0.9336,p_stats_django_ada
+a,flask (ada),resolved / all call sites,4036,0.2817,p_stats_flask_ada
+a,flask (ada),resolved / non-external,2237,0.5083,p_stats_flask_ada
+a,flask (ada),(resolved + ambiguous) / non-external,2237,0.9441,p_stats_flask_ada
+a,requests (ada),resolved / all call sites,2537,0.3555,p_stats_requests_ada
+a,requests (ada),resolved / non-external,1246,0.7239,p_stats_requests_ada
+a,requests (ada),(resolved + ambiguous) / non-external,1246,0.8555,p_stats_requests_ada
+a,django (local),resolved / all call sites,160479,0.3926,p_stats_django_local
+a,django (local),resolved / non-external,101411,0.6213,p_stats_django_local
+a,django (local),(resolved + ambiguous) / non-external,101411,0.9336,p_stats_django_local
+a,flask (local),resolved / all call sites,4036,0.2817,p_stats_flask_local
+a,flask (local),resolved / non-external,2237,0.5083,p_stats_flask_local
+a,flask (local),(resolved + ambiguous) / non-external,2237,0.9441,p_stats_flask_local
+a,requests (local),resolved / all call sites,2537,0.3555,p_stats_requests_local
+a,requests (local),resolved / non-external,1246,0.7239,p_stats_requests_local
+a,requests (local),(resolved + ambiguous) / non-external,1246,0.8555,p_stats_requests_local
+b,flask: all in-repo pairs,"recall, resolved",1057,0.4787,p_flask_recovery
+b,flask: all in-repo pairs,"recall, resolved or ambiguous",1057,0.6575,p_flask_recovery
+b,flask: callee in non-test code,"recall, resolved",1027,0.4742,p_flask_recovery
+b,flask: callee in non-test code,"recall, resolved or ambiguous",1027,0.6582,p_flask_recovery
+b,flask: caller and callee in non-test code,"recall, resolved",330,0.4697,p_flask_recovery
+b,flask: caller and callee in non-test code,"recall, resolved or ambiguous",330,0.603,p_flask_recovery
+b,flask: excluding implicit-protocol dunder callees,"recall, resolved",854,0.5925,p_flask_recovery
+b,flask: excluding implicit-protocol dunder callees,"recall, resolved or ambiguous",854,0.8138,p_flask_recovery
+b,"flask: all callees (in-repo, builtin, external)",recall (name match for non-repo callees),3358,0.4893,p_flask_recovery
+b,flask: in-repo + builtin callees,recall (name match for builtin),1635,0.611,p_flask_recovery
+b,flask,precision among resolved edges whose caller executed,821,0.6163,p_flask_recovery
+b,flask suite,function and method coverage (non-test units entered),363,0.8292,p_flask_recovery
+c,"flask+requests, own status resolved",Jedi agreement rate over answered,75,1.0,p_jedi_agreement
+c,"flask+requests, own status ambiguous",Jedi agreement rate over answered,75,0.4933,p_jedi_agreement
+c,"flask+requests, own status external",Jedi agreement rate over answered,75,1.0,p_jedi_agreement
+c,"flask+requests, own status unresolved",Jedi agreement rate over answered,63,0.3175,p_jedi_agreement
+c,"flask+requests, all",agreement rate,300,0.69,p_jedi_agreement
+d,"flask+requests, recorded ALL",claim holds (correct / decided),100,0.732,p_edge_inspection
+d,"flask+requests, recorded ambiguous",claim holds (correct / decided),20,0.4,p_edge_inspection
+d,"flask+requests, recorded external",claim holds (correct / decided),20,1.0,p_edge_inspection
+d,"flask+requests, recorded resolved",claim holds (correct / decided),40,1.0,p_edge_inspection
+d,"flask+requests, recorded unresolved",claim holds (correct / decided),20,0.2222,p_edge_inspection
+d,"flask+requests, population-weighted",in_repo_share_of_sites,,0.3957,p_edge_inspection
+d,"flask+requests, population-weighted",in_repo_sites_left_unresolved_share,,0.0209,p_edge_inspection
+d,"flask+requests, population-weighted",recall_resolved_or_ambiguous_over_in_repo_sites,,0.9791,p_edge_inspection
+d,"flask+requests, population-weighted",recall_resolved_over_in_repo_sites,,0.7738,p_edge_inspection
+d,"flask+requests, population-weighted",resolved_correct_share_of_sites,,0.3062,p_edge_inspection

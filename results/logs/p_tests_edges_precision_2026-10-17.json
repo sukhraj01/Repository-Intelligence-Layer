@@ -1,0 +1,45 @@
+{
+ "criterion": "correct when the linked unit is the subject, or part of the subject, of the test; incorrect when it is incidental setup or a different unit; unclear for a public API call that only drives lower-level behaviour",
+ "edge_family": "tests (exploratory)",
+ "judged_by": "one reader, the author of the build, by reading the source at each site; no second reader has checked the labels",
+ "n": 60,
+ "precision_by_stratum": {
+  "ALL": {
+   "correct": 41,
+   "incorrect": 11,
+   "n": 60,
+   "precision": 0.7885,
+   "unclear": 8,
+   "wilson95_high": 0.8776,
+   "wilson95_low": 0.6597
+  },
+  "body-invokes": {
+   "correct": 9,
+   "incorrect": 7,
+   "n": 20,
+   "precision": 0.5625,
+   "unclear": 4,
+   "wilson95_high": 0.769,
+   "wilson95_low": 0.3318
+  },
+  "body-invokes+name": {
+   "correct": 15,
+   "incorrect": 1,
+   "n": 20,
+   "precision": 0.9375,
+   "unclear": 4,
+   "wilson95_high": 0.9889,
+   "wilson95_low": 0.7167
+  },
+  "name-convention": {
+   "correct": 17,
+   "incorrect": 3,
+   "n": 20,
+   "precision": 0.85,
+   "unclear": 0,
+   "wilson95_high": 0.9476,
+   "wilson95_low": 0.6396
+  }
+ },
+ "seed": 0
+}

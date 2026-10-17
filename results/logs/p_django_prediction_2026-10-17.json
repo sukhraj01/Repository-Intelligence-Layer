@@ -1,0 +1,59 @@
+{
+ "django_inputs_from_git": {
+  "commits_reachable": 31107,
+  "py_bytes": 16392111,
+  "py_files": 2752,
+  "py_lines": 447663
+ },
+ "hardware": "local box: Apple M3, 8 GB RAM, Python 3.11",
+ "interpreter_baseline_rss_mb": 17.45,
+ "local_ceiling": "8 GB RAM; with OS headroom about 5 to 6 GB usable",
+ "made_utc": "2026-10-17T15:20:03Z",
+ "measured_inputs": {
+  "flask": {
+   "artifact_bytes": 3065502,
+   "edges": 5749,
+   "files": 80,
+   "lines": 17478,
+   "peak_rss_mb": 56.8,
+   "seconds": {
+    "exploratory": 0.0106,
+    "graph_build": 0.195,
+    "history": 0.087,
+    "parse": 0.0852
+   },
+   "units": 974
+  },
+  "requests": {
+   "artifact_bytes": 2131573,
+   "edges": 3775,
+   "files": 35,
+   "lines": 10152,
+   "peak_rss_mb": 54.4,
+   "seconds": {
+    "exploratory": 0.0056,
+    "graph_build": 0.1226,
+    "history": 0.0778,
+    "parse": 0.0591
+   },
+   "units": 678
+  }
+ },
+ "method": "two-point linear fits of each quantity against source lines (and against files) from flask and requests; two points only, so the projection is an order-of-magnitude estimate",
+ "projection": {
+  "artifact_mb_per_file": 58.5,
+  "artifact_mb_per_line": 57.9,
+  "edges_per_file": 122961,
+  "edges_per_line": 121663,
+  "graph_build_s_per_file": 4.49,
+  "graph_build_s_per_line": 4.45,
+  "history_s_per_file": 0.63,
+  "history_s_per_line": 0.63,
+  "parse_s_per_file": 1.63,
+  "parse_s_per_line": 1.62,
+  "peak_rss_mb_per_file": 199.3,
+  "peak_rss_mb_per_line": 197.7
+ },
+ "purpose": "memory and time projection for the django build, made from measured flask and requests numbers BEFORE the django build ran (the project's rule: project peak memory from measured per-unit numbers before a first run at a new scale)",
+ "verdict": "projected peak resident memory is a few hundred MB, far below the ceiling; the build would fit locally, and runs on Ada as instructed so that its measured numbers also test this extrapolation"
+}

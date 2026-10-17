@@ -1,0 +1,195 @@
+{
+ "class_source": "full",
+ "co_change": {
+  "commits_skipped_too_large": 0,
+  "commits_used": 402,
+  "max_files_per_commit": 50,
+  "pairs_any_support": 315,
+  "pairs_with_support_at_least": {
+   "2": 158,
+   "3": 102,
+   "5": 76
+  }
+ },
+ "commit": "0192aac24123735b3eaf9b08df46429bb770c283",
+ "config_hash": "9a02948851dd7b4f77cf1989ddcd05efab3a5708a85ff13256b6730f12995e1f",
+ "configures_exploratory": {
+  "configures:file-path": 1
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 683,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 1,
+   "external": 284,
+   "resolved": 202,
+   "unresolved": 1
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 28,
+   "resolved": 33,
+   "unresolved": 0
+  },
+  "invoke": {
+   "ambiguous": 164,
+   "external": 1291,
+   "resolved": 902,
+   "unresolved": 180
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 6,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 35,
+ "files_unparseable": 0,
+ "graph_sha256": "9f7fa4c6524db4cd33f8325ee14bef40743dbc7db9af1e019d0be6b084a64064",
+ "id_collisions": 1,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 170
+  },
+  "from-import:external": {
+   "external": 120
+  },
+  "from-import:in-repo-module-missing": {
+   "unresolved": 1
+  },
+  "from-import:module": {
+   "resolved": 2
+  },
+  "from-import:multiple-definitions": {
+   "ambiguous": 1
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 20
+  },
+  "from-import:reexported-external": {
+   "external": 61
+  },
+  "from-import:submodule": {
+   "resolved": 5
+  },
+  "import:external": {
+   "external": 103
+  },
+  "import:module": {
+   "resolved": 5
+  }
+ },
+ "invoke_by_rule": {
+  "class:function": {
+   "resolved": 11
+  },
+  "deco:external-receiver:external": {
+   "external": 7
+  },
+  "deco:name:external": {
+   "external": 17
+  },
+  "deco:name:undefined-name": {
+   "unresolved": 4
+  },
+  "expr:external": {
+   "external": 3
+  },
+  "external-receiver:external": {
+   "external": 519
+  },
+  "instance:function": {
+   "resolved": 167
+  },
+  "instance:inherited-from-external-base": {
+   "external": 19
+  },
+  "module:class-instantiation": {
+   "resolved": 137
+  },
+  "module:external": {
+   "external": 3
+  },
+  "module:function": {
+   "resolved": 143
+  },
+  "name:call-through-local-name": {
+   "unresolved": 172
+  },
+  "name:class-instantiation": {
+   "resolved": 128
+  },
+  "name:external": {
+   "external": 493
+  },
+  "name:function": {
+   "resolved": 222
+  },
+  "name:multiple-definitions": {
+   "ambiguous": 8
+  },
+  "name:nested-def": {
+   "resolved": 16
+  },
+  "name:undefined-name": {
+   "unresolved": 3
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 1
+  },
+  "self:function": {
+   "resolved": 77
+  },
+  "self:inherited-from-external-base": {
+   "external": 5
+  },
+  "super:function": {
+   "resolved": 1
+  },
+  "super:inherited-from-external-base": {
+   "external": 6
+  },
+  "super:object-method": {
+   "external": 1
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 156
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 218
+  }
+ },
+ "module_name_collisions": [],
+ "nodes": 684,
+ "repo_id": "psf/requests",
+ "seconds": {
+  "exploratory": 0.0197,
+  "graph_build": 0.404,
+  "history": 0.2251,
+  "parse": 0.194
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1
+ },
+ "skipped_files": [],
+ "tests_exploratory": {
+  "tests:body-invokes": 355,
+  "tests:body-invokes+name": 131,
+  "tests:class-name-convention": 5,
+  "tests:name-convention": 20
+ },
+ "units": 678,
+ "units_by_type": {
+  "class": 69,
+  "function": 130,
+  "method": 444,
+  "module": 35
+ },
+ "unparseable": []
+}

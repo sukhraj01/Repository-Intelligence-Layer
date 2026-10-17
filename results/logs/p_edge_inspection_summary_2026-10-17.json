@@ -1,0 +1,97 @@
+{
+ "judged_by": "one reader, the author of the build, by reading the source at each site; no second reader has checked the labels",
+ "n": 100,
+ "populations": {
+  "flask|ambiguous": 975,
+  "flask|external": 1799,
+  "flask|resolved": 1137,
+  "flask|unresolved": 125,
+  "requests|ambiguous": 164,
+  "requests|external": 1291,
+  "requests|resolved": 902,
+  "requests|unresolved": 180
+ },
+ "precision_by_status": {
+  "ALL": {
+   "correct": 71,
+   "incorrect": 26,
+   "n": 100,
+   "precision": 0.732,
+   "unclear": 3,
+   "wilson95_high": 0.81,
+   "wilson95_low": 0.6362
+  },
+  "ambiguous": {
+   "correct": 8,
+   "incorrect": 12,
+   "n": 20,
+   "precision": 0.4,
+   "unclear": 0,
+   "wilson95_high": 0.6134,
+   "wilson95_low": 0.2188
+  },
+  "external": {
+   "correct": 20,
+   "incorrect": 0,
+   "n": 20,
+   "precision": 1.0,
+   "unclear": 0,
+   "wilson95_high": 1.0,
+   "wilson95_low": 0.8389
+  },
+  "resolved": {
+   "correct": 39,
+   "incorrect": 0,
+   "n": 40,
+   "precision": 1.0,
+   "unclear": 1,
+   "wilson95_high": 1.0,
+   "wilson95_low": 0.9103
+  },
+  "unresolved": {
+   "correct": 4,
+   "incorrect": 14,
+   "n": 20,
+   "precision": 0.2222,
+   "unclear": 2,
+   "wilson95_high": 0.4522,
+   "wilson95_low": 0.09
+  }
+ },
+ "seed": 0,
+ "unresolved_truth_counts": {
+  "dynamic_callback": 2,
+  "dynamic_container": 2,
+  "environment_dependent": 2,
+  "external": 10,
+  "in_repo": 2,
+  "in_repo_nested_folded": 2
+ },
+ "weighted_estimates": {
+  "in_repo_share_of_sites": {
+   "boot95_high": 0.4385,
+   "boot95_low": 0.3522,
+   "estimate": 0.3957
+  },
+  "in_repo_sites_left_unresolved_share": {
+   "boot95_high": 0.0432,
+   "boot95_low": 0.004,
+   "estimate": 0.0209
+  },
+  "recall_resolved_or_ambiguous_over_in_repo_sites": {
+   "boot95_high": 0.996,
+   "boot95_low": 0.9568,
+   "estimate": 0.9791
+  },
+  "recall_resolved_over_in_repo_sites": {
+   "boot95_high": 0.8657,
+   "boot95_low": 0.6949,
+   "estimate": 0.7738
+  },
+  "resolved_correct_share_of_sites": {
+   "boot95_high": 0.3122,
+   "boot95_low": 0.295,
+   "estimate": 0.3062
+  }
+ }
+}

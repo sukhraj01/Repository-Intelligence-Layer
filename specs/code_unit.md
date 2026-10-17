@@ -87,6 +87,10 @@ project state before the freeze.
   Time-box: inside that build, no extra run.
 - **Conditions to revisit.** The edge-recovery numbers; a graph role that needs the projections
   (ADR-003); the edge store schema (ADR-011) being unable to reproduce the lists.
+- **Measured in the first build (2026-10-17).** The projections are not nearly empty: `calls` is non-empty for 45.6% (flask),
+  66.4% (requests) and 62.0% (django) of the units that are not module units, `called_by` for 21.5%, 25.8% and 17.3% of all
+  units (resolved `invoke` edges only, self-loops left out). On this evidence the lists do not meet the flip condition
+  (`results/tables/p_graph_status_counts.csv`, ADR-012). The decision stands; its reading is not changed.
 
 ### D5 (was Q14) `repo_id`
 - **Decision.** `owner/name`, case-folded. The commit (snapshot identity) lives in the container that
@@ -120,6 +124,12 @@ project state before the freeze.
   drop it by a version bump. Time-box: those pilots.
 - **Conditions to revisit.** The pilots; a granularity decision (ADR-004) that makes units larger or
   smaller.
+- **Measured in the first build (2026-10-17).** Module units: 80 (flask), 35 (requests), 2,751 (django); the parse of
+  flask, requests and django emits 974, 678 and 35,860 units (`units_by_type` in `results/logs/p_stats_*`). Folding
+  nested definitions has a visible cost for the graph: under the flask test suite 796 distinct caller-callee pairs end in a
+  function nested inside another unit (closures, decorator wrappers, views defined in tests) against 1,057 pairs that end in a
+  unit's own code (`results/logs/p_flask_recovery_2026-10-17.json`); the nested ones cannot be edges between units. Whether
+  gold positives fall inside nested definitions is pilot M's question.
 - **Reading of the decision made in code (confirm, Q29).** The module unit has `name` and
   `qualified_name` `<module>` (not a Python identifier, so it never collides with a definition), id
   `path::<module>`, empty `signature`, `docstring` = the module docstring or `None`, `start_line` 1
@@ -154,6 +164,10 @@ project state before the freeze.
   field buys; the cost of the per-file history lookup is measured in the first parse build. If it buys
   nothing and costs much, set it to `""` by default. Time-box: those pilots.
 - **Conditions to revisit.** E5; the lookup cost on the largest repository.
+- **Measured in the first build (2026-10-17).** One pass over the commits reachable from the snapshot gives every file's
+  last-modified time: 0.09 s (flask), 0.09 s (requests), 1.7 s (django, 31,107 commits) on the laptop; 1.9 s
+  for django on Ada. The cost is not a reason to drop the field. History is read with renames not followed, so a file moved
+  after its last edit (flask moved to `src/` in 2021) takes the time of the move.
 - **Format fixed in code (confirm, Q29).** `YYYY-MM-DDTHH:MM:SSZ` or `""`; `validate` rejects other
   spellings so the field compares and serializes one way.
 
@@ -185,6 +199,13 @@ project state before the freeze.
   (sampled precision, n >= 50). If a name-convention rule is almost always right and cheap, fill it at
   parse time by a version bump. Time-box: that build.
 - **Conditions to revisit.** The sampled precision; ADR-003.
+- **Measured in the first build (2026-10-17).** Exploratory `tests` edges, precision by reading, n = 60 over flask and requests
+  (`results/logs/p_tests_edges_precision_2026-10-17.json`): linked by a body call plus a name match 15 of 16 decided (94%, 4
+  unclear); by a body call alone 9 of 16 (56%, 4 unclear); by name convention alone 17 of 20 (85%). Body calls alone also link
+  incidental setup, so a call is not a test relation. The name-convention rule is cheap and mostly right on these two
+  repositories, which is the condition for filling `tests` at parse time; the body-plus-name rule is more precise and needs
+  `invoke`. No change is proposed here; it is the engineer's reading of the numbers. All labels are by one reader, the author of
+  the build.
 
 ### D11 (was Q20) `id`
 - **Decision.** `id = <repo-relative posix path>::<Qual.name>`. On a collision the second and later
@@ -200,6 +221,10 @@ project state before the freeze.
   file on flask, requests and django. A high rate (many conditional redefinitions) would make `#n`
   ids unstable under insertions between duplicates and favour another scheme. Time-box: that build.
 - **Conditions to revisit.** The collision rate; a pool whose ids do not follow `path/Class/function`.
+- **Measured in the first build (2026-10-17).** Units that received a `#n` suffix: 4 of 974 (flask), 1 of 678 (requests), 43 of
+  35,860 (django), 0.4%, 0.1% and 0.1%. Property setters and deleters account for 4 of 4 in flask and 32 of 43 in django; the
+  rest are definitions repeated in alternative branches (platform-specific helpers, compatibility shims). The rate is low, so the
+  instability of `#n` ids under insertions between duplicates touches well under 1% of units on these three repositories.
 - **Code.** `ril.parsing.unit_id`: `build_id`, `parse_id`, `assign_ids`, `id_to_pool`, `pool_to_id`.
   The pool form carries no ordinal, so `id_to_pool` drops it and `pool_to_id` returns the first
   occurrence unless an ordinal is given.

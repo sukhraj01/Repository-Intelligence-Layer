@@ -36,13 +36,21 @@ least one alternative with its trade-off, and open an ADR stub (next free number
 metric definition". Example of the kind of option to compare: resolved call sites ÷ call sites whose
 target is repository-internal, versus a comparison against a dynamic trace on the repo's own tests.
 
-## Acceptance criteria
+## Acceptance criteria (met by the first build of 2026-10-17)
 
-- [ ] Parses the chosen repo with no unhandled exceptions; files that fail to parse are counted and listed, not silently dropped.
-- [ ] Ten CodeUnits printed; each satisfies the schema validation in `specs/code_unit.md`.
-- [ ] Edge counts by type reported; **edge-recovery %** reported with its definition and the provisional-ADR link.
-- [ ] Deterministic: two runs with the same seed produce byte-identical unit tables and graph dumps (reproducibility test).
-- [ ] Memory estimated from a small sample before the first full run; if the repo is too large for 8 GB, run on Ada.
-- [ ] Parse time and units/s recorded in `throughput_log.csv` and `RESULTS.md`.
-- [ ] Unit tests: nested functions, methods, decorated functions, a class with inheritance, an unresolvable dynamic call (counts as unrecovered, not dropped).
-- [ ] `docs/ARCHITECTURE.md` (parsing → Interface, Limitations) updated with the measured coverage.
+- [x] Parses the chosen repositories with no unhandled exceptions; files that fail to parse are counted and listed, not silently dropped (flask 0 of 80, requests 0 of 35, django 1 of 2,752: a test file that is a deliberate syntax error, listed in `results/logs/p_stats_django_ada_2026-10-17.json`).
+- [x] Ten CodeUnits printed (`scripts/parse_repo.py PATH --repo-id owner/name --seed N`); each satisfies the schema validation in `specs/code_unit.md` (`CodeUnit.validate` runs on construction).
+- [x] Edge counts by type and status reported (`results/tables/p_graph_status_counts.csv`); **edge recovery reported under four definitions, none chosen** (ADR-012, which replaces the provisional ADR stub asked for above).
+- [x] Deterministic: rebuilds write byte-identical unit tables and graph files (`tests/reproducibility/test_graph_repro.py`; also on the real flask checkout; also across `PYTHONHASHSEED` values; the three repositories were rebuilt on Ada with identical files).
+- [x] Memory estimated from measured per-unit numbers before the django-scale run (`results/logs/p_django_prediction_2026-10-17.json`); the django build ran on Ada as instructed and was repeated on the laptop afterwards as a check of the estimate.
+- [x] Parse time and units/s recorded in `throughput_log.csv` (stages `parse` and `graph_build`, workload ids `graph-<repo>-v1`) and in `RESULTS.md`.
+- [x] Unit tests: nested functions, methods, decorated functions, a class with inheritance, an unresolvable dynamic call that counts as unrecovered (`tests/unit/test_repository_parser.py`, `test_call_graph.py`).
+- [x] `docs/ARCHITECTURE.md` (parsing: Interface, Limitations) updated with the measured coverage.
+
+## What the first build measured
+
+Outputs of the build and their meaning are in `results/tables/p_*.csv` and `results/logs/p_*`; the edge-recovery definitions with
+their trade-offs are in `decisions/ADR-012-edge-recovery-definitions.md`, and the storage measurements in
+`decisions/ADR-011-repo-graph-schema.md` (addendum). The exploratory families are `tests` and `configures` (written to their own
+files, never projected into the CodeUnit lists) and `co_change` (counts of file pairs changed together in at least N = 2, 3, 5
+commits that are ancestors of the snapshot, commits touching more than 50 files skipped; no edge is stored).

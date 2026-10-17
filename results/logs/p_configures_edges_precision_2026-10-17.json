@@ -1,0 +1,56 @@
+{
+ "criterion": "correct when the configuration line really names the linked module or definition as code (entry point, module list, file path run or excluded by a tool); incorrect for prose mentions, comments or pattern coincidences",
+ "edge_family": "configures (exploratory)",
+ "judged_by": "one reader, the author of the build, by reading the source at each site; no second reader has checked the labels",
+ "n": 60,
+ "pool_sizes": {
+  "django": 10,
+  "flask": 2,
+  "pylint": 40,
+  "pytest": 19,
+  "requests": 1,
+  "seaborn": 2,
+  "sphinx": 45
+ },
+ "pool_total": 119,
+ "precision_by_stratum": {
+  "ALL": {
+   "correct": 56,
+   "incorrect": 4,
+   "n": 60,
+   "precision": 0.9333,
+   "unclear": 0,
+   "wilson95_high": 0.9738,
+   "wilson95_low": 0.8407
+  },
+  "configures:dotted-name": {
+   "correct": 22,
+   "incorrect": 2,
+   "n": 24,
+   "precision": 0.9167,
+   "unclear": 0,
+   "wilson95_high": 0.9768,
+   "wilson95_low": 0.7415
+  },
+  "configures:entry-point": {
+   "correct": 11,
+   "incorrect": 1,
+   "n": 12,
+   "precision": 0.9167,
+   "unclear": 0,
+   "wilson95_high": 0.9851,
+   "wilson95_low": 0.6461
+  },
+  "configures:file-path": {
+   "correct": 23,
+   "incorrect": 1,
+   "n": 24,
+   "precision": 0.9583,
+   "unclear": 0,
+   "wilson95_high": 0.9926,
+   "wilson95_low": 0.7976
+  }
+ },
+ "repositories": "flask, requests, django (Verified base commits) plus pytest, sphinx, pylint, seaborn at Verified base commits (parsing only) so that the pool reaches n >= 50; the three main repositories alone yield 13 edges",
+ "seed": 0
+}

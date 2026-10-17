@@ -70,3 +70,19 @@ Locally, `python -I scripts/build_held_out.py` turns the merged files into `data
   prefixes, as a CPU job on `u22`; about 6.5 to 9 MB/s measured, so roughly 35 to 45 minutes per 17 GB.
 - `gangiswag/train_data` `train.zip` (23.6 GB) is not to be fetched until the engineer decides whether it
   is the intended pool (see Open question Q7); single members can be extracted with `zip_remote_extract.py`.
+
+## Parse and graph build (first build of 2026-10-17, `docs/COMPUTE.md` log)
+
+Work directory on Ada: `~/ril_p/` (`ril/`, `scripts/` copied with `rsync -a --exclude __pycache__ ril scripts ada:ril_p/`;
+`repos/`, `repos_extra/`, `out/`, `logs/`). Create `~/ril_p/logs` first (Slurm does not create the `--output` directory).
+The cluster nodes run Python 3.10: `ril/parsing`, `ril/evaluation/dynamic_trace.py` and `ril/bench` are written to run there;
+each job builds its own venv keyed by the interpreter version.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `trace_flask_suite.sbatch` + `trace_pytest.py` | flask test suite at the pallets__flask-5014 base commit under the function-level tracer, and again under coverage.py | `sbatch ril_p/scripts/ada/trace_flask_suite.sbatch` (writes `ril_p/out/flask_trace.json`, `flask_coverage.json`) |
+| `clone_django.sbatch` | full clone of django/django, checkout of the django__django-16145 base commit | `sbatch ril_p/scripts/ada/clone_django.sbatch` |
+| `graph_measure.sbatch` | statistics of the three graphs (`parse_repo.py`), then the storage and expansion measurement, determinism rerun, through the latency harness | `sbatch --export=ALL,RIL_COMMIT=<hash>,RIL_DIRTY=1 ril_p/scripts/ada/graph_measure.sbatch` |
+| `configures_pool.sbatch` + `configures_pool.py` | shallow fetch of four more Verified base commits (parsing only) and rendering of every exploratory `configures` edge for the precision sample | `sbatch ril_p/scripts/ada/configures_pool.sbatch` |
+
+Copy results back with `scp ada:ril_p/out/<file> data/processed/p_graph/`.

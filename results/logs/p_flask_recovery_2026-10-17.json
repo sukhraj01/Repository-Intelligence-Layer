@@ -1,0 +1,158 @@
+{
+ "definition_a_call_site_shares": {
+  "invoke_status_counts": {
+   "ambiguous": 975,
+   "external": 1799,
+   "resolved": 1137,
+   "unresolved": 125
+  },
+  "resolved_or_ambiguous_over_non_external": 0.9441215914170764,
+  "resolved_over_all_sites": 0.2817145688800793,
+  "resolved_over_non_external": 0.5082700044702727
+ },
+ "dynamic": {
+  "distinct_builtin_c_callee_pairs": 578,
+  "distinct_external_python_callee_pairs": 1723,
+  "distinct_in_repo_pairs": 1057,
+  "distinct_nested_callee_pairs": 796,
+  "excluded_event_counts": {
+   "callee-classbody-execution": 61,
+   "callee-comprehension": 1807,
+   "callee-module-execution": 2,
+   "nested-callee-same-unit": 733,
+   "unmapped-file": 47
+  },
+  "pytest_exit_code": 0,
+  "pytest_outcomes": {
+   "call:passed": 483,
+   "call:skipped": 1
+  },
+  "python": "3.10.12"
+ },
+ "graph_sha256": "b04a1b28951bf8f86521f0c74711891168eee516b08c0bb155b8e3607c188dc9",
+ "precision_among_edges_whose_caller_executed": {
+  "caller_and_callee_executed": 799,
+  "caller_executed": 821,
+  "note": "an edge on an untaken branch of an executed caller counts as unsupported, so this is a lower bound on precision",
+  "precision": 0.6163,
+  "precision_both_executed": 0.6333,
+  "static_resolved_pairs_total": 935,
+  "supported_among_both_executed": 506,
+  "supported_by_a_dynamic_pair": 506
+ },
+ "recall_in_repo_callees": [
+  {
+   "missed_by_category": {
+    "implicit-protocol-dunder": 203,
+    "instantiation-no-site": 18,
+    "no-call-site-for-callee-name": 76,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "n_pairs": 1057,
+   "recall_resolved": 0.4787,
+   "recall_resolved_or_ambiguous": 0.6575,
+   "recovered_ambiguous_only": 189,
+   "recovered_resolved": 506,
+   "view": "all in-repo pairs"
+  },
+  {
+   "missed_by_category": {
+    "implicit-protocol-dunder": 203,
+    "instantiation-no-site": 18,
+    "no-call-site-for-callee-name": 65,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "n_pairs": 1027,
+   "recall_resolved": 0.4742,
+   "recall_resolved_or_ambiguous": 0.6582,
+   "recovered_ambiguous_only": 189,
+   "recovered_resolved": 487,
+   "view": "callee in non-test code"
+  },
+  {
+   "missed_by_category": {
+    "implicit-protocol-dunder": 23,
+    "instantiation-no-site": 8,
+    "no-call-site-for-callee-name": 50,
+    "property-access": 31,
+    "site-present-not-recovered": 6,
+    "site-present-other-target": 13
+   },
+   "n_pairs": 330,
+   "recall_resolved": 0.4697,
+   "recall_resolved_or_ambiguous": 0.603,
+   "recovered_ambiguous_only": 44,
+   "recovered_resolved": 155,
+   "view": "caller and callee in non-test code"
+  },
+  {
+   "missed_by_category": {
+    "instantiation-no-site": 18,
+    "no-call-site-for-callee-name": 76,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "n_pairs": 854,
+   "recall_resolved": 0.5925,
+   "recall_resolved_or_ambiguous": 0.8138,
+   "recovered_ambiguous_only": 189,
+   "recovered_resolved": 506,
+   "view": "excluding implicit-protocol dunder callees"
+  }
+ ],
+ "recall_including_builtin_and_external_callees": {
+  "builtin_c": {
+   "matched_by_terminal_name": 493,
+   "n": 578
+  },
+  "external_python": {
+   "matched_by_terminal_name": 644,
+   "n": 1723
+  },
+  "in_repo": {
+   "n": 1057,
+   "recovered_resolved": 506
+  },
+  "n_pairs": 3358,
+  "note": "external and builtin callees are matched by the callee's last name against the terminal names of the caller's invoke sites (any status); a hit does not prove the same function",
+  "recall": 0.4893,
+  "recovered": 1643
+ },
+ "static": {
+  "ambiguous_unit_pairs": 1519,
+  "instantiation_implied_pairs": 171,
+  "resolved_unit_pairs": 935
+ },
+ "suite_function_coverage_non_test_units": {
+  "class": {
+   "executed": 46,
+   "share": 0.9583,
+   "units": 48
+  },
+  "function": {
+   "executed": 59,
+   "share": 0.6146,
+   "units": 96
+  },
+  "function_or_method": {
+   "executed": 301,
+   "share": 0.8292,
+   "units": 363
+  },
+  "method": {
+   "executed": 242,
+   "share": 0.9064,
+   "units": 267
+  },
+  "module": {
+   "executed": 21,
+   "share": 0.6364,
+   "units": 33
+  }
+ }
+}

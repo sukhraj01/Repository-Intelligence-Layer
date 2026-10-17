@@ -4,16 +4,18 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full; CodeUnit frozen (v1); held-out list schema 2; graph design drafted (options only) · **Tasks completed:** 10
+**Last updated:** 2026-10-17 · **Milestone:** M0 — parser and first graph built on flask, requests and django; edge recovery measured under four definitions (none chosen); storage options measured; CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 11
 
 ---
 
 ## One-line status
 
-Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is a working,
-empty Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass. **No retrieval
-research code exists** (the CodeUnit type, its helpers and the held-out filter are the only modules).
-Latency harness: **built** (synthetic stub stages only; real stages register as they arrive).
+Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is a working
+Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass. **Built so far:** the CodeUnit and its
+helpers, the held-out filter, the repository parser, the typed graph builder (contain, import, invoke, inherit, override, plus
+exploratory tests and configures), the edge-recovery measurements and the graph storage measurement. **No retrieval signal
+exists yet** (no BM25, dense encoder, fusion or assembly). Latency harness: **built**; `parse`, `graph_build` and the graph
+expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 
 ## What is built
 
@@ -29,7 +31,9 @@ Latency harness: **built** (synthetic stub stages only; real stages register as 
 | Paper notes and literature scan | done for the reading plan | `knowledge/papers/`, checked quote tables (`scripts/check_paper_note.py`); `LANDSCAPE.md` |
 | RepoGraph design | DRAFT v0, options only | `specs/repo_graph.md` (own version constant `REPO_GRAPH_SCHEMA_VERSION`), `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made, no code |
 | Latency harness | **built** | `ril/bench/` (`latency_harness.py`, `profile_stages.py`, `stub_stages.py`); `make bench` / `make bench-check`; logs `results/latency/{latency,throughput}_log.csv`; stages `query_encode`, `bm25`, `dense_search`, `graph_expansion`, `graph_expand_1hop`, `graph_expand_2hop`, `rrf_fusion`, `cross_encoder_rerank`, `assemble`, `end_to_end` (latency) and `parse`, `graph_build` (throughput); thresholds provisional (Q33); a real stage replaces a stub with one `REGISTRY.register` line and a new `query_set_id` |
-| Parser / call graph / BM25 / dense / fusion / assemble | not started | |
+| Parser and graph | **built** (first build 2026-10-17) | `ril/parsing/` (`repository_parser.py`, `call_graph.py`, `repo_graph.py`, `exploratory_edges.py`, `git_history.py`, `build.py`); `scripts/parse_repo.py PATH --repo-id owner/name --seed N`; own `ast` resolver `own-ast-resolver/v0` (`provisional: ADR-011`); class unit `source` = full class (`provisional: ADR-013`, Q28); byte-identical rebuilds; flask 974 units, requests 678, django 35,860 |
+| Edge recovery, exploratory edges, storage options | **measured**, nothing chosen | ADR-012 (four recovery definitions with trade-offs), ADR-011 addendum (storage table), `results/tables/p_*.csv`, `RESULTS.md` rows `p-*`; tracer and comparators in `ril/evaluation/`, storage in `ril/bench/graph_storage.py`, `graph_measure.py` |
+| BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
 | Evaluation (CORE-Bench loaders, metrics), agent integration | not started | |
 
@@ -53,10 +57,14 @@ Latency harness: **built** (synthetic stub stages only; real stages register as 
 
 ## Next task
 
-The first parse and graph build (`specs/parse_one_repo.md`; time `parse` and `graph_build` through the harness with a real query set id, and register `mentions_extract` if the graph spec keeps it) (writes the
-per-status coverage table and the storage measurements for ADR-011), pilots M and E. Engineer: provide
-`GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2 counts);
-decide Q28; confirm Q29; read `specs/repo_graph.md` "Open design questions" (Q30-Q32 below); settle ADR-001 to ADR-010 by end of week 2.
+Pilot M (chunk-to-unit mapping and graph reach): map every positive chunk of the flask, requests and seaborn sample
+folders to units at the Verified base commits (exact substring, then whitespace-normalised; reasons for failures), classify the L3
+positives (function, method, class, module residual, test unit, non-Python), and measure graph reach of the L3 positives from the L2
+positives per edge subset with a random-set control and bootstrap intervals. It uses the graph of the first build
+(`ril.parsing.build.build_repository`; `contain`, `import`, `invoke`, `inherit`, `override` stored, `tests` and `configures` exploratory).
+Then pilot E (E1 to E5). Engineer: provide `GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2
+counts); decide Q28; confirm Q29; read `decisions/ADR-012` and `ADR-011` (addendum) and `specs/repo_graph.md` "Open design questions"
+(Q30-Q32, Q35-Q38 below); settle ADR-001 to ADR-010 by end of week 2.
 
 ## Blockers
 
@@ -75,7 +83,7 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q1 | Which team member is Person A / B / C (owners in `docs/ROADMAP.md`)? | ownership columns | engineer, week 1 |
 | Q3 | Does a docs-only commit need a fresh latency row, or may it reference the previous row? Harness implements both behind `RIL_LATENCY_HOOK` (strict default); the hook is not installed until the engineer runs `make hooks` | hook setting | engineer |
 | Q33 | Regression thresholds in `configs/bench/latency.yaml` (p50 or p95 up by more than 50% and 0.5 ms vs the previous comparable row) are conservative placeholders, `provisional: Q33`; also whether a failing run is logged (now: not, unless `--append-on-fail`) | `make bench-check`, hook | engineer, before the freeze |
-| Q34 | `parse` and `graph_build` are offline, so they sit in the throughput log (units/s), while `graph_expand_1hop/2hop` are per-query latency stages. Confirm this split, or also report build time per query-path style | stage taxonomy | engineer |
+| Q34 | `parse` and `graph_build` are offline, so they sit in the throughput log (units/s), while `graph_expand_1hop/2hop` are per-query latency stages; the first build used exactly this split (workload ids `graph-<repo>-v1`). Confirm it | stage taxonomy | engineer |
 | Q4 | GitHub remote(s) for the team repo; the engineer performs every push | publishing only | engineer |
 | Q5 | ADR-001...ADR-010 (training pool, quality signal, graph role, granularity, benchmark, encoder, scaffold, LLM, rerank, usable-by-others) | frozen config, RQ2 start | team, end of week 2 |
 | Q7 | Is the candidate pool intended, or is the pool built with the published scripts? Read in full: `gangiswag/train_data` python = SweLocMulti's Python part (SweRank+ Table 1: 2,448 repositories, 24,285 PRs, 49,973 instances), not the original SweLoc (3,387 repositories); SweRank+ states no benchmark-repository exclusion; 89 held-out repositories (3,431 PRs, 14.13%) occur in it (DEV-004). Loc-Bench: 560 rows (V1) vs 660 (V0.2) | ADR-001, pool filter | engineer; evidence in ADR-001 addenda |
@@ -83,11 +91,15 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q12 | CORE-Bench L3 labels are LLM-judged; the paper does not say how the three votes combine into the kept score (R1); released qrels are binary; L2 positives include import blocks (3 of 53 sampled) | RQ3 interpretation | note in report |
 | Q24 | Master statement "tests and configuration are covered by nobody" no longer holds as worded (LARGER, Table 11; DEV-006); no ablation of such links exists. Keep it reworded ("no ablation shows the value of test and configuration links") or drop it | `docs/05`, report wording | engineer |
 | Q25 | Derived master copies in `docs/` still carry the superseded numbers and identifiers recorded in DEV-003 to DEV-007 (KGCompass 89.7% not 69.7%, Loc-Bench counts, CodeR identifier, edge-recovery expectation, ...). Edit the copies, or keep this file as the record? | `docs/03`, `docs/05`, `docs/06`, `docs/11` | engineer |
-| Q27 | ADR-012 inputs: four non-equivalent edge-recovery measures in the literature (PyCG, Jarvis, DyPyBench, Total Recall); a test-suite tracer as oracle can mis-state precision and recall in either direction. Report several (plan) / add an in-repo-only variant / add a corpus-extension step | ADR-012, parse and graph build | engineer |
+| Q27 | Which edge-recovery definition(s) to report: ADR-012 now holds four measured definitions (call-site share 28-72% by denominator; dynamic oracle on the flask suite 48% resolved, 66% with ambiguous, n = 1,057 pairs; Jedi agreement 100% on resolved, 49% on ambiguous; inspection of 100 sites). No single percentage reproduces the master's 70-85% | ADR-012, reporting | engineer |
 | Q28 | Class unit `source`: full class text or header only (the `Flask` class is 2,124 lines and its methods are units). The schema is unaffected; the parser stays behind `provisional: ADR-013` until decided | parser, index size | engineer |
 | Q29 | Confirm the readings of D6 and D8 made in code: module unit fields (`<module>` name, span = file, `source` = residual lines) and `last_modified` as `YYYY-MM-DDTHH:MM:SSZ` | parser | engineer |
 | Q30 | Graph role(s) in the frozen configuration and how a graph signal enters a fusion stack fixed to rank-based RRF (hop-decay score vs ranked list vs edited candidate list); whether graph-derived supervision (structural negatives, test/config positives) is inside RQ2; whether an agent-tool variant belongs to RQ3 (agent fixed). Options and evidence: `docs/GRAPH_DESIGN.md` sections 4 and 9 | ADR-003, frozen config | team, end of week 2 |
 | Q31 | ADR-011 schema choices (`specs/repo_graph.md` Q-G3 to Q-G15): `test` as flag or kind; which files are config/document; optional edge fields (`site`, `target_text`, `count`); `external` vs `unresolved` boundary; one graph per commit vs validity ranges; resolver per family; which families are in the first stored graph; storage option (measured in the first graph build) | ADR-011, first graph build | engineer, after the build |
+| Q35 | Policy for `ambiguous` sites (Q-G13/Q-G14): 12 of 20 inspected sets were spurious (calls on dictionaries, sockets, test-client objects whose method name matches an in-repository method); the right target was in the set 40% of the time. Options: keep as stored; re-bucket by receiver evidence (literals, `**kwargs`, annotated external types, fixture parameters) as `external`; drop sets above a size; keep only for expansion. Edge taxonomy is the engineer's | ADR-011, graph role | engineer |
+| Q36 | `external` vs `unresolved` boundary (Q-G8) measured on 40 inspected sites: `external` was right 20 of 20, `unresolved` sites were external in 10 of 20 and in-repository by name in 2 of 20. Options as in the spec; rules are in `results/tables/p_graph_rule_counts.csv` | ADR-011 | engineer |
+| Q37 | Which exploratory families enter the first stored artifact: `tests` precision by reading, n = 60: body call plus name 94%, body call alone 56%, name convention 85%; `configures` 93% (n = 60, seven repositories; only 13 edges exist in the three main ones); `co_change` counts only. All labels by one reader (the author of the build); a second reader is the open step | ADR-011 (Q-G14) | engineer |
+| Q38 | Storage option(s): measurements exist (ADR-011 addendum); in-memory structures answer 2 hops in under 1 ms at django scale, SQLite queried directly about 25 times slower, the embedded graph database about 100 times slower; which write format, which read structure, per-commit graphs (Q-G10) are decisions | ADR-011 | engineer |
 | Q32 | Confirm two readings made in the graph spec: `tests(u)` = test units with a resolved `tests` edge to `u`; `configs(u)` = config paths with a resolved `configures` edge to `u` or its file | projections | engineer |
 
 Resolved this block: Q8, Q9, Q13-Q23 (decisions log above), Q26 (recorded in DEV-007). Earlier: Q10, Q2, Q6.

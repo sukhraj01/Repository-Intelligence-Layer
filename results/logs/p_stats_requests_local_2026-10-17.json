@@ -1,0 +1,203 @@
+{
+ "artifact_sha256": {
+  "edges.jsonl": "09ffc5867ff4e18ee3c029a1a9c7d771f6306a5d1fc20d50a722595f8cc60248",
+  "edges_configures_exploratory.jsonl": "3f2f6f482838bb693d5a55938513ffc1ba67271db433b4a219fcd24b651773ad",
+  "edges_tests_exploratory.jsonl": "e42c449ddf9275bbd6a4a5d8e1d2ff23135984a95181c3465d2ab16d56f05b3c",
+  "meta.json": "1582e7bc019208557176e0b9ef27be0ada90fde3aa48b51fa4743fb2a776b8ea",
+  "nodes.jsonl": "107bfbbe40bc387d93b47bc3ce81c42c9a606ce767ecba78f0fb9d54d72591e3",
+  "units.jsonl": "cb434d580959d8a4e26ab1dfffbd8192d37ddf5e49545cc16dfcb8472577fc63"
+ },
+ "class_source": "full",
+ "co_change": {
+  "commits_skipped_too_large": 0,
+  "commits_used": 402,
+  "max_files_per_commit": 50,
+  "pairs_any_support": 315,
+  "pairs_with_support_at_least": {
+   "2": 158,
+   "3": 102,
+   "5": 76
+  }
+ },
+ "commit": "0192aac24123735b3eaf9b08df46429bb770c283",
+ "config_hash": "9a02948851dd7b4f77cf1989ddcd05efab3a5708a85ff13256b6730f12995e1f",
+ "configures_exploratory": {
+  "configures:file-path": 1
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 683,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 1,
+   "external": 284,
+   "resolved": 202,
+   "unresolved": 1
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 28,
+   "resolved": 33,
+   "unresolved": 0
+  },
+  "invoke": {
+   "ambiguous": 164,
+   "external": 1291,
+   "resolved": 902,
+   "unresolved": 180
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 6,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 35,
+ "files_unparseable": 0,
+ "graph_sha256": "c6fd0aa8bed9caa99346535d29a3b2f7a4c2e9b431e269ee75f6aaa21fad2ce7",
+ "id_collisions": 1,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 170
+  },
+  "from-import:external": {
+   "external": 120
+  },
+  "from-import:in-repo-module-missing": {
+   "unresolved": 1
+  },
+  "from-import:module": {
+   "resolved": 2
+  },
+  "from-import:multiple-definitions": {
+   "ambiguous": 1
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 20
+  },
+  "from-import:reexported-external": {
+   "external": 61
+  },
+  "from-import:submodule": {
+   "resolved": 5
+  },
+  "import:external": {
+   "external": 103
+  },
+  "import:module": {
+   "resolved": 5
+  }
+ },
+ "invoke_by_rule": {
+  "class:function": {
+   "resolved": 11
+  },
+  "deco:external-receiver:external": {
+   "external": 7
+  },
+  "deco:name:external": {
+   "external": 17
+  },
+  "deco:name:undefined-name": {
+   "unresolved": 4
+  },
+  "expr:external": {
+   "external": 3
+  },
+  "external-receiver:external": {
+   "external": 519
+  },
+  "instance:function": {
+   "resolved": 167
+  },
+  "instance:inherited-from-external-base": {
+   "external": 19
+  },
+  "module:class-instantiation": {
+   "resolved": 137
+  },
+  "module:external": {
+   "external": 3
+  },
+  "module:function": {
+   "resolved": 143
+  },
+  "name:call-through-local-name": {
+   "unresolved": 172
+  },
+  "name:class-instantiation": {
+   "resolved": 128
+  },
+  "name:external": {
+   "external": 493
+  },
+  "name:function": {
+   "resolved": 222
+  },
+  "name:multiple-definitions": {
+   "ambiguous": 8
+  },
+  "name:nested-def": {
+   "resolved": 16
+  },
+  "name:undefined-name": {
+   "unresolved": 3
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 1
+  },
+  "self:function": {
+   "resolved": 77
+  },
+  "self:inherited-from-external-base": {
+   "external": 5
+  },
+  "super:function": {
+   "resolved": 1
+  },
+  "super:inherited-from-external-base": {
+   "external": 6
+  },
+  "super:object-method": {
+   "external": 1
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 156
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 218
+  }
+ },
+ "module_name_collisions": [],
+ "nodes": 684,
+ "repo_id": "psf/requests",
+ "seconds": {
+  "exploratory": 0.0049,
+  "graph_build": 0.1202,
+  "history": 0.0975,
+  "parse": 0.0586
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1
+ },
+ "skipped_files": [],
+ "tests_exploratory": {
+  "tests:body-invokes": 355,
+  "tests:body-invokes+name": 131,
+  "tests:class-name-convention": 5,
+  "tests:name-convention": 20
+ },
+ "units": 678,
+ "units_by_type": {
+  "class": 69,
+  "function": 130,
+  "method": 444,
+  "module": 35
+ },
+ "unparseable": []
+}

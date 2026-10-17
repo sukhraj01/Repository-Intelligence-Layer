@@ -1,0 +1,212 @@
+{
+ "class_source": "full",
+ "co_change": {
+  "commits_skipped_too_large": 1,
+  "commits_used": 211,
+  "max_files_per_commit": 50,
+  "pairs_any_support": 1725,
+  "pairs_with_support_at_least": {
+   "2": 1001,
+   "3": 578,
+   "5": 326
+  }
+ },
+ "commit": "7ee9ceb71e868944a46e1ff00b506772a53a4f1d",
+ "config_hash": "891b8c48c68a1f97edf73ddab9b71f6c02c1d41ce74bf7dee25da785aa2d9acf",
+ "configures_exploratory": {
+  "configures:dotted-name": 1,
+  "configures:entry-point": 1
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 1000,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 0,
+   "external": 329,
+   "resolved": 305,
+   "unresolved": 0
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 24,
+   "resolved": 19,
+   "unresolved": 0
+  },
+  "invoke": {
+   "ambiguous": 975,
+   "external": 1799,
+   "resolved": 1137,
+   "unresolved": 125
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 36,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 80,
+ "files_unparseable": 0,
+ "graph_sha256": "df8de02784d792eefaa3e48eadc9af5f81dad071f58370886c9a2cfe893bb8dc",
+ "id_collisions": 4,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 186
+  },
+  "from-import:external": {
+   "external": 163
+  },
+  "from-import:module": {
+   "resolved": 4
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 88
+  },
+  "from-import:reexported-external": {
+   "external": 5
+  },
+  "from-import:submodule": {
+   "resolved": 11
+  },
+  "import:external": {
+   "external": 161
+  },
+  "import:module": {
+   "resolved": 16
+  }
+ },
+ "invoke_by_rule": {
+  "class:function": {
+   "resolved": 11
+  },
+  "class:inherited-from-external-base": {
+   "external": 1
+  },
+  "class:no-in-repo-method-of-that-name": {
+   "external": 1
+  },
+  "deco:external-receiver:external": {
+   "external": 19
+  },
+  "deco:instance:function": {
+   "resolved": 7
+  },
+  "deco:name:external": {
+   "external": 25
+  },
+  "deco:name:function": {
+   "resolved": 48
+  },
+  "deco:unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 4
+  },
+  "expr:callee-expression": {
+   "unresolved": 35
+  },
+  "expr:external": {
+   "external": 3
+  },
+  "external-receiver:external": {
+   "external": 608
+  },
+  "instance:attribute-not-in-mro": {
+   "unresolved": 35
+  },
+  "instance:function": {
+   "resolved": 307
+  },
+  "instance:inherited-from-external-base": {
+   "external": 88
+  },
+  "instance:no-in-repo-method-of-that-name": {
+   "external": 1
+  },
+  "module:class-instantiation": {
+   "resolved": 137
+  },
+  "module:function": {
+   "resolved": 167
+  },
+  "name:call-through-local-name": {
+   "unresolved": 39
+  },
+  "name:class-instantiation": {
+   "resolved": 123
+  },
+  "name:external": {
+   "external": 622
+  },
+  "name:function": {
+   "resolved": 151
+  },
+  "name:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "name:nested-def": {
+   "resolved": 69
+  },
+  "name:undefined-name": {
+   "unresolved": 1
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 13
+  },
+  "self:function": {
+   "resolved": 115
+  },
+  "self:inherited-from-external-base": {
+   "external": 7
+  },
+  "self:no-in-repo-method-of-that-name": {
+   "external": 4
+  },
+  "super:attribute-not-in-mro": {
+   "unresolved": 1
+  },
+  "super:function": {
+   "resolved": 2
+  },
+  "super:inherited-from-external-base": {
+   "external": 22
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 975
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 394
+  }
+ },
+ "module_name_collisions": [
+  "conftest"
+ ],
+ "nodes": 1001,
+ "repo_id": "pallets/flask",
+ "seconds": {
+  "exploratory": 0.035,
+  "graph_build": 0.7205,
+  "history": 0.2655,
+  "parse": 0.3311
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 11
+ },
+ "skipped_files": [],
+ "tests_exploratory": {
+  "tests:body-invokes": 344,
+  "tests:body-invokes+name": 64,
+  "tests:name-convention": 41
+ },
+ "units": 974,
+ "units_by_type": {
+  "class": 66,
+  "function": 513,
+  "method": 315,
+  "module": 80
+ },
+ "unparseable": []
+}
