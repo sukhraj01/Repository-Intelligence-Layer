@@ -64,7 +64,9 @@ Data: `GITHUB_TOKEN` is **not set on Ada** (decision D2). The rename cache holds
 2,448 `gangiswag/train_data` python repositories, 51 of CodeSearchNet's 13,590); every post-rename count is
 a lower bound until the token exists (the job is idempotent and resumes). The held-out repositories' own current names are resolved only for the 12
 Verified ones (unchanged). Q7: the intended pool is not confirmed. CORE-Bench corpora are streamed, not
-stored. No code blocker.
+stored. Commit: the held-out v2 data files (`data/held_out/*`, `results/tables/*`, the leakage test) are staged but
+not committed: the pre-commit trace check rejects three repository names of the new Loc-Bench tier (owners with a hyphenated suffix
+matching the provenance patterns); they need the engineer's allowlist, then `git commit` finishes it. No code blocker.
 
 ## Open questions
 
