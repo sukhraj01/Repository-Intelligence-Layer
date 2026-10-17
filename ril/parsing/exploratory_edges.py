@@ -24,7 +24,8 @@ from __future__ import annotations
 
 import os
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
+from itertools import combinations
 
 from ril.parsing.call_graph import GraphBuilder
 from ril.parsing.repo_graph import Edge, RepoGraph
@@ -218,3 +219,35 @@ def configures_edges(parsed: ParsedRepository, builder: GraphBuilder) -> list[Ed
 def _is_package(parsed: ParsedRepository, module_name: str) -> bool:
     path = parsed.module_files.get(module_name, "")
     return path.endswith("__init__.py")
+
+
+def co_change_edges(
+    parsed: ParsedRepository,
+    commit_py_sets: list[tuple[str, ...]],
+    min_support: int,
+    max_files_per_commit: int = 50,
+) -> list[Edge]:
+    """Exploratory ``co_change`` edges between file (module) units.
+
+    Two snapshot files are linked when at least ``min_support`` commits at or before the snapshot
+    changed both; commits touching more than ``max_files_per_commit`` snapshot files are skipped
+    (mass edits create dense false couplings), as in ``git_history.co_change_counts``. Only
+    ``.py`` files take part (the history keeps Python paths only). The edge is stored once, with
+    the lexicographically smaller path as ``src``; readers treat it as undirected.
+    """
+    module_unit = {path: fs.module_unit for path, fs in parsed.files.items()}
+    support: Counter[tuple[str, str]] = Counter()
+    for paths in commit_py_sets:
+        kept = [p for p in paths if p in module_unit]
+        if len(kept) < 2 or len(kept) > max_files_per_commit:
+            continue
+        for a, b in combinations(kept, 2):
+            support[(a, b)] += 1
+    rule = f"co_change:min-support-{min_support}"
+    edges = [
+        Edge("co_change", module_unit[a], module_unit[b], "resolved", rule, (), "", f"{n}")
+        for (a, b), n in support.items()
+        if n >= min_support
+    ]
+    edges.sort(key=Edge.sort_key)
+    return edges
