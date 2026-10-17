@@ -17,6 +17,11 @@ pytest-cov = ">=5.0"
 ruff = ">=0.6"
 mypy = ">=1.10"
 types-pyyaml = ">=6.0"
+jedi = ">=0.19"
+pyarrow = ">=15.0"
+networkx = ">=3.0"
+rustworkx = ">=0.14"
+kuzu = ">=0.4"
 
 [build-system]
 requires = ["poetry-core>=2.0"]
@@ -36,6 +41,11 @@ known-first-party = ["ril"]
 python_version = "3.11"
 strict = true
 files = ["ril"]
+
+[[tool.mypy.overrides]]
+# comparator and storage libraries without type information
+module = ["networkx", "pyarrow", "pyarrow.*", "rustworkx", "kuzu", "jedi"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
