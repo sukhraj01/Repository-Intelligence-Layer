@@ -1,0 +1,33 @@
+{
+ "ada_job_ids": "fetch 25779; clone 25780; chunk 25785 (flask check 25784); units 25788, 25800, 25801; full L2 25787; dev sweep 25789; confirm 25830; determinism rerun 25831",
+ "bootstrap_draws": 2000,
+ "chunk_items": 31,
+ "chunk_queries_by_role_level": {
+  "dev/L2": 355,
+  "dev/L3": 155,
+  "test/L2": 432,
+  "test/L3": 302
+ },
+ "code_commit": "a337e8d (the cluster ran the same retrieval, evaluation and metric files; e1_run.py there lacks only the decoding of a dot written %2E in a folder name)",
+ "config_hash": "638fb270c36035ecf6a90f879f1c48e29e2f756dbb5e01592370525f8b2a9c9c",
+ "experiment": "E-BM25-REPRO and E-LABEL-NOISE (exploratory pilots)",
+ "full_l2_config_hash": "583649ab5d04fa2eacf82016bc7f3a1ff385ff03f89f6ba2d058d550c69bbcce",
+ "full_l2_queries": 5061,
+ "hardware_chunk_stage": [
+  {
+   "cpus_visible": 40,
+   "host": "gnode002",
+   "mem_total_kb": 131868124,
+   "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+   "python": "3.10.12"
+  }
+ ],
+ "licence": "counts, ranks, ids, paths and line numbers only; no dataset or source text",
+ "seed": 0,
+ "unit_failures": {},
+ "unit_instances": 438,
+ "unit_instances_by_role": {
+  "dev": 355,
+  "test": 83
+ }
+}

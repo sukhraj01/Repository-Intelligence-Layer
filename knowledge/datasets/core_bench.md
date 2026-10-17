@@ -35,7 +35,7 @@ Every card statistic was re-measured from the file bytes (rows of `queries.jsonl
 | Per sub-dataset queries, chunks, qrels (11 rows) | see card | not stated | all 11 rows identical |
 | Per sub-dataset "repos" (e.g. SWE-bench Live 209, Multi-SWE-bench 35, SWE-Bench++ 319) | folder counts | not stated | folders match; distinct repositories 213, 39, 338 |
 | SFT set: repositories / queries | not in the package | 628 / 53,301 | not measurable (data not released) |
-| BM25 nDCG@10 / Recall@100 on L2 | 13.0 / 38.8 | same | not run in this project |
+| BM25 nDCG@10 / Recall@100 on L2 | 13.0 / 38.8 | same | **13.00 / 38.82** (pilot E1, 5,061 queries): mean over the 7 sub-datasets of the mean over folders; mean over queries is 13.28 / 36.27 |
 
 Other measured facts (S4):
 
@@ -88,7 +88,7 @@ Per repository (Verified / L2 / L3 / both): astropy 22/22/11/11, django 231/188/
 
 - `run_mteb.py` / `run_bm25.py` retrieve over the whole folder corpus, then post-filter each query's ranking to its own `filtered_corpus_id` set before scoring ("filter mode").
 - Metrics come from the MTEB retrieval evaluator (`ndcg_at_k`, `recall_at_k`, ...) with the default k list; main score `ndcg_at_10`. A separate collector (`collect_results/collect_core_bench_results.py`) recomputes metrics with binary gain and averages over queries.
-- Whether the card's NDCG@10 / Recall@100 are macro over folders or over queries was not established.
+- The card's NDCG@10 / Recall@100 are averages over folders (L2: over the seven sub-datasets, each the mean of its folders), not over queries; measured by pilot E1, which reproduces 13.0 / 38.8 and the Verified rows 11.9 / 46.7 and 22.2 / 33.9 this way (`docs/EXPERIMENTS.md` E-BM25-REPRO). 1,676 of the 52,712 L2 qrels rows repeat a (query, chunk) pair, leaving 51,036 distinct positives.
 
 ## Label provenance (paper_reported)
 

@@ -86,9 +86,14 @@ def load_unit_runs(out_dir: str) -> list[Record]:
     return _read_all(os.path.join(out_dir, "units", "*.json"))
 
 
+def table_name(folder: str) -> str:
+    """Folder name as written in tables and configs: a dot becomes %2E (see ``load_config``)."""
+    return folder.replace(".", "%2E")
+
+
 def groups_of(folder: str, role: str, dataset: str) -> list[str]:
     """Reporting groups a folder belongs to."""
-    out = [f"folder:{folder}"]
+    out = [f"folder:{table_name(folder)}"]
     if role == "test":
         out.append("verified12")
         if folder in SIX:
@@ -752,7 +757,7 @@ def per_folder_counts(chunk_runs: Sequence[Record]) -> list[Record]:
         {
             "role": r["role"],
             "dataset": r["dataset"],
-            "folder": r["folder"],
+            "folder": table_name(r["folder"]),
             "level": r["level"],
             "corpus_chunks": r["corpus_chunks"],
             "queries": r["queries"],

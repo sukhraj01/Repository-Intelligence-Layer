@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — parser and first graph built; chunk-to-unit mapping and graph reach piloted on flask, requests and seaborn; edge recovery measured under four definitions (none chosen); storage options measured; CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 12
+**Last updated:** 2026-10-18 · **Milestone:** M0 — parser and first graph built; graph reach piloted; BM25 index, CORE-Bench loader and metrics built and checked against the published BM25 rows; dev/test repositories fixed; edge recovery measured under four definitions (none chosen); CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 14
 
 ---
 
@@ -14,8 +14,8 @@ Research design is locked (Master Project Document rev 16, 2026-10-11). The repo
 Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass. **Built so far:** the CodeUnit and its
 helpers, the held-out filter, the repository parser, the typed graph builder (contain, import, invoke, inherit, override, plus
 exploratory tests and configures), the edge-recovery measurements, the graph storage measurement and the
-chunk-to-unit mapping with the graph-reach pilot. **No retrieval signal
-exists yet** (no BM25, dense encoder, fusion or assembly). Latency harness: **built**; `parse`, `graph_build` and the graph
+chunk-to-unit mapping with the graph-reach pilot, the BM25 index and the CORE-Bench loader and metrics (reproduce the published BM25 rows). **Only BM25 exists as a
+retrieval signal** (no dense encoder, fusion or assembly). Latency harness: **built**; `parse`, `graph_build` and the graph
 expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 
 ## What is built
@@ -34,10 +34,13 @@ expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 | Latency harness | **built** | `ril/bench/` (`latency_harness.py`, `profile_stages.py`, `stub_stages.py`); `make bench` / `make bench-check`; logs `results/latency/{latency,throughput}_log.csv`; stages `query_encode`, `bm25`, `dense_search`, `graph_expansion`, `graph_expand_1hop`, `graph_expand_2hop`, `rrf_fusion`, `cross_encoder_rerank`, `assemble`, `end_to_end` (latency) and `parse`, `graph_build` (throughput); thresholds provisional (Q33); a real stage replaces a stub with one `REGISTRY.register` line and a new `query_set_id` |
 | Parser and graph | **built** (first build 2026-10-17) | `ril/parsing/` (`repository_parser.py`, `call_graph.py`, `repo_graph.py`, `exploratory_edges.py`, `git_history.py`, `build.py`); `scripts/parse_repo.py PATH --repo-id owner/name --seed N`; own `ast` resolver `own-ast-resolver/v0` (`provisional: ADR-011`); class unit `source` = full class (`provisional: ADR-013`, Q28); byte-identical rebuilds; flask 974 units, requests 678, django 35,860 |
 | Edge recovery, exploratory edges, storage options | **measured**, nothing chosen | ADR-012 (four recovery definitions with trade-offs), ADR-011 addendum (storage table), `results/tables/p_*.csv`, `RESULTS.md` rows `p-*`; tracer and comparators in `ril/evaluation/`, storage in `ril/bench/graph_storage.py`, `graph_measure.py` |
-| BM25 / dense / fusion / assemble | not started | |
+| BM25 | **built** (reference form), no latency stage yet | `ril/retrieval/bm25_index.py`: reference tokenisation (stemmed, 33-word stop list) and Lucene-variant scoring, k1 1.5 / b 0.75 `provisional: ADR-004`; no identifier splitting or fields yet |
+| Dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
 | Evaluation: chunk-to-unit mapping, graph-reach pilot | **piloted** (exploratory) | `ril/evaluation/chunk_mapping.py`, `graph_reach.py`, `chunk_unit_pilot.py`, `ril/analysis/reach_tables.py`; 160 of 160 positives of flask, requests, seaborn found by exact text (D7 stands), residual share 16 of 160 (D6 stands); `docs/EXPERIMENTS.md` E-GRAPH-REACH, `RESULTS.md` rows `m-*`; job `scripts/ada/m_chunk_unit_reach.sbatch` (about 35 s) |
-| Evaluation: CORE-Bench loaders, metrics; agent integration | not started | |
+| Evaluation: CORE-Bench loader, metrics, unit-level BM25, label-noise readings | **built, piloted** (exploratory) | `ril/evaluation/{core_bench,metrics,unit_retrieval,label_noise,e1_run}.py`; reproduces Verified L2 11.94 / 46.74, L3 22.19 / 33.89 and all-L2 13.00 / 38.82 (mean over folders; paper 11.9 / 46.7, 22.2 / 33.9, 13.0 / 38.8); `docs/EXPERIMENTS.md` E-BM25-REPRO, E-LABEL-NOISE, `RESULTS.md` rows `e1-*`, `e2-*`; jobs in `scripts/ada/README.md` |
+| Agent integration | not started | |
+| Dev / test repositories | **set** (2026-10-18) | dev: Pro openlibrary and qutebrowser, Live conan, haystack, streamlink (355 instances; base commits from the datasets' metadata); test: Verified (12 folders, six with units); `configs/experiments/e1_bm25_reproduction.yaml`; sweeps on role `dev` only |
 
 ## Decisions log (closed 2026-10-17 by the engineer; reasoning, evidence class and flip experiments in the owning document)
 
@@ -59,14 +62,14 @@ expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 
 ## Next task
 
-Pilot E (interventions on BM25 and the graph, all exploratory; tuning discipline in the wave brief: sweeps on non-Verified dev
-repositories, Verified only to confirm one pre-stated setting). Start with E1: BM25 at chunk level under the CORE-Bench protocol on
-the sample folders (does our loader and metric reproduce the card's 13.0 / 38.8 on L2?), then BM25 at unit level on the mapped
-qrels with and without the module unit. The mapping exists (`ril.evaluation.chunk_unit_pilot.analyse_instance`, records under
-`data/processed/m_pilot/`, untracked); E3 should seed graph expansion from retrieved units, not gold, against a size-matched random
-expansion, and E4 can take edge weights from `results/tables/m_reach.csv`. Engineer: provide `GITHUB_TOKEN` on Ada and rerun
-`scripts/ada/resolve_renames.py` (completes held-out v2 counts); decide Q28 and Q39; confirm Q29; read `decisions/ADR-012`, `ADR-011`
-(addendum) and `specs/repo_graph.md` "Open design questions" (Q30-Q32, Q35-Q38); settle ADR-001 to ADR-010 by end of week 2.
+Pilot E part 2 (E3 to E6, exploratory; sweeps on the dev repositories only, Verified only to confirm one stated setting). E3: graph signal by
+intervention (BM25 over units plus hop-decay expansion from the top-C retrieved units, C in {1,3,5}, gamma in {0.3,0.5,0.7}, 1 or 2 hops, each edge family
+alone, leave-one-out and all), delta nDCG@10 at L2 and Recall@100 at L3 with paired intervals against BM25 alone and against a size-matched random
+expansion. E4: edge weights fitted from `results/tables/m_reach.csv`, cross-repository. E5: recency prior from `last_modified`. E6 only if time: dense encoder
+and rank fusion. Register the planned rows E-PILOT-LEAK, -K, -NEG, -L3POS, -POOL. Reuse `ril.evaluation.unit_retrieval.analyse_units` and
+`ril.analysis.e1_tables`; state the averaging convention (Q40) beside every number. A `bm25` latency stage with a real index is owed before E3. Engineer: provide
+`GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2 counts); decide Q28, Q39, Q40, Q41; confirm Q29; read `decisions/ADR-012`,
+`ADR-011` (addendum) and `specs/repo_graph.md` "Open design questions"; settle ADR-001 to ADR-010 by end of week 2.
 
 ## Blockers
 
@@ -102,7 +105,9 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q36 | `external` vs `unresolved` boundary (Q-G8) measured on 40 inspected sites: `external` was right 20 of 20, `unresolved` sites were external in 10 of 20 and in-repository by name in 2 of 20. Options as in the spec; rules are in `results/tables/p_graph_rule_counts.csv` | ADR-011 | engineer |
 | Q37 | Which exploratory families enter the first stored artifact: `tests` precision by reading, n = 60: body call plus name 94%, body call alone 56%, name convention 85%; `configures` 93% (n = 60, seven repositories; only 13 edges exist in the three main ones); `co_change` counts only. All labels by one reader (the author of the build); a second reader is the open step | ADR-011 (Q-G14) | engineer |
 | Q38 | Storage option(s): measurements exist (ADR-011 addendum); in-memory structures answer 2 hops in under 1 ms at django scale, SQLite queried directly about 25 times slower, the embedded graph database about 100 times slower; which write format, which read structure, per-commit graphs (Q-G10) are decisions | ADR-011 | engineer |
-| Q39 | Unit-level metric definition for chunks that map to several units or to residual lines: pilot M shows 21 of 160 sampled positives span several functions or methods, 5 fall on a class only, 16 on residual lines only, and 6 more span a method and its nested function (one unit under D6). Options: a positive counts for every unit it overlaps; for the largest-overlap unit; for a unit only above an overlap threshold. Metric definitions are the engineer's | ADR-004, E1 | engineer |
+| Q39 | Unit-level metric definition for chunks that map to several units or to residual lines: pilot M shows 21 of 160 sampled positives span several functions or methods, 5 fall on a class only, 16 on residual lines only, and 6 more span a method and its nested function (one unit under D6). Options: a positive counts for every unit it overlaps; for the largest-overlap unit; for a unit only above an overlap threshold. Pilot E1 ran the first two readings (`units`, `units_all`): same signs everywhere. Metric definitions are the engineer's | ADR-004, E1 | engineer |
+| Q40 | Averaging convention for any number compared with the paper: the published BM25 rows are means over folders (L2: over the seven sub-datasets), not over queries; measured difference up to 5 Recall@100 points (`docs/EXPERIMENTS.md` E-BM25-REPRO). Options: report both (done in pilot E); fix one in the frozen evaluation | evaluation, reporting | engineer |
+| Q41 | Are import-only L2 positives labels or noise (12.7% of dev, 6.2% of Verified-six positives; the module unit's measured benefit rests on them)? A metric definition | ADR-004, E2 | engineer |
 | Q32 | Confirm two readings made in the graph spec: `tests(u)` = test units with a resolved `tests` edge to `u`; `configs(u)` = config paths with a resolved `configures` edge to `u` or its file | projections | engineer |
 
 Resolved this block: Q8, Q9, Q13-Q23 (decisions log above), Q26 (recorded in DEV-007). Earlier: Q10, Q2, Q6.

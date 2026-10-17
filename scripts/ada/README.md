@@ -101,3 +101,21 @@ to units, builds the graph and writes ids, paths, lines and unit ids only (no ch
 
 Copy `ril_m/out/records.json` and `env.txt` to `data/processed/m_pilot/`, then locally
 `python scripts/m_tables.py data/processed/m_pilot/records.json results/tables --seed 0 --rerun <second records> --log <log>`.
+
+## BM25 reproduction, label noise and the dev sweep (pilot E1/E2, 2026-10-18)
+
+Work directory on Ada: `~/ril_e/` (`ril/`, `scripts/`, `configs/` by `rsync -a --exclude __pycache__ ril scripts configs ada:ril_e/`; `raw/` CORE-Bench folders, `repo_cache/` bare clones, `meta.json`
+instance base commits and patches, `out*/` records, `work/` working clones, `logs/`). `meta.json` is built locally from the datasets' parquet metadata (not committed). Records hold ranks, ids, paths and
+lines only. Jobs are resumable; set the memory with `--mem=4G` to `8G` (large requests wait behind a running job, see `docs/COMPUTE.md`).
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `e_fetch_data.sbatch` | the 12 Verified folders at L2 and L3 and the five dev folders | `sbatch ril_e/scripts/ada/e_fetch_data.sbatch` |
+| `e_clone_repos.sbatch` | bare clones of the eight repositories not already in `~/ril_s2/raw/repo_cache` (link that cache's three into `ril_e/repo_cache`) | `sbatch ril_e/scripts/ada/e_clone_repos.sbatch` |
+| `e1_run.sbatch` + `../e1_run.py` | `STAGE=chunk` (BM25 per folder) or `STAGE=units` (checkout, parse, unit BM25 per instance); `ONLY=<folder>` limits it | `sbatch --mem=8G --export=ALL,STAGE=chunk,RIL_COMMIT=<hash> ril_e/scripts/ada/e1_run.sbatch` |
+| `e1_full_l2.sbatch` + `e1_full_l2.py` | all 632 original L2 folders, one at a time (fetch, score, delete); needs `configs/experiments/e1_bm25_full_l2.yaml` | `sbatch --mem=12G ril_e/scripts/ada/e1_full_l2.sbatch` |
+| `e1_dev_sweep.sbatch` + `e1_dev_sweep.py` | k1 x b grid on the dev folders only | `sbatch ril_e/scripts/ada/e1_dev_sweep.sbatch` |
+| `e1_confirm.sbatch` + `e1_confirm.py` | one stated (k1, b) on the test folders | `sbatch --export=ALL,K1=2.0,B=0.75 ril_e/scripts/ada/e1_confirm.sbatch` |
+
+Copy `ril_e/out`, `out_full`, `out_sweep` and `out_confirm_*` to `data/processed/e1/`, then locally `python scripts/e1_tables.py data/processed/e1/out results/tables --config ... --seed 0 --sweep-dir ... --full-dir ... --confirm-dir ... --log ...`
+(rename case-colliding record files on the cluster first).

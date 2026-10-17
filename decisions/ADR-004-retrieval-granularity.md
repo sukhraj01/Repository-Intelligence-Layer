@@ -79,3 +79,22 @@ Exploratory pilot, flask / requests / seaborn, 11 Verified instances (`docs/EXPE
   upper bound 2.1% of L3 positives, 95%).
 - Still open for this ADR: the reported-metric granularity overall and the weight to give chunk-level numbers.
   Pilot E1 (BM25 at chunk and unit level, with and without the module unit) is the next evidence.
+
+## Addendum 2026-10-18 — pilot E1 measured BM25 at chunk and unit level (evidence only; this ADR stays Proposed)
+
+Exploratory pilot (`docs/EXPERIMENTS.md` E-BM25-REPRO, `results/tables/e1_*.csv`, `RESULTS.md` rows `e1-*`); dev and test repositories separated before any run.
+
+- **The ruler works.** Chunk-level BM25 under the benchmark protocol reproduces the published BM25 rows to the printed decimal (Verified L2 11.94 / 46.74 against
+  11.9 / 46.7, L3 22.19 / 33.89 against 22.2 / 33.9, all 632 L2 folders 13.00 / 38.82 against 13.0 / 38.8), provided the average is taken over folders (and, for the
+  whole of L2, over the seven sub-datasets). The query-weighted mean differs by up to 5 Recall@100 points. Whichever granularity is chosen, the averaging
+  convention must be written next to every number that is compared with the paper.
+- **Unit level is measurable on Python sub-datasets with base commits** (Pro, Live and SWE-Bench++ metadata give them; Verified already did). On the six Verified
+  repositories (83 L2 queries) unit-level BM25 gives nDCG@10 16.1 [10.4, 22.3] and Recall@100 43.8 [34.8, 53.3] against chunk-level 13.4 and 44.2 on the same queries;
+  on 353 dev L2 queries 15.8 / 33.1 at unit level against 19.3 / 41.8 at chunk level. The two are not on one footing (different candidate sets and numbers of gold items), so
+  they say that unit-level evaluation works, not that one granularity retrieves better.
+- **The module unit (D6)**, on the same gold: it makes residual-line gold reachable (dev L2 Recall@100 +2.00 [+0.68, +3.25], nDCG@10 +0.68 [+0.16, +1.27]) and costs
+  nDCG@10 0.5 to 1.9 points when the gold has none. On six Verified repositories the first effect is not distinguishable from zero (83 queries).
+- **Label noise (E2) bears on a granularity choice:** 12.7% of dev L2 positives and 6.2% of the Verified-six ones are import blocks, which only a module-level unit (or a chunk)
+  can represent; removing them removes the module unit's measured benefit. An evaluation that keeps them rewards a module unit; one that cleans them does not.
+- Still open: the reported-metric granularity overall (Q11), the gold definition for a chunk spanning several units (Q39; `units` and `units_all` give the same signs here), and the
+  reading of import-only positives (labels or noise).

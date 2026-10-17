@@ -29,7 +29,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 - [x] Repository parser + CodeUnit emission (`ril/parsing/repository_parser.py`; first build of 2026-10-17)
 - [x] Call / import / inherit graph with edge-recovery coverage (`ril/parsing/call_graph.py`; the coverage is reported under several definitions, ADR-012)
-- [ ] BM25 index (identifier splitting, field weights, tune b)
+- [ ] BM25 index (identifier splitting, field weights, tune b) — reference-tokenisation index built (`ril/retrieval/bm25_index.py`); identifier splitting, fields and b tuning open
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
@@ -39,8 +39,8 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 3–6 — Person C: evaluation harness
 
-- [ ] CORE-Bench loaders (L2, L3, REWRITE splits)
-- [ ] Metrics at chunk granularity; reproduces a published CORE-Bench number as a sanity check
+- [ ] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite splits not yet run
+- [x] Metrics at chunk granularity; reproduces a published CORE-Bench number as a sanity check (BM25 rows reproduced to the printed decimal, pilot E1)
 
 ## Weeks 5–8 — Person A: RQ1
 
