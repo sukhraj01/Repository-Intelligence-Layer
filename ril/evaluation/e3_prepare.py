@@ -52,7 +52,8 @@ from ril.retrieval.recency import ages_in_days
 PREPARE_VERSION = "e3-prepare/v1"
 CO_CHANGE_SUPPORT = 3
 """Co-change support used for the ``co_change`` family (the ``all`` subset of pilot M)."""
-READINGS = ("units", "units_all")
+READINGS = ("units", "units_all", "units_nomod")
+"""Gold readings (Q39): pilot M's mapping, every overlapped unit, the mapping minus module units."""
 Record = dict[str, Any]
 
 __all__ = [
@@ -94,6 +95,11 @@ def snapshot_time(root: str) -> float:
     return float(done.stdout.strip())
 
 
+def is_module_id(unit_id: str) -> bool:
+    """Whether a unit id names the residual module unit of a file."""
+    return unit_id.endswith("::<module>")
+
+
 def gold_by_level(e1_record: Record) -> dict[str, dict[str, set[str]]]:
     """``{level: {reading: gold unit ids}}`` from the positives of a pilot-E1 instance record."""
     out: dict[str, dict[str, set[str]]] = {}
@@ -101,8 +107,9 @@ def gold_by_level(e1_record: Record) -> dict[str, dict[str, set[str]]]:
         if p["status"] != "found":
             continue
         slot = out.setdefault(p["level"], {r: set() for r in READINGS})
-        for r in READINGS:
+        for r in ("units", "units_all"):
             slot[r].update(p[r])
+        slot["units_nomod"].update(u for u in p["units"] if not is_module_id(u))
     return out
 
 
@@ -216,6 +223,33 @@ def prepare_instance(
         "hardware": hardware(),
     }
     return arrays, meta
+
+
+def add_missing_readings(path: str, e1_record: Record) -> bool:
+    """Add gold readings that an older cache file lacks (``units_nomod``); True if it changed.
+
+    The gold arrays hold unit indices in the order of the sorted gold ids, and the index order is
+    the sorted unit-id order, so the ids of the pilot-E1 record line up with the stored indices.
+    """
+    arrays, meta = read_cache(path)
+    gold = gold_by_level(e1_record)
+    changed = False
+    for level, readings in gold.items():
+        have = arrays.get(f"gold_{level}_units")
+        want = f"gold_{level}_units_nomod"
+        if have is None or want in arrays:
+            continue
+        ids = sorted(readings["units"])
+        if len(ids) != len(have):
+            raise ValueError(f"{path}: {level} gold ids and stored indices differ in number")
+        arrays[want] = np.asarray(
+            [int(i) for i, uid in zip(have, ids, strict=True) if not is_module_id(uid)],
+            dtype=np.int32,
+        )
+        changed = True
+    if changed:
+        write_cache(path, arrays, meta)
+    return changed
 
 
 def write_cache(path: str, arrays: dict[str, np.ndarray[Any, Any]], meta: Record) -> None:

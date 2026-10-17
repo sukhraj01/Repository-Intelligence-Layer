@@ -16,6 +16,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+import numpy as np  # noqa: E402
+
 from ril.analysis.e1_tables import write_csv  # noqa: E402
 from ril.analysis.e3_tables import (  # noqa: E402
     add_heldout_keys,
@@ -36,6 +38,7 @@ def main() -> int:
     ap.add_argument("--groups", nargs="+", default=["pooled"])
     ap.add_argument("--setting", default="")
     ap.add_argument("--select", nargs="*", default=[])
+    ap.add_argument("--only-repos", nargs="*", default=[], help="pooled group: these repos only")
     ap.add_argument("--heldout", action="store_true", help="merge loro_<repo> weight sets")
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
@@ -51,6 +54,9 @@ def main() -> int:
     if "pooled" in args.groups:
         for role in roles:
             masks[f"{role}_all"] = tab.mask(role=role)
+    if args.only_repos:
+        sel = np.asarray([r["repo"] in set(args.only_repos) for r in tab.rows], dtype=bool)
+        masks["subset_of_repos"] = sel
     if "dataset" in args.groups:
         for ds in sorted({r["dataset"] for r in tab.rows}):
             masks[f"dataset:{ds}"] = tab.mask(dataset=ds)

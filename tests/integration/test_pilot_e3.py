@@ -202,3 +202,83 @@ def test_query_without_matching_terms_leaves_every_variant_at_the_baseline(snaps
     _, out = evaluate_instance(arrays, meta, spec)
     m = out["metrics_L2"]
     assert np.allclose(m, m[0])  # all keys equal the bm25 row
+
+
+def test_fusion_arms_dense_fused_and_graph_on_top(snapshot: Path) -> None:
+    arrays, meta = _cache(snapshot)
+    meta.update(instance="inst-1", role="dev")
+    rng = np.random.default_rng(0)
+    dense = {f"dense_{lv}": rng.random(meta["units"]).astype(np.float32) for lv in ("L2", "L3")}
+    spec = EvalSpec(
+        roles=("dev",),
+        fusion=GraphGrid(subsets=("core",), seeds=(3,), gammas=(0.5,), hops=(2,), draws=2),
+    )
+    _, out = evaluate_instance(arrays, meta, spec, dense)
+    keys = list(out["keys"])
+    for k in (
+        "bm25",
+        "dense",
+        "fused",
+        "fz_list|core|C3|g0.5|h2",
+        "fz_rrf|core|C3|g0.5|h2",
+        "fz_rrf|rand_whole|core|C3|h2",
+    ):
+        assert k in keys, k
+    assert list(out["aux_keys"]) == ["Efz|core|C3|g0.5|h2"]
+    m = out["metrics_L2"]
+    assert np.isfinite(m).all() and m.shape[0] == len(keys)
+    # fusing a list with itself ranks like the list: dense = bm25 scores leaves "fused" at "bm25"
+    same = {f"dense_{lv}": arrays[f"scores_{lv}"] for lv in ("L2", "L3")}
+    _, out2 = evaluate_instance(arrays, meta, spec, same)
+    k2 = list(out2["keys"])
+    assert np.allclose(out2["metrics_L2"][k2.index("fused")], out2["metrics_L2"][k2.index("bm25")])
+    with pytest.raises(ValueError, match="no dense"):
+        evaluate_instance(arrays, meta, spec, {})
+
+
+def test_older_cache_files_get_the_no_module_reading_added(snapshot: Path, tmp_path: Path) -> None:
+    from ril.evaluation.e3_prepare import add_missing_readings
+
+    queries = {"L2": "module level import header", "L3": "render the page title"}
+    levels = {
+        "L2": {"c1": "def parse_header(text):\n    return tokenise(text)[0]\n"},
+        "L3": {"c2": "from pkg.parse import parse_header\n"},  # a residual (module) positive
+    }
+    e1 = analyse_units(str(snapshot), "acme/mini", "inst-1", queries, levels, "")
+    arrays, meta = prepare_instance(str(snapshot), "acme/mini", queries, e1, BM25Params(), "hash0")
+    assert len(arrays["gold_L3_units"]) == 1 and len(arrays["gold_L3_units_nomod"]) == 0
+    assert len(arrays["gold_L2_units_nomod"]) == 1
+    old = {k: v for k, v in arrays.items() if not k.endswith("units_nomod")}
+    path = str(tmp_path / "inst-1.npz")
+    write_cache(path, old, meta)
+    assert add_missing_readings(path, e1) is True
+    back, _ = read_cache(path)
+    for lv in ("L2", "L3"):
+        assert np.array_equal(back[f"gold_{lv}_units_nomod"], arrays[f"gold_{lv}_units_nomod"])
+    assert add_missing_readings(path, e1) is False
+    # a level without gold under a reading is not scored (NaN), not scored as zero
+    meta.update(instance="inst-1", role="dev")
+    spec = EvalSpec(
+        roles=("dev",),
+        graph=GraphGrid(subsets=("core",), seeds=(1,), gammas=(0.5,), hops=(1,), draws=1),
+    )
+    _, out = evaluate_instance(arrays, meta, spec)
+    assert np.isnan(out["metrics_L3"][:, 4]).all() and not np.isnan(out["metrics_L3"][:, 0]).any()
+
+
+def test_expansion_never_depends_on_the_gold_units(snapshot: Path) -> None:
+    arrays, meta = _cache(snapshot)
+    meta.update(instance="inst-1", role="dev")
+    spec = EvalSpec(
+        roles=("dev",),
+        graph=GraphGrid(subsets=("all",), seeds=(3,), gammas=(0.5,), hops=(2,), draws=1),
+    )
+    _, a = evaluate_instance(arrays, meta, spec)
+    other = dict(arrays)
+    n = meta["units"]
+    for lv in ("L2", "L3"):
+        for r in ("units", "units_all", "units_nomod"):
+            other[f"gold_{lv}_{r}"] = np.asarray([n - 1, n - 2], dtype=np.int32)
+    _, b = evaluate_instance(other, meta, spec)
+    assert np.array_equal(a["aux_L2"][:, 0], b["aux_L2"][:, 0])  # expansion sizes are gold-free
+    assert not np.array_equal(a["metrics_L2"], b["metrics_L2"])  # while the scores do depend on it

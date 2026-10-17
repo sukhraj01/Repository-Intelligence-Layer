@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 from dataclasses import dataclass, field
 from typing import Any
@@ -123,6 +124,7 @@ class EvalSpec:
     graph: GraphGrid | None = None
     weights: WeightGrid | None = None
     recency: RecencyGrid | None = None
+    fusion: GraphGrid | None = None
 
     def validate(self) -> None:
         """Refuse a specification that would sweep on the test instances."""
@@ -130,7 +132,9 @@ class EvalSpec:
             raise ValueError("test instances may only be evaluated by a confirm specification")
         if not self.confirm:
             return
-        g, w, r = self.graph, self.weights, self.recency
+        g, w, r, fz = self.graph, self.weights, self.recency, self.fusion
+        if fz is not None and not (len(fz.seeds) == len(fz.gammas) == len(fz.hops) == 1):
+            raise ValueError("confirm: one C, one gamma and one hop count (fusion)")
         if g is not None and not (len(g.seeds) == len(g.gammas) == len(g.hops) == 1):
             raise ValueError("confirm: one C, one gamma and one hop count")
         if w is not None and not (len(w.sets) == 1 and len(w.seeds) == len(w.hops) == 1):
@@ -142,14 +146,14 @@ class EvalSpec:
 def spec_from_config(cfg: Record) -> EvalSpec:
     """Build the specification from a parsed YAML configuration."""
     table = subset_table()
-    graph = weights = recency = None
-    if "graph" in cfg:
-        gc = cfg["graph"]
+    graph = weights = recency = fusion = None
+
+    def grid_of(gc: Record) -> GraphGrid:
         subsets = tuple(gc.get("subsets", table))
-        for s in subsets:
-            if s not in table:
-                raise ValueError(f"unknown subset {s!r}")
-        graph = GraphGrid(
+        for sub in subsets:
+            if sub not in table:
+                raise ValueError(f"unknown subset {sub!r}")
+        return GraphGrid(
             variants=tuple(gc.get("variants", VARIANTS)),
             subsets=subsets,
             seeds=tuple(int(c) for c in gc["seeds"]),
@@ -160,6 +164,11 @@ def spec_from_config(cfg: Record) -> EvalSpec:
             draws=int(gc.get("draws", 3)),
             rrf_k=int(gc.get("rrf_k", RRF_K)),
         )
+
+    if "graph" in cfg:
+        graph = grid_of(cfg["graph"])
+    if "fusion" in cfg:
+        fusion = grid_of(cfg["fusion"])
     if "weights" in cfg:
         wc = cfg["weights"]
         weights = WeightGrid(
@@ -180,6 +189,7 @@ def spec_from_config(cfg: Record) -> EvalSpec:
         graph=graph,
         weights=weights,
         recency=recency,
+        fusion=fusion,
     )
     spec.validate()
     return spec
@@ -240,7 +250,12 @@ class _Level:
         file_of_unit: np.ndarray[Any, Any],
         age_days: np.ndarray[Any, Any],
         graph: FamilyGraph,
+        *,
+        fused: bool = False,
+        vpre: str = "",
     ) -> None:
+        self.fused = fused
+        self.vpre = vpre
         self.ident = ident
         self.scores = scores
         self.n = len(scores)
@@ -263,7 +278,10 @@ class _Level:
         for r in READINGS:
             ranks = [rank_of[p] for p in self.gold_pos[r]]
             n_rel = len(ranks)
-            out += [ndcg_at_k(ranks, 10, n_rel), recall_at_k(ranks, 100, n_rel)]
+            if n_rel == 0:  # no gold under this reading: the query is not scored
+                out += [math.nan, math.nan]
+            else:
+                out += [ndcg_at_k(ranks, 10, n_rel), recall_at_k(ranks, 100, n_rel)]
         return out
 
     def add(self, key: str, rank_of: dict[int, int]) -> None:
@@ -278,7 +296,8 @@ class _Level:
 
     def ranks_rrf(self, glist: list[int], k: int) -> dict[int, int]:
         if k not in self._rrf_base:
-            self._rrf_base[k] = rrf_base(self.n, k)
+            # a fused retrieval list brings its own scores (sorted, so index = position)
+            self._rrf_base[k] = self.scores[self.order] if self.fused else rrf_base(self.n, k)
         return dict(
             zip(self.union, rrf_ranks(self.n, self.union, glist, k, self._rrf_base[k]), strict=True)
         )
@@ -386,13 +405,15 @@ class _Level:
             else:
                 glist = rrf_graph_list(seed_pos, snorm_all[: len(seeds)], exp_pos, exp_g)
                 ranks = self.ranks_rrf(glist, rrf_k)
+            vname = self.vpre + variant
             key = (
-                graph_key(variant, subset, c, float(setting[1:]), h)
+                graph_key(vname, subset, c, float(setting[1:]), h)
                 if setting.startswith("g")
-                else weight_key(variant, subset, c, setting[2:], h)
+                else weight_key(vname, subset, c, setting[2:], h)
             )
             self.add(key, ranks)
-        self.aux_keys.append(expansion_key(subset, c, setting, h))
+        akey = expansion_key(subset, c, setting, h)
+        self.aux_keys.append(akey.replace("E|", "Efz|", 1) if self.vpre else akey)
         self.aux_rows.append(self.hits(exp_pos))
 
     def _controls(
@@ -416,7 +437,7 @@ class _Level:
                         ranks = self.ranks_rrf(seed_pos + exp_pos, grid.rrf_k)
                     acc[variant].append(self.metrics(ranks))
             for variant in grid.variants:
-                self.keys.append(control_key(variant, ctrl, subset, c, h, wname))
+                self.keys.append(control_key(self.vpre + variant, ctrl, subset, c, h, wname))
                 self.rows.append([float(x) for x in np.mean(acc[variant], axis=0)])
 
     # ---- recency
@@ -434,7 +455,10 @@ class _Level:
 
 
 def evaluate_instance(
-    arrays: dict[str, np.ndarray[Any, Any]], meta: Record, spec: EvalSpec
+    arrays: dict[str, np.ndarray[Any, Any]],
+    meta: Record,
+    spec: EvalSpec,
+    dense: dict[str, np.ndarray[Any, Any]] | None = None,
 ) -> tuple[Record, dict[str, np.ndarray[Any, Any]]]:
     """Evaluate one cached instance; return (metadata, arrays to store)."""
     n = int(meta["units"])
@@ -467,19 +491,67 @@ def evaluate_instance(
             lvl.run_weights(spec.weights, grid, table)
         if spec.recency is not None:
             lvl.run_recency(spec.recency)
+        if spec.fusion is not None:
+            if dense is None or f"dense_{level}" not in dense:
+                raise ValueError(f"{meta['instance']}: no dense scores for {level}")
+            _run_fusion(
+                lvl, dense[f"dense_{level}"], arrays, graph, table, spec.fusion, meta, level, golds
+            )
         if keys_ref is None:
             keys_ref, aux_ref = lvl.keys, lvl.aux_keys
         elif keys_ref != lvl.keys or aux_ref != lvl.aux_keys:
             raise RuntimeError("key order differs between levels of one instance")
         out[f"metrics_{level}"] = np.asarray(lvl.rows, dtype=np.float64)
-        out[f"aux_{level}"] = np.asarray(lvl.aux_rows, dtype=np.float64).reshape(-1, 3)
+        out[f"aux_{level}"] = np.asarray(lvl.aux_rows, dtype=np.float64).reshape(
+            -1, 1 + len(READINGS)
+        )
         info["levels"][level] = {
             "gold_units": int(len(golds["units"])),
             "gold_units_all": int(len(golds["units_all"])),
+            "gold_units_nomod": int(len(golds["units_nomod"])),
         }
     out["keys"] = np.asarray(keys_ref or [], dtype=str)
     out["aux_keys"] = np.asarray(aux_ref or [], dtype=str)
     return info, out
+
+
+def _run_fusion(
+    base: _Level,
+    dense_scores: np.ndarray[Any, Any],
+    arrays: dict[str, np.ndarray[Any, Any]],
+    graph: FamilyGraph,
+    table: dict[str, tuple[str, ...]],
+    grid: GraphGrid,
+    meta: Record,
+    level: str,
+    golds: dict[str, np.ndarray[Any, Any]],
+) -> None:
+    """Add the dense-only and BM25+dense fusion arms, and the graph on top of the fusion."""
+    ident = f"{meta['instance']}|{level}"
+    k = grid.rrf_k
+    dense_lvl = _Level(
+        ident, dense_scores, golds, arrays["file_of_unit"], arrays["age_days"], graph
+    )
+    dense_lvl.add("dense", dense_lvl.baseline_ranks())
+    pos_b = base.pos.astype(np.float64)
+    pos_d = dense_lvl.pos.astype(np.float64)
+    fused_scores = 1.0 / (k + pos_b + 1.0) + 1.0 / (k + pos_d + 1.0)
+    fz = _Level(
+        ident,
+        fused_scores,
+        golds,
+        arrays["file_of_unit"],
+        arrays["age_days"],
+        graph,
+        fused=True,
+        vpre="fz_",
+    )
+    fz.add("fused", fz.baseline_ranks())
+    fz.run_graph(grid, table)
+    base.keys += dense_lvl.keys + fz.keys
+    base.rows += dense_lvl.rows + fz.rows
+    base.aux_keys += fz.aux_keys
+    base.aux_rows += fz.aux_rows
 
 
 def write_eval(path: str, info: Record, arrays: dict[str, np.ndarray[Any, Any]]) -> None:
@@ -499,8 +571,13 @@ def read_eval(path: str) -> tuple[Record, dict[str, np.ndarray[Any, Any]]]:
     return info, arrays
 
 
-def run_eval(cfg: Record, cache_dir: str, out_dir: str) -> dict[str, int]:
-    """Evaluate every cached instance whose role is in the specification; resumable."""
+def run_eval(
+    cfg: Record, cache_dir: str, out_dir: str, dense_dir: str | None = None
+) -> dict[str, int]:
+    """Evaluate every cached instance whose role is in the specification; resumable.
+
+    ``dense_dir`` holds one file per instance with the dense scores (pilot E6).
+    """
     spec = spec_from_config(cfg)
     counts = {"evaluated": 0, "skipped_role": 0, "reused": 0}
     for name in sorted(os.listdir(cache_dir)):
@@ -517,7 +594,14 @@ def run_eval(cfg: Record, cache_dir: str, out_dir: str) -> dict[str, int]:
             if old.get("eval_hash") == ehash:
                 counts["reused"] += 1
                 continue
-        info, res = evaluate_instance(arrays, meta, spec)
+        dense = None
+        if spec.fusion is not None:
+            if dense_dir is None or not os.path.exists(os.path.join(dense_dir, name)):
+                counts["no_dense"] = counts.get("no_dense", 0) + 1
+                continue
+            with np.load(os.path.join(dense_dir, name), allow_pickle=False) as dz:
+                dense = {k: dz[k] for k in dz.files}
+        info, res = evaluate_instance(arrays, meta, spec, dense)
         info.update(
             eval_hash=ehash,
             instance=meta["instance"],

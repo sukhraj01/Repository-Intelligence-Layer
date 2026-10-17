@@ -42,7 +42,7 @@ def make_table() -> EvalTable:
                 "gold_units": 1,
             }
         )
-    m = np.zeros((6, len(keys), 4))
+    m = np.zeros((6, len(keys), 6))
     m[:, 0, :] = 0.2
     m[:, 1, :] = 0.5  # graph run beats BM25 by 30 points
     m[:, 2, :] = 0.45
@@ -50,9 +50,9 @@ def make_table() -> EvalTable:
     m[:, 4, :] = 0.6
     m[:, 5, :] = 0.7
     aux_keys = ["E|invoke|C3|g0.5|h1", "E|contain|C3|g0.5|h1"]
-    aux = np.zeros((6, 2, 3))
-    aux[:, 0, :] = [10, 2, 2]
-    aux[:, 1, :] = [20, 1, 1]
+    aux = np.zeros((6, 2, 4))
+    aux[:, 0, :] = [10, 2, 2, 1]
+    aux[:, 1, :] = [20, 1, 1, 0]
     return EvalTable(keys, {k: i for i, k in enumerate(keys)}, rows, m, aux_keys, aux)
 
 

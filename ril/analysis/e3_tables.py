@@ -28,17 +28,12 @@ from typing import Any
 
 import numpy as np
 
-from ril.evaluation.e3_eval import control_key, graph_key, read_eval
+from ril.evaluation.e3_eval import FAMILIES, control_key, graph_key, read_eval
 
 Record = dict[str, Any]
-READINGS = ("units", "units_all")
+READINGS = ("units", "units_all", "units_nomod")
 METRICS = ("ndcg10", "recall100")
-COLUMN = {
-    ("units", "ndcg10"): 0,
-    ("units", "recall100"): 1,
-    ("units_all", "ndcg10"): 2,
-    ("units_all", "recall100"): 3,
-}
+COLUMN = {(r, m): 2 * i + j for i, r in enumerate(READINGS) for j, m in enumerate(METRICS)}
 DRAWS = 2000
 HANDSET_GAMMA = 0.5
 """The hand-set decay that a fitted weight set is compared with (E4); the mean weight of a fit
@@ -104,7 +99,7 @@ def load_eval_dir(path: str) -> EvalTable:
         rows,
         np.stack(blocks),
         aux_keys,
-        np.stack(aux_blocks) if aux_keys else np.zeros((len(rows), 0, 3)),
+        np.stack(aux_blocks) if aux_keys else np.zeros((len(rows), 0, 1 + len(READINGS))),
     )
 
 
@@ -168,7 +163,7 @@ def graph_cells(tab: EvalTable) -> list[Cell]:
     cells: list[Cell] = []
     for key in tab.keys:
         parts = key.split("|")
-        if parts[0] not in ("list", "rrf") or parts[1].startswith("rand_"):
+        if parts[0] not in ("list", "rrf", "fz_list", "fz_rrf") or parts[1].startswith("rand_"):
             continue
         variant, subset, c, setting, h = parts[0], parts[1], parts[2], parts[3], parts[4]
         wname = setting[2:] if setting.startswith("w:") else ""
@@ -176,8 +171,13 @@ def graph_cells(tab: EvalTable) -> list[Cell]:
             ctrl: control_key(variant, ctrl, subset, int(c[1:]), int(h[1:]), wname)
             for ctrl in ("rand_whole", "rand_files")
         }
-        if wname:  # the hand-set decay at the same seeds and hops, when it was run
+        if variant.startswith("fz_"):  # graph on top of BM25 + dense: compare with that fusion too
+            controls["fused"] = "fused"
+        elif wname:  # the hand-set decay at the same seeds and hops, when it was run
             controls["handset"] = graph_key(variant, subset, int(c[1:]), HANDSET_GAMMA, int(h[1:]))
+        if subset == "all":  # leave-one-out: what the family adds to all the others
+            for fam in FAMILIES:
+                controls[f"minus_{fam}"] = f"{variant}|all-minus-{fam}|{c}|{setting}|{h}"
         controls = {k: v for k, v in controls.items() if v in tab.index}
         cells.append(
             Cell(
@@ -223,66 +223,65 @@ def compare(
     """Paired comparison of each cell with the BM25 ranking and its chance controls.
 
     One row per (cell, gold reading, metric, average). Values are percentages; differences are
-    percentage points.
+    percentage points. A query without gold under a reading is not scored under that reading
+    (``queries`` counts the scored ones).
     """
-    sel = np.flatnonzero(mask & np.asarray([r["level"] == level for r in tab.rows]))
-    if len(sel) == 0:
-        return []
-    repos = [tab.rows[i]["repo"] for i in sel]
-    boot = Boot(repos, seed)
-    sub = tab.metrics[sel]
+    level_mask = mask & np.asarray([r["level"] == level for r in tab.rows])
     base_i = tab.index["bm25"]
     out: list[Record] = []
-    for start in range(0, len(cells), chunk):
-        part = cells[start : start + chunk]
-        cols: list[np.ndarray[Any, Any]] = []
-        meta: list[tuple[Cell, str, str, str]] = []
-        for cell in part:
-            x_all = sub[:, tab.index[cell.key], :]
-            for reading in READINGS:
+    for reading in READINGS:
+        valid = ~np.isnan(tab.metrics[:, base_i, COLUMN[(reading, "ndcg10")]])
+        sel = np.flatnonzero(level_mask & valid)
+        if len(sel) == 0:
+            continue
+        repos = [tab.rows[i]["repo"] for i in sel]
+        boot = Boot(repos, seed)
+        sub = tab.metrics[sel]
+        for start in range(0, len(cells), chunk):
+            part = cells[start : start + chunk]
+            cols: list[np.ndarray[Any, Any]] = []
+            meta: list[tuple[Cell, str, str]] = []
+            for cell in part:
+                x_all = sub[:, tab.index[cell.key], :]
                 for metric in METRICS:
                     j = COLUMN[(reading, metric)]
                     x = x_all[:, j]
                     cols.append(100 * x)
-                    meta.append((cell, reading, metric, "value"))
+                    meta.append((cell, metric, "value"))
                     cols.append(100 * (x - sub[:, base_i, j]))
-                    meta.append((cell, reading, metric, "bm25"))
+                    meta.append((cell, metric, "bm25"))
                     for ctrl, ckey in cell.controls.items():
                         cols.append(100 * (x - sub[:, tab.index[ckey], j]))
-                        meta.append((cell, reading, metric, ctrl))
-        d = np.stack(cols, axis=1)
-        results = {avg: boot.summarize(d, avg) for avg in averages}
-        for avg in averages:
-            mean, lo, hi = results[avg]
-            rows: dict[tuple[str, str, str, str], Record] = {}
-            for i, (cell, reading, metric, what) in enumerate(meta):
-                key = (cell.key, reading, metric, avg)
-                row = rows.setdefault(
-                    key,
-                    {
-                        "group": group,
-                        "level": level,
-                        "average": avg,
-                        "queries": len(sel),
-                        "repos": len(set(repos)),
-                        "gold_reading": reading,
-                        "metric": metric,
-                        **cell.labels,
-                    },
-                )
-                if what == "value":
-                    row["value"] = _fmt(mean[i])
-                else:
-                    name = "d_bm25" if what == "bm25" else f"d_{what}"
-                    row[name] = _fmt(mean[i])
-                    row[f"{name}_lo"] = _fmt(lo[i])
-                    row[f"{name}_hi"] = _fmt(hi[i])
-            out.extend(rows.values())
-    base = 100 * sub[:, base_i, :]
-    for row in out:
-        j = COLUMN[(row["gold_reading"], row["metric"])]
-        w = boot.point_micro if row["average"] == "micro" else boot.point_macro
-        row["bm25"] = _fmt(w @ base[:, j])
+                        meta.append((cell, metric, ctrl))
+            d = np.stack(cols, axis=1)
+            for avg in averages:
+                mean, lo, hi = boot.summarize(d, avg)
+                rows: dict[tuple[str, str], Record] = {}
+                for i, (cell, metric, what) in enumerate(meta):
+                    row = rows.setdefault(
+                        (cell.key, metric),
+                        {
+                            "group": group,
+                            "level": level,
+                            "average": avg,
+                            "queries": len(sel),
+                            "repos": len(set(repos)),
+                            "gold_reading": reading,
+                            "metric": metric,
+                            **cell.labels,
+                        },
+                    )
+                    if what == "value":
+                        row["value"] = _fmt(mean[i])
+                    else:
+                        name = "d_bm25" if what == "bm25" else f"d_{what}"
+                        row[name] = _fmt(mean[i])
+                        row[f"{name}_lo"] = _fmt(lo[i])
+                        row[f"{name}_hi"] = _fmt(hi[i])
+                w = boot.point_micro if avg == "micro" else boot.point_macro
+                for row in rows.values():
+                    row["bm25"] = _fmt(100 * (w @ sub[:, base_i, COLUMN[(reading, row["metric"])]]))
+                out.extend(rows.values())
     return out
 
 
@@ -373,7 +372,7 @@ def add_heldout_keys(tab: EvalTable, prefix: str = "loro_") -> list[str]:
     added: list[str] = []
     tags = [r["repo"].replace("/", "__") for r in tab.rows]
     for virtual, by_tag in sorted(groups.items()):
-        column = np.zeros((len(tab.rows), 4))
+        column = np.zeros((len(tab.rows), tab.metrics.shape[2]))
         for i, tag in enumerate(tags):
             src = by_tag.get(tag)
             column[i] = tab.metrics[i, tab.index[src], :] if src else np.nan

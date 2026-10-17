@@ -32,6 +32,7 @@ def main() -> int:
     ap.add_argument("--only", default=None)
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--shard", nargs=2, type=int, default=[0, 1])
+    ap.add_argument("--dense-dir", default=None)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
     set_seed(args.seed)
@@ -63,7 +64,7 @@ def main() -> int:
         cfg = yaml.safe_load(handle)
     spec_from_config(cfg)  # validates the tuning discipline before touching data
     log.info("eval config %s", cfg_path)
-    counts = run_eval(cfg, cache_dir, out_dir)
+    counts = run_eval(cfg, cache_dir, out_dir, args.dense_dir)
     log.info("evaluation: %s", counts)
     sys.stdout.write(json.dumps({"eval_hash_of_config": eval_hash(cfg, ""), **counts}) + "\n")
     return 0
