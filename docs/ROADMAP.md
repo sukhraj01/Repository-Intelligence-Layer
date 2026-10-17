@@ -20,6 +20,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [ ] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`)
 - [x] Read the data and training papers in full and record notes with a checked quote table (`knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench; `scripts/check_paper_note.py`)
 - [x] Read the graph papers in full and record notes (`knowledge/papers/`: LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL)
+- [x] Read the call-graph accuracy papers, the supervision papers and Agent Retrieval Bench in full; log a literature scan with a per-RQ summary (`knowledge/papers/`: PyCG, Jarvis, Sun et al., Rethinking Negative Pairs, CodeR, Agent Retrieval Bench, `LANDSCAPE.md`)
 - [ ] Gather evidence for decisions 1–10 (`decisions/`)
 - [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
 
