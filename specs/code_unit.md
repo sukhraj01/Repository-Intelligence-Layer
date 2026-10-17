@@ -130,6 +130,13 @@ project state before the freeze.
   function nested inside another unit (closures, decorator wrappers, views defined in tests) against 1,057 pairs that end in a
   unit's own code (`results/logs/p_flask_recovery_2026-10-17.json`); the nested ones cannot be edges between units. Whether
   gold positives fall inside nested definitions is pilot M's question.
+- **Measured by pilot M (2026-10-17, exploratory).** On all 160 positives of the same three-repository
+  sample (19 at L2, 141 at L3), mapped to the frozen units by line overlap at the instance base commits: 16 overlap
+  no definition (10.0%; L3 13 of 141), 118 one function or method, 21 several, 5 only a class; 2 further chunks
+  touch residual lines beside a definition. The first sample's own rule (nested definitions as leaf units)
+  recomputed on the whole chunk span gives 112 / 27 / 5 / 16 against its 111 / 28 / 5 / 16. The residual
+  share that motivated the module unit therefore reproduces; whether it changes recall is still pilot E1's
+  question (`docs/EXPERIMENTS.md`, E-GRAPH-REACH; `results/tables/m_categories.csv`).
 - **Reading of the decision made in code (confirm, Q29).** The module unit has `name` and
   `qualified_name` `<module>` (not a Python identifier, so it never collides with a definition), id
   `path::<module>`, empty `signature`, `docstring` = the module docstring or `None`, `start_line` 1
@@ -151,6 +158,10 @@ project state before the freeze.
 - **Cheapest experiment that could flip it.** Pilot M's match rate: locate every positive chunk in the
   base-commit files by exact text. If a large share does not match, the mapping is unusable and chunk
   level evaluation stays primary (ADR-004). Time-box: pilot M.
+- **Measured by pilot M (2026-10-17, exploratory).** The flip condition did not occur: 160 of 160 positive
+  chunks (three repositories, L2 and L3, 11 instances) were found in the base-commit files, all by exact text
+  and each at exactly one location; none needed the trimmed, line-ending or whitespace tiers. Sample of three
+  repositories; other sub-datasets and languages are untested (`results/tables/m_match.csv`).
 - **Conditions to revisit.** A released chunk metadata file; the match rate.
 
 ### D8 (was Q17) `last_modified`

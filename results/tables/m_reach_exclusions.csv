@@ -1,0 +1,9 @@
+instance,covered_by_l2,in_study,l3_positives,text_identical_to_an_l2_positive
+mwaskom__seaborn-3069,5,28,33,3
+pallets__flask-5014,2,19,21,1
+psf__requests-1142,3,6,9,3
+psf__requests-1724,2,22,24,2
+psf__requests-1766,1,7,8,1
+psf__requests-1921,1,8,9,1
+psf__requests-6028,1,36,37,1
+all,15,126,141,12

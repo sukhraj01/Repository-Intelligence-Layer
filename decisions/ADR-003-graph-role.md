@@ -59,3 +59,25 @@ graph signal enters a fusion stack fixed to rank-based RRF; whether graph-derive
 RQ2; whether an agent-tool variant belongs to RQ3, which holds the agent fixed. None is answered
 there. Evidence still to gather for this ADR: the per-status coverage and the 1- and 2-hop expansion
 latency from the first graph build, and pilots M and E3.
+
+## Addendum 2026-10-17 — pilot M: how near L3 positives lie to L2 positives in the graph (evidence only; no choice made)
+
+Exploratory pilot, three repositories, 7 instances, 126 new Python L3 positives (`docs/EXPERIMENTS.md` E-GRAPH-REACH).
+Seeds were the gold L2 units, so this bounds what a perfect first stage could seed; it does not measure retrieval.
+
+- Hop distance from the L2 units over the five core families: 88% of new L3 positives within three hops, but a
+  random set of units from the same files reaches 78%, and random units of the same kind from the whole repository
+  50%. Most of the nearness is file and directory locality.
+- Excess over the same-file chance, within three hops: resolved call edges (both directions) +13 points (95%
+  bootstrap over positives +6 to +20; over the 7 instances +5 to +27), +5 points at one hop (ratio 1.8); `contain`
+  and `import` add nothing over same-file chance; `inherit` reaches 5 of 126; exploratory `tests`, `configures` and
+  `co_change` add nothing measurable. Heterogeneous across repositories: the call-edge excess is present in flask
+  and requests and absent in seaborn.
+- Bearing on the role of the graph (A signal, B training structure, C agent tool): for A, the locality that carries
+  most of the reach is also reachable without a graph (same file, same directory); the part only the graph
+  provides here is the call-edge excess. For B, 12 of 141 L3 positives are text-identical to an L2 positive and
+  7% are test units, which is the scale of "test positives" a graph-derived supervision could add. Evidence class:
+  measured, n small; the controlled retrieval-level test is pilot E3.
+- Cheapest experiment that could flip an inference from this: E3 (hop-decay expansion from retrieved, not gold,
+  seeds against a size-matched random expansion). Conditions to revisit: resolver recall (ADR-012 definitions), more
+  repositories (including the non-Verified L3 folders once base commits are obtained).

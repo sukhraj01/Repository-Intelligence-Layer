@@ -60,3 +60,22 @@ _Pending._
   primary set to chunk-level over all sub-datasets). Conditions to revisit: base commits for other
   sub-datasets; the pilot's variance.
 - What is still open here: which granularity the reported metrics use overall (this ADR).
+
+## Addendum 2026-10-17 — pilot M measured the chunk-to-unit mapping (evidence only; this ADR stays Proposed)
+
+Exploratory pilot, flask / requests / seaborn, 11 Verified instances (`docs/EXPERIMENTS.md` E-GRAPH-REACH,
+`results/tables/m_*.csv`, `RESULTS.md` rows `m-*`):
+
+- **Match rate (flip condition of D7).** 160 of 160 positive chunks (19 at L2, 141 at L3) were found by exact text,
+  each at one location; no failure of any kind. A unit-level scoring of chunk qrels is therefore
+  mechanically possible on these repositories. Not tested: other sub-datasets, other languages.
+- **What a chunk maps to.** One function or method 118, several 21, only a class 5, only residual lines 16
+  (10.0%). A unit-level metric must decide how a chunk that spans several units counts (13% of these
+  positives) and how a positive inside a nested definition counts (it folds into its parent under D6); neither is
+  decided here.
+- **Kinds at L3 (141).** Method 101, function 12, class 5, module residual 13, test unit 10, documentation or
+  configuration 0. In this sample the L3 labels are code units, so a function-level index covers every
+  positive; the benchmark's documentation and configuration chunks are not positives here (rule-of-three
+  upper bound 2.1% of L3 positives, 95%).
+- Still open for this ADR: the reported-metric granularity overall and the weight to give chunk-level numbers.
+  Pilot E1 (BM25 at chunk and unit level, with and without the module unit) is the next evidence.

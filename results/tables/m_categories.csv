@@ -1,0 +1,8 @@
+category,first_sample_name,first_sample_of_160,rule1_full,rule1_prefix,frozen_full,frozen_prefix
+one_unit,one_leaf_unit,111,112,118,118,119
+several_units,two_plus_leaf_units,28,27,6,21,5
+class_only,class_only,5,5,20,5,20
+module_residual,zero_units,16,16,16,16,16
+none,,,,,0,0
+total_located,,160,160,160,160,160
+also_overlaps_residual_lines,,,,,2,

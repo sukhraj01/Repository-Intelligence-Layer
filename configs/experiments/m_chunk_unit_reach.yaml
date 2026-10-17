@@ -1,0 +1,57 @@
+# E-GRAPH-REACH: chunk-to-unit mapping and graph reach (exploratory pilot).
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  units:
+  - positives
+  - instances
+co_change_supports:
+- 2
+- 3
+- 5
+codeunit_schema: v1
+controls:
+- same_files
+- whole_repo
+- whole_repo_kind
+date: '2026-10-17'
+draws: 200
+experiment_id: E-GRAPH-REACH
+instances:
+  L2: flask 1, requests 8, seaborn 2 (SWE-bench Verified, CORE-Bench sample folders)
+  L3: flask 1, requests 5, seaborn 1
+note: pilot_config_sha256 is the SHA-256 of the canonical JSON of the keys pilot, seed, draws,
+  prefix_chars, subsets, controls, co_change_supports, parser, resolver, repo_graph_schema and codeunit_schema
+parser: ast-parser/v0
+pilot: pilot-m/v1
+pilot_config_sha256: 23c173e6c4f87c90689dc5e524e17d87355ae8704673ab5ee06239ec2a917c27
+prefix_chars: 200
+repo_graph_schema: v0-draft
+resolver: own-ast-resolver/v0
+seed: 0
+status: exploratory pilot
+subsets:
+- invoke_both
+- invoke_fwd
+- invoke_rev
+- import
+- inherit
+- contain
+- tests
+- configures
+- co_change_n2
+- co_change_n3
+- co_change_n5
+- invoke_contain
+- import_contain
+- co_change_n2_contain
+- co_change_n3_contain
+- co_change_n5_contain
+- core
+- all_minus_contain
+- all
+tiers:
+- exact
+- trimmed
+- eol_normalised
+- whitespace_normalised

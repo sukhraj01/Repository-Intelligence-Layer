@@ -1,0 +1,9 @@
+level,repo,positives,function,method,class,module_residual,test_unit,non_python_docs,non_python_config,non_python_data,python_not_parsed,unmatched,structural_in_test_files
+L2,mwaskom/seaborn,5,1,3,0,1,0,0,0,0,0,0,
+L2,pallets/flask,1,0,1,0,0,0,0,0,0,0,0,
+L2,psf/requests,13,2,9,0,2,0,0,0,0,0,0,
+L2,all,19,3,13,0,3,0,0,0,0,0,0,
+L3,mwaskom/seaborn,33,0,31,0,2,0,0,0,0,0,0,
+L3,pallets/flask,21,0,15,2,1,3,0,0,0,0,0,function=3
+L3,psf/requests,87,12,55,3,10,7,0,0,0,0,0,method=7
+L3,all,141,12,101,5,13,10,0,0,0,0,0,function=3;method=7

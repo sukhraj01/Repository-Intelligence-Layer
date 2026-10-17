@@ -86,3 +86,18 @@ each job builds its own venv keyed by the interpreter version.
 | `configures_pool.sbatch` + `configures_pool.py` | shallow fetch of four more Verified base commits (parsing only) and rendering of every exploratory `configures` edge for the precision sample | `sbatch ril_p/scripts/ada/configures_pool.sbatch` |
 
 Copy results back with `scp ada:ril_p/out/<file> data/processed/p_graph/`.
+
+## Chunk-to-unit mapping and graph reach (pilot M, 2026-10-17)
+
+Work directory on Ada: `~/ril_m/` (`ril/`, `scripts/`, `out/`, `work/`, `logs/`). Needs the nine sample folders in
+`~/ril_s2/raw/core_bench_samples`, the bare clones in `~/ril_s2/raw/repo_cache` and the Verified parquet in
+`~/ril_s2/raw/meta_sets`. The job checks out each instance's base commit in a working clone, locates the positive chunks, maps them
+to units, builds the graph and writes ids, paths, lines and unit ids only (no chunk text). A finished instance is read back from
+`out/instances`; delete `out/instances` to redo.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `m_chunk_unit_reach.sbatch` + `../m_chunk_unit_reach.py` | the pilot for flask, requests and seaborn (about 35 s on 2 CPUs) | `rsync -a --exclude __pycache__ ril scripts ada:ril_m/ && sbatch --export=ALL,RIL_COMMIT=<hash> ril_m/scripts/ada/m_chunk_unit_reach.sbatch` |
+
+Copy `ril_m/out/records.json` and `env.txt` to `data/processed/m_pilot/`, then locally
+`python scripts/m_tables.py data/processed/m_pilot/records.json results/tables --seed 0 --rerun <second records> --log <log>`.

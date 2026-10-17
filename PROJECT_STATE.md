@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — parser and first graph built on flask, requests and django; edge recovery measured under four definitions (none chosen); storage options measured; CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 11
+**Last updated:** 2026-10-17 · **Milestone:** M0 — parser and first graph built; chunk-to-unit mapping and graph reach piloted on flask, requests and seaborn; edge recovery measured under four definitions (none chosen); storage options measured; CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 12
 
 ---
 
@@ -13,7 +13,8 @@
 Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is a working
 Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass. **Built so far:** the CodeUnit and its
 helpers, the held-out filter, the repository parser, the typed graph builder (contain, import, invoke, inherit, override, plus
-exploratory tests and configures), the edge-recovery measurements and the graph storage measurement. **No retrieval signal
+exploratory tests and configures), the edge-recovery measurements, the graph storage measurement and the
+chunk-to-unit mapping with the graph-reach pilot. **No retrieval signal
 exists yet** (no BM25, dense encoder, fusion or assembly). Latency harness: **built**; `parse`, `graph_build` and the graph
 expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 
@@ -35,7 +36,8 @@ expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 | Edge recovery, exploratory edges, storage options | **measured**, nothing chosen | ADR-012 (four recovery definitions with trade-offs), ADR-011 addendum (storage table), `results/tables/p_*.csv`, `RESULTS.md` rows `p-*`; tracer and comparators in `ril/evaluation/`, storage in `ril/bench/graph_storage.py`, `graph_measure.py` |
 | BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
-| Evaluation (CORE-Bench loaders, metrics), agent integration | not started | |
+| Evaluation: chunk-to-unit mapping, graph-reach pilot | **piloted** (exploratory) | `ril/evaluation/chunk_mapping.py`, `graph_reach.py`, `chunk_unit_pilot.py`, `ril/analysis/reach_tables.py`; 160 of 160 positives of flask, requests, seaborn found by exact text (D7 stands), residual share 16 of 160 (D6 stands); `docs/EXPERIMENTS.md` E-GRAPH-REACH, `RESULTS.md` rows `m-*`; job `scripts/ada/m_chunk_unit_reach.sbatch` (about 35 s) |
+| Evaluation: CORE-Bench loaders, metrics; agent integration | not started | |
 
 ## Decisions log (closed 2026-10-17 by the engineer; reasoning, evidence class and flip experiments in the owning document)
 
@@ -57,14 +59,14 @@ expansion stages now have real rows (query-set ids `graph-<repo>-<backend>-v1`).
 
 ## Next task
 
-Pilot M (chunk-to-unit mapping and graph reach): map every positive chunk of the flask, requests and seaborn sample
-folders to units at the Verified base commits (exact substring, then whitespace-normalised; reasons for failures), classify the L3
-positives (function, method, class, module residual, test unit, non-Python), and measure graph reach of the L3 positives from the L2
-positives per edge subset with a random-set control and bootstrap intervals. It uses the graph of the first build
-(`ril.parsing.build.build_repository`; `contain`, `import`, `invoke`, `inherit`, `override` stored, `tests` and `configures` exploratory).
-Then pilot E (E1 to E5). Engineer: provide `GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2
-counts); decide Q28; confirm Q29; read `decisions/ADR-012` and `ADR-011` (addendum) and `specs/repo_graph.md` "Open design questions"
-(Q30-Q32, Q35-Q38 below); settle ADR-001 to ADR-010 by end of week 2.
+Pilot E (interventions on BM25 and the graph, all exploratory; tuning discipline in the wave brief: sweeps on non-Verified dev
+repositories, Verified only to confirm one pre-stated setting). Start with E1: BM25 at chunk level under the CORE-Bench protocol on
+the sample folders (does our loader and metric reproduce the card's 13.0 / 38.8 on L2?), then BM25 at unit level on the mapped
+qrels with and without the module unit. The mapping exists (`ril.evaluation.chunk_unit_pilot.analyse_instance`, records under
+`data/processed/m_pilot/`, untracked); E3 should seed graph expansion from retrieved units, not gold, against a size-matched random
+expansion, and E4 can take edge weights from `results/tables/m_reach.csv`. Engineer: provide `GITHUB_TOKEN` on Ada and rerun
+`scripts/ada/resolve_renames.py` (completes held-out v2 counts); decide Q28 and Q39; confirm Q29; read `decisions/ADR-012`, `ADR-011`
+(addendum) and `specs/repo_graph.md` "Open design questions" (Q30-Q32, Q35-Q38); settle ADR-001 to ADR-010 by end of week 2.
 
 ## Blockers
 
@@ -87,7 +89,7 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q4 | GitHub remote(s) for the team repo; the engineer performs every push | publishing only | engineer |
 | Q5 | ADR-001...ADR-010 (training pool, quality signal, graph role, granularity, benchmark, encoder, scaffold, LLM, rerank, usable-by-others) | frozen config, RQ2 start | team, end of week 2 |
 | Q7 | Is the candidate pool intended, or is the pool built with the published scripts? Read in full: `gangiswag/train_data` python = SweLocMulti's Python part (SweRank+ Table 1: 2,448 repositories, 24,285 PRs, 49,973 instances), not the original SweLoc (3,387 repositories); SweRank+ states no benchmark-repository exclusion; 89 held-out repositories (3,431 PRs, 14.13%) occur in it (DEV-004). Loc-Bench: 560 rows (V1) vs 660 (V0.2) | ADR-001, pool filter | engineer; evidence in ADR-001 addenda |
-| Q11 | CORE-Bench evaluation is whole-snapshot retrieval: each query's candidate list is the repository snapshot at the base commit (paper Sec. 4.1; 12,153 of 12,153 list chunks located in 11 base-commit checkouts; DEV-003), and chunk ids carry no path or line span. D7 and D12 fix the mapping and the primary set; still open: the reported-metric granularity and whether chunk-level numbers are also reported (ADR-004) | ADR-004, evaluation | engineer |
+| Q11 | CORE-Bench evaluation is whole-snapshot retrieval: each query's candidate list is the repository snapshot at the base commit (paper Sec. 4.1; 12,153 of 12,153 list chunks located in 11 base-commit checkouts; DEV-003), and chunk ids carry no path or line span. D7 and D12 fix the mapping and the primary set; pilot M located 160 of 160 positives by exact text (three repositories); still open: the reported-metric granularity and whether chunk-level numbers are also reported (ADR-004) | ADR-004, evaluation | engineer |
 | Q12 | CORE-Bench L3 labels are LLM-judged; the paper does not say how the three votes combine into the kept score (R1); released qrels are binary; L2 positives include import blocks (3 of 53 sampled) | RQ3 interpretation | note in report |
 | Q24 | Master statement "tests and configuration are covered by nobody" no longer holds as worded (LARGER, Table 11; DEV-006); no ablation of such links exists. Keep it reworded ("no ablation shows the value of test and configuration links") or drop it | `docs/05`, report wording | engineer |
 | Q25 | Derived master copies in `docs/` still carry the superseded numbers and identifiers recorded in DEV-003 to DEV-007 (KGCompass 89.7% not 69.7%, Loc-Bench counts, CodeR identifier, edge-recovery expectation, ...). Edit the copies, or keep this file as the record? | `docs/03`, `docs/05`, `docs/06`, `docs/11` | engineer |
@@ -100,6 +102,7 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q36 | `external` vs `unresolved` boundary (Q-G8) measured on 40 inspected sites: `external` was right 20 of 20, `unresolved` sites were external in 10 of 20 and in-repository by name in 2 of 20. Options as in the spec; rules are in `results/tables/p_graph_rule_counts.csv` | ADR-011 | engineer |
 | Q37 | Which exploratory families enter the first stored artifact: `tests` precision by reading, n = 60: body call plus name 94%, body call alone 56%, name convention 85%; `configures` 93% (n = 60, seven repositories; only 13 edges exist in the three main ones); `co_change` counts only. All labels by one reader (the author of the build); a second reader is the open step | ADR-011 (Q-G14) | engineer |
 | Q38 | Storage option(s): measurements exist (ADR-011 addendum); in-memory structures answer 2 hops in under 1 ms at django scale, SQLite queried directly about 25 times slower, the embedded graph database about 100 times slower; which write format, which read structure, per-commit graphs (Q-G10) are decisions | ADR-011 | engineer |
+| Q39 | Unit-level metric definition for chunks that map to several units or to residual lines: pilot M shows 21 of 160 sampled positives span several functions or methods, 5 fall on a class only, 16 on residual lines only, and 6 more span a method and its nested function (one unit under D6). Options: a positive counts for every unit it overlaps; for the largest-overlap unit; for a unit only above an overlap threshold. Metric definitions are the engineer's | ADR-004, E1 | engineer |
 | Q32 | Confirm two readings made in the graph spec: `tests(u)` = test units with a resolved `tests` edge to `u`; `configs(u)` = config paths with a resolved `configures` edge to `u` or its file | projections | engineer |
 
 Resolved this block: Q8, Q9, Q13-Q23 (decisions log above), Q26 (recorded in DEV-007). Earlier: Q10, Q2, Q6.

@@ -93,3 +93,11 @@ Per repository (Verified / L2 / L3 / both): astropy 22/22/11/11, django 231/188/
 ## Label provenance (paper_reported)
 
 L2 qrels are chunks aligned to the PR patch by modified files and line ranges at the commit before the PR. L3 qrels come from agent browsing trajectories judged by a three-vote LLM ensemble. SFT data (628 repositories, 53,301 queries) is described as disjoint from the SWE-bench family; a public release is not stated.
+
+## Chunk-to-unit mapping on the Verified samples (pilot M, measured 2026-10-17; exploratory)
+
+- Method: for each Verified instance of pallets/flask, psf/requests and mwaskom/seaborn in the L2 and L3 sample folders (11 instances; L3 holds 7 of them), the base commit was checked out and each positive chunk's text located in the files (exact, trimmed, line endings, collapsed whitespace), then its line span mapped to the frozen units. Run on Ada; `results/tables/m_*.csv`, `results/logs/m_chunk_unit_reach_2026-10-17.json`. Counts only are stored (licence).
+- Match: 160 of 160 positives (19 L2, 141 L3) found by exact text at one location each.
+- Spans against the frozen units: one function or method 118, several 21, class only 5, residual lines only 16 (10.0%).
+- L3 positives by kind (141): method 101, function 12, class 5, module residual 13, test unit 10, documentation or configuration 0. L3 labels (judged, paper_reported) are therefore code units in this sample; 12 of the 141 are text-identical to an L2 positive and 15 map to an L2 unit.
+- Of the 19 L2 positives, 3 map to residual lines only (imports and module-level code).

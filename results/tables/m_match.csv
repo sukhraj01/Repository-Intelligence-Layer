@@ -1,0 +1,10 @@
+repo,level,positives,found,found_unique,found_several_locations,several_in_one_file,not_found,empty_chunk,tier_exact,tier_trimmed,tier_eol_normalised,tier_whitespace_normalised,failure_reasons,match_rate
+mwaskom/seaborn,L2,5,5,5,0,0,0,0,5,0,0,0,,1.0
+mwaskom/seaborn,L3,33,33,33,0,0,0,0,33,0,0,0,,1.0
+pallets/flask,L2,1,1,1,0,0,0,0,1,0,0,0,,1.0
+pallets/flask,L3,21,21,21,0,0,0,0,21,0,0,0,,1.0
+psf/requests,L2,13,13,13,0,0,0,0,13,0,0,0,,1.0
+psf/requests,L3,87,87,87,0,0,0,0,87,0,0,0,,1.0
+all,L2,19,19,19,0,0,0,0,19,0,0,0,,1.0
+all,L3,141,141,141,0,0,0,0,141,0,0,0,,1.0
+all,L2+L3,160,160,160,0,0,0,0,160,0,0,0,,1.0
