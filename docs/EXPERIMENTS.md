@@ -285,8 +285,9 @@ The ranked-list (rrf) form gives the same Recall@100 at L3 and smaller nDCG@10 g
 co_change 9, inherit 4 and 3, configures 1; share of the added units that are gold: 6% (contain, L2), 3% (invoke, L2), 14% and 13% at L3 (`e3_dev_setting_expansion.csv`).
 
 **What E3 shows, at this scale.** (1) Graph expansion from retrieved seeds improves BM25 on the dev repositories, mostly at L3 Recall@100 (`core` +11.9 [+9.6, +14.4]) and less at L2 nDCG@10
-(+1.8 [+1.0, +2.6]). A random expansion of the same size is not neutral: it is not a null, because 50 added units push BM25's own tail down only slowly, which is why the controls matter. Against
-random units of the seeds' files the gain of `core` is +2.0 [+1.2, +2.9] (L2) and +5.1 [+2.7, +7.5] (L3). (2) **Containment carries most of the signal.** Alone, `contain` is the one family
+(+1.8 [+1.0, +2.6]). The two controls behave differently, which is why both are reported: random units of the whole snapshot lower BM25 (for the size of the contain expansion by 2.5 nDCG@10 at L2 and 5.9
+Recall@100 at L3: they displace BM25's ranks 6 to 55 with unrelated units), while random units of the seeds' files already gain at L3 (+6.8 for that size) because gold units cluster in
+the seeds' files. Against random units of the seeds' files the gain of `core` is +2.0 [+1.2, +2.9] (L2) and +5.1 [+2.7, +7.5] (L3). (2) **Containment carries most of the signal.** Alone, `contain` is the one family
 clearly above same-file chance at L2 (+4.3 [+3.2, +5.4]) and above it at L3 (+2.2 [+0.7, +3.8]); removing it from `all` costs 1.3 [0.7, 2.1] nDCG@10 (L2) and 4.2 [2.7, 5.9] Recall@100
 (L3) on dev, and 3.4 [1.5, 5.8] Recall@100 (L3) on Verified (L2 on Verified: +0.1 [-0.7, +1.2], not distinguishable). The order is contain > invoke > the rest. `invoke` alone is only
 slightly above same-file chance at L2 (+0.9 [+0.1, +1.7]) and not at L3 (+1.3 [-1.1, +3.6]), but it adds to `all` at L3 on dev (+1.6 [+0.4, +2.8]) and not on Verified (+0.2 [-0.6, +1.2]);
