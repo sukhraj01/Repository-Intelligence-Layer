@@ -1,0 +1,2006 @@
+{
+ "canonical_form": "owner/name, case-folded",
+ "fork_rule": "not applied: exact canonical names only (open question)",
+ "loc_bench": "not included (open question)",
+ "n_repos": 605,
+ "per_source_counts": {
+  "L2:Multi-SWE-bench": 39,
+  "L2:SWE-Bench-plus-plus": 338,
+  "L2:SWE-bench-Live": 213,
+  "L2:SWE-bench-plus": 6,
+  "L2:SWE-bench_Multilingual": 41,
+  "L2:SWE-bench_Pro": 10,
+  "L2:SWE-bench_Verified": 12,
+  "L3:Multi-SWE-bench": 39,
+  "L3:SWE-bench_Multilingual": 40,
+  "L3:SWE-bench_Pro": 10,
+  "L3:SWE-bench_Verified": 12,
+  "Verified": 12
+ },
+ "repos": {
+  "0xmiden/miden-base": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "a2-ai/rv": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "a2aproject/a2a-python": [
+   "L2:SWE-bench-Live"
+  ],
+  "absmach/supermq": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "advplyr/audiobookshelf": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aeneasverif/charon": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aeon-toolkit/aeon": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ag2ai/faststream": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "agentops-ai/agentops": [
+   "L2:SWE-bench-Live"
+  ],
+  "agrestio/agrest": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aider-ai/aider": [
+   "L2:SWE-bench-Live"
+  ],
+  "aio-libs/aiohttp": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aiogram/aiogram": [
+   "L2:SWE-bench-Live"
+  ],
+  "albumentations-team/albumentations": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "alibaba/fastjson2": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "alstr/todo-to-issue-action": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "altinn/altinn-studio": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ammarabouzor/tui-journal": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "amoffat/sh": [
+   "L2:SWE-bench-Live"
+  ],
+  "amtep/tiger": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ansible/ansible": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "ansible/ansible-lint": [
+   "L2:SWE-bench-Live"
+  ],
+  "ansible/molecule": [
+   "L2:SWE-bench-Live"
+  ],
+  "anuraghazra/github-readme-stats": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "apache/arrow-java": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "apache/bookkeeper": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "apache/druid": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "apache/dubbo": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "apache/fluss": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "apache/gravitino": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "apache/iceberg": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "apache/lucene": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "apache/pinot": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "apify/crawlee-python": [
+   "L2:SWE-bench-Live"
+  ],
+  "april-tools/cirkit": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aptos-labs/aptos-core": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aquasecurity/trivy": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "archmonger/django-dbbackup": [
+   "L2:SWE-bench-Live"
+  ],
+  "argotorg/sourcify": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "arrow-py/arrow": [
+   "L2:SWE-bench-Live"
+  ],
+  "arviz-devs/arviz": [
+   "L2:SWE-bench-Live"
+  ],
+  "assertj/assertj": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "astral-sh/ruff": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "astronomer/dag-factory": [
+   "L2:SWE-bench-Live"
+  ],
+  "astropy/astropy": [
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "atlassian-labs/compiled": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "authlib/authlib": [
+   "L2:SWE-bench-Live"
+  ],
+  "automattic/mongoose": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aws-cloudformation/cfn-lint": [
+   "L2:SWE-bench-Live"
+  ],
+  "aws-powertools/powertools-lambda-python": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "aws/bedrock-agentcore-sdk-python": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aws/serverless-java-container": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "awslabs/mcp": [
+   "L2:SWE-bench-Live"
+  ],
+  "axios/axios": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "axonframework/axonframework": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "aya-prover/aya-dev": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "azure-samples/azure-search-openai-demo": [
+   "L2:SWE-bench-Live"
+  ],
+  "azure/azure-sdk-for-python": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "babel/babel": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "backstage/backstage": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "badges/shields": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "bayesian-optimization/bayesianoptimization": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "beancount/beancount": [
+   "L2:SWE-bench-Live"
+  ],
+  "beetbox/beets": [
+   "L2:SWE-bench-Live"
+  ],
+  "beeware/briefcase": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "berriai/litellm": [
+   "L2:SWE-bench-Live"
+  ],
+  "bodo-run/yek": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "bpftrace/bpftrace": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "braindecode/braindecode": [
+   "L2:SWE-bench-Live"
+  ],
+  "brettwooldridge/hikaricp": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "briannesbitt/carbon": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "bridgecrewio/checkov": [
+   "L2:SWE-bench-Live"
+  ],
+  "broderick-westrope/tetrigo": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "browser-use/browser-use": [
+   "L2:SWE-bench-Live"
+  ],
+  "burntsushi/ripgrep": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench"
+  ],
+  "caddyserver/caddy": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "cadence-workflow/cadence": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "camel-ai/camel": [
+   "L2:SWE-bench-Live"
+  ],
+  "camunda/camunda": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "caronc/apprise": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "casbin/pycasbin": [
+   "L2:SWE-bench-Live"
+  ],
+  "catchorg/catch2": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "celery/celery": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "celery/django-celery-beat": [
+   "L2:SWE-bench-Live"
+  ],
+  "celery/kombu": [
+   "L2:SWE-bench-Live"
+  ],
+  "certbot/certbot": [
+   "L2:SWE-bench-Live"
+  ],
+  "certtools/intelmq": [
+   "L2:SWE-bench-Live"
+  ],
+  "chainsafe/gossamer": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "chainsafe/lodestar": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "cilium/cilium": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "clap-rs/clap": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "cli/cli": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-Bench-plus-plus",
+   "L3:Multi-SWE-bench"
+  ],
+  "cloudposse/atmos": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "cloudtools/troposphere": [
+   "L2:SWE-bench-Live"
+  ],
+  "cockroachdb/pebble": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "codelion/openevolve": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "coder/coder": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "coderamp-labs/gitingest": [
+   "L2:SWE-bench-Live"
+  ],
+  "collective-soundworks/soundworks": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "comfy-org/comfyui_frontend": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "commaai/opendbc": [
+   "L2:SWE-bench-Live"
+  ],
+  "conan-io/conan": [
+   "L2:SWE-bench-Live"
+  ],
+  "conduitio/conduit": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "confetti/yayson": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "copier-org/copier": [
+   "L2:SWE-bench-Live"
+  ],
+  "cortexproject/cortex": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "cpmpy/cpmpy": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "cqcl/tket": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "crate/crate": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "crowdstrike/falcon-mcp": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "cyclotruc/gitingest": [
+   "L2:SWE-bench-Live"
+  ],
+  "danielgtaylor/huma": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "dapr/java-sdk": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "darkreader/darkreader": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "dbcli/mycli": [
+   "L2:SWE-bench-Live"
+  ],
+  "dbt-labs/dbt-core": [
+   "L2:SWE-bench-Live"
+  ],
+  "decathlon/tzatziki": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "deepset-ai/haystack": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "defold/extender": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "delgan/loguru": [
+   "L2:SWE-bench-Live"
+  ],
+  "delph-in/pydelphin": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "django-guardian/django-guardian": [
+   "L2:SWE-bench-Live"
+  ],
+  "django-helpdesk/django-helpdesk": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "django-json-api/django-rest-framework-json-api": [
+   "L2:SWE-bench-Live"
+  ],
+  "django/asgiref": [
+   "L2:SWE-bench-Live"
+  ],
+  "django/django": [
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "docling-project/docling": [
+   "L2:SWE-bench-Live"
+  ],
+  "dottxt-ai/outlines": [
+   "L2:SWE-bench-Live"
+  ],
+  "dpkp/kafka-python": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "dstackai/dstack": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "dtolnay/cxx": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ducaale/xh": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "duckdb/pg_duckdb": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "dylibso/chicory": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "dynaconf/dynaconf": [
+   "L2:SWE-bench-Live"
+  ],
+  "ebodshojaei/bake": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "eclipse-store/store": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "eclipse-sw360/sw360": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "eclipse-vertx/vert.x": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "elastic/beats": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "elastic/logstash": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "element-hq/element-web": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "emmercm/igir": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "encode/django-rest-framework": [
+   "L2:SWE-bench-Live"
+  ],
+  "encode/starlette": [
+   "L2:SWE-bench-Live"
+  ],
+  "equinor/ert": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "eslint-community/eslint-plugin-promise": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "eslint-stylistic/eslint-stylistic": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "eventlet/eventlet": [
+   "L2:SWE-bench-Live"
+  ],
+  "exasol/pyexasol": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "expo/eas-cli": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "expressjs/express": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "external-secrets/external-secrets": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "facebook/docusaurus": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "facebook/lexical": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "facebook/react": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "facebook/stylex": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "facebook/zstd": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "facebookresearch/hydra": [
+   "L2:SWE-bench-Live"
+  ],
+  "facelessuser/pymdown-extensions": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "faker-ruby/faker": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "falconry/falcon": [
+   "L2:SWE-bench-Live"
+  ],
+  "fasterxml/jackson-core": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "fasterxml/jackson-databind": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "fasterxml/jackson-dataformat-xml": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "fastlane/fastlane": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "feast-dev/feast": [
+   "L2:SWE-bench-Live"
+  ],
+  "feature-engine/feature_engine": [
+   "L2:SWE-bench-Live"
+  ],
+  "firebase/firebase-tools": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "firefox-devtools/profiler": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "flexget/flexget": [
+   "L2:SWE-bench-Live"
+  ],
+  "flexmeasures/flexmeasures": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "flipt-io/flipt": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "fluent/fluentd": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "fluxcd/flagger": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "fmtlib/fmt": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "fonttools/fonttools": [
+   "L2:SWE-bench-Live"
+  ],
+  "formbricks/formbricks": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "frankframework/frankframework": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "freeopcua/opcua-asyncio": [
+   "L2:SWE-bench-Live"
+  ],
+  "freqtrade/freqtrade": [
+   "L2:SWE-bench-Live"
+  ],
+  "fsspec/filesystem_spec": [
+   "L2:SWE-bench-Live"
+  ],
+  "ftsrg/theta": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "fuellabs/fuels-ts": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "future-architect/vuls": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "gaphor/gaphor": [
+   "L2:SWE-bench-Live"
+  ],
+  "gboeing/osmnx": [
+   "L2:SWE-bench-Live"
+  ],
+  "geldata/gel": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "geopandas/geopandas": [
+   "L2:SWE-bench-Live"
+  ],
+  "georchestra/georchestra": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "getindata/flink-http-connector": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "getmoto/moto": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "gin-gonic/gin": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "github/safe-settings": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "gitpython-developers/gitpython": [
+   "L2:SWE-bench-Live"
+  ],
+  "gleam-lang/gleam": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "glu-lang/glu": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "goccy/go-yaml": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "gohugoio/hugo": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "google/adk-python": [
+   "L2:SWE-bench-Live"
+  ],
+  "google/gson": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "googleapis/google-cloud-go": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "googlechrome/lighthouse": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "googlecontainertools/jib": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "gothenburgbitfactory/taskchampion-sync-server": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "gpbl/react-day-picker": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "gptme/gptme": [
+   "L2:SWE-bench-Live"
+  ],
+  "grafana/alloy": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "grafana/django-saml2-auth": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "grafana/k6": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "graphistry/pygraphistry": [
+   "L2:SWE-bench-Live"
+  ],
+  "gravitational/teleport": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "grpc/grpc-go": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-Bench-plus-plus",
+   "L3:Multi-SWE-bench"
+  ],
+  "gruntwork-io/terragrunt": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "h3js/h3": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "handsontable/hyperformula": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "hapifhir/hapi-fhir": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "hardbyte/python-can": [
+   "L2:SWE-bench-Live"
+  ],
+  "hashicorp/terraform": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "hashicorp/terraform-provider-aws": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "helidon-io/helidon": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "hgrecco/pint": [
+   "L2:SWE-bench-Live"
+  ],
+  "hiero-ledger/hiero-consensus-node": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "hirosystems/clarinet": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "holoviz/panel": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "home-assistant/supervisor": [
+   "L2:SWE-bench-Live"
+  ],
+  "htmlhint/htmlhint": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "huggingface/datasets": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "huggingface/huggingface_hub": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "huggingface/lerobot": [
+   "L2:SWE-bench-Live"
+  ],
+  "huggingface/lighteval": [
+   "L2:SWE-bench-Live"
+  ],
+  "huggingface/open-r1": [
+   "L2:SWE-bench-Live"
+  ],
+  "huggingface/smolagents": [
+   "L2:SWE-bench-Live"
+  ],
+  "humanlogio/humanlog": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "hynek/structlog": [
+   "L2:SWE-bench-Live"
+  ],
+  "hypothesisworks/hypothesis": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "i-am-bee/beeai-framework": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ia-toki/tcframe": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "iamkun/dayjs": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "ibis-project/ibis": [
+   "L2:SWE-bench-Live"
+  ],
+  "ibm/mcp-context-forge": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "ibm/openapi-validator": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "icereed/paperless-gpt": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "icinga/icinga2": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "icloud-photos-downloader/icloud_photos_downloader": [
+   "L2:SWE-bench-Live"
+  ],
+  "immutable-js/immutable-js": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "influxdata/influxdb": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "influxdata/telegraf": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "instructlab/instructlab": [
+   "L2:SWE-bench-Live"
+  ],
+  "integrated-application-development/sonar-delphi": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "internetarchive/openlibrary": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "ipython/ipython": [
+   "L2:SWE-bench-Live"
+  ],
+  "istio/istio": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "iterative/dvc": [
+   "L2:SWE-bench-Live"
+  ],
+  "itwin/itwinjs-core": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jarun/buku": [
+   "L2:SWE-bench-Live"
+  ],
+  "javaparser/javaparser": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "jax-ml/jax": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jazzband/django-auditlog": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jazzband/djangorestframework-simplejwt": [
+   "L2:SWE-bench-Live"
+  ],
+  "jazzband/tablib": [
+   "L2:SWE-bench-Live"
+  ],
+  "jbangdev/jbang": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jborgers/sonar-pmd": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jekyll/jekyll": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "jelmer/dulwich": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jenkinsci/configuration-as-code-plugin": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jeremiah-c-leary/vhdl-style-guide": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jesseduffield/lazygit": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jetty/jetty.project": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jlowin/fastmcp": [
+   "L2:SWE-bench-Live"
+  ],
+  "joke2k/faker": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "jordansissel/fpm": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "josdejong/mathjs": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "joshuadavidthomas/django-bird": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "jpadilla/pyjwt": [
+   "L2:SWE-bench-Live"
+  ],
+  "jqlang/jq": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "jupyterlab/jupyter-ai": [
+   "L2:SWE-bench-Live"
+  ],
+  "k0sproject/k0s": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "katex/katex": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "kedro-org/kedro": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "keephq/keep": [
+   "L2:SWE-bench-Live"
+  ],
+  "keras-team/keras": [
+   "L2:SWE-bench-Live"
+  ],
+  "kestra-io/kestra": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "keycloak/keycloak": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "khronosgroup/vulkan-validationlayers": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "kinto/kinto": [
+   "L2:SWE-bench-Live"
+  ],
+  "kong/insomnia": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "koxudaxi/datamodel-code-generator": [
+   "L2:SWE-bench-Live"
+  ],
+  "kozea/radicale": [
+   "L2:SWE-bench-Live"
+  ],
+  "kozea/weasyprint": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "kubernetes-client/python": [
+   "L2:SWE-bench-Live"
+  ],
+  "kubernetes-sigs/lws": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "lablup/backend.ai": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "langchain-ai/langchain-aws": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "langchain-ai/langchainjs": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "laravel/framework": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "lastmile-ai/mcp-agent": [
+   "L2:SWE-bench-Live"
+  ],
+  "lektor/lektor": [
+   "L2:SWE-bench-Live"
+  ],
+  "lightning-ai/lightning-thunder": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "lightning-ai/litserve": [
+   "L2:SWE-bench-Live"
+  ],
+  "lightning-ai/pytorch-lightning": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "llamastack/llama-stack": [
+   "L2:SWE-bench-Live"
+  ],
+  "lmstudio-ai/lmstudio-python": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ls1intum/artemis": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "magic-wormhole/magic-wormhole": [
+   "L2:SWE-bench-Live"
+  ],
+  "maizzle/framework": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mapillary/mapillary_tools": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mark3labs/mcp-go": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "marshmallow-code/marshmallow": [
+   "L2:SWE-bench-plus"
+  ],
+  "matplotlib/matplotlib": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "max-heller/mdbook-pandoc": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mckinsey/vizro": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mdanalysis/mdanalysis": [
+   "L2:SWE-bench-Live"
+  ],
+  "mechanicalsoup/mechanicalsoup": [
+   "L2:SWE-bench-Live"
+  ],
+  "mediathekview/mserver": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "meltano/meltano": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mercedes-benz/sechub": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mervinpraison/praisonai": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "mesonbuild/meson": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "meta-llama/llama-stack": [
+   "L2:SWE-bench-Live"
+  ],
+  "micronaut-projects/micronaut-openapi": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "micropython/micropython": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "microsoft/proxy": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "microsoft/typescript-go": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mikedh/trimesh": [
+   "L2:SWE-bench-Live"
+  ],
+  "mintplex-labs/anything-llm": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mk6i/retro-aim-server": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ml-explore/mlx-lm": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mlco2/codecarbon": [
+   "L2:SWE-bench-Live"
+  ],
+  "mockito/mockito": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "modelcontextprotocol/go-sdk": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "modelcontextprotocol/python-sdk": [
+   "L2:SWE-bench-Live"
+  ],
+  "modelcontextprotocol/registry": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "moquette-io/moquette": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mozilla-ai/any-agent": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mozilla-ai/any-llm": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mrdaemon/exosphere": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "mrdoob/three.js": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "mui/material-ui": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "mwaskom/seaborn": [
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "naggie/dstask": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "narwhals-dev/narwhals": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "naver/billboard.js": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "navidrome/navidrome": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "neo4j/graphql": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "netty/netty": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "networkx/networkx": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "newfuture/ddns": [
+   "L2:SWE-bench-Live"
+  ],
+  "newrelic/node-newrelic": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "nilearn/nilearn": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "nlohmann/json": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "nock/nock": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "nodebb/nodebb": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "nom-tam-fits/nom-tam-fits": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "nonebot/nonebot2": [
+   "L2:SWE-bench-Live"
+  ],
+  "nrwl/nx": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "nushell/nushell": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "nvidia/garak": [
+   "L2:SWE-bench-Live"
+  ],
+  "nvidia/nemo-guardrails": [
+   "L2:SWE-bench-Live"
+  ],
+  "octodns/octodns": [
+   "L2:SWE-bench-Live"
+  ],
+  "offchainlabs/prysm": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "olofk/fusesoc": [
+   "L2:SWE-bench-Live"
+  ],
+  "onthegomap/planetiler": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "open-policy-agent/conftest": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "open-policy-agent/gatekeeper": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "open-policy-agent/opa": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "open-telemetry/opentelemetry-cpp": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "open-telemetry/opentelemetry-js": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "open-telemetry/opentelemetry-python": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "open-webui/mcpo": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openai/openai-agents-python": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "openapitools/openapi-diff": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openapitools/openapi-generator": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openfga/openfga": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openmdao/dymos": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openpubkey/opkssh": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openrefine/openrefine": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "opensearch-project/opensearch-mcp-server-py": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openwallet-foundation/acapy": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openyurtio/openyurt": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openzeppelin/stellar-contracts": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "openzim/mwoffliner": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "oumi-ai/oumi": [
+   "L2:SWE-bench-Live"
+  ],
+  "owncloud/web": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "packit/ogr": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "palantir/policy-bot": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pallets/click": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pallets/flask": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "pasteurlabs/tesseract-core": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pathintegral-institute/mcpm.sh": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "patman15/bms_ble-ha": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "patroni/patroni": [
+   "L2:SWE-bench-Live"
+  ],
+  "pdfminer/pdfminer.six": [
+   "L2:SWE-bench-Live"
+  ],
+  "pdm-project/pdm": [
+   "L2:SWE-bench-Live"
+  ],
+  "pex-tool/pex": [
+   "L2:SWE-bench-Live"
+  ],
+  "pgmpy/pgmpy": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "philterd/phileas": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "php-cs-fixer/php-cs-fixer": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "phpoffice/phpspreadsheet": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "pingcap/tidb": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pipecat-ai/pipecat": [
+   "L2:SWE-bench-Live"
+  ],
+  "piskvorky/smart_open": [
+   "L2:SWE-bench-Live"
+  ],
+  "ponylang/ponyc": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "posit-dev/gt-extras": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "posit-dev/orbital": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "powsybl/powsybl-core": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "praw-dev/praw": [
+   "L2:SWE-bench-Live"
+  ],
+  "preactjs/preact": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "prefecthq/prefect": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "priorlabs/tabpfn": [
+   "L2:SWE-bench-Live"
+  ],
+  "privacyidea/privacyidea": [
+   "L2:SWE-bench-Live"
+  ],
+  "probabl-ai/skore": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "projectlombok/lombok": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "projectmesa/mesa": [
+   "L2:SWE-bench-Live"
+  ],
+  "prometheus/common": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "prometheus/prometheus": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "promptfoo/promptfoo": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "psf/black": [
+   "L2:SWE-bench-Live"
+  ],
+  "psf/requests": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "pvlib/pvlib-python": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench-plus"
+  ],
+  "pwr-solaar/solaar": [
+   "L2:SWE-bench-Live"
+  ],
+  "py-pdf/pypdf": [
+   "L2:SWE-bench-Live"
+  ],
+  "pybamm-team/pybamm": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "pyca/cryptography": [
+   "L2:SWE-bench-Live"
+  ],
+  "pyccel/psydac": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pydantic/pydantic": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pydantic/pydantic-ai": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pydata/xarray": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "pydicom/pydicom": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench-plus"
+  ],
+  "pyinfra-dev/pyinfra": [
+   "L2:SWE-bench-Live"
+  ],
+  "pyinstaller/pyinstaller": [
+   "L2:SWE-bench-Live"
+  ],
+  "pylint-dev/astroid": [
+   "L2:SWE-bench-plus"
+  ],
+  "pylint-dev/pylint": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "pymodbus-dev/pymodbus": [
+   "L2:SWE-bench-Live"
+  ],
+  "pynamodb/pynamodb": [
+   "L2:SWE-bench-Live"
+  ],
+  "pyomo/pyomo": [
+   "L2:SWE-bench-Live"
+  ],
+  "pypa/cibuildwheel": [
+   "L2:SWE-bench-Live"
+  ],
+  "pypa/pipenv": [
+   "L2:SWE-bench-Live"
+  ],
+  "pypa/pipx": [
+   "L2:SWE-bench-Live"
+  ],
+  "pypa/twine": [
+   "L2:SWE-bench-Live"
+  ],
+  "pypsa/pypsa": [
+   "L2:SWE-bench-Live"
+  ],
+  "pyscf/pyscf": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pysport/kloppy": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "pytest-dev/pytest": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "python-attrs/attrs": [
+   "L2:SWE-bench-Live"
+  ],
+  "python-babel/babel": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "python-control/python-control": [
+   "L2:SWE-bench-Live"
+  ],
+  "python-kasa/python-kasa": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "python-pillow/pillow": [
+   "L2:SWE-bench-Live"
+  ],
+  "python-poetry/poetry": [
+   "L2:SWE-bench-Live"
+  ],
+  "python-social-auth/social-core": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "python-telegram-bot/python-telegram-bot": [
+   "L2:SWE-bench-Live"
+  ],
+  "python/mypy": [
+   "L2:SWE-bench-Live"
+  ],
+  "pytorch/torchtitan": [
+   "L2:SWE-bench-Live"
+  ],
+  "pytorch/torchtune": [
+   "L2:SWE-bench-Live"
+  ],
+  "pytransitions/transitions": [
+   "L2:SWE-bench-Live"
+  ],
+  "pyvista/pyvista": [
+   "L2:SWE-bench-plus"
+  ],
+  "qbraid/qbraid": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "qiskit/qiskit": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "qtile/qtile": [
+   "L2:SWE-bench-Live"
+  ],
+  "quantco/dataframely": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "quantco/pixi-pack": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "quantecon/quantecon.py": [
+   "L2:SWE-bench-Live"
+  ],
+  "quantumlib/cirq": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench-Live"
+  ],
+  "quantumlib/stim": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "quarkusio/quarkus": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "qubvel-org/segmentation_models.pytorch": [
+   "L2:SWE-bench-Live"
+  ],
+  "quic-go/quic-go": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "qutebrowser/qutebrowser": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "rayon-rs/rayon": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "reactivex/rxjava": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "reata/sqllineage": [
+   "L2:SWE-bench-Live"
+  ],
+  "recharts/recharts": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "redis/redis": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "reflex-dev/reflex": [
+   "L2:SWE-bench-Live"
+  ],
+  "rook/rook": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "ros-controls/ros2_control": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "rthalley/dnspython": [
+   "L2:SWE-bench-Live"
+  ],
+  "rubocop/rubocop": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "rucio/rucio": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "rudra-ravi/wikipedia-mcp": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "run-llama/llama_deploy": [
+   "L2:SWE-bench-Live"
+  ],
+  "rusq/slackdump": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "rust-lang/cargo": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "rust-lang/mdbook": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "scaleway/terraform-provider-scaleway": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "scicompmod/memilio": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "scikit-learn-contrib/category_encoders": [
+   "L2:SWE-bench-Live"
+  ],
+  "scikit-learn/scikit-learn": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "scitools/cartopy": [
+   "L2:SWE-bench-Live"
+  ],
+  "scrapinghub/dateparser": [
+   "L2:SWE-bench-Live"
+  ],
+  "scrapy-plugins/scrapy-splash": [
+   "L2:SWE-bench-Live"
+  ],
+  "scylladb/scylla-operator": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "sdv-dev/sdv": [
+   "L2:SWE-bench-Live"
+  ],
+  "secreto31126/whatsapp-api-js": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "serde-rs/serde": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "serge-sans-paille/pythran": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "shaka-project/shaka-player": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "shapely/shapely": [
+   "L2:SWE-bench-Live"
+  ],
+  "sharkdp/bat": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "sharkdp/fd": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "siderolabs/omni": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "simdjson/simdjson": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "simonw/llm": [
+   "L2:SWE-bench-Live"
+  ],
+  "sissbruecker/linkding": [
+   "L2:SWE-bench-Live"
+  ],
+  "skriptlang/skript": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "skrub-data/skrub": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "slackapi/bolt-python": [
+   "L2:SWE-bench-Live"
+  ],
+  "slackapi/python-slack-sdk": [
+   "L2:SWE-bench-Live"
+  ],
+  "slackapi/slack-github-action": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "smalaca/training-center-microservices": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "smallrye/smallrye-open-api": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "software-mansion/typegpu": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "sooperset/mcp-atlassian": [
+   "L2:SWE-bench-Live"
+  ],
+  "spesmilo/electrum": [
+   "L2:SWE-bench-Live"
+  ],
+  "spf13/cobra": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "sphinx-doc/sphinx": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "spikeinterface/spikeinterface": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "spring-cloud/spring-cloud-netflix": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "spring-projects/spring-data-elasticsearch": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "spulec/freezegun": [
+   "L2:SWE-bench-Live"
+  ],
+  "sqlfluff/sqlfluff": [
+   "L2:SWE-bench-plus"
+  ],
+  "srcml/srcml": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "stacklok/toolhive": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "stanford-crfm/helm": [
+   "L2:SWE-bench-Live"
+  ],
+  "stanfordnlp/dspy": [
+   "L2:SWE-bench-Live"
+  ],
+  "stellar/js-stellar-sdk": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "stephenberry/glaze": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "streamlink/streamlink": [
+   "L2:SWE-bench-Live"
+  ],
+  "strimzi/strimzi-kafka-operator": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "substratusai/kubeai": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "sveltejs/svelte": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "sympy/sympy": [
+   "L2:SWE-bench-Live",
+   "L2:SWE-bench_Verified",
+   "L3:SWE-bench_Verified",
+   "Verified"
+  ],
+  "syncthing/syncthing": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "systran/faster-whisper": [
+   "L2:SWE-bench-Live"
+  ],
+  "szhsin/react-menu": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "taiga-family/maskito": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tailwindlabs/tailwindcss": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "takari/takari-lifecycle": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tcurdt/jdeb": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "temporalio/sdk-java": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "textualize/textual": [
+   "L2:SWE-bench-Live"
+  ],
+  "thealgorithms/python": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "theoehrly/fast-f1": [
+   "L2:SWE-bench-Live"
+  ],
+  "theskumar/python-dotenv": [
+   "L2:SWE-bench-Live"
+  ],
+  "thomasschafer/scooter": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "timefoldai/timefold-solver": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tjw-lint/vue3-snapshot-serializer": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tmc/langchaingo": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tobikodata/sqlmesh": [
+   "L2:SWE-bench-Live"
+  ],
+  "tokio-rs/axum": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "tokio-rs/bytes": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "tokio-rs/tokio": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "tokio-rs/tracing": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "torchio-project/torchio": [
+   "L2:SWE-bench-Live"
+  ],
+  "toss/es-toolkit": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tox-dev/tox": [
+   "L2:SWE-bench-Live"
+  ],
+  "traceloop/openllmetry": [
+   "L2:SWE-bench-Live"
+  ],
+  "traefik/traefik": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "trailofbits/algo": [
+   "L2:SWE-bench-Live"
+  ],
+  "trinodb/trino": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "trpc/trpc": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "turfjs/turf": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "tutao/tutanota": [
+   "L2:SWE-bench_Pro",
+   "L3:SWE-bench_Pro"
+  ],
+  "tuxemon/tuxemon": [
+   "L2:SWE-bench-Live"
+  ],
+  "typeddjango/django-stubs": [
+   "L2:SWE-bench-Live"
+  ],
+  "typescript-eslint/typescript-eslint": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "typescripttolua/typescripttolua": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "typestrong/typedoc": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "uber/nullaway": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "unicode-org/icu4x": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "unidata/metpy": [
+   "L2:SWE-bench-Live"
+  ],
+  "updatecli/updatecli": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "urlaubsverwaltung/urlaubsverwaltung": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "urllib3/urllib3": [
+   "L2:SWE-bench-Live"
+  ],
+  "usebruno/bruno": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "uutils/coreutils": [
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "vaadin/flow": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vaadin/hilla": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vacanza/holidays": [
+   "L2:SWE-bench-Live"
+  ],
+  "valkey-io/valkey": [
+   "L2:SWE-bench_Multilingual",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "vega/altair": [
+   "L2:SWE-bench-Live"
+  ],
+  "versity/versitygw": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vert-x3/vertx-tcp-eventbus-bridge": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vgvassilev/clad": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vitessio/vitess": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vitest-dev/eslint-plugin-vitest": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "voltcyclone/pcileechfwgenerator": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "vuejs/core": [
+   "L2:Multi-SWE-bench",
+   "L2:SWE-Bench-plus-plus",
+   "L2:SWE-bench_Multilingual",
+   "L3:Multi-SWE-bench",
+   "L3:SWE-bench_Multilingual"
+  ],
+  "vuejs/eslint-plugin-vue": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "waku-org/js-waku": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "webdriverio/webdriverio": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "webforj/webforj": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "webpack/webpack": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "wemake-services/wemake-python-styleguide": [
+   "L2:SWE-bench-Live"
+  ],
+  "wireservice/csvkit": [
+   "L2:SWE-bench-Live"
+  ],
+  "xarray-contrib/xdggs": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "xataio/pgstream": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "yamada-ui/yamada-ui": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "yhirose/cpp-httplib": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "yosyshq/yosys": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "yt-dlp/yt-dlp": [
+   "L2:SWE-bench-Live"
+  ],
+  "zeromicro/go-zero": [
+   "L2:Multi-SWE-bench",
+   "L3:Multi-SWE-bench"
+  ],
+  "zizmorcore/zizmor": [
+   "L2:SWE-Bench-plus-plus"
+  ],
+  "zobweyt/textcase": [
+   "L2:SWE-Bench-plus-plus"
+  ]
+ },
+ "source_labels": "L2:<dataset> / L3:<dataset> = CORE-Bench folders; Verified = SWE-bench Verified metadata; RW-* only if a Rewrite folder names a repository its original lacks",
+ "unresolved_folders": []
+}
