@@ -1,0 +1,168 @@
+{
+ "ada_jobs": {
+  "e6_probe": 25855,
+  "e6_probe_failed_transformers_version": 25853,
+  "e6_text_count": 25857,
+  "prepare_dev": 25845,
+  "prepare_probe": 25843,
+  "prepare_test": 25851
+ },
+ "ada_partition": "u22, qos low, gnode002 (prepare), 4 CPUs, 12 GB requested, Python 3.10.12",
+ "caches": {
+  "bm25_rank_mismatches": 0,
+  "bm25_ranks_compared_with_pilot_e1": 12924,
+  "edge_pairs_summed_over_snapshots": {
+   "co_change": 1180964,
+   "configures": 14550,
+   "contain": 2936728,
+   "import": 925598,
+   "inherit": 280779,
+   "invoke": 4000161,
+   "tests": 1096636
+  },
+  "gold_ids_not_in_units": 0,
+  "instances_by_folder": {
+   "astropy__astropy": 22,
+   "conan": 90,
+   "deepset": 72,
+   "instance_internetarchive__openlibrary": 81,
+   "instance_qutebrowser__qutebrowser": 75,
+   "matplotlib__matplotlib": 32,
+   "mwaskom__seaborn": 2,
+   "pallets__flask": 1,
+   "psf__requests": 8,
+   "pydata__xarray": 18,
+   "streamlink__streamlink": 37
+  },
+  "instances_by_role": {
+   "dev": 355,
+   "test": 83
+  },
+  "prepare_config_hashes": [
+   "70b481631de49849dbf639d7459b1c16fb2f047f100bb8d6572932d36fdaa682"
+  ],
+  "prepare_hosts": {
+   "gnode002": 438
+  },
+  "prepare_seconds_summed": 5398.7,
+  "units_summed_over_snapshots": 2896954,
+  "units_without_history": 98
+ },
+ "date": "2026-10-18",
+ "e6": {
+  "distinct_unit_texts_dev_estimate": {
+   "conan-io/conan": 12665,
+   "deepset-ai/haystack": 9489,
+   "internetarchive/openlibrary": 8611,
+   "qutebrowser/qutebrowser": 14762,
+   "streamlink/streamlink": 6437
+  },
+  "model": "CodeRankEmbed",
+  "note": "distinct texts counted over six spread snapshots per repository (job 25857)",
+  "probe_job": 25855,
+  "probe_tokens_per_second_estimate": 340,
+  "probe_units_per_second_4_cpus": 0.85,
+  "status": "not run: constraint recorded (Q42)"
+ },
+ "evaluation_host": "Apple M3, 8 GB, Python 3.11 (evaluation and tables ran locally on the cache files)",
+ "evaluations": {
+  "eval_e3_dev": {
+   "config_file": "configs/experiments/e3_graph_signal.yaml",
+   "config_file_sha256": "7ef07dd75e4a8982343762bcf993db649287f656d35959b773da18dc54bc4ffa",
+   "evaluated_on": "macOS-15.7.1-arm64-arm-64bit",
+   "evaluation_hashes": [
+    "b0f36a22dd4577a5dd4097040aa485ed1d60cc9334d0b38ce57769b15a1ac206"
+   ],
+   "keys_per_query": 1141,
+   "python": "3.11.14",
+   "queries": {
+    "dev:L2": 353,
+    "dev:L3": 155
+   }
+  },
+  "eval_e3_test": {
+   "config_file": "configs/experiments/e3_graph_signal_confirm.yaml",
+   "config_file_sha256": "a768b4af4ad223b19b6172a991dde88a52dd5aec9d79fa5edc4fd98a620cde29",
+   "evaluated_on": "macOS-15.7.1-arm64-arm-64bit",
+   "evaluation_hashes": [
+    "06e3ff78e1a0002e8d825b5d687af25320d30751da396d9721c99e3f9e907447"
+   ],
+   "keys_per_query": 115,
+   "python": "3.11.14",
+   "queries": {
+    "test:L2": 83,
+    "test:L3": 55
+   }
+  },
+  "eval_e4_dev": {
+   "config_file": "configs/experiments/e4_fitted_weights.yaml",
+   "config_file_sha256": "5bd0d3f511896be3aa8a4d8fed94d9c023d4a8dadd7f5f94e614d7243948bace",
+   "evaluated_on": "macOS-15.7.1-arm64-arm-64bit",
+   "evaluation_hashes": [
+    "4d633970aed556e4dce2c28f89e8b8f12977daaf4091cfcc5d88b5460de1bad0"
+   ],
+   "keys_per_query": 97,
+   "python": "3.11.14",
+   "queries": {
+    "dev:L2": 353,
+    "dev:L3": 155
+   }
+  },
+  "eval_e4_test": {
+   "config_file": "configs/experiments/e4_fitted_weights_confirm.yaml",
+   "config_file_sha256": "18475f65035ba524e9f37bb882ac828e22527233e72440ec7e7027d403d6fe7c",
+   "evaluated_on": "macOS-15.7.1-arm64-arm-64bit",
+   "evaluation_hashes": [
+    "956ad364cdbf13ed2895697cf5bf8d15682e2d99ed076e39b81eaf63730c9a7f"
+   ],
+   "keys_per_query": 25,
+   "python": "3.11.14",
+   "queries": {
+    "test:L2": 83,
+    "test:L3": 55
+   }
+  },
+  "eval_e5_dev": {
+   "config_file": "configs/experiments/e5_recency_prior.yaml",
+   "config_file_sha256": "c5a5f574cc2de1868188664f807974772185270b4b604381e26da8616465fcd6",
+   "evaluated_on": "macOS-15.7.1-arm64-arm-64bit",
+   "evaluation_hashes": [
+    "2eefba8d3a70125e1bd2729bf7851d6469d9d86738cac138613d7d010b9343d5"
+   ],
+   "keys_per_query": 16,
+   "python": "3.11.14",
+   "queries": {
+    "dev:L2": 353,
+    "dev:L3": 155
+   }
+  },
+  "eval_e5_test": {
+   "config_file": "configs/experiments/e5_recency_prior_confirm.yaml",
+   "config_file_sha256": "d710394dc638c8ddb9f5112ce1950380788967be6acc953e1ee34512c57a8327",
+   "evaluated_on": "macOS-15.7.1-arm64-arm-64bit",
+   "evaluation_hashes": [
+    "eaa5ce62950e508f810231271295f29a5648775843d33d8998942c1f4b9aba5f"
+   ],
+   "keys_per_query": 2,
+   "python": "3.11.14",
+   "queries": {
+    "test:L2": 83,
+    "test:L3": 55
+   }
+  }
+ },
+ "experiment": "E-GRAPH-SIGNAL, E-GRAPH-WEIGHTS, E-RECENCY (E6 not run)",
+ "seed": 0,
+ "selection_dev": {
+  "criterion": "(L2 nDCG@10 gain + L3 Recall@100 gain) / 2 against BM25, subset core, gold reading units, micro average",
+  "list_and_rrf_best_cell": {
+   "C": 5,
+   "gamma": 0.5,
+   "hops": 2
+  },
+  "recency_best_cell": {
+   "lam": 0.2,
+   "tau_days": 30
+  }
+ }
+}

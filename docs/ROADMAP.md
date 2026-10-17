@@ -44,7 +44,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 5–8 — Person A: RQ1
 
-- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns
+- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense arm waits for a GPU run, Q42)
 - [ ] Latency distribution measured; rerank decision informed (ADR-009)
 
 ## Before week 6 — freeze

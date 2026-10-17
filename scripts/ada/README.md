@@ -119,3 +119,17 @@ lines only. Jobs are resumable; set the memory with `--mem=4G` to `8G` (large re
 
 Copy `ril_e/out`, `out_full`, `out_sweep` and `out_confirm_*` to `data/processed/e1/`, then locally `python scripts/e1_tables.py data/processed/e1/out results/tables --config ... --seed 0 --sweep-dir ... --full-dir ... --confirm-dir ... --log ...`
 (rename case-colliding record files on the cluster first).
+
+## Graph-signal pilots (E3 to E6, 2026-10-18)
+
+Work directory `~/ril_e/` as above (needs `out/units` from the E1 unit stage, `raw`, `repo_cache`, `meta.json`). `e3_cache/` holds one `.npz` per instance (BM25 scores, edge pairs per family, gold unit indices; no text),
+`e3_work/` the working clones of the shards, `e3_out/` failure lists and environment files. Evaluation needs only the cache and can run anywhere (`scripts/e3_run.py eval`).
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `e3_prepare.sbatch` | cache of every instance of the role (`ROLES=dev` or `ROLES=test`), `SHARDS` processes (default 4), `ONLY=<folder>`, `LIMIT=<n per shard>` | `rsync -a --exclude __pycache__ ril scripts configs ada:ril_e/ && sbatch --export=ALL,ROLES=dev,RIL_COMMIT=<hash> ril_e/scripts/ada/e3_prepare.sbatch` (dev: 25 min, test: 4 min) |
+| `e3_eval.sbatch` | one evaluation configuration on the cache (`EVAL_CONFIG`, `OUT`); a configuration that names test instances must be a single-setting confirmation | `sbatch --export=ALL,EVAL_CONFIG=configs/experiments/e3_graph_signal.yaml,OUT=e3_eval_dev ril_e/scripts/ada/e3_eval.sbatch` |
+| `e6_probe.sbatch` | builds `venv_dense310` (CPU torch, transformers 4.44.2, sentence-transformers 3.1.1), loads CodeRankEmbed and times 200 chunks on 4 CPUs | `sbatch ril_e/scripts/ada/e6_probe.sbatch` |
+| `e6_count.py` | distinct unit texts and characters over a spread of snapshots per dev repository (no model) | `srun -p u22 -A research -q low -c 2 --mem=4G env PYTHONPATH=. venv_ril310/bin/python scripts/ada/e6_count.py e3_cache meta.json repo_cache e3_work 6` from `~/ril_e` |
+
+Copy the caches with `rsync -a ada:ril_e/e3_cache/ data/processed/e3/e3_cache/`; `scripts/e3_add_readings.py` adds gold readings that older cache files lack. Dense scores (`scripts/e6_dense.py`) were not produced.

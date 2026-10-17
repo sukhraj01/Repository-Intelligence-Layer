@@ -81,3 +81,21 @@ Seeds were the gold L2 units, so this bounds what a perfect first stage could se
 - Cheapest experiment that could flip an inference from this: E3 (hop-decay expansion from retrieved, not gold,
   seeds against a size-matched random expansion). Conditions to revisit: resolver recall (ADR-012 definitions), more
   repositories (including the non-Verified L3 folders once base commits are obtained).
+
+## Addendum 2026-10-18 — pilots E3 to E5: graph expansion from retrieved seeds (evidence only; no choice made)
+
+Exploratory pilots (`docs/EXPERIMENTS.md` E-GRAPH-SIGNAL, E-GRAPH-WEIGHTS, E-RECENCY): BM25 over the units of the snapshot, hop-decay expansion from the top-C retrieved units
+(not gold), compared with BM25 alone and with size-matched random expansions, sweeps on five non-Verified repositories (508 queries), one dev-chosen setting confirmed on six Verified
+repositories (83 L2, 55 L3 queries). Evidence class: measured, small samples.
+
+- Role A (retrieval-time signal): expansion over the core families improves BM25 on the dev repositories (L3 Recall@100 +11.9 [+9.6, +14.4], L2 nDCG@10 +1.8 [+1.0, +2.6]); against random
+  units of the seeds' files the gain is +5.1 [+2.7, +7.5] and +2.0 [+1.2, +2.9]. On the Verified six the gain over BM25 is +4.4 [+1.1, +8.1] (L3) and 0.0 [-1.4, +1.6] (L2) and is not
+  distinguishable from same-file chance. So a graph signal helps a lexical first stage at L3 on these data; whether it helps a dense first stage is untested (E6 not run, Q42).
+- Which edges: containment carries most of it (alone +4.3 [+3.2, +5.4] nDCG@10 over same-file chance at L2; leaving it out of all families costs 4.2 [2.7, 5.9] Recall@100 at L3 on dev and
+  3.4 [1.5, 5.8] on Verified); call edges add at L3 on dev only; imports, inheritance, tests, configuration and co-change add nothing or hurt. Part of the L3 containment gain is the module unit of a
+  file entering the list (without module units in the gold set it is +1.2 [-0.4, +2.8] over same-file chance).
+- Entry into a rank-fused stack (Q30): the edited list and the ranked list fused by reciprocal rank give the same L3 Recall@100 and a smaller L2 nDCG@10 gain for the fused form (contain +1.9 against +4.1 on
+  dev); neither was chosen.
+- Role B (training structure): fitted family weights favour containment and do not change L3; no evidence on supervision was gathered.
+- Cheapest experiment that could flip an inference: a fixed-length budget arm and a dense first stage (E6 on a GPU), 1 to 2 hours on Ada once a GPU run is allowed. Conditions to revisit: resolver recall (ADR-012),
+  more non-Verified Python repositories with base commits.
