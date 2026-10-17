@@ -21,3 +21,5 @@ timestamp_utc,commit,dirty,branch,host,cpu_model,cpu_cores,ram_gb,gpu_name,gpu_d
 2026-10-17T15:41:35Z,bf9a3b7,1,main,gnode002,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,40,125.8,none,,,3.10.12,none,91e3c543ec202929f90eca58bfba9fd5caf74fd61c52947215c37d628bd81023,graph-django-v1,graph_build,107580,67.388713,1596.41
 2026-10-17T15:51:45Z,e8562c1,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006317,132985.04
 2026-10-17T15:51:45Z,e8562c1,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005186,7713012.68
+2026-10-17T15:51:54Z,688f52b,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006294,133453.38
+2026-10-17T15:51:54Z,688f52b,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005219,7664976.16
