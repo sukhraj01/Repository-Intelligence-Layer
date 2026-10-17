@@ -20,6 +20,7 @@ that cannot wait proceeds behind `provisional: ADR-0NN` flags; no ADR is filled 
 | [ADR-008](ADR-008-base-llm.md) | Base LLM for the agent | Decide on budget; if local, quantize identically across all arms. | Proposed | _pending_ |
 | [ADR-009](ADR-009-cross-encoder-rerank.md) | Cross-encoder rerank | Include but measure — it likely dominates latency. | Proposed | _pending_ |
 | [ADR-010](ADR-010-usable-by-others.md) | Is RIL meant to be usable by others? | Decide now — it changes CLI, config and packaging decisions in week 1, not week 10. | Proposed | _pending_ |
+| [ADR-013](ADR-013-codeunit-v1-frozen.md) | CodeUnit v1 frozen (decisions D4-D11) | — (engineer's decisions, 2026-10-17) | Proposed (schema frozen; Q28 open) | engineer |
 
 ## Adding a new ADR
 
@@ -35,3 +36,14 @@ These are locked in the design and are changed only through `docs/DEVIATIONS.md`
 - RQ2 compares supervision strategies at **matched optimization budgets** (optimizer updates fixed).
 - Fusion is **RRF (k=60)**; the index is **flat exact**; context assembly is byte-identical across arms.
 - Python only; the quality signal is not invented; repository-level disjointness.
+
+## Where the 2026-10-17 engineer decisions (D1-D13) are recorded
+
+| Decision (earlier question) | Owning document |
+|---|---|
+| D1 held-out matching (Q8), D2 token (Q22) | `specs/held_out_repos.md` (addendum) and ADR-001 (addendum) |
+| D3 Loc-Bench tier (Q9), D13 Rewrite qrels (Q23) | `specs/held_out_repos.md` and ADR-005 (addenda) |
+| D12 unit-level evaluation on Verified (Q21) | ADR-004 and ADR-005 (addenda) |
+| D4-D11 CodeUnit (Q13-Q20) | `specs/code_unit.md` decision log and ADR-013; D4 also noted in ADR-003, D6 and D7 in ADR-004 |
+
+ADR-011 (graph) and ADR-012 (edge recovery) are reserved for the graph-design and parse sessions.

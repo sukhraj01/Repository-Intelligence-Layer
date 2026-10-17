@@ -77,3 +77,40 @@ The held-out list has 605 repositories (CORE-Bench L2 union L3 union SWE-bench V
 
 Exact-name filtering is not sufficient for pools built before a repository was renamed; whether renamed repositories and forks are held out is Open question Q8 (fork / near-duplicate rule). Details: `data/held_out/pool_filter_report_*.md`, `knowledge/datasets/sweloc.md`.
 
+## Addendum 2026-10-17 — held-out matching rule, token, and what the candidate pool is (decisions D1, D2, Q7 reframed)
+
+**D1 (closed Q8): held-out matching.** A pool repository is held out if its name or its current GitHub
+name equals a held-out repository's name or current name (current-name resolution through GitHub
+redirects). The fork network is a sensitivity report only and is never a filter. A content-overlap
+audit is added and reported, not applied.
+- *Why.* Exact names miss repositories renamed or transferred after a dataset was built: of 108
+  repositories looked up, 23 now have a different name, and 19 of the 59 same-name candidates in two
+  pools resolve to a held-out repository, none being a fork. The SweRank paper itself removed
+  repositories by source-code overlap (`knowledge/papers/swerank-2505.07849.md`, Sec. 3.1, p.4).
+- *Evidence class.* Measured (lookups, `data/held_out/rename_cache.json`; audit,
+  `results/logs/d_content_overlap_audit_2026-10-17.json`) and read in full (SweRank).
+- *Cheapest experiment that could flip it.* Train a small encoder with and without the renamed
+  held-out-repository instances and compare on Verified (planned as E-PILOT-LEAK; the
+  experiments session registers it in `docs/EXPERIMENTS.md`). If the inflation is negligible the rule costs
+  data for no gain. Time-box: one small run.
+- *Conditions to revisit.* The pilot; a fork-network sensitivity row that drops a large share; the
+  audit finding overlap in repositories the name rules keep.
+- *Result so far.* Held-out list v2 and the pool filters are in `specs/held_out_repos.md` (addendum)
+  and `data/held_out/pool_filter_report_*.md`. Resolution is partial without a token (47 of 2,448
+  gangiswag python repositories, 11% of its instances), so the post-rename counts are lower bounds.
+
+**D2 (closed Q22): token.** A read-only token (public-repository scope, no write scope) in the
+environment variable `GITHUB_TOKEN` on the cluster, never printed or stored in the repository.
+Presence is tested without printing; `GET /rate_limit` verifies it. Without it the resolver runs
+against the unauthenticated limit (60 requests per hour) and reports what it did not reach.
+- *Status on 2026-10-17.* Not present on the cluster (login shell and batch environment). The resolver
+  and its tests use a fake transport; a data blocker is recorded in `PROJECT_STATE.md`.
+- *Evidence class.* Measured (presence check). *Flip experiment.* None needed; the limit is
+  documented by the service and was reached in practice (`docs/COMPUTE.md`).
+
+**Q7 reframed (not decided).** Read in full: SweRank+ Table 1 gives for Python 2,448 repositories,
+24,285 PRs and 49,973 function-level instances, exactly the counts measured in the candidate, so the
+candidate is SweLocMulti's Python part and not the original SweLoc (3,387 repositories); that paper
+states no exclusion of benchmark repositories, and 89 held-out repositories (3,431 instances, 14.13%
+of the PRs) are present in it (`knowledge/papers/swerank-plus-2512.20482.md`, claim S2). Whether it is
+the intended pool remains the engineer's decision.

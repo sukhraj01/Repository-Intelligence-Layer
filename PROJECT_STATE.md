@@ -4,46 +4,67 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full, literature scan logged · **Tasks completed:** 7
+**Last updated:** 2026-10-17 · **Milestone:** M0 — empty package bootstrapped; data sources located and sampled; twenty-seven papers read in full; CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 8
 
 ---
 
 ## One-line status
 
-Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is now a
-working, empty Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass.
-**No research code exists.** Latency harness: **not built** (commits are exempt until it is).
+Research design is locked (Master Project Document rev 16, 2026-10-11). The repository is a working,
+empty Python 3.11 project: `make setup`, `make test`, `make test-all`, `make lint` pass. **No retrieval
+research code exists** (the CodeUnit type, its helpers and the held-out filter are the only modules).
+Latency harness: **not built** (commits are exempt until it is).
 
 ## What is built
 
 | Layer | State | Notes |
 |---|---|---|
-| Repo scaffold: folders, docs split from master, ADR stubs, specs | done | |
-| Package `ril/`, `pyproject.toml`, `Makefile`, tests, ruff, `mypy --strict` | done | Python 3.11 pinned; Poetry venv in `.venv`; Ada path (`uv`) documented in the Makefile header |
-| `ril/config` (paths, `RunConfig` + hash), `ril/util` (seed, logger, sanity) | done | no experiment parameters yet |
-| Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh` as `pre-commit.d/10-latency`; not installed yet |
-| CodeUnit schema | draft implemented, **not frozen** | `ril/parsing/code_unit.py` (+ unit and reproducibility tests) per `specs/code_unit.md` DRAFT v0, `CODEUNIT_SCHEMA_VERSION = "v0-draft"`; eight open questions Q13-Q20 below; freeze is the engineer's sign-off |
-| Data access, formats, statistics (CORE-Bench, Verified, Loc-Bench, SweLoc search, CoRNStack/CSN) | done | every card statistic re-measured and agrees (`results/tables/core_bench_card_vs_measured.csv`); `knowledge/datasets/*.md`; `scripts/ada/README.md`; Ada reachable non-interactively |
-| Held-out repository list, filter, leakage tests | done | 605 repositories in `data/held_out/` (report, pool reports); `filter_pool` and leakage helpers in `ril/training/`; `tests/leakage/` real tests; rebuild with `python -I scripts/build_held_out.py` |
-| Paper notes and literature scan | done for the reading plan | `knowledge/papers/`: twelve data, training and graph papers (CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench, LocAgent, KGCompass, LARGER, SpIDER, GREPO, ARISE, CoSIL) plus PyCG, Jarvis, Sun et al., Rethinking Negative Pairs, CodeR, Agent Retrieval Bench and nine scan papers, each with a quote table re-found in the extracted text by `scripts/check_paper_note.py`; `LANDSCAPE.md` logs 19 queries (2026-10-17), lists every candidate as read, abstract only or lead only, and ends with a per-RQ table of what is taken, open and contradicted; remaining papers in `knowledge/papers/README.md` are not read |
-| Latency harness | **not built** | `make bench` / `make bench-check` print "latency harness: not built" |
+| Repo scaffold: folders, docs split from master, ADR stubs, specs, folder layout | done | |
+| Package `ril/`, `pyproject.toml`, `Makefile`, tests, ruff, `mypy --strict` | done | Python 3.11 pinned; Poetry venv in `.venv`; Ada path (`uv`) in the Makefile header |
+| `ril/config`, `ril/util` | done | no experiment parameters yet |
+| Commit hook | done, opt-in | `make hooks` installs `scripts/hooks/latency_check.sh`; not installed yet |
+| CodeUnit schema | **FROZEN v1** (ADR-013) | `ril/parsing/code_unit.py`, `unit_id.py`, `repo_id.py`, `path_rules.py` per `specs/code_unit.md` (decision log D4-D11); `unit_type` has `module`; canonical bytes pinned by a golden test; class-unit `source` open (Q28) |
+| Data access, formats, statistics | done | every card statistic re-measured; `knowledge/datasets/*.md`; `scripts/ada/README.md`; Ada reachable non-interactively |
+| Held-out list, filter, leakage tests | done, list schema 2 | 605 core repositories + 169-repository Loc-Bench tier (switchable) + current-name aliases; `rule_counts`, `rename_resolution`, `content_overlap` in `ril/training/`; rebuild `python -I scripts/build_held_out.py`; resolution is partial without a token (see Blockers) |
+| Paper notes and literature scan | done for the reading plan | `knowledge/papers/`, checked quote tables (`scripts/check_paper_note.py`); `LANDSCAPE.md` |
+| Latency harness | **not built** | `make bench` prints "latency harness: not built" |
 | Parser / call graph / BM25 / dense / fusion / assemble | not started | |
 | Training pipeline, supervision arms | not started | |
 | Evaluation (CORE-Bench loaders, metrics), agent integration | not started | |
 
+## Decisions log (closed 2026-10-17 by the engineer; reasoning, evidence class and flip experiments in the owning document)
+
+| D (was) | Decision in one line | Owner |
+|---|---|---|
+| D1 (Q8) | held-out matching = exact names + current-name resolution; fork network = sensitivity only; content-overlap audit reported | `specs/held_out_repos.md`, ADR-001 |
+| D2 (Q22) | read-only `GITHUB_TOKEN` on Ada, never printed or stored | same |
+| D3 (Q9) | Loc-Bench held out as a separate switchable tier | `specs/held_out_repos.md`, ADR-005 |
+| D4 (Q13) | relations in a separate edge store; CodeUnit lists hold resolved ids only | `specs/code_unit.md`, ADR-013 |
+| D5 (Q14) | `repo_id` = `owner/name` case-folded; commit in the container; aliases for renames | same |
+| D6 (Q15) | top-level functions, methods, classes + one residual `module` unit per file | same, ADR-004 |
+| D7 (Q16) | chunk-to-unit link is a derived mapping built by the evaluation loader | same, ADR-004 |
+| D8 (Q17) | `last_modified` = last commit time <= snapshot, or `""` | same |
+| D9 (Q18) | `is_test` = file-level path rule (agrees with pytest on 3 repositories) | same |
+| D10 (Q19) | `tests` filled by the graph build; `[]` = not computed | same |
+| D11 (Q20) | id `path::Qual.name`, `#2` ordinal on collisions, converter to the pool form | same |
+| D12 (Q21) | unit-level evaluation primary on Verified (432 L2, 302 L3); other sub-datasets chunk-level | ADR-004, ADR-005 |
+| D13 (Q23) | Rewrite runs scored against the original qrels; 158 folders reported as a packaging defect | ADR-005, DEV-008 |
+
 ## Next task
 
-Next in the plan: freeze the CodeUnit and record the engineer's decisions (D1-D13), then the knowledge-graph design, the latency harness and the first parse and graph build; the items below stay with the engineer.
-
-Engineer: close Q13-Q20 and freeze the CodeUnit (set the spec status, bump the version, write the ADR); settle Q8 (fork and rename rule)
-and Q9 (Loc-Bench) so the held-out list can be finalised. Then: the latency harness, then parsing one repository
-(`specs/latency_harness.md`, `specs/parse_one_repo.md`). Available for RQ3 pairing: 432 instances with L2 labels and 302 with L2 and L3 labels,
-all in SWE-bench Verified (`results/tables/paired_n.json`).
+Knowledge-graph design (session G of the second wave)
+(`specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`, ADR-011), options with evidence and no choices. Then
+the latency harness (L), the first parse and graph build (P), pilots M and E. Engineer: provide
+`GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2 counts);
+decide Q28; confirm Q29; settle ADR-001 to ADR-010 by end of week 2.
 
 ## Blockers
 
-None for code. Data: no confirmed SweLoc pool (Q7). Renames and forks can only be resolved for short lists (unauthenticated GitHub API,
-60 requests per hour; Q22). CORE-Bench corpora are streamed, not stored; evaluation by unit needs checkouts (Q21).
+Data: `GITHUB_TOKEN` is **not set on Ada** (decision D2). The rename cache holds 108 repositories (47 of the
+2,448 `gangiswag/train_data` python repositories, 51 of CodeSearchNet's 13,590); every post-rename count is
+a lower bound until the token exists (the job is idempotent and resumes). The held-out repositories' own current names are resolved only for the 12
+Verified ones (unchanged). Q7: the intended pool is not confirmed. CORE-Bench corpora are streamed, not
+stored. No code blocker.
 
 ## Open questions
 
@@ -53,29 +74,16 @@ None for code. Data: no confirmed SweLoc pool (Q7). Renames and forks can only b
 | Q3 | Does a docs-only commit need a fresh latency row, or may it reference the previous row? | commit hook design | engineer, before the latency harness closes |
 | Q4 | GitHub remote(s) for the team repo; the engineer performs every push | publishing only | engineer |
 | Q5 | ADR-001...ADR-010 (training pool, quality signal, graph role, granularity, benchmark, encoder, scaffold, LLM, rerank, usable-by-others) | frozen config, RQ2 start | team, end of week 2 |
-| Q7 | SweLoc: master doc says released; no dataset by that name exists. Candidate `gangiswag/train_data` (no card; 56,279 instance directories, Python 24,285 / 2,448 repository directories; function-level; `repo` in metadata). Read in full (R1): the SweRank+ paper's Table 1 gives exactly 24,285 PRs, 2,448 repositories and 49,973 function-level instances for Python and 56,279 PRs overall, so the candidate is SweLocMulti's Python part (the directories are PRs, not instances), and that paper states no exclusion of benchmark repositories loses 14.1% of its Python instances (3,431) and 3.6% of its repositories (89) to the held-out list. Is it the intended pool, or is the pool built with the published scripts? Also Loc-Bench: 560 rows (V1) vs 660 (V0.2), category counts differ from the master doc | ADR-001, pool filter | engineer; options and evidence in `decisions/ADR-001` addenda |
-| Q8 | Fork / near-duplicate rule for the held-out list. Measured: exact names miss renamed repositories (19 of 59 same-name candidates in two pools now resolve to a held-out repository, for example `pycqa/pylint` to `pylint-dev/pylint`; CodeSearchNet 1,603 rows, candidate 54 instances), and 0 of 59 are forks. Options: exact names only / plus current-name resolution / plus fork network / plus same-name proxy. No recommendation in the master doc | held-out list, pool filters | engineer |
-| Q9 | Is Loc-Bench held out of training? 128 of its 165 (V1) repositories are not in the held-out list; the others overlap Verified (django, sympy, sklearn, ...). Effect on pools is in the ADR-005 addendum | ADR-005 | engineer |
-| Q11 | CORE-Bench chunk ids are random UUIDs with no path or line span; chunks are text windows (mean about 1,000 characters, longest 1,009,865, so not capped at 4,096); each query scores against its own `filtered_corpus_id` list (mean about 9,800 ids in L2, 11,400 in L3, minimum 32, maximum 348,310) rather than the whole folder corpus. Read and measured (R1): the paper says the filter keeps the documents visible at the PR state, and on 11 Verified instances all 12,153 list chunks occur in the checkout at the base commit (`results/tables/r1_c1_snapshot_check.json`), so each list is the snapshot and evaluation is whole-snapshot retrieval; the folder corpus is the union of snapshots. Chunk-to-CodeUnit mapping and the matching evaluation protocol need a decision | CodeUnit, ADR-004, evaluation | engineer |
-| Q12 | CORE-Bench L3 labels are LLM-judged (paper, three-vote ensemble); L2 labels are chunk-vs-patch alignment (a sample of 53 L2 positives was 50 code chunks, 3 import blocks; whether positives are the edited code is untested). The paper does not say how the three Level-3 judge votes combine into the kept score (R1); released qrels are binary | RQ3 interpretation | note in report |
-| Q13 | CodeUnit Q1: what do `calls` / `called_by` / `tests` / `configs` hold? Options: unit ids / qualified names / paths. Proposal: unit ids (unresolved targets dropped and counted in edge-recovery coverage); `configs` = repo-relative file paths | parser, graph | engineer, freeze |
-| Q14 | CodeUnit Q2: `repo_id` form. Options: `owner/name` / `owner/name@commit` / folder name (unusable: truncated, Q10). Proposal: `owner/name` (compare case-folded), commit kept in the index manifest | held-out filter | engineer, freeze |
-| Q15 | CodeUnit Q3: nested defs, lambdas, properties, decorators, class attributes. Flask at the flask-5014 base commit: 513 nested defs, 613 decorated, 16 property-like, 24 lambdas, 114 class attributes, `Flask` class 2,124 lines. Proposal: top-level functions, classes, methods only (nested folded into the parent, decorators in the span, lambdas and class attributes never units); class `source` (full vs header-only) is unresolved | parser, ADR-004 | engineer, freeze |
-| Q16 | CodeUnit Q4: chunk link (ADR-004). Of 160 sampled L2/L3 positives (3 Verified repos), 111 overlap one function/method, 28 overlap 2+, 5 only a class, 16 no definition (module-level), 39 cut a unit at the window edge. Options: `chunk_id` field / derived mapping table / chunk-level only. Proposal: derived table built by the evaluation loader at the instance base commit, schema unchanged; module-level code needs an ADR-004 answer (a new unit type would change the schema) | evaluation, ADR-004 | engineer, freeze |
-| Q17 | CodeUnit Q5: `last_modified`. Options: last-touching commit time / mtime / empty / snapshot time. Proposal: commit time (ISO-8601 UTC) when full history exists, else `""`; never mtime (breaks byte-identity) | reproducibility | engineer, freeze |
-| Q18 | CodeUnit Q6: `is_test`. Options: path rule / name rule / framework markers. Proposal: file-level path rule (component `tests` or `test`, or `test_*.py`, `*_test.py`, `conftest.py`); `examples/` is not test | parser | engineer, freeze |
-| Q19 | CodeUnit Q7: `tests` filled at parse time or by the graph extension? Proposal: graph extension (weeks 7-10); `[]` until then, and empty does not mean untested | graph | engineer, freeze |
-| Q20 | CodeUnit Q8: `id` format. Options: `file::Qual.name` / `file:Qual.name` / both with a mapping. Proposal: `::` as in the master example, repo-relative posix path, deterministic `#<start_line>` suffix only on same-name collisions (the suffix rule is part of the question) | everything | engineer, freeze |
-| Q21 | CORE-Bench evaluation by unit needs the checkout at each instance base commit; base commits were available only for Verified instances (SWE-bench parquet), unknown for the other sub-datasets. Which sub-datasets enter the evaluation? | evaluation, Q11 | engineer |
-| Q22 | Resolving renames and forks (Q8) at scale needs authenticated GitHub access (the unauthenticated limit of 60 requests per hour allowed 59 lookups). Should an access token be provided on Ada (never stored in the repository), and should the held-out repositories themselves be checked for renames (CORE-Bench ids carry the name at collection time)? | Q8 | engineer |
-| Q23 | Rewrite qrels are not identical to the originals: 81 Rewrite SWE-bench_Multilingual folders have no qrels file and 13 other folders have fewer rows (158 in all), although the card says Rewrite shares qrels with the originals. Score Rewrite runs against the original qrels (same query ids in every folder) or the Rewrite ones? | Rewrite evaluation | engineer |
-| Q24 | Master-document statement "tests and configuration are covered by nobody" no longer holds as worded. Read in full (R2): LARGER builds tested_by, documents and configures links with fixed confidences 0.75, 0.6, 0.5 (Table 11, p.19) and appends related tests, documentation and configuration files to search output; it reports no ablation of those links and its alignment study runs with test files dropped (p.17), so there is no published evidence either way that they help. Options: keep the claim reworded as "no ablation shows the value of test and configuration links", or drop it. Not edited in the derived docs | graph design, `docs/05`, report wording | engineer |
-| Q25 | Corrections to master-document numbers about the graph papers, found by reading: KGCompass multi-hop share is 89.7% of 146 ground-truth functions in v3 (69.7% was v1; 67.3% is the share of Lite issues with no named file or function); LocAgent Loc-Bench is 560 = 242 / 150 / 29 / 139 in v2 (660 is v1) and its ablation is Table 6; SpIDER gain is "at least 13% relative over the same encoder's dense list" (12.9% was v1); LARGER says LocBench has 5 repositories, which its own Figure 4(b) contradicts (165 measured). Derived docs not edited; decide whether to log in `docs/DEVIATIONS.md` | `docs/05`, `docs/06`, references | engineer |
-| Q26 | Corrections to master-document statements about papers, found by reading (R3): the CodeR paper is arXiv 2505.12697 (the references' 2508.11442 is CoDiEmb, a different paper); Sun et al. "+19.2% MRR" is DeepCS only, Java only, relative, three small evaluation sets, with half the data and half the training time, and "over a third noisy" is 33.1%; "False negatives are pervasive" (Li et al.) is cited from earlier work, not measured; "expect 70-85% edge recovery" (`docs/05`) is not supported by PyCG (69.9% on five small packages, hand truth), Jarvis (0.76 and 0.82, own truth) or DyPyBench (49% of executed edges); Agent Retrieval Bench supports complementarity of two systems, not a signal ablation, and disclaims any resolved-rate claim. Derived docs not edited; log in `docs/DEVIATIONS.md`? | `docs/03`, `docs/05`, `docs/11`, report wording | engineer |
-| Q27 | ADR-012 inputs: the literature has four non-equivalent edge-recovery measures (hand-built truth with external callees: PyCG; test traces plus hand additions with chain counting: Jarvis; executed edges from test suites with built-in callees: DyPyBench; fixed entry points with an extended input corpus, core package only or whole graph: Total Recall). A test-suite tracer as oracle can mis-state precision and recall in either direction (Java evidence only). Options: report several (as the plan says) / add an in-repo-only variant / add a corpus-extension step. No recommendation in the master document | ADR-012, parse and graph build | engineer |
+| Q7 | Is the candidate pool intended, or is the pool built with the published scripts? Read in full: `gangiswag/train_data` python = SweLocMulti's Python part (SweRank+ Table 1: 2,448 repositories, 24,285 PRs, 49,973 instances), not the original SweLoc (3,387 repositories); SweRank+ states no benchmark-repository exclusion; 89 held-out repositories (3,431 PRs, 14.13%) occur in it (DEV-004). Loc-Bench: 560 rows (V1) vs 660 (V0.2) | ADR-001, pool filter | engineer; evidence in ADR-001 addenda |
+| Q11 | CORE-Bench evaluation is whole-snapshot retrieval: each query's candidate list is the repository snapshot at the base commit (paper Sec. 4.1; 12,153 of 12,153 list chunks located in 11 base-commit checkouts; DEV-003), and chunk ids carry no path or line span. D7 and D12 fix the mapping and the primary set; still open: the reported-metric granularity and whether chunk-level numbers are also reported (ADR-004) | ADR-004, evaluation | engineer |
+| Q12 | CORE-Bench L3 labels are LLM-judged; the paper does not say how the three votes combine into the kept score (R1); released qrels are binary; L2 positives include import blocks (3 of 53 sampled) | RQ3 interpretation | note in report |
+| Q24 | Master statement "tests and configuration are covered by nobody" no longer holds as worded (LARGER, Table 11; DEV-006); no ablation of such links exists. Keep it reworded ("no ablation shows the value of test and configuration links") or drop it | `docs/05`, report wording | engineer |
+| Q25 | Derived master copies in `docs/` still carry the superseded numbers and identifiers recorded in DEV-003 to DEV-007 (KGCompass 89.7% not 69.7%, Loc-Bench counts, CodeR identifier, edge-recovery expectation, ...). Edit the copies, or keep this file as the record? | `docs/03`, `docs/05`, `docs/06`, `docs/11` | engineer |
+| Q27 | ADR-012 inputs: four non-equivalent edge-recovery measures in the literature (PyCG, Jarvis, DyPyBench, Total Recall); a test-suite tracer as oracle can mis-state precision and recall in either direction. Report several (plan) / add an in-repo-only variant / add a corpus-extension step | ADR-012, parse and graph build | engineer |
+| Q28 | Class unit `source`: full class text or header only (the `Flask` class is 2,124 lines and its methods are units). The schema is unaffected; the parser stays behind `provisional: ADR-013` until decided | parser, index size | engineer |
+| Q29 | Confirm the readings of D6 and D8 made in code: module unit fields (`<module>` name, span = file, `source` = residual lines) and `last_modified` as `YYYY-MM-DDTHH:MM:SSZ` | parser | engineer |
 
-Resolved this block: Q10 (folder counts 632 / 97 are 605 / 92 distinct repositories, read from instance ids; L3 inside L2; Verified inside both;
-17 L2 and 2 L3 folders hold several repositories; see `data/held_out/report.md`). Earlier: Q2 (Ada reaches HF and GitHub), Q6 (24 GB free; L2+L3 originals 17.0 GB).
+Resolved this block: Q8, Q9, Q13-Q23 (decisions log above), Q26 (recorded in DEV-007). Earlier: Q10, Q2, Q6.
 
 ## Carried debt
 

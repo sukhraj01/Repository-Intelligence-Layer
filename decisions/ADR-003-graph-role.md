@@ -41,4 +41,11 @@ See `docs/11_references.md`.
 _Pending._
 
 ## Addenda
-_None._
+
+## Addendum 2026-10-17 — what the CodeUnit holds for relations (decision D4, context only)
+
+Decision D4 (`specs/code_unit.md`) does not choose the graph's role. It fixes that relations live in
+a separate typed edge store and that the CodeUnit lists `calls`, `called_by`, `tests` and `configs`
+are projections of resolved ids only, so that signal-or-tool (this ADR) and the edge taxonomy
+(ADR-011) stay open. Experiment that could flip D4: the resolution coverage measured in the first
+parse and graph build.

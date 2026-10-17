@@ -1,0 +1,113 @@
+{
+ "date": "2026-10-17",
+ "hardware_local": "Apple macOS 24.6 (Darwin), 8 GB class box, no GPU; unit tests and aggregation only",
+ "held_out_v2_config_hash": "9e6b0de60417",
+ "held_out_v2_log": "results/logs/d_held_out_v2_2026-10-17.json",
+ "runs": [
+  {
+   "config_hash": "44d8d90e727a",
+   "extra": [
+    "ril/training/rename_resolution.py"
+   ],
+   "result": {
+    "already_final": 10,
+    "authenticated": false,
+    "cache_entries": 108,
+    "date": "2026-10-17",
+    "failed": [],
+    "looked_up": 49,
+    "names_requested": 2460,
+    "not_checked": 2401,
+    "rate_limit_after": 2,
+    "rate_limit_before": 53,
+    "stopped_by_rate_limit": true
+   },
+   "run_id": "d-resolve-renames",
+   "script": "scripts/ada/resolve_renames.py",
+   "script_sha256_prefix": {
+    "ril/training/rename_resolution.py": "83338e326881",
+    "scripts/ada/resolve_renames.py": "bafbc7dc98cb"
+   },
+   "seed": null,
+   "where": "ada-gw1 login node, Xeon Gold 5215, python 3.9, unauthenticated GitHub API (GITHUB_TOKEN absent)"
+  },
+  {
+   "config_hash": "b397f12b4d6c",
+   "extra": [
+    "ril/training/content_overlap.py",
+    "ril/parsing/unit_id.py"
+   ],
+   "result": {
+    "control_positive": {
+     "covered": 245,
+     "units_scored": 245
+    },
+    "held_out_chunks": 16902,
+    "max_share_random": 0.0,
+    "max_share_targeted": 0.0896,
+    "pool_id_round_trip": {
+     "failures_by_reason": {},
+     "ids": 16141,
+     "ok": 16141
+    },
+    "random_repos": 40,
+    "targeted_repos": 30
+   },
+   "run_id": "d-content-overlap-audit",
+   "script": "scripts/ada/content_overlap_audit.py",
+   "script_sha256_prefix": {
+    "ril/parsing/unit_id.py": "3226056b6657",
+    "ril/training/content_overlap.py": "7a4362ac172c",
+    "scripts/ada/content_overlap_audit.py": "2882464e29db"
+   },
+   "seed": 0,
+   "where": "ada gnode002 (Xeon Gold 5215 family, 20 CPUs visible), u22/low, srun job 25469, 2 CPU, 156 MB max RSS, 2 min 39 s"
+  },
+  {
+   "config_hash": "d9fca16d3e18",
+   "extra": [
+    "scripts/ada/validate_is_test_rule.sbatch",
+    "ril/parsing/path_rules.py"
+   ],
+   "result": {
+    "flask": {
+     "collected_flagged_by_rule": 21,
+     "flagged_not_collected": 27,
+     "py_files": 83,
+     "pytest_files_collection_error": 3,
+     "pytest_files_with_items": 18,
+     "pytest_summary": "319 tests collected, 3 errors in 0.95s",
+     "rule_flagged": 48
+    },
+    "requests": {
+     "collected_flagged_by_rule": 9,
+     "flagged_not_collected": 6,
+     "py_files": 37,
+     "pytest_files_collection_error": 0,
+     "pytest_files_with_items": 9,
+     "pytest_summary": "635 tests collected in 0.61s",
+     "rule_flagged": 15
+    },
+    "seaborn": {
+     "collected_flagged_by_rule": 35,
+     "flagged_not_collected": 5,
+     "py_files": 152,
+     "pytest_files_collection_error": 1,
+     "pytest_files_with_items": 34,
+     "pytest_summary": "1759 tests collected, 1 error in 4.63s",
+     "rule_flagged": 40
+    }
+   },
+   "run_id": "d-is-test-rule",
+   "script": "scripts/validate_is_test_rule.py",
+   "script_sha256_prefix": {
+    "ril/parsing/path_rules.py": "ef6f911fcc2e",
+    "scripts/ada/validate_is_test_rule.sbatch": "0813cd380959",
+    "scripts/validate_is_test_rule.py": "beb503884738"
+   },
+   "seed": null,
+   "where": "ada gnode002, u22/low, sbatch job 25468, 4 CPU, 95 MB max RSS, python 3.10 venv with pytest; trees = default commits of the cached bare clones (flask d086db8, requests 611c616, seaborn 22cdfb0)"
+  }
+ ],
+ "session": "2026-10-17-09 d-decisions-freeze"
+}

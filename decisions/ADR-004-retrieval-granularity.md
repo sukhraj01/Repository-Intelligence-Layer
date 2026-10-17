@@ -42,4 +42,21 @@ See `docs/11_references.md`.
 _Pending._
 
 ## Addenda
-_None._
+
+## Addendum 2026-10-17 — decisions that bear on granularity (D6, D7, D12; this ADR stays Proposed)
+
+- **D6** adds one residual `module` unit per file, so that about 10% of sampled gold positions that
+  overlap no definition are reachable at unit level (16 of 160, three repositories). Flip: pilots M and E1.
+- **D7** keeps the chunk-to-unit link out of the CodeUnit: the evaluation loader builds a derived
+  mapping at the instance base commit. Reason: chunk definitions differ within one paper (mean length
+  1,004.9 characters at evaluation, 2,188.4 in training) and released rows carry only `_id` and `text`.
+  Flip: pilot M's match rate.
+- **D12** makes unit-level evaluation primary on the Verified instances (432 at L2, 302 at L3, also
+  the paired-RQ3 set); the other CORE-Bench sub-datasets stay chunk-level and secondary until base
+  commits are obtained from their own metadata (Wave 1 checked Verified only).
+  Evidence class: measured (counts, `results/tables/paired_n.json`) and read in full (the evaluation
+  scores a repository snapshot at the base commit, Sec. 4.1, p.5). Flip: per-repository variance in
+  pilot E (if three to twelve repositories give an interval too wide to rank anything, widen the
+  primary set to chunk-level over all sub-datasets). Conditions to revisit: base commits for other
+  sub-datasets; the pilot's variance.
+- What is still open here: which granularity the reported metrics use overall (this ADR).
