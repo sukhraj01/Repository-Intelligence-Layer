@@ -124,6 +124,26 @@ class BM25Index:
             out[self._docs[a:z]] += qtf * self._weights[a:z]
         return out
 
+    def top_k(self, query_tokens: Sequence[str], k: int) -> Int:
+        """Indices of the ``k`` best documents in the order of :func:`order_by_score`.
+
+        Partial selection instead of a full sort, which is what a query-path stage needs; ties at
+        the cut are resolved exactly as in the full order (lower index first).
+        """
+        scores = self.scores(query_tokens)
+        return top_k_of(scores, k)
+
+
+def top_k_of(scores: Float, k: int) -> Int:
+    """First ``k`` entries of :func:`order_by_score` without sorting everything."""
+    n = len(scores)
+    if k >= n:
+        return order_by_score(scores)
+    threshold = np.partition(scores, n - k)[n - k]
+    cand = np.flatnonzero(scores >= threshold)
+    head = cand[np.lexsort((cand, -scores[cand]))]
+    return head[:k]
+
 
 def order_by_score(scores: Float, subset: Int | None = None) -> Int:
     """Document indices by decreasing score, ties by increasing index.

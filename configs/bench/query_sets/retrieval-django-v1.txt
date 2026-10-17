@@ -1,0 +1,200 @@
+truncatewords tests test truncatewords 02
+staff user base user
+spatialite schema editor remove geometry metadata
+test lookup query test deep mixed forward
+rename methods tests test renamed subclass
+spatial ref sys test test
+m 2 m complex circular
+is same domain host pattern
+extra info str
+lookup tests test in bulk with
+test bad set up test data tear down
+model inheritance test test issue 11764
+test serialize mixin simple test
+non auto pk book
+test checks test invalid
+manage command tests test custom test
+updated to path tests simple test
+explicit related query name clash
+year archive view tests test year view
+request processor request
+try importing label
+live server threaded tests test check model instance
+atomic tests test decorator
+base cache get many keys version
+autocomplete fields tests check
+relative field tests test foreign object to
+test single enclosure rss feed test
+template render context
+model inheritance tests test
+related field check kwargs
+field prepare value value
+serializers test base test serialize
+serializers test base test pre 1000 ad date
+date time lookup tests
+collation operation operation
+lexer test mixin test tokenize
+multi value dict tests test appendlist
+django help formatter help formatter
+day archive view tests test day
+m 2 m tests
+http sitemap tests test callable sitemod full
+options add manager manager
+generic relation tests test ticket 20564 nullable fk
+simpler xml generator characters content
+static files storage file system storage
+decimal pk data
+test registration decorator test multiple registration
+get package libraries pkg
+url field deconstruct
+test collection custom ignore patterns
+geo model admin formfield for dbfield db field
+squash migrations tests test squashmigrations manual
+rename methods tests test
+file system finder find path
+simple tag tests test simple
+request ur lconf tests
+timesince tests test timesince
+dependency ordering tests test multiple dependencies
+promise test test positive integer field
+length is tests test length is 01
+ordered set init iterable
+shell command test case test
+misc tests simple test case
+discover runner tests test add arguments shuffle
+test static file permissions test collect static
+raster field test test lookup with
+custom query set optin private method args
+multi db operation tests test run
+search query str
+reverse query name clash
+case expression tests test order by conditional explicit
+child 1 abstract base 1
+function tests test ulitem
+test querying test index transform expression
+serializer end serialization
+apps tests test lazy model
+sub post inline
+ping google tests test
+comment syntax tests test comment
+right lookup gis lookup
+inspect db test case
+base tests get existing storage
+multiple auto fields tests test case
+base validator clean x
+manifest files mixin save manifest
+default tests test default
+oracle operations geometry columns
+user creation form clean password
+xor lookups tests test filter
+query test case test
+basic expressions tests test filtering
+test aggregate distinct set
+test encoding utils test
+generic inline formset tests test save new
+m 2 m regression
+function tests test unlocalize
+add message request level message
+bool and aggregate
+admin view permissions test test disabled staff
+field db tablespace
+fixture test case test loaddata
+spatia lite introspection get geometry type table name
+file open mode
+builtin lookup as sql compiler connection
+admin foreign key widget change list set
+function tests test carriage newline
+choices do not call in
+queries 1 tests test
+schema tests test alter fk
+function tests test upper
+admin custom save related tests set up
+extends node get parent
+locale paths resolution order i 18 n
+optimizer tests test create model
+admin selenium test case wait for css
+test querying test key regex
+test suite tests test reorder test bin no
+template reload tests test reset all loaders mock
+autodetector tests test parse number
+createsuperuser management command test case test
+field operation operation
+form field callback tests
+date function tests test
+tagged item form
+database wrapper init args kwargs
+query set set operation tests test ordering
+date hierarchy tests test case
+url response tests url test case base
+database features minimum database version
+createsuperuser management command test case test invalid
+syndication feed test test
+user settings holder delattr name
+reverse many to one descriptor set
+migration recorder migration
+null boolean field boolean field
+no backends test test case
+echo node render context
+get contenttypes and models app config using
+verbatim tag tests test verbatim tag 06
+bulk create tests test
+model check default pk
+list mixin reverse
+simple indexes tests test name
+testing http response http response
+client test test follow 307 and 308
+html equal tests test html parser
+constraints tests test check
+utf 8 class str
+file storage tests test file access
+line string y
+check field default mixin check kwargs
+many to one tests
+length tests simple test case
+change list get deterministic ordering ordering
+test related fields admin
+query build filtered relation
+migrate test case test
+test find static get file filepath
+relative field tests test
+many to many field
+char field tests test bad
+inclusion explicit no context from template
+reset format cache
+validation error repr
+basic syntax tests test basic syntax 38
+mail tests test encoding
+groups for user environ username
+template tests test get current timezone templatetag
+data create pk klass
+if tag tests test if tag
+database operations datetime cast date sql sql params
+create default site tests set up
+bad serializer init exception
+duration string duration
+as geo json as
+query set insert objs fields returning
+test first last test first
+term color tests test fg bg
+functional tests test lazy repr int
+test context decorator tests
+function tests test trailing period
+migrate tests test migrate syncdb deferred sql
+list display editable tests test list display
+conditional get middleware test simple test case
+apps tests test two configs app
+date time check mixin check
+extension user abstract user
+database operations date extract sql
+base reloader notify file changed path
+relation assignment tests test
+admin actions test test actions ordering
+my sqlgis schema editor
+url pattern resolve path
+migration autodetector generate altered managers
+auth template tests test password reset view
+index columns str
+paginator num pages
+test other types exact querying
+date format tests simple
+list filters tests test lookup

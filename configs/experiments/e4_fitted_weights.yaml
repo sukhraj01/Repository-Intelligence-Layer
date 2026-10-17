@@ -1,0 +1,98 @@
+experiment_id: E-GRAPH-WEIGHTS
+stage: dev
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+roles:
+- dev
+confirm: false
+note: One weight per edge family, multiplied along the path; the best family of a
+  fit gets the hand-set decay 0.5 (the hand-set run of E3 gives every family 0.5).
+  fit_reach and fit_excess come from pilot M's reach table (flask, requests, seaborn;
+  none is a dev repository); loro_<repo> sets are fitted on the other dev repositories
+  from E3 expansions and are evaluated only on the repository they were not fitted
+  on.
+graph:
+  variants:
+  - list
+  - rrf
+  subsets:
+  - all
+  - core
+  seeds:
+  - 5
+  gammas:
+  - 0.5
+  hops:
+  - 2
+  cap: 50
+  controls:
+  - rand_whole
+  - rand_files
+  draws: 3
+  rrf_k: 60
+weights:
+  subsets:
+  - all
+  - core
+  seeds:
+  - 5
+  hops:
+  - 2
+  sets:
+    fit_reach:
+      contain: 0.5
+      import: 0.1333
+      invoke: 0.3667
+      inherit: 0.0556
+      tests: 0.0
+      configures: 0.0
+      co_change: 0.0444
+    fit_excess:
+      contain: 0.1555
+      import: 0.0
+      invoke: 0.5
+      inherit: 0.1605
+      tests: 0.0
+      configures: 0.0
+      co_change: 0.0205
+    loro_conan-io__conan:
+      contain: 0.5
+      import: 0.1471
+      invoke: 0.3701
+      inherit: 0.0914
+      tests: 0.3478
+      configures: 0.0107
+      co_change: 0.0738
+    loro_deepset-ai__haystack:
+      contain: 0.5
+      import: 0.1931
+      invoke: 0.3858
+      inherit: 0.1061
+      tests: 0.4496
+      configures: 0.011
+      co_change: 0.0814
+    loro_internetarchive__openlibrary:
+      contain: 0.5
+      import: 0.0445
+      invoke: 0.2718
+      inherit: 0.0942
+      tests: 0.2773
+      configures: 0.0
+      co_change: 0.0458
+    loro_qutebrowser__qutebrowser:
+      contain: 0.5
+      import: 0.1822
+      invoke: 0.3469
+      inherit: 0.1093
+      tests: 0.2438
+      configures: 0.0281
+      co_change: 0.0988
+    loro_streamlink__streamlink:
+      contain: 0.5
+      import: 0.1571
+      invoke: 0.3466
+      inherit: 0.1709
+      tests: 0.3125
+      configures: 0.012
+      co_change: 0.0765

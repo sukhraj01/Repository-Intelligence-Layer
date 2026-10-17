@@ -79,3 +79,15 @@ def test_agrees_with_the_reference_library_on_ranking() -> None:
     idx = BM25Index(tokenize("\n" + t) for t in texts)
     ours = list(order_by_score(idx.scores(tokenize(q))))
     assert ours[:2] == list(res[0][:2])  # the later ranks are zero-score ties
+
+
+def test_top_k_equals_the_head_of_the_full_order_including_ties() -> None:
+    import numpy as np
+
+    from ril.retrieval.bm25_index import order_by_score, top_k_of
+
+    scores = np.array([0.0, 2.0, 2.0, 1.0, 2.0, 0.0, 3.0, 1.0])
+    for k in range(1, 12):
+        assert list(top_k_of(scores, k)) == list(order_by_score(scores))[:k]
+    zeros = np.zeros(6)
+    assert list(top_k_of(zeros, 3)) == [0, 1, 2]

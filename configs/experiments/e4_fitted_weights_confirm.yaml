@@ -1,0 +1,50 @@
+experiment_id: E-GRAPH-WEIGHTS
+stage: confirm on Verified (astropy, matplotlib, xarray are disjoint from the fitting
+  repositories)
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+roles:
+- test
+confirm: true
+note: 'Stated on 2026-10-18 before any test instance was scored. One weight set: fit_reach
+  (fitted from the pilot-M reach table on flask, requests and seaborn, best family
+  scaled to 0.5), compared with the hand-set 0.5 at C = 5, 2 hops. The table reports
+  the three Verified repositories that were not used for the fit; the other three
+  are listed separately.'
+graph:
+  variants:
+  - list
+  - rrf
+  subsets:
+  - all
+  - core
+  seeds:
+  - 5
+  gammas:
+  - 0.5
+  hops:
+  - 2
+  cap: 50
+  controls:
+  - rand_whole
+  - rand_files
+  draws: 3
+  rrf_k: 60
+weights:
+  subsets:
+  - all
+  - core
+  seeds:
+  - 5
+  hops:
+  - 2
+  sets:
+    fit_reach:
+      contain: 0.5
+      import: 0.1333
+      invoke: 0.3667
+      inherit: 0.0556
+      tests: 0.0
+      configures: 0.0
+      co_change: 0.0444

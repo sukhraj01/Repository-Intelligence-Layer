@@ -1,0 +1,16 @@
+experiment_id: E-RECENCY
+stage: confirm on Verified (six repositories with units)
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+roles:
+- test
+confirm: true
+note: 'Stated on 2026-10-18 before any test instance was scored. Setting chosen on
+  dev by the same criterion as E3 (L2 nDCG@10 gain + L3 Recall@100 gain) / 2: lam
+  = 0.2, tau = 30 days (results/tables/e5_dev_compare.csv).'
+recency:
+  lam:
+  - 0.2
+  tau_days:
+  - 30

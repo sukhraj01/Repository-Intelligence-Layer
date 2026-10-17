@@ -1,0 +1,50 @@
+experiment_id: E-GRAPH-SIGNAL
+stage: confirm on Verified (six repositories with units)
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+roles:
+- test
+confirm: true
+note: 'Stated on 2026-10-18 before any test instance was prepared or scored. Setting
+  chosen on the dev repositories by the criterion (L2 nDCG@10 gain + L3 Recall@100
+  gain) / 2 against BM25 for the subset core, gold reading units, micro average: C
+  = 5, gamma = 0.5, 2 hops, for both ways of forming the list (results/tables/e3_dev_grid_compare.csv).
+  The cell lies at the edge of the grid (largest C and hops). One setting is run for
+  all 19 edge subsets, both variants, and the two chance controls.'
+graph:
+  variants:
+  - list
+  - rrf
+  subsets:
+  - contain
+  - import
+  - invoke
+  - inherit
+  - tests
+  - configures
+  - co_change
+  - import+contain
+  - invoke+contain
+  - co_change+contain
+  - all-minus-contain
+  - all-minus-import
+  - all-minus-invoke
+  - all-minus-inherit
+  - all-minus-tests
+  - all-minus-configures
+  - all-minus-co_change
+  - core
+  - all
+  seeds:
+  - 5
+  gammas:
+  - 0.5
+  hops:
+  - 2
+  cap: 50
+  controls:
+  - rand_whole
+  - rand_files
+  draws: 3
+  rrf_k: 60

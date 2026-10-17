@@ -1,0 +1,59 @@
+experiment_id: E-GRAPH-SIGNAL
+stage: dev sweep
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+roles:
+- dev
+confirm: false
+note: >-
+  Graph expansion from the top-C BM25 units over the unit index of the snapshot at the base commit.
+  Sweeps run on role dev only (Pro openlibrary and qutebrowser; Live conan, haystack, streamlink; the
+  split is fixed in e1_bm25_reproduction.yaml). BM25 is the reference form (k1 1.5, b 0.75, module unit
+  in the index), seeds are retrieved units, never gold. Two ways to form the scored list are reported
+  side by side and neither is chosen (open question Q30): 'list' (seeds, expansion in score order,
+  then the rest of the BM25 list) and 'rrf' (the expansion as a second ranked list, fused with the BM25
+  list by reciprocal rank fusion, k = 60). The expansion keeps at most 50 units (an implementation
+  limit so that a hub does not flood the list; not tuned). inherit includes override; co_change has
+  support 3; tests, configures and co_change are exploratory families.
+graph:
+  variants:
+  - list
+  - rrf
+  subsets:
+  - contain
+  - import
+  - invoke
+  - inherit
+  - tests
+  - configures
+  - co_change
+  - import+contain
+  - invoke+contain
+  - co_change+contain
+  - all-minus-contain
+  - all-minus-import
+  - all-minus-invoke
+  - all-minus-inherit
+  - all-minus-tests
+  - all-minus-configures
+  - all-minus-co_change
+  - core
+  - all
+  seeds:
+  - 1
+  - 3
+  - 5
+  gammas:
+  - 0.3
+  - 0.5
+  - 0.7
+  hops:
+  - 1
+  - 2
+  cap: 50
+  controls:
+  - rand_whole
+  - rand_files
+  draws: 3
+  rrf_k: 60

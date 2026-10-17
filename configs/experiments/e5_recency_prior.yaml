@@ -1,0 +1,24 @@
+experiment_id: E-RECENCY
+stage: dev sweep
+status: exploratory pilot
+date: '2026-10-18'
+seed: 0
+roles:
+- dev
+confirm: false
+note: >-
+  BM25 score divided by the best score of the query, plus lam times exp(-age / tau), where age is the
+  snapshot commit's time minus the last_modified of the unit's file (decision D8: last commit that
+  touched the file, restricted to commits at or before the snapshot; a unit without history gets prior 0;
+  a last_modified after the snapshot raises). Sweep on role dev only. Ties keep BM25 order.
+recency:
+  lam:
+  - 0.02
+  - 0.05
+  - 0.1
+  - 0.2
+  - 0.5
+  tau_days:
+  - 30
+  - 90
+  - 365
