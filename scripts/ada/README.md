@@ -52,6 +52,7 @@ Held-out list and audit jobs (all CPU, streamed, numbers and ids only; each skip
 | `pool_repo_counts.py` / `.sbatch` | per-repository counts: CodeSearchNet python (580 MB parquet, deleted afterwards) and the `gangiswag/train_data` candidate (from the zip listing) | `sbatch ril_s2/scripts/pool_repo_counts.sbatch` |
 | `export_meta_ids.py` | (repo, instance_id) pairs of Verified and Loc-Bench | `venv_pa/bin/python -I ril_s2/scripts/export_meta_ids.py out.json <parquet>...` |
 | `label_quality_sample.py` | seeded sample of L2 instances, positive chunks classified, counts only | `python3 -I label_quality_sample.py <root> out.json 0 30 <repo>...` |
+| `core_bench_snapshot_check.py` / `.sbatch` | tests that each Verified query's candidate list is the checkout at the instance base commit (flask, requests, seaborn samples; clones cached in `raw/repo_cache`, counts only) | `cd ~ && sbatch ril_s2/core_bench_snapshot_check.sbatch` (needs `raw/core_bench_samples`, the Verified parquet, git, pyarrow; the clones take minutes, the check 20 s) |
 | `github_repo_check.py` | current name, fork status and fork-network root of a short repository list (unauthenticated, 60 per hour) | `python3 -I github_repo_check.py repos.txt out.json` |
 | `merge_json_dir.py` | merges per-folder JSON into one file keyed by path (case-variant folder names collide on macOS) | `python3 -I merge_json_dir.py <dir> <out.json>` |
 

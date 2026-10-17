@@ -18,6 +18,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Filter any candidate training pool against it; record how many instances survive (`specs/held_out_repos.md`) (CodeSearchNet python and the unconfirmed `gangiswag/train_data` candidate; CoRNStack cannot be filtered)
 - [ ] Stand up the per-commit latency harness (`specs/latency_harness.md`)
 - [ ] Parse one real repository end to end; print ten CodeUnits and the edge-recovery % (`specs/parse_one_repo.md`)
+- [x] Read the data and training papers in full and record notes with a checked quote table (`knowledge/papers/`: CORE-Bench, SweRank, SweRank+, CoRNStack, SWE-bench; `scripts/check_paper_note.py`)
 - [ ] Gather evidence for decisions 1–10 (`decisions/`)
 - [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
 

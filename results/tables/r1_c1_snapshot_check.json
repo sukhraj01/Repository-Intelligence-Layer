@@ -1,0 +1,375 @@
+{
+ "git": "git version 2.34.1",
+ "host": "gnode002",
+ "max_recall_sample": 1500,
+ "python": "3.10.12",
+ "repos": {
+  "mwaskom__seaborn": {
+   "corpus_rows": 2515,
+   "instances": [
+    {
+     "base_commit": "54cab15bdacfaa05a88fbc5502a5b322d99f148e",
+     "char_coverage_of_those_files": 0.7648,
+     "ext_in_list": {
+      ".html": 2,
+      ".ipynb": 2,
+      ".md": 3,
+      ".py": 2356,
+      ".rst": 57,
+      ".toml": 1,
+      ".txt": 1,
+      ".yaml": 1
+     },
+     "files_of_those_exts_in_snapshot": 275,
+     "files_of_those_exts_with_a_chunk": 185,
+     "instance": "mwaskom__seaborn-3069",
+     "list_in_snapshot_exact": 2425,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 2425,
+     "non_list_chunks_sampled": 90,
+     "non_list_chunks_total": 90,
+     "non_list_sampled_found_in_snapshot": 4,
+     "of_those_in_uncovered_files_or_regions": 0,
+     "of_those_inside_a_region_covered_by_list_chunks": 4,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 310,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "22cdfb0c93f8ec78492d87edb810f10cb7f57a31",
+     "char_coverage_of_those_files": 0.7584,
+     "ext_in_list": {
+      ".html": 2,
+      ".ipynb": 2,
+      ".md": 3,
+      ".py": 2389,
+      ".rst": 58,
+      ".toml": 1,
+      ".txt": 1,
+      ".yaml": 1
+     },
+     "files_of_those_exts_in_snapshot": 287,
+     "files_of_those_exts_with_a_chunk": 188,
+     "instance": "mwaskom__seaborn-3187",
+     "list_in_snapshot_exact": 2459,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 2459,
+     "non_list_chunks_sampled": 56,
+     "non_list_chunks_total": 56,
+     "non_list_sampled_found_in_snapshot": 4,
+     "of_those_in_uncovered_files_or_regions": 0,
+     "of_those_inside_a_region_covered_by_list_chunks": 4,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 323,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    }
+   ]
+  },
+  "pallets__flask": {
+   "corpus_rows": 1000,
+   "instances": [
+    {
+     "base_commit": "7ee9ceb71e868944a46e1ff00b506772a53a4f1d",
+     "char_coverage_of_those_files": 0.9919,
+     "ext_in_list": {
+      ".css": 2,
+      ".html": 19,
+      ".ini": 1,
+      ".md": 2,
+      ".py": 778,
+      ".rst": 180,
+      ".toml": 5,
+      ".txt": 13
+     },
+     "files_of_those_exts_in_snapshot": 211,
+     "files_of_those_exts_with_a_chunk": 199,
+     "instance": "pallets__flask-5014",
+     "list_in_snapshot_exact": 1000,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 1000,
+     "non_list_chunks_sampled": 0,
+     "non_list_chunks_total": 0,
+     "non_list_sampled_found_in_snapshot": 0,
+     "of_those_in_uncovered_files_or_regions": 0,
+     "of_those_inside_a_region_covered_by_list_chunks": 0,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 251,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    }
+   ]
+  },
+  "psf__requests": {
+   "corpus_rows": 2356,
+   "instances": [
+    {
+     "base_commit": "22623bd8c265b78b161542663ee980738441c307",
+     "char_coverage_of_those_files": 0.9599,
+     "ext_in_list": {
+      ".html": 5,
+      ".py": 604,
+      ".rst": 28,
+      ".txt": 1
+     },
+     "files_of_those_exts_in_snapshot": 95,
+     "files_of_those_exts_with_a_chunk": 93,
+     "instance": "psf__requests-1142",
+     "list_in_snapshot_exact": 522,
+     "list_in_snapshot_line_endings_normalised": 114,
+     "list_in_snapshot_stripped": 2,
+     "list_not_in_snapshot": 0,
+     "list_size": 638,
+     "non_list_chunks_sampled": 1500,
+     "non_list_chunks_total": 1718,
+     "non_list_sampled_found_in_snapshot": 35,
+     "of_those_in_uncovered_files_or_regions": 5,
+     "of_those_inside_a_region_covered_by_list_chunks": 30,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 113,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "1ba83c47ce7b177efe90d5f51f7760680f72eda0",
+     "char_coverage_of_those_files": 0.967,
+     "ext_in_list": {
+      ".html": 5,
+      ".py": 747,
+      ".rst": 34,
+      ".txt": 1
+     },
+     "files_of_those_exts_in_snapshot": 100,
+     "files_of_those_exts_with_a_chunk": 98,
+     "instance": "psf__requests-1724",
+     "list_in_snapshot_exact": 665,
+     "list_in_snapshot_line_endings_normalised": 120,
+     "list_in_snapshot_stripped": 2,
+     "list_not_in_snapshot": 0,
+     "list_size": 787,
+     "non_list_chunks_sampled": 1500,
+     "non_list_chunks_total": 1569,
+     "non_list_sampled_found_in_snapshot": 61,
+     "of_those_in_uncovered_files_or_regions": 6,
+     "of_those_inside_a_region_covered_by_list_chunks": 55,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 117,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "847735553aeda6e6633f2b32e14ba14ba86887a4",
+     "char_coverage_of_those_files": 0.9672,
+     "ext_in_list": {
+      ".html": 5,
+      ".py": 754,
+      ".rst": 34,
+      ".txt": 2
+     },
+     "files_of_those_exts_in_snapshot": 102,
+     "files_of_those_exts_with_a_chunk": 100,
+     "instance": "psf__requests-1766",
+     "list_in_snapshot_exact": 673,
+     "list_in_snapshot_line_endings_normalised": 120,
+     "list_in_snapshot_stripped": 2,
+     "list_not_in_snapshot": 0,
+     "list_size": 795,
+     "non_list_chunks_sampled": 1500,
+     "non_list_chunks_total": 1561,
+     "non_list_sampled_found_in_snapshot": 63,
+     "of_those_in_uncovered_files_or_regions": 6,
+     "of_those_inside_a_region_covered_by_list_chunks": 57,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 120,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "3c88e520da24ae6f736929a750876e7654accc3d",
+     "char_coverage_of_those_files": 0.9732,
+     "ext_in_list": {
+      ".html": 5,
+      ".py": 787,
+      ".rst": 37,
+      ".txt": 2
+     },
+     "files_of_those_exts_in_snapshot": 103,
+     "files_of_those_exts_with_a_chunk": 101,
+     "instance": "psf__requests-1921",
+     "list_in_snapshot_exact": 831,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 831,
+     "non_list_chunks_sampled": 1500,
+     "non_list_chunks_total": 1525,
+     "non_list_sampled_found_in_snapshot": 74,
+     "of_those_in_uncovered_files_or_regions": 6,
+     "of_those_inside_a_region_covered_by_list_chunks": 68,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 121,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "091991be0da19de9108dbe5e3752917fea3d7fdc",
+     "char_coverage_of_those_files": 0.9743,
+     "ext_in_list": {
+      ".html": 5,
+      ".py": 857,
+      ".rst": 38,
+      ".txt": 2
+     },
+     "files_of_those_exts_in_snapshot": 109,
+     "files_of_those_exts_with_a_chunk": 108,
+     "instance": "psf__requests-2317",
+     "list_in_snapshot_exact": 902,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 902,
+     "non_list_chunks_sampled": 1454,
+     "non_list_chunks_total": 1454,
+     "non_list_sampled_found_in_snapshot": 66,
+     "of_those_in_uncovered_files_or_regions": 6,
+     "of_those_inside_a_region_covered_by_list_chunks": 60,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 128,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "5f7a3a74aab1625c2bb65f643197ee885e3da576",
+     "char_coverage_of_those_files": 0.9756,
+     "ext_in_list": {
+      ".html": 5,
+      ".md": 1,
+      ".py": 970,
+      ".rst": 47,
+      ".txt": 2
+     },
+     "files_of_those_exts_in_snapshot": 115,
+     "files_of_those_exts_with_a_chunk": 114,
+     "instance": "psf__requests-2931",
+     "list_in_snapshot_exact": 1025,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 1025,
+     "non_list_chunks_sampled": 1331,
+     "non_list_chunks_total": 1331,
+     "non_list_sampled_found_in_snapshot": 49,
+     "of_those_in_uncovered_files_or_regions": 4,
+     "of_those_inside_a_region_covered_by_list_chunks": 45,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 135,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "39d0fdd9096f7dceccbc8f82e1eda7dd64717a8e",
+     "char_coverage_of_those_files": 0.9783,
+     "ext_in_list": {
+      ".css": 1,
+      ".html": 3,
+      ".ini": 2,
+      ".md": 15,
+      ".py": 588,
+      ".rst": 34,
+      ".txt": 2
+     },
+     "files_of_those_exts_in_snapshot": 68,
+     "files_of_those_exts_with_a_chunk": 61,
+     "instance": "psf__requests-5414",
+     "list_in_snapshot_exact": 645,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 645,
+     "non_list_chunks_sampled": 1500,
+     "non_list_chunks_total": 1711,
+     "non_list_sampled_found_in_snapshot": 34,
+     "of_those_in_uncovered_files_or_regions": 0,
+     "of_those_inside_a_region_covered_by_list_chunks": 34,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 97,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    },
+    {
+     "base_commit": "0192aac24123735b3eaf9b08df46429bb770c283",
+     "char_coverage_of_those_files": 0.9783,
+     "ext_in_list": {
+      ".css": 1,
+      ".html": 3,
+      ".ini": 2,
+      ".md": 16,
+      ".py": 588,
+      ".rst": 34,
+      ".txt": 2
+     },
+     "files_of_those_exts_in_snapshot": 68,
+     "files_of_those_exts_with_a_chunk": 61,
+     "instance": "psf__requests-6028",
+     "list_in_snapshot_exact": 646,
+     "list_in_snapshot_line_endings_normalised": 0,
+     "list_in_snapshot_stripped": 0,
+     "list_not_in_snapshot": 0,
+     "list_size": 646,
+     "non_list_chunks_sampled": 1500,
+     "non_list_chunks_total": 1710,
+     "non_list_sampled_found_in_snapshot": 33,
+     "of_those_in_uncovered_files_or_regions": 0,
+     "of_those_inside_a_region_covered_by_list_chunks": 33,
+     "of_those_with_text_identical_to_a_list_chunk": 0,
+     "snapshot_files_text": 97,
+     "unlocated_list_chunk_diagnostics": {
+      "mean_chars": null,
+      "with_carriage_return": 0,
+      "with_non_ascii": 0
+     }
+    }
+   ]
+  }
+ },
+ "run_utc": "2026-10-17T08:41:12+00:00",
+ "script": "scripts/ada/core_bench_snapshot_check.py",
+ "seed": 17
+}

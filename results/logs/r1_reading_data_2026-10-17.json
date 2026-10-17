@@ -1,0 +1,85 @@
+{
+ "args": "raw/core_bench_samples <Verified parquet> raw/repo_cache raw/snapshot_check.json 17 1500 pallets__flask psf__requests mwaskom__seaborn",
+ "checker_runs": {
+  "core-bench-2606.11864.md": "PASS 27 pp, 97 numbers",
+  "cornstack-2412.01007.md": "PASS 18 pp, 40 numbers",
+  "swe-bench-2310.06770.md": "PASS 52 pp, 32 numbers",
+  "swerank-2505.07849.md": "PASS 20 pp, 56 numbers",
+  "swerank-plus-2512.20482.md": "PASS 11 pp, 31 numbers"
+ },
+ "config_hash": "2cb5ca41249a",
+ "date": "2026-10-17",
+ "dead_ends": [
+  "first runs (jobs 25054, 25063, 25064) lacked a UTF-8 fallback, a line-ending normalisation tier and the covered-region diagnostic; a first run crashed on one seaborn base commit not reachable in the bare clone before fetch-by-sha was added; the 114-120 list chunks unlocated in three old requests instances were line-ending differences"
+ ],
+ "hardware": "Ada gnode002 (Intel Xeon Gold 5215, 4 CPU allocated), Slurm job 25084, 19 s elapsed, max RSS 74.5 MB, python 3.10.12, git 2.52.0; repository clones (cached) fetched earlier in jobs 25054-25064 on gnode004",
+ "inputs": "CORE-Bench L2 SWE-bench_Verified folders pallets__flask, psf__requests, mwaskom__seaborn (corpus.jsonl, queries.jsonl; Wave 1 samples fetched 2026-10-17); SWE-bench Verified parquet (base_commit); GitHub clones of pallets/flask, psf/requests, mwaskom/seaborn",
+ "licence_note": "CORE-Bench is non-commercial share-alike; only counts and derived tables are kept",
+ "output": "results/tables/r1_c1_snapshot_check.json",
+ "output_sha256": "cc66117c9831ea09cd01fdd16ef94a47b768503fdcc8aaaaa5f48dcf57b64a19",
+ "pdf_sha256": {
+  "2310.06770v3": "f7e8e1df64129742b8199a21a042734519a823a1dafd6f48f8f3ddcfb48ee296",
+  "2412.01007v3": "d45e1737c9f4d30f3f07f028bd1f489b42eba69d7b3a6976c8510326f94d29c8",
+  "2505.07849v2": "766adad6a0f125c3fc8ed6c9e7eb58ed5ba8bcad7696c740014d0562d880b1f7",
+  "2512.20482v1": "4f8c2f50940b84d93636c3c55523628c6bda0c041382a4fb19c7d8a65d067a8c",
+  "2606.11864v3": "8e3414d68916d88d9e5c05eea05a42e542aa9596a485155f8285b8c6a6cd8551"
+ },
+ "pdf_source": "https://arxiv.org/pdf/<id>v<k> fetched from the local machine 2026-10-17; extracted with pdftotext -layout (poppler), page counts equal pdfinfo; stored untracked under data/raw/papers/",
+ "per_repo": {
+  "mwaskom__seaborn": {
+   "char_coverage": [
+    0.7648,
+    0.7584
+   ],
+   "corpus": 2515,
+   "instances": 2,
+   "list_sizes": [
+    2425,
+    2459
+   ]
+  },
+  "pallets__flask": {
+   "char_coverage": 0.9919,
+   "corpus": 1000,
+   "instances": 1,
+   "list": 1000
+  },
+  "psf__requests": {
+   "char_coverage_range": [
+    0.9599,
+    0.9783
+   ],
+   "corpus": 2356,
+   "instances": 8,
+   "list_sizes": [
+    638,
+    787,
+    795,
+    831,
+    902,
+    1025,
+    645,
+    646
+   ]
+  }
+ },
+ "run_id": "r1-c1-snapshot-check",
+ "sbatch": "scripts/ada/core_bench_snapshot_check.sbatch",
+ "script": "scripts/ada/core_bench_snapshot_check.py",
+ "script_sha256": "2cb5ca41249a30e283f22dd5128bd04cc1683fa98cbf49aedd40e64f6beb7a56",
+ "seed": 17,
+ "seed_use": "sampling of at most 1500 non-list chunks per instance for the recall side",
+ "totals": {
+  "instances": 11,
+  "list_chunks": 12153,
+  "located_after_line_ending_normalisation": 354,
+  "located_exact": 11793,
+  "located_stripped": 6,
+  "non_list_chunks_sampled": 11931,
+  "non_list_found_in_snapshot_text": 423,
+  "not_located": 0,
+  "of_which_in_uncovered_regions": 33,
+  "of_which_inside_regions_covered_by_list_chunks": 390
+ },
+ "what": "Does a CORE-Bench Verified per-query candidate list equal the snapshot at the instance base commit (flask, requests, seaborn)?"
+}
