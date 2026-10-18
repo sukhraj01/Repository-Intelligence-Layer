@@ -1,0 +1,27 @@
+quantity,value
+any_hits,14614
+ast_hits,14614
+documents,2400000
+documents_with_ast_hash,2327498
+negative_ast_hits,0
+negative_text_hits,0
+negatives,0
+rows,2400000
+rows_bad_json,0
+text_hits,170
+hits_under 20 nodes,10680
+hits_20 to 49,1575
+hits_50 to 99,1127
+hits_100 or more,1232
+hits_repo_astropy/astropy,5228
+hits_repo_django/django,5016
+hits_repo_matplotlib/matplotlib,1794
+hits_repo_mwaskom/seaborn,54
+hits_repo_pallets/flask,133
+hits_repo_psf/requests,2782
+hits_repo_pydata/xarray,2109
+hits_repo_pylint-dev/pylint,3022
+hits_repo_pytest-dev/pytest,2082
+hits_repo_scikit-learn/scikit-learn,4377
+hits_repo_sphinx-doc/sphinx,382
+hits_repo_sympy/sympy,6488

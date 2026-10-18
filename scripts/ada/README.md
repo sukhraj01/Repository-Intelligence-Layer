@@ -133,3 +133,17 @@ Work directory `~/ril_e/` as above (needs `out/units` from the E1 unit stage, `r
 | `e6_count.py` | distinct unit texts and characters over a spread of snapshots per dev repository (no model) | `srun -p u22 -A research -q low -c 2 --mem=4G env PYTHONPATH=. venv_ril310/bin/python scripts/ada/e6_count.py e3_cache meta.json repo_cache e3_work 6` from `~/ril_e` |
 
 Copy the caches with `rsync -a ada:ril_e/e3_cache/ data/processed/e3/e3_cache/`; `scripts/e3_add_readings.py` adds gold readings that older cache files lack. Dense scores (`scripts/e6_dense.py`) were not produced.
+
+## Pool check and contamination probe (session X, 2026-10-18)
+
+Work directories on Ada: `~/ril_pc/` (pool check; `ril/`, `scripts/` by `rsync -a --exclude __pycache__ ril scripts ada:ril_pc/`; `work/` caches, `out/`) and `~/ril_c/` (probe; same layout plus `repo_cache/`). Both read `~/ril_s2/raw` (zip listing, CORE-Bench ids, Verified parquet).
+Output holds ids, counts and hashes only, never query, function or code text.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `pool_check.sbatch` + `pool_check.py`, `pool_check_ref.py` | queries and qrels of all 24,285 python instance directories of `gangiswag/train_data` by one range request each (about 33 min at 12 threads), corpus of a seeded sample; overlap with CORE-Bench ids and Verified; resumable (`work/pool_meta.jsonl`) | `sbatch --export=ALL,SEED=0,SAMPLE=300,THREADS=12 ril_pc/scripts/ada/pool_check.sbatch`, then `scp ada:ril_pc/out/pool_check.json data/processed/x/` and `python scripts/pool_check_tables.py data/processed/x/pool_check.json results/tables` |
+| `contam_build.sbatch` | bare clones of the six Verified repositories not yet on the cluster, then the probe set (hashes of every function and method at all 499 distinct Verified base commits; 29 min) | `sbatch ril_c/scripts/ada/contam_build.sbatch` |
+| `contam_measure.sbatch` | throughput of streaming the CoRNStack python shards (first 200 MB of shards 0, 120, 239; 50 MB with negatives scanned) | `sbatch --export=ALL,MB=200,MB_NEG=50 ril_c/scripts/ada/contam_measure.sbatch` |
+| `contam_scan.sbatch` + `contam_probe.py scan` | scan of the `document` field of whole shards against the probe set, 4 workers, one output file per shard, finished shards skipped | slice: `sbatch --export=ALL,FIRST=0,LAST=239,STRIDE=10 ril_c/scripts/ada/contam_scan.sbatch`; full scan (about 10 CPU-hours, about 2.6 h on 4 CPUs, 307.6 GB streamed): `--export=ALL,FIRST=0,LAST=239,STRIDE=1` |
+
+Scanning the 100 negatives of every row as well costs about 3.5 s per compressed MB (29 times the documents-only scan), about 300 CPU-hours for the corpus: not run.

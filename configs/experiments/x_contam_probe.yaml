@@ -1,0 +1,9 @@
+# E-CONTAM-PROBE: normalised function-hash probe of CoRNStack python shards against Verified functions. Exploratory.
+experiment_id: E-CONTAM-PROBE
+date: '2026-10-18'
+probe_version: contam-probe/v1
+code: ril/training/contamination.py, ril/training/contamination_index.py, scripts/ada/contam_probe.py
+benchmark_side: function and method units (parse_file) of the 12 Verified repositories at all Verified base commits
+corpus_side: field "document" of each row; field "negatives" only where stated
+hash_levels: [text, ast]
+seed: n/a (no randomness)

@@ -1,0 +1,216 @@
+{
+ "ada_job_id": "25861/25985 (probe set, 499 snapshots), 25862 (throughput), 25980/25992 (scan; shard 230 failed on a recursion error in the first job, fixed and rerun)",
+ "config_file": "configs/experiments/x_contam_probe.yaml",
+ "config_hash": "3d5d58f880b7d21150a42f66d65369e516d77265f843f6955bc5499c9b49c682",
+ "hardware": {
+  "cluster": "Ada u22, qos low",
+  "cpus_requested": "2 (pool check, build), 4 (scan), 2 (measure)",
+  "git": "2.34.1",
+  "host": "gnode002 (pool check, probe build, scan); gnode004 (throughput measurement)",
+  "mem_total_kb": 131868124,
+  "python": "3.10.12"
+ },
+ "hits_by_repo": {
+  "astropy/astropy": 5228,
+  "django/django": 5016,
+  "matplotlib/matplotlib": 1794,
+  "mwaskom/seaborn": 54,
+  "pallets/flask": 133,
+  "psf/requests": 2782,
+  "pydata/xarray": 2109,
+  "pylint-dev/pylint": 3022,
+  "pytest-dev/pytest": 2082,
+  "scikit-learn/scikit-learn": 4377,
+  "sphinx-doc/sphinx": 382,
+  "sympy/sympy": 6488
+ },
+ "label": "exploratory; slice of 24 of 240 shards (every 10th), field document only",
+ "probe_stats": {
+  "blobs_parsed": 57705,
+  "blobs_seen": 834651,
+  "blobs_skipped_by_rule": 81,
+  "blobs_unparseable": 29,
+  "distinct_ast_hashes": 222020,
+  "distinct_text_hashes": 277268,
+  "functions": 1688434,
+  "per_repo": {
+   "astropy/astropy": {
+    "blobs_parsed": 5069,
+    "functions": 117276,
+    "snapshots": 22
+   },
+   "django/django": {
+    "blobs_parsed": 15333,
+    "functions": 447170,
+    "snapshots": 230
+   },
+   "matplotlib/matplotlib": {
+    "blobs_parsed": 5566,
+    "functions": 144476,
+    "snapshots": 34
+   },
+   "mwaskom/seaborn": {
+    "blobs_parsed": 175,
+    "functions": 3347,
+    "snapshots": 2
+   },
+   "pallets/flask": {
+    "blobs_parsed": 80,
+    "functions": 828,
+    "snapshots": 1
+   },
+   "psf/requests": {
+    "blobs_parsed": 299,
+    "functions": 3665,
+    "snapshots": 8
+   },
+   "pydata/xarray": {
+    "blobs_parsed": 1621,
+    "functions": 72075,
+    "snapshots": 22
+   },
+   "pylint-dev/pylint": {
+    "blobs_parsed": 4314,
+    "functions": 28057,
+    "snapshots": 10
+   },
+   "pytest-dev/pytest": {
+    "blobs_parsed": 1514,
+    "functions": 45210,
+    "snapshots": 19
+   },
+   "scikit-learn/scikit-learn": {
+    "blobs_parsed": 5613,
+    "functions": 93560,
+    "snapshots": 32
+   },
+   "sphinx-doc/sphinx": {
+    "blobs_parsed": 3362,
+    "functions": 87576,
+    "snapshots": 44
+   },
+   "sympy/sympy": {
+    "blobs_parsed": 14759,
+    "functions": 645194,
+    "snapshots": 75
+   }
+  },
+  "repos": {
+   "astropy/astropy": 22,
+   "django/django": 230,
+   "matplotlib/matplotlib": 34,
+   "mwaskom/seaborn": 2,
+   "pallets/flask": 1,
+   "psf/requests": 8,
+   "pydata/xarray": 22,
+   "pylint-dev/pylint": 10,
+   "pytest-dev/pytest": 19,
+   "scikit-learn/scikit-learn": 32,
+   "sphinx-doc/sphinx": 44,
+   "sympy/sympy": 75
+  },
+  "seconds": 1890.6,
+  "snapshots": 499,
+  "version": "contam-probe/v1"
+ },
+ "probe_version": "contam-probe/v1",
+ "run": "x-contam-probe",
+ "scan_summary": {
+  "distinct_hit_ast_hashes": 4968,
+  "hit_records": 14614,
+  "hit_records_with_several_repos": 4158,
+  "hits_by_node_bucket": {
+   "100 or more": 1232,
+   "20 to 49": 1575,
+   "50 to 99": 1127,
+   "under 20 nodes": 10680
+  },
+  "shard_ids": [
+   0,
+   10,
+   20,
+   30,
+   40,
+   50,
+   60,
+   70,
+   80,
+   90,
+   100,
+   110,
+   120,
+   130,
+   140,
+   150,
+   160,
+   170,
+   180,
+   190,
+   200,
+   210,
+   220,
+   230
+  ],
+  "shards": 24,
+  "totals": {
+   "any_hits": 14614,
+   "ast_hits": 14614,
+   "documents": 2400000,
+   "documents_with_ast_hash": 2327498,
+   "negative_ast_hits": 0,
+   "negative_text_hits": 0,
+   "negatives": 0,
+   "rows": 2400000,
+   "rows_bad_json": 0,
+   "text_hits": 170
+  }
+ },
+ "seed": "n/a",
+ "slice_summary_sha256": "2cecbbfaacab8b61aeb62d6ae533be1f36e330bba8defcff651396f04ddd6390",
+ "table_sha256": {
+  "x_contam_probe_slice.csv": "d9674c63cd61ff043caab35f9fd213bf41c5ec3d875881c4839258ba157d2fc3"
+ },
+ "throughput_measurements": {
+  "00000": {
+   "compressed_bytes": 200000000,
+   "rows": 15289,
+   "seconds": {
+    "inflate_and_rest": 6.5,
+    "network_read": 4.26,
+    "scan_hash_json": 12.85,
+    "total": 23.61
+   }
+  },
+  "00000_negatives": {
+   "compressed_bytes": 50000000,
+   "negatives": 388413,
+   "rows": 3882,
+   "seconds": {
+    "inflate_and_rest": 2.66,
+    "network_read": 3.01,
+    "scan_hash_json": 168.77,
+    "total": 174.45
+   }
+  },
+  "00120": {
+   "compressed_bytes": 200000000,
+   "rows": 15031,
+   "seconds": {
+    "inflate_and_rest": 6.21,
+    "network_read": 7.34,
+    "scan_hash_json": 11.23,
+    "total": 24.78
+   }
+  },
+  "00239": {
+   "compressed_bytes": 200000000,
+   "rows": 15949,
+   "seconds": {
+    "inflate_and_rest": 6.15,
+    "network_read": 4.47,
+    "scan_hash_json": 12.69,
+    "total": 23.31
+   }
+  }
+ }
+}

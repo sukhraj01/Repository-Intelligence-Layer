@@ -37,6 +37,9 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-GRAPH-SIGNAL | RQ1 ext. (apparatus) | edge-family subset (19), seeds C (1, 3, 5), decay gamma (0.3, 0.5, 0.7), hops (1, 2), way of forming the scored list (edited list, ranked list fused by RRF) | reference BM25 over the units of the snapshot (module unit in), seeds are retrieved units, expansion limited to 50 units, seed 0, dev repositories for every sweep | n/a | change in nDCG@10 (L2) and Recall@100 (L3) against BM25 alone and against size-matched random expansions, paired 95% intervals | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e3-*`; ADR-003 addendum) |
 | E-GRAPH-WEIGHTS | RQ1 ext. (apparatus) | one weight per edge family fitted from data (pilot M reach table; leave-one-repository-out from E3 expansions) against the hand-set decay | as E-GRAPH-SIGNAL at C 5, 2 hops | n/a | paired difference against the hand-set decay, dev and three disjoint Verified repositories | done (exploratory pilot, 2026-10-18; rows `e4-*`) |
 | E-RECENCY | RQ1 ext. (apparatus) | weight and time constant of a recency prior from `last_modified` (D8) added to BM25 | as E-GRAPH-SIGNAL | n/a | paired change against BM25 | done (exploratory pilot, 2026-10-18; rows `e5-*`) |
+| E-POOL-CHECK | RQ2 (apparatus, pool) | none (measurement of the candidate pool `gangiswag/train_data` python) | the pool as published | n/a (sample seed 0) | directory structure, positives and functions per instance, (repository, PR) overlap with CORE-Bench and Verified | done (exploratory, 2026-10-18; `RESULTS.md` row `x-pool-check`) |
+| E-POWER | RQ2, RQ3 (apparatus) | n, discordance, effect, run-to-run SD, per-query SD, correlation, seeds | alpha 0.05, power 0.8 | n/a (simulation seed 0) | power and minimum detectable effects (calculation, no data) | done (2026-10-18; row `x-power`) |
+| E-CONTAM-PROBE | RQ2/RQ3 (apparatus, contamination) | shard slice (every 10th of 240), hash level (text, syntax tree) | probe set = functions of the 12 Verified repositories at 499 base commits | n/a | function-hash matches against CoRNStack `document`, by size of function; feasibility and cost of the full scan | done as a slice (exploratory, 2026-10-18; rows `x-contam-probe-slice`, `x-contam-throughput`) |
 | E-GRAPH-FUSION | RQ1 ext. (apparatus) | dense encoder (CodeRankEmbed) and rank fusion BM25 + dense + graph | as above | n/a | as above | not run (CPU cost, open question Q42); code and tests exist (`ril/evaluation/e6_dense.py`, fusion arms of `e3_eval.py`) |
 | E-GRAPH-L3 | RQ1 ext. | + test/config node and edge types | L3 eval set | n/a | L3 metrics; edge-recovery coverage | planned |
 | E-RQ2-RAW | RQ2 | arm = RAW | everything in the held-identical block | 3 | retrieval metrics + budget table | planned |
@@ -343,6 +346,122 @@ the `fusion` arms of `e3_eval.py` (dense alone, BM25 + dense by RRF, the graph o
 0.040 ms on 974 units (flask), 0.037 on 678 (requests), 0.202 on 35,860 (django); `graph_expand_2hop` p50 / p95 / p99 0.110 / 0.214 / 0.521 ms (flask), 0.145 / 0.192 / 0.216 (requests), 0.463 /
 1.394 / 2.421 (django); `graph_expansion` (BM25 plus 2-hop expansion from three seeds, at most 50 units) 0.149 / 0.259 / 0.561, 0.170 / 0.220 / 0.241 and 1.140 / 2.135 / 2.854 ms (warm). These
 are stage costs of this implementation on one machine; none is a regression claim.
+
+## E-POOL-CHECK, E-POWER, E-CONTAM-PROBE: pool, power and contamination measurements, done 2026-10-18
+
+Configs `configs/experiments/x_pool_check.yaml`, `x_power.yaml`, `x_contam_probe.yaml`; logs `results/logs/x_pool_check_2026-10-18.json`, `x_power_2026-10-18.json`, `x_contam_probe_2026-10-18.json`;
+tables `results/tables/x_pool_check_*.csv`, `x_power_*.csv`, `x_contam_probe_slice.csv`; rows `x-*` in `RESULTS.md`. Exploratory: they measure and calculate, they choose nothing (ADR-001 and the
+others stay open). Licence: counts, ids and hashes only; no query, function or code text was kept.
+
+### E-POOL-CHECK: what `gangiswag/train_data` (python) contains
+
+Method: the member table of `train.zip` (listing of 2026-10-17), then one HTTP range request per instance directory for its query and qrels members (24,285 of 24,285 read, 0 fetch errors, 33 minutes at
+12 threads, CPU only), and the corpus of a sample of 300 directories chosen by the order of sha256("0:<directory>"). Nothing else was downloaded. Overlap is by (canonical repository, PR number); the
+reference sets are the CORE-Bench L2 and L3 query ids (the Rewrite folders carry the same ids) and the 500 Verified instances.
+
+- **What a directory is.** One pull request: `<owner>__<name>-<PR>` with one query (the issue text, `metadata` = `repo` and `base_commit` only), a qrels file of binary positives (every row has score 1)
+  and a corpus that lists the functions of the repository at the base commit. All 24,285 directories have exactly one query; the directory name agrees with the `repo` field in 24,285 of 24,285; the 24,285 (repository, PR) pairs are distinct over 2,448 repositories.
+- **Positives.** 307,996 qrels rows in total: mean 12.68 per directory, median 4, 95th percentile 42, maximum 3,924; none has zero. The sample (300): mean 9.22, median 3; all 2,765 positive ids occur in their corpus.
+- **Functions per instance (sample of 300).** Corpus size mean 1,047, median 410, 5th to 95th percentile 48 to 4,750, minimum 24, maximum 15,584; function ids are unique within a corpus in 300 of 300.
+  Nine of the 300 corpora have at most 40 functions (these pass a top-40 rank filter whatever the model).
+- **Is the 24,285 before or after the top-40 filter (S2)?** Not decidable from this data; the facts are: no rank, score or filter field exists anywhere (query metadata has two keys, corpus rows carry `_id`, `title`, `text`,
+  `metadata` with no keys). The SweRank+ table counts 49,973 "instances" for the Python row (an instance being a query with one modified function as positive); the directories hold 307,996 positive rows, 6.2 times as many. This
+  is what the data would look like if the directories were the unfiltered pull requests with all their modified functions and the table counted what survived the filter (49,973 of 307,996 is 16.2%); it is also what it would look like if a
+  "table instance" were not a (query, function) pair. Neither reading is confirmed. The earlier SweRank paper's Figure 5a shows a filter keeping about 28% of the instances at K=20 (plot reading, `knowledge/papers/swerank-2505.07849.md`), so a 16% survival at K=40 would be unusual
+  but those are different pools and teachers. Cheapest experiment that would settle it: rank the positives of about 50 small directories under SweRankEmbed-Small and count how many fall outside the top 40 (about 1 hour of encoding of a few thousand functions on CPU; not run, it needs the encoder and is a different job than a metadata check).
+- **Creation dates.** None in the pool (`metadata` has `repo` and `base_commit`). The `created_at` values exist only for Verified (2013-01-25 to 2023-08-07, `knowledge/datasets/swe_bench_verified.md`); a date comparison would need a GitHub lookup of the pool's base commits, blocked without `GITHUB_TOKEN`.
+- **Same-PR overlap (direct leakage).** 60 pairs with CORE-Bench L2, all in sub-datasets SWE-bench-Live (56) and SWE-Bench-plus-plus (4), over 18 repositories (cfn-lint 9, haystack 7, trimesh 7, weasyprint 6, faker 5, python-telegram-bot 5, streamlink 5, and eleven others with 1 or 2);
+  0 with L3 (any sub-dataset), 0 with Verified (0 of 500 by (repository, PR), 0 of 500 by base commit), 0 with Multi-SWE-bench, SWE-bench-plus, Multilingual. With the owner ignored (sensitivity for renamed or moved repositories) 63 pairs. The Pro ids contain a hash, not a PR number, and cannot be compared this way (632 L2, 585 L3 ids).
+  All 18 repositories are on the held-out list, so the repository-level filter removes these 60 pull requests; the check adds no instance beyond the filter, and it shows that without the filter 60 CORE-Bench L2 queries would have had their own pull request in the training pool.
+
+### E-POWER: calculations, assumptions explicit
+
+Two-sided, alpha 0.05, power target 0.8. Seed 0, `ril/evaluation/power.py` (`scripts/power_analysis.py`); the closed forms were checked by simulation (below). Nothing here chooses an n, a design or a number of runs.
+
+**Paired resolved rate, exact McNemar.** n instances, two conditions; d = share of instances on which the two conditions disagree (discordance), effect = difference in resolved rate. P(only the second resolves) = (d + effect)/2, P(only the first) = (d - effect)/2.
+The test is the exact binomial test on the disagreeing instances (doubled tail). The power depends on n, d and the effect only; the baseline resolved rate (0.2 to 0.6) only limits which (d, effect) pairs exist, and all 75 combinations of baseline 0.2 to 0.6, d 0.10 to 0.30 and effect 2 to 10 points are feasible (`x_power_mcnemar_feasibility.csv`). The minimum detectable effect is the smallest effect on a 0.25-point grid from which the power stays at or above 0.8 (the exact test's power is not monotone).
+
+| n | discordance | power at 2 pts | 4 pts | 6 pts | 8 pts | 10 pts | minimum detectable effect (points, power 0.8) |
+|---|---|---|---|---|---|---|---|
+| 302 | 0.1 | 0.14 | 0.53 | 0.90 | 1.00 | 1.00 | 5.5 |
+| 302 | 0.2 | 0.10 | 0.30 | 0.61 | 0.86 | 0.97 | 7.5 |
+| 302 | 0.3 | 0.08 | 0.21 | 0.44 | 0.69 | 0.88 | 9.25 |
+| 432 | 0.1 | 0.22 | 0.72 | 0.98 | 1.00 | 1.00 | 4.5 |
+| 432 | 0.2 | 0.13 | 0.42 | 0.77 | 0.96 | 1.00 | 6.25 |
+| 432 | 0.3 | 0.10 | 0.30 | 0.59 | 0.85 | 0.96 | 7.75 |
+| 500 | 0.1 | 0.25 | 0.79 | 0.99 | 1.00 | 1.00 | 4.25 |
+| 500 | 0.2 | 0.15 | 0.48 | 0.84 | 0.98 | 1.00 | 5.75 |
+| 500 | 0.3 | 0.11 | 0.34 | 0.66 | 0.90 | 0.98 | 7.25 |
+
+Reading: at n = 432 and a discordance of 0.20 the test detects a 6.25-point difference with 80% power and a 4-point difference with 42% power; at n = 302 a 4-point difference has 30% power. The discordance is not known before the runs (it is at least the effect and grows with run-to-run randomness); the row to read is chosen by the engineer's expectation, and the pilot runs of the agent give a first value.
+
+**Run-to-run variation.** Read as the standard deviation (in points) of the overall resolved rate between repeated full passes of one condition; if ±2 to ±5 is meant as a half-range, the standard deviation is smaller and the tables scale linearly (minimum detectable difference = 2.80 x SD x sqrt(2/runs); runs needed = 2 x (2.80 x SD / effect)^2, rounded up; normal approximation, run noise only, the instance-sampling variance of the paired comparison is not added).
+
+Minimum detectable difference between two conditions (points) with r runs per condition:
+
+| run-to-run SD (points) | 1 run | 2 | 3 | 5 | 10 |
+|---|---|---|---|---|---|
+| 2 | 7.92 | 5.6 | 4.57 | 3.54 | 2.51 |
+| 3 | 11.89 | 8.4 | 6.86 | 5.32 | 3.76 |
+| 4 | 15.85 | 11.21 | 9.15 | 7.09 | 5.01 |
+| 5 | 19.81 | 14.01 | 11.44 | 8.86 | 6.26 |
+
+Runs per condition needed to detect an effect (points) at 80% power:
+
+| run-to-run SD (points) | effect 2 pts | 4 | 6 | 8 | 10 |
+|---|---|---|---|---|---|
+| 2 | 16 | 4 | 2 | 1 | 1 |
+| 3 | 36 | 9 | 4 | 3 | 2 |
+| 4 | 63 | 16 | 7 | 4 | 3 |
+| 5 | 99 | 25 | 11 | 7 | 4 |
+
+**Paired bootstrap of nDCG@10.** Per-query scores of two retrievers with the same standard deviation and correlation rho; the 95% percentile bootstrap interval of the mean paired difference excludes zero; normal scores assumed (nDCG@10 is bounded and skewed, so these are approximations). Minimum detectable mean difference (nDCG@10 points, i.e. 0.01 = 1) at 80% power:
+
+| n | per-query SD | rho 0.5 | rho 0.7 | rho 0.9 |
+|---|---|---|---|---|
+| 432 | 0.2 | 2.7 | 2.09 | 1.21 |
+| 432 | 0.3 | 4.04 | 3.13 | 1.81 |
+| 432 | 0.4 | 5.39 | 4.18 | 2.41 |
+| 302 | 0.2 | 3.22 | 2.5 | 1.44 |
+| 302 | 0.3 | 4.84 | 3.75 | 2.16 |
+| 302 | 0.4 | 6.45 | 5.0 | 2.88 |
+
+**Seeds.** Two arms with k training seeds each; the seed-to-seed standard deviation in the metric is the unit. Minimum detectable difference at 80% power (Monte Carlo, 200,000 draws per evaluation, bisection):
+
+| seeds per arm | design | minimum detectable difference (seed SDs) |
+|---|---|---|
+| 3 | unpaired t | 3.07 |
+| 3 | paired t, rho 0.5 | 3.26 |
+| 3 | paired t, rho 0.8 | 2.06 |
+| 5 | unpaired t | 2.03 |
+| 5 | paired t, rho 0.5 | 1.69 |
+| 5 | paired t, rho 0.8 | 1.06 |
+
+With three seeds per arm and independent seeds, two arms must differ by about 3.1 seed standard deviations to be detected by a t-test; arms closer than that are indistinguishable at this sample size, which is the project's overlap-within-one-SD rule stated as a number.
+
+**Validation.** Exact McNemar versus 20,000 simulated multinomial experiments at four cells: differences within 0.71 standard errors (|z| at most 0.71); the percentile paired bootstrap simulated at its analytic minimum (400 datasets x 1,000 resamples, three cells) gave power 0.825, 0.783, 0.825 for a target of 0.80 (within 1.4 standard errors). `tests/unit/test_power.py` also compares the closed form with full enumeration for small n.
+
+### E-CONTAM-PROBE: feasibility, probe and a measured slice
+
+**Corpus (metadata and stream measurements).** `cornstack-python-v1` (Nomic organisation on the Hub): 240 shards `shard-00000` to `shard-00239` `.jsonl.gz`, 307.6 GB compressed (0.74 to 1.35 GB each; the 38 shards and 49 GB of the earlier dataset note were a mistake from reading one listing page; corrected in `knowledge/datasets/cornstack.md`).
+Row fields in every row measured: `query`, `document`, `document_rank`, `document_score`, `metadata`, `negatives` (100 or 101 strings), `negative_scores`; no repository field. A shard holds 100,000 rows in the 24 shards scanned, so the corpus is about 24 million rows (23.9 million if the last shard is short; extrapolation).
+
+**Throughput (job 25862).** Streaming 200 MB of compressed stream (about 15,000 to 16,000 rows) and hashing the `document` of every row took 23.3 to 24.8 s on 2 CPUs (network 4.3 to 7.3 s, inflate 6 s, JSON parse and hashing 11 to 13 s). Whole shards in the scan ran 135 to 648 s each on 4 workers sharing a node (network read 26 to 502 s; the network share varied most).
+That gives about 0.12 CPU-seconds per compressed MB, about 10 CPU-hours for the 307.6 GB (about 2.6 hours on 4 CPUs if the network keeps up). Hashing the 100 negatives of every row as well: 174 s for 50 MB (29 times the cost per MB of the documents alone; 388,413 negatives in 3,882 rows), about 300 CPU-hours: not feasible here and not run.
+The full documents-only scan fits the compute policy but not the time of this session; a systematic slice was run instead.
+
+**Probe set.** `ril/training/contamination_index.py` with the existing parser (`parse_file`): every function and method unit (D6) of every `.py` file of the CodeUnit discovery rules at the 499 distinct base commits of the 500 Verified instances (12 repositories), read from the git object store once per blob
+(834,651 file versions seen, 57,705 distinct parsed, 29 unparseable, 81 excluded by the rules): 1,688,434 function occurrences, 277,268 distinct text hashes, 222,020 distinct syntax-tree hashes (about 30 minutes on 2 CPUs). Two hash levels: layout-normalised text (docstring and comments kept) and syntax tree (docstring, decorators, comments, layout and quoting ignored; names and statements kept).
+
+**Slice result (documents only; shards 0, 10, ..., 230 = 24 of 240; 2,400,000 rows, 2,327,498 documents with a syntax-tree hash).** 14,614 documents (0.61%) have the syntax-tree hash of a Verified function; 170 of them also match at the text level (the corpus documents mostly lack the docstring, which is the query, so a text match including the docstring is rare). 4,968 distinct hashes;
+4,158 of the 14,614 hits belong to hashes that occur in more than one of the 12 repositories. By size of the matched function (syntax-tree nodes): under 20 nodes 10,680 (73%); 20 to 49 1,575; 50 to 99 1,127; 100 or more 1,232 (8.4%). Hits per repository (a hash shared by several repositories counts for each): sympy 6,488, astropy 5,228, django 5,016, scikit-learn 4,377, pylint 3,022, requests 2,782, xarray 2,109, pytest 2,082, matplotlib 1,794, sphinx 382, flask 133, seaborn 54.
+Extrapolating the 10% systematic sample ten-fold would give the order of 10^5 hits and 10^4 large ones, but the shards are not known to be randomly ordered; no corpus-wide rate is claimed.
+
+**What a hit does and does not mean.** A hit says that a function with this exact syntax tree (names and statements equal) occurs as the `document` of a CoRNStack row; the function may come from the repository at a different commit than the Verified base commit (the probe set is the union over 499 snapshots), from a fork or vendored copy, or be a generic function that many repositories contain (73% of hits are very small functions; a quarter of hit records match several repositories).
+It does not say that the (query, document) pair was in any model's training data, that the Verified issue was seen, or that the model memorised anything; the retriever trained on it (CodeRankEmbed) is not the project's encoder choice (ADR-006 open). A non-hit does not show absence: renamed or edited copies, functions in the unscanned 90% of shards and the negatives field are not covered. A defensible reading is limited to the larger hits: how many of the 1,232 hits of 100 or more nodes are Verified functions at the instances'
+own base commits (not the union) was not computed.
+
+Reproduce: `scripts/ada/README.md` ("Pool check and contamination probe"). The slice command is `contam_scan.sbatch` with `STRIDE=10`; `STRIDE=1` runs the full documents-only scan.
 
 ## Pre-registered interpretation rules
 

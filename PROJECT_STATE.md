@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-10-18 · **Milestone:** M0 — parser and first graph built; graph reach piloted; BM25 index, CORE-Bench loader and metrics built and checked against the published BM25 rows; graph expansion, fitted edge weights and a recency prior piloted on BM25 seeds (exploratory); dev/test repositories fixed; edge recovery measured under four definitions (none chosen); CodeUnit frozen (v1); held-out list schema 2 · **Tasks completed:** 15
+**Last updated:** 2026-10-18 · **Milestone:** M0 — parser and first graph built; graph reach piloted; BM25 index, CORE-Bench loader and metrics built and checked against the published BM25 rows; graph expansion, fitted edge weights and a recency prior piloted on BM25 seeds (exploratory); dev/test repositories fixed; edge recovery measured under four definitions (none chosen); CodeUnit frozen (v1); held-out list schema 2; pool check, power table and a contamination slice measured · **Tasks completed:** 16
 
 ---
 
@@ -63,17 +63,17 @@ storage stages and now `bm25`, `graph_expand_1hop/2hop` and `graph_expansion` wi
 
 ## Next task
 
-Session X of the wave brief (no code dependency on pilot E): pool check (`gangiswag/train_data` python metadata by range request: overlap of (repo, PR) with Verified and CORE-Bench ids, creation dates, positives per instance), the power
-analysis (`scripts/power_analysis.py` with tests; table in `docs/EXPERIMENTS.md`) and the contamination probe feasibility. Optional, if the engineer allows a GPU job: run pilot E6 (`scripts/ada/e6_probe.sbatch`, then dense scores and the `fusion` arms of
-`ril/evaluation/e3_eval.py`; needs a GPU-capable partition and a capability gate, about 1 hour of encoding). Engineer: provide `GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py` (completes held-out v2 counts); decide Q28, Q30, Q39, Q40,
-Q41, Q42; confirm Q29; read `decisions/ADR-012`, `ADR-011` (addendum), `ADR-003` (addendum of 2026-10-18) and `specs/repo_graph.md` "Open design questions"; settle ADR-001 to ADR-010 by end of week 2.
+The wave's remaining items are the engineer's choices: (a) settle ADR-001 to ADR-010 and Q28, Q30, Q39 to Q45 (week 2); (b) provide `GITHUB_TOKEN` on Ada and rerun `scripts/ada/resolve_renames.py`; (c) allow a GPU job for pilot E6
+(`scripts/ada/e6_probe.sbatch`, then dense scores and the `fusion` arms of `ril/evaluation/e3_eval.py`; Q42); (d) allow the full documents-only contamination scan (`contam_scan.sbatch`, `STRIDE=1`, about 10 CPU-hours) and/or the
+pool filter-rank experiment (Q43). Read `decisions/ADR-012`, `ADR-011` (addendum), `ADR-003` (addendum of 2026-10-18), `ADR-001` (addendum of 2026-10-18) and `specs/repo_graph.md` "Open design questions". Until then: build the dense
+encoder wrapper and the flat exact index (`ril/retrieval/dense_encoder.py`) behind a config flag marked `provisional: ADR-006`, with tests.
 
 ## Blockers
 
 Data: `GITHUB_TOKEN` is **not set on Ada** (decision D2). The rename cache holds 108 repositories (47 of the
 2,448 `gangiswag/train_data` python repositories, 51 of CodeSearchNet's 13,590); every post-rename count is
 a lower bound until the token exists (the job is idempotent and resumes). The held-out repositories' own current names are resolved only for the 12
-Verified ones (unchanged). Q7: the intended pool is not confirmed. CORE-Bench corpora are streamed, not
+Verified ones (unchanged). Q7: the intended pool is not confirmed (pool check of 2026-10-18: the directories hold 307,996 positive rows, not the table's 49,973 instances; Q43). CORE-Bench corpora are streamed, not
 stored. Commit: the held-out v2 data files (`data/held_out/*`, `results/tables/*`, the leakage test) are staged but
 not committed: the pre-commit trace check rejects three repository names of the new Loc-Bench tier (owners with a hyphenated suffix
 matching the provenance patterns); they need the engineer's allowlist, then `git commit` finishes it. No code blocker.
@@ -106,6 +106,9 @@ matching the provenance patterns); they need the engineer's allowlist, then `git
 | Q40 | Averaging convention for any number compared with the paper: the published BM25 rows are means over folders (L2: over the seven sub-datasets), not over queries; measured difference up to 5 Recall@100 points (`docs/EXPERIMENTS.md` E-BM25-REPRO). Options: report both (done in pilot E); fix one in the frozen evaluation | evaluation, reporting | engineer |
 | Q41 | Are import-only L2 positives labels or noise (12.7% of dev, 6.2% of Verified-six positives; the module unit's measured benefit rests on them, and so does part of the L3 containment gain of pilot E3)? A metric definition | ADR-004, E2 | engineer |
 | Q42 | Pilot E6 (CodeRankEmbed on the units, BM25 + dense + graph by rank fusion) was not run: on CPU the encoder takes about 0.85 chunks/s on 4 CPUs, about 30 hours for the roughly 52,000 distinct unit texts of the dev snapshots (`docs/EXPERIMENTS.md`). Options: a GPU job on Ada (about 1 hour, outside the CPU-only policy of the pilots); fewer instances (for example streamlink, 6,400 texts, 37 queries: too small to settle anything); a shorter token cut or a smaller encoder (a different, lower-fidelity experiment, not substituted). Compute policy and the encoder are the engineer's | E6, ADR-006, RQ1 dense rows | engineer |
+| Q43 | The candidate pool's 24,285 directories hold 307,996 positive rows (E-POOL-CHECK) against 49,973 instances in the SweRank+ Python row, and carry no rank field: is the pool unfiltered (the paper's table counting the instances that survived top-40) or is "instance" something else? Options: rank about 50 small directories under SweRankEmbed-Small and count positives outside the top 40 (CPU, about 1 hour); wait for the authors' code. Decides whether the pool's own filter is rerun or replaced by FILTER's | ADR-001, FILTER arm | engineer |
+| Q44 | Contamination probe: slice result 14,614 of 2.4 M documents (0.61%) match a Verified function by syntax-tree hash, 73% of them tiny generic functions (`docs/EXPERIMENTS.md`). Run the full documents-only scan (about 10 CPU-hours, 307.6 GB streamed) and restrict hits to functions at the instance's own base commit and above a size floor? Is the probe part of the frozen evaluation? | contamination statement in the report | engineer |
+| Q45 | Which discordance (0.10 to 0.30) and run-to-run SD (2 to 5 points) to plan the RQ3 sample with: the power table gives minimum detectable effects of 4.5 to 7.75 points at n = 432 (`docs/EXPERIMENTS.md`, E-POWER); the values need an agent pilot | RQ3 sample size, run count | engineer |
 | Q32 | Confirm two readings made in the graph spec: `tests(u)` = test units with a resolved `tests` edge to `u`; `configs(u)` = config paths with a resolved `configures` edge to `u` or its file | projections | engineer |
 
 Resolved this block: Q8, Q9, Q13-Q23 (decisions log above), Q26 (recorded in DEV-007). Earlier: Q10, Q2, Q6.
