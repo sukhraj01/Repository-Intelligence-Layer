@@ -20,6 +20,13 @@ Why this one. Distinguish **evidence**, **inference**, and **opinion**.
 ## Trade-offs
 What we give up. Known downsides.
 
+## Evidence class and the experiment that could change it
+- **Evidence class:** measured here / read in full (note) / reasoned only. Say which, per claim.
+- **Cheapest experiment that could flip this decision:** what would be varied, on what data, what result
+  would reverse the choice, and its time-box. If it is cheap, run it before deciding; if it cannot
+  finish inside the time-box, decide on the reasoning and list the experiment under "Conditions to
+  revisit" with the date it should be run by.
+
 ## Evidence
 Data, benchmarks (link `RESULTS.md` rows / `results/` paths), documentation, papers (note whether read in full).
 

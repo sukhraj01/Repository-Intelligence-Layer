@@ -12,7 +12,12 @@ import hashlib
 import json
 
 from ril.config.paths import data_root, repo_root
-from ril.training.held_out import canonical_repo, filter_pool
+from ril.training.held_out import (
+    canonical_repo,
+    filter_pool,
+    is_held_out,
+    load_held_out_lists,
+)
 from ril.training.leakage import intersect
 
 HELD_OUT_DIR = repo_root() / "data" / "held_out"
@@ -87,6 +92,36 @@ def test_filtered_pools_are_disjoint_from_held_out() -> None:
         doc = json.loads(path.read_text(encoding="utf-8"))
         assert doc["held_out_sha256"] == digest, f"{path.name} was filtered against a stale list"
         _check_disjoint(doc["repositories"])
+
+
+def test_list_is_schema_2_with_a_separate_loc_bench_tier() -> None:
+    doc = _held_out()
+    assert doc["schema_version"] == 2
+    lists = load_held_out_lists(doc)
+    assert lists.loc_bench, "decision D3: the Loc-Bench tier must be present"
+    assert not (lists.loc_bench & lists.core), "the tier stores only repositories outside the core"
+    assert lists.blocked(False) == lists.core and lists.blocked() == lists.core | lists.loc_bench
+
+
+def test_filtered_pools_are_disjoint_under_current_names_and_the_loc_bench_tier() -> None:
+    """The default rule set (D1 + D3) holds for every pool file written by the build script."""
+    lists = load_held_out_lists(_held_out())
+    blocked = set(lists.blocked())
+    blocked |= {lists.aliases[b] for b in blocked if b in lists.aliases}
+    from ril.training.rename_resolution import alias_map, load_cache
+
+    aliases = {**lists.aliases, **alias_map(load_cache(HELD_OUT_DIR / "rename_cache.json"))}
+    for path in sorted((data_root() / "processed" / "pools").glob("*_repos.json")):
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        bad = [r for r in doc["repositories"] if is_held_out(canonical_repo(r), blocked, aliases)]
+        assert bad == [], f"{path.name} keeps held-out repositories: {bad[:5]}"
+
+
+def test_rename_cache_holds_names_and_flags_only() -> None:
+    doc = json.loads((HELD_OUT_DIR / "rename_cache.json").read_text(encoding="utf-8"))
+    allowed = {"status", "current", "fork", "parent", "source", "checked"}
+    assert all(set(e) <= allowed for e in doc["entries"].values())
+    assert "token" not in json.dumps(doc).lower()
 
 
 def test_unfiltered_pool_would_fail_the_check() -> None:

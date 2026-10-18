@@ -1,13 +1,13 @@
 # Held-out repository list
 
-Contract: `specs/held_out_repos.md`. List: `held_out_repos.json` (sha256 `7ba5c9d8d27dd9a92092dff04275fc2b6ec4c15e5641c834ddc6d93a9f477783`, file `held_out_repos.sha256`).
+Contract: `specs/held_out_repos.md`. List: `held_out_repos.json` (sha256 `ba463ded28b7b46a5dcd30240d02168490b84b395778931ee6f6962466dcbfb7`, file `held_out_repos.sha256`).
 
 ## Form and method
 
 - Canonical form: `owner/name`, case-folded (`Owner/Repo`, `owner__repo` and `owner/repo` are one entry).
 - CORE-Bench folder names are truncated and are not repository names, so the repository of a folder is read from the instance ids in its `queries.jsonl` (`owner__name-<PR>`; the Pro split `instance_owner__name-<hash>`). Every one of the 1,458 folders resolved; unresolved folders: none. Nothing was guessed from a folder name.
 - Union held out: all L2 datasets, all L3 datasets, the Rewrite variants (same repositories, checked below) and SWE-bench Verified metadata.
-- Not applied: any fork or near-duplicate rule, and Loc-Bench (both are open questions; counts under each are below).
+- List schema 2: core tier above plus current-name resolution (aliases from the rename cache, decision D1) and a separate, switchable Loc-Bench tier (decision D3). The fork network is a sensitivity report only.
 
 ## Result
 
@@ -50,7 +50,7 @@ The card's 632 and 97 are folder counts. Distinct repositories are 605 (L2) and 
 
 L2 union L3 union Verified = 605. L3 is wholly inside L2 (92 of 92), and the 12 Verified repositories are inside both. The per-dataset overlap matrix is `results/tables/held_out_pairwise_overlaps.csv`.
 
-## Loc-Bench (reported separately, not in the list)
+## Loc-Bench tier (decision D3: separate and switchable)
 
 | version | rows | repositories | already in the list | not in the list |
 |---|---|---|---|---|
@@ -58,7 +58,7 @@ L2 union L3 union Verified = 605. L3 is wholly inside L2 (92 of 92), and the 12 
 | Loc-Bench_V0.2 | 660 | 210 | 41 | 169 |
 
 
-Whether Loc-Bench repositories are held out of training is ADR-005 and is not decided here.
+The tier holds 169 repositories that are not in the core list (union of both versions), under `tiers.loc_bench` in `held_out_repos.json`; it is held out by default and can be switched off.
 
 ## Paired analysis n (instance ids)
 
@@ -73,13 +73,13 @@ Details per repository: `results/tables/paired_n.json`.
 
 ## Fork and near-duplicate counts
 
-See the pool reports below. The held-out list itself is exact names only. Measured on candidate pools: repositories that were renamed or transferred since the pool was built still carry their old name and pass an exact-name filter.
+Rename cache: 108 repositories looked up, 23 resolve to a different name; 2 of the held-out repositories have a known current name (the others are not yet resolved: this needs the read-only token on the cluster, see `docs/COMPUTE.md`). The pool reports below give the counts per rule.
 
 ## Pool reports
 
-| pool | instances before | after | repos before | after |
-|---|---|---|---|---|
-| codesearchnet_python | 457,461 | 449,440 | 13,590 | 13,546 |
-| gangiswag_train_data_python | 24,285 | 20,854 | 2,448 | 2,359 |
+| pool | instances before | after exact | after default | repos before | after exact | after default |
+|---|---|---|---|---|---|---|
+| codesearchnet_python | 457,461 | 449,440 | 444,037 | 13,590 | 13,546 | 13,518 |
+| gangiswag_train_data_python | 24,285 | 20,854 | 20,800 | 2,448 | 2,359 | 2,356 |
 
 Files: `pool_filter_report_<pool>.md` (CodeSearchNet python, the gangiswag candidate), `pool_filter_report_cornstack_python.md` (cannot be filtered), `pool_filter_report_sweloc.md` (does not exist).

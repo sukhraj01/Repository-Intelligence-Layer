@@ -2,18 +2,30 @@
 
 Pool: `gangiswag/train_data` train.zip, python folders (CANDIDATE, provisional; Open question Q7, not chosen as the pool). Unit counted: rows are instance directories `train/python/<owner>__<name>-<PR>/`; repository names are read from directory names in the zip central directory, nothing else was fetched.
 
-Held-out list: `held_out_repos.json` (exact canonical names, no fork rule, no Loc-Bench). This is a measurement of survival, not a choice of training pool.
+Held-out list: `held_out_repos.json` (schema 2): exact canonical names of the core tier, current-name resolution (D1), Loc-Bench tier (D3); the fork network is a sensitivity row only. This is a measurement of survival, not a choice of training pool.
 
-|  | instances | repositories |
+| rule (cumulative) | instances after | repositories after | repositories dropped |
+|---|---|---|---|
+| exact | 20,854 | 2,359 | 89 |
+| +current_name | 20,800 | 2,356 | 92 |
+| +loc_bench | 20,800 | 2,356 | 92 |
+| sensitivity: +fork_network | 20,800 | 2,356 | 92 |
+
+
+Before: 24,285 instances, 2,448 repositories. Current-name resolution covers 47 of 2,448 pool repositories (2,678 of 24,285 instances); every row after `exact` is a lower bound on full resolution.
+
+## Before and after, against the Wave 1 lower bound
+
+|  | Wave 1 (exact + same-name candidates only) | now (exact + cached current names) |
 |---|---|---|
-| before | 24,285 | 2,448 |
-| after (exact-name filter) | 20,854 | 2,359 |
-| surviving | 85.87 % | 96.36 % |
+| repositories resolving to a held-out repository under its current name | 3 | 3 |
+| instances in those repositories | 54 | 54 |
+| instances after exact + current-name | n/a | 20,800 |
 
 
-Held-out repositories present in the pool: 89.
+Repositories that the exact filter keeps and current-name resolution drops: airtai/faststream, jazzband/django-dbbackup, lepture/authlib.
 
-Top dropped repositories (by instances):
+## Top dropped repositories under the default rule set (by instances)
 
 | repository | instances |
 |---|---|
@@ -34,13 +46,4 @@ Top dropped repositories (by instances):
 | narwhals-dev/narwhals | 71 |
 
 
-## Sensitivity to the two open rules (both reported, neither chosen)
-
-| rule | instances after | repositories after |
-|---|---|---|
-| exact names only (above) | 20,854 | 2,359 |
-| exact names + Loc-Bench repositories (open question) | 20,854 | 2,359 |
-| exact names + current-name resolution of 10 same-name candidates checked on GitHub | 20,800 | 2,356 |
-
-
-Fork / near-duplicate evidence: 10 surviving pool repositories (81 instances) share a repository name with a held-out repository under a different owner. 10 of them were looked up through the unauthenticated GitHub API (60 requests per hour); 0 were not checked. Among the checked: 3 resolve to a held-out repository under its current name (a rename or ownership transfer, so the exact-name filter lets them through): airtai/faststream, jazzband/django-dbbackup, lepture/authlib; 0 are forks whose fork-network root or parent is held out; 0 no longer exist. Renamed repositories whose name part differs, and forks with other names, cannot be found this way: this is a lower bound.
+The fork-network row is a sensitivity report: it counts pool repositories that are forks whose parent or source is held out, among the repositories resolved so far. It is never applied as a filter (decision D1).

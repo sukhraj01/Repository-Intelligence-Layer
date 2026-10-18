@@ -1,7 +1,12 @@
 {
+ "aliases": {
+  "dbt-labs/dbt-core": "dbt-labs/dbt",
+  "facebookresearch/hydra": "hydra-ecosystem/hydra"
+ },
  "canonical_form": "owner/name, case-folded",
- "fork_rule": "not applied: exact canonical names only (open question)",
- "loc_bench": "not included (open question)",
+ "fork_rule": "sensitivity report only, never a filter (decision D1)",
+ "loc_bench": "separate tier under tiers.loc_bench (decision D3)",
+ "matching": "exact canonical names + current-name resolution via aliases (decision D1); fork network is a sensitivity report only",
  "n_repos": 605,
  "per_source_counts": {
   "L2:Multi-SWE-bench": 39,
@@ -2001,6 +2006,651 @@
    "L2:SWE-Bench-plus-plus"
   ]
  },
+ "schema_version": 2,
  "source_labels": "L2:<dataset> / L3:<dataset> = CORE-Bench folders; Verified = SWE-bench Verified metadata; RW-* only if a Rewrite folder names a repository its original lacks",
+ "tiers": {
+  "core": "repos: CORE-Bench L2, L3 and SWE-bench Verified (always held out)",
+  "loc_bench": {
+   "default": "held out (decision D3); switch off with load_held_out_lists(...).blocked(False)",
+   "n_repos": 169,
+   "repos": {
+    "acoular/acoular": [
+     "Loc-Bench_V0.2"
+    ],
+    "agenta-ai/agenta": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "agrc/masquerade": [
+     "Loc-Bench_V0.2"
+    ],
+    "aiortc/aiortc": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "airbnb/knowledge-repo": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "alexa-pi/alexapi": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ansys/pymapdl": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "avantifellows/quiz-backend": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "azavea/raster-vision": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "azuread/microsoft-authentication-library-for-python": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "bears-r-us/arkouda": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "beeware/rubicon-objc": [
+     "Loc-Bench_V0.2"
+    ],
+    "bennettoxford/bennettbot": [
+     "Loc-Bench_V0.2"
+    ],
+    "camunda-community-hub/pyzeebe": [
+     "Loc-Bench_V0.2"
+    ],
+    "ccxt/ccxt": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "chainlit/chainlit": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "cherrypy/cheroot": [
+     "Loc-Bench_V0.2"
+    ],
+    "cisagov/manage.get.gov": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ckan/ckan": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "cleder/crepr": [
+     "Loc-Bench_V0.2"
+    ],
+    "clinical-genomics/cg": [
+     "Loc-Bench_V0.2"
+    ],
+    "cogent3/cogent3": [
+     "Loc-Bench_V0.2"
+    ],
+    "crossgl/crosstl": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ctc-oss/fapolicy-analyzer": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "cupy/cupy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "cworthy-ocean/roms-tools": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "cython/cython": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "dask/dask": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "deltares/imod-python": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "dmlc/dgl": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ds4sd/docling": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "duncanscanga/vdrs-solutions": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "explodinggradients/ragas": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "facebookresearch/xformers": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "famedly/synapse-invite-checker": [
+     "Loc-Bench_V0.2"
+    ],
+    "flet-dev/flet": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "fortra/impacket": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "fractal-analytics-platform/fractal-tasks-core": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "freedomofpress/securedrop-client": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "freelawproject/courtlistener": [
+     "Loc-Bench_V0.2"
+    ],
+    "fulcrumgenomics/prymer": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "gammasim/simtools": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "gaogaotiantian/viztracer": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "gitlabform/gitlabform": [
+     "Loc-Bench_V0.2"
+    ],
+    "happy-algorithms-league/hal-cgp": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "home-assistant/core": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "huggingface/accelerate": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "huggingface/diffusers": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "huggingface/optimum-benchmark": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "huggingface/transformers": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "huggingface/trl": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "hyeneung/tech-blog-hub-site": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "innopoints/backend": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "instructor-ai/instructor": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "intelowlproject/greedybear": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "isledecomp/reccmp": [
+     "Loc-Bench_V0.2"
+    ],
+    "ivadomed/ivadomed": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "jackplowman/repo_standards_validator": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "jarbashivemind/hivemind-core": [
+     "Loc-Bench_V0.2"
+    ],
+    "jazzband/django-two-factor-auth": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "jobatabs/textec": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "joinmarket-org/joinmarket-clientserver": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "joselc/life-sim-first-try": [
+     "Loc-Bench_V0.2"
+    ],
+    "jupyterhub/oauthenticator": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "justin13601/aces": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "kiasambrook/tfl-live-tracker": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "kornia/kornia": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "kuuuube/kanjigrid": [
+     "Loc-Bench_V0.2"
+    ],
+    "langchain-ai/langgraph": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "latchset/jwcrypto": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "locustio/locust": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "matchms/matchms-backup": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "mathesar-foundation/mathesar": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "matrix-org/synapse": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "mesonbuild/meson-python": [
+     "Loc-Bench_V0.2"
+    ],
+    "micropython/micropython-lib": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "mlflow/mlflow": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "mllam/neural-lam": [
+     "Loc-Bench_V0.2"
+    ],
+    "modin-project/modin": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "natlibfi/annif": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "nautobot/nautobot": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ncsu-high-powered-rocketry-club/airbrakesv2": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "netbox-community/netbox": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "netflix/metaflow": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "neurobagel/federation-api": [
+     "Loc-Bench_V0.2"
+    ],
+    "nextgencontributions/nitpick": [
+     "Loc-Bench_V0.2"
+    ],
+    "nltk/nltk": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "nnpdf/eko": [
+     "Loc-Bench_V0.2"
+    ],
+    "nofusscomputing/centurion_erp": [
+     "Loc-Bench_V0.2"
+    ],
+    "nss-day-cohort-71/bangazon-api-ctrl-alt-elite": [
+     "Loc-Bench_V0.2"
+    ],
+    "numba/numba": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "numpy/numpy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "nvidia/cuda-python": [
+     "Loc-Bench_V0.2"
+    ],
+    "nvidia/nemo": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "okta/okta-jwt-verifier-python": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "open-mss/mss": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "openenergyplatform/open-mastr": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "openvoiceos/ovos-core": [
+     "Loc-Bench_V0.2"
+    ],
+    "openwisp/openwisp-users": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "oppia/oppia": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "optuna/optuna": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ouranosinc/xclim": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "pandas-dev/pandas": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "paperless-ngx/paperless-ngx": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "phidatahq/phidata": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "plasmapy/plasmapy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "plone/plone.restapi": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "pm4-graders/3es": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "project-monai/monai": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "prowler-cloud/prowler": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "pulp/pulp_rpm": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "pyca/pyopenssl": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "pypa/pip": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "python-visualization/folium": [
+     "Loc-Bench_V0.2"
+    ],
+    "python/cpython": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "raft-tech/tanf-app": [
+     "Loc-Bench_V0.2"
+    ],
+    "ranaroussi/yfinance": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "rapidsai/dask-cuda": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ray-project/ray": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "redhat-qe-security/scautolib": [
+     "Loc-Bench_V0.2"
+    ],
+    "roboflow/supervision": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "robotframework/robotframework": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "rq/rq": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "rwth-i6/sisyphus": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "sagemath/sage": [
+     "Loc-Bench_V0.2"
+    ],
+    "sancus-tee/sancus-compiler": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "scipy/scipy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "scrapy/scrapy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "secdev/scapy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "second-hand-friends/kleinanzeigen-bot": [
+     "Loc-Bench_V0.2"
+    ],
+    "sgkit-dev/sgkit": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "shishirpatil/gorilla": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "sktime/sktime": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "sopel-irc/sopel": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "spacetelescope/stcal": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "spack/spack": [
+     "Loc-Bench_V0.2"
+    ],
+    "speechbrain/speechbrain": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "spinalcordtoolbox/spinalcordtoolbox": [
+     "Loc-Bench_V0.2"
+    ],
+    "spotify/luigi": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "standard-labs/real-intent": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "stravalib/stravalib": [
+     "Loc-Bench_V0.2"
+    ],
+    "strawberry-graphql/strawberry": [
+     "Loc-Bench_V0.2"
+    ],
+    "strawberry-graphql/strawberry-django": [
+     "Loc-Bench_V0.2"
+    ],
+    "streamlit/streamlit": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "tagstudiodev/tagstudio": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "tarantool/ansible-cartridge": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "tardis-sn/tardis": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "thunderbird/appointment": [
+     "Loc-Bench_V0.2"
+    ],
+    "tjorim/pyrail": [
+     "Loc-Bench_V0.2"
+    ],
+    "tobymao/sqlglot": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "transformerlensorg/transformerlens": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "twisted/klein": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ucl/tlomodel": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ukplab/sentence-transformers": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "ultralytics/ultralytics": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "una-auxme/paf": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "uxarray/uxarray": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "vechervhatux/learning_data_science_in_prison": [
+     "Loc-Bench_V0.2"
+    ],
+    "vitalik/django-ninja": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "vllm-project/vllm": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "wandb/wandb": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "waterloo-rocketry/omnibus": [
+     "Loc-Bench_V0.2"
+    ],
+    "webcompat/webcompat.com": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "weboftrust/keria": [
+     "Loc-Bench_V0.2"
+    ],
+    "wxboysuper/productivity-app": [
+     "Loc-Bench_V0.2"
+    ],
+    "xcdat/xcdat": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "zarr-developers/zarr-python": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "zulip/zulip": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ],
+    "zulko/moviepy": [
+     "Loc-Bench_V0.2",
+     "Loc-Bench_V1"
+    ]
+   }
+  }
+ },
  "unresolved_folders": []
 }
