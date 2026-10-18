@@ -114,3 +114,11 @@ candidate is SweLocMulti's Python part and not the original SweLoc (3,387 reposi
 states no exclusion of benchmark repositories, and 89 held-out repositories (3,431 instances, 14.13%
 of the PRs) are present in it (`knowledge/papers/swerank-plus-2512.20482.md`, claim S2). Whether it is
 the intended pool remains the engineer's decision.
+
+## Addendum 2026-10-18 — pool check of the candidate (evidence, no decision)
+
+Measured (`docs/EXPERIMENTS.md`, E-POOL-CHECK; `results/tables/x_pool_check_*.csv`): the candidate's 24,285 directories are pull requests with one query each and 307,996 positive rows in total (mean 12.68, median 4 per directory), not
+the 49,973 instances of the SweRank+ Python row; the counts that agree with that paper are the 24,285 PRs and the 2,448 repositories only. The data carries no rank or filter field, so whether the directories are before or after the
+top-40 consistency filter is undecided (a 16% survival of positives would explain the difference; the experiment that would settle it is in E-POOL-CHECK). Corpora are whole-repository function lists (sample median 410 functions). No creation dates.
+60 (repository, PR) pairs coincide with CORE-Bench L2 queries (SWE-bench-Live and plus-plus; 18 repositories, all on the held-out list), none with Verified or L3, so the repository-level filter removes all direct same-PR leakage; the filter is required: without it the pool contains
+the pull requests of 60 L2 queries. Evidence class: measured. Conditions to revisit: a token on the cluster (creation dates, current names), and the rank experiment above if FILTER's K or teacher is to be compared with the pool's own filtering.

@@ -1,0 +1,16 @@
+reference,reference_ids,reference_pairs,exact_pairs,exact_repos,name_only_pairs
+core_bench_any,5035,4401,60,18,63
+core_bench_level-2,5035,4401,60,18,63
+core_bench_level-2/Multi-SWE-bench,1449,1449,0,0,0
+core_bench_level-2/SWE-Bench-plus-plus,442,442,4,3,4
+core_bench_level-2/SWE-bench-Live,1623,1623,56,16,59
+core_bench_level-2/SWE-bench-plus,207,207,0,0,0
+core_bench_level-2/SWE-bench_Multilingual,276,276,0,0,0
+core_bench_level-2/SWE-bench_Pro,632,0,0,0,0
+core_bench_level-2/SWE-bench_Verified,432,432,0,0,0
+core_bench_level-3,2567,1982,0,0,0
+core_bench_level-3/Multi-SWE-bench,1445,1445,0,0,0
+core_bench_level-3/SWE-bench_Multilingual,248,248,0,0,0
+core_bench_level-3/SWE-bench_Pro,585,0,0,0,0
+core_bench_level-3/SWE-bench_Verified,302,302,0,0,0
+swe_bench_verified_500,500,500,0,0,0

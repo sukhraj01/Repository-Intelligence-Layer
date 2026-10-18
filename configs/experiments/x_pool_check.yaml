@@ -1,0 +1,15 @@
+# E-POOL-CHECK: metadata check of the candidate pool gangiswag/train_data (python). Exploratory; no design choice.
+experiment_id: E-POOL-CHECK
+date: '2026-10-18'
+source: https://huggingface.co/datasets/gangiswag/train_data/resolve/main/train.zip
+language: python
+method: zip central directory (listing of 2026-10-17) plus one HTTP range request per instance for the queries and qrels members; corpus of a seeded sample
+sample:
+  size: 300
+  order: sha256 of "<seed>:<instance directory>", first 300, sorted
+seed: 0
+references:
+- CORE-Bench L2 and L3 query ids (all sub-datasets; Rewrite folders excluded, same ids)
+- SWE-bench Verified, 500 instance ids and base commits
+match: exact (canonical repository, PR number); sensitivity with the owner ignored; base-commit equality with Verified
+code: ril/training/pool_check.py, scripts/ada/pool_check.py

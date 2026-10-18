@@ -1,0 +1,25 @@
+quantity,value
+instance_directories,24285
+distinct_repositories,2448
+distinct_repo_pr_pairs,24285
+queries_per_directory,1 in every directory
+query_metadata_keys,base_commit|repo
+qrel_rows_total,307996
+positives_per_instance_mean,12.68
+positives_per_instance_median,4.0
+positives_per_instance_p95,42.0
+positives_per_instance_max,3924.0
+directories_with_zero_positives,0
+sample_size,300
+sample_functions_mean,1047.0
+sample_functions_median,410.5
+sample_functions_p5,47.9
+sample_functions_p95,4749.6
+sample_functions_min,24.0
+sample_functions_max,15584.0
+sample_positives_mean,9.22
+sample_positives_median,3.0
+sample_positives_found_in_corpus,2765 of 2765
+sample_corpus_at_most_40_functions,9
+base_commit_hits_with_verified,0
+fetch_errors,0

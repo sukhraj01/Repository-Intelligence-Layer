@@ -1,0 +1,29 @@
+{
+ "ada_job_id": "25872 (all 24,285 instances); 25860 failed after 5,260 instances on a line-splitting defect (fixed, cache reused)",
+ "config_file": "configs/experiments/x_pool_check.yaml",
+ "config_hash": "d419c0dd5fd140175550d006452346a1f72ccbd0561ff2709c2282ba8a66c4c1",
+ "fetch_errors": 0,
+ "hardware": {
+  "cluster": "Ada u22, qos low",
+  "cpus_requested": "2 (pool check, build), 4 (scan), 2 (measure)",
+  "git": "2.34.1",
+  "host": "gnode002 (pool check, probe build, scan); gnode004 (throughput measurement)",
+  "mem_total_kb": 131868124,
+  "python": "3.10.12"
+ },
+ "label": "exploratory; metadata check, no design choice",
+ "run": "x-pool-check",
+ "sample_size": 300,
+ "seconds": {
+  "meta": 1952.6,
+  "sample": 30.6
+ },
+ "seed": 0,
+ "summary_file": "data/processed/x/pool_check.json",
+ "summary_sha256": "437fbd1a17580fb8090de4c402d80972e198ad9bf771e637dfaa0e562b840894",
+ "table_sha256": {
+  "x_pool_check_facts.csv": "87ce0a72167f85fc59f20deb47ff76a1a067d019c1674896edc940d1ff75e265",
+  "x_pool_check_overlap.csv": "95094aaf85296173f109469364a2c80c28ea710613cabd3160826bbd13d5191d"
+ },
+ "threads": 12
+}
