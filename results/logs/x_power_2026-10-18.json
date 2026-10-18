@@ -1,0 +1,156 @@
+{
+ "config": {
+  "alpha": 0.05,
+  "baselines": [
+   0.2,
+   0.3,
+   0.4,
+   0.5,
+   0.6
+  ],
+  "boot_draws": 1000,
+  "boot_ns": [
+   432,
+   302
+  ],
+  "boot_reps": 400,
+  "boot_rhos": [
+   0.5,
+   0.7,
+   0.9
+  ],
+  "boot_sds": [
+   0.2,
+   0.3,
+   0.4
+  ],
+  "deltas_points": [
+   2.0,
+   4.0,
+   6.0,
+   8.0,
+   10.0
+  ],
+  "discordances": [
+   0.1,
+   0.2,
+   0.3
+  ],
+  "effects": [
+   0.02,
+   0.04,
+   0.06,
+   0.08,
+   0.1
+  ],
+  "ns": [
+   302,
+   432,
+   500
+  ],
+  "power": 0.8,
+  "runs": [
+   1,
+   2,
+   3,
+   5,
+   10
+  ],
+  "seed": 0,
+  "seed_ks": [
+   3,
+   5
+  ],
+  "seed_rhos": [
+   null,
+   0.5,
+   0.8
+  ],
+  "sigmas_points": [
+   2.0,
+   3.0,
+   4.0,
+   5.0
+  ],
+  "sim_reps": 20000,
+  "version": "power/v1"
+ },
+ "config_hash": "a6624caf4b3aae2cb304bd38668dcd2514bb2305c0b894cdd4c483b61431e04d",
+ "hardware": {
+  "machine": "arm64",
+  "platform": "macOS-15.7.1-arm64-arm-64bit",
+  "python": "3.11.14"
+ },
+ "label": "calculation (no data); assumptions in the config",
+ "run": "x-power-analysis",
+ "seconds": 8.0,
+ "seed": 0,
+ "table_sha256": {
+  "x_power_bootstrap_mdd.csv": "90573a5977e5ef8e8a9bbbd44fb7e2177323e4f8e57ddca54bc0eaf9ca588143",
+  "x_power_mcnemar_feasibility.csv": "6b9dcfd4e53b958df504d6790eff8f028bd1888d23e3497ea004386f8184ab49",
+  "x_power_mcnemar_mde.csv": "9103d306f29a368bbf4ae6e538116957fe2194bb7c5731bc589d22ca8a1e86bd",
+  "x_power_mcnemar_power.csv": "5564ce4aecf716e8bd2f703dc9a863fd35f3a85600bcd341712884d36a138868",
+  "x_power_run_noise_mde.csv": "1f0d9ef5f1024873e5791079500dfee8f01d3afe096be6cb8beea950c5678cf6",
+  "x_power_runs_needed.csv": "33d755c0eb962fc9e2945546e9a3f92db58c8a0a8638c8474f724ae1e12c0536",
+  "x_power_seed_mdd.csv": "a30d0e44573175064c5c89f89a7570e60ad73647f6806839cdb132a091cb2981",
+  "x_power_validation.csv": "d956a946258c148d22c1596d61c1c86b56bbac550e3899356de8a6167e7828b2"
+ },
+ "validation": [
+  {
+   "cell": "n=302 d=0.2 e=0.06",
+   "check": "mcnemar exact vs simulation",
+   "closed_form": 0.6071,
+   "se": 0.0035,
+   "simulated": 0.606,
+   "z": -0.29
+  },
+  {
+   "cell": "n=432 d=0.1 e=0.04",
+   "check": "mcnemar exact vs simulation",
+   "closed_form": 0.7158,
+   "se": 0.0032,
+   "simulated": 0.7181,
+   "z": 0.71
+  },
+  {
+   "cell": "n=500 d=0.3 e=0.08",
+   "check": "mcnemar exact vs simulation",
+   "closed_form": 0.8957,
+   "se": 0.0022,
+   "simulated": 0.895,
+   "z": -0.35
+  },
+  {
+   "cell": "n=432 d=0.2 e=0.04",
+   "check": "mcnemar exact vs simulation",
+   "closed_form": 0.4186,
+   "se": 0.0035,
+   "simulated": 0.4184,
+   "z": -0.07
+  },
+  {
+   "cell": "n=432 sd=0.3 rho=0.7 delta=0.0313",
+   "check": "bootstrap power at the analytic minimum (target 0.80)",
+   "closed_form": 0.8,
+   "se": 0.019,
+   "simulated": 0.825,
+   "z": 1.32
+  },
+  {
+   "cell": "n=302 sd=0.4 rho=0.5 delta=0.0645",
+   "check": "bootstrap power at the analytic minimum (target 0.80)",
+   "closed_form": 0.8,
+   "se": 0.0206,
+   "simulated": 0.7825,
+   "z": -0.85
+  },
+  {
+   "cell": "n=432 sd=0.2 rho=0.9 delta=0.0121",
+   "check": "bootstrap power at the analytic minimum (target 0.80)",
+   "closed_form": 0.8,
+   "se": 0.019,
+   "simulated": 0.825,
+   "z": 1.32
+  }
+ ]
+}

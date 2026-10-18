@@ -1,0 +1,7 @@
+seeds_per_arm,design,mdd_in_seed_sd
+3,unpaired t,3.07
+3,"paired t, rho 0.5",3.26
+3,"paired t, rho 0.8",2.06
+5,unpaired t,2.03
+5,"paired t, rho 0.5",1.69
+5,"paired t, rho 0.8",1.06

@@ -1,0 +1,8 @@
+check,cell,closed_form,simulated,se,z
+mcnemar exact vs simulation,n=302 d=0.2 e=0.06,0.6071,0.606,0.0035,-0.29
+mcnemar exact vs simulation,n=432 d=0.1 e=0.04,0.7158,0.7181,0.0032,0.71
+mcnemar exact vs simulation,n=500 d=0.3 e=0.08,0.8957,0.895,0.0022,-0.35
+mcnemar exact vs simulation,n=432 d=0.2 e=0.04,0.4186,0.4184,0.0035,-0.07
+bootstrap power at the analytic minimum (target 0.80),n=432 sd=0.3 rho=0.7 delta=0.0313,0.8,0.825,0.019,1.32
+bootstrap power at the analytic minimum (target 0.80),n=302 sd=0.4 rho=0.5 delta=0.0645,0.8,0.7825,0.0206,-0.85
+bootstrap power at the analytic minimum (target 0.80),n=432 sd=0.2 rho=0.9 delta=0.0121,0.8,0.825,0.019,1.32
