@@ -7,7 +7,7 @@
 #SBATCH --constraint=2080ti
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --time=02:30:00
+#SBATCH --time=03:00:00
 #SBATCH --output=ril_x2/logs/x2_encode_%j.out
 # GPU. Dense measurements X2, encoding stage; needs the x2_prepare job's stores and environment.
 # Starts with a real CUDA matrix product checked against the CPU (the run log records it); the

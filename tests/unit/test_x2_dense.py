@@ -39,10 +39,13 @@ def test_encode_store_resumes_and_merges(tmp_path: Path) -> None:
     assert res["texts"] == 23 and res["encoded_now"] == 23 and res["cut_at_max_tokens"] > 0
     again = encode_store(enc, [src], "units__r", out, batch_size=4, piece=10)
     assert again["reused"]
-    # a lost merged file is rebuilt from the pieces without encoding anything again
+    # pieces are removed once merged; finished pieces of an interrupted run are kept and skipped
+    assert not os.listdir(os.path.join(out, "parts", "units__r"))
     os.remove(os.path.join(out, "units__r.npz"))
-    third = encode_store(enc, [src], "units__r", out, batch_size=4, piece=10)
-    assert third["encoded_now"] == 0
+    first_piece = os.path.join(out, "parts", "units__r", f"{0:09d}.npz")
+    encode_store(enc, [src], "units__r", str(tmp_path / "x"), batch_size=4, piece=10)
+    os.replace(os.path.join(tmp_path, "x", "units__r.npz"), os.path.join(out, "units__r.npz"))
+    assert not os.path.exists(first_piece)
     vs = VectorStore([os.path.join(out, "units__r.npz")])
     texts = read_store([src])
     h = sorted(texts)[3]
@@ -68,3 +71,25 @@ def test_scale_matrix_rows_and_seed() -> None:
     assert scale_matrix(v, 4, 0).shape == (4, 4)
     m1, m2 = scale_matrix(v, 10, 1), scale_matrix(v, 10, 1)
     assert m1.shape == (10, 4) and np.array_equal(m1, m2)
+
+
+def test_encode_store_reuses_texts_the_shorter_cut_left_whole(tmp_path: Path) -> None:
+    src = str(tmp_path / "t.jsonl")
+    append_store(src, [" ".join(["w"] * (i + 1)) for i in range(12)], set())
+    short = DenseEncoder(ENCODERS["coderankembed"].with_max_tokens(8), FakeBackend())
+    encode_store(short, [src], "s", str(tmp_path / "a"), batch_size=4, piece=5)
+    long_ = DenseEncoder(ENCODERS["coderankembed"].with_max_tokens(16), FakeBackend())
+    res = encode_store(
+        long_,
+        [src],
+        "s",
+        str(tmp_path / "b"),
+        batch_size=4,
+        piece=5,
+        reuse=(str(tmp_path / "a" / "s.npz"), 8),
+    )
+    # texts of 1..6 words have at most 8 tokens (two special tokens): taken over
+    assert res["taken_from_shorter_cut"] == 6 and res["encoded_now"] == 6
+    vs = VectorStore([str(tmp_path / "b" / "s.npz")])
+    assert len(vs.index) == 12
+    assert not os.path.exists(str(tmp_path / "b" / "parts" / "s" / "reused.npz"))

@@ -283,20 +283,42 @@ def encode_store(
     batch_size: int,
     piece: int = PIECE,
     is_query: bool = False,
+    reuse: tuple[str, int] | None = None,
 ) -> Record:
     """Encode every distinct text of a store into ``<out_dir>/<store_name>.npz``; resumable.
 
     Texts are ordered by character length (then hash) and encoded in pieces of ``piece``; a
-    finished piece is a file and is skipped on a rerun. The merged file holds the hashes (sorted),
-    float16 vectors, and token counts before the cut.
+    finished piece is a file and is skipped on a rerun; pieces are removed once merged. The merged
+    file holds the hashes (sorted), float16 vectors, and token counts before the cut.
+
+    ``reuse = (merged store at a shorter cut, that cut)``: a text that the shorter cut did not
+    shorten gets the same input at this cut, so its vector is taken over instead of re-encoded
+    (only texts longer than the shorter cut are encoded again).
     """
     final = os.path.join(out_dir, f"{store_name}.npz")
     if os.path.exists(final):
         return {"store": store_name, "reused": True}
     texts = read_store(store_paths)
-    hashes = sorted(texts, key=lambda h: (len(texts[h]), h))
     pdir = _piece_paths(out_dir, store_name)
     os.makedirs(pdir, exist_ok=True)
+    taken = 0
+    skip: set[str] = set()
+    if reuse is not None and os.path.exists(reuse[0]):
+        with np.load(reuse[0], allow_pickle=False) as d:
+            keep = d["ntok"] <= reuse[1]
+            rh = [str(h) for h in d["hashes"][keep]]
+            skip = set(rh)
+            rpath = os.path.join(pdir, "reused.npz")
+            if not os.path.exists(rpath):
+                np.savez(
+                    f"{rpath}.tmp.npz",
+                    hashes=np.asarray(rh, dtype=str),
+                    vectors=d["vectors"][keep],
+                    ntok=d["ntok"][keep],
+                )
+                os.replace(f"{rpath}.tmp.npz", rpath)
+            taken = len(rh)
+    hashes = sorted((h for h in texts if h not in skip), key=lambda h: (len(texts[h]), h))
     t0 = time.perf_counter()
     encoded = 0
     for start in range(0, len(hashes), piece):
@@ -335,13 +357,18 @@ def encode_store(
     order = np.argsort(np.asarray(hs_all, dtype=str), kind="stable")
     mat = np.concatenate(vecs_all)[order] if vecs_all else np.zeros((0, 1), np.float16)
     ntok = np.concatenate(ntok_all)[order] if ntok_all else np.zeros(0, np.int32)
+    if len(set(hs_all)) != len(texts):
+        raise RuntimeError(f"{store_name}: {len(set(hs_all))} vectors for {len(texts)} texts")
     tmp = f"{final}.tmp.npz"
     np.savez(tmp, hashes=np.asarray(hs_all, dtype=str)[order], vectors=mat, ntok=ntok)
     os.replace(tmp, final)
+    for p in parts:
+        os.remove(p)
     cut = int((ntok > encoder.spec.max_tokens).sum())
     return {
         "store": store_name,
-        "texts": len(hashes),
+        "texts": len(texts),
+        "taken_from_shorter_cut": taken,
         "encoded_now": encoded,
         "seconds_now": round(seconds, 2),
         "texts_per_s_now": round(encoded / seconds, 2) if encoded and seconds > 0 else None,

@@ -140,7 +140,7 @@ def encode_job(
     log: Record = {"gate": cuda_gate(), "hardware": hardware(), "runs": []}
     groups = store_groups(prep_dir, kinds, names)
     for name in encoders:
-        for cut in cuts:
+        for cut in sorted(cuts):
             spec = ENCODERS[name].with_max_tokens(cut)
             t_load = time.perf_counter()
             enc = DenseEncoder.load(spec, device="cuda", dtype=dtype)
@@ -158,7 +158,12 @@ def encode_job(
             out_dir = os.path.join(enc_root, f"{name}__t{cut}")
             torch.cuda.reset_peak_memory_stats()
             t0 = time.perf_counter()
+            shorter = [c for c in sorted(cuts) if c < cut]
             for store, files in sorted(groups.items()):
+                reuse = None
+                if shorter:
+                    prev = os.path.join(enc_root, f"{name}__t{shorter[-1]}", f"{store}.npz")
+                    reuse = (prev, shorter[-1])
                 res = encode_store(
                     enc,
                     files,
@@ -166,6 +171,7 @@ def encode_job(
                     out_dir,
                     batch_size=BATCH[name],
                     is_query=store.startswith("queries__"),
+                    reuse=reuse,
                 )
                 run["stores"].append(res)
             run["seconds_total"] = round(time.perf_counter() - t0, 1)

@@ -62,7 +62,7 @@ class EncoderSpec:
     max_tokens: int = 512
     trust_remote_code: bool = False
     revision: str | None = None
-    """Model repository revision; recorded in every run log, pinned once known."""
+    """Model repository revision (the commit downloaded on 2026-10-23), pinned."""
 
     def __post_init__(self) -> None:
         if "{query}" not in self.query_template:
@@ -85,11 +85,13 @@ ENCODERS: dict[str, EncoderSpec] = {
         model_id=f"{_NOMIC}/CodeRankEmbed",
         query_template="Represent this query for searching relevant code: {query}",
         trust_remote_code=True,
+        revision="3c4b60807d71f79b43f3c4363786d9493691f8b1",
     ),
     "qwen3-embedding-0.6b": EncoderSpec(
         name="qwen3-embedding-0.6b",
         model_id="Qwen/Qwen3-Embedding-0.6B",
         query_template=f"Instruct: {QWEN_TASK}\nQuery:{{query}}",
+        revision="97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
     ),
 }
 

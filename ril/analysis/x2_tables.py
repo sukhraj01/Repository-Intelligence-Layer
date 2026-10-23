@@ -263,3 +263,212 @@ __all__ = [
     "unit_rows",
     "write_csv",
 ]
+
+
+# --------------------------------------------------------------------------- reports
+
+
+def _tag(rows: list[Record], against: str) -> list[Record]:
+    for r in rows:
+        r["against"] = against
+    return rows
+
+
+def encoders_of(variants: Sequence[str]) -> list[str]:
+    """Encoder names of ``<encoder>__t<cut>`` variants, in first-seen order."""
+    return list(dict.fromkeys(v.split("__t")[0] for v in variants))
+
+
+def first_report(
+    tab: EvalTable,
+    variants: Sequence[str],
+    ks: Sequence[int],
+    alphas: Sequence[float],
+    group: str,
+    seed: int,
+    selection: Record | None = None,
+) -> tuple[list[Record], Record]:
+    """Item-2 rows (dense, RRF and score-level fusion against BM25; cuts; RRF against dense;
+    encoder against encoder) and the selection (computed on dev, or passed in for test)."""
+    cols: list[tuple[str, str, str | None]] = [("bm25", "bm25", None)]
+    for v in variants:
+        cols.append((f"dense|{v}", f"dense|{v}", "bm25"))
+        cols += [(f"rrf|{v}|k{k}", f"rrf|{v}|k{k}", "bm25") for k in ks]
+        cols += [(f"score|{v}|a{a}", f"score|{v}|a{a}", "bm25") for a in alphas]
+    rows = _tag(unit_rows(tab, group, cols, seed), "bm25")
+    sel: Record = dict(selection or {})
+    for enc in encoders_of(variants):
+        pair = [v for v in variants if v.startswith(f"{enc}__t")]
+        if len(pair) == 2:
+            short, long_ = sorted(pair, key=lambda v: int(v.split("__t")[1]))
+            cut_rows = unit_rows(
+                tab,
+                group,
+                [(short, f"dense|{short}", None), (long_, f"dense|{long_}", short)],
+                seed,
+            )
+            rows += _tag(cut_rows, "cut")
+            if selection is None:
+                sel.setdefault("cut", {})[enc] = select_cut(cut_rows, long_)
+    if selection is None:
+        for enc in encoders_of(variants):
+            cut = (
+                sel["cut"][enc]["selected"]
+                if enc in sel.get("cut", {})
+                else int(next(v for v in variants if v.startswith(enc)).split("__t")[1])
+            )
+            v = f"{enc}__t{cut}"
+            sel.setdefault("variant", {})[enc] = v
+            sel.setdefault("rrf_k", {})[enc] = select_best(rows, [f"rrf|{v}|k{k}" for k in ks])
+            if alphas:
+                sel.setdefault("alpha", {})[enc] = select_best(
+                    rows, [f"score|{v}|a{a}" for a in alphas]
+                )
+        cands = ["bm25"]
+        for enc in encoders_of(variants):
+            v = sel["variant"][enc]
+            cands += [f"dense|{v}", sel["rrf_k"][enc]["name"]]
+        sel["first_stage"] = select_best(rows, cands)
+    # RRF at the selected k against dense alone, and the two encoders against each other
+    picks = []
+    for enc, v in sel.get("variant", {}).items():
+        if f"dense|{v}" not in tab.index:
+            continue
+        kname = sel["rrf_k"][enc]["name"]
+        rows += _tag(
+            unit_rows(tab, group, [("dense", f"dense|{v}", None), (kname, kname, "dense")], seed),
+            "dense",
+        )
+        picks.append((enc, kname, v))
+    if len(picks) == 2:
+        (e1, k1, v1), (e2, k2, v2) = picks
+        rows += _tag(
+            unit_rows(
+                tab,
+                group,
+                [
+                    (f"dense|{v1}", f"dense|{v1}", None),
+                    (f"dense|{v2}", f"dense|{v2}", f"dense|{v1}"),
+                    (k1, k1, None),
+                    (k2, k2, k1),
+                ],
+                seed,
+            ),
+            "encoder",
+        )
+    return rows, sel
+
+
+def graph_cells_of(tab: EvalTable) -> list[str]:
+    """Real graph cells (``list``/``rrf3``/``score``, no controls) in table order."""
+    out = []
+    for k in tab.keys:
+        parts = k.split("|")
+        if (
+            parts[0] in ("list", "rrf3", "score")
+            and len(parts) >= 5
+            and not parts[1].startswith("rand_")
+        ):
+            if parts[0] == "score" and parts[1].startswith("enc"):
+                continue
+            out.append(k)
+    return out
+
+
+def control_of(cell: str, ctrl: str) -> str:
+    """Key of a cell's chance control."""
+    parts = cell.split("|")
+    if parts[0] == "score":
+        return "|".join([parts[0], ctrl, *parts[1:]])
+    way = parts[0]
+    return f"{way}|{ctrl}|{parts[1]}|{parts[2]}|{parts[4]}"
+
+
+def graph_report(tab: EvalTable, group: str, seed: int) -> list[Record]:
+    """Item-3 rows: every graph cell against the first stage and against its chance controls."""
+    cells = graph_cells_of(tab)
+    rows = _tag(
+        unit_rows(tab, group, [("first", "first", None)] + [(c, c, "first") for c in cells], seed),
+        "first",
+    )
+    score_cells = [c for c in cells if c.startswith("score|")]
+    if score_cells and "first_score" in tab.index:
+        rows += _tag(
+            unit_rows(
+                tab,
+                group,
+                [("first_score", "first_score", None)]
+                + [(c, c, "first_score") for c in score_cells],
+                seed,
+            ),
+            "first_score",
+        )
+    for ctrl in ("rand_whole", "rand_files"):
+        cols: list[tuple[str, str, str | None]] = []
+        for c in cells:
+            ck = control_of(c, ctrl)
+            if ck in tab.index:
+                cols += [(ck, ck, None), (c, c, ck)]
+        if cols:
+            uniq = list({n: (n, k, r) for n, k, r in cols}.values())
+            rows += _tag(unit_rows(tab, group, uniq, seed), ctrl)
+    return rows
+
+
+def parse_cell(name: str) -> Record:
+    """Labels of a graph cell key."""
+    p = name.split("|")
+    out: Record = {"way": p[0], "subset": p[1], "C": int(p[2][1:]), "gamma": float(p[3][1:])}
+    out["hops"] = int(p[4][1:])
+    out["weight"] = float(p[5][1:]) if len(p) > 5 else ""
+    return out
+
+
+def select_graph(rows: list[Record], subset: str = "core") -> Record:
+    """The cell of ``subset`` with the highest objective (any way), against the first stage."""
+    names = sorted(
+        {
+            r["name"]
+            for r in rows
+            if r.get("against") == "first"
+            and r["name"] != "first"
+            and r["name"].split("|")[1] == subset
+        }
+    )
+    best = select_best([r for r in rows if r.get("against") == "first"], names)
+    return {**best, **parse_cell(best["name"])}
+
+
+def chunk_report(
+    rows_q: list[Record],
+    cols: dict[str, Arr],
+    variants: Sequence[str],
+    ks: Sequence[int],
+    group: str,
+    seed: int,
+    selection: Record | None = None,
+) -> tuple[list[Record], Record]:
+    """Chunk-level rows against BM25 and the RRF k selection (dev) or the stated k (test)."""
+    sel: Record = dict(selection or {})
+    use_ks = ks
+    columns: list[tuple[str, str, str | None]] = [("bm25", "bm25", None)]
+    for v in variants:
+        columns.append((f"dense|{v}", v, "bm25"))
+        if selection is not None:
+            use_ks = [int(sel["rrf_k"][v]["name"].split("rrf")[1].split("__")[0])]
+        columns += [(f"rrf{k}__{v}", f"rrf{k}__{v}", "bm25") for k in use_ks]
+    rows = chunk_rows(rows_q, cols, group, columns, seed)
+    if selection is None:
+        for v in variants:
+            sel.setdefault("rrf_k", {})[v] = select_best(
+                rows, [f"rrf{k}__{v}" for k in ks], "chunks"
+            )
+    for v in variants:
+        kname = sel["rrf_k"][v]["name"]
+        rows += [
+            {**r, "against": "dense"}
+            for r in chunk_rows(
+                rows_q, cols, group, [("dense", v, None), (kname, kname, "dense")], seed
+            )
+        ]
+    return rows, sel
