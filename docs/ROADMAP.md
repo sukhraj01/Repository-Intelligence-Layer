@@ -61,7 +61,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 7–10 — Person A: graph extension
 
-- [ ] Test and configuration node types, `tests` / `configures` edges (census of 2026-10-23: test units are 15% of L3 positives and 40% of those outside the L2 files; configuration and documentation positives are under 1%)
+- [ ] Test and configuration node types, `tests` / `configures` edges (census of 2026-10-23 over 540 Python L3 instances: test units are 20.5% of L3 positives and 44% of those outside the L2 files; non-Python positives 1.7%)
 - [ ] CORE-Bench L3 evaluation
 
 ## Week 12 — go / no-go

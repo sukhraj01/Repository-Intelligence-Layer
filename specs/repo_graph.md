@@ -418,7 +418,9 @@ Verified with one pre-stated setting. Full design in `docs/GRAPH_DESIGN.md`.
   (not computed) in the first stored graph.
 - **Recovery reporting (D15):** see Q-G15.
 - **Still open, to be settled by measurement (D24):** Q-G8 and Q-G13 (the `ambiguous` and `external` policies, Q35 and Q36)
-  and Q-G1, Q-G2 (graph role, entry into fusion; Q30).
+  and Q-G1, Q-G2 (graph role, entry into fusion; Q30). The `ambiguous` policies (keep, drop, rebucket by receiver evidence, keep
+  sets of at most three) are applied by a reader (`ril/parsing/ambiguity_policy.py`), the stored edge record is unchanged; first
+  measurements 2026-10-23 in the ADR-011 addendum (`docs/EXPERIMENTS.md` E-AMBIG-POLICY). Still open.
 
 ## Acceptance criteria (for the spec, as a draft)
 

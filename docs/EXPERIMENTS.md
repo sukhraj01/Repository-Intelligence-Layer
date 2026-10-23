@@ -44,7 +44,7 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-RECENCY | RQ1 ext. (apparatus) | weight and time constant of a recency prior from `last_modified` (D8) added to BM25 | as E-GRAPH-SIGNAL | n/a | paired change against BM25 | done (exploratory pilot, 2026-10-18; rows `e5-*`) |
 | E-CLASS-SOURCE | RQ1 ext. (apparatus) | class unit `source` form (full, header, header plus method signatures; Q28, `provisional: ADR-013`) | units, ids, spans, gold mapping, BM25 parameters, the pilot-E3 grid and cache, seed 0, dev repositories for the sweep | n/a | BM25 and expansion nDCG@10 (L2) and Recall@100 (L3) per form, query-level and repository-clustered intervals, four gold readings; index size and build time | done (exploratory, 2026-10-23; rows `x1-class-source-*`; ADR-013 addendum). Dev rule kept `full` |
 | E-AMBIG-POLICY | RQ1 ext. (apparatus) | policy for ambiguous `invoke` sites read from the stored graph (keep, drop, rebucket by receiver evidence, keep sets of at most three; Q35, Q36) | as E-CLASS-SOURCE, form `full` | n/a | retrieval effect per policy; edge precision and recall per policy by the dynamic oracle (flask) and Jedi (300 stratified sites of requests and streamlink) | done (exploratory, 2026-10-23; rows `x1-ambig-*`; ADR-011 addendum). Dev rule kept `drop` |
-| E-L3-CENSUS | RQ1 ext., RQ2 (apparatus) | none (count of positives by kind, repository and file novelty) | pilot-E1 unit records; D9 path rule | n/a (bootstrap seed 0) | positives by kind; share of L3 positives in files without L2 positives, instance-bootstrap intervals | done for the 438 cached instances (2026-10-23; row `x1-l3-census`); extension to the other Python L3 folders as recorded in the section |
+| E-L3-CENSUS | RQ1 ext., RQ2 (apparatus) | none (count of positives by kind, repository and file novelty) | pilot-E1 unit records; D9 path rule | n/a (bootstrap seed 0) | positives by kind; share of L3 positives in files without L2 positives, instance-bootstrap intervals | done (2026-10-23; rows `x1-l3-census`, `x1-l3-census-extended`): 438 cached instances, then all 540 Python L3 instances with base commits |
 | E-POOL-CHECK | RQ2 (apparatus, pool) | none (measurement of the candidate pool `gangiswag/train_data` python) | the pool as published | n/a (sample seed 0) | directory structure, positives and functions per instance, (repository, PR) overlap with CORE-Bench and Verified | done (exploratory, 2026-10-18; `RESULTS.md` row `x-pool-check`) |
 | E-POWER | RQ2, RQ3 (apparatus) | n, discordance, effect, run-to-run SD, per-query SD, correlation, seeds | alpha 0.05, power 0.8 | n/a (simulation seed 0) | power and minimum detectable effects (calculation, no data) | done (2026-10-18; row `x-power`) |
 | E-CONTAM-PROBE | RQ2/RQ3 (apparatus, contamination) | shard slice (every 10th of 240), hash level (text, syntax tree) | probe set = functions of the 12 Verified repositories at 499 base commits | n/a | function-hash matches against CoRNStack `document`, by size of function; feasibility and cost of the full scan | done as a slice (exploratory, 2026-10-18; rows `x-contam-probe-slice`, `x-contam-throughput`) |
@@ -597,9 +597,25 @@ that holds no L2 positive (dev 29.5% [24.8, 34.4], Verified six 57.5% [49.5, 64.
 new-file share runs from 28.9% (openlibrary) to 61.5% (xarray). **What it shows.** Test code is the largest structure beyond the edited
 files that L3 asks for (15% of L3 positives, 40% of those in new files); configuration and documentation are rare (30 configuration and
 8 documentation positives in 4,595); the pilot sample's 0 of 141 non-Python positives was a small-sample zero, the rate is about 2.5%.
-**Extension beyond the cached instances** (the six other Verified repositories with L3 qrels and SWE-bench Pro ansible, the one further
-Python repository with L3 qrels; Live has no L3 folders, Multi-SWE-bench and Multilingual are not Python): see the census addendum
-below for what finished.
+**Extension beyond the cached instances** (`x1_l3_census.yaml`; Ada jobs 35503 and 35518, 2.7 CPU-hours): the six other Verified
+repositories with L3 qrels (django 136, sympy 51, sphinx 26, scikit-learn 21, pytest 10, pylint 3 instances) and SWE-bench Pro ansible
+(83), the one further Python repository with L3 qrels (Live has no L3 folders; Multi-SWE-bench and Multilingual are not Python), mapped
+with the pilot-E1 unit stage; every positive located. All 540 Python L3 instances of the sub-datasets with base commits (all 302 Verified,
+155 dev, 83 ansible), 14,092 L3 positives (`results/tables/x1_census_extended_*.csv`):
+
+| set | L3 positives | function | method | class | module residual | test unit | non-Python (docs / config / data) | in a file without L2 positives |
+|---|---|---|---|---|---|---|---|---|
+| all 540 | 14,092 | 2,570 (18.2%) | 6,710 (47.6%) | 467 (3.3%) | 1,192 (8.5%) | 2,887 (20.5%) | 245 = 1.7% [1.2, 2.4] (82 / 70 / 93) | 46.2% [43.0, 49.4] |
+| Verified, all 12 repositories (302) | 8,893 | 1,034 | 4,843 | 243 | 454 | 2,248 (25.3%) | 71 = 0.8% [0.3, 1.6] (43 / 0 / 28) | 58.8% [55.6, 61.9] |
+| dev (155) | 3,253 | 1,170 | 941 | 111 | 444 | 482 (14.8%) | 86 = 2.6% [1.7, 3.8] | 29.5% [24.8, 34.4] |
+| ansible (83) | 1,946 | 366 | 926 | 113 | 294 | 157 (8.1%) | 88 = 4.5% [2.7, 6.7] (33 / 40 / 15) | 16.6% [12.7, 21.2] |
+
+Of the 6,516 L3 positives in files without L2 positives, 2,887 are test units (44%), 2,384 methods, 778 functions, 241 module residuals,
+103 non-Python. Django carries much of the Verified test share (1,459 of its 4,361 L3 positives are test units; 62.8% of its L3 positives
+lie in new files). The extension strengthens the cached-instance reading: tests are the structure beyond the edited files that L3 asks
+for (a fifth of all L3 positives, close to half of those in new files); configuration and documentation are under 2% everywhere,
+highest in ansible (4.5%, a configuration-heavy project); the dev repositories have fewer new-file positives than Verified (29.5% against
+58.8%), so a graph signal for L3 tuned on dev sees a different mix than the test set.
 
 **The E-GRAPH-SIGNAL headline under D18** (`full` form and `drop` policy, as selected; C 5, gamma 0.5, 2 hops, list form; gold
 `units_all_nomod`; query-level interval, clustered interval in brackets after it where it differs in sign):

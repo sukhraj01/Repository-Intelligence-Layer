@@ -266,6 +266,8 @@ index exists.
 - **Q28** Class unit `source`: full class text or header only. Not decided in advance (engineer decision D24 of
   2026-10-18): it is settled by measurement (BM25 and the containment expansion with the class unit's `source` as full
   text, header only, and header plus method signatures; a config option, `provisional: ADR-013` until the engineer decides).
+  Implemented as `ParseOptions.class_source` (`full` default, `header`, `header_sigs`; only the text differs) and measured on
+  2026-10-23 (ADR-013 addendum; `docs/EXPERIMENTS.md` E-CLASS-SOURCE). Still open.
 
 ## Addendum 2026-10-23 — readings confirmed (engineer decision D20 of 2026-10-18, closes Q29)
 

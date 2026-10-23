@@ -13,6 +13,13 @@
   "draws": 2000,
   "interval": "95% percentile"
  },
+ "census": {
+  "cached_instances": 438,
+  "e1_unit_stage_config_hash": "6233fcc0b44c0c4875f3bac080785f98f310198737c51a2da5660431f6bc4898",
+  "extra_instances_with_l3": 330,
+  "l3_instances_total": 540,
+  "l3_positives_total": 14092
+ },
  "cluster_jobs": [
   {
    "alloc": "cpu=6,mem=12G",
@@ -33,14 +40,22 @@
    "what": "extras, 83 Verified-six instances, 3 shards (after the confirmation was stated and committed)"
   },
   {
+   "alloc": "cpu=6,mem=16G",
+   "cpu_time": "02:36:17",
+   "elapsed": "01:32:49",
+   "failures": "only no_metadata for L2-only instances (by design)",
+   "host": "gnode002",
    "job": 35503,
-   "status": "running at the end of the session; resumable",
-   "what": "census of the extra L3 folders (pilot-E1 unit stage), long folders"
+   "what": "census of the extra L3 folders (pilot-E1 unit stage): django, sympy, ansible, scikit-learn"
   },
   {
+   "alloc": "cpu=4,mem=8G",
+   "cpu_time": "00:05:57",
+   "elapsed": "00:05:22",
+   "failures": "only no_metadata for L2-only instances (by design)",
+   "host": "gnode002",
    "job": 35518,
-   "status": "running at the end of the session; resumable",
-   "what": "census of the extra L3 folders, sphinx, pytest, pylint"
+   "what": "census of sphinx, pytest, pylint"
   }
  ],
  "code": {
@@ -162,6 +177,8 @@
   "results/tables/x1_headline_confirm_cells.csv",
   "results/tables/x1_headline_confirm_variants.csv",
   "results/tables/x1_census_cached_kinds.csv",
-  "results/tables/x1_census_cached_novelty.csv"
+  "results/tables/x1_census_cached_novelty.csv",
+  "results/tables/x1_census_extended_kinds.csv",
+  "results/tables/x1_census_extended_novelty.csv"
  ]
 }
