@@ -1,0 +1,57 @@
+experiment_id: E-GRAPH-SIGNAL restated under decision D18 (structure measurements X1, item 4)
+stage: confirm on Verified (six repositories with units)
+status: exploratory pilot
+date: '2026-10-23'
+seed: 0
+roles:
+- test
+confirm: true
+note: 'Stated on 2026-10-23 after the dev selection (results/tables/x1_dev_selection.json) and before
+  any X1 extras of a test instance were prepared or scored. Stated setting: class-unit source form full
+  (the dev rule kept full: header and header_sigs were worse at L2 and L3 under every gold reading) and
+  ambiguous-site policy drop (no policy candidate was eligible: keep and rebucket lowered L3 Recall@100,
+  max3 was indistinguishable), at the pilot-E3 cell C 5, gamma 0.5, 2 hops, both list forms, the 19 edge
+  subsets and both chance controls. Primary gold reading units_all_nomod (D18), units_all beside it. No
+  other form or policy is scored on test instances.'
+stated: full
+reference: full
+variants:
+  full:
+    form: full
+    policy: drop
+graph:
+  variants:
+  - list
+  - rrf
+  subsets:
+  - contain
+  - import
+  - invoke
+  - inherit
+  - tests
+  - configures
+  - co_change
+  - import+contain
+  - invoke+contain
+  - co_change+contain
+  - all-minus-contain
+  - all-minus-import
+  - all-minus-invoke
+  - all-minus-inherit
+  - all-minus-tests
+  - all-minus-configures
+  - all-minus-co_change
+  - core
+  - all
+  seeds:
+  - 5
+  gammas:
+  - 0.5
+  hops:
+  - 2
+  cap: 50
+  controls:
+  - rand_whole
+  - rand_files
+  draws: 3
+  rrf_k: 60

@@ -3,7 +3,8 @@
 Reads the per-variant evaluation directories written by ``ril.evaluation.x1_eval`` (metric
 matrices only) and the X1 extras (sizes, times, ambiguous-site counts), and writes:
 
-* ``<prefix>_cells.csv``: every graph cell of every variant against its own BM25 ranking and the
+* ``<prefix>_cells.csv``: every graph cell of every variant (column ``structure_variant``; the column
+  ``variant`` is the list form) against its own BM25 ranking and the
   two chance controls (``ril.analysis.e3_tables.compare``);
 * ``<prefix>_variants.csv``: each variant against the reference variant, key by key (BM25 alone
   and each graph cell), paired over the same queries;
@@ -279,7 +280,7 @@ def write_x1_tables(cfg: Record, out_dir: str, prefix: str, seed: int = 0) -> Re
         for level in ("L2", "L3"):
             for name, tab in tabs.items():
                 for r in compare(tab, mask, group, level, cells, seed, averages=avgs):
-                    r["variant"] = name
+                    r["structure_variant"] = name
                     cell_rows.append(r)
             diff_rows += variant_diffs(tabs, reference, keys, mask, group, level, seed, avgs)
     write_csv(f"{prefix}_cells.csv", cell_rows)

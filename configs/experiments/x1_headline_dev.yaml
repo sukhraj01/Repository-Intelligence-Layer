@@ -1,0 +1,53 @@
+experiment_id: E-GRAPH-SIGNAL restated under decision D18 (structure measurements X1, item 4)
+stage: dev, one setting (the pilot-E3 cell), all 19 edge subsets
+status: exploratory pilot
+date: '2026-10-23'
+seed: 0
+roles:
+- dev
+confirm: false
+note: 'The pilot-E3 cell (C 5, gamma 0.5, 2 hops) re-run with the class-unit source form that won on dev
+  by the rule stated in x1_structure_dev.yaml (results/tables/x1_dev_selection.json: full; neither header
+  form was eligible) and the ambiguous-site policy that won there (drop, as pilot E3), so that the headline
+  can be read under gold units_all_nomod (D18 primary) and units_all beside it.'
+reference: full
+variants:
+  full:
+    form: full
+    policy: drop
+graph:
+  variants:
+  - list
+  - rrf
+  subsets:
+  - contain
+  - import
+  - invoke
+  - inherit
+  - tests
+  - configures
+  - co_change
+  - import+contain
+  - invoke+contain
+  - co_change+contain
+  - all-minus-contain
+  - all-minus-import
+  - all-minus-invoke
+  - all-minus-inherit
+  - all-minus-tests
+  - all-minus-configures
+  - all-minus-co_change
+  - core
+  - all
+  seeds:
+  - 5
+  gammas:
+  - 0.5
+  hops:
+  - 2
+  cap: 50
+  controls:
+  - rand_whole
+  - rand_files
+  draws: 3
+  rrf_k: 60
