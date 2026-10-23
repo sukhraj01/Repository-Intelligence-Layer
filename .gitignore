@@ -69,3 +69,6 @@ reports/**/*.fdb_latexmk
 reports/**/*.synctex.gz
 
 # Tracked on purpose (do not ignore): results/latency/*.csv, results/logs/, RESULTS.md, decisions/
+
+# Review sheets for a second reader (labels and fetched sources; not tracked)
+data/review/

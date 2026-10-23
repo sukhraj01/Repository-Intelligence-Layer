@@ -19,5 +19,9 @@ Design: `docs/06_core_bench.md`, `docs/08_experimental_design.md`.
   `specs/parse_one_repo.md` (ADR-012): a function-level tracer for a repository's own test suite and the comparison
   with the static graph (definition (b)), the second-resolver agreement sample (c), and seeded samples for
   inspection by reading (d) and for the exploratory edges' precision.
+- `spot_check.py` — the second-reader check of those single-reader labels: a seeded draw from the four labelled
+  sources, a reading sheet with source context and no labels, the separate answer key, and agreement with Cohen's
+  kappa (`scripts/build_spot_check.py`, `scripts/spot_check_agree.py`, `configs/experiments/h_spot_check.yaml`;
+  outputs in the untracked `data/review/`).
 
 Depends on: `retrieval/`, `parsing/`, `config/`.

@@ -27,3 +27,7 @@ timestamp_utc,commit,dirty,branch,host,cpu_model,cpu_cores,ram_gb,gpu_name,gpu_d
 2026-10-17T15:52:04Z,ab1b76a,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005178,7724430.93
 2026-10-17T22:31:54Z,bba24b0,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006225,134930.74
 2026-10-17T22:31:54Z,bba24b0,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005189,7708985.79
+2026-10-23T01:28:17Z,3a6cc85,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006398,131285.04
+2026-10-23T01:28:17Z,3a6cc85,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005212,7674597.08
+2026-10-23T01:28:18Z,3a6cc85,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.006318,132951.7
+2026-10-23T01:28:18Z,3a6cc85,1,main,Sukhraj.local,Apple M3,8,8.0,none,,,3.11.14,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.005254,7612703.7

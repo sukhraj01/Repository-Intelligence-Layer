@@ -1,0 +1,18 @@
+# Second-reader spot-check of the first graph build's single-reader labels (ADR-012 (d), ADR-011 D19).
+# Sheet and key are written to data/review/ (untracked). Labels come from results/tables/p_*_sample.csv.
+exp_id: h_spot_check
+seed: 20261023
+radius: 6
+quotas:            # 20 items, roughly proportional to the source sizes (80 / 20 / 60 / 60 rows)
+  call_site: 7     # resolved, external, unresolved strata of the 100-edge inspection sample
+  ambiguous_set: 3 # the 20 ambiguous rows of the same sample
+  tests: 5
+  configures: 5
+repos:             # label in the edge keys -> repository at the commit the graph was built from
+  flask:    {name: pallets/flask,       commit: 7ee9ceb71e868944a46e1ff00b506772a53a4f1d, local: data/raw/repos/pallets__flask}
+  requests: {name: psf/requests,        commit: 0192aac24123735b3eaf9b08df46429bb770c283, local: data/raw/repos/psf__requests}
+  django:   {name: django/django,       commit: 93d4c9ea1de24eb391cb2b3561b6703fd46374df, local: data/raw/repos/django__django}
+  pytest:   {name: pytest-dev/pytest,   commit: 3c1534944cbd34e8a41bc9e76818018fadefc9a1}
+  sphinx:   {name: sphinx-doc/sphinx,   commit: 6cb783c0024a873722952a67ebb9f41771c8eb6d}
+  pylint:   {name: pylint-dev/pylint,   commit: 1f8c4d9eb185c16a2c1d881c054f015e1c2eb334}
+  seaborn:  {name: mwaskom/seaborn,     commit: 22cdfb0c93f8ec78492d87edb810f10cb7f57a31}
