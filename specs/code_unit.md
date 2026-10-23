@@ -137,7 +137,7 @@ project state before the freeze.
   recomputed on the whole chunk span gives 112 / 27 / 5 / 16 against its 111 / 28 / 5 / 16. The residual
   share that motivated the module unit therefore reproduces; whether it changes recall is still pilot E1's
   question (`docs/EXPERIMENTS.md`, E-GRAPH-REACH; `results/tables/m_categories.csv`).
-- **Reading of the decision made in code (confirm, Q29).** The module unit has `name` and
+- **Reading of the decision made in code (confirmed 2026-10-18, D20).** The module unit has `name` and
   `qualified_name` `<module>` (not a Python identifier, so it never collides with a definition), id
   `path::<module>`, empty `signature`, `docstring` = the module docstring or `None`, `start_line` 1
   and `end_line` the last line of the file, `source` = the residual lines in order, `loc` = the number
@@ -179,7 +179,7 @@ project state before the freeze.
   last-modified time: 0.09 s (flask), 0.09 s (requests), 1.7 s (django, 31,107 commits) on the laptop; 1.9 s
   for django on Ada. The cost is not a reason to drop the field. History is read with renames not followed, so a file moved
   after its last edit (flask moved to `src/` in 2021) takes the time of the move.
-- **Format fixed in code (confirm, Q29).** `YYYY-MM-DDTHH:MM:SSZ` or `""`; `validate` rejects other
+- **Format fixed in code (confirmed 2026-10-18, D20).** `YYYY-MM-DDTHH:MM:SSZ` or `""`; `validate` rejects other
   spellings so the field compares and serializes one way.
 
 ### D9 (was Q18) `is_test`
@@ -263,5 +263,15 @@ index exists.
 
 ## Open after the freeze
 
-- **Q28** Class unit `source`: full class text or header only.
-- **Q29** Confirm the readings recorded under D6 (module unit fields) and D8 (timestamp form).
+- **Q28** Class unit `source`: full class text or header only. Not decided in advance (engineer decision D24 of
+  2026-10-18): it is settled by measurement (BM25 and the containment expansion with the class unit's `source` as full
+  text, header only, and header plus method signatures; a config option, `provisional: ADR-013` until the engineer decides).
+
+## Addendum 2026-10-23 — readings confirmed (engineer decision D20 of 2026-10-18, closes Q29)
+
+The readings made in code under D6 (module unit: `<module>` name and qualified name, id `path::<module>`, span = whole
+file, `source` = residual lines, `loc` = non-blank residual lines) and D8 (`last_modified` as `YYYY-MM-DDTHH:MM:SSZ` in
+UTC, or `""`) are accepted as written. No field, type or meaning changes, so `CODEUNIT_SCHEMA_VERSION` stays v1.
+*Evidence class:* reasoned; implemented and pinned by the golden test. *Experiment that could flip it:* none planned; a
+consumer that needs the module unit's span to exclude definitions, or a timestamp with sub-second or local-time precision,
+would reopen it through the change control above.

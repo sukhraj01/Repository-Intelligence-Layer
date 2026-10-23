@@ -48,4 +48,18 @@ These are locked in the design and are changed only through `docs/DEVIATIONS.md`
 | D12 unit-level evaluation on Verified (Q21) | ADR-004 and ADR-005 (addenda) |
 | D4-D11 CodeUnit (Q13-Q20) | `specs/code_unit.md` decision log and ADR-013; D4 also noted in ADR-003, D6 and D7 in ADR-004 |
 
+## Where the 2026-10-18 engineer decisions (D14-D24) are recorded
+
+| Decision (earlier question) | Owning document |
+|---|---|
+| D14 wording and derived-copy corrections (Q24, Q25) | `docs/DEVIATIONS.md` DEV-010 (and DEV-011, reference audit); ADR-003 addendum |
+| D15 edge-recovery reporting (Q27) | ADR-012 addendum; `specs/repo_graph.md` Q-G15 |
+| D16 graph read structure (Q38), D19 first stored families (Q37), D20 projections (Q32) | ADR-011 addendum; `specs/repo_graph.md` ("Decided on 2026-10-18") |
+| D17 averaging (Q40), D23 contamination scan (Q44) | ADR-005 addendum; `docs/EXPERIMENTS.md` (rules; E-CONTAM-PROBE) |
+| D18 gold readings (Q39, Q41; provisional) | ADR-004 addendum; ADR-003 addendum; `docs/EXPERIMENTS.md` (rules) |
+| D20 module unit and timestamp readings (Q29), stage taxonomy (Q34) | `specs/code_unit.md` and ADR-013 addenda; `specs/latency_harness.md` addendum |
+| D21 GPU budget (Q42) | ADR-006 addendum; `docs/COMPUTE.md` ("GPU budget") |
+| D22 provisional pool until the filter-state experiment (Q43) | ADR-001 addendum |
+| D24 not decided in advance: Q28 (ADR-013), Q35/Q36 (ADR-011), Q30 (ADR-003), encoder (ADR-006), pool (ADR-001, after the filter-state experiment); Q45 waits for ADR-007 | the addenda named, each stating that measurement settles it |
+
 ADR-011 (RepoGraph schema, edge taxonomy, storage) is opened as Proposed with options and no choice (`specs/repo_graph.md`, `docs/GRAPH_DESIGN.md`). ADR-012 (edge-recovery definitions) is reserved for the first parse and graph build.

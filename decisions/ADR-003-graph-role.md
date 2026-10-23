@@ -99,3 +99,21 @@ repositories (83 L2, 55 L3 queries). Evidence class: measured, small samples.
 - Role B (training structure): fitted family weights favour containment and do not change L3; no evidence on supervision was gathered.
 - Cheapest experiment that could flip an inference: a fixed-length budget arm and a dense first stage (E6 on a GPU), 1 to 2 hours on Ada once a GPU run is allowed. Conditions to revisit: resolver recall (ADR-012),
   more non-Verified Python repositories with base commits.
+
+## Addendum 2026-10-23 — engineer decisions D14, D18, D19 and D24 of 2026-10-18 as they bear on the graph role (this ADR stays Proposed)
+
+- **D14 (closes Q24): wording.** The master statement that tests and configuration are "covered by nobody" is replaced in
+  project text by "no ablation shows the value of test and configuration links" (DEV-006: LARGER builds such links but
+  reports no ablation of them). Evidence class: read in full. Flip: a published ablation of test or configuration links.
+- **D18: gold for graph decisions.** Design decisions about the graph use the gold without module-residual positives,
+  with the CORE-Bench-faithful reading beside it (ADR-004 addendum). Under it the L3 containment gain of pilot E3 is not
+  distinguishable from same-file chance.
+- **D19: families.** The first stored graph holds `contain`, `invoke`, `import`, `inherit`, `override`; the exploratory
+  families are built but off by default (ADR-011 addendum). A training-time use (E-PILOT-L3POS) is the test that could
+  bring them back.
+- **D24: the role itself (Q30) is not decided in advance.** It is settled by measurement on a dense and a fused first stage:
+  the graph as a third ranked list in reciprocal-rank fusion, the edited candidate list, and score-level fusion with weights
+  tuned on dev, against the same-file and whole-snapshot chance controls, one pre-stated setting confirmed on Verified.
+  Answered pushback from the previous wave: a hop-decay score cannot enter rank fusion as written, hence the three forms;
+  structural negatives stay outside the four RQ2 arms (they would break "only supervision varies") and are a separate pilot
+  factor with the negative policy held identical across arms.

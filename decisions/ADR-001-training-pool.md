@@ -122,3 +122,19 @@ the 49,973 instances of the SweRank+ Python row; the counts that agree with that
 top-40 consistency filter is undecided (a 16% survival of positives would explain the difference; the experiment that would settle it is in E-POOL-CHECK). Corpora are whole-repository function lists (sample median 410 functions). No creation dates.
 60 (repository, PR) pairs coincide with CORE-Bench L2 queries (SWE-bench-Live and plus-plus; 18 repositories, all on the held-out list), none with Verified or L3, so the repository-level filter removes all direct same-PR leakage; the filter is required: without it the pool contains
 the pull requests of 60 L2 queries. Evidence class: measured. Conditions to revisit: a token on the cluster (creation dates, current names), and the rank experiment above if FILTER's K or teacher is to be compared with the pool's own filtering.
+
+## Addendum 2026-10-23 — provisional pool until the filter-state experiment reports (engineer decision D22 of 2026-10-18; this ADR stays Proposed)
+
+**D22 (Q43 pending the experiment).** The pool filter-state experiment is run (X3 in the experiment plan: rank the positives
+of at least 150 sampled pool instances under SweRankEmbed-Small, CodeRankEmbed and BM25, and compare the share outside the
+top 40 with the 307,996 positive rows against 49,973 instances, ratio 6.2). Until it reports, the training pool is
+**provisional**: `gangiswag/train_data` python minus the held-out list (core list plus the Loc-Bench tier, D1 and D3),
+marked `provisional: ADR-001` wherever it is used and never in `configs/frozen/`.
+- *Rationale.* Whether the directories are before or after the top-40 consistency filter decides how the four RQ2 arms are
+  built (if they are already filtered by one teacher, RAW is not available from this pool); the provisional choice lets the
+  training stack be built and smoke-tested without fixing that.
+- *Evidence class.* Measured (E-POOL-CHECK: counts and the absence of a rank field) and read in full (SweRank+ Table 1).
+- *Experiment that could flip it.* X3 itself: a positive-rank distribution with essentially no positives outside the top 40
+  under one teacher would say the pool is post-filter, which removes RAW from this pool and reopens the choice between this
+  pool and an own PR-mined set; time-box as sized in the plan (GPU budget of the current block).
+- *Conditions to revisit.* X3; a token on the cluster (current names, creation dates; D2); the authors' code being released.

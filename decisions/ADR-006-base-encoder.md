@@ -43,3 +43,17 @@ _Pending._
 
 ## Addenda
 _None._
+
+## Addendum 2026-10-23 — GPU use authorised; the encoder is decided by measurement (engineer decisions D21 and D24 of 2026-10-18; this ADR stays Proposed)
+
+- **D21 (closes Q42).** GPU jobs on the cluster are authorised within a budget of 8 GPU-hours for the first block of the
+  current wave and 24 GPU-hours for the second, summed over jobs from `sacct` and logged per job in `docs/COMPUTE.md`. Every
+  GPU job is gated by a real CUDA matrix multiplication and requests a supported card. *Rationale:* the CPU estimate for
+  encoding the roughly 52,000 distinct unit texts of the dev snapshots with CodeRankEmbed was about 30 hours (0.85 chunks/s
+  on 4 CPUs, `docs/EXPERIMENTS.md`), against about an hour on one GPU; a smaller sample or a shorter cut would be a different,
+  lower-fidelity experiment. *Evidence class:* measured (CPU throughput), estimated (GPU). *Flip:* a job that would exceed
+  the block budget stops, records its partial result and the resumable command.
+- **D24 (not decided now).** The base encoder is chosen by the engineer after measurement: CodeRankEmbed (137M) and
+  Qwen3-Embedding-0.6B (the master document's candidate) on the dev and Verified-six unit texts, with encode throughput on
+  CPU and GPU, peak memory, query-encode and flat-index search latency (p50/p95/p99), and retrieval quality alone and fused
+  with BM25.

@@ -70,4 +70,13 @@ is the subject of pilots M and E1.
 - The engineer edits D4, D6 or D11: a version bump and a re-index plan.
 
 ## Addenda
-_None._
+
+## Addendum 2026-10-23 — engineer decisions D20 and D24 of 2026-10-18
+
+- **D20 (closes Q29).** The readings made in code for the module unit (D6) and the timestamp form (D8) are accepted as
+  written (`specs/code_unit.md`, addendum). Schema unchanged, v1. Evidence class: reasoned, pinned by the golden test.
+- **D24 (Q28 not decided in advance).** The class unit's `source` (full class text, header only, header plus method
+  signatures) is settled by measurement: unit-level BM25 and the containment expansion on the dev repositories, with
+  repository-clustered intervals, index size and build time. The parser offers the forms as a config option behind
+  `provisional: ADR-013` until the engineer decides; the CodeUnit schema is not affected by any of the three.
+

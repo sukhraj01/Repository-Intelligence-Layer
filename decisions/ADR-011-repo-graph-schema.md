@@ -1,6 +1,6 @@
 # ADR-011: RepoGraph schema, edge taxonomy and storage
 
-- **Status:** Proposed — **not decided**. This ADR lists options, evidence and costs. No option is chosen.
+- **Status:** Proposed — **not decided** except the parts settled by the engineer on 2026-10-18 (D16 read structure, D19 families of the first stored graph, D20 projection readings; addendum of 2026-10-23). This ADR lists options, evidence and costs for the rest.
 - **Date:** 2026-10-17
 - **Decided by:** _pending — engineer / team_
 - **Related:** `specs/repo_graph.md` (DRAFT v0), `docs/GRAPH_DESIGN.md`, ADR-003 (graph role), ADR-012
@@ -189,3 +189,42 @@ make up about 70% of django's edges. Django: invoke 160,479 sites (63,010 resolv
 external), import 16,817 (13,414 resolved, 3,403 external), inherit 6,841 (6,506 resolved), override 3,513, contain 36,505. The
 exploratory families in django: `tests` 17,454 edges, `configures` 10 edges; `co_change` file pairs changed together in at least 2,
 3 and 5 commits (cap 50 files per commit): 25,378, 11,519 and 4,130.
+
+## Addendum 2026-10-23 — engineer decisions D16, D19, D20 of 2026-10-18 (parts of this ADR settled; the ADR stays Proposed for the rest)
+
+**D16 (closes Q38): read structure of the first stored graph.** The graph is written as a typed edge-list file and read
+into an in-memory adjacency; no graph database. The interchange format of the edge list (S1 Parquet or S7 canonical JSONL)
+and per-commit graphs (Q-G10) are not part of D16.
+- *Rationale.* Every in-memory option answers a warm 2-hop expansion at django scale with p95 0.29 to 0.54 ms on Ada (table
+  above), against 14 ms for SQLite queried directly and 40 ms for the embedded graph database; the graph is on the query path
+  (the standing latency requirement, `docs/07_latency_and_profiling.md`), so a 25- to 100-fold slower read is a cost
+  without a matching need. The query-language flexibility of a database matters only for an agent-tool role (role C), which
+  is not chosen.
+- *Evidence class.* Measured (storage table above, both machines, warm and cold).
+- *Experiment that could flip it.* The same storage benchmark on the largest repository the pool or CORE-Bench L2 contains:
+  if peak resident memory after load approaches the memory budget of a worker, or if a use needs incremental updates per
+  commit (the per-file update above is a lower bound), the decision is revisited. Time-box: one cluster job per repository.
+- *Conditions to revisit.* A graph that outgrows memory; a need for incremental updates; role C entering RQ3.
+
+**D19 (closes Q37 and Q-G14): families in the first stored graph.** The first stored artifact holds `contain`, `invoke`,
+`import`, `inherit` and `override`. The exploratory builders (`tests`, `configures`, `co_change`) stay in the code and are off
+by default.
+- *Rationale.* At pilot scale none of the exploratory families adds reach or retrieval quality over same-file chance (pilot M:
+  nothing measurable; pilots E3 to E5: they add nothing or hurt; ADR-003 addenda), while their precision by reading is uneven
+  (`tests`: body call plus name 94%, body call alone 56%, name convention 85%; `configures` 93%; n = 60 each, one reader) and
+  `configures` is nearly empty in library repositories (10 edges in django).
+- *Evidence class.* Measured, small samples; precision labels by one reader (the author of the build). A second-reader
+  spot-check of these labels is prepared for the engineer.
+- *Experiment that could flip it.* A training-time use of the exploratory families (E-PILOT-L3POS: test and configuration
+  units as additional positives or as structure for negatives) that improves a dev-set metric with an interval excluding
+  zero; or the L3 positive census showing a substantial share of test or configuration positives.
+- *Conditions to revisit.* The census; E-PILOT-L3POS; a second reader disagreeing on more than one label in ten.
+
+**D20 (closes Q32 and Q-G12): projection readings accepted.** `tests(u)` = the test units with a `resolved` `tests` edge to
+`u`; `configs(u)` = the config paths with a `resolved` `configures` edge to `u` or to its file. Since D19 keeps both families
+off by default, both projections are `[]` (= not computed, D10) in the first stored graph. *Evidence class.* Reasoned and
+implemented in code. *Flip.* A use of the projections that needs ambiguous edges as well.
+
+**Not decided now (D24).** Q35 and Q36 (the policy for `ambiguous` sets and the `external`/`unresolved` boundary, Q-G8,
+Q-G13) and the graph's role (Q30, Q-G1, Q-G2) are decided by the measurements of the current wave, not by the engineer
+in advance.

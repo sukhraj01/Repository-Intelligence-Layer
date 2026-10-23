@@ -68,6 +68,18 @@ Before running any step at a new scale for the first time: measure per-unit memo
 project to full scale, and compare against the machine ceiling **with OS headroom**. If close to the
 margin, go to Ada immediately; do not try locally first.
 
+## GPU budget (decision D21, 2026-10-18)
+
+GPU jobs are authorised within a budget per block of work: **block 1 at most 8 GPU-hours, block 2 at most 24 GPU-hours**,
+summed over jobs and counted from `sacct` (elapsed time times allocated GPUs). Before sizing a job run `sinfo`,
+`myallocation` and `sacctmgr show qos`. Every GPU job starts with a real CUDA matrix multiplication as a capability gate,
+requests a supported card with `--constraint`, keeps CPU preparation in a separate job, and is idempotent and resumable.
+A job that would take the block over its budget is not submitted; the item records its partial result and the resumable
+command instead. Each GPU job gets a row here when it finishes.
+
+| Date | Job id | Block | Purpose | GPUs x elapsed | GPU-hours | Block total |
+|---|---|---|---|---|---|---|
+
 ## Log of cluster verification
 
 | date | what was verified | result |

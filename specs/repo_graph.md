@@ -403,10 +403,22 @@ Verified with one pre-stated setting. Full design in `docs/GRAPH_DESIGN.md`.
 | Q-G9 | `contain` stored or derived | stored; derived from ids | storage |
 | Q-G10 | One graph per (repository, commit) or one graph with validity ranges | per-commit; temporal graph as in GREPO (`grepo-2602.13921.md`, App. A.4, p.16); incremental update as in LARGER | storage, training role |
 | Q-G11 | Unit-set hash recorded in the graph | yes; no | compatibility |
-| Q-G12 | Confirm the projection readings under "Settled" | confirm; change | CodeUnit projections |
+| Q-G12 | Confirm the projection readings under "Settled" | **decided 2026-10-18 (D20): confirmed** | CodeUnit projections |
 | Q-G13 | Which resolver per family | own `ast`; PyCG-style; Jedi or language server; combination with status per resolver | ADR-011, ADR-012 |
-| Q-G14 | Which families are in the first graph artifact and which stay exploratory | contain, import, invoke, inherit, override in; tests, configures, documents, co_change exploratory until precision is sampled | ADR-011 |
-| Q-G15 | Edge-recovery definition(s) reported | see ADR-012 stub and Q27 | reporting |
+| Q-G14 | Which families are in the first graph artifact and which stay exploratory | **decided 2026-10-18 (D19): contain, import, invoke, inherit, override in; tests, configures, co_change built but off by default** | ADR-011 |
+| Q-G15 | Edge-recovery definition(s) reported | **decided 2026-10-18 (D15): dynamic-oracle recall with and without implicit callees, beside the call-site breakdown with each denominator named** (ADR-012 addendum) | reporting |
+
+### Decided on 2026-10-18 (engineer decisions D15, D16, D19, D20; reasoning in the ADR-011 and ADR-012 addenda)
+
+- **Read structure (D16):** a typed edge-list file read into an in-memory adjacency; no graph database. The file format
+  (Parquet or canonical JSONL) and per-commit graphs (Q-G10) stay open.
+- **First stored families (D19):** `contain`, `invoke`, `import`, `inherit`, `override`. The `tests`, `configures` and
+  `co_change` builders stay and are off by default; `documents` and `mentions` are not built.
+- **Projections (D20):** the readings under "Settled" are confirmed. With D19, `tests(u)` and `configs(u)` are `[]`
+  (not computed) in the first stored graph.
+- **Recovery reporting (D15):** see Q-G15.
+- **Still open, to be settled by measurement (D24):** Q-G8 and Q-G13 (the `ambiguous` and `external` policies, Q35 and Q36)
+  and Q-G1, Q-G2 (graph role, entry into fusion; Q30).
 
 ## Acceptance criteria (for the spec, as a draft)
 

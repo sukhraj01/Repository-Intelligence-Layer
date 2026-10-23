@@ -98,3 +98,22 @@ Exploratory pilot (`docs/EXPERIMENTS.md` E-BM25-REPRO, `results/tables/e1_*.csv`
   can represent; removing them removes the module unit's measured benefit. An evaluation that keeps them rewards a module unit; one that cleans them does not.
 - Still open: the reported-metric granularity overall (Q11), the gold definition for a chunk spanning several units (Q39; `units` and `units_all` give the same signs here), and the
   reading of import-only positives (labels or noise).
+
+## Addendum 2026-10-23 — gold readings (engineer decision D18 of 2026-10-18, closes Q39 and Q41 provisionally; this ADR stays Proposed)
+
+**D18.** (1) A chunk's positive counts as a positive for **every unit it overlaps** (the `units_all` reading of pilot E1).
+(2) The reading **without module-residual positives** is primary for design decisions about the graph; the
+CORE-Bench-faithful reading (with them) is reported beside it. Provisional until the measurements of the current wave show
+whether any ranking of conditions flips between the two readings.
+- *Rationale.* Counting every overlapped unit keeps all gold reachable and does not need an overlap threshold no source
+  justifies. Without module residuals the gold is function-level, as in SweRank, LocAgent and Loc-Bench, so graph results
+  are comparable with that work; it is also the conservative reading for the graph question: the L3 containment gain of
+  pilot E3 over same-file chance is +1.2 [-0.4, +2.8] Recall@100 without module units in the gold, not distinguishable from
+  zero, while import-only positives (12.7% of dev and 6.2% of Verified-six positives, pilot E2) carry part of the module
+  unit's measured benefit.
+- *Evidence class.* Measured (pilots M, E1, E2, E3; small samples) and read in full (the gold definitions of the cited papers).
+- *Experiment that could flip it.* Every comparison of the current wave (class-unit source, edge policy, dense and fused
+  first stages, graph on top) computed under both readings: if the ordering of conditions flips between them, the primary
+  reading is reopened. No extra runs are needed; both readings come from the same caches.
+- *Conditions to revisit.* A flipped ordering; the reported-metric granularity (Q11) being settled differently.
+- *Not decided by D18:* whether reported benchmark numbers are chunk-level, unit-level or both (Q11).

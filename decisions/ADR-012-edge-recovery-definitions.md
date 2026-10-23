@@ -180,4 +180,28 @@ Build and storage measurements are in ADR-011 (addendum); the oracle run (job 25
 - The graph role (ADR-003) is settled and needs one definition for a threshold or a report.
 
 ## Addenda
-_None yet._
+
+## Addendum 2026-10-23 — how edge recovery is reported (engineer decision D15 of 2026-10-18, closes Q27)
+
+**Decision (D15).** Edge recovery is reported as the dynamic-oracle recall of definition (b), with and without the
+implicit-protocol callees and with n stated (flask: 47.9% resolved and 65.8% resolved or ambiguous over 1,057 in-repository
+pairs; 59.3% and 81.4% over the 854 pairs without implicit dunder callees), beside the call-site breakdown of definition (a)
+with each denominator named (resolved over all sites, over non-external sites, resolved plus ambiguous over non-external
+sites). The "70-85%" figure of the master document is not repeated in project text (DEV-007). This ADR keeps all four
+definitions; (c) and (d) stay as supporting evidence.
+
+- *Rationale.* (b) is the only definition that measures what is present at run time, and stating it with and without the
+  implicit callees shows how much of the gap has no call site to resolve; (a) costs nothing and is available for every
+  repository, but its value moves by a factor of two with the denominator, so the denominator is always named. A single
+  percentage would hide that the `ambiguous` bucket is mostly spurious while containing the target about 40% of the time.
+- *Disclosed beside every number (Wave 2 pushback, answered):* the oracle's coverage (82.9% of non-test functions and
+  methods entered; 89.6% line and branch coverage of `src/flask`), the built-in and external callees counted apart, and that
+  an edge on a branch the suite did not take counts as unsupported.
+- *Evidence class.* Measured (the tables above), one repository for (b).
+- *Experiment that could flip it.* The same oracle on a second repository (requests with its test HTTP server, or one dev
+  repository) moving (b) by more than ten points, which would make a one-repository recall unrepresentative and call for a
+  per-repository report or a different headline definition; time-box a few hours on the cluster.
+- *Conditions to revisit.* As listed above; also a resolver change (Q-G13), which changes every number here.
+- *Not decided by D15:* the policy for `ambiguous` sets and the `external`/`unresolved` boundary (Q35, Q36; settled by
+  experiment, decision D24).
+

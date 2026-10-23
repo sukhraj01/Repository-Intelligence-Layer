@@ -14,6 +14,11 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 - **RQ2 extras recorded per run:** GPU-hours, unique examples seen, effective epochs, optimizer updates.
 - **A one-line summary goes in `RESULTS.md` the moment a run finishes.**
 - **Statuses:** `planned` → `config-ready` → `running` → `done` → `interpreted` (or `cut`, with reason).
+- **Averaging (decision D17, 2026-10-18):** the primary number is the mean over queries with repository-clustered
+  bootstrap intervals; the mean of folder means appears only in the table that reproduces the published BM25 rows (ADR-005).
+- **Gold readings (decision D18, 2026-10-18, provisional):** a chunk's positive counts for every unit it overlaps; the reading
+  without module-residual positives is primary for design decisions about the graph, the CORE-Bench-faithful reading (with
+  them) is reported beside it (ADR-004).
 
 ## Registry
 
@@ -462,6 +467,11 @@ It does not say that the (query, document) pair was in any model's training data
 own base commits (not the union) was not computed.
 
 Reproduce: `scripts/ada/README.md` ("Pool check and contamination probe"). The slice command is `contam_scan.sbatch` with `STRIDE=10`; `STRIDE=1` runs the full documents-only scan.
+
+**Next (decision D23, 2026-10-18).** The full documents-only scan (`STRIDE=1`) runs in the background, with hits restricted to
+functions at the instance's own base commit and above a size floor stated before the full result is read; counts per
+repository. The probe is not part of the frozen evaluation: it supports the contamination statement of the report only, and a
+hit is not proof that a pair was trained on (ADR-005 addendum).
 
 ## Pre-registered interpretation rules
 

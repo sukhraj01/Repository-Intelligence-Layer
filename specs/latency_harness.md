@@ -62,3 +62,16 @@ commit) behind a documented switch so the engineer can relax it, and record the 
 - [ ] p50/p95/p99 computed from raw samples, not means; warmup discarded (test).
 - [ ] `docs/07_latency_and_profiling.md` is *not* edited; `docs/ARCHITECTURE.md` (bench) and `PROJECT_STATE.md` ("harness: built") are.
 - [ ] One latency row for the harness's own commit is in `RESULTS.md`.
+
+## Addendum 2026-10-23 — stage taxonomy confirmed (engineer decision D20 of 2026-10-18, closes Q34)
+
+- **Offline stages go to the throughput log, per-query stages to the latency log.** `parse` and `graph_build` (and any later
+  indexing or training stage) are recorded in `results/latency/throughput_log.csv` in units per second; per-query stages
+  (`bm25`, `graph_expand_1hop`, `graph_expand_2hop`, `graph_expansion`, `query_encode`, `dense_search`, ...) in
+  `results/latency/latency_log.csv` as p50/p95/p99 at batch size 1. This is the split the first graph build used.
+  *Rationale:* the two logs answer different questions (interactive cost against indexing and training cost) and are never
+  compared row against row. *Evidence class:* reasoned. *Experiment that could flip it:* a stage that is both offline and
+  on the query path (for example an incremental graph update per commit inside an agent loop) would need a row in each log.
+- **Q3 stays strict:** every commit gets a fresh row when the hook is installed (`RIL_LATENCY_HOOK=strict`).
+- **Q33 stays provisional:** the regression thresholds in `configs/bench/latency.yaml` are placeholders until real stages
+  (dense encoder, fusion, assembly) have rows and a run-to-run spread can be measured.

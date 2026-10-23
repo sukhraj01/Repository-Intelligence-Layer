@@ -71,3 +71,31 @@ class.* Measured (`results/tables/core_bench_card_vs_measured.csv`, DEV-002). *F
 BM25 on original against Rewrite queries scored with both qrels sets; if the choice flips a
 conclusion, report both. Time-box: one BM25 run per sub-dataset (pilot E1 infrastructure).
 *Conditions to revisit.* The dataset authors fixing the qrels; a flipped conclusion.
+
+## Addendum 2026-10-23 — averaging and the contamination probe (engineer decisions D17 and D23 of 2026-10-18; this ADR stays Proposed)
+
+**D17 (closes Q40): averaging convention.** The primary number is the mean over queries, with bootstrap intervals that
+resample repositories (clusters) and the queries inside them. The mean of folder means appears only in the table that
+reproduces the published BM25 rows.
+- *Rationale.* The claim is about queries (issues), and queries of one repository are not independent, so a
+  repository-clustered interval is the honest one; the folder mean weights a folder of 2 queries like a folder of 80. The
+  folder mean is kept where the purpose is to match the published numbers, which use it.
+- *Evidence class.* Measured: on Verified the two conventions differ by 3.8 Recall@100 points at L2 (46.74 against 42.92)
+  and 5.1 at L3 (33.89 against 28.79) for BM25 (`docs/EXPERIMENTS.md`, E-BM25-REPRO); only the folder mean reproduces the
+  published rows.
+- *Experiment that could flip it.* Compute both conventions on every comparison table of the current wave (no extra runs);
+  if the ordering of two conditions differs between them, both are reported in the main table and the convention is
+  reopened.
+- *Conditions to revisit.* A flipped ordering; a reviewer or the benchmark authors fixing a different convention.
+
+**D23 (closes Q44 as a decision; the run is pending).** The full documents-only contamination scan runs in the background,
+with hits restricted to functions at the instance's own base commit and above a size floor chosen from the slice before
+the full result is read. It is **not part of the frozen evaluation**; it supports the contamination statement in the report.
+- *Rationale.* In the slice 73% of hits were functions under 20 syntax-tree nodes and the probe set was the union of 499
+  snapshots, so unrestricted counts overstate exposure; the restriction makes a hit specific to the evaluated code. A
+  frozen-evaluation component would have to be rerun for every encoder, at about 10 CPU-hours per run.
+- *Evidence class.* Measured (slice of 24 of 240 shards, `docs/EXPERIMENTS.md`, E-CONTAM-PROBE).
+- *Experiment that could flip it.* The full scan finding a large share of the Verified instances' own edited functions
+  (above the floor) in the corpus, concentrated in a few repositories: then a per-repository sensitivity row (results with
+  and without those repositories) would be considered for the evaluation.
+- *Interpretation rule.* A hit is not proof that the (query, document) pair was trained on; a non-hit is not proof of absence.
