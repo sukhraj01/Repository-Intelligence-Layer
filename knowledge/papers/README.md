@@ -51,6 +51,18 @@ Literature scan (third reading pass; queries and the full candidate list are in 
 | CodeGrep — Chen et al. 2026 | 2608.05886 | Trained retriever, resolved rate with the agent fixed (+1.2 points, one run) | full, 16 pp, v1, 2026-10-17 | `codegrep-2608.05886.md` |
 | RLHN — Thakur et al. 2025 | 2505.16967 (EMNLP 2025 Findings) | False negatives and pruning for text retrievers | full, 20 pp, v2, 2026-10-17 | `rlhn-2505.16967.md` |
 | Cost-Effective Exploration — Al Awad and Ivanov 2026 | 2608.29675 | Repository-clustered statistics on a Verified-derived arm | full, 11 pp, v1, 2026-10-17 | `cost-effective-exploration-2608.29675.md` |
-| CoREB; LogicLoc; LLM type and call-graph study; RepoNavigator; NoCFG | 2605.04615; 2604.16021; 2410.00603; 2512.20957; 2105.03099 | Scan candidates | abstract only | listed in `LANDSCAPE.md` |
+| CoREB; LLM type and call-graph study | 2605.04615; 2410.00603 | Scan candidates | dropped with a reason (2026-10-23) | listed in `LANDSCAPE.md` |
+
+Fourth reading pass (2026-10-23; refreshed scan with queries and dates in `LANDSCAPE.md`):
+
+| Paper | arXiv / venue | Role in this project | Read depth | Note file |
+|---|---|---|---|---|
+| Qwen3 Embedding — Zhang et al. 2025 | 2506.05176 | ADR-006 candidate encoder (0.6B) | full, 14 pp, v3, 2026-10-23 | `qwen3-embedding-2506.05176.md` |
+| NV-Retriever — Moreira et al. 2024 | 2407.15831 | Negative selection with false-negative removal (negative policy) | full, 11 pp, v2, 2026-10-23 | `nv-retriever-2407.15831.md` |
+| MAP4CS — Chen et al. 2026 | 2610.11727 | Filtering training pairs of a code retriever (FILTER-like, not budget-matched) | full, 24 pp, v1, 2026-10-23 | `map4cs-2610.11727.md` |
+| What Tracks Hard-Negative Transfer? — Sinha et al. 2026 | 2603.20990 | Negative sources; frozen-encoder statistics against false-negative-shaped controls | full, 15 pp, v5, 2026-10-23 | `hard-negative-transfer-2603.20990.md` |
+| LogicLoc — Xu et al. 2026 | 2604.16021 | Program-fact graph as an agent tool; keyword shortcut | full, 22 pp, v2, 2026-10-23 | `logicloc-2604.16021.md` |
+| RepoNavigator — Zhang et al. 2026 | 2512.20957 (ICML 2026 per the PDF) | Symbol resolution as an agent's only tool | full, 27 pp, v6, 2026-10-23 | `reponavigator-2512.20957.md` |
+| NoCFG — Abadi et al. 2021 | 2105.03099 | Python call-graph precision and recall against test-driven dynamic graphs | full, 11 pp, v1, 2026-10-23 | `nocfg-2105.03099.md` |
 
 Full citations: `docs/11_references.md` (identifiers, titles, first authors and years audited against arXiv and Crossref on 2026-10-23; corrections and the list of mismatches in `docs/DEVIATIONS.md`, DEV-011).
