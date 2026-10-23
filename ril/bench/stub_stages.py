@@ -128,4 +128,7 @@ def build_stub_registry(seed: int) -> StageRegistry:
     registry.register("end_to_end", end_to_end, reset=reset)
     registry.register_throughput("parse", parse)
     registry.register_throughput("graph_build", graph_build)
+    registry.register_throughput(
+        "dense_encode", lambda: int(np.stack([encode(s) for s in sources]).shape[0])
+    )
     return registry

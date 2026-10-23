@@ -62,7 +62,7 @@ LATENCY_STAGES: tuple[str, ...] = (
     "end_to_end",
 )
 # Offline stages, reported as units per second in the throughput log.
-THROUGHPUT_STAGES: tuple[str, ...] = ("parse", "graph_build")
+THROUGHPUT_STAGES: tuple[str, ...] = ("parse", "graph_build", "dense_encode")
 
 CACHE_STATES: tuple[str, ...] = ("cold", "warm")
 

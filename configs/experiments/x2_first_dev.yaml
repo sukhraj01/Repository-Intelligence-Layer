@@ -1,0 +1,36 @@
+experiment_id: E-DENSE-FUSION (dense retrieval and BM25+dense fusion, X2 item 2)
+stage: dev sweep (five development repositories; no test instance is read)
+status: exploratory pilot
+date: '2026-10-23'
+seed: 0
+roles:
+- dev
+confirm: false
+encoders: provisional ADR-006 (ril/retrieval/dense_encoder.py ENCODERS; settings of the released models)
+truncation: >-
+  one policy for both encoders: queries (with the model's query prefix or instruction) and documents
+  cut at max_tokens tokens of the encoder's own tokenizer, keeping the beginning; special tokens added
+  after the cut. Dev compares 512 and 1024; test is encoded and scored at the selected cut only.
+first:
+  variants:
+  - coderankembed__t512
+  - coderankembed__t1024
+  - qwen3-embedding-0.6b__t512
+  - qwen3-embedding-0.6b__t1024
+  rrf_ks: [1, 5, 10, 20, 40, 60, 100, 200]
+  alphas: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+selection_rules:
+  stated: before any dense score existed (this file is committed before the first encoding job ran)
+  reading: units_all_nomod (D18 primary); units_all reported beside it; mean over queries (D17)
+  objective: (L2 nDCG@10 + L3 Recall@100) / 2 on dev
+  cut: per encoder, 1024 is selected when dense alone at 1024 minus 512 has a paired query-level 95%
+    interval above zero for L2 nDCG@10 or L3 Recall@100 and wholly below zero for neither; else 512
+  rrf_k: per encoder at its selected cut, the k with the highest objective for RRF(BM25, dense);
+    ties to the first in the list
+  alpha: per encoder at its selected cut, the alpha with the highest objective for score-level
+    BM25+dense (used only as the alpha of the score-level graph form)
+  first_stage: the strongest first stage is the candidate with the highest objective among BM25,
+    dense and RRF(BM25, dense) at the selected k for both encoders at their selected cuts; the graph
+    measurement (x2_graph_dev.yaml) is run on it. If dense alone wins, the graph is run on RRF of
+    that encoder anyway (the brief's three forms need BM25 and dense lists) and this is stated.
+  chunk_level: the same rules on the chunk-level dev records (k tuned there separately)
