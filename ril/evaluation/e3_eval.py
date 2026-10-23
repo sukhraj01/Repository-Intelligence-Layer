@@ -509,6 +509,7 @@ def evaluate_instance(
             "gold_units": int(len(golds["units"])),
             "gold_units_all": int(len(golds["units_all"])),
             "gold_units_nomod": int(len(golds["units_nomod"])),
+            "gold_units_all_nomod": int(len(golds["units_all_nomod"])),
         }
     out["keys"] = np.asarray(keys_ref or [], dtype=str)
     out["aux_keys"] = np.asarray(aux_ref or [], dtype=str)

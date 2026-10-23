@@ -1,0 +1,54 @@
+experiment_id: E-CLASS-SOURCE and E-AMBIG-POLICY (structure measurements X1)
+stage: dev sweep (no test instance is read)
+status: exploratory pilot
+date: '2026-10-23'
+seed: 0
+roles:
+- dev
+confirm: false
+note: 'Written before any X1 evaluation ran. Variants share the pilot-E3 cache (edges, files, ages) and
+  differ only in the class-unit source form (BM25 scores; Q28, provisional: ADR-013) or in the policy
+  for ambiguous invoke sites (Q35, Q36; read by the evaluation, the stored graph is unchanged). The
+  variant full (form full, policy drop) is pilot E3 as run; its gold-units numbers must reproduce E3.
+  Gold readings: units_all_nomod is primary (decision D18), units_all is the CORE-Bench-faithful reading
+  beside it, units and units_nomod continue pilot E3. Intervals: repository-clustered (D17) and
+  query-level beside it. The extra variant pol_rebucket_nofixture (re-bucketing without the fixture
+  rule) is a dev-only sensitivity, never confirmed.'
+reference: full
+variants:
+  full: {form: full, policy: drop}
+  header: {form: header, policy: drop}
+  header_sigs: {form: header_sigs, policy: drop}
+  pol_keep: {form: full, policy: keep}
+  pol_rebucket: {form: full, policy: rebucket}
+  pol_rebucket_nofixture: {form: full, policy: rebucket, evidence: [literal, kwargs, annotated_external]}
+  pol_max3: {form: full, policy: max3}
+selection:
+  q28_class_source:
+    key: list|core|C5|g0.5|h2
+    reading: units_all_nomod
+    reference: full
+    candidates: [header, header_sigs]
+    group: dev_all
+    rule: 'among the candidates, the largest mean of (L2 nDCG@10 difference, L3 Recall@100 difference)
+      against full at the pilot-E3 cell (C 5, gamma 0.5, 2 hops, list form, subset core), micro
+      average; it replaces full only if that mean is positive, at least one of the two query-level
+      95% intervals lies above zero and neither lies below zero; otherwise full stays'
+  q35_policy:
+    key: list|core|C5|g0.5|h2
+    reading: units_all_nomod
+    reference: full
+    candidates: [pol_keep, pol_rebucket, pol_max3]
+    group: dev_all
+    rule: 'same rule, the reference being policy drop (pilot E3 as run); the dev-only variant
+      pol_rebucket_nofixture is not a candidate'
+graph:
+  variants: [list, rrf]
+  subsets: [contain, invoke, invoke+contain, core]
+  seeds: [1, 3, 5]
+  gammas: [0.5]
+  hops: [1, 2]
+  cap: 50
+  controls: [rand_whole, rand_files]
+  draws: 3
+  rrf_k: 60

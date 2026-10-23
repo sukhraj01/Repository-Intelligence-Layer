@@ -11,8 +11,9 @@ The parse is phase one of two: it emits the units and a compact :class:`FileSumm
 (``ril.parsing.call_graph``) re-reads each file to resolve call sites against these summaries. Files
 that cannot be read or parsed are counted and listed, never dropped silently.
 
-The class unit's ``source`` (full class text or header only) is the open question Q28; it is an
-option here and the default is recorded with every build (``provisional: ADR-013``).
+The class unit's ``source`` (full class text, header only, or header plus method signatures) is the
+open question Q28; it is an option here (:data:`CLASS_SOURCE_FORMS`) and the form is recorded with
+every build (``provisional: ADR-013``; default ``full``).
 
 Kept compatible with Python 3.10 so the same code runs on the cluster's compute nodes.
 """
@@ -373,15 +374,52 @@ def _annotation_text(node: ast.expr | None) -> str:
 # --------------------------------------------------------------------------- phase one
 
 
+CLASS_SOURCE_FORMS: tuple[str, ...] = ("full", "header", "header_sigs")
+"""Forms of a class unit's ``source`` (open question Q28, ``provisional: ADR-013``).
+
+* ``full``         the whole class span, methods included (the default of every build so far);
+* ``header``       the class span without its methods: decorators, the ``class`` line, the
+                   docstring and every class-level statement (attributes, nested classes), wherever
+                   they stand between or after the methods;
+* ``header_sigs``  ``header`` plus each method's decorators and ``def`` line(s) up to its body.
+
+Only the text changes: the unit's id, span and every other field are the same in all forms, so the
+gold mapping of a chunk to units does not depend on the form."""
+
+
 @dataclass
 class ParseOptions:
     """Options of the parse; ``class_source`` is open question Q28 (``provisional: ADR-013``)."""
 
-    class_source: str = "full"  # "full" | "header"
+    class_source: str = "full"  # one of CLASS_SOURCE_FORMS
 
     def __post_init__(self) -> None:
-        if self.class_source not in ("full", "header"):
-            raise ValueError("class_source must be 'full' or 'header'")
+        if self.class_source not in CLASS_SOURCE_FORMS:
+            raise ValueError(f"class_source must be one of {CLASS_SOURCE_FORMS}")
+
+
+def class_source_text(lines: list[str], node: ast.ClassDef, start: int, end: int, form: str) -> str:
+    """The ``source`` of a class unit spanning lines ``start``..``end`` under ``form``.
+
+    Methods are the function definitions that :func:`collect_entries` makes method units (found
+    by :func:`iter_defs` in the class body); everything else in the span is the header.
+    """
+    if form == "full":
+        return "\n".join(lines[start - 1 : end])
+    skip: set[int] = set()
+    keep: set[int] = set()
+    for sub in iter_defs(node.body):
+        if not isinstance(sub, ast.FunctionDef | ast.AsyncFunctionDef):
+            continue
+        m_start = span_start(sub)
+        m_end = min(sub.end_lineno or sub.lineno, end)
+        skip.update(range(m_start, m_end + 1))
+        if form == "header_sigs":
+            body_first = sub.body[0].lineno if sub.body else sub.lineno
+            sig_end = min(max(sub.lineno, body_first - 1), m_end)
+            keep.update(range(m_start, sig_end + 1))
+    kept = [lines[i - 1] for i in range(start, end + 1) if i not in skip or i in keep]
+    return "\n".join(kept).rstrip()
 
 
 def _module_level_names(tree: ast.Module, summary: FileSummary) -> None:
@@ -578,13 +616,7 @@ def parse_file(
         start = min(start, end)
         if utype == "class":
             assert isinstance(node, ast.ClassDef)
-            if options.class_source == "header":
-                first_def = next(iter(iter_defs(node.body)), None)
-                head_end = (span_start(first_def) - 1) if first_def is not None else end
-                head_end = max(start, min(head_end, end))
-                source = "\n".join(lines[start - 1 : head_end])
-            else:
-                source = "\n".join(lines[start - 1 : end])
+            source = class_source_text(lines, node, start, end, options.class_source)
             sig = class_signature(node)
             cs = ClassSummary(
                 unit_id=uid,

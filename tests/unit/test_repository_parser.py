@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from ril.parsing.repository_parser import (
+    CLASS_SOURCE_FORMS,
     ParseOptions,
     discover_python_files,
     module_names,
@@ -70,8 +71,54 @@ def test_class_source_header_option(mini_repo: Path) -> None:
     ).unit_by_id()["pkg/core.py::Engine"]
     assert head.source == "class Engine(Base):"
     assert len(full.source) > len(head.source)
+    sigs = parse_repository(
+        str(mini_repo), "acme/mini", options=ParseOptions(class_source="header_sigs")
+    ).unit_by_id()["pkg/core.py::Engine"]
+    assert sigs.source.startswith("class Engine(Base):")
+    assert "    @property" in sigs.source and "    def size(self):" in sigs.source
+    assert "return self.helper.go()" not in sigs.source
+    assert (sigs.start_line, sigs.end_line, sigs.id) == (full.start_line, full.end_line, full.id)
     with pytest.raises(ValueError):
         ParseOptions(class_source="nope")
+
+
+def test_class_source_forms_keep_late_class_statements(tmp_path: Path) -> None:
+    text = (
+        "@dec\n"
+        "class K:\n"
+        '    """Doc."""\n'
+        "    A = 1\n"
+        "    def f(\n"
+        "        self, x\n"
+        "    ):\n"
+        '        """Method doc."""\n'
+        "        return x\n"
+        "    B = 2\n"
+        "    class Inner:\n"
+        "        pass\n"
+        "    def g(self): return 3\n"
+    )
+    (tmp_path / "m.py").write_text(text, encoding="utf-8")
+    forms = {
+        f: parse_repository(str(tmp_path), "a/b", options=ParseOptions(class_source=f))
+        .unit_by_id()["m.py::K"]
+        .source
+        for f in CLASS_SOURCE_FORMS
+    }
+    assert forms["full"] == text.rstrip("\n")
+    assert forms["header"].splitlines() == [
+        "@dec",
+        "class K:",
+        '    """Doc."""',
+        "    A = 1",
+        "    B = 2",
+        "    class Inner:",
+        "        pass",
+    ]
+    sig_lines = forms["header_sigs"].splitlines()
+    assert sig_lines[4:7] == ["    def f(", "        self, x", "    ):"]
+    assert '        """Method doc."""' not in sig_lines
+    assert sig_lines[-1] == "    def g(self): return 3"  # a one-line method keeps its line
 
 
 def test_is_test_and_last_modified(mini_repo: Path) -> None:

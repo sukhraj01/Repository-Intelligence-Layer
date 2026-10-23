@@ -248,13 +248,14 @@ def test_older_cache_files_get_the_no_module_reading_added(snapshot: Path, tmp_p
     arrays, meta = prepare_instance(str(snapshot), "acme/mini", queries, e1, BM25Params(), "hash0")
     assert len(arrays["gold_L3_units"]) == 1 and len(arrays["gold_L3_units_nomod"]) == 0
     assert len(arrays["gold_L2_units_nomod"]) == 1
-    old = {k: v for k, v in arrays.items() if not k.endswith("units_nomod")}
+    old = {k: v for k, v in arrays.items() if not k.endswith("_nomod")}
     path = str(tmp_path / "inst-1.npz")
     write_cache(path, old, meta)
     assert add_missing_readings(path, e1) is True
     back, _ = read_cache(path)
     for lv in ("L2", "L3"):
-        assert np.array_equal(back[f"gold_{lv}_units_nomod"], arrays[f"gold_{lv}_units_nomod"])
+        for r in ("units_nomod", "units_all_nomod"):
+            assert np.array_equal(back[f"gold_{lv}_{r}"], arrays[f"gold_{lv}_{r}"])
     assert add_missing_readings(path, e1) is False
     # a level without gold under a reading is not scored (NaN), not scored as zero
     meta.update(instance="inst-1", role="dev")
@@ -277,7 +278,7 @@ def test_expansion_never_depends_on_the_gold_units(snapshot: Path) -> None:
     other = dict(arrays)
     n = meta["units"]
     for lv in ("L2", "L3"):
-        for r in ("units", "units_all", "units_nomod"):
+        for r in ("units", "units_all", "units_nomod", "units_all_nomod"):
             other[f"gold_{lv}_{r}"] = np.asarray([n - 1, n - 2], dtype=np.int32)
     _, b = evaluate_instance(other, meta, spec)
     assert np.array_equal(a["aux_L2"][:, 0], b["aux_L2"][:, 0])  # expansion sizes are gold-free

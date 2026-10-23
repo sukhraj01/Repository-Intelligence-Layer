@@ -40,7 +40,7 @@ class BuildConfig:
     """Everything that decides the bytes of a build besides the repository content."""
 
     repo_id: str
-    class_source: str = "full"  # Q28, provisional: ADR-013
+    class_source: str = "full"  # Q28, provisional: ADR-013; see CLASS_SOURCE_FORMS
     max_candidates: int = MAX_CANDIDATES
     with_history: bool = True
     seed: int = 0

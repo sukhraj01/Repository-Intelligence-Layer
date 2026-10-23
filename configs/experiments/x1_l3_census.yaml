@@ -1,0 +1,62 @@
+experiment_id: E-L3-CENSUS
+stage: census of positives (counts only), extra folders beyond the pilot-E1 unit-level set
+status: exploratory pilot
+date: '2026-10-23'
+seed: 0
+note: 'Counts positives by kind and file novelty; no retrieval setting is chosen from these folders.
+  The six Verified repositories without unit-level records so far and the one further Python
+  repository with L3 qrels in the non-Verified sub-datasets (SWE-bench Pro ansible) are mapped with
+  the pilot-E1 unit stage (same code, same BM25 parameters; the BM25 ranks it also writes are not
+  used). Only instances with L3 qrels get metadata. Live has no L3 folders; Multi-SWE-bench and
+  Multilingual are not Python and are out of scope.'
+bm25:
+  k1: 1.5
+  b: 0.75
+  stopwords: en (33 words)
+  stemmer: snowball english
+  token_pattern: (?u)\b\w\w+\b
+  provisional: ADR-004
+prefilter_k: 10000
+folders:
+- role: test
+  dataset: SWE-bench_Verified
+  folder: django__django
+  repo: django/django
+  levels: [L2, L3]
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pylint
+  repo: pylint-dev/pylint
+  levels: [L2, L3]
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pytest
+  repo: pytest-dev/pytest
+  levels: [L2, L3]
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: scikit
+  repo: scikit-learn/scikit-learn
+  levels: [L2, L3]
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: sphinx
+  repo: sphinx-doc/sphinx
+  levels: [L2, L3]
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: sympy__sympy
+  repo: sympy/sympy
+  levels: [L2, L3]
+  units: true
+- role: census
+  dataset: SWE-bench_Pro
+  folder: instance_ansible__ansible
+  repo: ansible/ansible
+  levels: [L2, L3]
+  units: true

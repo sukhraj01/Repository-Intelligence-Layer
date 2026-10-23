@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ril.parsing.build import BuildConfig, build_repository, write_artifacts  # noqa: E402
 from ril.parsing.report import build_stats, select_units, unit_summary  # noqa: E402
+from ril.parsing.repository_parser import CLASS_SOURCE_FORMS  # noqa: E402
 from ril.util.seed import set_seed  # noqa: E402
 
 
@@ -25,7 +26,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--out", default="")
     ap.add_argument("--stats-json", default="")
-    ap.add_argument("--class-source", default="full", choices=("full", "header"))
+    ap.add_argument("--class-source", default="full", choices=CLASS_SOURCE_FORMS)
     ap.add_argument("--no-history", action="store_true")
     args = ap.parse_args()
     set_seed(args.seed)

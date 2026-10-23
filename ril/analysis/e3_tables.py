@@ -9,8 +9,10 @@ Conventions
 -----------
 * A *query* is an (instance, level) pair; L2 and L3 are always separate rows.
 * ``micro`` averages over queries; ``macro_repo`` averages the per-repository means (the queries
-  of every repository are resampled inside it, so the structure of the average is kept). Both are
-  stated beside every number (Q40: the published BM25 rows are folder means).
+  of every repository are resampled inside it, so the structure of the average is kept); ``cluster``
+  is the micro mean with a repository-clustered interval (whole repositories resampled with
+  replacement; decision D17's primary convention). With five or six repositories the clustered
+  interval is wide and coarse, so the query-level (``micro``) interval is reported beside it.
 * Differences are in percentage points of nDCG@10 and Recall@100; the intervals are 95%
   percentile bootstraps with a fixed seed (2,000 draws, one set of resamples shared by all
   columns of a group, which keeps the comparisons paired).
@@ -29,9 +31,9 @@ from typing import Any
 import numpy as np
 
 from ril.evaluation.e3_eval import FAMILIES, control_key, graph_key, read_eval
+from ril.evaluation.e3_prepare import READINGS
 
 Record = dict[str, Any]
-READINGS = ("units", "units_all", "units_nomod")
 METRICS = ("ndcg10", "recall100")
 COLUMN = {(r, m): 2 * i + j for i, r in enumerate(READINGS) for j, m in enumerate(METRICS)}
 DRAWS = 2000
@@ -133,14 +135,28 @@ class Boot:
             point[m] = 1.0 / len(m) / len(blocks)
         self.macro = macro
         self.point_macro = point
+        # repository-clustered (decision D17): resample whole repositories with replacement, then
+        # average over the queries of the drawn repositories (point estimate = the micro mean)
+        names = sorted(blocks)
+        repo_of_query = np.empty(q, dtype=np.int64)
+        for j, name in enumerate(names):
+            repo_of_query[blocks[name]] = j
+        picks = rng.integers(0, len(names), size=(draws, len(names)))
+        drawn = np.zeros((draws, len(names)))
+        np.add.at(drawn, (np.repeat(np.arange(draws), len(names)), picks.ravel()), 1.0)
+        cluster = drawn[:, repo_of_query]
+        self.cluster = cluster / cluster.sum(axis=1, keepdims=True)
 
     def summarize(
         self, d: np.ndarray[Any, Any], average: str
     ) -> tuple[np.ndarray[Any, Any], np.ndarray[Any, Any], np.ndarray[Any, Any]]:
         """Mean, 2.5% and 97.5% quantiles of every column of ``d`` (queries x columns)."""
-        w, p = (
-            (self.micro, self.point_micro) if average == "micro" else (self.macro, self.point_macro)
-        )
+        if average == "micro":
+            w, p = self.micro, self.point_micro
+        elif average == "cluster":
+            w, p = self.cluster, self.point_micro
+        else:
+            w, p = self.macro, self.point_macro
         boots = w @ d
         lo, hi = np.quantile(boots, [0.025, 0.975], axis=0)
         return p @ d, lo, hi
@@ -278,7 +294,7 @@ def compare(
                         row[name] = _fmt(mean[i])
                         row[f"{name}_lo"] = _fmt(lo[i])
                         row[f"{name}_hi"] = _fmt(hi[i])
-                w = boot.point_micro if avg == "micro" else boot.point_macro
+                w = boot.point_macro if avg.startswith("macro") else boot.point_micro
                 for row in rows.values():
                     row["bm25"] = _fmt(100 * (w @ sub[:, base_i, COLUMN[(reading, row["metric"])]]))
                 out.extend(rows.values())

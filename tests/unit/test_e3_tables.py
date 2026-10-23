@@ -42,7 +42,7 @@ def make_table() -> EvalTable:
                 "gold_units": 1,
             }
         )
-    m = np.zeros((6, len(keys), 6))
+    m = np.zeros((6, len(keys), 8))
     m[:, 0, :] = 0.2
     m[:, 1, :] = 0.5  # graph run beats BM25 by 30 points
     m[:, 2, :] = 0.45
@@ -50,9 +50,9 @@ def make_table() -> EvalTable:
     m[:, 4, :] = 0.6
     m[:, 5, :] = 0.7
     aux_keys = ["E|invoke|C3|g0.5|h1", "E|contain|C3|g0.5|h1"]
-    aux = np.zeros((6, 2, 4))
-    aux[:, 0, :] = [10, 2, 2, 1]
-    aux[:, 1, :] = [20, 1, 1, 0]
+    aux = np.zeros((6, 2, 5))
+    aux[:, 0, :] = [10, 2, 2, 1, 1]
+    aux[:, 1, :] = [20, 1, 1, 0, 0]
     return EvalTable(keys, {k: i for i, k in enumerate(keys)}, rows, m, aux_keys, aux)
 
 
@@ -67,6 +67,11 @@ def test_bootstrap_point_estimates_and_intervals() -> None:
     const = np.ones((6, 1))
     m3, l3, h3 = boot.summarize(const, "micro")
     assert l3[0] == pytest.approx(1.0) and h3[0] == pytest.approx(1.0)
+    # clustered: the point is the micro mean; a draw is all-a (1.0), all-b (4.0) or mixed
+    mc, lc, hc = boot.summarize(d, "cluster")
+    assert mc[0] == pytest.approx(2.0)
+    assert lc[0] == pytest.approx(1.0) and hc[0] == pytest.approx(4.0)
+    assert boot.cluster.sum(axis=1) == pytest.approx(1.0)
 
 
 def test_compare_reports_paired_differences_against_all_comparators() -> None:
