@@ -33,7 +33,7 @@ The audit ran across six-plus search rounds and repeatedly narrowed the claim. T
 
 | Original claim | Killed by |
 |---|---|
-| "We discovered that training data noise hurts code retrieval" | Sun et al., ICSE 2022 — measured it, filtered, +19.2% MRR |
+| "We discovered that training data noise hurts code retrieval" | Sun et al., ICSE 2022 — measured it, filtered, +19.2% MRR (relative, one model (DeepCS), Java only, averaged over three small evaluation sets; corrected, see DEV-007) |
 | "We invented filtering / weighting / curriculum for code retrieval" | Each exists separately (Sun 2022; Li et al. 2023; CodeR 2025) |
 | "No one has studied supervision quality for code retrieval" | CoRNStack, CodeR, SweRank all do |
 | "Training on repository-level data improves repository-level retrieval" is open | CORE-Bench SFT: Qwen3-0.6B 17.0→26.5, Qwen3-8B 20.3→32.8 |

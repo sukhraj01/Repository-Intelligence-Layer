@@ -11,7 +11,7 @@ The professor's suggestion is correct and the schema already exists in published
 
 `issue → implementation → caller → dependency → test → configuration`
 
-No published schema covers all of it. LocAgent covers implementation through dependency. KGCompass adds the issue. Tests and configuration are covered by nobody — and are exactly what CORE-Bench Level-3 scores.
+No published schema covers all of it. LocAgent covers implementation through dependency. KGCompass adds the issue. No ablation shows the value of test and configuration links (corrected, see DEV-006: LARGER builds such links but reports no ablation of them) — and they are part of what CORE-Bench Level-3 scores.
 
 ## LocAgent schema (adopt this)
 
@@ -36,7 +36,7 @@ Three readings that change our design. Directory structure is nearly worthless �
 
 ## KGCompass extension
 
-Unifies code entities with repository artifacts — issues and pull requests become nodes. Scores functions by combining semantic similarity with shortest path length from the issue node. Reports that 69.7% of successfully localized bugs required multi-hop traversal. Language-agnostic and incrementally updatable.
+Unifies code entities with repository artifacts — issues and pull requests become nodes. Scores functions by combining semantic similarity with shortest path length from the issue node. Reports that 89.7% of 146 ground-truth functions lie two or more hops from the issue node (corrected, see DEV-005; 69.7% was the superseded first version). Language-agnostic and incrementally updatable.
 
 ## Our addition
 
@@ -50,4 +50,4 @@ Baseline scoring if signal: `struct(u) = γ^dist(ℓ,u)` with γ≈0.5. Personal
 
 ## Known limitation to quantify
 
-Static call-graph extraction in Python is incomplete — dynamic dispatch, `getattr`, decorators, monkey-patching and duck typing all produce unresolvable edges. Expect 70–85% edge recovery. Measure and report this number; if RQ1 finds structural signals weak, incomplete extraction is a candidate explanation and the coverage figure is what makes that credible.
+Static call-graph extraction in Python is incomplete — dynamic dispatch, `getattr`, decorators, monkey-patching and duck typing all produce unresolvable edges. No published figure supports an expected recovery range for arbitrary repositories (corrected, see DEV-007); edge recovery is reported as the dynamic-oracle recall beside the call-site breakdown (ADR-012). Measure and report it; if RQ1 finds structural signals weak, incomplete extraction is a candidate explanation and the coverage figure is what makes that credible.

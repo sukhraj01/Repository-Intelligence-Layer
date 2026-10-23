@@ -76,7 +76,7 @@ Volunteering these is the single most effective move in a proposal defence. Rais
 | Quality signal not transferable | Docstring-era filters break on issue text | Use SweRank's K-rank signal; settle in week 1 |
 | Small RQ3 sample | n≈30 gives ±8.4pp standard error | Paired McNemar; report CIs; state detectable effect size up front |
 | Benchmark contamination | Base LLM has likely seen SWE-bench repositories | Inflates absolute rates identically across arms, so the comparison holds; say so, and do not report absolute rates as agent capability |
-| Incomplete call graphs | Python dynamism defeats static resolution | Measure and report edge-recovery coverage (expect 70–85%) |
+| Incomplete call graphs | Python dynamism defeats static resolution | Measure and report edge-recovery coverage as defined in ADR-012 (no expected range; corrected, see DEV-007) |
 | Single language | Python only | Scope the claim to Python; do not generalize |
 | Seed variance | One run can show a spurious gap | Three seeds minimum; mean ± SD |
 | Granularity mismatch | CORE-Bench is chunk-level, our units are functions | Adopt their chunking for reported metrics |

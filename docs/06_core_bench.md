@@ -14,8 +14,8 @@ Data: [zhangfw123/CORE-Bench](https://huggingface.co/datasets/zhangfw123/CORE-Be
 | Level | Goal | Scale |
 |---|---|---|
 | L1 — Code Understanding | Text-to-code, code-to-text, code-to-code, hybrid, competitive programming | 172,961 queries; 2,412,296 corpus items |
-| L2 — Issue-to-Edit Localization | Retrieve files or chunks that must be modified | 632 repositories; 5,061 queries; 9,377,120 chunks |
-| L3 — Broader Context Retrieval | Retrieve auxiliary code, tests, documentation, configuration | 97 repositories; 2,580 queries; 2,609,581 chunks |
+| L2 — Issue-to-Edit Localization | Retrieve files or chunks that must be modified | 632 folders (605 distinct repositories; corrected, see DEV-002); 5,061 queries; 9,377,120 chunks |
+| L3 — Broader Context Retrieval | Retrieve auxiliary code, tests, documentation, configuration | 97 folders (92 distinct repositories; corrected, see DEV-002); 2,580 queries; 2,609,581 chunks |
 
 L2 and L3 are built from SWE-bench-series instances. Registered groups: `CORE_BENCH_LEVEL1`, `LEVEL2`, `LEVEL3`, `LEVEL2_REWRITE`, `LEVEL3_REWRITE`.
 

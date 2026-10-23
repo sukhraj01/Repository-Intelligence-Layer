@@ -8,7 +8,7 @@ repository; ten CodeUnits and the edge-recovery percentage."*
 
 Prove the parser → CodeUnit → graph path works on real code, and measure how much of the call graph
 static analysis recovers. Static call-graph extraction in Python is incomplete (dynamic dispatch,
-`getattr`, decorators, monkey-patching, duck typing); the expected recovery is 70–85% and **the
+`getattr`, decorators, monkey-patching, duck typing); no published range applies (corrected, see DEV-007) and **the
 number must be measured and reported** — it is the credible explanation if RQ1 finds structural
 signals weak.
 

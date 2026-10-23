@@ -27,13 +27,13 @@ This is what SweLoc, CoRNStack and CORE-Bench's SFT set all did. Replicating it 
 
 | Stage | Dataset | Role | Note |
 |---|---|---|---|
-| A — train | **SweLoc** (SweRank) | Primary pool | Released; purpose-built for issue localization |
+| A — train | **SweLoc** (SweRank) | Primary pool | Purpose-built for issue localization; not published under that name: the available candidate, `gangiswag/train_data` python, is the Python part of SweLocMulti (SweRank+) and holds benchmark repositories (corrected, see DEV-001 and DEV-004) |
 | A — train | **Own PR-mined set** | Contamination-safe replication | The piece we actually build |
 | A — train | CodeSearchNet | Transfer-gap arm | Not a substitute for repo-level data |
 | C — retrieval eval | **CORE-Bench L2** | Primary metric | Issue-to-edit localization |
 | C — retrieval eval | **CORE-Bench L3** | Structural / graph question | Tests, docs, configuration |
 | C — retrieval eval | CORE-Bench L2/L3 REWRITE | Free query-rewriting ablation | Paper reports rewriting can hurt |
-| C — retrieval eval | Loc-Bench | Contamination check, category balance | 660 examples, post-Oct-2024 |
+| C — retrieval eval | Loc-Bench | Contamination check, category balance | 560 examples in V1, 660 in V0.2; not every row post-dates Oct 2024 (corrected, see DEV-001) |
 | C — retrieval eval | CoIR | Generalization | Cut first if behind |
 | D — agent eval | **SWE-bench Verified** | Resolved rate | Overlaps L2 — see below |
 

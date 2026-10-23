@@ -7,7 +7,7 @@ The extracted text has 38 pages and no blank page (`scripts/check_paper_note.py`
 the theory (A.2, pp.12-18), the locality study (A.3, pp.18-19), the FAQ (A.14, pp.27-28) and all tables of
 pp.29-38. The KDE and per-K figures (Figures 4-7, pp.22-24) carry no numbers beyond those in the tables. The
 superseded v1 (16 pages) and v2 (21 pages) were fetched and only searched for the "12.9" figure; they are not
-sources. The paper is cited as an ICML 2026 paper in `knowledge/papers/README.md`; the PDF itself carries no venue.
+sources. The paper was cited as an ICML 2026 paper in `knowledge/papers/README.md`; the PDF itself carries no venue, and the arXiv comment of v3 says "EMNLP 2026 camera-ready" (corrected, see DEV-011).
 
 ## What it established
 

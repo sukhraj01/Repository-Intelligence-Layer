@@ -11,10 +11,10 @@ Every paper that bears on the project, what it established, and why our work is 
 
 | Work | Established | Why RQ2 is not it |
 |---|---|---|
-| [Sun et al., ICSE 2022](https://arxiv.org/abs/2202.06649) — high-quality training sets for neural code search | Over a third of queries noisy; rule-based + model-based filtering; +19.2% MRR, +21.3% Answer@1 | Shows filtering works. No comparison against weighting or curriculum at matched budget |
-| [Li et al., EMNLP 2023](https://arxiv.org/abs/2310.08069) — Rethinking Negative Pairs in Code Search | False negatives are pervasive; Soft-InfoNCE soft weighting | One intervention, snippet-level, no agent |
+| [Sun et al., ICSE 2022](https://arxiv.org/abs/2202.06649) — high-quality training sets for neural code search | 33.1% of queries carry a noise feature (corrected, see DEV-007); rule-based + model-based filtering; +19.2% MRR, +21.3% Answer@1, relative, for DeepCS on Java only (corrected, see DEV-007) | Shows filtering works. No comparison against weighting or curriculum at matched budget |
+| [Li et al., EMNLP 2023](https://arxiv.org/abs/2310.08069) — Rethinking Negative Pairs in Code Search | Soft-InfoNCE soft weighting of in-batch negatives; that false negatives are common is cited from earlier work, not measured there (corrected, see DEV-007) | One intervention, snippet-level, no agent |
 | [Suresh et al., 2024 — CoRNStack](https://arxiv.org/abs/2412.01007) (ICLR 2025) | Consistency filtering + hard-negative mining; evaluates SWE-bench function localization | Closest prior work. Ablations within one recipe, not a matched-budget comparison; agent not held constant |
-| [Li et al., NeurIPS 2025 — CodeR](https://arxiv.org/abs/2508.11442) | Synthetic heterogeneous data + curriculum (annealing) across 16 tasks | Curriculum inside a recipe, not a controlled arm |
+| [Li et al., NeurIPS 2025 — CodeR](https://arxiv.org/abs/2505.12697) (identifier corrected, see DEV-007) | Synthetic heterogeneous data + curriculum (annealing) across 16 tasks | Curriculum inside a recipe, not a controlled arm |
 | [Gangi Reddy et al., 2025 — SweRank / SweLoc](https://arxiv.org/abs/2505.07849) (ICLR 2026) | Retrieve-and-rerank for issue localization; SweLoc training set; **filter-rank K tradeoff, optimal at moderate K≈20**; data-size curve | Filtering only. This is our training-data source and our quality signal |
 
 ## Repository-level retrieval and benchmarks
@@ -31,10 +31,10 @@ Every paper that bears on the project, what it established, and why our work is 
 
 | Work | Established | Relevance |
 |---|---|---|
-| [Chen et al., ACL 2025 — LocAgent](https://arxiv.org/abs/2503.09089) | Heterogeneous code graph; 92.7% file-level Acc@5; graph ablation; better localization → +12% Pass@10 | **Schema to adopt.** Its Table 5 is an RQ1-shaped ablation already run |
-| [Yang et al., 2025 — KGCompass](https://arxiv.org/abs/2503.21710) | Graph unifying code entities with issues and PRs; 69.7% of localized bugs need multi-hop; 45.67% repair on SWE-bench-Lite | Adds the issue node our professor's chain starts from |
-| [Jiang et al., 2025 — CoSIL](https://arxiv.org/abs/2503.22424) | Training-free, index-free call-graph search; +8.6–98.2% function Top-1; resolved rate +9.3–31.5% | Graph as agent tool, no training |
-| [Agent Retrieval Bench, 2026](https://arxiv.org/abs/2607.24882) | File-level repository context retrieval; semantic and structure-aware retrieval are complementary | Supports RQ1's premise |
+| [Chen et al., ACL 2025 — LocAgent](https://arxiv.org/abs/2503.09089) | Heterogeneous code graph; 92.7% file-level Acc@5; graph ablation; better localization → +12% Pass@10 | **Schema to adopt.** Its Table 6 (Table 5 is the cost table; corrected, see DEV-005) is an RQ1-shaped ablation already run |
+| [Yang et al., 2025 — KGCompass](https://arxiv.org/abs/2503.21710) | Graph unifying code entities with issues and PRs; 89.7% of 146 ground-truth functions lie two or more hops from the issue node (corrected, see DEV-005; 69.7% was the superseded first version); 45.67% repair on SWE-bench-Lite | Adds the issue node our professor's chain starts from |
+| [Jiang et al., ASE 2025 — CoSIL](https://arxiv.org/abs/2503.22424) (venue added, see DEV-011) | Training-free, index-free call-graph search; +8.6–98.2% function Top-1; resolved rate +9.3–31.5% | Graph as agent tool, no training |
+| [Qin et al., 2026 — Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) (first author added, see DEV-011) | File-level repository context retrieval; semantic and structure-aware retrieval are complementary | Supports RQ1's premise |
 
 ## Precedent for the RQ3 shape
 

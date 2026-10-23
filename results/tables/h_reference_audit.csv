@@ -1,0 +1,37 @@
+arxiv_id,title_on_arxiv,first_author_on_arxiv,first_version_date,latest_version,arxiv_comment,audit_status
+2103.00587,PyCG: Practical Call Graph Generation in Python,"Salis, Vitalis",2021/02/28,v1,,confirmed
+2105.03099,NoCFG: A Lightweight Approach for Sound Call Graph Approximation,"Abadi, Aharon",2021/05/07,v1,,confirmed
+2202.06649,On the Importance of Building High-quality Training Datasets for Neural Code Search,"Sun, Zhensu",2022/02/14,v1,"11 pages, accepted to ICSE 2022",confirmed
+2305.05949,Scalable and Precise Application-Centered Call Graph Construction for Python,"Huang, Kaifeng",2023/05/10,v5,13 pages,confirmed
+2310.06770,SWE-bench: Can Language Models Resolve Real-World GitHub Issues?,"Jimenez, Carlos E.",2023/10/10,v3,"Data, code, and leaderboard are available at this https URL ICLR 2024, this https URL",confirmed
+2310.08069,Rethinking Negative Pairs in Code Search,"Li, Haochen",2023/10/12,v1,Accepted to EMNLP 2023,confirmed
+2403.00539,DyPyBench: A Benchmark of Executable Python Software,"Bouzenia, Islem",2024/03/01,v1,,confirmed
+2405.15793,SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering,"Yang, John",2024/05/06,v3,"Code, data, and demo available at this https URL",confirmed
+2406.14497,CodeRAG-Bench: Can Retrieval Augment Code Generation?,"Wang, Zora Zhiruo",2024/06/20,v2,,confirmed
+2407.01489,Agentless: Demystifying LLM-based Software Engineering Agents,"Xia, Chunqiu Steven",2024/07/01,v2,,confirmed
+2410.00603,An Empirical Study of Large Language Models for Type and Call Graph Analysis in Python and JavaScript,"Venkatesh, Ashwin Prasad Shivarpatna",2024/10/01,v2,Accepted to be published in the EMSE journal,confirmed
+2412.01007,CoRNStack: High-Quality Contrastive Data for Better Code Retrieval and Reranking,"Suresh, Tarun",2024/12/01,v3,Published as a conference paper at ICLR 2025. First and second author had equal contribution,mismatch: cited title is v1/v2 title
+2503.09089,LocAgent: Graph-Guided LLM Agents for Code Localization,"Chen, Zhaoling",2025/03/12,v2,,confirmed; Loc-Bench counts cited from v1 (DEV-005)
+2503.21710,Enhancing repository-level software repair via repository-aware knowledge graphs,"Yang, Boyang",2025/03/27,v3,,mismatch: cited author order is v1 order
+2503.22424,Issue Localization via LLM-Driven Iterative Code Graph Searching,"Jiang, Zhonghao",2025/03/28,v3,Accepted by ASE 2025,mismatch: cited title is v1 title; first author and venue missing
+2505.07849,SweRank: Software Issue Localization with Code Ranking,"Reddy, Revanth Gangi",2025/05/07,v2,ICLR 2026 Camera Ready Version,confirmed
+2505.12697,Towards A Generalist Code Embedding Model Based On Massive Data Synthesis,"Li, Chaofan",2025/05/19,v1,,mismatch: cited as 2508.11442 (DEV-007)
+2505.16967,"Hard Negatives, Hard Lessons: Revisiting Training Data Quality for Robust Information Retrieval with LLMs","Thakur, Nandan",2025/05/22,v2,EMNLP 2025 Findings,confirmed
+2508.11442,CoDiEmb: A Collaborative yet Distinct Framework for Unified Representation Learning in Information Retrieval and Semantic Textual Similarity,"Zhang, Bowen",2025/08/15,v2,,"mismatch: this identifier is CoDiEmb, cited for CodeR (DEV-007)"
+2512.16956,SpIDER: Spatially Informed Dense Embedding Retrieval for Software Issue Localization,"Chaudhari, Shravan",2025/12/18,v3,EMNLP 2026 camera-ready,mismatch: venue cited as ICML 2026
+2512.20482,"SweRank+: Multilingual, Multi-Turn Code Ranking for Software Issue Localization","Reddy, Revanth Gangi",2025/12/23,v1,,confirmed
+2512.20957,One Tool Is Enough: Reinforcement Learning for Repository-Level LLM Agents,"Zhang, Zhaoxi",2025/12/24,v6,,confirmed
+2512.22469,GraphLocator: Graph-guided Causal Reasoning for Issue Localization,"Liu, Wei",2025/12/27,v1,,confirmed
+2602.13921,GREPO: A Benchmark for Graph Neural Networks on Repository-Level Bug Localization,"Wang, Juntong",2026/02/14,v1,"46 pages, 14figures",confirmed
+2604.16021,Neurosymbolic Repo-level Code Localization,"Xu, Xiufeng",2026/04/17,v2,,confirmed
+2605.03117,ARISE: A Repository-level Graph Representation and Toolset for Agentic Program Repair and Fault Localization,"Seddik, Shahd",2026/05/04,v2,"v2: extended analysis, more experiments, additional authors added",confirmed
+2605.04615,Beyond Retrieval: A Multitask Benchmark and Model for Code Search,"Xue, Siqiao",2026/05/06,v2,project site: this https URL,confirmed
+2605.16352,LARGER: Lexically Anchored Repository Graph Exploration and Retrieval,"Hu, Yuntong",2026/05/08,v1,,confirmed
+2606.07297,SWE-Explore: Benchmarking How Coding Agents Explore Repositories,"Zhang, Shaoqiu",2026/06/05,v1,"20 pages, 5 figures",confirmed
+2606.11864,CORE-Bench: A Comprehensive Benchmark for Code Retrieval in the Era of Agentic Coding,"Zhang, Fuwei",2026/06/10,v3,Accepted By EMNLP 2026 Main,omission: venue missing
+2606.11976,Exploration Structure in LLM Agents for Multi-File Change Localization,"Fattha, Akeela Darryl",2026/06/10,v1,,confirmed
+2607.24882,Agent Retrieval Bench: Evaluating Repository Context Retrieval for Coding Agents,"Qin, Bowen",2026/07/27,v1,,omission: first author missing
+2608.05886,CodeGrep: An RL-Trained Retrieval Agent for LLM Coding Agents,"Chen, Wuya",2026/08/06,v1,,confirmed
+2608.29675,Cost-Effective Repository Exploration for Agentic Issue Localization,"Awad, Mohammad Nour Al",2026/08/30,v1,,confirmed
+2609.31176,Semantic Navigation for Issue Localization in Code Repository,"Wei, Yunxiang",2026/09/25,v1,,confirmed
+2407.16741,OpenHands: An Open Platform for AI Software Developers as Generalist Agents,"Wang, Xingyao",2024/07/23,v3,Accepted by ICLR 2025; Code: this https URL,omission: identifier missing in the references

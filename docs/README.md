@@ -29,6 +29,10 @@ the task at hand needs**. This page says what each file is and when to read it.
 - **Derived copies (`01`–`12`, `source/`)** are generated from the master doc. Do not edit them to
   record progress. If one is wrong or stale, the *master* is wrong — record an Open question in
   `PROJECT_STATE.md` and the team fixes the master, then re-syncs.
+  Exception (decision D14, 2026-10-18; DEV-010): where the master is factually wrong about an
+  identifier or a figure, the copy is corrected in place with the inline marker "(corrected, see
+  DEV-0nn)", and `DEVIATIONS.md` keeps the evidence. A re-sync must keep those corrections until the
+  master carries them.
 - **Live documents (`ARCHITECTURE`, `ROADMAP`, `EXPERIMENTS`, `DEVIATIONS`, `COMPUTE`)** are
   owned by this repo and updated as work happens.
 
