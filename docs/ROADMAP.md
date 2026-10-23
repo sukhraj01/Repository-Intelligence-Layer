@@ -23,7 +23,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Read the call-graph accuracy papers, the supervision papers and Agent Retrieval Bench in full; log a literature scan with a per-RQ summary (`knowledge/papers/`: PyCG, Jarvis, Sun et al., Rethinking Negative Pairs, CodeR, Agent Retrieval Bench, `LANDSCAPE.md`)
 - [x] Read the candidate encoder's report, the remaining negative-policy and graph scan entries in full, refresh the literature scan and update the per-RQ summary (`knowledge/papers/`: Qwen3 Embedding, NV-Retriever, MAP4CS, hard-negative transfer, LogicLoc, RepoNavigator, NoCFG; `LANDSCAPE.md`, scan of 2026-10-23)
 - [x] Design the knowledge graph as a separately versioned artifact: node kinds, edge families, edge record with status, three roles, storage options (`specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made)
-- [ ] Gather evidence for decisions 1–10 (`decisions/`) — pool check, power table and contamination slice measured 2026-10-18 (`docs/EXPERIMENTS.md`); engineer decisions D14-D24 of 2026-10-18 recorded in the owning ADRs and specs, references audited (DEV-011), second-reader spot-check sheet prepared; ADR-001 to ADR-010 still open
+- [ ] Gather evidence for decisions 1–10 (`decisions/`) — pool check, power table and contamination slice measured 2026-10-18 (`docs/EXPERIMENTS.md`); engineer decisions D14-D24 of 2026-10-18 recorded in the owning ADRs and specs, references audited (DEV-011), second-reader spot-check sheet prepared; class-unit source forms, ambiguous-site policies and the L3 positive census measured 2026-10-23 (Q28, Q35, Q36; ADR-013, ADR-011 addenda); ADR-001 to ADR-010 still open
 - [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
 
 ## Weeks 1–4 — Person A: parsing, call graph, BM25
@@ -61,7 +61,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 7–10 — Person A: graph extension
 
-- [ ] Test and configuration node types, `tests` / `configures` edges
+- [ ] Test and configuration node types, `tests` / `configures` edges (census of 2026-10-23: test units are 15% of L3 positives and 40% of those outside the L2 files; configuration and documentation positives are under 1%)
 - [ ] CORE-Bench L3 evaluation
 
 ## Week 12 — go / no-go

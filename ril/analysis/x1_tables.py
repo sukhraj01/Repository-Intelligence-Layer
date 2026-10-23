@@ -3,9 +3,9 @@
 Reads the per-variant evaluation directories written by ``ril.evaluation.x1_eval`` (metric
 matrices only) and the X1 extras (sizes, times, ambiguous-site counts), and writes:
 
-* ``<prefix>_cells.csv``: every graph cell of every variant (column ``structure_variant``; the column
-  ``variant`` is the list form) against its own BM25 ranking and the
-  two chance controls (``ril.analysis.e3_tables.compare``);
+* ``<prefix>_cells.csv``: every graph cell of every variant (column ``structure_variant``; the
+  column ``variant`` is the list form) against its own BM25 ranking and the two chance controls
+  (``ril.analysis.e3_tables.compare``);
 * ``<prefix>_variants.csv``: each variant against the reference variant, key by key (BM25 alone
   and each graph cell), paired over the same queries;
 * ``<prefix>_selection.json``: the result of the selection rule stated in the configuration.

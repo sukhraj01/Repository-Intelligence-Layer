@@ -1,0 +1,12 @@
+group,instances_with_l2,l3_positives_with_l2,in_new_file,new_file_pct,new_file_lo,new_file_hi,instances_with_any_new_file,new_function,new_method,new_class,new_module_residual,new_test_unit,new_non_python,new_python_not_parsed
+all,210,4595,1731,37.67,32.93,42.5,184,344,559,21,65,685,41,16
+repo:astropy/astropy,11,160,85,53.12,39.2,64.79,11,4,25,2,5,49,0,0
+repo:internetarchive/openlibrary,81,2165,626,28.91,22.79,36.0,73,216,72,6,36,271,9,16
+repo:matplotlib/matplotlib,24,685,389,56.79,41.32,66.99,19,30,247,2,9,73,28,0
+repo:mwaskom/seaborn,1,33,17,51.52,51.52,51.52,1,0,16,0,1,0,0,0
+repo:pallets/flask,1,21,9,42.86,42.86,42.86,1,0,5,1,0,3,0,0
+repo:psf/requests,5,87,52,59.77,18.6,74.21,4,2,36,1,6,7,0,0
+repo:pydata/xarray,13,356,219,61.52,45.07,73.97,12,55,88,1,2,71,2,0
+repo:qutebrowser/qutebrowser,74,1088,334,30.7,24.95,36.5,63,37,70,8,6,211,2,0
+role:dev,155,3253,960,29.51,24.75,34.39,136,253,142,14,42,482,11,16
+role:test,55,1342,771,57.45,49.53,64.4,48,91,417,7,23,203,30,0

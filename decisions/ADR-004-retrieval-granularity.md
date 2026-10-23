@@ -117,3 +117,17 @@ whether any ranking of conditions flips between the two readings.
   reading is reopened. No extra runs are needed; both readings come from the same caches.
 - *Conditions to revisit.* A flipped ordering; the reported-metric granularity (Q11) being settled differently.
 - *Not decided by D18:* whether reported benchmark numbers are chunk-level, unit-level or both (Q11).
+
+## Addendum 2026-10-23 — D18's revisit condition checked on the structure measurements (evidence only; this ADR stays Proposed)
+
+- D18 is provisional until the wave's measurements show whether an ordering of conditions flips between the two D18 readings
+  (`units_all` with and without module units). **Class-source forms and ambiguous-site policies:** no flip (`docs/EXPERIMENTS.md`
+  E-CLASS-SOURCE, E-AMBIG-POLICY). **Edge subsets of the pilot-E3 headline:** some flips, all among cells whose intervals overlap;
+  the one of substance is at dev L3 against same-file chance, where `invoke` is ahead of `contain` without module units (+2.0 [-0.5,
+  +4.4] against +1.6 [+0.0, +3.1]) and behind with them (+0.8 [-1.5, +3.2] against +2.8 [+1.3, +4.2]); sign changes only for cells
+  within about a point of zero. Whether this reopens the primary reading is the engineer's call.
+- **A dependence D18 did not anticipate.** D18 part 1 (a chunk's positive counts for every unit it overlaps) makes a class gold
+  whenever one of its methods is; under that reading the full class text wins Q28 by 2 to 3 points, under pilot M's mapping the
+  class-source forms are indistinguishable (ADR-013 addendum of today). The gold reading for classes and Q28 are one question.
+- Evidence class: measured (exploratory). Experiment that could flip it: a reading that counts a class only through lines outside
+  its methods, computed from the same records (minutes).

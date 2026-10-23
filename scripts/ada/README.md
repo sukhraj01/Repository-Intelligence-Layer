@@ -147,3 +147,20 @@ Output holds ids, counts and hashes only, never query, function or code text.
 | `contam_scan.sbatch` + `contam_probe.py scan` | scan of the `document` field of whole shards against the probe set, 4 workers, one output file per shard, finished shards skipped | slice: `sbatch --export=ALL,FIRST=0,LAST=239,STRIDE=10 ril_c/scripts/ada/contam_scan.sbatch`; full scan (about 10 CPU-hours, about 2.6 h on 4 CPUs, 307.6 GB streamed): `--export=ALL,FIRST=0,LAST=239,STRIDE=1` |
 
 Scanning the 100 negatives of every row as well costs about 3.5 s per compressed MB (29 times the documents-only scan), about 300 CPU-hours for the corpus: not run.
+
+## Structure measurements (class-unit source, ambiguous-site policy, L3 census; 2026-10-23)
+
+Work directory `~/ril_x1/` (`ril/`, `scripts/`, `configs/` by `rsync -a --exclude __pycache__ ril scripts configs ada:ril_x1/`). It links
+`~/ril_e/{raw,repo_cache,meta.json}` and `~/ril_e/out/units` (the pilot-E1 records) and uses `~/ril_e/venv_ril310`. `x1_cache/` holds one
+`.npz` per instance (BM25 scores per class-source form, index sizes, ambiguous sites with evidence, gold indices; no text).
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `x1_prepare.sbatch` | extras of every instance of the role (`ROLES=dev` or `test`), `SHARDS` processes (default 4) | `sbatch --cpus-per-task=4 --mem=10G --export=ALL,ROLES=dev,RIL_COMMIT=<hash> ril_x1/scripts/ada/x1_prepare.sbatch` (dev 26 min; test 22 min with 3 shards) |
+| `x1_census.sbatch` | pilot-E1 unit stage on the extra L3 folders of `configs/experiments/x1_l3_census.yaml` (fetches the SWE-bench Pro ansible folders, bare clones in `repo_cache_census/`); `FOLDERS="a b"` limits it | `scp data/processed/x1/census_meta.json ada:ril_x1/ && sbatch --export=ALL,RIL_COMMIT=<hash> ril_x1/scripts/ada/x1_census.sbatch` (django alone about 3.5 h) |
+
+`census_meta.json` is built locally (`python scripts/x1_census.py meta data/raw/core_bench/ids_all.json OUT <parquet>... --folders ...`; it holds
+patches, so it stays untracked). Locally: `rsync -a ada:ril_x1/x1_cache/ data/processed/x1/x1_cache/`, then `python scripts/x1_run.py eval <config>
+data/processed/e3/e3_cache data/processed/x1/x1_cache <out>`, `x1_run.py tables <config> <out> results/tables/<prefix>`, `x1_run.py sizes`, and the
+census tables with `python scripts/x1_census.py tables <prefix> <units dir>...`. The readers run locally: `python scripts/x1_readers.py oracle ...`
+and `x1_readers.py jedi ...` (commands in the run log).

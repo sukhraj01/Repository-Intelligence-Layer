@@ -1,0 +1,270 @@
+{
+ "evidence_kinds": {
+  "annotated_external": {
+   "answered": 4,
+   "jedi_external": 4,
+   "jedi_external_ci95": [
+    0.5101,
+    1.0
+   ],
+   "n": 7
+  },
+  "fixture_param": {
+   "answered": 1,
+   "jedi_external": 0,
+   "jedi_external_ci95": [
+    0.0,
+    0.7935
+   ],
+   "n": 4
+  },
+  "kwargs": {
+   "answered": 0,
+   "jedi_external": 0,
+   "jedi_external_ci95": null,
+   "n": 0
+  },
+  "literal": {
+   "answered": 21,
+   "jedi_external": 21,
+   "jedi_external_ci95": [
+    0.8454,
+    1.0
+   ],
+   "n": 22
+  }
+ },
+ "jedi_version": "0.20.1",
+ "pooled": {
+  "ambiguous_evidence": {
+   "answered": 25,
+   "jedi-external-only": 24,
+   "jedi-in-repo-in-set": 1,
+   "jedi-nothing": 6,
+   "jedi_external_ci95": [
+    0.8046,
+    0.9929
+   ],
+   "jedi_external_share_of_answered": 0.96,
+   "jedi_in_repo_share_of_answered": 0.04,
+   "n": 31
+  },
+  "ambiguous_gt3": {
+   "answered": 20,
+   "jedi-external-only": 16,
+   "jedi-in-repo-in-set": 4,
+   "jedi-nothing": 30,
+   "jedi_external_share_of_answered": 0.8,
+   "jedi_in_set_ci95": [
+    0.0807,
+    0.416
+   ],
+   "jedi_in_set_share_of_answered": 0.2,
+   "n": 50
+  },
+  "ambiguous_le3": {
+   "answered": 58,
+   "jedi-external-only": 28,
+   "jedi-in-repo-in-set": 30,
+   "jedi-nothing": 11,
+   "jedi_external_share_of_answered": 0.4828,
+   "jedi_in_set_ci95": [
+    0.3916,
+    0.6407
+   ],
+   "jedi_in_set_share_of_answered": 0.5172,
+   "n": 69
+  },
+  "external": {
+   "answered": 40,
+   "jedi-external-only": 40,
+   "jedi-nothing": 10,
+   "jedi_external_ci95": [
+    0.9124,
+    1.0
+   ],
+   "jedi_external_share_of_answered": 1.0,
+   "jedi_in_repo_share_of_answered": 0.0,
+   "n": 50
+  },
+  "resolved": {
+   "agree_ci95": [
+    0.8654,
+    0.989
+   ],
+   "agree_share_of_answered": 0.96,
+   "answered": 50,
+   "jedi-external-only": 2,
+   "jedi-in-repo-same": 48,
+   "n": 50
+  },
+  "unresolved": {
+   "answered": 44,
+   "jedi-external-only": 14,
+   "jedi-in-repo": 30,
+   "jedi-no-answer": 3,
+   "jedi-nothing": 3,
+   "jedi_external_ci95": [
+    0.2,
+    0.4656
+   ],
+   "jedi_external_share_of_answered": 0.3182,
+   "jedi_in_repo_share_of_answered": 0.6818,
+   "n": 50
+  }
+ },
+ "repo:requests": {
+  "ambiguous_evidence": {
+   "answered": 3,
+   "jedi-external-only": 3,
+   "jedi-nothing": 3,
+   "jedi_external_ci95": [
+    0.4385,
+    1.0
+   ],
+   "jedi_external_share_of_answered": 1.0,
+   "jedi_in_repo_share_of_answered": 0.0,
+   "n": 6
+  },
+  "ambiguous_gt3": {
+   "answered": 2,
+   "jedi-external-only": 2,
+   "jedi-nothing": 23,
+   "jedi_external_share_of_answered": 1.0,
+   "jedi_in_set_ci95": [
+    0.0,
+    0.6576
+   ],
+   "jedi_in_set_share_of_answered": 0.0,
+   "n": 25
+  },
+  "ambiguous_le3": {
+   "answered": 36,
+   "jedi-external-only": 9,
+   "jedi-in-repo-in-set": 27,
+   "jedi-nothing": 8,
+   "jedi_external_share_of_answered": 0.25,
+   "jedi_in_set_ci95": [
+    0.5893,
+    0.8625
+   ],
+   "jedi_in_set_share_of_answered": 0.75,
+   "n": 44
+  },
+  "external": {
+   "answered": 18,
+   "jedi-external-only": 18,
+   "jedi-nothing": 7,
+   "jedi_external_ci95": [
+    0.8241,
+    1.0
+   ],
+   "jedi_external_share_of_answered": 1.0,
+   "jedi_in_repo_share_of_answered": 0.0,
+   "n": 25
+  },
+  "resolved": {
+   "agree_ci95": [
+    0.8668,
+    1.0
+   ],
+   "agree_share_of_answered": 1.0,
+   "answered": 25,
+   "jedi-in-repo-same": 25,
+   "n": 25
+  },
+  "unresolved": {
+   "answered": 23,
+   "jedi-external-only": 2,
+   "jedi-in-repo": 21,
+   "jedi-nothing": 2,
+   "jedi_external_ci95": [
+    0.0242,
+    0.268
+   ],
+   "jedi_external_share_of_answered": 0.087,
+   "jedi_in_repo_share_of_answered": 0.913,
+   "n": 25
+  }
+ },
+ "repo:streamlink": {
+  "ambiguous_evidence": {
+   "answered": 22,
+   "jedi-external-only": 21,
+   "jedi-in-repo-in-set": 1,
+   "jedi-nothing": 3,
+   "jedi_external_ci95": [
+    0.782,
+    0.9919
+   ],
+   "jedi_external_share_of_answered": 0.9545,
+   "jedi_in_repo_share_of_answered": 0.0455,
+   "n": 25
+  },
+  "ambiguous_gt3": {
+   "answered": 18,
+   "jedi-external-only": 14,
+   "jedi-in-repo-in-set": 4,
+   "jedi-nothing": 7,
+   "jedi_external_share_of_answered": 0.7778,
+   "jedi_in_set_ci95": [
+    0.09,
+    0.4522
+   ],
+   "jedi_in_set_share_of_answered": 0.2222,
+   "n": 25
+  },
+  "ambiguous_le3": {
+   "answered": 22,
+   "jedi-external-only": 19,
+   "jedi-in-repo-in-set": 3,
+   "jedi-nothing": 3,
+   "jedi_external_share_of_answered": 0.8636,
+   "jedi_in_set_ci95": [
+    0.0475,
+    0.3334
+   ],
+   "jedi_in_set_share_of_answered": 0.1364,
+   "n": 25
+  },
+  "external": {
+   "answered": 22,
+   "jedi-external-only": 22,
+   "jedi-nothing": 3,
+   "jedi_external_ci95": [
+    0.8513,
+    1.0
+   ],
+   "jedi_external_share_of_answered": 1.0,
+   "jedi_in_repo_share_of_answered": 0.0,
+   "n": 25
+  },
+  "resolved": {
+   "agree_ci95": [
+    0.7503,
+    0.9778
+   ],
+   "agree_share_of_answered": 0.92,
+   "answered": 25,
+   "jedi-external-only": 2,
+   "jedi-in-repo-same": 23,
+   "n": 25
+  },
+  "unresolved": {
+   "answered": 21,
+   "jedi-external-only": 12,
+   "jedi-in-repo": 9,
+   "jedi-no-answer": 3,
+   "jedi-nothing": 1,
+   "jedi_external_ci95": [
+    0.3655,
+    0.7553
+   ],
+   "jedi_external_share_of_answered": 0.5714,
+   "jedi_in_repo_share_of_answered": 0.4286,
+   "n": 25
+  }
+ },
+ "seed": 0,
+ "sites": 300
+}

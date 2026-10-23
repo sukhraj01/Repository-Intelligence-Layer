@@ -42,6 +42,9 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-GRAPH-SIGNAL | RQ1 ext. (apparatus) | edge-family subset (19), seeds C (1, 3, 5), decay gamma (0.3, 0.5, 0.7), hops (1, 2), way of forming the scored list (edited list, ranked list fused by RRF) | reference BM25 over the units of the snapshot (module unit in), seeds are retrieved units, expansion limited to 50 units, seed 0, dev repositories for every sweep | n/a | change in nDCG@10 (L2) and Recall@100 (L3) against BM25 alone and against size-matched random expansions, paired 95% intervals | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e3-*`; ADR-003 addendum) |
 | E-GRAPH-WEIGHTS | RQ1 ext. (apparatus) | one weight per edge family fitted from data (pilot M reach table; leave-one-repository-out from E3 expansions) against the hand-set decay | as E-GRAPH-SIGNAL at C 5, 2 hops | n/a | paired difference against the hand-set decay, dev and three disjoint Verified repositories | done (exploratory pilot, 2026-10-18; rows `e4-*`) |
 | E-RECENCY | RQ1 ext. (apparatus) | weight and time constant of a recency prior from `last_modified` (D8) added to BM25 | as E-GRAPH-SIGNAL | n/a | paired change against BM25 | done (exploratory pilot, 2026-10-18; rows `e5-*`) |
+| E-CLASS-SOURCE | RQ1 ext. (apparatus) | class unit `source` form (full, header, header plus method signatures; Q28, `provisional: ADR-013`) | units, ids, spans, gold mapping, BM25 parameters, the pilot-E3 grid and cache, seed 0, dev repositories for the sweep | n/a | BM25 and expansion nDCG@10 (L2) and Recall@100 (L3) per form, query-level and repository-clustered intervals, four gold readings; index size and build time | done (exploratory, 2026-10-23; rows `x1-class-source-*`; ADR-013 addendum). Dev rule kept `full` |
+| E-AMBIG-POLICY | RQ1 ext. (apparatus) | policy for ambiguous `invoke` sites read from the stored graph (keep, drop, rebucket by receiver evidence, keep sets of at most three; Q35, Q36) | as E-CLASS-SOURCE, form `full` | n/a | retrieval effect per policy; edge precision and recall per policy by the dynamic oracle (flask) and Jedi (300 stratified sites of requests and streamlink) | done (exploratory, 2026-10-23; rows `x1-ambig-*`; ADR-011 addendum). Dev rule kept `drop` |
+| E-L3-CENSUS | RQ1 ext., RQ2 (apparatus) | none (count of positives by kind, repository and file novelty) | pilot-E1 unit records; D9 path rule | n/a (bootstrap seed 0) | positives by kind; share of L3 positives in files without L2 positives, instance-bootstrap intervals | done for the 438 cached instances (2026-10-23; row `x1-l3-census`); extension to the other Python L3 folders as recorded in the section |
 | E-POOL-CHECK | RQ2 (apparatus, pool) | none (measurement of the candidate pool `gangiswag/train_data` python) | the pool as published | n/a (sample seed 0) | directory structure, positives and functions per instance, (repository, PR) overlap with CORE-Bench and Verified | done (exploratory, 2026-10-18; `RESULTS.md` row `x-pool-check`) |
 | E-POWER | RQ2, RQ3 (apparatus) | n, discordance, effect, run-to-run SD, per-query SD, correlation, seeds | alpha 0.05, power 0.8 | n/a (simulation seed 0) | power and minimum detectable effects (calculation, no data) | done (2026-10-18; row `x-power`) |
 | E-CONTAM-PROBE | RQ2/RQ3 (apparatus, contamination) | shard slice (every 10th of 240), hash level (text, syntax tree) | probe set = functions of the 12 Verified repositories at 499 base commits | n/a | function-hash matches against CoRNStack `document`, by size of function; feasibility and cost of the full scan | done as a slice (exploratory, 2026-10-18; rows `x-contam-probe-slice`, `x-contam-throughput`) |
@@ -472,6 +475,161 @@ Reproduce: `scripts/ada/README.md` ("Pool check and contamination probe"). The s
 functions at the instance's own base commit and above a size floor stated before the full result is read; counts per
 repository. The probe is not part of the frozen evaluation: it supports the contamination statement of the report only, and a
 hit is not proof that a pair was trained on (ADR-005 addendum).
+
+## E-CLASS-SOURCE, E-AMBIG-POLICY, E-L3-CENSUS and the E-GRAPH-SIGNAL headline under decision D18: exploratory, done 2026-10-23
+
+Configs `configs/experiments/x1_structure_dev.yaml` (hash `3041c6121f78`; the dev sweep and the two selection rules, written before
+any run), `x1_headline_dev.yaml` (`7c42ce178063`), `x1_headline_confirm.yaml` (`063d649a918c`; the Verified setting, committed before
+any Verified extras existed), `x1_l3_census.yaml` (`3244f8775b83`). Log `results/logs/x1_structure_2026-10-23.json` (job ids, hashes,
+hardware, alignment checks), readers `results/logs/x1_oracle_flask_2026-10-23.json` and `x1_jedi_policy_2026-10-23.json`; tables
+`results/tables/x1_*`. Code: `ril/parsing/ambiguity_policy.py`, the class-source forms in `ril/parsing/repository_parser.py`,
+`ril/evaluation/{x1_prepare,x1_eval,policy_readers}.py`, `ril/analysis/{x1_tables,l3_census}.py`; jobs `scripts/ada/x1_prepare.sbatch`,
+`x1_census.sbatch`. Licence: arrays, counts, ids and paths only.
+
+**Protocol.** One extras file per instance (Ada, CPU; 355 dev and 83 Verified-six instances, no failures) holds the BM25 scores of
+the issue text under each class-unit source form, the index size and build time of each form, every ambiguous `invoke` site with
+its candidate set and receiver evidence, and four gold readings. The evaluation merges it with the pilot-E3 cache of the same
+instance and refuses to score unless the `full`-form scores equal the cached BM25 scores and the resolved invoke pairs agree in
+number (438 of 438 agree). It then runs the pilot-E3 grid unchanged (seeds, hop decay, the 50-unit cap, both list forms, both chance
+controls), so a variant differs from pilot E3 only in the class text or in which ambiguous sites become edges. Variant `full`
+with policy `drop` *is* pilot E3: under gold `units` it reproduces every pilot-E3 number (for example `contain` +4.1 [+2.9, +5.2]
+nDCG@10 at L2 on dev, `core` -0.0 [-1.4, +1.6] at L2 on Verified). **Gold readings:** `units_all_nomod` (every overlapped unit, module
+units removed) is primary (D18); `units_all` (CORE-Bench-faithful) is beside it; pilot M's mapping `units` (functions or methods a chunk
+overlaps, else the class, else the module unit) continues pilot E3. **Averages:** mean over queries with two 95% intervals,
+query-level (`micro`) and repository-clustered (`cluster`, D17). Dev has five repositories at L2 but only **two at L3** (openlibrary,
+qutebrowser): a clustered interval over two clusters is not informative (it can be narrower than the query-level one) and the L3
+text quotes the query-level interval. **Tuning discipline:** every variant ran on dev only; the selection rules were in the config
+before the first run; Verified ran one stated setting. The `pol_rebucket_nofixture` variant is a dev-only sensitivity.
+
+**Class-unit source forms (Q28).** `full` = the whole class span; `header` = the class span without its methods (decorators,
+`class` line, docstring, every class-level statement wherever it stands); `header_sigs` = `header` plus each method's decorators
+and `def` line(s). Ids, spans and every other field are identical across forms, so the unit count and the gold mapping are too.
+
+Dev (351 L2, 155 L3 queries), difference against `full` (percentage points; query-level interval, clustered interval at L2):
+
+| gold reading | ranking | `full` (L2 nDCG@10 / L3 Recall@100) | `header` L2 | `header` L3 | `header_sigs` L2 | `header_sigs` L3 |
+|---|---|---|---|---|---|---|
+| `units_all_nomod` (primary) | BM25 alone | 21.2 / 37.5 | -2.3 [-3.4, -1.3] (cl. [-3.3, -1.2]) | -2.9 [-3.6, -2.1] | -2.9 [-3.8, -2.0] (cl. [-4.1, -1.8]) | -2.2 [-2.9, -1.6] |
+| `units_all_nomod` | `contain` expansion | 23.5 / 45.1 | -2.2 [-3.6, -0.8] | -0.9 [-2.3, +0.4] | -2.9 [-4.2, -1.7] | -0.7 [-1.8, +0.4] |
+| `units_all_nomod` | `core` expansion | 22.2 / 47.4 | -2.0 [-3.1, -0.8] (cl. [-3.1, -0.8]) | -1.7 [-3.1, -0.5] | -2.7 [-3.9, -1.6] (cl. [-4.1, -1.6]) | -2.0 [-3.2, -1.0] |
+| `units_all` | BM25 alone | 21.0 / 36.8 | -2.6 [-3.7, -1.6] | -2.6 [-3.3, -1.9] | -3.1 [-4.1, -2.2] | -2.0 [-2.6, -1.4] |
+| `units_all` | `core` expansion | 22.5 / 48.8 | -2.0 [-3.2, -0.8] | -2.0 [-3.3, -0.7] | -2.7 [-3.8, -1.6] | -2.0 [-3.1, -1.0] |
+| `units` (pilot M mapping) | BM25 alone | 15.8 / 35.6 | -0.3 [-1.1, +0.4] | +0.3 [-0.3, +0.8] | +0.3 [-0.4, +1.0] | +0.4 [-0.1, +0.8] |
+| `units` | `contain` expansion | 19.9 / 44.5 | -1.4 [-2.5, -0.3] | +0.7 [-0.6, +2.1] | -1.3 [-2.4, -0.3] | +0.8 [-0.3, +1.9] |
+| `units` | `core` expansion | 17.6 / 47.5 | -0.2 [-1.1, +0.7] | -0.7 [-2.0, +0.5] | -0.2 [-1.1, +0.7] | -0.9 [-2.0, +0.1] |
+
+Expansion cells: C 5, gamma 0.5, 2 hops, list form. Per repository (`units_all_nomod`, BM25 alone and `core`), `full` is ahead or level
+in all five dev repositories (streamlink level). **Selection rule result** (`results/tables/x1_dev_selection.json`): `full` stays; neither
+header form is eligible (both are below `full` at L2 and L3). **Index size and build time** (dev, median per snapshot over 355
+snapshots; `results/tables/x1_dev_sizes.csv`): 5,195 units (755 class units) in every form; source text 5.73 M characters (`full`),
+3.70 M (`header`, -35%), 4.01 M (`header_sigs`, -30%); BM25 tokens 517,550 / 332,714 (-36%) / 359,494 (-31%); postings 207,739 /
+164,846 (-21%) / 174,660 (-16%); index arrays 3.42 / 2.73 / 2.89 MB; parse plus index build p50 2.83 / 2.45 / 2.53 s, p95 5.01 / 4.37 /
+4.75 s (Ada Xeon E5-2640 v4, four shards sharing six CPUs: indicative, not a latency row). The graph does not depend on the form.
+
+**What it shows.** Under the readings that count a unit as gold whenever a positive chunk overlaps it (D18 part 1), the full class
+text is better by 2 to 3 points at both levels, for BM25 alone and after expansion. Most of that is the reading: a class whose method
+is gold is itself gold under `units_all`, and only the full form contains the method's text. Under pilot M's mapping, where a class is
+gold only when a chunk touches no method, the three forms are not distinguishable for BM25 or `core` (all intervals include 0), and
+`header` costs 1.4 points at L2 only through the containment expansion. So the Q28 answer depends on D18 part 1, and the cost of `full`
+is about 55% more indexed tokens and 26% more postings for text that the method units already hold. **Does not show** anything about a
+dense encoder (truncation makes long class units behave differently; X2), or about chunk-level evaluation.
+
+**Ambiguous-site policies (Q35, Q36).** Applied to the `invoke` family when the graph is read (`ril/parsing/ambiguity_policy.py`):
+`keep` every candidate of every ambiguous site; `drop` none (pilot E3 as run read resolved edges only); `rebucket` drop a site whose
+receiver carries evidence of a non-repository object (literal or builtin container assigned, `*args`/`**kwargs` name, an annotation
+naming only builtin or imported external types after removing `Optional`/`Union`/container wrappers, an un-annotated parameter of a test
+or fixture function in a test file) and keep the rest; `max3` keep sites with at most three candidates. The evidence rules are this
+project's syntactic reading of the four kinds named in Q35, not type inference. Ambiguous sites are common: median per dev snapshot
+1,168 (haystack) to 5,306 (conan) ambiguous sites against 8,744 to 25,600 resolved; the evidence rules fire on 6% (haystack) to 40%
+(qutebrowser, mostly fixture parameters) of them (`results/tables/x1_dev_ambiguous.csv`).
+
+Retrieval effect, dev, `full` form, gold `units_all_nomod`, list form at the pilot-E3 cell, difference against `drop`:
+
+| policy | `invoke` L2 | `invoke` L3 | `core` L2 | `core` L3 | `invoke+contain` L3 |
+|---|---|---|---|---|---|
+| `keep` | -0.2 [-0.6, +0.1] | -2.9 [-4.2, -1.4] | -0.1 [-0.3, +0.1] | -2.4 [-3.5, -1.3] | -3.3 [-4.6, -1.9] |
+| `rebucket` | -0.1 [-0.4, +0.2] | -2.1 [-3.4, -0.8] | +0.0 [-0.2, +0.2] | -1.6 [-2.7, -0.5] | -2.1 [-3.4, -0.9] |
+| `rebucket` without the fixture rule (dev only) | -0.3 [-0.6, +0.1] | -2.3 [-3.6, -1.0] | -0.1 [-0.3, +0.1] | -2.2 [-3.4, -1.2] | -3.2 [-4.5, -1.8] |
+| `max3` | -0.0 [-0.3, +0.2] | -0.4 [-1.4, +0.6] | -0.0 [-0.2, +0.2] | +0.1 [-0.4, +0.7] | -0.4 [-1.4, +0.4] |
+
+The ordering (`max3` = `drop` > `rebucket` > `keep` at L3; nothing moves L2) is the same under all four gold readings; in the
+clustered intervals `rebucket` at L3 includes 0 (`core` [-3.2, +0.1]). **Selection rule result:** `drop` stays; no candidate is eligible.
+
+Edge quality per policy, read by two readers that are not the build author:
+
+| reader, measure | `drop` | `keep` | `rebucket` | `max3` |
+|---|---|---|---|---|
+| dynamic oracle (flask suite, 1,057 in-repository caller-callee pairs): precision of invoke pairs whose caller executed (lower bound) | 0.616 (506/821) [0.583, 0.649] | 0.315 (694/2,205) [0.296, 0.334] | 0.450 (619/1,377) [0.423, 0.476] | 0.476 (671/1,409) [0.450, 0.502] |
+| oracle: recall of all pairs / without implicit-protocol dunders (n 1,057 / 854; D15) | 0.479 / 0.592 | 0.657 / 0.813 | 0.586 / 0.725 | 0.635 / 0.786 |
+| oracle: precision of the ambiguous pairs the policy adds / drops | - / 0.136 | 0.136 (188/1,384) / - | 0.203 (113/556) / 0.091 (75/828) | 0.281 (165/588) / 0.029 (23/796) |
+
+Site level. Oracle, executed lines of the library (coverage.py): an in-repository candidate was observed for 29 of 50 executed sites
+with at most three candidates (0.58 [0.44, 0.71]) and 2 of 33 with more (0.06 [0.02, 0.20]); 4 of 650 executed `external` sites had an
+in-repository callee of that name (0.006 [0.002, 0.016]); 197 of 263 executed resolved sites had their pair observed (0.75 [0.69,
+0.80]). In the test files (judged at caller level; no line coverage there) fixture-parameter sites had a candidate observed as often
+as sites without evidence (97/433 = 0.22 [0.19, 0.27] against 95/392 = 0.24 [0.20, 0.29]): **the fixture rule does not separate
+in-repository from external receivers in flask** (a fixture often returns the repository's own object). Jedi 0.20.1 on 300 stratified
+sites (requests and the dev repository streamlink, 150 each, `results/tables/x1_jedi_policy_sample.csv`): resolved sites agree 48/50
+(0.96 [0.87, 0.99]); `external` 40/40 answered external; re-bucketed (evidence) sites 24/25 answered external (0.96 [0.80, 0.99];
+literal 21/21, annotated 4/4, fixture 0/1 answered); sites with at most three candidates 30/58 answered inside the set (0.52 [0.39,
+0.64]; requests 27/36, streamlink 3/22), with more than three 4/20 (0.20 [0.08, 0.42], 30 of 50 unanswered); `unresolved` sites were
+in-repository for Jedi in 30/44 answered (0.68). **What it shows.** Adding ambiguous candidates raises oracle recall (0.48 to 0.66)
+and lowers pair precision (0.62 to 0.32); `max3` keeps most of the recall gain (0.64) at the best precision of the three, and its
+dropped pairs are almost all wrong (0.03 supported). In retrieval none of the policies helps: at L3 every added ambiguous edge costs
+Recall@100 in proportion to how many wrong edges it adds, and L2 does not move. The receiver-evidence rules are precise for literals and
+annotations (Jedi) but those are few; the fixture rule, which fires most, is not supported by the oracle. **Does not show:** a policy
+for other edge uses (training negatives, an agent tool), or the boundary between `external` and `unresolved` beyond the counts above
+(Jedi reads 68% of `unresolved` sites as in-repository: the resolver's recall limit, not a bucket error).
+
+**L3 positive census.** Every located positive of the 438 cached instances (210 with L3 qrels; `results/tables/x1_census_cached_*.csv`),
+by kind of the unit it maps to (decision D9 path rule first: a positive in a test file is a test unit whatever its structure):
+
+| set | L3 positives | function | method | class | module residual | test unit | non-Python (docs / config / data) | Python not parsed |
+|---|---|---|---|---|---|---|---|---|
+| dev (155 instances) | 3,253 | 1,170 | 941 | 111 | 444 | 482 | 86 (6 / 30 / 50) | 19 |
+| Verified six (55) | 1,342 | 178 | 849 | 20 | 62 | 203 | 30 (2 / 0 / 28) | 0 |
+| all (210) | 4,595 | 1,348 (29.3%) | 1,790 (39.0%) | 131 (2.9%) | 506 (11.0%) | 685 (14.9%) | 116 (2.5% [1.4, 4.0]) | 19 |
+
+L2 for comparison (438 instances, 2,792 positives): no test units, 74 non-Python (2.7% [1.9, 3.5]), 586 module residuals (21.0%).
+**Novelty:** of the L3 positives of instances that also have L2 positives, 37.7% [32.9, 42.5] (instance bootstrap) lie in a file
+that holds no L2 positive (dev 29.5% [24.8, 34.4], Verified six 57.5% [49.5, 64.4]); 184 of 210 instances have at least one. Of those
+1,731 new-file positives, 685 are test units (40%), 559 methods, 344 functions, 65 module residuals, 41 non-Python. Per repository the
+new-file share runs from 28.9% (openlibrary) to 61.5% (xarray). **What it shows.** Test code is the largest structure beyond the edited
+files that L3 asks for (15% of L3 positives, 40% of those in new files); configuration and documentation are rare (30 configuration and
+8 documentation positives in 4,595); the pilot sample's 0 of 141 non-Python positives was a small-sample zero, the rate is about 2.5%.
+**Extension beyond the cached instances** (the six other Verified repositories with L3 qrels and SWE-bench Pro ansible, the one further
+Python repository with L3 qrels; Live has no L3 folders, Multi-SWE-bench and Multilingual are not Python): see the census addendum
+below for what finished.
+
+**The E-GRAPH-SIGNAL headline under D18** (`full` form and `drop` policy, as selected; C 5, gamma 0.5, 2 hops, list form; gold
+`units_all_nomod`; query-level interval, clustered interval in brackets after it where it differs in sign):
+
+| edge subset | dev L2 vs BM25 | dev L2 vs same-file | dev L3 vs BM25 | dev L3 vs same-file | Verified-6 L2 vs BM25 | Verified-6 L2 vs same-file | Verified-6 L3 vs BM25 | Verified-6 L3 vs same-file |
+|---|---|---|---|---|---|---|---|---|
+| contain | +2.4 [+1.3, +3.5] | +3.4 [+2.5, +4.5] | +7.7 [+5.4, +10.0] | +1.6 [+0.0, +3.1] | +2.8 [+0.5, +5.1] (cl. [-0.7, +4.4]) | +4.4 [+2.6, +6.3] | +7.2 [+3.0, +12.1] | +4.0 [+0.5, +7.9] (cl. [-0.3, +6.3]) |
+| invoke | +0.4 [-0.5, +1.3] | +1.4 [+0.6, +2.3] (cl. [-0.1, +2.9]) | +7.3 [+5.4, +9.4] | +2.0 [-0.5, +4.4] | +0.8 [-0.8, +2.6] | +2.4 [+0.8, +4.2] | +1.6 [-0.8, +4.2] | -1.7 [-5.2, +1.4] |
+| import | -1.4 [-1.9, -0.8] | -1.1 [-1.6, -0.6] | -0.8 [-1.6, +0.1] | -3.0 [-4.8, -1.4] | -0.3 [-1.4, +0.8] | +0.9 [-0.1, +2.0] | -2.0 [-4.0, -0.4] | -4.9 [-8.0, -2.2] |
+| invoke+contain | +1.0 [+0.1, +2.0] | +2.1 [+1.3, +3.0] | +11.3 [+9.0, +13.9] | +4.8 [+2.2, +7.2] | +2.0 [-0.2, +4.3] | +3.4 [+1.6, +5.4] | +6.0 [+2.6, +10.4] | +2.2 [-1.7, +6.1] |
+| core | +1.0 [+0.1, +1.9] | +2.1 [+1.3, +3.0] | +9.9 [+7.7, +12.3] | +3.9 [+1.5, +6.3] | +1.7 [-0.4, +3.9] | +3.1 [+1.3, +5.0] | +5.8 [+2.3, +9.9] | +2.1 [-1.7, +5.9] |
+| all | +0.9 [+0.0, +1.9] | +2.0 [+1.1, +2.9] | +9.0 [+6.9, +11.3] | +2.8 [+0.4, +5.2] | +1.4 [-0.6, +3.4] | +2.7 [+1.0, +4.5] | +4.1 [+0.3, +8.6] | +0.5 [-3.4, +4.2] |
+| all-minus-contain | +0.0 [-0.9, +0.9] | +1.3 [+0.4, +2.2] | +5.6 [+3.8, +7.5] | -0.0 [-2.4, +2.3] | +0.6 [-1.0, +2.4] | +2.3 [+0.9, +3.9] | +0.4 [-2.2, +3.1] | -2.7 [-5.7, -0.1] |
+
+BM25 alone under this reading: dev 21.2 (L2, 351 queries) and 37.5 (L3, 155); Verified six 18.0 (83) and 31.8 (55). The full tables
+(19 subsets, both list forms, every reading and both intervals) are `results/tables/x1_headline_{dev,confirm}_cells.csv`.
+**What changes against the pilot-E3 statement.** (1) The containment result holds and is cleaner on Verified: under the primary
+reading `contain` is above same-file chance at L2 on dev and Verified (+3.4, +4.4) and at L3 on Verified (+4.0 [+0.5, +7.9]); at L3
+on dev it sits at the edge (+1.6 [+0.0, +3.1]), where pilot E3's `units_nomod` reading gave +1.2 [-0.4, +2.8]. The gain over BM25 at L2
+is smaller than pilot E3 reported (dev +2.4 rather than +4.1) because the baseline is higher under every-overlapped-unit gold (21.2
+rather than 15.8). (2) `core` and `all` remain not distinguishable from same-file chance at L3 on Verified. (3) Removing containment
+leaves nothing above same-file chance at L3 (dev -0.0, Verified -2.7). (4) **Some orderings flip between the two D18 readings** (D18's
+revisit condition), all among cells whose intervals overlap: at dev L3 against same-file chance `invoke` is ahead of `contain` without
+module units (+2.0 [-0.5, +4.4] against +1.6 [+0.0, +3.1]) and behind it with them (+0.8 [-1.5, +3.2] against +2.8 [+1.3, +4.2]);
+sign changes occur only for cells within about one point of zero (`tests`, `import+contain`, `co_change+contain` at dev L3, `co_change`
+at Verified L2). The class-source and policy orderings above do not flip between the two D18 readings. Whether a flip among
+indistinguishable cells reopens the primary reading is for the engineer (ADR-004). With six repositories, mostly matplotlib and
+astropy, the clustered intervals on Verified include 0 for `contain` at L2 against BM25, `contain` at L3 against same-file chance and
+`all` at L3 against BM25 (cl. [-0.3, +10.1]), where the query-level ones do not; D17's clustered interval is the more cautious reading.
+
 
 ## Pre-registered interpretation rules
 

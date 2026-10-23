@@ -1,0 +1,105 @@
+{
+ "q28_class_source": {
+  "candidates": {
+   "header": {
+    "L2_ndcg10": [
+     -1.972,
+     -3.114,
+     -0.807
+    ],
+    "L3_recall100": [
+     -1.733,
+     -3.068,
+     -0.477
+    ],
+    "combined": -1.853,
+    "eligible": false
+   },
+   "header_sigs": {
+    "L2_ndcg10": [
+     -2.705,
+     -3.851,
+     -1.632
+    ],
+    "L3_recall100": [
+     -2.029,
+     -3.164,
+     -0.964
+    ],
+    "combined": -2.367,
+    "eligible": false
+   }
+  },
+  "rule": {
+   "candidates": [
+    "header",
+    "header_sigs"
+   ],
+   "group": "dev_all",
+   "key": "list|core|C5|g0.5|h2",
+   "reading": "units_all_nomod",
+   "reference": "full",
+   "rule": "among the candidates, the largest mean of (L2 nDCG@10 difference, L3 Recall@100 difference) against full at the pilot-E3 cell (C 5, gamma 0.5, 2 hops, list form, subset core), micro average; it replaces full only if that mean is positive, at least one of the two query-level 95% intervals lies above zero and neither lies below zero; otherwise full stays"
+  },
+  "winner": "full"
+ },
+ "q35_policy": {
+  "candidates": {
+   "pol_keep": {
+    "L2_ndcg10": [
+     -0.103,
+     -0.328,
+     0.125
+    ],
+    "L3_recall100": [
+     -2.376,
+     -3.543,
+     -1.333
+    ],
+    "combined": -1.24,
+    "eligible": false
+   },
+   "pol_max3": {
+    "L2_ndcg10": [
+     -0.006,
+     -0.18,
+     0.177
+    ],
+    "L3_recall100": [
+     0.146,
+     -0.414,
+     0.677
+    ],
+    "combined": 0.07,
+    "eligible": false
+   },
+   "pol_rebucket": {
+    "L2_ndcg10": [
+     0.04,
+     -0.154,
+     0.233
+    ],
+    "L3_recall100": [
+     -1.582,
+     -2.734,
+     -0.52
+    ],
+    "combined": -0.771,
+    "eligible": false
+   }
+  },
+  "rule": {
+   "candidates": [
+    "pol_keep",
+    "pol_rebucket",
+    "pol_max3"
+   ],
+   "group": "dev_all",
+   "key": "list|core|C5|g0.5|h2",
+   "reading": "units_all_nomod",
+   "reference": "full",
+   "rule": "same rule, the reference being policy drop (pilot E3 as run); the dev-only variant pol_rebucket_nofixture is not a candidate"
+  },
+  "winner": "full"
+ }
+}

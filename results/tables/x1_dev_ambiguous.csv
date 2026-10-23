@@ -1,0 +1,6 @@
+repo,snapshots,sites_median,any_evidence_median,literal_median,kwargs_median,annotated_external_median,fixture_param_median,size_le_3_median,size_gt_3_median,resolved_invoke_pairs_median,invoke_resolved_median,invoke_ambiguous_median,invoke_unresolved_median,invoke_external_median
+conan-io/conan,90,5305.5,701.0,226.0,0.0,0.0,479.0,2466.0,2837.5,16000.0,25600.0,5305.5,226.0,17595.0
+deepset-ai/haystack,72,1168.0,75.0,12.0,0.0,23.0,44.0,1145.0,26.5,6604.5,8743.5,1168.0,375.0,7631.0
+internetarchive/openlibrary,81,1981.0,282.0,91.0,1.0,100.0,129.0,813.0,1188.0,4173.0,5672.0,1981.0,136.0,10822.0
+qutebrowser/qutebrowser,75,5028.0,1986.0,133.0,1.0,62.0,1821.0,3825.0,1198.0,6285.0,8424.0,5028.0,544.0,16536.0
+streamlink/streamlink,37,1743.0,229.0,166.0,0.0,94.0,5.0,715.0,992.0,5018.0,7187.0,1743.0,204.0,9319.0

@@ -117,3 +117,14 @@ repositories (83 L2, 55 L3 queries). Evidence class: measured, small samples.
   Answered pushback from the previous wave: a hop-decay score cannot enter rank fusion as written, hence the three forms;
   structural negatives stay outside the four RQ2 arms (they would break "only supervision varies") and are a separate pilot
   factor with the negative policy held identical across arms.
+
+## Addendum 2026-10-23 — the pilot-E3 headline under decision D18 (evidence only; no choice made)
+
+- Re-read with D18's primary gold (`units_all_nomod`) and the class form and ambiguous-site policy that the stated dev rules kept
+  (`full`, `drop`; `docs/EXPERIMENTS.md`, section of 2026-10-23; rows `x1-headline-*`). Containment still carries the signal and is
+  clearer on Verified: above same-file chance at L2 on dev and Verified (+3.4 [+2.5, +4.5], +4.4 [+2.6, +6.3]) and at L3 on Verified
+  (+4.0 [+0.5, +7.9]; clustered interval [-0.3, +6.3]); at dev L3 at the edge (+1.6 [+0.0, +3.1]). `core` and `all` remain not
+  distinguishable from same-file chance at L3 on Verified; without containment nothing is above that chance at L3. Gains over BM25 at
+  L2 are smaller than pilot E3 stated (dev `contain` +2.4 rather than +4.1) because BM25 is higher under this gold (21.2 rather than
+  15.8). Reading ambiguous call sites as edges does not help expansion (ADR-011 addendum of today).
+- Evidence class: measured (exploratory; one stated setting on six Verified repositories, wide clustered intervals).

@@ -228,3 +228,26 @@ implemented in code. *Flip.* A use of the projections that needs ambiguous edges
 **Not decided now (D24).** Q35 and Q36 (the policy for `ambiguous` sets and the `external`/`unresolved` boundary, Q-G8,
 Q-G13) and the graph's role (Q30, Q-G1, Q-G2) are decided by the measurements of the current wave, not by the engineer
 in advance.
+
+## Addendum 2026-10-23 — Q35 and Q36 measured: reader-side policies for ambiguous sites (evidence only; nothing chosen)
+
+- **What was measured** (`docs/EXPERIMENTS.md` E-AMBIG-POLICY; rows `x1-ambig-*`). The stored graph is unchanged; a reader applies
+  one of four policies to `ambiguous` invoke sites (`ril/parsing/ambiguity_policy.py`): `keep` every candidate, `drop` (what pilot E3
+  read), `rebucket` (read a site as `external` when its receiver carries syntactic evidence: literal or builtin container, `*args` /
+  `**kwargs`, an annotation naming only builtin or imported external types, an un-annotated parameter of a test or fixture function)
+  and `max3` (keep sets of at most three). Retrieval on dev, plus edge quality by two readers that are not the build author: the
+  dynamic oracle on flask and Jedi on 300 stratified sites of requests and streamlink.
+- **Result.** In retrieval no policy beats `drop`: `keep` costs 2.4 [1.3, 3.5] points of L3 Recall@100 for `core`, `rebucket` 1.6
+  [0.5, 2.7], `max3` nothing measurable (+0.1 [-0.4, +0.7]); L2 does not move. As edges: `keep` raises oracle recall from 0.48 to 0.66
+  and halves pair precision (0.62 to 0.32); `max3` keeps most of the recall (0.64) at 0.48 precision, and the pairs it drops are
+  supported 23 times in 796; `rebucket` drops pairs that are supported 75 times in 828. Jedi confirms the literal and annotation rules
+  (24 of 25 answered evidence sites external) but they are rare; the fixture rule fires most (up to 36% of a repository's ambiguous
+  sites) and the oracle does not support it (fixture sites reach an in-repository candidate as often as sites without evidence: 22%
+  against 24%). For Q36: 4 of 650 executed `external` sites had an in-repository callee of that name (0.6%), and Jedi resolves 68% of
+  answered `unresolved` sites inside the repository, so `unresolved` is mostly the resolver's recall limit rather than a wrong bucket.
+- **Evidence class.** Measured (exploratory; dev only for retrieval; oracle on one repository, Jedi on two; Jedi lacks the
+  repositories' dependencies). The evidence rules are this project's own syntactic reading.
+- **Experiment that could flip it.** A use of the graph other than expansion from BM25 seeds: on a dense first stage or as an agent
+  tool, recall may matter more than precision and `max3` could pay off (X2's graph-on-top run with the `max3` variant, minutes on
+  the extras). A typed resolver (receiver types from a type checker) instead of the syntactic rules.
+- **Not decided here:** the policy, the edge taxonomy (Q35, Q36, Q-G8, Q-G13) — the engineer's.

@@ -80,3 +80,24 @@ is the subject of pilots M and E1.
   repository-clustered intervals, index size and build time. The parser offers the forms as a config option behind
   `provisional: ADR-013` until the engineer decides; the CodeUnit schema is not affected by any of the three.
 
+
+## Addendum 2026-10-23 — Q28 measured: class-unit source forms (evidence only; Q28 stays open, `provisional: ADR-013` stays)
+
+- **What was measured** (`docs/EXPERIMENTS.md` E-CLASS-SOURCE; rows `x1-class-source-dev`, `x1-extras`). Three forms of a class
+  unit's `source`, offered by the parser as `ParseOptions.class_source` (`full`, the default of every build so far; `header`, the
+  class span without its methods; `header_sigs`, `header` plus each method's decorators and `def` lines). Only the text differs:
+  ids, spans and every other field are identical, so the schema is untouched (v1, golden test unchanged) and the gold mapping is the
+  same in every form. Unit-level BM25 and the pilot-E3 expansion on the five dev repositories (351 L2, 155 L3 queries).
+- **Result.** Under the readings that count every overlapped unit as gold (decision D18), `full` is ahead by 2 to 3 points at L2
+  nDCG@10 and L3 Recall@100, for BM25 alone (`header` -2.3 [-3.4, -1.3] and -2.9 [-3.6, -2.1] under `units_all_nomod`) and after the
+  `core` expansion (-2.0 [-3.1, -0.8] and -1.7 [-3.1, -0.5]); `header_sigs` is not better than `header`. The rule stated before the
+  run therefore keeps `full`. Under pilot M's mapping (a class is gold only when a chunk touches none of its methods) the three
+  forms are not distinguishable for BM25 or the `core` expansion. The advantage of `full` comes mostly from the gold reading: a class
+  whose method is gold is itself gold under D18 part 1, and only `full` repeats the method's text. The cost of `full`: about 55% more
+  indexed tokens and 26% more postings per snapshot (median 517,550 against 332,714 tokens), build time p50 2.83 s against 2.45 s.
+- **Evidence class.** Measured (exploratory, dev only, one seed of a deterministic pipeline; Verified not scored for the forms).
+- **Experiment that could flip it.** The same comparison for the dense encoder of ADR-006 (long class units are truncated, so `full`
+  may lose there), and under a gold reading that does not make a class gold through its methods; both are minutes on the existing
+  extras once dense scores exist (X2's unit texts would have to be encoded per form).
+- **What it does not settle.** Which gold reading is right for classes (ADR-004, D18 part 1) — the form question and that one are now
+  the same question.

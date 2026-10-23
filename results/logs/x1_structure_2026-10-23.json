@@ -1,0 +1,167 @@
+{
+ "alignment_checks": {
+  "e3_units_reading_reproduced": "dev and Verified-six pilot-E3 numbers reproduce exactly under gold units (e.g. contain +4.1 [+2.9, +5.2] dev L2)",
+  "full_form_bm25_scores_equal_to_e3_cache": 438,
+  "instances": 438,
+  "resolved_invoke_pair_counts_equal": 438
+ },
+ "bootstrap": {
+  "averages": {
+   "cluster": "mean over queries, whole repositories resampled (D17)",
+   "micro": "mean over queries, queries resampled"
+  },
+  "draws": 2000,
+  "interval": "95% percentile"
+ },
+ "cluster_jobs": [
+  {
+   "alloc": "cpu=6,mem=12G",
+   "cpu_time": "01:36:17",
+   "elapsed": "00:25:41",
+   "failures": 0,
+   "host": "gnode006",
+   "job": 35493,
+   "what": "extras, 355 dev instances, 4 shards"
+  },
+  {
+   "alloc": "cpu=4,mem=10G",
+   "cpu_time": "01:02:56",
+   "elapsed": "00:22:28",
+   "failures": 0,
+   "host": "gnode002",
+   "job": 35511,
+   "what": "extras, 83 Verified-six instances, 3 shards (after the confirmation was stated and committed)"
+  },
+  {
+   "job": 35503,
+   "status": "running at the end of the session; resumable",
+   "what": "census of the extra L3 folders (pilot-E1 unit stage), long folders"
+  },
+  {
+   "job": 35518,
+   "status": "running at the end of the session; resumable",
+   "what": "census of the extra L3 folders, sphinx, pytest, pylint"
+  }
+ ],
+ "code": {
+  "confirm_stated_commit": "dc0b4e5",
+  "measurement_code_commit": "fe1b856",
+  "note": "the dev extras job started from the working tree of cfe7a6c before fe1b856 was made; its prepare code differs from fe1b856 only by a refactor of how the four gold readings are listed (same arrays); the test extras ran at dc0b4e5"
+ },
+ "configs": {
+  "configs/experiments/e1_bm25_reproduction.yaml": "aa3ee5e674618256f3458800966ef5b3dba366374791c50bc3590e0602d623ca",
+  "configs/experiments/x1_headline_confirm.yaml": "063d649a918cffde880a333946b16cc8d3092d2e0abe35c5ef241eee9f4b2346",
+  "configs/experiments/x1_headline_dev.yaml": "7c42ce178063725a129cd4ee2ba9bd92d431a378188662779e407fd198220a9e",
+  "configs/experiments/x1_l3_census.yaml": "3244f8775b839effd23e5eb7db7f0ddf6f7e290ace66ff562761025c2a6f8fd0",
+  "configs/experiments/x1_structure_dev.yaml": "3041c6121f78f60eaf24def464a0ae59aee63b6791f2b79f97b295c8cb1b33b9"
+ },
+ "date": "2026-10-23",
+ "dev_selection": {
+  "q28_class_source": {
+   "candidates": {
+    "header": {
+     "L2_ndcg10": [
+      -1.972,
+      -3.114,
+      -0.807
+     ],
+     "L3_recall100": [
+      -1.733,
+      -3.068,
+      -0.477
+     ],
+     "combined": -1.853,
+     "eligible": false
+    },
+    "header_sigs": {
+     "L2_ndcg10": [
+      -2.705,
+      -3.851,
+      -1.632
+     ],
+     "L3_recall100": [
+      -2.029,
+      -3.164,
+      -0.964
+     ],
+     "combined": -2.367,
+     "eligible": false
+    }
+   },
+   "winner": "full"
+  },
+  "q35_policy": {
+   "candidates": {
+    "pol_keep": {
+     "L2_ndcg10": [
+      -0.103,
+      -0.328,
+      0.125
+     ],
+     "L3_recall100": [
+      -2.376,
+      -3.543,
+      -1.333
+     ],
+     "combined": -1.24,
+     "eligible": false
+    },
+    "pol_max3": {
+     "L2_ndcg10": [
+      -0.006,
+      -0.18,
+      0.177
+     ],
+     "L3_recall100": [
+      0.146,
+      -0.414,
+      0.677
+     ],
+     "combined": 0.07,
+     "eligible": false
+    },
+    "pol_rebucket": {
+     "L2_ndcg10": [
+      0.04,
+      -0.154,
+      0.233
+     ],
+     "L3_recall100": [
+      -1.582,
+      -2.734,
+      -0.52
+     ],
+     "combined": -0.771,
+     "eligible": false
+    }
+   },
+   "winner": "full"
+  }
+ },
+ "extras_config_hash": "2a63c75d2e8f0c58bfde03de8113e186b22d2cffae7b1a3ca99587099a8fdca0",
+ "hardware": {
+  "cluster": "Ada u22, qos low, Intel Xeon E5-2640 v4 @ 2.40GHz, Python 3.10.12, git 2.34.1, CPU only",
+  "local": "Apple M3, 8 cores, 8 GB, Python 3.11.14 (evaluation, tables, readers)"
+ },
+ "licence": "arrays, counts, ids, ranks and paths only; no query, chunk or code text",
+ "readers": {
+  "jedi": "results/logs/x1_jedi_policy_2026-10-23.json, sample results/tables/x1_jedi_policy_sample.csv (requests at 0192aac; streamlink at 27087e0, the base commit of streamlink__streamlink-5762, the first dev instance of streamlink by id; Jedi 0.20.1 without the repositories' dependencies)",
+  "oracle": "results/logs/x1_oracle_flask_2026-10-23.json (flask at 7ee9ceb, the pallets__flask-5014 base commit; trace and coverage of the suite from the first graph build)"
+ },
+ "run": "x1-structure (class-unit source forms, ambiguous-site policies, L3 positive census, graph-signal headline under decision D18)",
+ "seed": 0,
+ "status": "exploratory",
+ "tables": [
+  "results/tables/x1_dev_cells.csv",
+  "results/tables/x1_dev_variants.csv",
+  "results/tables/x1_dev_selection.json",
+  "results/tables/x1_dev_sizes.csv",
+  "results/tables/x1_dev_ambiguous.csv",
+  "results/tables/x1_headline_dev_cells.csv",
+  "results/tables/x1_headline_dev_variants.csv",
+  "results/tables/x1_headline_confirm_cells.csv",
+  "results/tables/x1_headline_confirm_variants.csv",
+  "results/tables/x1_census_cached_kinds.csv",
+  "results/tables/x1_census_cached_novelty.csv"
+ ]
+}

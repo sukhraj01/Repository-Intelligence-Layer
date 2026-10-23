@@ -5,6 +5,7 @@ Usage:
             --roles dev [test] [--only FOLDER] [--limit N] [--shard I K]
   x1_run.py eval EVAL_CONFIG E3_CACHE X1_CACHE OUT_DIR
   x1_run.py tables EVAL_CONFIG OUT_DIR TABLE_PREFIX
+  x1_run.py sizes X1_CACHE TABLE_PREFIX --roles dev [test]
 Writes arrays and counts only (no text).
 """
 
@@ -26,7 +27,7 @@ from ril.util.seed import set_seed  # noqa: E402
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("stage", choices=["prepare", "eval", "tables"])
+    ap.add_argument("stage", choices=["prepare", "eval", "tables", "sizes"])
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--roles", nargs="+", default=["dev"])
     ap.add_argument("--only", default=None)
@@ -58,6 +59,15 @@ def main() -> int:
         )
         log.info("prepare failures: %d", len(fails))
         return 0 if not fails else 2
+    if args.stage == "sizes":
+        from ril.analysis.e1_tables import write_csv  # noqa: PLC0415
+        from ril.analysis.x1_tables import ambiguity_rows, size_rows  # noqa: PLC0415
+
+        x1_cache, prefix = args.paths
+        roles = tuple(args.roles)
+        write_csv(f"{prefix}_sizes.csv", size_rows(x1_cache, roles))
+        write_csv(f"{prefix}_ambiguous.csv", ambiguity_rows(x1_cache, roles))
+        return 0
     from ril.evaluation.x1_eval import run_x1_eval, x1_spec  # noqa: PLC0415
 
     cfg_path = args.paths[0]

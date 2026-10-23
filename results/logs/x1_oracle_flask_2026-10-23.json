@@ -1,0 +1,216 @@
+{
+ "ambiguous_sites": 975,
+ "dynamic_in_repo_pairs": 1057,
+ "dynamic_pairs_without_implicit_dunders": 854,
+ "graph_sha256": "b04a1b28951bf8f86521f0c74711891168eee516b08c0bb155b8e3607c188dc9",
+ "note": "pair precision counts a pair whose caller executed but whose call was not taken as unsupported (lower bound); site outcomes use executed lines only",
+ "policies": {
+  "drop": {
+   "ambiguous_pairs_added": {
+    "caller_executed": 0,
+    "pairs": 0,
+    "precision": null,
+    "supported": 0
+   },
+   "ambiguous_pairs_dropped": {
+    "caller_executed": 1384,
+    "pairs": 1492,
+    "precision": 0.1358,
+    "supported": 188
+   },
+   "edges": {
+    "caller_executed": 821,
+    "pairs": 935,
+    "precision": 0.6163,
+    "supported": 506
+   },
+   "recall_all": {
+    "hit": 506,
+    "n": 1057,
+    "recall": 0.4787
+   },
+   "recall_without_implicit_dunders": {
+    "hit": 506,
+    "n": 854,
+    "recall": 0.5925
+   }
+  },
+  "keep": {
+   "ambiguous_pairs_added": {
+    "caller_executed": 1384,
+    "pairs": 1492,
+    "precision": 0.1358,
+    "supported": 188
+   },
+   "ambiguous_pairs_dropped": {
+    "caller_executed": 0,
+    "pairs": 0,
+    "precision": null,
+    "supported": 0
+   },
+   "edges": {
+    "caller_executed": 2205,
+    "pairs": 2427,
+    "precision": 0.3147,
+    "supported": 694
+   },
+   "recall_all": {
+    "hit": 694,
+    "n": 1057,
+    "recall": 0.6566
+   },
+   "recall_without_implicit_dunders": {
+    "hit": 694,
+    "n": 854,
+    "recall": 0.8126
+   }
+  },
+  "max3": {
+   "ambiguous_pairs_added": {
+    "caller_executed": 588,
+    "pairs": 640,
+    "precision": 0.2806,
+    "supported": 165
+   },
+   "ambiguous_pairs_dropped": {
+    "caller_executed": 796,
+    "pairs": 852,
+    "precision": 0.0289,
+    "supported": 23
+   },
+   "edges": {
+    "caller_executed": 1409,
+    "pairs": 1575,
+    "precision": 0.4762,
+    "supported": 671
+   },
+   "recall_all": {
+    "hit": 671,
+    "n": 1057,
+    "recall": 0.6348
+   },
+   "recall_without_implicit_dunders": {
+    "hit": 671,
+    "n": 854,
+    "recall": 0.7857
+   }
+  },
+  "rebucket": {
+   "ambiguous_pairs_added": {
+    "caller_executed": 556,
+    "pairs": 590,
+    "precision": 0.2032,
+    "supported": 113
+   },
+   "ambiguous_pairs_dropped": {
+    "caller_executed": 828,
+    "pairs": 902,
+    "precision": 0.0906,
+    "supported": 75
+   },
+   "edges": {
+    "caller_executed": 1377,
+    "pairs": 1525,
+    "precision": 0.4495,
+    "supported": 619
+   },
+   "recall_all": {
+    "hit": 619,
+    "n": 1057,
+    "recall": 0.5856
+   },
+   "recall_without_implicit_dunders": {
+    "hit": 619,
+    "n": 854,
+    "recall": 0.7248
+   }
+  }
+ },
+ "sites": {
+  "ambiguous": {
+   "candidate-observed": 31,
+   "n": 94,
+   "no-candidate-observed": 52,
+   "site-not-executed": 11
+  },
+  "ambiguous_evidence": {
+   "candidate-observed": 1,
+   "n": 5,
+   "no-candidate-observed": 4
+  },
+  "ambiguous_evidence:annotated_external": {
+   "n": 4,
+   "no-candidate-observed": 4
+  },
+  "ambiguous_evidence:fixture_param|caller-level": {
+   "candidate-observed": 97,
+   "n": 433,
+   "no-candidate-observed": 336
+  },
+  "ambiguous_evidence:literal": {
+   "candidate-observed": 1,
+   "n": 5,
+   "no-candidate-observed": 4
+  },
+  "ambiguous_evidence|caller-level": {
+   "candidate-observed": 97,
+   "n": 433,
+   "no-candidate-observed": 336
+  },
+  "ambiguous_gt3": {
+   "candidate-observed": 2,
+   "n": 33,
+   "no-candidate-observed": 31
+  },
+  "ambiguous_gt3|caller-level": {
+   "candidate-observed": 16,
+   "n": 280,
+   "no-candidate-observed": 264
+  },
+  "ambiguous_le3": {
+   "candidate-observed": 29,
+   "n": 50,
+   "no-candidate-observed": 21
+  },
+  "ambiguous_le3|caller-level": {
+   "candidate-observed": 176,
+   "n": 545,
+   "no-candidate-observed": 369
+  },
+  "ambiguous_no_evidence": {
+   "candidate-observed": 30,
+   "n": 78,
+   "no-candidate-observed": 48
+  },
+  "ambiguous_no_evidence|caller-level": {
+   "candidate-observed": 95,
+   "n": 392,
+   "no-candidate-observed": 297
+  },
+  "ambiguous|caller-level": {
+   "candidate-observed": 192,
+   "n": 881,
+   "no-candidate-observed": 633,
+   "site-not-executed": 56
+  },
+  "external": {
+   "in-repo-callee-of-that-name-observed": 4,
+   "n": 1799,
+   "no-in-repo-callee-of-that-name": 646,
+   "site-not-executed": 1149
+  },
+  "resolved": {
+   "n": 1137,
+   "not-observed": 66,
+   "self-or-nested": 10,
+   "site-not-executed": 864,
+   "supported": 197
+  },
+  "unresolved": {
+   "in-repo-callee-of-that-name-observed": 2,
+   "n": 125,
+   "no-in-repo-callee-of-that-name": 48,
+   "site-not-executed": 75
+  }
+ }
+}

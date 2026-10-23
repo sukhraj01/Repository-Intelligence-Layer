@@ -13,6 +13,7 @@
 # paths, lines and kinds only. Needs ~/ril_x1/census_meta.json (built locally from the datasets' metadata,
 # untracked) and configs/experiments/x1_l3_census.yaml. Resumable (finished records are kept; clones fetched).
 # Submit from $HOME:  sbatch --export=ALL,RIL_COMMIT=<hash> ril_x1/scripts/ada/x1_census.sbatch
+# (FOLDERS="a b" limits the run to those folders; the fetch and clone steps are skipped when done.)
 set -euo pipefail
 W=$HOME/ril_x1
 E=$HOME/ril_e
@@ -46,6 +47,11 @@ run() {
   "$VENV/bin/python" scripts/e1_run.py units "$CFG" "$RAW" "$W/census_meta.json" "$RC" "$W/work_census_$1" \
     "$W/out_census/$1" --only "$1" > "$W/logs/x1_census_$1.log" 2>&1
 }
-run django__django & run sympy__sympy & run instance_ansible__ansible & run scikit & wait
-run sphinx & run pytest & run pylint & wait
+if [ -n "${FOLDERS:-}" ]; then  # e.g. FOLDERS="sphinx pytest pylint": these folders only, in parallel
+  for f in $FOLDERS; do run "$f" & done
+  wait
+else
+  run django__django & run sympy__sympy & run instance_ansible__ansible & run scikit & wait
+  run sphinx & run pytest & run pylint & wait
+fi
 echo done
