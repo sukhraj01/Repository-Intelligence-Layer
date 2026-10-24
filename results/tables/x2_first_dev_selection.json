@@ -1,0 +1,67 @@
+{
+ "alpha": {
+  "coderankembed": {
+   "candidates": 9,
+   "name": "score|coderankembed__t1024|a0.4",
+   "objective": 33.59
+  },
+  "qwen3-embedding-0.6b": {
+   "candidates": 9,
+   "name": "score|qwen3-embedding-0.6b__t512|a0.2",
+   "objective": 38.04
+  }
+ },
+ "cut": {
+  "coderankembed": {
+   "diff_vs_512": {
+    "L2": [
+     1.08,
+     0.37,
+     1.87
+    ],
+    "L3": [
+     0.07,
+     -0.9,
+     1.01
+    ]
+   },
+   "selected": 1024
+  },
+  "qwen3-embedding-0.6b": {
+   "diff_vs_512": {
+    "L2": [
+     0.52,
+     -0.07,
+     1.11
+    ],
+    "L3": [
+     0.11,
+     -0.49,
+     0.75
+    ]
+   },
+   "selected": 512
+  }
+ },
+ "first_stage": {
+  "candidates": 5,
+  "name": "rrf|qwen3-embedding-0.6b__t512|k20",
+  "objective": 37.7
+ },
+ "rrf_k": {
+  "coderankembed": {
+   "candidates": 8,
+   "name": "rrf|coderankembed__t1024|k100",
+   "objective": 33.52
+  },
+  "qwen3-embedding-0.6b": {
+   "candidates": 8,
+   "name": "rrf|qwen3-embedding-0.6b__t512|k20",
+   "objective": 37.7
+  }
+ },
+ "variant": {
+  "coderankembed": "coderankembed__t1024",
+  "qwen3-embedding-0.6b": "qwen3-embedding-0.6b__t512"
+ }
+}
