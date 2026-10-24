@@ -24,7 +24,6 @@ import time
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from ril.training import pool_check as pc
 from ril.training import pool_ranks as pr
 
 Record = dict[str, Any]
@@ -104,10 +103,43 @@ def _selection(
     return pr.order_by_repository(insts, seed)
 
 
-def _listing(listing_path: str) -> tuple[str, dict[str, dict[str, Any]]]:
+POOL_PREFIX = "train/python/"
+
+
+def _prefix_of(sample_path: str | None) -> str:
+    """Listing prefix of a selection: the sample file's ``listing_prefix`` or the pool's."""
+    if sample_path:
+        with open(sample_path, encoding="utf-8") as handle:
+            return str(json.load(handle).get("listing_prefix", POOL_PREFIX))
+    return POOL_PREFIX
+
+
+def _listing(listing_path: str, prefix: str = POOL_PREFIX) -> tuple[str, dict[str, dict[str, Any]]]:
     with open(listing_path, encoding="utf-8") as handle:
         z = json.load(handle)
-    return str(z["url"]), pc.pool_instances(z["members"], "python")
+    groups = pr.group_members(z["members"], prefix)
+    return str(z["url"]), {k: dict(v) for k, v in groups.items()}
+
+
+def reference_sample_job(listing_path: str, out_path: str, *, prefix: str, strip: str) -> Record:
+    """Write a selection file covering every directory of a reference archive (no strata).
+
+    Why: the reference (never filtered, outside the teacher's training repositories) is ranked by
+    the same bodies as the pool sample, so the two are comparable directory by directory.
+    """
+    _, members = _listing(listing_path, prefix)
+    insts = pr.reference_instances(members, strip)
+    doc: Record = {
+        "version": pr.POOL_RANKS_VERSION,
+        "listing_prefix": prefix,
+        "reference": True,
+        "pool_instances": len(insts),
+        "sample": [pr.instance_record(i) for i in insts],
+    }
+    os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as handle:
+        json.dump(doc, handle, indent=1, sort_keys=True)
+    return {"reference_instances": len(insts), "repos": len({i.repo for i in insts})}
 
 
 def bm25_job(
@@ -124,7 +156,7 @@ def bm25_job(
     fetch: pr.Fetch = pr.http_fetch,
 ) -> Record:
     """BM25 ranks of the positives of every selected directory (CPU; resumable)."""
-    url, members = _listing(listing_path)
+    url, members = _listing(listing_path, _prefix_of(sample_path))
     insts = _selection(sample_path, meta_path, seed, shard, shards)
     done = pr.done_dirs(out_path)
     todo = [i.dir for i in insts if i.dir not in done]
@@ -186,7 +218,7 @@ def dense_job(
     from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
 
     log: Record = {"gate": cuda_gate(), "hardware": hardware(), "teachers": []}
-    url, members = _listing(listing_path)
+    url, members = _listing(listing_path, _prefix_of(sample_path))
     insts = _selection(sample_path, meta_path, seed, shard, shards)
     by_dir = {i.dir: i for i in insts}
     err_path = out_path + ".errors.jsonl"

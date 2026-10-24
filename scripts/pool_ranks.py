@@ -5,9 +5,11 @@ Subcommands (logic in ``ril/``):
   bm25   LISTING OUT [--sample SAMPLE | --meta META] [--form code|pool] [--shard I N]
   dense  LISTING OUT LOG --teachers T [T ...] --cut C [--sample SAMPLE | --meta META] [--shard I N]
   dedup  LISTING META OUT --repos-per-bin N --seed S
+  reference LISTING OUT [--prefix P] [--strip S]  (selection file of a reference archive)
   tables SAMPLE RANKS [RANKS ...] --config CONFIG --out-dir DIR [--dedup DEDUP]
          [--dense-log LOG ...]
-         [--pool-sample POOL_SAMPLE]
+         [--pool-sample POOL_SAMPLE] [--meta META]
+         [--private-dir DIR]
 """
 
 from __future__ import annotations
@@ -52,6 +54,11 @@ def main(argv: list[str] | None = None) -> int:
     d.add_argument("out")
     d.add_argument("--repos-per-bin", type=int, required=True)
     d.add_argument("--seed", type=int, required=True)
+    r = sub.add_parser("reference")
+    r.add_argument("listing")
+    r.add_argument("out")
+    r.add_argument("--prefix", default="swe_bench_verified/")
+    r.add_argument("--strip", default="swe-bench-verified-function_")
     t = sub.add_parser("tables")
     t.add_argument("sample")
     t.add_argument("ranks", nargs="+")
@@ -60,13 +67,23 @@ def main(argv: list[str] | None = None) -> int:
     t.add_argument("--dedup")
     t.add_argument("--dense-log", nargs="*", default=[])
     t.add_argument("--pool-sample")
+    t.add_argument("--meta")
+    t.add_argument("--private-dir")
     a = p.parse_args(argv)
 
     if a.cmd == "tables":
         from ril.analysis.x3_tables import write_tables
 
         res = write_tables(
-            a.sample, a.ranks, a.config, a.out_dir, a.dedup, a.dense_log, a.pool_sample
+            a.sample,
+            a.ranks,
+            a.config,
+            a.out_dir,
+            a.dedup,
+            a.dense_log,
+            a.pool_sample,
+            a.meta,
+            a.private_dir,
         )
         sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
         return 0
@@ -86,6 +103,8 @@ def main(argv: list[str] | None = None) -> int:
             k: doc[k]
             for k in ("pool_instances", "pool_strata", "sample_strata", "size_edges_corpus_bytes")
         }
+    elif a.cmd == "reference":
+        res = jobs.reference_sample_job(a.listing, a.out, prefix=a.prefix, strip=a.strip)
     elif a.cmd == "bm25":
         res = jobs.bm25_job(
             a.listing,

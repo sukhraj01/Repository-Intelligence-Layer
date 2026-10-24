@@ -16,7 +16,7 @@ teachers: [swerankembed-small, coderankembed, bm25]
 teacher_notes:
   swerankembed-small: Salesforce/SweRankEmbed-Small revision 745d2a06103a66d3cfa600aa52fc0d3523010daa; the SweRank+ filter teacher (top-40)
   coderankembed: revision 3c4b60807d71f79b43f3c4363786d9493691f8b1; the SweRank filter teacher (top-20)
-  bm25: ril.retrieval.bm25_index reference form, k1 1.5, b 0.75 (provisional: ADR-004)
+  bm25: ril.retrieval.bm25_index reference form, k1 1.5, b 0.75, provisional ADR-004
 max_tokens: 1024
 max_tokens_reason: the published SweRank mining script sets max_seq_length 1024
 dtype: float16
@@ -35,3 +35,12 @@ prestated_tests:
   c: if the qrels themselves were filtered, nearly every positive is inside the SweRankEmbed-Small top 40
 code: ril/training/pool_ranks.py, ril/training/pool_rank_jobs.py, ril/analysis/x3_tables.py, scripts/pool_ranks.py
 provisional: ADR-001, ADR-002
+sensitivity_teachers: [swerankembed-small@pool]
+sensitivity:
+  text_form_pool: SweRankEmbed-Small also on the stored "<id>\n<code>" text (the authors' text form for the SweRank+ filter is not stated); reported as teacher swerankembed-small@pool, stated before the main ranks were read
+reference:
+  stated: 2026-10-25, after the main ranks were read and before any reference rank was computed
+  archive: gangiswag/train_data swe_bench_verified.zip (the same authors' export of SWE-bench Verified at function level, same directory format), all 500 directories
+  why: never consistency-filtered (an evaluation set) and outside the teacher's training repositories (SweRank excludes SWE-bench repositories from its training pool)
+  teachers: swerankembed-small on the stored text, coderankembed on the code text (same settings as the main run)
+  reading: share of directories with no positive in the top 10 and 40, pool sample against reference, within bins of positives per directory (1, 2-3, 4-9, 10+), exact binomial intervals; a reference share clearly above the pool's under SweRankEmbed-Small, with the two closer under CodeRankEmbed, points to selection of the pool by (or fit of) SweRankEmbed-Small; near 0 in both under SweRankEmbed-Small means a PR-level filter could have removed few PRs

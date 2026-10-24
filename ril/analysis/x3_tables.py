@@ -398,12 +398,14 @@ def cost_estimate(
     dense_rows: Sequence[Mapping[str, Any]],
     dedup_rows: Sequence[Mapping[str, Any]],
     pool_meta_functions_per_byte: float,
+    bin_bytes: Mapping[str, int] | None = None,
 ) -> Record:
     """GPU-hours for the whole pool per teacher, from measured encode throughput and dedup.
 
     Pool functions are estimated from the pool's total corpus bytes times the measured functions
-    per corpus byte of the sample; dedup is the per-bin distinct/all ratio weighted by each bin's
-    share of texts in the dedup sample (a ratio estimate; bins without data fall back to 1).
+    per corpus byte; dedup is the per-bin distinct/all ratio weighted by each bin's share of the
+    pool's corpus bytes (``bin_bytes``; a bin without data counts as no saving). Without
+    ``bin_bytes`` the pooled ratio of the dedup sample is used.
     """
     pool_bytes = sum(int(t["corpus_bytes"]) for t in sample_doc["pool_strata"].values())
     pool_functions = pool_bytes * pool_meta_functions_per_byte
@@ -420,14 +422,42 @@ def cost_estimate(
         }
     texts = sum(int(r["texts"]) for r in dedup_rows)
     distinct = sum(int(r["distinct"]) for r in dedup_rows)
-    ratio = distinct / texts if texts else 1.0
+    pooled = distinct / texts if texts else 1.0
+    per_bin: Record = {}
+    for r in dedup_rows:
+        b = per_bin.setdefault(
+            str(r["bin"]), {"repos": 0, "texts": 0, "distinct": 0, "max_repo_ratio": 0.0}
+        )
+        b["repos"] += 1
+        b["texts"] += int(r["texts"])
+        b["distinct"] += int(r["distinct"])
+        if int(r["texts"]):
+            b["max_repo_ratio"] = max(b["max_repo_ratio"], int(r["distinct"]) / int(r["texts"]))
+    ratio = pooled
+    conservative = 1.0
+    if bin_bytes:
+        total = sum(bin_bytes.values())
+        ratio = 0.0
+        conservative = 0.0
+        for name, nbytes in bin_bytes.items():
+            b = per_bin.get(name)
+            r_b = b["distinct"] / b["texts"] if b and b["texts"] else 1.0
+            ratio += r_b * nbytes / total
+            conservative += (b["max_repo_ratio"] if b else 1.0) * nbytes / total
+            if b:
+                b["max_repo_ratio"] = round(b["max_repo_ratio"], 4)
+                b["ratio"] = round(r_b, 4)
+                b["pool_bytes_share"] = round(nbytes / total, 4)
     out: Record = {
         "pool_corpus_bytes": pool_bytes,
         "functions_per_byte": pool_meta_functions_per_byte,
         "pool_functions_est": round(pool_functions),
         "dedup_texts": texts,
         "dedup_distinct": distinct,
+        "dedup_ratio_pooled": round(pooled, 4),
         "dedup_ratio": round(ratio, 4),
+        "dedup_ratio_conservative": round(conservative, 4),
+        "dedup_bins": per_bin,
         "dedup_repos": len(dedup_rows),
         "teachers": per_teacher,
     }
@@ -436,6 +466,33 @@ def cost_estimate(
         if rate > 0:
             v["gpu_hours_no_dedup"] = round(pr.gpu_hours_estimate(pool_functions, rate), 2)
             v["gpu_hours_dedup"] = round(pr.gpu_hours_estimate(pool_functions, rate, ratio), 2)
+            v["gpu_hours_dedup_conservative"] = round(
+                pr.gpu_hours_estimate(pool_functions, rate, conservative), 2
+            )
+    return out
+
+
+def _registry_names(log: Record) -> Record:
+    """A dense run log with each model id replaced by the encoder's registry name.
+
+    The registry (``ril.retrieval.dense_encoder.ENCODERS``) pins model id and revision; the log
+    keeps the name and the pinned revision.
+    """
+    for t in log.get("teachers", []):
+        if "model_id" in t:
+            t["model_id"] = f"registry:{t['teacher']}"
+    return log
+
+
+def relabel(row: Mapping[str, Any], main_form: str) -> Record:
+    """A rank row whose text form differs from the main one becomes teacher ``<name>@<form>``.
+
+    BM25 rows carry a form too; only dense teachers are relabelled when it differs.
+    """
+    out = dict(row)
+    f = out.get("form")
+    if f and f != main_form and out.get("teacher") != "bm25":
+        out["teacher"] = f"{out['teacher']}@{f}"
     return out
 
 
@@ -464,6 +521,8 @@ def write_tables(
     dedup_path: str | None = None,
     dense_logs: Sequence[str] = (),
     pool_sample_path: str | None = None,
+    meta_path: str | None = None,
+    private_dir: str | None = None,
 ) -> Record:
     """Write every table of the measurement and return the summary record (the run log body)."""
     with open(config_path, encoding="utf-8") as handle:
@@ -471,8 +530,9 @@ def write_tables(
     with open(sample_path, encoding="utf-8") as handle:
         sample = json.load(handle)
     instances = [pr.instance_from_record(r) for r in sample["sample"]]
-    rows = [r for p in rank_paths for r in pr.read_jsonl(p)]
-    teachers = list(cfg["teachers"])
+    form = str(cfg.get("text_form", "code"))
+    rows = [relabel(r, form) for p in rank_paths for r in pr.read_jsonl(p)]
+    teachers = list(cfg["teachers"]) + list(cfg.get("sensitivity_teachers", []))
     ks = tuple(int(k) for k in cfg["k_cuts"])
     draws = int(cfg["bootstrap_draws"])
     seed = int(cfg["seed"])
@@ -516,17 +576,33 @@ def write_tables(
     write_csv(f"{prefix}_groups.csv", summary["groups"])
     write_csv(f"{prefix}_agreement.csv", summary["agreement"])
     write_csv(f"{prefix}_repositories.csv", repo_rows)
-    write_csv(
-        f"{prefix}_features.csv",
-        [{c: r.get(c, "") for c in pr.feature_columns(teachers)} for r in feats],
-    )
+    cols = pr.feature_columns(teachers)
+    tracked = [c for c in cols if c != "positive_id"]
+    write_csv(f"{prefix}_features.csv", [{c: r.get(c, "") for c in tracked} for r in feats])
+    if private_dir:
+        name = os.path.join(private_dir, f"{cfg['table_prefix']}_features_with_ids.csv")
+        write_csv(name, [{c: r.get(c, "") for c in cols} for r in feats])
     dense_rows = [r for r in rows if r.get("teacher") in teachers and "encoded" in r]
     # functions per corpus byte from the pool check's simple random sample when given (the
     # stratified sample over-weights large snapshots), else from the rank rows
     src = pr.read_jsonl(pool_sample_path) if pool_sample_path else dense_rows
     fpb = sum(int(r["functions"]) for r in src) / max(1, sum(int(r["corpus_bytes"]) for r in src))
     dedup_rows = pr.read_jsonl(dedup_path) if dedup_path else []
-    summary["cost"] = cost_estimate(sample, dense_rows, dedup_rows, fpb)
-    summary["dense_logs"] = [json.load(open(p, encoding="utf-8")) for p in dense_logs]
+    bin_bytes = None
+    if meta_path:
+        from ril.training.pool_rank_jobs import dedup_bins
+
+        insts, _ = pr.build_instances(pr.read_jsonl(meta_path), lambda _r: False)
+        by_repo: dict[str, list[pr.PoolInstance]] = {}
+        for inst in insts:
+            by_repo.setdefault(inst.repo, []).append(inst)
+        bin_bytes = {
+            name: sum(x.corpus_bytes for r in repos for x in by_repo[r])
+            for name, repos in dedup_bins(by_repo).items()
+        }
+    summary["cost"] = cost_estimate(sample, dense_rows, dedup_rows, fpb, bin_bytes)
+    summary["dense_logs"] = [
+        _registry_names(json.load(open(p, encoding="utf-8"))) for p in dense_logs
+    ]
     summary["feature_rows"] = len(feats)
     return summary

@@ -171,6 +171,56 @@ def instance_from_record(rec: Mapping[str, Any]) -> PoolInstance:
     )
 
 
+def group_members(
+    members: Sequence[Mapping[str, Any]], prefix: str
+) -> dict[str, dict[str, Mapping[str, Any]]]:
+    """``{directory: {corpus, queries, qrels}}`` of a zip member table under ``prefix``.
+
+    The same grouping as :func:`pool_check.pool_instances` for any top-level prefix (the pool's
+    ``train/python/`` or the reference archive's ``swe_bench_verified/``); incomplete directories
+    are left out.
+    """
+    out: dict[str, dict[str, Mapping[str, Any]]] = {}
+    kinds = {"corpus.jsonl": "corpus", "queries.jsonl": "queries", "test.tsv": "qrels"}
+    for m in members:
+        name = str(m["name"])
+        if not name.startswith(prefix) or name.endswith("/"):
+            continue
+        parts = name[len(prefix) :].split("/")
+        kind = kinds.get(parts[-1])
+        if kind is None or len(parts) not in (2, 3):
+            continue
+        out.setdefault(parts[0], {})[kind] = m
+    return {k: v for k, v in sorted(out.items()) if len(v) == 3}
+
+
+def reference_instances(
+    groups: Mapping[str, Mapping[str, Mapping[str, Any]]], strip: str
+) -> list[PoolInstance]:
+    """Instances of a reference archive (one stratum ``s0-h``; positives read later from qrels).
+
+    ``strip`` is a name prefix removed before the ``owner__name-<n>`` split (the reference archive
+    names directories ``swe-bench-verified-function_<owner>__<name>-<n>``).
+    """
+    out: list[PoolInstance] = []
+    for d, mem in sorted(groups.items()):
+        split = pc.split_instance_dir(d[len(strip) :] if d.startswith(strip) else d)
+        if split is None:
+            raise ValueError(f"unreadable reference directory {d!r}")
+        out.append(
+            PoolInstance(
+                dir=d,
+                repo=split[0],
+                pr=split[1],
+                corpus_bytes=int(mem["corpus"]["uncompressed"]),
+                positives=0,
+                held_out=True,
+                size_bin=0,
+            )
+        )
+    return out
+
+
 def order_by_repository(instances: Sequence[PoolInstance], seed: int) -> list[PoolInstance]:
     """Instances grouped by repository (so a per-repository vector cache can be reused)."""
     return sorted(instances, key=lambda i: (seeded_key(seed, i.repo), i.dir))
@@ -452,6 +502,7 @@ def rank_record(
 
 FEATURE_COLUMNS: tuple[str, ...] = (
     "instance_id",
+    "positive_key",
     "positive_id",
     "repo",
     "held_out",
@@ -459,6 +510,15 @@ FEATURE_COLUMNS: tuple[str, ...] = (
     "functions",
     "positives_in_instance",
 )
+
+
+def positive_key(fid: str) -> str:
+    """Stable 16-hex key of a pool function id (SHA-1 prefix), recomputable from the pool.
+
+    Why: the tracked table carries keys, not the dataset's path strings; the plain ids stay in an
+    untracked copy and the key joins the two.
+    """
+    return hashlib.sha1(fid.encode("utf-8")).hexdigest()[:16]
 
 
 def feature_rows(
@@ -491,6 +551,7 @@ def feature_rows(
         inst = instances[d]
         row_out: Record = {
             "instance_id": d,
+            "positive_key": positive_key(p),
             "positive_id": p,
             "repo": inst.repo,
             "held_out": int(inst.held_out),

@@ -200,6 +200,7 @@ def test_feature_rows_have_no_text_and_all_teachers() -> None:
     feats = pr.feature_rows({i.dir: i for i in insts}, rows, ["t1", "t2"])
     assert len(feats) == 2
     # x: t1 score 3 vs the only non-positive z at 2 -> 1; t2 score 1 vs z at 3 -> 2
+    assert feats[0]["positive_key"] == pr.positive_key("x") and len(feats[0]["positive_key"]) == 16
     assert feats[0]["positive_id"] == "x" and feats[0]["rank_t1"] == 1 and feats[0]["rank_t2"] == 2
     assert feats[0]["rank_all_t2"] == 3
     assert feats[1]["rank_t1"] == 2 and feats[1]["held_out"] == 1
@@ -294,7 +295,8 @@ def test_write_tables_end_to_end(tmp_path: Path) -> None:
     assert lo <= 4 <= hi
     agree = [r for r in out["agreement"] if r["measure"] == "spearman_rank"][0]
     assert agree["value"] > 0.95
-    assert (tmp_path / "out" / "t_features.csv").exists()
+    head = (tmp_path / "out" / "t_features.csv").read_text().splitlines()[0].split(",")
+    assert "positive_key" in head and "positive_id" not in head
     assert out["feature_rows"] == 16
     assert out["cost"]["teachers"]["a"]["texts_per_second"] == 100.0
     assert len(out["config_hash"]) == 64
@@ -317,3 +319,39 @@ def test_spearman_and_kappa() -> None:
     assert xt.spearman(a, -a) == pytest.approx(-1.0)
     assert xt.kappa(np.asarray([1, 0, 1, 0]), np.asarray([1, 0, 1, 0])) == pytest.approx(1.0)
     assert np.isnan(xt.kappa(np.ones(3), np.ones(3)))
+
+
+def test_relabel_other_text_form() -> None:
+    assert xt.relabel({"teacher": "a", "form": "pool"}, "code")["teacher"] == "a@pool"
+    assert xt.relabel({"teacher": "a", "form": "code"}, "code")["teacher"] == "a"
+    assert xt.relabel({"teacher": "bm25", "form": "pool"}, "code")["teacher"] == "bm25"
+
+
+def test_cost_estimate_weights_dedup_bins() -> None:
+    sample = {"pool_strata": {"x": {"corpus_bytes": 1000}}}
+    dense = [{"teacher": "a", "encoded": 100, "encode_seconds": 1.0}]
+    dedup = [
+        {"bin": "d1", "texts": 10, "distinct": 10},
+        {"bin": "d50+", "texts": 100, "distinct": 10},
+    ]
+    out = xt.cost_estimate(sample, dense, dedup, 1.0, {"d1": 500, "d50+": 500, "d2-9": 0})
+    assert out["dedup_ratio"] == pytest.approx(0.55)
+    assert out["dedup_ratio_pooled"] == pytest.approx(20 / 110, abs=1e-4)
+    assert out["teachers"]["a"]["gpu_hours_no_dedup"] == pytest.approx(round(1000 / 100 / 3600, 2))
+
+
+def test_group_members_and_reference_instances() -> None:
+    members = [
+        {"name": "ref/", "offset": 0},
+        {"name": "ref/p_o__r-7/corpus.jsonl", "uncompressed": 50, "offset": 1},
+        {"name": "ref/p_o__r-7/queries.jsonl", "offset": 2},
+        {"name": "ref/p_o__r-7/qrels/test.tsv", "offset": 3},
+        {"name": "ref/p_o__r-8/corpus.jsonl", "uncompressed": 5, "offset": 4},
+        {"name": "other/x/corpus.jsonl", "offset": 5},
+    ]
+    groups = pr.group_members(members, "ref/")
+    assert list(groups) == ["p_o__r-7"]  # incomplete p_o__r-8 left out
+    insts = pr.reference_instances(groups, "p_")
+    assert insts[0].repo == "o/r" and insts[0].pr == 7 and insts[0].corpus_bytes == 50
+    with pytest.raises(ValueError):
+        pr.reference_instances({"noseparator-1": groups["p_o__r-7"]}, "p_")

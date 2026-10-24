@@ -14,6 +14,8 @@
 # while the GPU encodes snapshot and issue; ranks of the positives and encode timings are appended
 # per directory (resumable). Needs x3_prepare (models in the cache, loaded offline once).
 #   sbatch --export=ALL,RIL_COMMIT=<hash> ril_x3/scripts/ada/x3_dense.sbatch
+# Text-form sensitivity: FORM=pool OUT_NAME=ranks_dense_poolform.jsonl TEACHERS=swerankembed-small.
+# Reference archive (Verified, never filtered): SAMPLE_NAME=verified_sample.json OUT_NAME=... (see README).
 # Full pool (not run by default): SELECT=all SHARD="i n" (repositories split by hash) with a longer
 # --time; see scripts/ada/README.md for the estimate.
 set -euo pipefail
@@ -31,9 +33,9 @@ SHARD=${SHARD:-"0 1"}
 if [ "${SELECT:-sample}" = all ]; then
   SEL="--meta $META"; OUT=$W/work/full_ranks_dense_s${SHARD// /of}.jsonl
 else
-  SEL="--sample $W/work/sample.json"; OUT=$W/work/ranks_dense.jsonl
+  SEL="--sample $W/work/${SAMPLE_NAME:-sample.json}"; OUT=$W/work/${OUT_NAME:-ranks_dense.jsonl}
 fi
 PYTHONPATH="$X2/overlay_cre:$W" RIL_COMMIT=${RIL_COMMIT:-none} "$GV/bin/python" scripts/pool_ranks.py dense \
   "$LIST" "$OUT" "$W/out/dense_${SLURM_JOB_ID}.json" --teachers ${TEACHERS:-swerankembed-small coderankembed} \
-  --cut ${CUT:-1024} --batch-size ${BATCH:-64} $SEL --shard $SHARD --ahead 4
+  --cut ${CUT:-1024} --batch-size ${BATCH:-64} $SEL --shard $SHARD --ahead 4 --form ${FORM:-code}
 echo done
