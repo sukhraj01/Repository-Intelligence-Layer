@@ -141,8 +141,13 @@ class DenseEncoder:
         device: str = "cpu",
         dtype: str = "float32",
         threads: int | None = None,
+        local_dir: str | None = None,
     ) -> DenseEncoder:
-        """Load the released model with ``sentence-transformers`` (imported here, lazily)."""
+        """Load the released model with ``sentence-transformers`` (imported here, lazily).
+
+        ``local_dir`` loads from a downloaded snapshot directory instead of the hub name (see
+        :func:`local_snapshot`); the pinned revision is then the snapshot's.
+        """
         import torch  # type: ignore[import-not-found,unused-ignore]
         from sentence_transformers import (  # type: ignore[import-not-found,unused-ignore]
             SentenceTransformer,
@@ -151,9 +156,9 @@ class DenseEncoder:
         if threads is not None:
             torch.set_num_threads(threads)
         kwargs: dict[str, Any] = {"trust_remote_code": spec.trust_remote_code, "device": device}
-        if spec.revision:
+        if spec.revision and local_dir is None:
             kwargs["revision"] = spec.revision
-        model = SentenceTransformer(spec.model_id, **kwargs)
+        model = SentenceTransformer(local_dir or spec.model_id, **kwargs)
         if dtype == "float16":
             model = model.half()
         elif dtype != "float32":
@@ -240,6 +245,19 @@ class FlatIndex:
         order = np.lexsort((cand, -s[cand]))[:k]
         idx = cand[order].astype(np.int64)
         return idx, s[idx]
+
+
+def local_snapshot(spec: EncoderSpec) -> str:
+    """Directory of the cached snapshot of the pinned revision (no network).
+
+    Why: the SweRankEmbed-Small configuration points to modelling code in another repository whose
+    weight loader looks for the weights by hub name at the default revision; given a directory it
+    reads the pinned snapshot's files directly.
+    """
+    from huggingface_hub import snapshot_download  # type: ignore[import-not-found,unused-ignore]
+
+    path: str = snapshot_download(spec.model_id, revision=spec.revision, local_files_only=True)
+    return path
 
 
 def default_threads() -> int:

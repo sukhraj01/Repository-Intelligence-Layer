@@ -41,9 +41,10 @@ print(snapshot_download("Salesforce/SweRankEmbed-Small", revision="745d2a06103a6
 print(snapshot_download("Snowflake/snowflake-arctic-embed-m-long", allow_patterns=["*.py", "*.json"]))
 PY
   HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONPATH="$X2/overlay_cre:$W" "$GV/bin/python" - <<'PY'
-from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder
+from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
 for name in ("swerankembed-small", "coderankembed"):
-    enc = DenseEncoder.load(ENCODERS[name].with_max_tokens(1024), device="cpu", threads=4)
+    spec = ENCODERS[name].with_max_tokens(1024)
+    enc = DenseEncoder.load(spec, device="cpu", threads=4, local_dir=local_snapshot(spec))
     v = enc.encode_documents(["def f(x):\n    return x + 1", "class A:\n    pass"])
     q = enc.encode_query("f returns the wrong value")
     print(name, v.shape, float(v[0] @ q), float(v[1] @ q))

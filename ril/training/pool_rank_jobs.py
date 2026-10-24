@@ -183,7 +183,7 @@ def dense_job(
 
     from ril.evaluation.chunk_unit_pilot import hardware
     from ril.evaluation.x2_jobs import cuda_gate, model_revision
-    from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder
+    from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
 
     log: Record = {"gate": cuda_gate(), "hardware": hardware(), "teachers": []}
     url, members = _listing(listing_path)
@@ -195,7 +195,9 @@ def dense_job(
         done = {str(r["dir"]) for r in pr.read_jsonl(out_path) if r.get("teacher") == teacher}
         todo = [i.dir for i in insts if i.dir not in done]
         t_load = time.perf_counter()
-        enc = DenseEncoder.load(spec, device="cuda", dtype="float16")
+        enc = DenseEncoder.load(
+            spec, device="cuda", dtype="float16", local_dir=local_snapshot(spec)
+        )
         info: Record = {
             "teacher": teacher,
             "model_id": spec.model_id,
