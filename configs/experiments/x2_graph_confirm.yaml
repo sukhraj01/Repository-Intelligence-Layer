@@ -1,0 +1,28 @@
+experiment_id: E-DENSE-FUSION, graph on top of the strongest first stage (X2 item 3)
+stage: confirm on Verified (six repositories with units)
+status: exploratory pilot
+date: '2026-10-25'
+seed: 0
+roles:
+- test
+confirm: true
+note: >-
+  Stated from results/tables/x2_graph_dev_selection.json (rule of x2_graph_dev.yaml) before any
+  Verified graph cell was scored: score-level form, C 5, gamma 0.7, 2 hops, graph weight 0.5
+  (the largest weight of the dev grid: the optimum may lie beyond it), alpha 0.2, on RRF(BM25,
+  Qwen3-Embedding-0.6B at 512 tokens, k 20); core families and each core family alone; both chance
+  controls (the random units take the expansion's graph scores, 3 draws). Primary reading
+  units_all_nomod, units_all beside it.
+graph:
+  variant: qwen3-embedding-0.6b__t512
+  k: 20
+  alpha: 0.2
+  ways: [score]
+  subsets: [core, contain, import, invoke, inherit]
+  seeds: [5]
+  gammas: [0.7]
+  hops: [2]
+  weights: [0.5]
+  cap: 50
+  draws: 3
+  score_controls: true

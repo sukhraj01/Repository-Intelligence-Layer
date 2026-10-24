@@ -1,0 +1,24 @@
+experiment_id: E-DENSE-FUSION (dense retrieval and BM25+dense fusion, X2 item 2)
+stage: confirm on Verified (six repositories with units)
+status: exploratory pilot
+date: '2026-10-25'
+seed: 0
+roles:
+- test
+confirm: true
+note: >-
+  Stated from results/tables/x2_first_dev_selection.json before any Verified dense score was read:
+  CodeRankEmbed at 1024 tokens with RRF k 100 and score-level alpha 0.4; Qwen3-Embedding-0.6B at 512
+  tokens with RRF k 20 and alpha 0.2. Primary gold reading units_all_nomod (D18), units_all beside it.
+  Chunk level: the k selected on the chunk-level dev records, encoders at 512 tokens (see the note
+  in the chunk confirmation).
+first:
+  variants:
+  - coderankembed__t1024
+  - qwen3-embedding-0.6b__t512
+  rrf_k_of:
+    coderankembed__t1024: 100
+    qwen3-embedding-0.6b__t512: 20
+  alpha_of:
+    coderankembed__t1024: 0.4
+    qwen3-embedding-0.6b__t512: 0.2

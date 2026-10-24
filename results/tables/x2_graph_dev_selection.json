@@ -1,0 +1,13 @@
+{
+ "graph": {
+  "C": 5,
+  "candidates": 126,
+  "gamma": 0.7,
+  "hops": 2,
+  "name": "score|core|C5|g0.7|h2|w0.5",
+  "objective": 44.01,
+  "subset": "core",
+  "way": "score",
+  "weight": 0.5
+ }
+}

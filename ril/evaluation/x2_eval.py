@@ -68,6 +68,9 @@ class FirstSpec:
     variants: tuple[str, ...]
     rrf_ks: tuple[int, ...]
     alphas: tuple[float, ...]
+    rrf_k_of: dict[str, int] | None = None
+    """Per-variant k (a confirmation states one k per encoder); overrides ``rrf_ks``."""
+    alpha_of: dict[str, float] | None = None
 
 
 @dataclass(frozen=True)
@@ -101,8 +104,8 @@ class X2Spec:
         if not self.confirm:
             return
         f, g = self.first, self.graph
-        if f is not None and (len(f.rrf_ks) > len(f.variants) or len(f.alphas) > 1):
-            raise ValueError("confirm: at most one k per variant and one alpha")
+        if f is not None and (f.rrf_ks or f.alphas):
+            raise ValueError("confirm: state one k and one alpha per variant (rrf_k_of, alpha_of)")
         if g is not None and not (
             len(g.ways) == len(g.seeds) == len(g.gammas) == len(g.hops) == len(g.weights) == 1
         ):
@@ -118,6 +121,12 @@ def spec_from_config(cfg: Record) -> X2Spec:
             variants=tuple(fc["variants"]),
             rrf_ks=tuple(int(k) for k in fc.get("rrf_ks", ())),
             alphas=tuple(float(a) for a in fc.get("alphas", ())),
+            rrf_k_of={str(k): int(v) for k, v in fc["rrf_k_of"].items()}
+            if "rrf_k_of" in fc
+            else None,
+            alpha_of={str(k): float(v) for k, v in fc["alpha_of"].items()}
+            if "alpha_of" in fc
+            else None,
         )
     if "graph" in cfg:
         gc = cfg["graph"]
@@ -228,10 +237,12 @@ def first_stage(sc: _Scorer, bm25: Arr, dense: dict[str, Arr], fs: FirstSpec) ->
         d = dense[v]
         sc.add(f"dense|{v}", d)
         pd = positions(d)
-        for k in fs.rrf_ks:
+        ks = (fs.rrf_k_of[v],) if fs.rrf_k_of and v in fs.rrf_k_of else fs.rrf_ks
+        for k in ks:
             sc.add(f"rrf|{v}|k{k}", rrf_scores([pb, pd], k))
         nd = minmax(d)
-        for a in fs.alphas:
+        alphas = (fs.alpha_of[v],) if fs.alpha_of and v in fs.alpha_of else fs.alphas
+        for a in alphas:
             sc.add(f"score|{v}|a{a}", a * nb + (1 - a) * nd)
 
 

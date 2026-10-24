@@ -293,8 +293,11 @@ def first_report(
     cols: list[tuple[str, str, str | None]] = [("bm25", "bm25", None)]
     for v in variants:
         cols.append((f"dense|{v}", f"dense|{v}", "bm25"))
-        cols += [(f"rrf|{v}|k{k}", f"rrf|{v}|k{k}", "bm25") for k in ks]
-        cols += [(f"score|{v}|a{a}", f"score|{v}|a{a}", "bm25") for a in alphas]
+        if selection is None:
+            cols += [(f"rrf|{v}|k{k}", f"rrf|{v}|k{k}", "bm25") for k in ks]
+            cols += [(f"score|{v}|a{a}", f"score|{v}|a{a}", "bm25") for a in alphas]
+        else:  # a confirmation: the keys it computed (one k and one alpha per variant)
+            cols += [(k, k, "bm25") for k in tab.keys if k.startswith((f"rrf|{v}|", f"score|{v}|"))]
     rows = _tag(unit_rows(tab, group, cols, seed), "bm25")
     sel: Record = dict(selection or {})
     for enc in encoders_of(variants):

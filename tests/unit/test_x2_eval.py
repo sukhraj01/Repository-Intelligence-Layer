@@ -52,8 +52,8 @@ def test_spec_refuses_sweeps_on_test() -> None:
     cfg["confirm"] = True
     with pytest.raises(ValueError):
         spec_from_config(cfg)
-    cfg["first"]["rrf_ks"] = [60]
-    spec_from_config(cfg)
+    cfg["first"] = {"variants": ["a"], "rrf_k_of": {"a": 60}}
+    assert spec_from_config(cfg).first is not None
 
 
 def test_first_and_graph_keys_and_identity() -> None:
