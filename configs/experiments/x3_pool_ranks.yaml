@@ -1,0 +1,37 @@
+# E-POOL-RANKS: teacher ranks of the candidate pool's positives (gangiswag/train_data python).
+# Exploratory measurement; chooses nothing (ADR-001 pool, ADR-002 quality signal stay open).
+# Stated before any rank was seen (2026-10-25).
+experiment_id: E-POOL-RANKS
+date: '2026-10-25'
+source: https://huggingface.co/datasets/gangiswag/train_data/resolve/main/train.zip
+language: python
+access: zip central directory (listing of 2026-10-17) and HTTP range requests per directory; nothing stored but ids, ranks, counts
+sample:
+  strata: corpus-size quartile (uncompressed corpus bytes of all 24,285 directories, pool-check cache) x held-out flag
+  held_out_rule: held-out list v2, core plus Loc-Bench tier, aliases from the list and the rename cache (decision D1, D3)
+  per_stratum: 20
+  order: sha256 of "<seed>:<directory>" within each stratum
+seed: 0
+teachers: [swerankembed-small, coderankembed, bm25]
+teacher_notes:
+  swerankembed-small: Salesforce/SweRankEmbed-Small revision 745d2a06103a66d3cfa600aa52fc0d3523010daa; the SweRank+ filter teacher (top-40)
+  coderankembed: revision 3c4b60807d71f79b43f3c4363786d9493691f8b1; the SweRank filter teacher (top-20)
+  bm25: ril.retrieval.bm25_index reference form, k1 1.5, b 0.75 (provisional: ADR-004)
+max_tokens: 1024
+max_tokens_reason: the published SweRank mining script sets max_seq_length 1024
+dtype: float16
+text_form: code
+text_form_reason: the published construction encodes the function code alone; the pool stores "<id>\n<code>", the id line is stripped
+rank: 1 + non-positive functions with a strictly higher score (other positives of the PR are not competitors, as in the published construction)
+k_cuts: [10, 20, 40]
+bootstrap_draws: 2000
+dedup:
+  repos_per_bin: 4
+  bins: directories per repository 1, 2-9, 10-49, 50+
+table_prefix: x3_pool_ranks
+prestated_tests:
+  a: if the directories are only PRs with at least one positive kept by the SweRank+ filter, the pool share of directories with no positive in the SweRankEmbed-Small top 40 is near 0
+  b: if the qrels are the unfiltered modified functions and Table 1 counts the kept ones, the pool estimate of positives inside the SweRankEmbed-Small top 40 is near 49,973 and most positives are outside
+  c: if the qrels themselves were filtered, nearly every positive is inside the SweRankEmbed-Small top 40
+code: ril/training/pool_ranks.py, ril/training/pool_rank_jobs.py, ril/analysis/x3_tables.py, scripts/pool_ranks.py
+provisional: ADR-001, ADR-002

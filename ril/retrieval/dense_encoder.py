@@ -7,11 +7,14 @@ inner product (= cosine) with the query over a **flat exact** index (no approxim
 frozen stack of ``docs/08_experimental_design.md`` holds a flat exact index).
 
 Everything about *which* encoder and *how* it is fed is ``provisional: ADR-006`` (the base encoder
-is open; decision D24 leaves it to measurement). The two candidates measured are registered in
+is open; decision D24 leaves it to measurement). The candidates measured are registered in
 :data:`ENCODERS` with the settings of their released models, nothing substituted:
 
 * ``coderankembed`` (137M): the model's own query prefix, documents without prefix; the model
   repository's modelling code is loaded (``trust_remote_code``), as the model requires.
+* ``swerankembed-small`` (137M, fine-tuned from CodeRankEmbed on the SweRank training data): the
+  same query prefix as its base (model card); registered as a teacher for the pool-rank measurement
+  (the K-rank teacher of SweRank+), not as a candidate base encoder.
 * ``qwen3-embedding-0.6b``: the instruction goes on the query only, documents carry none
   (``knowledge/papers/qwen3-embedding-2506.05176.md``, p.3). The report gives the format
   ``{Instruction} {Query}<|endoftext|>`` but no instruction for code tasks; the template used here
@@ -86,6 +89,13 @@ ENCODERS: dict[str, EncoderSpec] = {
         query_template="Represent this query for searching relevant code: {query}",
         trust_remote_code=True,
         revision="3c4b60807d71f79b43f3c4363786d9493691f8b1",
+    ),
+    "swerankembed-small": EncoderSpec(
+        name="swerankembed-small",
+        model_id="Salesforce/SweRankEmbed-Small",
+        query_template="Represent this query for searching relevant code: {query}",
+        trust_remote_code=True,
+        revision="745d2a06103a66d3cfa600aa52fc0d3523010daa",
     ),
     "qwen3-embedding-0.6b": EncoderSpec(
         name="qwen3-embedding-0.6b",
