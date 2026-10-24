@@ -1,0 +1,17 @@
+experiment_id: E-DENSE-FUSION, chunk level (X2 item 2)
+stage: confirm on Verified (the six repositories with units, every L2 and L3 folder of them)
+status: exploratory pilot
+date: '2026-10-25'
+seed: 0
+roles:
+- test
+confirm: true
+note: >-
+  Stated from results/tables/x2_chunks_dev_selection.json before any Verified chunk rank was read:
+  RRF k 100 for CodeRankEmbed and 20 for Qwen3-Embedding-0.6B. Both encoders at 512 tokens at chunk
+  level (the 1024-token encoding was not run for chunks: CodeRankEmbed's dev gain at 1024 was at unit
+  level, and chunks are cut by the benchmark to about 1,500 characters; stated as a departure from the
+  one-cut rule). Filter-first reading: each query ranked among its own candidate list.
+first:
+  variants: [coderankembed__t512, qwen3-embedding-0.6b__t512]
+  rrf_ks: [100, 20]

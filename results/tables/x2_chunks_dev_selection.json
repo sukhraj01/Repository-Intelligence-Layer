@@ -1,0 +1,14 @@
+{
+ "rrf_k": {
+  "coderankembed__t512": {
+   "candidates": 8,
+   "name": "rrf100__coderankembed__t512",
+   "objective": 37.78
+  },
+  "qwen3-embedding-0.6b__t512": {
+   "candidates": 8,
+   "name": "rrf20__qwen3-embedding-0.6b__t512",
+   "objective": 42.26
+  }
+ }
+}
