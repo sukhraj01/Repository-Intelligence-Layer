@@ -34,7 +34,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
-- [ ] Dense encoder + flat exact index
+- [x] Dense encoder + flat exact index (`ril/retrieval/dense_encoder.py`, `provisional: ADR-006`; CodeRankEmbed and Qwen3-Embedding-0.6B measured zero-shot, E-DENSE-FUSION, 2026-10-25)
 - [ ] Baseline training (multi-positive InfoNCE, repo-local hard negatives)
 - [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list
 
@@ -45,7 +45,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 5–8 — Person A: RQ1
 
-- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense arm waits for a GPU run, Q42)
+- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense, dense+BM25 and the graph on a fused first stage measured zero-shot with latency rows, E-DENSE-FUSION 2026-10-25; the frozen-configuration ablation still to run)
 - [ ] Latency distribution measured; rerank decision informed (ADR-009)
 
 ## Before week 6 — freeze

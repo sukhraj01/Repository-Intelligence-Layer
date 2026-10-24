@@ -1,0 +1,1772 @@
+{
+ "code_commits": [
+  "662d9fa",
+  "928edb7"
+ ],
+ "configs": {
+  "x2_chunks_confirm.yaml": "afb83c2bf13e",
+  "x2_first_confirm.yaml": "4fff5dc4f7de",
+  "x2_first_dev.yaml": "abf0ba1e339e",
+  "x2_graph_confirm.yaml": "e09d169f6680",
+  "x2_graph_dev.yaml": "f0dcbd370e66",
+  "x2_graph_headline_dev.yaml": "c0a2002b0b4e"
+ },
+ "date": "2026-10-23 to 2026-10-25",
+ "encode_runs": {
+  "encode_coderankembed_devunits_36104.json|t1024": {
+   "batch": 64,
+   "encoded": 17993,
+   "peak_gpu_mem_mb": 4397.9,
+   "seconds": 346.2,
+   "stores": {
+    "units__conan-io__conan": {
+     "share_cut": 0.1,
+     "taken_from_shorter_cut": 15307,
+     "texts": 19972
+    },
+    "units__deepset-ai__haystack": {
+     "share_cut": 0.129,
+     "taken_from_shorter_cut": 13877,
+     "texts": 18376
+    },
+    "units__internetarchive__openlibrary": {
+     "share_cut": 0.0586,
+     "taken_from_shorter_cut": 14813,
+     "texts": 17324
+    },
+    "units__qutebrowser__qutebrowser": {
+     "share_cut": 0.0786,
+     "taken_from_shorter_cut": 21684,
+     "texts": 26315
+    },
+    "units__streamlink__streamlink": {
+     "share_cut": 0.0711,
+     "taken_from_shorter_cut": 7650,
+     "texts": 9337
+    }
+   },
+   "texts_per_s": 52.0
+  },
+  "encode_coderankembed_devunits_36104.json|t512": {
+   "batch": 64,
+   "encoded": 91324,
+   "peak_gpu_mem_mb": 1433.1,
+   "seconds": 455.2,
+   "stores": {
+    "units__conan-io__conan": {
+     "share_cut": 0.2336,
+     "taken_from_shorter_cut": 0,
+     "texts": 19972
+    },
+    "units__deepset-ai__haystack": {
+     "share_cut": 0.2448,
+     "taken_from_shorter_cut": 0,
+     "texts": 18376
+    },
+    "units__internetarchive__openlibrary": {
+     "share_cut": 0.1449,
+     "taken_from_shorter_cut": 0,
+     "texts": 17324
+    },
+    "units__qutebrowser__qutebrowser": {
+     "share_cut": 0.176,
+     "taken_from_shorter_cut": 0,
+     "texts": 26315
+    },
+    "units__streamlink__streamlink": {
+     "share_cut": 0.1807,
+     "taken_from_shorter_cut": 0,
+     "texts": 9337
+    }
+   },
+   "texts_per_s": 200.6
+  },
+  "encode_coderankembed_more_38109.json|t1024": {
+   "batch": 64,
+   "encoded": 76968,
+   "peak_gpu_mem_mb": 4126.1,
+   "seconds": 1499.4,
+   "stores": {
+    "chunks__astropy__astropy": {
+     "share_cut": 0.1191,
+     "taken_from_shorter_cut": 50107,
+     "texts": 66203
+    },
+    "chunks__conan-io__conan": {
+     "share_cut": 0.087,
+     "taken_from_shorter_cut": 9831,
+     "texts": 13445
+    },
+    "chunks__deepset-ai__haystack": {
+     "share_cut": 0.0904,
+     "taken_from_shorter_cut": 9632,
+     "texts": 13486
+    },
+    "chunks__internetarchive__openlibrary": {
+     "share_cut": 0.1356,
+     "taken_from_shorter_cut": 12995,
+     "texts": 17934
+    },
+    "chunks__matplotlib__matplotlib": {
+     "share_cut": 0.1475,
+     "taken_from_shorter_cut": 30530,
+     "texts": 42522
+    },
+    "chunks__mwaskom__seaborn": {
+     "share_cut": 0.0485,
+     "taken_from_shorter_cut": 2144,
+     "texts": 2515
+    },
+    "chunks__pallets__flask": {
+     "share_cut": 0.091,
+     "taken_from_shorter_cut": 795,
+     "texts": 1000
+    },
+    "chunks__psf__requests": {
+     "share_cut": 0.1125,
+     "taken_from_shorter_cut": 1873,
+     "texts": 2356
+    },
+    "chunks__pydata__xarray": {
+     "share_cut": 0.1664,
+     "taken_from_shorter_cut": 12022,
+     "texts": 18007
+    },
+    "chunks__qutebrowser__qutebrowser": {
+     "share_cut": 0.1055,
+     "taken_from_shorter_cut": 15362,
+     "texts": 20001
+    },
+    "chunks__streamlink__streamlink": {
+     "share_cut": 0.1401,
+     "taken_from_shorter_cut": 4499,
+     "texts": 6345
+    },
+    "units__astropy__astropy": {
+     "share_cut": 0.0795,
+     "taken_from_shorter_cut": 41582,
+     "texts": 51270
+    },
+    "units__matplotlib__matplotlib": {
+     "share_cut": 0.121,
+     "taken_from_shorter_cut": 27327,
+     "texts": 35699
+    },
+    "units__mwaskom__seaborn": {
+     "share_cut": 0.0604,
+     "taken_from_shorter_cut": 2822,
+     "texts": 3231
+    },
+    "units__pallets__flask": {
+     "share_cut": 0.0211,
+     "taken_from_shorter_cut": 1022,
+     "texts": 1091
+    },
+    "units__psf__requests": {
+     "share_cut": 0.0616,
+     "taken_from_shorter_cut": 2282,
+     "texts": 2631
+    },
+    "units__pydata__xarray": {
+     "share_cut": 0.0822,
+     "taken_from_shorter_cut": 16524,
+     "texts": 20581
+    }
+   },
+   "texts_per_s": 51.3
+  },
+  "encode_coderankembed_more_38109.json|t512": {
+   "batch": 64,
+   "encoded": 0,
+   "peak_gpu_mem_mb": 276.1,
+   "seconds": 0,
+   "stores": {},
+   "texts_per_s": null
+  },
+  "encode_coderankembed_queries_36104.json|t1024": {
+   "batch": 64,
+   "encoded": 333,
+   "peak_gpu_mem_mb": 3008.7,
+   "seconds": 6.0,
+   "stores": {
+    "queries__L2__SWE-bench-Live__conan": {
+     "share_cut": 0.1889,
+     "taken_from_shorter_cut": 55,
+     "texts": 90
+    },
+    "queries__L2__SWE-bench-Live__deepset": {
+     "share_cut": 0.0833,
+     "taken_from_shorter_cut": 55,
+     "texts": 72
+    },
+    "queries__L2__SWE-bench-Live__streamlink__streamlink": {
+     "share_cut": 0.3784,
+     "taken_from_shorter_cut": 8,
+     "texts": 37
+    },
+    "queries__L2__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 78,
+     "texts": 81
+    },
+    "queries__L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 72,
+     "texts": 75
+    },
+    "queries__L2__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.2273,
+     "taken_from_shorter_cut": 9,
+     "texts": 22
+    },
+    "queries__L2__SWE-bench_Verified__django__django": {
+     "share_cut": 0.0745,
+     "taken_from_shorter_cut": 146,
+     "texts": 188
+    },
+    "queries__L2__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.1875,
+     "taken_from_shorter_cut": 13,
+     "texts": 32
+    },
+    "queries__L2__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 2,
+     "texts": 2
+    },
+    "queries__L2__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 1,
+     "texts": 1
+    },
+    "queries__L2__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.125,
+     "taken_from_shorter_cut": 7,
+     "texts": 8
+    },
+    "queries__L2__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.3333,
+     "taken_from_shorter_cut": 3,
+     "texts": 18
+    },
+    "queries__L2__SWE-bench_Verified__pylint": {
+     "share_cut": 0.3333,
+     "taken_from_shorter_cut": 5,
+     "texts": 9
+    },
+    "queries__L2__SWE-bench_Verified__pytest": {
+     "share_cut": 0.6,
+     "taken_from_shorter_cut": 5,
+     "texts": 15
+    },
+    "queries__L2__SWE-bench_Verified__scikit": {
+     "share_cut": 0.1923,
+     "taken_from_shorter_cut": 11,
+     "texts": 26
+    },
+    "queries__L2__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.0952,
+     "taken_from_shorter_cut": 25,
+     "texts": 42
+    },
+    "queries__L2__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.0435,
+     "taken_from_shorter_cut": 57,
+     "texts": 69
+    },
+    "queries__L3__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 78,
+     "texts": 81
+    },
+    "queries__L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 71,
+     "texts": 74
+    },
+    "queries__L3__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.2727,
+     "taken_from_shorter_cut": 5,
+     "texts": 11
+    },
+    "queries__L3__SWE-bench_Verified__django__django": {
+     "share_cut": 0.0441,
+     "taken_from_shorter_cut": 112,
+     "texts": 136
+    },
+    "queries__L3__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.1667,
+     "taken_from_shorter_cut": 10,
+     "texts": 24
+    },
+    "queries__L3__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 1,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 1,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.2,
+     "taken_from_shorter_cut": 4,
+     "texts": 5
+    },
+    "queries__L3__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.1538,
+     "taken_from_shorter_cut": 3,
+     "texts": 13
+    },
+    "queries__L3__SWE-bench_Verified__pylint": {
+     "share_cut": 0.6667,
+     "taken_from_shorter_cut": 0,
+     "texts": 3
+    },
+    "queries__L3__SWE-bench_Verified__pytest": {
+     "share_cut": 0.6,
+     "taken_from_shorter_cut": 3,
+     "texts": 10
+    },
+    "queries__L3__SWE-bench_Verified__scikit": {
+     "share_cut": 0.1905,
+     "taken_from_shorter_cut": 9,
+     "texts": 21
+    },
+    "queries__L3__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.0385,
+     "taken_from_shorter_cut": 17,
+     "texts": 26
+    },
+    "queries__L3__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.0196,
+     "taken_from_shorter_cut": 45,
+     "texts": 51
+    }
+   },
+   "texts_per_s": 55.4
+  },
+  "encode_coderankembed_queries_36104.json|t512": {
+   "batch": 64,
+   "encoded": 1244,
+   "peak_gpu_mem_mb": 1430.5,
+   "seconds": 9.5,
+   "stores": {
+    "queries__L2__SWE-bench-Live__conan": {
+     "share_cut": 0.3889,
+     "taken_from_shorter_cut": 0,
+     "texts": 90
+    },
+    "queries__L2__SWE-bench-Live__deepset": {
+     "share_cut": 0.2361,
+     "taken_from_shorter_cut": 0,
+     "texts": 72
+    },
+    "queries__L2__SWE-bench-Live__streamlink__streamlink": {
+     "share_cut": 0.7838,
+     "taken_from_shorter_cut": 0,
+     "texts": 37
+    },
+    "queries__L2__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.037,
+     "taken_from_shorter_cut": 0,
+     "texts": 81
+    },
+    "queries__L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.04,
+     "taken_from_shorter_cut": 0,
+     "texts": 75
+    },
+    "queries__L2__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.5909,
+     "taken_from_shorter_cut": 0,
+     "texts": 22
+    },
+    "queries__L2__SWE-bench_Verified__django__django": {
+     "share_cut": 0.2234,
+     "taken_from_shorter_cut": 0,
+     "texts": 188
+    },
+    "queries__L2__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.5938,
+     "taken_from_shorter_cut": 0,
+     "texts": 32
+    },
+    "queries__L2__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 2
+    },
+    "queries__L2__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 1
+    },
+    "queries__L2__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.125,
+     "taken_from_shorter_cut": 0,
+     "texts": 8
+    },
+    "queries__L2__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.8333,
+     "taken_from_shorter_cut": 0,
+     "texts": 18
+    },
+    "queries__L2__SWE-bench_Verified__pylint": {
+     "share_cut": 0.4444,
+     "taken_from_shorter_cut": 0,
+     "texts": 9
+    },
+    "queries__L2__SWE-bench_Verified__pytest": {
+     "share_cut": 0.6667,
+     "taken_from_shorter_cut": 0,
+     "texts": 15
+    },
+    "queries__L2__SWE-bench_Verified__scikit": {
+     "share_cut": 0.5769,
+     "taken_from_shorter_cut": 0,
+     "texts": 26
+    },
+    "queries__L2__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.4048,
+     "taken_from_shorter_cut": 0,
+     "texts": 42
+    },
+    "queries__L2__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.1739,
+     "taken_from_shorter_cut": 0,
+     "texts": 69
+    },
+    "queries__L3__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.037,
+     "taken_from_shorter_cut": 0,
+     "texts": 81
+    },
+    "queries__L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0405,
+     "taken_from_shorter_cut": 0,
+     "texts": 74
+    },
+    "queries__L3__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.5455,
+     "taken_from_shorter_cut": 0,
+     "texts": 11
+    },
+    "queries__L3__SWE-bench_Verified__django__django": {
+     "share_cut": 0.1765,
+     "taken_from_shorter_cut": 0,
+     "texts": 136
+    },
+    "queries__L3__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.5833,
+     "taken_from_shorter_cut": 0,
+     "texts": 24
+    },
+    "queries__L3__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.2,
+     "taken_from_shorter_cut": 0,
+     "texts": 5
+    },
+    "queries__L3__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.7692,
+     "taken_from_shorter_cut": 0,
+     "texts": 13
+    },
+    "queries__L3__SWE-bench_Verified__pylint": {
+     "share_cut": 1.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 3
+    },
+    "queries__L3__SWE-bench_Verified__pytest": {
+     "share_cut": 0.7,
+     "taken_from_shorter_cut": 0,
+     "texts": 10
+    },
+    "queries__L3__SWE-bench_Verified__scikit": {
+     "share_cut": 0.5714,
+     "taken_from_shorter_cut": 0,
+     "texts": 21
+    },
+    "queries__L3__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.3462,
+     "taken_from_shorter_cut": 0,
+     "texts": 26
+    },
+    "queries__L3__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.1176,
+     "taken_from_shorter_cut": 0,
+     "texts": 51
+    }
+   },
+   "texts_per_s": 130.8
+  },
+  "encode_coderankembed_rest512_36104.json|t512": {
+   "batch": 64,
+   "encoded": 318317,
+   "peak_gpu_mem_mb": 1430.5,
+   "seconds": 1647.1,
+   "stores": {
+    "chunks__astropy__astropy": {
+     "share_cut": 0.2431,
+     "taken_from_shorter_cut": 0,
+     "texts": 66203
+    },
+    "chunks__conan-io__conan": {
+     "share_cut": 0.2688,
+     "taken_from_shorter_cut": 0,
+     "texts": 13445
+    },
+    "chunks__deepset-ai__haystack": {
+     "share_cut": 0.2858,
+     "taken_from_shorter_cut": 0,
+     "texts": 13486
+    },
+    "chunks__internetarchive__openlibrary": {
+     "share_cut": 0.2754,
+     "taken_from_shorter_cut": 0,
+     "texts": 17934
+    },
+    "chunks__matplotlib__matplotlib": {
+     "share_cut": 0.282,
+     "taken_from_shorter_cut": 0,
+     "texts": 42522
+    },
+    "chunks__mwaskom__seaborn": {
+     "share_cut": 0.1475,
+     "taken_from_shorter_cut": 0,
+     "texts": 2515
+    },
+    "chunks__pallets__flask": {
+     "share_cut": 0.205,
+     "taken_from_shorter_cut": 0,
+     "texts": 1000
+    },
+    "chunks__psf__requests": {
+     "share_cut": 0.205,
+     "taken_from_shorter_cut": 0,
+     "texts": 2356
+    },
+    "chunks__pydata__xarray": {
+     "share_cut": 0.3324,
+     "taken_from_shorter_cut": 0,
+     "texts": 18007
+    },
+    "chunks__qutebrowser__qutebrowser": {
+     "share_cut": 0.2319,
+     "taken_from_shorter_cut": 0,
+     "texts": 20001
+    },
+    "chunks__streamlink__streamlink": {
+     "share_cut": 0.2909,
+     "taken_from_shorter_cut": 0,
+     "texts": 6345
+    },
+    "units__astropy__astropy": {
+     "share_cut": 0.189,
+     "taken_from_shorter_cut": 0,
+     "texts": 51270
+    },
+    "units__matplotlib__matplotlib": {
+     "share_cut": 0.2345,
+     "taken_from_shorter_cut": 0,
+     "texts": 35699
+    },
+    "units__mwaskom__seaborn": {
+     "share_cut": 0.1266,
+     "taken_from_shorter_cut": 0,
+     "texts": 3231
+    },
+    "units__pallets__flask": {
+     "share_cut": 0.0632,
+     "taken_from_shorter_cut": 0,
+     "texts": 1091
+    },
+    "units__psf__requests": {
+     "share_cut": 0.1326,
+     "taken_from_shorter_cut": 0,
+     "texts": 2631
+    },
+    "units__pydata__xarray": {
+     "share_cut": 0.1971,
+     "taken_from_shorter_cut": 0,
+     "texts": 20581
+    }
+   },
+   "texts_per_s": 193.3
+  },
+  "encode_qwen3-embedding-0.6b_devunits_36104.json|t1024": {
+   "batch": 16,
+   "encoded": 13615,
+   "peak_gpu_mem_mb": 4584.0,
+   "seconds": 658.9,
+   "stores": {
+    "units__conan-io__conan": {
+     "share_cut": 0.0722,
+     "taken_from_shorter_cut": 16477,
+     "texts": 19972
+    },
+    "units__deepset-ai__haystack": {
+     "share_cut": 0.1054,
+     "taken_from_shorter_cut": 14692,
+     "texts": 18376
+    },
+    "units__internetarchive__openlibrary": {
+     "share_cut": 0.0454,
+     "taken_from_shorter_cut": 15400,
+     "texts": 17324
+    },
+    "units__qutebrowser__qutebrowser": {
+     "share_cut": 0.0622,
+     "taken_from_shorter_cut": 23001,
+     "texts": 26315
+    },
+    "units__streamlink__streamlink": {
+     "share_cut": 0.0485,
+     "taken_from_shorter_cut": 8139,
+     "texts": 9337
+    }
+   },
+   "texts_per_s": 20.7
+  },
+  "encode_qwen3-embedding-0.6b_devunits_36104.json|t512": {
+   "batch": 16,
+   "encoded": 91324,
+   "peak_gpu_mem_mb": 2278.8,
+   "seconds": 1086.4,
+   "stores": {
+    "units__conan-io__conan": {
+     "share_cut": 0.175,
+     "taken_from_shorter_cut": 0,
+     "texts": 19972
+    },
+    "units__deepset-ai__haystack": {
+     "share_cut": 0.2005,
+     "taken_from_shorter_cut": 0,
+     "texts": 18376
+    },
+    "units__internetarchive__openlibrary": {
+     "share_cut": 0.1111,
+     "taken_from_shorter_cut": 0,
+     "texts": 17324
+    },
+    "units__qutebrowser__qutebrowser": {
+     "share_cut": 0.1259,
+     "taken_from_shorter_cut": 0,
+     "texts": 26315
+    },
+    "units__streamlink__streamlink": {
+     "share_cut": 0.1283,
+     "taken_from_shorter_cut": 0,
+     "texts": 9337
+    }
+   },
+   "texts_per_s": 84.1
+  },
+  "encode_qwen3-embedding-0.6b_queries_36104.json|t1024": {
+   "batch": 16,
+   "encoded": 291,
+   "peak_gpu_mem_mb": 3417.5,
+   "seconds": 14.7,
+   "stores": {
+    "queries__L2__SWE-bench-Live__conan": {
+     "share_cut": 0.1556,
+     "taken_from_shorter_cut": 56,
+     "texts": 90
+    },
+    "queries__L2__SWE-bench-Live__deepset": {
+     "share_cut": 0.0278,
+     "taken_from_shorter_cut": 60,
+     "texts": 72
+    },
+    "queries__L2__SWE-bench-Live__streamlink__streamlink": {
+     "share_cut": 0.2973,
+     "taken_from_shorter_cut": 9,
+     "texts": 37
+    },
+    "queries__L2__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 78,
+     "texts": 81
+    },
+    "queries__L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 74,
+     "texts": 75
+    },
+    "queries__L2__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.1818,
+     "taken_from_shorter_cut": 10,
+     "texts": 22
+    },
+    "queries__L2__SWE-bench_Verified__django__django": {
+     "share_cut": 0.0426,
+     "taken_from_shorter_cut": 156,
+     "texts": 188
+    },
+    "queries__L2__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.1562,
+     "taken_from_shorter_cut": 17,
+     "texts": 32
+    },
+    "queries__L2__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 2,
+     "texts": 2
+    },
+    "queries__L2__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 1,
+     "texts": 1
+    },
+    "queries__L2__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.125,
+     "taken_from_shorter_cut": 7,
+     "texts": 8
+    },
+    "queries__L2__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.2222,
+     "taken_from_shorter_cut": 5,
+     "texts": 18
+    },
+    "queries__L2__SWE-bench_Verified__pylint": {
+     "share_cut": 0.2222,
+     "taken_from_shorter_cut": 5,
+     "texts": 9
+    },
+    "queries__L2__SWE-bench_Verified__pytest": {
+     "share_cut": 0.3333,
+     "taken_from_shorter_cut": 5,
+     "texts": 15
+    },
+    "queries__L2__SWE-bench_Verified__scikit": {
+     "share_cut": 0.2308,
+     "taken_from_shorter_cut": 11,
+     "texts": 26
+    },
+    "queries__L2__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.0714,
+     "taken_from_shorter_cut": 26,
+     "texts": 42
+    },
+    "queries__L2__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.0435,
+     "taken_from_shorter_cut": 59,
+     "texts": 69
+    },
+    "queries__L3__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 78,
+     "texts": 81
+    },
+    "queries__L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 73,
+     "texts": 74
+    },
+    "queries__L3__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.2727,
+     "taken_from_shorter_cut": 5,
+     "texts": 11
+    },
+    "queries__L3__SWE-bench_Verified__django__django": {
+     "share_cut": 0.0294,
+     "taken_from_shorter_cut": 118,
+     "texts": 136
+    },
+    "queries__L3__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.125,
+     "taken_from_shorter_cut": 13,
+     "texts": 24
+    },
+    "queries__L3__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 1,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 1,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.2,
+     "taken_from_shorter_cut": 4,
+     "texts": 5
+    },
+    "queries__L3__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.1538,
+     "taken_from_shorter_cut": 4,
+     "texts": 13
+    },
+    "queries__L3__SWE-bench_Verified__pylint": {
+     "share_cut": 0.3333,
+     "taken_from_shorter_cut": 0,
+     "texts": 3
+    },
+    "queries__L3__SWE-bench_Verified__pytest": {
+     "share_cut": 0.3,
+     "taken_from_shorter_cut": 3,
+     "texts": 10
+    },
+    "queries__L3__SWE-bench_Verified__scikit": {
+     "share_cut": 0.2381,
+     "taken_from_shorter_cut": 9,
+     "texts": 21
+    },
+    "queries__L3__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.0385,
+     "taken_from_shorter_cut": 17,
+     "texts": 26
+    },
+    "queries__L3__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.0196,
+     "taken_from_shorter_cut": 46,
+     "texts": 51
+    }
+   },
+   "texts_per_s": 19.8
+  },
+  "encode_qwen3-embedding-0.6b_queries_36104.json|t512": {
+   "batch": 16,
+   "encoded": 1244,
+   "peak_gpu_mem_mb": 2273.0,
+   "seconds": 22.5,
+   "stores": {
+    "queries__L2__SWE-bench-Live__conan": {
+     "share_cut": 0.3778,
+     "taken_from_shorter_cut": 0,
+     "texts": 90
+    },
+    "queries__L2__SWE-bench-Live__deepset": {
+     "share_cut": 0.1667,
+     "taken_from_shorter_cut": 0,
+     "texts": 72
+    },
+    "queries__L2__SWE-bench-Live__streamlink__streamlink": {
+     "share_cut": 0.7568,
+     "taken_from_shorter_cut": 0,
+     "texts": 37
+    },
+    "queries__L2__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.037,
+     "taken_from_shorter_cut": 0,
+     "texts": 81
+    },
+    "queries__L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0133,
+     "taken_from_shorter_cut": 0,
+     "texts": 75
+    },
+    "queries__L2__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.5455,
+     "taken_from_shorter_cut": 0,
+     "texts": 22
+    },
+    "queries__L2__SWE-bench_Verified__django__django": {
+     "share_cut": 0.1702,
+     "taken_from_shorter_cut": 0,
+     "texts": 188
+    },
+    "queries__L2__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.4688,
+     "taken_from_shorter_cut": 0,
+     "texts": 32
+    },
+    "queries__L2__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 2
+    },
+    "queries__L2__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 1
+    },
+    "queries__L2__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.125,
+     "taken_from_shorter_cut": 0,
+     "texts": 8
+    },
+    "queries__L2__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.7222,
+     "taken_from_shorter_cut": 0,
+     "texts": 18
+    },
+    "queries__L2__SWE-bench_Verified__pylint": {
+     "share_cut": 0.4444,
+     "taken_from_shorter_cut": 0,
+     "texts": 9
+    },
+    "queries__L2__SWE-bench_Verified__pytest": {
+     "share_cut": 0.6667,
+     "taken_from_shorter_cut": 0,
+     "texts": 15
+    },
+    "queries__L2__SWE-bench_Verified__scikit": {
+     "share_cut": 0.5769,
+     "taken_from_shorter_cut": 0,
+     "texts": 26
+    },
+    "queries__L2__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.381,
+     "taken_from_shorter_cut": 0,
+     "texts": 42
+    },
+    "queries__L2__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.1449,
+     "taken_from_shorter_cut": 0,
+     "texts": 69
+    },
+    "queries__L3__SWE-bench_Pro__instance_internetarchive__openlibrary": {
+     "share_cut": 0.037,
+     "taken_from_shorter_cut": 0,
+     "texts": 81
+    },
+    "queries__L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser": {
+     "share_cut": 0.0135,
+     "taken_from_shorter_cut": 0,
+     "texts": 74
+    },
+    "queries__L3__SWE-bench_Verified__astropy__astropy": {
+     "share_cut": 0.5455,
+     "taken_from_shorter_cut": 0,
+     "texts": 11
+    },
+    "queries__L3__SWE-bench_Verified__django__django": {
+     "share_cut": 0.1324,
+     "taken_from_shorter_cut": 0,
+     "texts": 136
+    },
+    "queries__L3__SWE-bench_Verified__matplotlib__matplotlib": {
+     "share_cut": 0.4583,
+     "taken_from_shorter_cut": 0,
+     "texts": 24
+    },
+    "queries__L3__SWE-bench_Verified__mwaskom__seaborn": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__pallets__flask": {
+     "share_cut": 0.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 1
+    },
+    "queries__L3__SWE-bench_Verified__psf__requests": {
+     "share_cut": 0.2,
+     "taken_from_shorter_cut": 0,
+     "texts": 5
+    },
+    "queries__L3__SWE-bench_Verified__pydata__xarray": {
+     "share_cut": 0.6923,
+     "taken_from_shorter_cut": 0,
+     "texts": 13
+    },
+    "queries__L3__SWE-bench_Verified__pylint": {
+     "share_cut": 1.0,
+     "taken_from_shorter_cut": 0,
+     "texts": 3
+    },
+    "queries__L3__SWE-bench_Verified__pytest": {
+     "share_cut": 0.7,
+     "taken_from_shorter_cut": 0,
+     "texts": 10
+    },
+    "queries__L3__SWE-bench_Verified__scikit": {
+     "share_cut": 0.5714,
+     "taken_from_shorter_cut": 0,
+     "texts": 21
+    },
+    "queries__L3__SWE-bench_Verified__sphinx": {
+     "share_cut": 0.3462,
+     "taken_from_shorter_cut": 0,
+     "texts": 26
+    },
+    "queries__L3__SWE-bench_Verified__sympy__sympy": {
+     "share_cut": 0.098,
+     "taken_from_shorter_cut": 0,
+     "texts": 51
+    }
+   },
+   "texts_per_s": 55.3
+  },
+  "encode_qwen3-embedding-0.6b_rest512_36104.json|t512": {
+   "batch": 16,
+   "encoded": 318317,
+   "peak_gpu_mem_mb": 2278.8,
+   "seconds": 4148.3,
+   "stores": {
+    "chunks__astropy__astropy": {
+     "share_cut": 0.2158,
+     "taken_from_shorter_cut": 0,
+     "texts": 66203
+    },
+    "chunks__conan-io__conan": {
+     "share_cut": 0.2019,
+     "taken_from_shorter_cut": 0,
+     "texts": 13445
+    },
+    "chunks__deepset-ai__haystack": {
+     "share_cut": 0.2468,
+     "taken_from_shorter_cut": 0,
+     "texts": 13486
+    },
+    "chunks__internetarchive__openlibrary": {
+     "share_cut": 0.2284,
+     "taken_from_shorter_cut": 0,
+     "texts": 17934
+    },
+    "chunks__matplotlib__matplotlib": {
+     "share_cut": 0.2445,
+     "taken_from_shorter_cut": 0,
+     "texts": 42522
+    },
+    "chunks__mwaskom__seaborn": {
+     "share_cut": 0.1189,
+     "taken_from_shorter_cut": 0,
+     "texts": 2515
+    },
+    "chunks__pallets__flask": {
+     "share_cut": 0.178,
+     "taken_from_shorter_cut": 0,
+     "texts": 1000
+    },
+    "chunks__psf__requests": {
+     "share_cut": 0.1808,
+     "taken_from_shorter_cut": 0,
+     "texts": 2356
+    },
+    "chunks__pydata__xarray": {
+     "share_cut": 0.2871,
+     "taken_from_shorter_cut": 0,
+     "texts": 18007
+    },
+    "chunks__qutebrowser__qutebrowser": {
+     "share_cut": 0.181,
+     "taken_from_shorter_cut": 0,
+     "texts": 20001
+    },
+    "chunks__streamlink__streamlink": {
+     "share_cut": 0.2411,
+     "taken_from_shorter_cut": 0,
+     "texts": 6345
+    },
+    "units__astropy__astropy": {
+     "share_cut": 0.1592,
+     "taken_from_shorter_cut": 0,
+     "texts": 51270
+    },
+    "units__matplotlib__matplotlib": {
+     "share_cut": 0.1931,
+     "taken_from_shorter_cut": 0,
+     "texts": 35699
+    },
+    "units__mwaskom__seaborn": {
+     "share_cut": 0.0987,
+     "taken_from_shorter_cut": 0,
+     "texts": 3231
+    },
+    "units__pallets__flask": {
+     "share_cut": 0.0458,
+     "taken_from_shorter_cut": 0,
+     "texts": 1091
+    },
+    "units__psf__requests": {
+     "share_cut": 0.1083,
+     "taken_from_shorter_cut": 0,
+     "texts": 2631
+    },
+    "units__pydata__xarray": {
+     "share_cut": 0.1523,
+     "taken_from_shorter_cut": 0,
+     "texts": 20581
+    }
+   },
+   "texts_per_s": 76.7
+  }
+ },
+ "experiment": "E-DENSE-FUSION (X2)",
+ "gpu_hours": {
+  "36104": 2.41,
+  "38109": 0.43,
+  "total": 2.84
+ },
+ "hardware": {
+  "cpu_node": "ada u22 gnode006 (see results/latency rows for the CPU model)",
+  "gpu": "NVIDIA GeForce RTX 2080 Ti 11 GB, driver 570.211.01, torch 2.4.1+cu121, compute capability 7.5, CUDA gate max abs error 1.2e-4",
+  "local": "Apple M3 8 GB, python 3.11 (evaluation and tables)"
+ },
+ "jobs": {
+  "36028": "CPU prepare (unit-text hashes of 438 instances, 3 class forms; query and chunk stores; GPU environment)",
+  "36104": "GPU encode, RTX 2080 Ti gnode044, 02:24:36",
+  "38088": "CPU scoring (units, chunks) and CPU latency/throughput, gnode006, 4 threads",
+  "38109": "GPU encode CodeRankEmbed 1024 Verified-six, RTX 2080 Ti gnode045, 00:25:58",
+  "38157": "CPU scoring of CodeRankEmbed 1024 Verified units"
+ },
+ "measure": {
+  "measure_coderankembed_t1024_cpu_38088.json": {
+   "dim": 768,
+   "host": "gnode006",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 395.0657,
+     "p95_ms": 1048.0954,
+     "p99_ms": 2203.3908,
+     "query_set_id": "qenc-coderankembed-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 411.4684,
+     "p95_ms": 1265.1825,
+     "p99_ms": 2555.2351,
+     "query_set_id": "qenc-coderankembed-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.5098,
+     "p95_ms": 0.5556,
+     "p99_ms": 0.6682,
+     "query_set_id": "dsearch-coderankembed-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.3787,
+     "p95_ms": 0.41,
+     "p99_ms": 0.428,
+     "query_set_id": "dsearch-coderankembed-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 4.9657,
+     "p95_ms": 5.1101,
+     "p99_ms": 5.2104,
+     "query_set_id": "dsearch-coderankembed-django-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 4.9558,
+     "p95_ms": 5.1225,
+     "p99_ms": 5.2555,
+     "query_set_id": "dsearch-coderankembed-django-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": null,
+   "query_tokens": {
+    "max": 1006,
+    "p50": 224.0,
+    "p95": 539.4499999999998,
+    "share_cut": 0.0
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 92.546754,
+     "units": 128,
+     "units_per_s": 1.38,
+     "workload_id": "dense-units-streamlink__streamlink-n128-coderankembed-t1024-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 1659384,
+   "vm_hwm_kb_end": 2516132
+  },
+  "measure_coderankembed_t1024_gpu_36104.json": {
+   "dim": 768,
+   "host": "gnode044",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 18.2618,
+     "p95_ms": 21.6213,
+     "p99_ms": 24.5182,
+     "query_set_id": "qenc-coderankembed-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 18.0691,
+     "p95_ms": 19.2836,
+     "p99_ms": 22.1453,
+     "query_set_id": "qenc-coderankembed-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.1139,
+     "p95_ms": 0.1215,
+     "p99_ms": 0.165,
+     "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.113,
+     "p95_ms": 0.1169,
+     "p99_ms": 0.1308,
+     "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.2672,
+     "p95_ms": 0.2749,
+     "p99_ms": 0.2822,
+     "query_set_id": "dsearch-coderankembed-django-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.267,
+     "p95_ms": 0.2683,
+     "p99_ms": 0.2781,
+     "query_set_id": "dsearch-coderankembed-django-torch-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": 1240.1,
+   "query_tokens": {
+    "max": 1006,
+    "p50": 224.0,
+    "p95": 539.4499999999998,
+    "share_cut": 0.0
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 4.825589,
+     "units": 1024,
+     "units_per_s": 212.2,
+     "workload_id": "dense-units-streamlink__streamlink-n1024-coderankembed-t1024-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 1795380,
+   "vm_hwm_kb_end": 1795380
+  },
+  "measure_coderankembed_t512_cpu_38088.json": {
+   "dim": 768,
+   "host": "gnode006",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 373.7906,
+     "p95_ms": 943.4245,
+     "p99_ms": 988.0667,
+     "query_set_id": "qenc-coderankembed-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 377.6283,
+     "p95_ms": 937.1981,
+     "p99_ms": 956.7272,
+     "query_set_id": "qenc-coderankembed-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.4028,
+     "p95_ms": 0.4695,
+     "p99_ms": 0.5289,
+     "query_set_id": "dsearch-coderankembed-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.3997,
+     "p95_ms": 0.4355,
+     "p99_ms": 0.472,
+     "query_set_id": "dsearch-coderankembed-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 4.8989,
+     "p95_ms": 5.1236,
+     "p99_ms": 5.2187,
+     "query_set_id": "dsearch-coderankembed-django-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 4.9456,
+     "p95_ms": 5.1223,
+     "p99_ms": 5.2558,
+     "query_set_id": "dsearch-coderankembed-django-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": null,
+   "query_tokens": {
+    "max": 1006,
+    "p50": 224.0,
+    "p95": 539.4499999999998,
+    "share_cut": 0.07
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 59.117307,
+     "units": 128,
+     "units_per_s": 2.17,
+     "workload_id": "dense-units-streamlink__streamlink-n128-coderankembed-t512-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 1661316,
+   "vm_hwm_kb_end": 1738956
+  },
+  "measure_coderankembed_t512_gpu_36104.json": {
+   "dim": 768,
+   "host": "gnode044",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 18.7181,
+     "p95_ms": 21.9946,
+     "p99_ms": 25.09,
+     "query_set_id": "qenc-coderankembed-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 18.4832,
+     "p95_ms": 19.5332,
+     "p99_ms": 20.5899,
+     "query_set_id": "qenc-coderankembed-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.1274,
+     "p95_ms": 0.1484,
+     "p99_ms": 0.2521,
+     "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.115,
+     "p95_ms": 0.1247,
+     "p99_ms": 0.1378,
+     "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.2671,
+     "p95_ms": 0.2937,
+     "p99_ms": 0.3012,
+     "query_set_id": "dsearch-coderankembed-django-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.2671,
+     "p95_ms": 0.2698,
+     "p99_ms": 0.2987,
+     "query_set_id": "dsearch-coderankembed-django-torch-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": 568.8,
+   "query_tokens": {
+    "max": 1006,
+    "p50": 224.0,
+    "p95": 539.4499999999998,
+    "share_cut": 0.07
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 3.560411,
+     "units": 1024,
+     "units_per_s": 287.61,
+     "workload_id": "dense-units-streamlink__streamlink-n1024-coderankembed-t512-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 1800708,
+   "vm_hwm_kb_end": 1800708
+  },
+  "measure_qwen3-embedding-0.6b_t1024_cpu_38088.json": {
+   "dim": 1024,
+   "host": "gnode006",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 1519.3877,
+     "p95_ms": 3603.3641,
+     "p99_ms": 5858.4346,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 1520.3872,
+     "p95_ms": 3995.6486,
+     "p99_ms": 7266.1555,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.5336,
+     "p95_ms": 0.5913,
+     "p99_ms": 0.6806,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.5301,
+     "p95_ms": 0.5711,
+     "p99_ms": 0.5965,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 5.993,
+     "p95_ms": 6.2395,
+     "p99_ms": 6.3201,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 5.9412,
+     "p95_ms": 6.24,
+     "p99_ms": 6.8758,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": null,
+   "query_tokens": {
+    "max": 1011,
+    "p50": 218.0,
+    "p95": 518.1999999999998,
+    "share_cut": 0.0
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 249.079669,
+     "units": 128,
+     "units_per_s": 0.51,
+     "workload_id": "dense-units-streamlink__streamlink-n128-qwen3-embedding-0.6b-t1024-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 4045524,
+   "vm_hwm_kb_end": 6253644
+  },
+  "measure_qwen3-embedding-0.6b_t1024_gpu_36104.json": {
+   "dim": 1024,
+   "host": "gnode044",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 46.6505,
+     "p95_ms": 49.0196,
+     "p99_ms": 51.8832,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 46.4535,
+     "p95_ms": 47.9015,
+     "p99_ms": 50.4025,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t1024-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.1144,
+     "p95_ms": 0.127,
+     "p99_ms": 0.1808,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.1142,
+     "p95_ms": 0.1258,
+     "p99_ms": 0.1533,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.3276,
+     "p95_ms": 0.3377,
+     "p99_ms": 0.3647,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.3277,
+     "p95_ms": 0.3291,
+     "p99_ms": 0.3305,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-torch-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": 3417.5,
+   "query_tokens": {
+    "max": 1011,
+    "p50": 218.0,
+    "p95": 518.1999999999998,
+    "share_cut": 0.0
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 12.411903,
+     "units": 1024,
+     "units_per_s": 82.5,
+     "workload_id": "dense-units-streamlink__streamlink-n1024-qwen3-embedding-0.6b-t1024-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 4189216,
+   "vm_hwm_kb_end": 4189216
+  },
+  "measure_qwen3-embedding-0.6b_t512_cpu_38088.json": {
+   "dim": 1024,
+   "host": "gnode006",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 1527.0809,
+     "p95_ms": 3575.9885,
+     "p99_ms": 3647.1418,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 1533.264,
+     "p95_ms": 3590.6225,
+     "p99_ms": 3627.7079,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.5267,
+     "p95_ms": 0.5987,
+     "p99_ms": 0.7216,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.5142,
+     "p95_ms": 0.5761,
+     "p99_ms": 0.6118,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 5.9892,
+     "p95_ms": 6.1629,
+     "p99_ms": 6.3105,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 5.9837,
+     "p95_ms": 6.1852,
+     "p99_ms": 6.3811,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": null,
+   "query_tokens": {
+    "max": 1011,
+    "p50": 218.0,
+    "p95": 518.1999999999998,
+    "share_cut": 0.06
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 190.351345,
+     "units": 128,
+     "units_per_s": 0.67,
+     "workload_id": "dense-units-streamlink__streamlink-n128-qwen3-embedding-0.6b-t512-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 4046692,
+   "vm_hwm_kb_end": 5050436
+  },
+  "measure_qwen3-embedding-0.6b_t512_gpu_36104.json": {
+   "dim": 1024,
+   "host": "gnode044",
+   "latency_rows": [
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 45.316,
+     "p95_ms": 47.1251,
+     "p99_ms": 48.8342,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 45.167,
+     "p95_ms": 46.5903,
+     "p99_ms": 47.6254,
+     "query_set_id": "qenc-qwen3-embedding-0.6b-t512-v1",
+     "stage": "query_encode"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.1118,
+     "p95_ms": 0.1249,
+     "p99_ms": 0.2149,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.1097,
+     "p95_ms": 0.1243,
+     "p99_ms": 0.1312,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-dev-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "cold",
+     "n": 100,
+     "p50_ms": 0.3276,
+     "p95_ms": 0.3384,
+     "p99_ms": 0.4349,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-torch-v1",
+     "stage": "dense_search"
+    },
+    {
+     "cache_state": "warm",
+     "n": 295,
+     "p50_ms": 0.3271,
+     "p95_ms": 0.3291,
+     "p99_ms": 0.3356,
+     "query_set_id": "dsearch-qwen3-embedding-0.6b-django-torch-v1",
+     "stage": "dense_search"
+    }
+   ],
+   "peak_gpu_mem_mb_encode_sample": 2273.0,
+   "query_tokens": {
+    "max": 1011,
+    "p50": 218.0,
+    "p95": 518.1999999999998,
+    "share_cut": 0.06
+   },
+   "scales": {
+    "dev": 5195,
+    "django": 35860
+   },
+   "throughput_rows": [
+    {
+     "seconds": 9.97792,
+     "units": 1024,
+     "units_per_s": 102.63,
+     "workload_id": "dense-units-streamlink__streamlink-n1024-qwen3-embedding-0.6b-t512-v1"
+    }
+   ],
+   "vm_hwm_kb_after_load": 4189276,
+   "vm_hwm_kb_end": 4189276
+  }
+ },
+ "models": {
+  "coderankembed": "revision 3c4b60807d71f79b43f3c4363786d9493691f8b1, float16 on GPU (min cosine to float32 0.99998 on 64 units)",
+  "qwen3-embedding-0.6b": "revision 97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3, float16 on GPU (min cosine to float32 0.99999 on 64 units); end-of-text token present after the cut"
+ },
+ "seed": 0
+}

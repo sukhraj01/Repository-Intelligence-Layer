@@ -1,0 +1,53 @@
+{
+ "note": "Latency query sets of E-DENSE-FUSION. Built on the cluster by ril.bench.dense_measure.build_issue_like_queries (seed 0) from the words of the development repository streamlink/streamlink's unit texts (store of the x2 preparation), with word counts drawn from the 355 development L2 issues (median 161 words, 95th percentile 429). The files are kept outside the tracked tree (data/processed/x2/query_sets/) because they are raw code words; this record pins their content by sha256. All qenc-* files share one content; dsearch-* files hold the same queries (the search stage looks up their precomputed vectors).",
+ "sets": {
+  "dsearch-coderankembed-dev-torch-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-coderankembed-dev-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-coderankembed-django-torch-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-coderankembed-django-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-qwen3-embedding-0.6b-dev-torch-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-qwen3-embedding-0.6b-dev-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-qwen3-embedding-0.6b-django-torch-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "dsearch-qwen3-embedding-0.6b-django-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "qenc-coderankembed-t1024-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "qenc-coderankembed-t512-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "qenc-qwen3-embedding-0.6b-t1024-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  },
+  "qenc-qwen3-embedding-0.6b-t512-v1": {
+   "queries": 100,
+   "sha256": "8a422a505ee22617fcc5375a5af60f76d0599d0f07ff6a9e88f99f74a9d0cf99"
+  }
+ }
+}

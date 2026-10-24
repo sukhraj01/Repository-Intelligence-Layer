@@ -128,3 +128,26 @@ repositories (83 L2, 55 L3 queries). Evidence class: measured, small samples.
   L2 are smaller than pilot E3 stated (dev `contain` +2.4 rather than +4.1) because BM25 is higher under this gold (21.2 rather than
   15.8). Reading ambiguous call sites as edges does not help expansion (ADR-011 addendum of today).
 - Evidence class: measured (exploratory; one stated setting on six Verified repositories, wide clustered intervals).
+
+## Addendum 2026-10-25 — the graph on a dense, fused first stage (E-DENSE-FUSION; evidence only, no choice made)
+
+What changed relative to the BM25-only pilots (`docs/EXPERIMENTS.md`, E-DENSE-FUSION; rows `x2-graph-*`; gold
+`units_all_nomod`):
+
+- **The first stage moved.** The graph now sits on RRF(BM25, Qwen3-Embedding-0.6B, k 20), the strongest first stage
+  on dev (28.3 L2 nDCG@10, 47.1 L3 Recall@100 against BM25's 21.2 / 37.5). Seeds are its top units.
+- **The three forms of D24 give the same answer.** On dev the best core cells of the edited list (+1.4 / +10.7),
+  the graph as a third RRF list (+1.5 / +9.9) and score-level fusion with tuned weight (+1.9 / +10.7) overlap; the
+  form a rank-fusion stack can take (third RRF list) loses nothing measurable against the others. The stated dev rule
+  picked score level (C 5, gamma 0.7, 2 hops, weight 0.5, the edge of the weight grid).
+- **The L3 gain survives a stronger first stage; the L2 gain mostly does not.** Verified-six, stated cell, core:
+  +0.2 [-1.8, +2.2] at L2 and +4.4 [+0.5, +8.8] at L3 over the first stage, +11.4 over whole-snapshot chance.
+- **The same-file question is unchanged.** Over the same-file control the Verified L3 gain is +1.4 [-2.3, +5.1]
+  (not distinguishable; dev +2.5 [+0.2, +4.5] with two L3 repositories). `contain` alone carries the effect (dev over
+  same-file +2.3 / +3.8); `invoke` alone helps L3 over the first stage but not over same-file chance; `import` lowers
+  L2. This matches the BM25-seeded pilots: most of what the graph adds is "other units of the files already found".
+- **Evidence class:** measured, exploratory; zero-shot encoders, one seed, 55 Verified L3 queries, two dev L3
+  repositories (Q47). **Cheapest experiment that could change the reading:** the same stated cell with a same-file
+  expansion that is not random but ordered by the first-stage score (a "file neighbours by score" baseline), from the
+  existing dev and Verified evaluation inputs (minutes, no GPU); if it matches the graph, the graph's L3 role reduces
+  to file-level expansion.

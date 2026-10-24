@@ -164,3 +164,20 @@ patches, so it stays untracked). Locally: `rsync -a ada:ril_x1/x1_cache/ data/pr
 data/processed/e3/e3_cache data/processed/x1/x1_cache <out>`, `x1_run.py tables <config> <out> results/tables/<prefix>`, `x1_run.py sizes`, and the
 census tables with `python scripts/x1_census.py tables <prefix> <units dir>...`. The readers run locally: `python scripts/x1_readers.py oracle ...`
 and `x1_readers.py jedi ...` (commands in the run log).
+
+## Dense encoders, fusion and latency (E-DENSE-FUSION, 2026-10-23 to 2026-10-25)
+
+Work directory `~/ril_x2/` (`ril/`, `scripts/`, `configs/` by `rsync -a --exclude __pycache__ ril scripts configs ada:ril_x2/`). It links
+`~/ril_e/{raw,repo_cache,meta.json,e3_cache}`, reuses the pilot-E3 working clones in `~/ril_e/e3_work` and the model cache `~/ril_e/hf_cache`.
+`prep/` holds text stores (unit and chunk texts, queries; never copied off the cluster), `enc/<encoder>__t<cut>/` float16 vectors by text hash,
+`dense/<encoder>__t<cut>/` per-instance scores, `chunks_out/` chunk-level ranks, `out/` run logs, latency CSVs and query sets.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `x2_prepare.sbatch` | CPU: GPU environment (`venv_gpu310`, CodeRankEmbed overlay `overlay_cre`), model download, unit-text hashes of every cached instance (three class forms, 4 shards), query and chunk stores (about 25 min plus 15 min for the environment) | `sbatch --export=ALL,RIL_COMMIT=<hash> ril_x2/scripts/ada/x2_prepare.sbatch` |
+| `x2_encode.sbatch` | GPU (2080 Ti, CUDA gate): `STAGE=dev` dev units at 512 and 1024, queries, GPU latency rows, then Verified-six units and chunks at 512 (2 h 25 min); `STAGE=more ENCODERS=<names> CUTS="512 1024"` further cuts (texts the shorter cut left whole are taken over) | `sbatch --export=ALL,STAGE=dev,RIL_COMMIT=<hash> ril_x2/scripts/ada/x2_encode.sbatch` |
+| `x2_score.sbatch` | CPU: unit scores of every encoded variant, chunk ranks (`CHUNK_VARIANTS`), CPU latency and throughput rows (`MEASURE=1`, 4 threads; about 55 min) | `sbatch --export=ALL,MEASURE=1,CHUNK_VARIANTS="coderankembed__t512 qwen3-embedding-0.6b__t512",RIL_COMMIT=<hash> ril_x2/scripts/ada/x2_score.sbatch` |
+
+Locally: `rsync -a ada:ril_x2/dense/ data/processed/x2/dense/`, `rsync -a ada:ril_x2/chunks_out/ data/processed/x2/chunks_out/`, a copy of the E3 cache with
+the no-module readings (`scripts/e3_add_readings.py`), then `python scripts/x2_tables.py eval|first|graph|chunks <config> ...` (commands in the run log
+`results/logs/x2_dense_fusion_2026-10-25.json` and `docs/EXPERIMENTS.md`). The latency CSVs in `out/latency/` are appended to `results/latency/`.

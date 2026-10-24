@@ -80,6 +80,7 @@ command instead. Each GPU job gets a row here when it finishes.
 | Date | Job id | Block | Purpose | GPUs x elapsed | GPU-hours | Block total |
 |---|---|---|---|---|---|---|
 | 2026-10-23 | 36104 | 1 | X2 dense encoding (CodeRankEmbed, Qwen3-Embedding-0.6B): dev unit texts at 512 and 1024 tokens, all query stores, Verified-six unit texts and dev/Verified-six chunk texts at 512, GPU latency rows; RTX 2080 Ti (gnode044), CUDA gate passed | 1 x 02:24:36 | 2.41 | 2.41 |
+| 2026-10-25 | 38109 | 1 | X2: CodeRankEmbed at 1024 tokens on the Verified-six unit texts (the dev rule selected 1024 for this encoder) and, because the stage listed chunk stores too, on the chunk texts; texts the 512 cut left whole taken over from the 512 run; RTX 2080 Ti (gnode045), CUDA gate passed | 1 x 00:25:58 | 0.43 | 2.84 |
 
 ## Log of cluster verification
 

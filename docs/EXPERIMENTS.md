@@ -48,7 +48,7 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-POOL-CHECK | RQ2 (apparatus, pool) | none (measurement of the candidate pool `gangiswag/train_data` python) | the pool as published | n/a (sample seed 0) | directory structure, positives and functions per instance, (repository, PR) overlap with CORE-Bench and Verified | done (exploratory, 2026-10-18; `RESULTS.md` row `x-pool-check`) |
 | E-POWER | RQ2, RQ3 (apparatus) | n, discordance, effect, run-to-run SD, per-query SD, correlation, seeds | alpha 0.05, power 0.8 | n/a (simulation seed 0) | power and minimum detectable effects (calculation, no data) | done (2026-10-18; row `x-power`) |
 | E-CONTAM-PROBE | RQ2/RQ3 (apparatus, contamination) | shard slice (every 10th of 240), hash level (text, syntax tree) | probe set = functions of the 12 Verified repositories at 499 base commits | n/a | function-hash matches against CoRNStack `document`, by size of function; feasibility and cost of the full scan | done as a slice (exploratory, 2026-10-18; rows `x-contam-probe-slice`, `x-contam-throughput`) |
-| E-DENSE-FUSION (was E-GRAPH-FUSION) | RQ1 ext. (apparatus), ADR-006, Q30 | encoder (CodeRankEmbed, Qwen3-Embedding-0.6B; `provisional: ADR-006`), cut (512, 1024 tokens; dev only), first stage (BM25, dense, RRF(BM25, dense) with k swept on dev, score-level BM25+dense), graph on top of the strongest first stage (edited list, graph as a third RRF list, score-level with weight swept on dev; core families and each family alone) | units and gold of the pilot-E3 cache, class form `full`, ambiguous sites `drop`, seeds are retrieved units, expansion at most 50 units, seed 0, dev repositories for every sweep, one stated setting on the Verified-six | n/a | nDCG@10 (L2) and Recall@100 (L3) at unit level (both D18 readings) and chunk level, query-level and repository-clustered intervals; graph cells against the first stage and size-matched chance controls; query-encode and flat-search latency p50/p95/p99 (CPU, GPU), encoding throughput and peak memory | running (2026-10-23; rows `x2-*`) |
+| E-DENSE-FUSION (was E-GRAPH-FUSION) | RQ1 ext. (apparatus), ADR-006, Q30 | encoder (CodeRankEmbed, Qwen3-Embedding-0.6B; `provisional: ADR-006`), cut (512, 1024 tokens; dev only), first stage (BM25, dense, RRF(BM25, dense) with k swept on dev, score-level BM25+dense), graph on top of the strongest first stage (edited list, graph as a third RRF list, score-level with weight swept on dev; core families and each family alone) | units and gold of the pilot-E3 cache, class form `full`, ambiguous sites `drop`, seeds are retrieved units, expansion at most 50 units, seed 0, dev repositories for every sweep, one stated setting on the Verified-six | n/a | nDCG@10 (L2) and Recall@100 (L3) at unit level (both D18 readings) and chunk level, query-level and repository-clustered intervals; graph cells against the first stage and size-matched chance controls; query-encode and flat-search latency p50/p95/p99 (CPU, GPU), encoding throughput and peak memory | done (exploratory, 2026-10-23 to 2026-10-25; rows `x2-*`; ADR-006 and ADR-003 addenda) |
 | E-GRAPH-L3 | RQ1 ext. | + test/config node and edge types | L3 eval set | n/a | L3 metrics; edge-recovery coverage | planned |
 | E-RQ2-RAW | RQ2 | arm = RAW | everything in the held-identical block | 3 | retrieval metrics + budget table | planned |
 | E-RQ2-FILTER | RQ2 | arm = FILTER (K-rank threshold) | as above | 3 | as above | planned |
@@ -646,6 +646,82 @@ indistinguishable cells reopens the primary reading is for the engineer (ADR-004
 astropy, the clustered intervals on Verified include 0 for `contain` at L2 against BM25, `contain` at L3 against same-file chance and
 `all` at L3 against BM25 (cl. [-0.3, +10.1]), where the query-level ones do not; D17's clustered interval is the more cautious reading.
 
+
+## E-DENSE-FUSION: dense retrieval, BM25+dense fusion and the graph on top, exploratory, done 2026-10-25
+
+**What it measures.** The first dense numbers of the project: two encoders on the same unit texts as the BM25
+pilots, fused with BM25, and the graph expansion of pilot E3 on top of the strongest first stage, in three forms.
+Nothing here is a decision; ADR-006 (encoder) and Q30 (graph role, how a graph signal enters fusion) stay open.
+
+**Setup.** Units, gold readings and edge pairs of the pilot-E3 cache (class form `full`, ambiguous sites dropped);
+355 dev instances (five development repositories) for every sweep, the 83 Verified-six instances for one stated
+setting per configuration. Encoders (`ril/retrieval/dense_encoder.py`, `provisional: ADR-006`): CodeRankEmbed
+(137M, its own query prefix) and Qwen3-Embedding-0.6B (instruction on the query only, in the model repository's
+`Instruct: <task>\nQuery:<issue>` form with the task sentence "Given a GitHub issue, retrieve the code units
+(functions, methods, classes or modules) that have to be changed to resolve it"; the report gives the format but
+no instruction for code). Truncation: queries (with prefix or instruction) and documents cut at the same number of
+tokens of each encoder's tokenizer, beginning kept; 512 and 1024 compared on dev only. Flat exact inner-product
+index over L2-normalised vectors. Float16 on one RTX 2080 Ti (agreement with float32: cosine >= 0.99998 on 64
+units). Fusion: RRF `sum 1/(k + rank)` with k swept on dev; score-level `alpha * mm(BM25) + (1 - alpha) * mm(dense)`
+with alpha swept on dev. Graph on top: seeds = top-C of the first stage; hop-decay expansion (at most 50 units) over
+core families and each alone; forms: edited list, graph list as a third RRF list (same k), score level
+`(1 - w) * first_score + w * g`; chance controls of the same size (whole snapshot, files of the seeds). Metrics:
+nDCG@10 (L2) and Recall@100 (L3), mean over queries with query-level and repository-clustered bootstrap intervals
+(2,000 draws, seed 0); D18 readings `units_all_nomod` (primary) and `units_all`. Chunk level: filter-first ranks
+of the CORE-Bench chunks of the same folders. Configurations (sha256, 12 characters): `x2_first_dev` abf0ba1e339e,
+`x2_graph_dev` f0dcbd370e66, `x2_graph_headline_dev` c0a2002b0b4e, `x2_first_confirm` 4fff5dc4f7de,
+`x2_graph_confirm` e09d169f6680, `x2_chunks_confirm` afb83c2bf13e; every selection rule was committed before the
+numbers it selects from existed, every confirmation before its Verified scores were read. Run log
+`results/logs/x2_dense_fusion_2026-10-25.json`; tables `results/tables/x2_*`.
+
+**Dev selections (stated rules).** Cut: CodeRankEmbed 1024 (dense alone at L2 +1.1 [+0.4, +1.9] over 512), Qwen3
+512 (+0.5 [-0.1, +1.1], rule keeps the cheaper cut). RRF k: 100 (CodeRankEmbed), 20 (Qwen3). Strongest first stage:
+RRF(BM25, Qwen3-Embedding-0.6B, k 20). Graph cell: score level, C 5, gamma 0.7, 2 hops, w 0.5 (w 0.5 is the edge
+of the grid). Chunk-level k: 100 and 20.
+
+**Results (unit level, `units_all_nomod`; points, mean over queries, query-level interval; under `units_all` the selections and every
+Verified ordering are the same; on dev CodeRankEmbed alone is level with BM25 at L3, -0.2 rather than -3.5).**
+
+| | dev L2 nDCG@10 | dev L3 R@100 | Verified-six L2 | Verified-six L3 |
+|---|---|---|---|---|
+| BM25 | 21.2 | 37.5 | 18.0 | 31.8 |
+| CodeRankEmbed (1024) alone | 18.2 | 34.0 | 17.9 | 33.6 |
+| Qwen3-Embedding-0.6B (512) alone | 24.7 | 46.7 | 17.0 | 39.1 |
+| RRF BM25 + CodeRankEmbed, vs BM25 | 24.0, +2.9 [+1.2, +4.6] | 43.0, +5.5 [+4.0, +7.2] | 23.0, +5.1 [+1.4, +8.8] | 38.0, +6.2 [+2.9, +9.7] |
+| RRF BM25 + Qwen3, vs BM25 | 28.3, +7.2 [+5.4, +8.9] | 47.1, +9.6 [+8.0, +11.5] | 24.9, +6.9 [+3.6, +10.5] | 41.5, +9.7 [+6.8, +12.7] |
+| RRF Qwen3 vs RRF CodeRankEmbed | +4.3 [+3.0, +5.7] | +4.1 [+2.9, +5.4] | +1.9 [-1.7, +5.5] | +3.4 [+0.9, +6.3]; clustered [-1.1, +5.7] |
+
+Chunk level (filter-first): BM25 19.3 / 41.7 (dev), 13.4 / 33.0 (Verified-six); RRF with Qwen3 +9.4 [+7.5, +11.4] /
++14.1 [+12.3, +16.2] (dev) and +8.6 [+4.1, +13.2] / +16.1 [+12.0, +20.2] (Verified-six); RRF with CodeRankEmbed +3.9
+/ +10.4 (dev, k 20 row) and +5.3 [-0.4, +10.8] / +11.4 [+6.9, +16.1] (Verified-six). At chunk level and at L3 the
+Qwen3 encoder alone is level with its RRF (dev L3 -0.5 [-2.3, +1.1]).
+
+**Graph on top of RRF(BM25, Qwen3) (stated cell; `units_all_nomod`).** Dev: core +1.9 [+0.9, +2.8] (L2) and +10.7
+[+8.8, +12.8] (L3) over the first stage; over the same-file control +0.9 [-0.0, +1.7] and +2.5 [+0.2, +4.5]; over the
+whole-snapshot control +5.9 and +17.6. `contain` alone carries it (+3.4 / +11.8; over same-file +2.3 [+1.5, +3.1] /
++3.8 [+2.0, +5.5]); `invoke` alone +5.5 at L3 but below same-file chance; `import` lowers L2. The three forms give
+overlapping best cells on dev (core: edited list +1.4 / +10.7, third RRF list +1.5 / +9.9, score level +1.9 /
++10.7). Verified-six: core +0.2 [-1.8, +2.2] (L2) and +4.4 [+0.5, +8.8] (L3; clustered [+0.8, +7.8]) over the
+first stage; over the same-file control +1.4 [-2.3, +5.1] at L3 (not distinguishable from same-file chance); over
+the whole-snapshot control +11.4 [+8.1, +15.2].
+
+**Cost (per hardware spec, `results/latency/`).** Query encoding, batch 1, warm p50 / p95 / p99: on the 2080 Ti,
+CodeRankEmbed 18.5 / 19.5 / 20.6 ms and Qwen3 45.2 / 46.6 / 47.6 ms (512); on 4 threads of a Xeon E5-2640 v4,
+378 / 937 / 957 ms and 1,533 / 3,591 / 3,628 ms. Flat exact search of 100 (CPU, numpy): 0.40 / 0.44 / 0.47 ms
+(CodeRankEmbed, 768 dimensions) and 0.51 / 0.58 / 0.61 ms (Qwen3, 1,024) at the dev median snapshot of 5,195 units;
+4.95 / 5.12 / 5.26 ms and 5.98 / 6.19 / 6.38 ms at the django scale of 35,860 units; on the GPU 0.27 and 0.33 ms at
+django scale. Encoding throughput: whole dev runs at 512 tokens 201 (CodeRankEmbed) and 84 (Qwen3) unit texts per
+second on the GPU; a fixed 128-text sample on 4 CPU threads 2.2 and 0.67 texts per second. Peak GPU memory while
+encoding: 1.4 / 4.4 GB (CodeRankEmbed at 512 / 1024) and 2.3 / 4.6 GB (Qwen3); CPU resident peak after loading 1.7
+and 4.0 GB, up to 2.5 and 6.3 GB after encoding a 1024-token sample. GPU-hours: 2.84 (jobs 36104, 38109).
+
+**What it does not show.** Zero-shot encoders only; one seed per cell (sampling over queries is the only interval);
+dev L3 has two repositories, so its clustered interval is not informative (Q47); Verified-six L3 has 55 queries.
+The graph cell was selected at the edge of its weight grid. The latency query set is built from a development
+repository's code words with issue-like lengths (median 220 tokens), not from issues; its files stay out of the
+tracked tree (raw code words) and are pinned by sha256 in `results/logs/x2_query_sets.json`. Chunk-level CodeRankEmbed was
+scored at 512 tokens only (a 1024-token chunk encoding exists, unscored). Class-source forms and the `max3` policy
+were not read on the dense first stage (the per-form unit hashes are prepared on the cluster).
 
 ## Pre-registered interpretation rules
 
