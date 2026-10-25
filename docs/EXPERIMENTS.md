@@ -46,6 +46,7 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-AMBIG-POLICY | RQ1 ext. (apparatus) | policy for ambiguous `invoke` sites read from the stored graph (keep, drop, rebucket by receiver evidence, keep sets of at most three; Q35, Q36) | as E-CLASS-SOURCE, form `full` | n/a | retrieval effect per policy; edge precision and recall per policy by the dynamic oracle (flask) and Jedi (300 stratified sites of requests and streamlink) | done (exploratory, 2026-10-23; rows `x1-ambig-*`; ADR-011 addendum). Dev rule kept `drop` |
 | E-L3-CENSUS | RQ1 ext., RQ2 (apparatus) | none (count of positives by kind, repository and file novelty) | pilot-E1 unit records; D9 path rule | n/a (bootstrap seed 0) | positives by kind; share of L3 positives in files without L2 positives, instance-bootstrap intervals | done (2026-10-23; rows `x1-l3-census`, `x1-l3-census-extended`): 438 cached instances, then all 540 Python L3 instances with base commits |
 | E-POOL-CHECK | RQ2 (apparatus, pool) | none (measurement of the candidate pool `gangiswag/train_data` python) | the pool as published | n/a (sample seed 0) | directory structure, positives and functions per instance, (repository, PR) overlap with CORE-Bench and Verified | done (exploratory, 2026-10-18; `RESULTS.md` row `x-pool-check`) |
+| E-POOL-RANKS | RQ2 (apparatus, pool, quality signal) | teacher (SweRankEmbed-Small, CodeRankEmbed, BM25; stored-text sensitivity), K in {10, 20, 40} | sample: 160 directories, 20 per stratum of corpus-size quartile x held-out flag, seed 0; cut 1,024 tokens, float16; rank among non-positive functions | n/a (sample and bootstrap seed 0) | positive-rank distributions, shares outside the top K, directories with no positive in the top K, pool estimates against SweRank+ Table 1, teacher agreement, full-pool cost | done (exploratory, 2026-10-25; rows `x3-*`): qrels not filtered per positive (39% outside the SweRankEmbed-Small top 40); directories selected with respect to SweRankEmbed-Small (0 of 160 without a top-10 positive vs 19.3% on never-filtered Verified); filter vs teacher fit not decidable |
 | E-POWER | RQ2, RQ3 (apparatus) | n, discordance, effect, run-to-run SD, per-query SD, correlation, seeds | alpha 0.05, power 0.8 | n/a (simulation seed 0) | power and minimum detectable effects (calculation, no data) | done (2026-10-18; row `x-power`) |
 | E-CONTAM-PROBE | RQ2/RQ3 (apparatus, contamination) | shard slice (every 10th of 240), hash level (text, syntax tree) | probe set = functions of the 12 Verified repositories at 499 base commits | n/a | function-hash matches against CoRNStack `document`, by size of function; feasibility and cost of the full scan | done as a slice (exploratory, 2026-10-18; rows `x-contam-probe-slice`, `x-contam-throughput`) |
 | E-DENSE-FUSION (was E-GRAPH-FUSION) | RQ1 ext. (apparatus), ADR-006, Q30 | encoder (CodeRankEmbed, Qwen3-Embedding-0.6B; `provisional: ADR-006`), cut (512, 1024 tokens; dev only), first stage (BM25, dense, RRF(BM25, dense) with k swept on dev, score-level BM25+dense), graph on top of the strongest first stage (edited list, graph as a third RRF list, score-level with weight swept on dev; core families and each family alone) | units and gold of the pilot-E3 cache, class form `full`, ambiguous sites `drop`, seeds are retrieved units, expansion at most 50 units, seed 0, dev repositories for every sweep, one stated setting on the Verified-six | n/a | nDCG@10 (L2) and Recall@100 (L3) at unit level (both D18 readings) and chunk level, query-level and repository-clustered intervals; graph cells against the first stage and size-matched chance controls; query-encode and flat-search latency p50/p95/p99 (CPU, GPU), encoding throughput and peak memory | done (exploratory, 2026-10-23 to 2026-10-25; rows `x2-*`; ADR-006 and ADR-003 addenda) |
@@ -722,6 +723,154 @@ repository's code words with issue-like lengths (median 220 tokens), not from is
 tracked tree (raw code words) and are pinned by sha256 in `results/logs/x2_query_sets.json`. Chunk-level CodeRankEmbed was
 scored at 512 tokens only (a 1024-token chunk encoding exists, unscored). Class-source forms and the `max3` policy
 were not read on the dense first stage (the per-form unit hashes are prepared on the cluster).
+
+## E-POOL-RANKS: teacher ranks of the candidate pool's positives and the pool's filter state, exploratory, done 2026-10-25
+
+**What it measures.** Whether the 24,285 directories of `gangiswag/train_data` python (E-POOL-CHECK) are before or after the
+consistency filter of SweRank+ (keep a positive only if it ranks in the top 40 of its repository under SweRankEmbed-Small;
+`knowledge/papers/swerank-plus-2512.20482.md`), and how the K-rank quality signal of ADR-002 is distributed in this pool under three
+teachers. Nothing is decided; ADR-001 (pool) and ADR-002 (quality signal) stay open.
+
+**Setup.** Configuration `configs/experiments/x3_pool_ranks.yaml` (hash `755b27136e9d`; the main part, including three readings (below), stated before any rank was read, the reference
+comparison added after the main ranks and before any reference rank). Sample: corpus-size quartile (uncompressed corpus bytes of every directory, edges 122,227 / 359,103 /
+974,092 bytes) times held-out flag (list v2, core plus Loc-Bench tier, aliases including the rename cache: 3,485 of 24,285 directories),
+20 directories per stratum by the order of sha256("0:<directory>"), 160 directories, 118 repositories, 1,522 positives, 188,566 functions
+(sample file sha256 in the run log). Each directory was read by HTTP range request; nothing but ids, ranks, counts and timings left the
+cluster. Teachers: SweRankEmbed-Small (revision `745d2a06`, the SweRank+ filter teacher), CodeRankEmbed (revision `3c4b6080`, the
+SweRank filter teacher) and BM25 (reference form, `provisional: ADR-004`); dense teachers at 1,024 tokens (the published SweRank
+mining script's length), float16, the model's query prefix. Rank, as in the published SweRank construction scripts (read
+2026-10-25; each positive is a separate instance whose candidates are the positive and every non-positive function, so the other
+positives of the same pull request are not competitors): 1 + non-positive functions with a strictly higher score (`rank_all`, which
+counts the other positives too, is in the tables). Text: the function code with the stored id line removed (as the published mining
+script encodes it); sensitivity stated in advance: SweRankEmbed-Small on the stored `<id>\n<code>` text (`@pool`). Pool estimates
+weight each stratum's sample ratio by its pool positives or directories; intervals are 95% stratified bootstrap (2,000 draws,
+instances resampled within strata, seed 0); for 0 or 2 of 160 the exact binomial interval is given. Code
+`ril/training/pool_ranks.py`, `pool_rank_jobs.py`, `ril/analysis/x3_tables.py`, `scripts/pool_ranks.py`; jobs in `scripts/ada/README.md`;
+log `results/logs/x3_pool_ranks_2026-10-25.json`; tables `results/tables/x3_pool_ranks_*.csv`; rows `x3-*` in `RESULTS.md`.
+1.24 GPU-hours (jobs 38202, 38213, 38291, 38292, 38295, 38296; `docs/COMPUTE.md`).
+
+**Positive ranks** (1,522 positives of the sample; median and quartiles of `rank`):
+
+| teacher | p25 | median | p75 | p95 | max |
+|---|---|---|---|---|---|
+| SweRankEmbed-Small | 1 | 10 | 98.8 | 448 | 7,911 |
+| SweRankEmbed-Small, stored text | 1 | 3 | 94.8 | 404 | 7,936 |
+| CodeRankEmbed | 7 | 38.5 | 154 | 688 | 7,560 |
+| BM25 | 7 | 33 | 120.8 | 714 | 7,188 |
+
+**Shares outside the top K** (pool estimates; sample values in `x3_pool_ranks_topk.csv`):
+
+| teacher | positives outside top 10 | top 20 | top 40 | directories with no positive in top 10 | top 20 | top 40 (sample count of 160) |
+|---|---|---|---|---|---|---|
+| SweRankEmbed-Small | 50.4% [34.2, 59.1] | 45.2% [29.3, 54.2] | 39.4% [24.1, 48.0] | 1.7% [0.2, 3.9] | 1.3% [0.0, 3.5] | 1.3% (2; exact [0.15, 4.4]) |
+| SweRankEmbed-Small, stored text | 43.3% [26.2, 52.0] | 40.0% [23.7, 49.0] | 34.9% [19.3, 43.4] | 0 | 0 | 0 (0 of 160; exact upper 2.3%) |
+| CodeRankEmbed | 69.4% [57.2, 75.8] | 61.6% [48.6, 68.8] | 52.7% [37.9, 60.7] | 15.3% [8.8, 22.2] | 10.0% [5.2, 15.9] | 4.3% [1.6, 8.0] (9; exact [2.6, 10.4]) |
+| BM25 | 71.3% [59.9, 78.6] | 63.5% [51.0, 71.8] | 53.4% [40.5, 62.0] | 23.2% [16.4, 31.0] | 15.1% [9.4, 21.1] | 13.4% [8.0, 19.6] (23; exact [9.3, 20.8]) |
+
+**Against the SweRank+ Table 1 Python row** (24,285 PRs, 49,973 instances; `paper_reported`). Pool estimate of the positives inside the
+top K (the instance count a SweRank-style positive-level filter would give from these directories):
+
+| teacher | K = 10 | K = 20 | K = 40 |
+|---|---|---|---|
+| SweRankEmbed-Small | 152,783 [125,891, 202,589] | 168,809 [141,025, 217,902] | 186,531 [160,311, 233,797] |
+| SweRankEmbed-Small, stored text | 174,614 [147,788, 227,173] | 184,667 [157,014, 235,010] | 200,660 [174,432, 248,435] |
+| CodeRankEmbed | 94,137 [74,664, 131,790] | 118,269 [95,988, 158,448] | 145,839 [121,145, 191,143] |
+| BM25 | 88,465 [65,884, 123,512] | 112,426 [87,016, 150,796] | 143,689 [117,119, 183,415] |
+
+Simple count rules over all 307,996 qrels rows (exploratory, no teacher) do not give 49,973 either: one positive per directory 24,285,
+at most two 42,667, at most three 57,413; positives of directories with at most 5 / 10 positives 34,769 / 63,727; distinct
+(repository, function id) pairs 226,468; no positive lies in a test file (D9 path rule), so a test-function exclusion is not the gap.
+
+**Teacher agreement per positive** (Spearman of ranks, instance-clustered bootstrap; Cohen's kappa of top-K membership):
+SweRankEmbed-Small and CodeRankEmbed 0.855 [0.791, 0.896], kappa 0.64 at K = 20 (597 both inside, 267 only under SweRankEmbed-Small,
+12 only under CodeRankEmbed, 646 neither) and 0.69 at K = 40; each dense teacher and BM25 0.53 [0.33, 0.67] and 0.53 [0.35, 0.65],
+kappa 0.36 at K = 20; the two text forms of SweRankEmbed-Small 0.899 [0.835, 0.929], kappa 0.85 at K = 20.
+
+**By repository and held-out flag** (sample, descriptive; no interval). Of 118 sampled repositories, the share with no positive in the
+top 40 is 0.9% (SweRankEmbed-Small), 5.9% (CodeRankEmbed), 13.6% (BM25); the share with every positive inside is 59%, 47%, 38%. Median
+rank in held-out against kept directories: 7 vs 14 (SweRankEmbed-Small), 31.5 vs 49 (CodeRankEmbed), 35 vs 32 (BM25); by size
+quartile the dense teachers' outside-top-40 shares range 26-45% and 32-59% (`x3_pool_ranks_groups.csv`, `x3_pool_ranks_repositories.csv`).
+
+**The three readings stated in advance.**
+(a) *If the directories are only PRs with at least one positive kept by the SweRank+ filter, the share of directories with no positive in
+the SweRankEmbed-Small top 40 is near 0.* Observed 2 of 160 (code text) and 0 of 160 (stored text, even at K = 10): consistent.
+(b) *If the qrels are the unfiltered modified functions and Table 1 counts the kept ones, the estimate of positives inside the
+SweRankEmbed-Small top 40 is near 49,973.* Observed 186,531 [160,311, 233,797] (200,660 for the stored text): not consistent; even at
+K = 10 and under every teacher the estimate is above 49,973 with its interval.
+(c) *If the qrels themselves were filtered, nearly every positive is inside the SweRankEmbed-Small top 40.* Observed 39.4% [24.1, 48.0]
+outside (34.9% for the stored text): ruled out.
+
+**Reference: the same teachers on a never-filtered set** (stated in the configuration before it was run). The authors' export of
+SWE-bench Verified in the same directory format (`swe_bench_verified.zip` of the same dataset repository; 457 of 500 directories carry
+qrels) was never consistency-filtered and its repositories are outside SweRankEmbed-Small's training pool (SweRank excludes SWE-bench
+repositories). Share of directories with no positive in the top K, plain sample shares with exact intervals
+(`x3_pool_ranks_reference.csv`):
+
+| teacher | K | pool sample (160) | Verified export (457) | pool, 1,000-2,999 functions | Verified, 1,000-2,999 functions | pool, 1 positive | Verified, 1 positive |
+|---|---|---|---|---|---|---|---|
+| SweRankEmbed-Small, stored text | 10 | 0 [0, 2.3] | 19.3% [15.7, 23.2] | 0 of 34 [0, 10.3] | 25.0% [13.6, 39.6] | 0 of 34 [0, 10.3] | 18.6% [14.6, 23.2] |
+| SweRankEmbed-Small, stored text | 40 | 0 [0, 2.3] | 9.4% [6.9, 12.5] | 0 of 34 [0, 10.3] | 12.5% [4.7, 25.3] | 0 of 34 [0, 10.3] | 9.8% [6.8, 13.4] |
+| CodeRankEmbed | 10 | 16.9% [11.4, 23.6] | 35.7% [31.3, 40.3] | 23.5% [10.8, 41.2] | 45.8% [31.4, 60.8] | 23.5% [10.8, 41.2] | 35.5% [30.4, 40.9] |
+| CodeRankEmbed | 40 | 5.6% [2.6, 10.4] | 17.5% [14.1, 21.3] | 14.7% [5.0, 31.1] | 33.3% [20.4, 48.4] | 5.9% [0.7, 19.7] | 20.4% [16.2, 25.1] |
+
+Reading: on never-filtered issues the same teacher with the same text leaves about one directory in five without a positive in its top
+10; in the pool not one of 160 is (also within matched snapshot size and positive count). Under the independent CodeRankEmbed the pool is
+easier than Verified as well (a third to a half of the no-positive share), so part of the gap is a difference between the two sets (repositories,
+issue style); the remainder, a share that goes to zero only under SweRankEmbed-Small, is specific to that model.
+
+**Conclusion (what is certain, what is not).**
+- Certain within this sample: the positive-level consistency filter of SweRank+ has not been applied to the qrels. Under the filter's
+  own teacher, in either text form, a third or more of the positive rows rank outside the top 40, and far more than 49,973 positives
+  rank inside it. So the directories' positives are the unfiltered modified functions (or a superset that no filter we can reproduce
+  explains), and a RAW arm at the positive level is available from this pool.
+- Certain: Table 1's 49,973 is not the count of these directories' positives surviving a top-K filter under the released teachers for
+  any K in {10, 20, 40}; the directories are not the paper's instance set, and the paper's count cannot stand in for the size of a
+  FILTER arm built from them.
+- Measured, with the reference: the directories are a set selected with respect to SweRankEmbed-Small. No sampled directory lacks a
+  positive in its stored-text top 10, against 19.3% [15.7, 23.2] of never-filtered Verified directories under the same teacher and
+  settings, and the gap is larger than under the independent CodeRankEmbed. This is what a PR-level consequence of the SweRank+ filter
+  (keep a PR if one of its positives passes; the published SweRank script cuts at rank 10) would produce.
+- Not decidable here: whether that selection is a filter applied to the pool or the fit of the released SweRankEmbed-Small to these pull
+  requests. The same picture arises without any filter if the released checkpoint has been trained on them: it was
+  fine-tuned on the SweRank training data (Python PRs of popular PyPI repositories, the same authors' collection), and on this pool it
+  ranks positives far better than its own base model (median 10 against 38.5; 267 against 12 positives inside the top 20 under one
+  teacher only). Inference: a PR-level filter removes the PRs whose every positive fails; how many those were is not recoverable from
+  the directories; on the Verified reference the same rule would remove 9.4% (top 40) to 19.3% (top 10) of PRs. Held-out-repository directories (14% of the pool) show the same no-positive share under SweRankEmbed-Small as the rest (1 of 80 each).
+- Cheapest experiment that would separate filter from fit: creation dates of the pool's PRs against the release date of the
+  SweRankEmbed-Small checkpoint (needs `GITHUB_TOKEN`, D2). PRs created after it cannot have been in its training data; if they too
+  never lack a top-10 positive, the pool was filtered; if they behave like the Verified reference, the selection is the checkpoint's fit.
+  A token-free variant: the pool's 2,448 repositories against SweRank's own 3,387 (not released; the authors' code may list them).
+
+**What each case means for the RQ2 arms** (evidence for ADR-001 and ADR-002, no decision).
+- *Directories unfiltered* (all collected PRs): RAW = every positive of the surviving repositories; FILTER, WEIGHT and CURRICULUM are
+  computed from a teacher's K-rank on the same positives; the four arms come from one pool as designed.
+- *Directories filtered at PR level by SweRankEmbed-Small* (qrels unfiltered, as measured): RAW is available at the positive level but
+  is "RAW given that the PR has at least one easy positive"; the hardest PRs (every positive failing) are missing in unknown number.
+  RAW-versus-FILTER contrasts measured on this pool then understate the noise RAW carries, so an effect found would be conservative and
+  a null would not exclude an effect on a fully raw pool; the limitation would be stated with the result. FILTER, WEIGHT and CURRICULUM
+  stay buildable.
+- *Qrels filtered per positive* (the case in which RAW would not exist in this pool): ruled out by (c).
+- In every case, SweRankEmbed-Small is a doubtful K-rank teacher for this pool: if it was trained on these PRs, its rank of a positive
+  is a training fit, not an independent quality signal (ADR-002's rule that the quality encoder is separately pretrained is about the
+  trained model; this is the same concern for the teacher). CodeRankEmbed (pretrained only) disagrees with it on 279 of 1,522 positives
+  at K = 20. Which teacher and K define FILTER stays with ADR-002 and E-PILOT-K.
+
+**Full-pool feature table: cost from measured throughput.** Pool functions: 24.72 GB of corpora times 0.001152 functions per byte (the
+pool check's simple random sample of 300) = 28.5 million function texts; within-repository dedup (texts repeat across a repository's
+snapshots): 16 repositories in four bins of directories per repository, distinct/all 0.998 (1 directory), 0.300 (2-9), 0.148 (10-49),
+0.058 (50+), weighted by the bins' shares of pool bytes 0.117 (conservative, each bin's largest per-repository ratio: 0.239). Measured
+encode rate on one RTX 2080 Ti at 1,024 tokens, float16: 278 texts/s (SweRankEmbed-Small), 275 (CodeRankEmbed), 260 (stored text).
+Encoding alone would take 3.3 GPU-hours per dense teacher with dedup; the GPU is held for the whole loop, so the estimate uses a wall-time
+model fitted to the five measured GPU runs (wall = 0.000203 s per function processed + 0.00355 s per text encoded; fits each run within
+2%): 4.9 GPU-hours per dense teacher with dedup (8.3 conservative; 29.7 without dedup), both teachers about 9.7 (16.6 conservative); 4.15 GB of compressed corpora to stream (about 12 minutes at the measured 6 MB/s from Hugging Face). BM25 for the whole
+pool (no dedup): 160 directories took 124 s for 188,566 functions on one process, so about 5.2 CPU-hours, about 1.3 hours in four shards.
+Commands: `x3_dense.sbatch` with `SELECT=all SHARD="i n"` and `x3_pool_full.sbatch` (BM25), resumable per directory, then
+`scripts/pool_ranks.py tables`; the estimate fits block 2's 24 GPU-hours; not run.
+
+**What this does not show.** 160 directories: the pool-level estimates of positive counts have wide intervals (the positive count per
+directory is heavy-tailed, 1 to 3,924). One cut (1,024 tokens) and float16 on one GPU type; the authors' text form, cut and precision for
+the SweRank+ filter are not stated. Ranks count ties in the positive's favour (27% of BM25 positives tie with at least one function,
+mostly at score 0). The dedup ratio rests on 16 repositories; the conservative figure bounds it from that sample only.
 
 ## Pre-registered interpretation rules
 

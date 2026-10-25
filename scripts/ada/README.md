@@ -181,3 +181,22 @@ Work directory `~/ril_x2/` (`ril/`, `scripts/`, `configs/` by `rsync -a --exclud
 Locally: `rsync -a ada:ril_x2/dense/ data/processed/x2/dense/`, `rsync -a ada:ril_x2/chunks_out/ data/processed/x2/chunks_out/`, a copy of the E3 cache with
 the no-module readings (`scripts/e3_add_readings.py`), then `python scripts/x2_tables.py eval|first|graph|chunks <config> ...` (commands in the run log
 `results/logs/x2_dense_fusion_2026-10-25.json` and `docs/EXPERIMENTS.md`). The latency CSVs in `out/latency/` are appended to `results/latency/`.
+
+## Pool ranks and the pool's filter state (E-POOL-RANKS, 2026-10-25)
+
+Work directory `~/ril_x3/` (`rsync -a --exclude __pycache__ ril scripts configs ada:ril_x3/`; the sample file `work/sample.json` is made locally
+with `python scripts/pool_ranks.py sample <pool_meta.jsonl> data/held_out/held_out_repos.json data/held_out/rename_cache.json sample.json --per-stratum 20 --seed 0`
+from the pool-check cache `~/ril_pc/work/pool_meta.jsonl`). It reuses `~/ril_x2/venv_gpu310` with the CodeRankEmbed overlay, the pilot-E venv for BM25,
+the listing `~/ril_s2/raw/ziplist_train.json` and the model cache `~/ril_e/hf_cache`. `work/` holds rank rows (ids, ranks, counts, timings; no text).
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `x3_prepare.sbatch` | CPU: SweRankEmbed-Small (pinned revision) and the modelling code its configuration names into the cache, offline load test of both teachers, BM25 ranks of the sample, dedup measurement over 16 repositories (5.6 min) | `sbatch --export=ALL,RIL_COMMIT=<hash> ril_x3/scripts/ada/x3_prepare.sbatch` |
+| `x3_dense.sbatch` | GPU (2080 Ti, CUDA gate): dense ranks under each teacher, directories fetched ahead in threads, resumable per teacher and directory (sample, both teachers: 19.5 min; one teacher on the stored text, `FORM=pool`: 10.7 min; Verified reference, one teacher: 22 min). Reference archive: `LISTING=$HOME/ril_x3/work/ziplist_verified.json SAMPLE_NAME=verified_sample.json OUT_NAME=<file>` (selection made with `scripts/pool_ranks.py reference`). Whole pool: `SELECT=all SHARD="i n"` with a longer `--time` | `sbatch --export=ALL,RIL_COMMIT=<hash> ril_x3/scripts/ada/x3_dense.sbatch` |
+| `x3_pool_full.sbatch` | CPU: BM25 ranks of every positive of the whole pool, one repository shard (about 5.2 CPU-hours unsharded, estimate) | `sbatch --export=ALL,SHARD="0 4" ril_x3/scripts/ada/x3_pool_full.sbatch` |
+
+Full-pool feature table (not run; estimate in `docs/EXPERIMENTS.md` E-POOL-RANKS: about 4.9 GPU-hours per dense teacher with within-repository
+dedup from a wall-time model of the measured runs, 8.3 conservative): four GPU shards `SELECT=all SHARD="i 4"` and four CPU shards, then locally
+`python scripts/pool_ranks.py tables <sample> <rank files> --config configs/experiments/x3_pool_ranks.yaml --out-dir results/tables ...`
+(arguments as in the run log `results/logs/x3_pool_ranks_2026-10-25.json`). The listing the jobs read must carry member offsets
+(`scripts/ada/zip_remote_listing.py URL OUT.json`).

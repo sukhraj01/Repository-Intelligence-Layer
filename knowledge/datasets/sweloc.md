@@ -32,3 +32,12 @@ The candidate's python instance directory names were read from the already-fetch
 ## Pool check of the candidate (E-POOL-CHECK, 2026-10-18; counts in `results/tables/x_pool_check_*.csv`)
 
 Queries and qrels of all 24,285 python instance directories read by one range request each; corpus of a seeded sample of 300. Each directory holds one query (`_id`, `text`, `metadata` with only `repo` and `base_commit`: no creation date, no rank, no score field) and a qrels file whose rows all carry score 1. `qrel_rows_total` is 307,996 (mean 12.68 positives per directory, median 4, 95th percentile 42, maximum 3,924, none with zero), not the 49,973 instances of the SweRank+ table for the Python row. The corpus of a directory is the repository's function list at the base commit (sample: median 410 functions, mean 1,047, range 24 to 15,584; every positive id found in its corpus, 2,765 of 2,765; function ids unique within a corpus). Overlap of (repository, PR number): 60 pairs with CORE-Bench L2 (56 SWE-bench-Live, 4 SWE-Bench-plus-plus; 18 repositories, all on the held-out list), none with Verified (0 of 500, also none by base commit), none with L3, none with the other L2 sub-datasets; the Pro ids carry no PR number and cannot be compared.
+
+## Teacher ranks and filter state (E-POOL-RANKS, 2026-10-25)
+
+Ranks of 1,522 positives of 160 sampled directories under SweRankEmbed-Small, CodeRankEmbed and BM25 (`docs/EXPERIMENTS.md`, E-POOL-RANKS):
+the qrels are not consistency-filtered per positive (about 39% of positives outside the SweRankEmbed-Small top 40), while every sampled
+directory has a positive in that model's top 10, against 19% of the authors' never-filtered Verified export; whether that reflects a
+PR-level filter or the model's fit to these PRs is open. Corpus rows store `<id>\n<code>`; 43 of the 500 Verified-export directories have no
+qrels file. No positive lies in a test file.
+

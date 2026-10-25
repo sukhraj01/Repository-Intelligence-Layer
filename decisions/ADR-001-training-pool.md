@@ -138,3 +138,25 @@ marked `provisional: ADR-001` wherever it is used and never in `configs/frozen/`
   under one teacher would say the pool is post-filter, which removes RAW from this pool and reopens the choice between this
   pool and an own PR-mined set; time-box as sized in the plan (GPU budget of the current block).
 - *Conditions to revisit.* X3; a token on the cluster (current names, creation dates; D2); the authors' code being released.
+
+## Addendum 2026-10-25 — filter state of the candidate pool (evidence for D22 / Q43, no decision; this ADR stays Proposed)
+
+Measured (`docs/EXPERIMENTS.md`, E-POOL-RANKS; `results/logs/x3_pool_ranks_2026-10-25.json`, config hash `755b27136e9d`): every positive of
+160 directories (stratified by corpus size and held-out flag, seed 0; 1,522 positives) ranked against the other functions of its
+snapshot under SweRankEmbed-Small (the SweRank+ filter teacher), CodeRankEmbed and BM25.
+- *Certain within the sample:* the qrels are not consistency-filtered per positive. Under SweRankEmbed-Small 39.4% [24.1, 48.0] of the
+  pool's positives lie outside the top 40 (34.9% on the stored text), and the estimated count inside the top 40 is 186,531
+  [160,311, 233,797], not the 49,973 instances of SweRank+ Table 1; no K in {10, 20, 40} and no teacher gives that count. A RAW arm at
+  the positive level is available from this pool.
+- *Measured:* the directories are selected with respect to SweRankEmbed-Small: none of 160 lacks a positive in its top 10 (stored text;
+  exact upper bound 2.3%), against 19.3% [15.7, 23.2] of the authors' never-filtered Verified export under the same teacher; under
+  CodeRankEmbed the gap is smaller (16.9% against 35.7%).
+- *Not decidable from these data:* whether that selection is a PR-level filter (a PR kept if one positive passes) or the released
+  checkpoint's fit to these PRs (it was fine-tuned on the same authors' Python PR collection).
+- *What it means for the pool decision.* If PR-level filtered, the pool lacks the PRs whose every positive fails (on Verified that rule
+  would remove 9 to 19% of PRs): RAW from this pool is "RAW given one easy positive", and RAW-versus-FILTER effects measured on it would be
+  conservative. If not, the pool is raw at both levels. Either way the four arms can be built from it; an own PR-mined set (the master
+  document's alternative) would be raw by construction at the cost of building it.
+- *Evidence class:* measured (exploratory, n = 160 plus a 457-directory reference). *Experiment that could flip it:* creation dates of
+  the pool's PRs against the checkpoint's release (needs `GITHUB_TOKEN`, D2): post-release PRs that still never lack a top-10 positive
+  mean a filter. *Conditions to revisit:* that experiment; the authors' code or data card.
