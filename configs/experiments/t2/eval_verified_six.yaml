@@ -1,0 +1,5 @@
+# Evaluation override of E-PILOT-LEAK only (stated before the runs): the Verified-six test
+# repositories, units, one stated rrf k (as the training configurations' evaluation section).
+label: verified_six
+roles: [test]
+deliberate_test: "uses test repositories deliberately, for the leakage effect; not a final number (E-PILOT-LEAK)"

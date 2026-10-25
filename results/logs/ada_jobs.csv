@@ -7,3 +7,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-25,A,38747,T1,training throughput per batch shape (GPU; one process per shape and setting),u22,6,1,00:06:55,0.115,COMPLETED
 2026-10-25,A,38808,T1,torch tests of the training stack and leakage tests (CPU),u22,2,0,00:00:39,0.0,FAILED (27 passed; 2 leakage tests missed a held-out file not staged)
 2026-10-25,A,38809,T1,torch tests of the training stack and leakage tests (CPU) rerun,u22,2,0,00:00:12,0.0,COMPLETED (29 passed; peak RSS 0.52 GB)
+2026-10-25,A,38819,T2,held-out pool directories per repository (CPU srun; 92 repositories 3485 directories),u22,2,0,00:00:02,0.0,COMPLETED
+2026-10-25,A,38821,T2,smoke-pilot selections A and L and their example caches (CPU; 2000 + 2000 directories by range request),u22,2,0,00:51:48,0.0,COMPLETED (0 fetch errors; caches 263 MB and 301 MB)
+2026-10-25,A,38835,T2,torch tests incl. the new run-batch test and leakage tests (CPU),u22,2,0,00:00:17,0.0,COMPLETED (30 passed; peak RSS 0.52 GB)

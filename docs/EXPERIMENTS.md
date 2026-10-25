@@ -34,9 +34,9 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-GRAPH-REACH | RQ1 ext. (apparatus) | edge subset (19), control (3: same files, whole repository, whole repository of the same unit kind) | flask, requests, seaborn Verified instances (L2 11, L3 7) at their base commits, seed 0, 200 control draws per positive, 2,000 bootstrap draws, resolver `own-ast-resolver/v0` | n/a | chunk match rate and failure reasons; span categories against the first label sample; L3 positives by kind; share of new L3 positives within 1, 2, 3 hops of the L2 units and unreachable, with chance control and 95% bootstrap intervals | done (exploratory pilot, 2026-10-17; `RESULTS.md` rows `m-*`; ADR-004 and ADR-003 addenda) |
 | E-BM25-REPRO | RQ1 ext. (apparatus) | BM25 granularity (chunk, unit), module unit in or out of the index, protocol reading (cut at 10,000 before the candidate filter, or candidates only), k1/b (dev sweep) | reference tokenisation and scoring, seed 0, 2,000 bootstrap draws; dev and test repositories fixed in the config before the runs | n/a | nDCG@10 and Recall@100 with 95% intervals; agreement with the published BM25 rows | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e1-*`; ADR-004 addendum) |
 | E-LABEL-NOISE | RQ1 ext. (apparatus) | label set (all, content-cleaned, edit-overlap, both) and treatment of removed positives (kept as not relevant, or dropped from the list) | rankings of E-BM25-REPRO | n/a | score changes on the same queries with paired intervals; first-rank changes; whether a comparison changes verdict | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e2-*`) |
-| E-PILOT-LEAK | RQ2 (pilot, needs the training stack) | small encoder trained with versus without the instances of held-out and renamed repositories (the D1 rename-resolved overlap, 89 repositories in the candidate pool) | encoder, budget, seed, remaining pool, evaluation set | 3 | Verified nDCG@10 and Recall@100 of both encoders, paired; the difference is the leakage inflation | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25). What this would decide: whether current-name resolution (D1) matters for any reported number or is only hygiene, i.e. whether the pool filter's rename step has to be in the frozen configuration |
-| E-PILOT-K | RQ2 (pilot) | consistency filter K in {10, 20, 40, none} and teacher in {CodeRankEmbed, SweRankEmbed-Small, BM25, agreement of two}, at a tiny budget | encoder, matched optimization budget, pool, seed | 3 | retrieval metrics per cell with intervals; kept share per cell | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25). What this would decide: whether the FILTER and WEIGHT arms' K and teacher are sensitive settings, and which teacher can serve as the separately pretrained quality signal (ADR-002) |
-| E-PILOT-NEG | RQ2 (pilot) | negatives: random repository-local, teacher-mined, graph-structural (callers, siblings, same-file units) | positives, budget, pool, seed | 3 | retrieval metrics; false-negative rate of each negative source on a labelled sample | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25; negative policies `random_repo`, `teacher_top_m`, `teacher_top_m_poscut`, and `structural` for pilots only); the structural factor waits for the graph role (Q30). What this would decide: whether graph-derived supervision belongs inside RQ2, and whether mined negatives carry label noise that FILTER would have to handle |
+| E-PILOT-LEAK | RQ2 (pilot, needs the training stack) | small encoder trained with versus without the instances of held-out and renamed repositories (the D1 rename-resolved overlap, 89 repositories in the candidate pool) | encoder, budget, seed, remaining pool, evaluation set | 3 | Verified nDCG@10 and Recall@100 of both encoders, paired; the difference is the leakage inflation | config-ready (2026-10-25, T2 smoke pilot; setup and readings stated in "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots" before any run) |
+| E-PILOT-K | RQ2 (pilot) | consistency filter K in {10, 20, 40, none} and teacher in {CodeRankEmbed, SweRankEmbed-Small, BM25, agreement of two}, at a tiny budget | encoder, matched optimization budget, pool, seed | 3 | retrieval metrics per cell with intervals; kept share per cell | config-ready (2026-10-25, T2 smoke pilot; setup and readings stated in "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots" before any run) |
+| E-PILOT-NEG | RQ2 (pilot) | negatives: random repository-local, teacher-mined, graph-structural (callers, siblings, same-file units) | positives, budget, pool, seed | 3 | retrieval metrics; false-negative rate of each negative source on a labelled sample | config-ready (2026-10-25, T2 smoke pilot; setup and readings stated in "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots" before any run) |
 | E-PILOT-L3POS | RQ2 (pilot) | graph-derived test and configuration positives added to training | everything else, budget | 3 | L3 Recall@100 and L2 nDCG@10, paired with the run without them | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25). What this would decide: whether the L3-style positive (E-GRAPH-REACH, E-GRAPH-SIGNAL) is learnable from structure, i.e. whether an L3 arm is worth a place in RQ2 |
 | E-PILOT-POOL | RQ2 (pilot) | training pool (SweLoc-style candidate pool, own PR-mined set, CodeSearchNet) at a fixed number of updates | encoder, budget, seed, filter | 3 | retrieval metrics per pool; unique examples seen | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25); waits for ADR-001. What this would decide: which pool the frozen configuration uses, and how much of an arm difference is a pool difference |
 | E-GRAPH-SIGNAL | RQ1 ext. (apparatus) | edge-family subset (19), seeds C (1, 3, 5), decay gamma (0.3, 0.5, 0.7), hops (1, 2), way of forming the scored list (edited list, ranked list fused by RRF) | reference BM25 over the units of the snapshot (module unit in), seeds are retrieved units, expansion limited to 50 units, seed 0, dev repositories for every sweep | n/a | change in nDCG@10 (L2) and Recall@100 (L3) against BM25 alone and against size-matched random expansions, paired 95% intervals | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e3-*`; ADR-003 addendum) |
@@ -920,6 +920,52 @@ nothing is chosen here.
 
 **What this does not show.** Nothing about which arm, teacher, K, negative policy or budget is better; the `sentence-transformers`
 path was trained for 4 updates on the CPU and measured for 13 updates per shape on the GPU, not run to convergence.
+
+## E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots, exploratory (stated 2026-10-25, before any training run)
+
+**Purpose.** Evidence for ADR-002 (quality signal, K, teacher, negative policy) and ADR-001 (the held-out filter's effect) at a
+tiny budget; effect sizes at this budget may not transfer to the RQ2 budget, and nothing here decides anything.
+
+**Held identical across every condition** (`configs/experiments/t2/*.yaml`, one file per condition and seed; every value a
+pilot value, `provisional: ADR-001, ADR-002, ADR-006`): base CodeRankEmbed (pinned revision) at 512 tokens, float16 autocast with
+gradient checkpointing; batch 32 x (1 positive + 1 hard negative) plus in-batch negatives (Q53); multi-positive InfoNCE
+(`sum_in_numerator`, batch normaliser, temperature 0.05); AdamW lr 2e-5 (SweRank's small-retriever value), weight decay 0.01,
+7 warmup updates then linear decay, clip 1.0; **63 optimizer updates** in every run (one pass over selection A's 2,000
+examples at batch 32: 2,016 visits); the final model in half precision; evaluation by the X2 hook on the development
+repositories, units only (decision D12's level; chunks skipped for budget), RRF k = 60 with BM25 beside the dense column.
+Seeds 0 and 1 per condition (training seed; the selection is fixed). Teacher ranks: one pass over the example cache per teacher
+(CodeRankEmbed, SweRankEmbed-Small at 1,024 tokens, float16; BM25), with E-POOL-RANKS's rank definition; feature table
+`t2_features_A.csv` (untracked; ids hashed as in E-POOL-RANKS).
+
+**Pool.** Selection A: the first 2,000 directories outside the held-out list (v2 with the rename cache) by sha256("0:<directory>");
+cached with 0 fetch errors, 2,000 examples. Selection L (E-PILOT-LEAK only): the first 2,000 directories of the whole listing by
+the same order, held-out repositories included: 292 held-out directories in place of A's last 292. No Verified-six repository
+has a directory in the pool (92 held-out repositories occur in it, none of them in Verified-six; two development repositories
+do: haystack 140 and streamlink 109 directories), so on Verified-six the pilot can see only indirect leakage.
+
+**Conditions.**
+- E-PILOT-K: RAW (`t2_k_raw`); FILTER at the positive level, K in {10, 20, 40}, under CodeRankEmbed, SweRankEmbed-Small, BM25 and
+  the agreement of CodeRankEmbed and BM25 (a positive is kept if it is inside the top K under both); WEIGHT (power form
+  min(1, (20 / K-rank)^1), floor 0.1, example K-rank under CodeRankEmbed); CURRICULUM (easy to hard by the example K-rank under
+  CodeRankEmbed, 4 quantile buckets). Negatives `random_repo` in every cell. Q52: every cell whose teacher includes CodeRankEmbed
+  has `teacher_equals_base` true (recorded per run).
+- E-PILOT-NEG (RAW arm in every cell): `random_repo` (= `t2_k_raw`), `teacher_top_m` (M = 15, CodeRankEmbed miner, the base
+  checkpoint), `teacher_top_m_poscut` (M = 15 after dropping candidates scored at or above 0.95 x the best positive's score:
+  reference positive `max`).
+- E-PILOT-LEAK: `t2_k_raw` (selection A) against `t2_leak_in` (selection L), both evaluated on the development repositories and on
+  Verified-six, the latter labelled "uses test repositories deliberately, for the leakage effect; not a final number".
+- Run order (reverse priority for dropping if the 20 GPU-hour cap is reached): RAW with its Verified-six evaluation, FILTER
+  cells, NEG, LEAK, then WEIGHT and CURRICULUM.
+
+**Readings stated in advance** (tables by `scripts/t2_tables.py pilots configs/experiments/t2_pilots.yaml`, method in
+`ril/analysis/t2_tables.py`). Primary numbers: dev L2 nDCG@10 and L3 Recall@100 under the D18 primary reading, dense column (the
+trained encoder alone), RRF column beside. Effect = condition minus reference, seed means, paired over queries; 95% intervals over
+queries and over repositories (D17). A cell is called different from its reference only if its query-level interval excludes 0
+**and** its effect is larger than the reference's own seed-0-to-seed-1 difference on the same queries; otherwise
+indistinguishable at this budget. With about 15 contrasts x 2 levels, one or two intervals excluding 0 are expected by chance.
+Every condition is also shown against the untrained base (does 63 updates move the model at all). Two seeds give one
+seed-to-seed difference per condition: they can show an effect larger than one retraining's change, not a seed standard
+deviation, and the intervals carry query sampling only.
 
 ## Pre-registered interpretation rules
 
