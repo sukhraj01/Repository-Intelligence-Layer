@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import pytest
 
-import torch
+torch = pytest.importorskip("torch")  # Ada only: the local machine has no torch (Makefile header)
+pytestmark = pytest.mark.torch
+
+from pathlib import Path
 
 from ril.training.training import train
 from tests.unit._training_fixtures import synthetic_examples, train_config

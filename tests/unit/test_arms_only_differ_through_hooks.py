@@ -10,12 +10,14 @@ does change what it should and only that.
 
 from __future__ import annotations
 
+import pytest
+
+torch = pytest.importorskip("torch")  # Ada only: the local machine has no torch (Makefile header)
+pytestmark = pytest.mark.torch
+
 import zlib
 from pathlib import Path
 from typing import Any
-
-import pytest
-import torch
 
 from ril.training.encoders import build_encoder
 from ril.training.supervision import ARM_HOOK_FIELDS, Arm, MappingKRank

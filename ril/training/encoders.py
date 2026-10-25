@@ -71,7 +71,7 @@ def _no_grad_numpy(enc: TrainEncoder, texts: Sequence[str], is_query: bool, bs: 
 # --------------------------------------------------------------------------- tiny
 
 
-class _TinyModule(nn.Module):
+class _TinyModule(nn.Module):  # type: ignore[misc,unused-ignore]
     def __init__(self, buckets: int, dim: int) -> None:
         super().__init__()
         self.bag = nn.EmbeddingBag(buckets, dim, mode="mean")

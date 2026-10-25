@@ -8,12 +8,15 @@ result).
 
 from __future__ import annotations
 
+import pytest
+
+torch = pytest.importorskip("torch")  # Ada only: the local machine has no torch (Makefile header)
+pytestmark = pytest.mark.torch
+
 import csv
 import json
 import os
 from pathlib import Path
-
-import torch
 
 from ril.evaluation.checkpoint_eval import eval_checkpoint
 from ril.training import pool_ranks as pr

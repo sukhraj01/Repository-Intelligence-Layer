@@ -48,7 +48,6 @@ from ril.training.pool_reader import (
     write_cache,
 )
 from ril.training.supervision import QualitySignal, TableKRank
-from ril.training.training import load_train_config, train
 
 Record = dict[str, Any]
 
@@ -220,6 +219,8 @@ def train_job(
 ) -> Record:
     """One training run from the example cache (resumable: rerun the same command)."""
     import torch
+
+    from ril.training.training import load_train_config, train
 
     cfg = load_train_config(config_path)
     gate: Record | None = None

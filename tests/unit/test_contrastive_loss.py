@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-import math
-
 import pytest
-import torch
+
+torch = pytest.importorskip("torch")  # Ada only: the local machine has no torch (Makefile header)
+pytestmark = pytest.mark.torch
+
+import math
 
 from ril.training.contrastive_loss import info_nce
 

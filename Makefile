@@ -6,23 +6,35 @@
 #           srun --pty bash
 #           uv venv --python 3.11 .venv && uv pip install -e . pytest pytest-cov ruff mypy types-pyyaml
 #         then run the targets below with RUN= (empty) after `source .venv/bin/activate`.
+#
+# torch is an optional Poetry group: `make setup` never installs it (the local box is 8 GB and runs
+# no training, encoding or model loading); `make setup-train` adds it, on Ada only. `make test` runs
+# the unit tests without the `torch` and `slow` markers on one worker; `make test-all` (every test,
+# torch ones included) is for Ada only.
 
 PYTHON ?= python3.11
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup test test-all lint format bench bench-check bench-graph hooks
+.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks
 
 setup:
 	poetry env use $(PYTHON)
-	poetry install
+	poetry sync
+	$(RUN) python scripts/check_env.py
+
+# Ada only: adds the optional training group (torch).
+setup-train:
+	poetry env use $(PYTHON)
+	poetry sync --with train
 	$(RUN) python scripts/check_env.py
 
 test:
-	$(RUN) pytest tests/unit -q
+	$(RUN) pytest tests/unit -q -p no:xdist -m "not torch and not slow"
 
+# Ada only (needs `make setup-train`).
 test-all:
-	$(RUN) pytest tests -q
+	$(RUN) pytest tests -q -p no:xdist
 
 lint:
 	$(RUN) ruff check ril tests scripts
