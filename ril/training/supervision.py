@@ -321,11 +321,36 @@ class Arm:
 ARM_HOOK_FIELDS = ("filter", "weigher", "ordering")
 
 
+@dataclass(frozen=True)
+class AgreementKRank:
+    """Agreement of several teachers: a positive's rank is the worst (largest) of their ranks.
+
+    Inside the top ``k`` under this signal means inside the top ``k`` under every teacher (the
+    "agreement of two teachers" cell of E-PILOT-K); its name is the teachers joined by ``+``.
+    """
+
+    parts: tuple[QualitySignal, ...]
+
+    @property
+    def teacher(self) -> str:
+        return "+".join(p.teacher for p in self.parts)
+
+    def positive_rank(self, example: PoolExample, positive_id: str) -> int:
+        return max(p.positive_rank(example, positive_id) for p in self.parts)
+
+    def example_rank(self, example: PoolExample) -> int:
+        return min(self.positive_rank(example, p) for p in example.positive_ids)
+
+
 def _signal(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> QualitySignal:
+    """The quality signal a hook names: one teacher, or ``a+b`` for the agreement of teachers."""
     t = str(cfg["teacher"])
-    if t not in signals:
-        raise KeyError(f"no quality signal for teacher {t!r}")
-    return signals[t]
+    if t in signals:
+        return signals[t]
+    parts = t.split("+")
+    if len(parts) > 1 and all(p in signals for p in parts):
+        return AgreementKRank(tuple(signals[p] for p in parts))
+    raise KeyError(f"no quality signal for teacher {t!r}")
 
 
 def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> Arm:

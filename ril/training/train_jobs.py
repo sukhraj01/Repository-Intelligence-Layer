@@ -26,19 +26,23 @@ import hashlib
 import json
 import os
 import time
+from dataclasses import dataclass
 from typing import Any
 
 from ril.training import pool_ranks as pr
 from ril.training.negatives import (
+    Mined,
     ScoreFn,
     bm25_score_fn,
     dense_score_fn,
     mine,
+    mine_from_scores,
     read_mined,
     write_mined,
 )
 from ril.training.pool_check import split_instance_dir
 from ril.training.pool_reader import (
+    PoolExample,
     ReaderStats,
     load_feature_table,
     load_listing,
@@ -150,6 +154,189 @@ def cache_job(
     return rec
 
 
+def teacher_score_fn(
+    teacher: str, *, cut: int, device: str, batch_size: int
+) -> tuple[ScoreFn, Record | None]:
+    """Score function of a teacher (``bm25`` or a registered dense encoder) and the GPU gate."""
+    if teacher == "bm25":
+        return bm25_score_fn, None
+    from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
+
+    gate: Record | None = None
+    if device.startswith("cuda"):
+        from ril.util.gpu import cuda_gate
+
+        gate = cuda_gate()
+    spec = ENCODERS[teacher].with_max_tokens(cut)
+    enc = DenseEncoder.load(
+        spec,
+        device=device,
+        dtype="float16" if device.startswith("cuda") else "float32",
+        local_dir=local_snapshot(spec),
+    )
+    return dense_score_fn(enc, batch_size), gate
+
+
+def teacher_job(
+    cache_path: str,
+    ranks_out: str,
+    mined_out: str,
+    *,
+    teacher: str,
+    keep: int,
+    cut: int = 1024,
+    device: str = "cpu",
+    batch_size: int = 64,
+) -> Record:
+    """One teacher pass over the example cache: K-ranks of every positive and mined candidates.
+
+    Each snapshot is scored once (positives first, then every candidate); the ranks follow the
+    E-POOL-RANKS definition (``pool_ranks.positive_ranks``: 1 + non-positive functions scored
+    strictly higher) and are written as E-POOL-RANKS rank rows, the mined candidates as
+    :func:`write_mined` rows. Examples are visited grouped by repository (the dense teachers'
+    per-repository vector cache). Resumable per directory: rank rows and mined rows are appended
+    and finished directories skipped; the mined file is rewritten at the end.
+    """
+    examples = sorted(read_cache(cache_path), key=lambda e: (e.repo, e.instance_id))
+    rows_path = f"{mined_out}.rows.jsonl"
+    done = {str(r["dir"]) for r in pr.read_jsonl(ranks_out) if r.get("teacher") == teacher}
+    done_m = {str(r["instance_id"]) for r in pr.read_jsonl(rows_path)}
+    todo = [e for e in examples if e.instance_id not in done or e.instance_id not in done_m]
+    score_fn, gate = teacher_score_fn(teacher, cut=cut, device=device, batch_size=batch_size)
+    t0 = time.perf_counter()
+    for ex in todo:
+        t1 = time.perf_counter()
+        texts = list(ex.positive_texts) + list(ex.candidate_texts)
+        s = score_fn(ex, texts)
+        secs = round(time.perf_counter() - t1, 4)
+        if ex.instance_id not in done:
+            pr.append_jsonl(
+                ranks_out,
+                {
+                    "dir": ex.instance_id,
+                    "teacher": teacher,
+                    "functions": len(texts),
+                    "ranks": pr.positive_ranks(ex.ids, s, ex.positive_ids),
+                    "form": "cache",
+                    "max_tokens": cut if teacher != "bm25" else None,
+                    "seconds": secs,
+                },
+            )
+        if ex.instance_id not in done_m:
+            m = mine_from_scores(ex, teacher, s, keep)
+            pr.append_jsonl(
+                rows_path,
+                {
+                    "instance_id": ex.instance_id,
+                    "teacher": m.teacher,
+                    "positive_scores": list(m.positive_scores),
+                    "top_ids": list(m.top_ids),
+                    "top_scores": list(m.top_scores),
+                },
+            )
+    mined = {
+        str(r["instance_id"]): Mined(
+            teacher=str(r["teacher"]),
+            positive_scores=tuple(float(x) for x in r["positive_scores"]),
+            top_ids=tuple(r["top_ids"]),
+            top_scores=tuple(float(x) for x in r["top_scores"]),
+        )
+        for r in pr.read_jsonl(rows_path)
+    }
+    write_mined(mined_out, mined)
+    rec = {
+        "teacher": teacher,
+        "keep": keep,
+        "cut": cut,
+        "examples": len(examples),
+        "done_before": len(examples) - len(todo),
+        "scored_now": len(todo),
+        "mined": len(mined),
+        "gate": gate,
+        "seconds": round(time.perf_counter() - t0, 1),
+        "cache_sha256": _sha256(cache_path),
+    }
+    _dump(f"{mined_out}.json", rec)
+    return rec
+
+
+def feature_table_job(
+    rank_paths: list[str],
+    out_csv: str,
+    *,
+    teachers: list[str],
+    held_out_path: str,
+    rename_cache_path: str | None,
+) -> Record:
+    """Feature table (E-POOL-RANKS columns, keys only) from teacher-pass rank rows.
+
+    A directory enters only if every listed teacher ranked it (a partial row would make one arm's
+    hook fail on an example another arm keeps). ``stratum`` is empty: the selection is a seeded
+    random subset, not the E-POOL-RANKS strata.
+    """
+    import csv
+
+    from ril.training.pool_rank_jobs import held_out_predicate
+
+    pred = held_out_predicate(held_out_path, rename_cache_path)
+    by: dict[str, dict[str, Record]] = {}
+    for p in rank_paths:
+        for r in pr.read_jsonl(p):
+            if str(r["teacher"]) in teachers:
+                by.setdefault(str(r["dir"]), {})[str(r["teacher"])] = r
+    complete = sorted(d for d, ts in by.items() if all(t in ts for t in teachers))
+    cols = [
+        "instance_id",
+        "positive_key",
+        "repo",
+        "held_out",
+        "stratum",
+        "functions",
+        "positives_in_instance",
+        *[f"rank_{t}" for t in teachers],
+        *[f"rank_all_{t}" for t in teachers],
+    ]
+    os.makedirs(os.path.dirname(out_csv) or ".", exist_ok=True)
+    rows = 0
+    with open(f"{out_csv}.tmp", "w", encoding="utf-8", newline="") as handle:
+        w = csv.DictWriter(handle, fieldnames=cols)
+        w.writeheader()
+        for d in complete:
+            sp = split_instance_dir(d)
+            if sp is None:
+                raise ValueError(f"unreadable instance directory {d!r}")
+            ref = by[d][teachers[0]]
+            cells: dict[str, Record] = {}
+            for t in teachers:
+                for x in by[d][t]["ranks"]:
+                    cells.setdefault(str(x["positive"]), {})[t] = x
+            for pid in sorted(cells):
+                cell = cells[pid]
+                row: Record = {
+                    "instance_id": d,
+                    "positive_key": pr.positive_key(pid),
+                    "repo": sp[0],
+                    "held_out": int(pred(sp[0])),
+                    "stratum": "",
+                    "functions": int(ref["functions"]),
+                    "positives_in_instance": len(cells),
+                }
+                for t in teachers:
+                    row[f"rank_{t}"] = int(cell[t]["rank"])
+                    row[f"rank_all_{t}"] = int(cell[t]["rank_all"])
+                w.writerow(row)
+                rows += 1
+    os.replace(f"{out_csv}.tmp", out_csv)
+    return {
+        "directories_ranked": len(by),
+        "directories_complete": len(complete),
+        "positive_rows": rows,
+        "teachers": teachers,
+        "out": out_csv,
+        "sha256": _sha256(out_csv),
+    }
+
+
 def mine_job(
     cache_path: str,
     out_path: str,
@@ -162,25 +349,7 @@ def mine_job(
 ) -> Record:
     """Teacher scores (positives, top ``keep`` candidates) of every cached example."""
     examples = sorted(read_cache(cache_path), key=lambda e: (e.repo, e.instance_id))
-    gate: Record | None = None
-    score_fn: ScoreFn
-    if teacher == "bm25":
-        score_fn = bm25_score_fn
-    else:
-        from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
-
-        if device.startswith("cuda"):
-            from ril.util.gpu import cuda_gate
-
-            gate = cuda_gate()
-        spec = ENCODERS[teacher].with_max_tokens(cut)
-        enc = DenseEncoder.load(
-            spec,
-            device=device,
-            dtype="float16" if device.startswith("cuda") else "float32",
-            local_dir=local_snapshot(spec),
-        )
-        score_fn = dense_score_fn(enc, batch_size)
+    score_fn, gate = teacher_score_fn(teacher, cut=cut, device=device, batch_size=batch_size)
     t0 = time.perf_counter()
     rows = {e.instance_id: mine(e, teacher, score_fn, keep) for e in examples}
     write_mined(out_path, rows)
@@ -205,6 +374,38 @@ def signals_from_table(feature_table: str | None) -> dict[str, QualitySignal]:
     return {t: TableKRank(table, t) for t in table.teachers}
 
 
+@dataclass
+class TrainInputs:
+    """Inputs of training runs read once (a job that trains several configurations)."""
+
+    cache_path: str
+    examples: list[PoolExample]
+    feature_table: str | None
+    signals: dict[str, QualitySignal]
+    mined_path: str | None
+    mined: dict[str, Mined] | None
+    hashes: Record
+
+
+def load_inputs(
+    cache_path: str, feature_table: str | None = None, mined_path: str | None = None
+) -> TrainInputs:
+    """Read the example cache, the feature table's quality signals and the mined scores."""
+    return TrainInputs(
+        cache_path=cache_path,
+        examples=read_cache(cache_path),
+        feature_table=feature_table,
+        signals=signals_from_table(feature_table),
+        mined_path=mined_path,
+        mined=read_mined(mined_path) if mined_path else None,
+        hashes={
+            "cache_sha256": _sha256(cache_path),
+            "feature_table_sha256": _sha256(feature_table) if feature_table else None,
+            "mined_sha256": _sha256(mined_path) if mined_path else None,
+        },
+    )
+
+
 def train_job(
     config_path: str,
     cache_path: str,
@@ -216,8 +417,13 @@ def train_job(
     feature_table: str | None = None,
     mined_path: str | None = None,
     stop_after: int | None = None,
+    inputs: TrainInputs | None = None,
 ) -> Record:
-    """One training run from the example cache (resumable: rerun the same command)."""
+    """One training run from the example cache (resumable: rerun the same command).
+
+    ``inputs`` (from :func:`load_inputs`) replaces reading the cache, table and mined file again;
+    it must have been loaded from the same paths.
+    """
     import torch
 
     from ril.training.training import load_train_config, train
@@ -230,27 +436,31 @@ def train_job(
         gate = cuda_gate()
     else:
         torch.set_num_threads(int(os.environ.get("RIL_THREADS", "4")))
-    examples = read_cache(cache_path)
-    mined = read_mined(mined_path) if mined_path else None
+    if inputs is None:
+        inputs = load_inputs(cache_path, feature_table, mined_path)
+    elif (inputs.cache_path, inputs.feature_table, inputs.mined_path) != (
+        cache_path,
+        feature_table,
+        mined_path,
+    ):
+        raise ValueError("preloaded inputs come from other paths")
     extra = {
         "gate": gate,
         "inputs": {
             "config_path": config_path,
             "config_file_sha256": _sha256(config_path),
-            "cache_sha256": _sha256(cache_path),
-            "feature_table_sha256": _sha256(feature_table) if feature_table else None,
-            "mined_sha256": _sha256(mined_path) if mined_path else None,
+            **inputs.hashes,
         },
     }
     return train(
         cfg,
-        examples,
+        inputs.examples,
         results_root=results_root,
         work_root=work_root,
         date=date,
         device=device,
-        signals=signals_from_table(feature_table),
-        mined=mined,
+        signals=inputs.signals,
+        mined=inputs.mined,
         stop_after=stop_after,
         extra_log=extra,
     )

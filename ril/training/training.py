@@ -506,7 +506,7 @@ def teacher_equals_base(cfg: Mapping[str, Any]) -> bool:
     """
     base = cfg["model"].get("encoder")
     hooks = [cfg["arm"].get(k) or {} for k in ("filter", "weight", "ordering")]
-    return base is not None and any(h.get("teacher") == base for h in hooks)
+    return base is not None and any(base in str(h.get("teacher") or "").split("+") for h in hooks)
 
 
 def budget_record(

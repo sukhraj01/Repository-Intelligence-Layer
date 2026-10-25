@@ -1,0 +1,26 @@
+# Table specification of the smoke pilots (stated before the runs; scripts/t2_tables.py pilots).
+# Each pilot compares conditions (exp_ids, runs differing only in the training seed) with one
+# reference; ril/analysis/t2_tables.py documents the intervals and the seed rows.
+experiment_id: t2-smoke-pilots
+pilots:
+  - name: pilot_k
+    reference: t2_k_raw
+    conditions: [t2_k_raw,
+                 t2_k_filter_cre_k10, t2_k_filter_cre_k20, t2_k_filter_cre_k40,
+                 t2_k_filter_srs_k10, t2_k_filter_srs_k20, t2_k_filter_srs_k40,
+                 t2_k_filter_bm25_k10, t2_k_filter_bm25_k20, t2_k_filter_bm25_k40,
+                 t2_k_filter_agree_k10, t2_k_filter_agree_k20, t2_k_filter_agree_k40,
+                 t2_k_weight_cre, t2_k_curriculum_cre]
+  - name: pilot_neg
+    reference: t2_k_raw
+    conditions: [t2_k_raw, t2_neg_topm_cre, t2_neg_poscut_cre]
+  - name: pilot_leak_dev
+    reference: t2_k_raw
+    conditions: [t2_k_raw, t2_leak_in]
+    label: "development repositories; the held-out directories of selection L include development repositories"
+  - name: pilot_leak_verified
+    reference: t2_k_raw
+    conditions: [t2_k_raw, t2_leak_in]
+    section: evaluation_verified_six
+    sub: verified_six
+    label: "uses test repositories deliberately, for the leakage effect; not a final number"

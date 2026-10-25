@@ -26,7 +26,7 @@ import os
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from ril.analysis.e3_tables import load_eval_dir
+from ril.analysis.e3_tables import COLUMN, EvalTable, load_eval_dir
 from ril.analysis.x2_tables import chunk_rows, load_chunk_dir, unit_rows, write_csv
 from ril.evaluation.e1_run import load_config
 from ril.evaluation.x2_dense import encode_store, score_chunks, score_units
@@ -93,6 +93,35 @@ def _chunk_columns(
     ref_r = f"rrf:{baselines[0]}" if baselines else "bm25"
     cols += [(f"dense:{variant}", variant, ref_d), (f"rrf:{variant}", f"rrf{k}__{variant}", ref_r)]
     return cols
+
+
+def query_rows(
+    tab: EvalTable, columns: Sequence[tuple[str, str, str | None]], roles: Sequence[str]
+) -> list[Record]:
+    """Per-query metrics of the listed columns (one row per query and column; ids and numbers).
+
+    Why: comparisons between trained variants (pilot arms, seeds) are paired over the same queries;
+    the paired tables of one run only pair each variant with its baseline. Values are fractions;
+    an empty cell is a reading under which the query has no gold.
+    """
+    out: list[Record] = []
+    for i, row in enumerate(tab.rows):
+        if row["role"] not in roles:
+            continue
+        for name, key, _ in columns:
+            j = tab.index[key]
+            rec: Record = {
+                "instance": row["instance"],
+                "level": row["level"],
+                "repo": row["repo"],
+                "role": row["role"],
+                "name": name,
+            }
+            for (reading, metric), c in sorted(COLUMN.items(), key=lambda kv: kv[1]):
+                v = float(tab.metrics[i, j, c])
+                rec[f"{reading}:{metric}"] = "" if v != v else round(v, 6)
+            out.append(rec)
+    return out
 
 
 def eval_checkpoint(
@@ -172,6 +201,10 @@ def eval_checkpoint(
     }
     os.makedirs(result_dir, exist_ok=True)
     write_csv(os.path.join(result_dir, "unit_rows.csv"), urows)
+    write_csv(
+        os.path.join(result_dir, "query_rows.csv"),
+        query_rows(tab, _columns(variant, baselines, k), roles),
+    )
     if cfg["chunks"]:
         enc_dirs = {variant: enc_dir, **dict(baseline_enc_dirs or {})}
         chunk_dir = os.path.join(work_dir, "chunks", variant)

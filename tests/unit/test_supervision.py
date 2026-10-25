@@ -96,3 +96,30 @@ def test_arm_from_config() -> None:
         )
     with pytest.raises(ValueError):
         arm_from_config({"name": "OTHER"}, {})
+
+
+def test_agreement_signal_is_the_worst_rank_of_its_teachers() -> None:
+    from ril.training.supervision import AgreementKRank
+
+    exs = synthetic_examples(repos=2, prs=3)
+    a = _signal()
+    ranks_b = {k: (v * 3) % 17 + 1 for k, v in a.ranks.items()}
+    b = MappingKRank(ranks_b, "u")
+    ag = AgreementKRank((a, b))
+    assert ag.teacher == "t+u"
+    for e in exs:
+        for p in e.positive_ids:
+            assert ag.positive_rank(e, p) == max(a.positive_rank(e, p), b.positive_rank(e, p))
+        assert ag.example_rank(e) == min(ag.positive_rank(e, p) for p in e.positive_ids)
+    arm = arm_from_config(
+        {"name": "FILTER", "filter": {"teacher": "t+u", "k": 10, "level": "positive"}},
+        {"t": a, "u": b},
+    )
+    kept, _ = arm.filter.apply(exs)
+    for e in kept:
+        assert all(ag.positive_rank(e, p) <= 10 for p in e.positive_ids)
+    with pytest.raises(KeyError):
+        arm_from_config(
+            {"name": "FILTER", "filter": {"teacher": "t+v", "k": 10, "level": "positive"}},
+            {"t": a, "u": b},
+        )

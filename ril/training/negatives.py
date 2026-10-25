@@ -80,8 +80,21 @@ def mine(example: PoolExample, teacher: str, score_fn: ScoreFn, keep: int) -> Mi
     if keep < 1:
         raise ValueError("keep must be at least 1")
     texts = list(example.positive_texts) + list(example.candidate_texts)
-    s = np.asarray(score_fn(example, texts), dtype=np.float64)
-    if s.shape[0] != len(texts):
+    return mine_from_scores(example, teacher, score_fn(example, texts), keep)
+
+
+def mine_from_scores(
+    example: PoolExample, teacher: str, scores: Sequence[float], keep: int
+) -> Mined:
+    """:func:`mine` from scores already computed for ``example.ids`` (positives first).
+
+    Why: one teacher pass over a cached snapshot gives both the K-rank of every positive and the
+    mined candidates (``ril.training.train_jobs.teacher_job``), so the snapshot is encoded once.
+    """
+    if keep < 1:
+        raise ValueError("keep must be at least 1")
+    s = np.asarray(scores, dtype=np.float64)
+    if s.shape[0] != len(example.positive_ids) + len(example.candidate_ids):
         raise ValueError("one teacher score per text expected")
     npos = len(example.positive_ids)
     cand = s[npos:]

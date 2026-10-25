@@ -150,3 +150,13 @@ def test_tiny_model_end_to_end_with_resume_and_evaluation(tmp_path: Path) -> Non
     with open(rdir / "results.json", encoding="utf-8") as handle:
         res = json.load(handle)
     assert set(res) == {"training", "evaluation"} and res["evaluation"]["headline"]
+    with open(rdir / "query_rows.csv", encoding="utf-8") as handle:
+        qrows = list(csv.DictReader(handle))
+    assert {r["name"] for r in qrows} == {
+        "bm25",
+        "dense:tiny_base",
+        "rrf:tiny_base",
+        "dense:t1_e2e",
+        "rrf:t1_e2e",
+    }
+    assert len(qrows) == 5 * len({(r["instance"], r["level"]) for r in qrows})
