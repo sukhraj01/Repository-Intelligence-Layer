@@ -1,0 +1,13 @@
+pair,measure,k,positives,value,ci,both_inside,only_first,only_second,neither
+coderankembed~swerankembed-small,spearman_rank,,25318,0.854,"[0.818, 0.884]",,,,
+coderankembed~swerankembed-small,topk_membership,10,25318,0.493,,5514,195,5870,13739
+coderankembed~swerankembed-small,topk_membership,20,25318,0.573,,7687,239,5210,12182
+coderankembed~swerankembed-small,topk_membership,40,25318,0.643,,10325,305,4332,10356
+coderankembed~bm25,spearman_rank,,25318,0.706,"[0.65, 0.75]",,,,
+coderankembed~bm25,topk_membership,10,25318,0.427,,3157,2552,2500,17109
+coderankembed~bm25,topk_membership,20,25318,0.478,,5047,2879,2785,14607
+coderankembed~bm25,topk_membership,40,25318,0.5,,7856,2774,3449,11239
+swerankembed-small~bm25,spearman_rank,,25318,0.667,"[0.601, 0.722]",,,,
+swerankembed-small~bm25,topk_membership,10,25318,0.357,,4675,6709,982,12952
+swerankembed-small~bm25,topk_membership,20,25318,0.426,,6704,6193,1128,11293
+swerankembed-small~bm25,topk_membership,40,25318,0.489,,9695,4962,1610,9051

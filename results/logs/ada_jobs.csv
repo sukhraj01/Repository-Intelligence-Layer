@@ -10,3 +10,10 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-25,A,38819,T2,held-out pool directories per repository (CPU srun; 92 repositories 3485 directories),u22,2,0,00:00:02,0.0,COMPLETED
 2026-10-25,A,38821,T2,smoke-pilot selections A and L and their example caches (CPU; 2000 + 2000 directories by range request),u22,2,0,00:51:48,0.0,COMPLETED (0 fetch errors; caches 263 MB and 301 MB)
 2026-10-25,A,38835,T2,torch tests incl. the new run-batch test and leakage tests (CPU),u22,2,0,00:00:17,0.0,COMPLETED (30 passed; peak RSS 0.52 GB)
+2026-10-25,A,39098,T2,teacher passes over cache A: CodeRankEmbed then SweRankEmbed-Small (K-ranks and top-64 candidates; 1024 tokens float16),u22,4,1,02:11:57,2.2,COMPLETED (gnode057; CUDA gate passed; CodeRankEmbed 3940 s; peak RSS 4.5 GB)
+2026-10-25,A,39099,T2,BM25 teacher pass over cache A (CPU),u22,2,0,00:02:19,0.0,COMPLETED (123 s for 1.95 M functions; peak RSS 2.3 GB)
+2026-10-25,A,39143,T2,feature table and teacher tables (CPU),u22,2,0,00:00:03,0.0,FAILED (feature table written; the exact binomial interval overflowed at n=2000)
+2026-10-25,A,39144,T2,first main run batch (dependency on 39143),u22,4,1,00:00:00,0.0,CANCELLED (dependency never satisfied; never ran)
+2026-10-25,A,39187,T2,feature table and teacher tables rerun with a Wilson interval (CPU),u22,2,0,00:02:42,0.0,COMPLETED (2000 directories 25318 positives)
+2026-10-25,A,39100,T2,run batch: t2_k_raw seeds 0 and 1 trained and evaluated on dev and Verified-six (labelled),u22,4,1,01:24:33,1.41,COMPLETED (gnode044; about 42 min per run of which about 30 min evaluation)
+2026-10-25,A,39101,T2,run batch: t2_leak_in seeds 0 and 1 on cache L evaluated on dev and Verified-six (labelled),u22,4,1,01:24:38,1.41,COMPLETED (gnode044)

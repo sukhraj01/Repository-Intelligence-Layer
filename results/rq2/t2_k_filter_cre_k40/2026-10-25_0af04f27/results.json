@@ -1,0 +1,68 @@
+{
+ "training": {
+  "arm": {
+   "filter": "krank_threshold",
+   "name": "FILTER",
+   "ordering": "random",
+   "weigher": "unit"
+  },
+  "budget": {
+   "batch_size": 32,
+   "effective_epochs": 1.053842132775745,
+   "examples_seen": 2016,
+   "gpu_hours_train_loop": 0.04688180760170023,
+   "negative_shortfall_visits": 0,
+   "negatives_seen": 2016,
+   "optimizer_updates": 63,
+   "passes_started": 2,
+   "pool_examples": 1913,
+   "positives_seen": 2016,
+   "unique_examples_seen": 1913,
+   "wall_hours_train_loop": 0.04688180760170023
+  },
+  "checkpoint_root": "/tmp/ril_t2_39188/ckpt/t2_k_filter_cre_k40/0af04f27",
+  "config_hash": "0af04f27a3149001e53cb83b18dfbfe02ca9e930ddea964f2d9c7e0581ddce25",
+  "exp_id": "t2_k_filter_cre_k40",
+  "filter": {
+   "examples_in": 2000,
+   "examples_kept_share": 0.9565,
+   "examples_out": 1913,
+   "positives_in": 25318,
+   "positives_kept_share": 0.41985938857729677,
+   "positives_out": 10630
+  },
+  "final_dtype": "float16",
+  "final_model": "/tmp/ril_t2_39188/ckpt/t2_k_filter_cre_k40/0af04f27/final",
+  "finished": true,
+  "loss_first": {
+   "candidates_per_query": 64.0,
+   "loss": 0.9299612045288086,
+   "loss_unweighted": 0.9299612045288086,
+   "lr": 5.7142857142857145e-06,
+   "positives_per_query": 1.0,
+   "update": 0
+  },
+  "loss_last": {
+   "candidates_per_query": 64.0,
+   "loss": 0.5552436709403992,
+   "loss_unweighted": 0.5552436709403992,
+   "lr": 0.0,
+   "positives_per_query": 1.0,
+   "update": 62
+  },
+  "plan_sha256": "2914cb862c60e9dcf50843e5798a7f15d1ebc9998255c89ef00f5e8b102f8323",
+  "provisional": "provisional: ADR-001, ADR-002, ADR-006",
+  "result_dir": "/home2/[login]/ril_t2/results/rq2/t2_k_filter_cre_k40/2026-10-25_0af04f27",
+  "seed": 1,
+  "teacher_equals_base": true,
+  "updates_this_process": 63,
+  "version": "training/v1",
+  "weights": {
+   "max": 1.0,
+   "mean": 1.0,
+   "min": 1.0,
+   "n": 1913,
+   "share_below_1": 0.0
+  }
+ }
+}
