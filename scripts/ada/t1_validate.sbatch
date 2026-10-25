@@ -22,6 +22,8 @@
 #   rsync -a --exclude __pycache__ ril scripts configs ada:ril_t1/
 #   rsync -a data/held_out/held_out_repos.json data/held_out/rename_cache.json ada:ril_t1/data/held_out/
 #   rsync -a results/tables/x3_pool_ranks_features.csv ada:ril_t1/results/tables/
+#   rsync -a data/processed/x2/e3_cache/ ada:ril_t1/work/e3_cache/   (the E3 cache with the D18 no-module
+#     readings, as the X2 evaluation used it; ~/ril_e/e3_cache lacks them)
 #   sbatch --export=ALL,RIL_COMMIT=<hash> ril_t1/scripts/ada/t1_validate.sbatch
 set -euo pipefail
 W=$HOME/ril_t1
@@ -53,7 +55,7 @@ RES=$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1]))["result_dir"
 MODEL=$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1]))["final_model"])' "out/train_tiny_${SLURM_JOB_ID}.json")
 mkdir -p work/dense && ln -sfn "$X2/dense/coderankembed__t512" work/dense/coderankembed__t512
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 $T eval configs/experiments/t1_validate_tiny.yaml "$MODEL" "$RES" \
-  --e1-config configs/experiments/e1_bm25_reproduction.yaml --prep "$X2/prep" --e3-cache "$X2/e3_cache" \
+  --e1-config configs/experiments/e1_bm25_reproduction.yaml --prep "$X2/prep" --e3-cache "$W/work/e3_cache" \
   --data-root "$X2/raw" --work "$W/work/eval" --dense-root "$W/work/dense" \
   --baseline "coderankembed__t512=$X2/enc/coderankembed__t512" > "out/eval_tiny_${SLURM_JOB_ID}.json"
 # released-checkpoint path on the CPU, checkpoints in node-local space

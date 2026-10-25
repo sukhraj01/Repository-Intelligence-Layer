@@ -11,9 +11,10 @@ so that no GPU is held while the CPU or the network works (``docs/COMPUTE.md``):
 * ``mine_job`` (CPU for BM25, GPU for a dense teacher): teacher scores of positives and top
   candidates, for teacher-mined negative policies.
 * ``train_job`` (GPU, or CPU for the tiny model): one run of ``ril.training.training.train``; a GPU
-  run starts with the real CUDA matrix-product gate of ``ril.evaluation.x2_jobs``.
-* ``eval_job``: the configuration's ``evaluation`` section through
-  ``ril.evaluation.checkpoint_eval`` into the run's result directory.
+  run starts with the real CUDA matrix-product gate (``ril.util.gpu``).
+
+The evaluation of a trained model is wired in ``scripts/train.py eval`` (the training package does
+not import evaluation code: leakage check (d)).
 
 Every output is ids, counts, scores and timings, except the example cache. Kept compatible with
 Python 3.10.
@@ -25,7 +26,6 @@ import hashlib
 import json
 import os
 import time
-from collections.abc import Mapping
 from typing import Any
 
 from ril.training import pool_ranks as pr
@@ -47,7 +47,7 @@ from ril.training.pool_reader import (
     write_cache,
 )
 from ril.training.supervision import QualitySignal, TableKRank
-from ril.training.training import load_train_config, merge_results, train
+from ril.training.training import load_train_config, train
 
 Record = dict[str, Any]
 
@@ -160,7 +160,7 @@ def mine_job(
         from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
 
         if device.startswith("cuda"):
-            from ril.evaluation.x2_jobs import cuda_gate
+            from ril.util.gpu import cuda_gate
 
             gate = cuda_gate()
         spec = ENCODERS[teacher].with_max_tokens(cut)
@@ -213,7 +213,7 @@ def train_job(
     cfg = load_train_config(config_path)
     gate: Record | None = None
     if device.startswith("cuda"):
-        from ril.evaluation.x2_jobs import cuda_gate
+        from ril.util.gpu import cuda_gate
 
         gate = cuda_gate()
     else:
@@ -242,47 +242,3 @@ def train_job(
         stop_after=stop_after,
         extra_log=extra,
     )
-
-
-def eval_job(
-    config_path: str,
-    model_dir: str,
-    result_dir: str,
-    *,
-    e1_config: str,
-    prep_dir: str,
-    cache_dir: str,
-    data_root: str,
-    work_dir: str,
-    device: str,
-    baseline_enc_dirs: Mapping[str, str] | None = None,
-    dense_root: str | None = None,
-) -> Record:
-    """Evaluate a trained model directory with the configuration's ``evaluation`` section."""
-    from ril.evaluation.checkpoint_eval import eval_checkpoint
-    from ril.training.encoders import load_trained
-
-    cfg = load_train_config(config_path)
-    ev = dict(cfg["evaluation"])
-    ev.setdefault("variant", f"{cfg['exp_id']}__{os.path.basename(result_dir)}")
-    gate: Record | None = None
-    if device.startswith("cuda"):
-        from ril.evaluation.x2_jobs import cuda_gate
-
-        gate = cuda_gate()
-    enc = load_trained(model_dir, device=device)
-    out = eval_checkpoint(
-        enc,
-        ev,
-        e1_config=e1_config,
-        prep_dir=prep_dir,
-        cache_dir=cache_dir,
-        data_root=data_root,
-        work_dir=work_dir,
-        result_dir=result_dir,
-        baseline_enc_dirs=baseline_enc_dirs,
-        dense_root=dense_root,
-    )
-    out["gate"] = gate
-    merge_results(result_dir, "evaluation", out)
-    return out

@@ -24,7 +24,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import platform
 import subprocess
 import time
 from collections import Counter
@@ -65,6 +64,7 @@ from ril.parsing.code_unit import CODEUNIT_SCHEMA_VERSION, CodeUnit
 from ril.parsing.exploratory_edges import co_change_edges
 from ril.parsing.repo_graph import REPO_GRAPH_SCHEMA_VERSION, Edge
 from ril.parsing.repository_parser import PARSER_VERSION
+from ril.util.machine import hardware as hardware
 
 PILOT_VERSION = "pilot-m/v1"
 PREFIX_CHARS = 200
@@ -95,22 +95,6 @@ def config_hash(seed: int, draws: int) -> str:
     """SHA-256 of the canonical JSON of :func:`config_payload`."""
     blob = json.dumps(config_payload(seed, draws), sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
-
-
-def hardware() -> dict[str, Any]:
-    """Machine description recorded with every run."""
-    info: dict[str, Any] = {
-        "host": platform.node(),
-        "platform": platform.platform(),
-        "python": platform.python_version(),
-        "cpus_visible": os.cpu_count(),
-    }
-    try:
-        with open("/proc/meminfo", encoding="ascii") as handle:
-            info["mem_total_kb"] = int(handle.readline().split()[1])
-    except (OSError, ValueError, IndexError):
-        info["mem_total_kb"] = None
-    return info
 
 
 # --------------------------------------------------------------------------- git

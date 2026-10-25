@@ -21,6 +21,36 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
+def _evaluate(a: argparse.Namespace) -> dict[str, object]:
+    """Wiring only: the configuration's evaluation section, the trained model, the X2 hook."""
+    import os
+
+    from ril.evaluation.checkpoint_eval import eval_checkpoint
+    from ril.training.encoders import load_trained
+    from ril.training.training import load_train_config, merge_results
+    from ril.util.gpu import cuda_gate
+
+    cfg = load_train_config(a.config)
+    ev = dict(cfg["evaluation"])
+    ev.setdefault("variant", f"{cfg['exp_id']}__{os.path.basename(a.result_dir)}")
+    gate = cuda_gate() if a.device.startswith("cuda") else None
+    out = eval_checkpoint(
+        load_trained(a.model_dir, device=a.device),
+        ev,
+        e1_config=a.e1_config,
+        prep_dir=a.prep,
+        cache_dir=a.e3_cache,
+        data_root=a.data_root,
+        work_dir=a.work,
+        result_dir=a.result_dir,
+        baseline_enc_dirs=dict(x.split("=", 1) for x in a.baseline),
+        dense_root=a.dense_root,
+    )
+    out["gate"] = gate
+    merge_results(a.result_dir, "evaluation", out)
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -108,20 +138,7 @@ def main(argv: list[str] | None = None) -> int:
             stop_after=a.stop_after,
         )
     else:
-        base = dict(x.split("=", 1) for x in a.baseline)
-        out = tj.eval_job(
-            a.config,
-            a.model_dir,
-            a.result_dir,
-            e1_config=a.e1_config,
-            prep_dir=a.prep,
-            cache_dir=a.e3_cache,
-            data_root=a.data_root,
-            work_dir=a.work,
-            device=a.device,
-            baseline_enc_dirs=base,
-            dense_root=a.dense_root,
-        )
+        out = _evaluate(a)
     json.dump(out, sys.stdout, indent=1, sort_keys=True, default=str)
     sys.stdout.write("\n")
     return 0

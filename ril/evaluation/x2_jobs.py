@@ -45,48 +45,12 @@ from ril.bench.latency_harness import (
 from ril.evaluation.chunk_unit_pilot import hardware
 from ril.evaluation.x2_dense import VectorStore, encode_store, read_store
 from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder
+from ril.util.gpu import cuda_gate as cuda_gate
+from ril.util.gpu import model_revision as model_revision
 
 Record = dict[str, Any]
 BATCH = {"coderankembed": 64, "qwen3-embedding-0.6b": 16}
 """Encoding batch sizes per encoder on an 11 GB card (a fit, not a tuned value)."""
-
-
-def cuda_gate() -> Record:
-    """Real CUDA matrix product checked against the CPU; raises if the card is unusable."""
-    import torch  # type: ignore[import-not-found,unused-ignore]
-
-    if not torch.cuda.is_available():
-        raise RuntimeError("CUDA not available")
-    cap = torch.cuda.get_device_capability(0)
-    if cap < (7, 0):
-        raise RuntimeError(f"compute capability {cap} not supported by this build")
-    g = torch.Generator().manual_seed(0)
-    a = torch.randn(1024, 1024, generator=g)
-    b = torch.randn(1024, 1024, generator=g)
-    ref = a @ b
-    got = (a.cuda() @ b.cuda()).cpu()
-    torch.cuda.synchronize()
-    err = float((got - ref).abs().max())
-    if not err < 1e-2:
-        raise RuntimeError(f"CUDA matmul disagrees with CPU (max abs error {err})")
-    return {
-        "device": torch.cuda.get_device_name(0),
-        "capability": list(cap),
-        "matmul_max_abs_error": err,
-        "torch": torch.__version__,
-        "cuda": torch.version.cuda,
-    }
-
-
-def model_revision(model_id: str) -> str | None:
-    """Commit of the downloaded model repository (from the Hugging Face cache refs)."""
-    home = os.environ.get("HF_HOME", os.path.expanduser("~/.cache/huggingface"))
-    ref = os.path.join(home, "hub", "models--" + model_id.replace("/", "--"), "refs", "main")
-    try:
-        with open(ref, encoding="ascii") as handle:
-            return handle.read().strip()
-    except OSError:
-        return None
 
 
 def store_groups(

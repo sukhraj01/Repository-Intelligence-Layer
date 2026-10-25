@@ -213,9 +213,9 @@ def dense_job(
     """
     import torch  # type: ignore[import-not-found,unused-ignore]
 
-    from ril.evaluation.chunk_unit_pilot import hardware
-    from ril.evaluation.x2_jobs import cuda_gate, model_revision
     from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
+    from ril.util.gpu import cuda_gate, model_revision
+    from ril.util.machine import hardware
 
     log: Record = {"gate": cuda_gate(), "hardware": hardware(), "teachers": []}
     url, members = _listing(listing_path, _prefix_of(sample_path))
