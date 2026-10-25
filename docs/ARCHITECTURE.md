@@ -91,9 +91,9 @@ implementation and then written here.**
 ## training (`ril/training/`)
 
 - **Purpose:** produce the four supervision-arm encoders under matched optimizer updates.
-- **Files:** `contrastive_loss.py`, `training.py`, `data_loader.py`, `supervision.py`.
-- **Responsibilities:** multi-positive InfoNCE (τ=0.05) with repository-local hard negatives; arm logic (RAW/FILTER/WEIGHT/CURRICULUM) isolated in `supervision.py`; K-rank quality signal from a **separately pretrained** encoder; record compute cost, unique examples seen, effective epochs for every run.
-- **Dependencies:** `parsing/`, `config/`; imports the encoder *class* from `retrieval/`, never trained weights, for K-rank.
+- **Files:** `contrastive_loss.py`, `training.py`, `data_loader.py`, `supervision.py`; built 2026-10-25 with `pool_reader.py`, `negatives.py`, `encoders.py`, `train_jobs.py` (`ril/training/README.md`).
+- **Responsibilities:** multi-positive InfoNCE (τ=0.05) with repository-local hard negatives; arm logic (RAW/FILTER/WEIGHT/CURRICULUM) isolated in `supervision.py` as exactly three hooks (filter, weights, ordering; the negative policy is held identical across arms, DEV-012); K-rank quality signal from a **separately pretrained** encoder (a precomputed rank table); record compute cost, unique examples seen, effective epochs for every run.
+- **Dependencies:** `parsing/`, `config/`, `util/` (GPU gate, machine description); imports the encoder *class* from `retrieval/`, never trained weights, for K-rank. Never `evaluation/`, `analysis/` or `bench/` (leakage check (d)); the checkpoint evaluation (`evaluation/checkpoint_eval.py`) takes a trained encoder object and is wired in `scripts/train.py`.
 - **Defaults:** mean pooling (masked), lr 2e-5 linear decay, 10% warmup, 20,000 updates, max length 512, ≥3 seeds.
 - **Assumptions:** the training pool is repository-disjoint from all evaluation repos.
 - **Limitations:** FILTER reuses data more at equal updates (data-budget confound) — reported, plus a subsampled-RAW control.

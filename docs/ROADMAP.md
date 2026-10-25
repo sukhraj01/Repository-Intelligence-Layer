@@ -35,6 +35,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
 - [x] Dense encoder + flat exact index (`ril/retrieval/dense_encoder.py`, `provisional: ADR-006`; CodeRankEmbed and Qwen3-Embedding-0.6B measured zero-shot, E-DENSE-FUSION, 2026-10-25)
+- [x] Training stack (pool reader, multi-positive InfoNCE, pluggable negative policy, the three arm hooks with the identity test, budget accounting, checkpoints, evaluation hook; `ril/training/`, E-TRAIN-STACK, 2026-10-25; every training value `provisional: ADR-001, ADR-002, ADR-006`)
 - [ ] Baseline training (multi-positive InfoNCE, repo-local hard negatives)
 - [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list
 

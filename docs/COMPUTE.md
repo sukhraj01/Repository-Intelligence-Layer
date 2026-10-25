@@ -7,6 +7,19 @@ something new, update this file and say so in the commit message.
 
 ## Machines
 
+**Local machine: editing, `make lint`, `make test` (one worker) and git only.** The 8 GB machine crashed on
+2026-10-25 while torch was being installed and CPU training tests ran next to the editor. Nothing that
+imports torch, trains, encodes or loads a model runs locally, tiny tests included. torch is an optional
+Poetry group: `make setup` never installs it; `make setup-train` (Ada only) adds it; `make test` skips the
+`torch` and `slow` markers; `make test-all` is Ada only. The training stack's torch tests run as
+`scripts/ada/t1_tests.sbatch`.
+
+**Ada accounts.** Jobs are ledgered per account in `results/logs/ada_jobs.csv` (accounts named A, B, C in
+tracked text); GPU budgets are summed across accounts; one job never spans two accounts; per-user QOS limits
+apply per account. On 2026-10-25 only account A has an alias in the local SSH configuration (it answers
+`ssh -o BatchMode=yes -o ConnectTimeout=10`); B and C have no alias yet, so whether homes are shared is
+not measured (needs the engineer to add the aliases).
+
 | | Spec | Use for |
 |---|---|---|
 | Local dev box | 8 GB RAM, no GPU | parsing, unit tests, linting, tiny subsamples, writing sbatch scripts |
@@ -14,6 +27,27 @@ something new, update this file and say so in the commit message.
 
 Every benchmark records the exact hardware it ran on. Latency numbers from different machines are
 never compared without saying so.
+
+## Ada accounts
+
+Three logins, all with SSH key authentication (no password prompt once the key is accepted).
+
+| Login | Gateways | Slurm account / QOS | Limits (checked 2026-10-25) | `$HOME` |
+|---|---|---|---|---|
+| primary (`ssh ada`, `~/.ssh/config` host entry) | `ada-gw1.iiit.ac.in` | `-A research -q low` | 10 CPU, 1 GPU, 32,000 MB per user, 5 jobs (`myallocation`, 2026-10-23) | separate NFS home, about 25 GB |
+| course: `[login]` | `ssh [login]@ada-gw1.iiit.ac.in` or `ssh [login]@ada-gw2.iiit.ac.in` | `-A [course] -q [course]` | `cpu=10,gres/gpu=1` per user, **1 job**, **6 h wall time**, priority 0 (`sacctmgr show qos [course]`) | `/home2/[login]`, 25 GB, empty at first login |
+| teammate: `[login]` (key `~/.ssh/[key]`) | `ssh -i ~/.ssh/[key] [login]@ada-gw1.iiit.ac.in` or `…@ada-gw2.iiit.ac.in` | `-A research -q low` | `cpu=10,gres/gpu=1,mem=32000M` per user, 5 jobs, 4-day wall time, priority 10 (`sacctmgr show qos low`) | `/home2/[login]`, 50 GB, 13 GB already used by the account owner's files at first check |
+
+- The logins have separate homes, separate venvs and separate QOS limits; nothing staged under one is visible to the
+  other. A job on another login needs its own copy of the code, environment and caches.
+- QOS limits are per user, so each extra login adds its own 10 CPU / 1 GPU allowance. The course login's 1-job and
+  6-hour limits mean only short or resumable jobs fit there (training jobs must checkpoint and resume, see `scripts/ada/t1_train.sbatch`).
+- The GPU budget (decision D21, below) is counted per block of work across **all** logins.
+- The teammate login has the same QOS as the primary and the most free disk (about 38 GB). Work under a project
+  directory (e.g. `~/ril_*`) and never touch the owner's existing files.
+- Record which login and node a run used in its log; hardware comparisons follow the rule above.
+- Optional convenience: extra `~/.ssh/config` host entries (e.g. `Host ada2` with `User [login]`, `Host ada3` with
+  `User [login]` and `IdentityFile ~/.ssh/[key]`) so scripts can say `ssh ada2` / `ssh ada3`.
 
 ## Data acquisition rule
 
@@ -86,6 +120,9 @@ command instead. Each GPU job gets a row here when it finishes.
 | 2026-10-25 | 38291, 38292 | 1 | X3 reference jobs that read the pool listing instead of the reference listing (every directory a lookup error; resubmitted) | 1 x 00:00:37 | 0.01 | 3.36 |
 | 2026-10-25 | 38295 | 1 | X3 reference: SweRankEmbed-Small on 457 Verified-export directories (3.68 million functions, 161,946 encoded after per-repository dedup); gnode046 | 1 x 00:22:18 | 0.37 | 3.73 |
 | 2026-10-25 | 38296 | 1 | X3 reference: CodeRankEmbed on the same; gnode046 | 1 x 00:21:31 | 0.36 | 4.09 |
+| 2026-10-25 | 38741 | 2 | T1 training throughput, all shapes in one process (every shape out of memory after the first); account A, gnode045 | 1 x 00:00:52 | 0.01 | 0.01 |
+| 2026-10-25 | 38746 | 2 | T1 throughput job submitted with a wrong commit label, cancelled; account A | 1 x 00:00:06 | 0.00 | 0.02 |
+| 2026-10-25 | 38747 | 2 | T1 training throughput and peak memory per batch shape of CodeRankEmbed (fp32, float16 autocast, plus gradient checkpointing); account A, gnode046, CUDA gate passed | 1 x 00:06:55 | 0.12 | 0.13 |
 
 ## Log of cluster verification
 
@@ -110,3 +147,6 @@ command instead. Each GPU job gets a row here when it finishes.
 | 2026-10-23 | Structure-measurement jobs (u22, qos low, `~/ril_x1/`, reusing `~/ril_e/venv_ril310`, raw folders and bare clones by symbolic link): the QOS `low` limit is `cpu=10,gres/gpu=1,mem=32000M` per user and 5 jobs; Slurm rounds the CPU allocation up with the memory request (`--mem=16G` with 4 CPUs was allocated 6 CPUs, `--mem=12G` 5 or 6), so a second job waited on `QOSMaxCpuPerUserLimit` until resubmitted with `--cpus-per-task=4 --mem=10G` (allocated 4). Extras of 355 dev instances in 25.7 min (job 35493, 1.6 CPU-hours), 83 Verified-six instances in 22.5 min (job 35511, 1.0 CPU-hours, slower per instance: astropy and matplotlib with three parses each). The pilot-E1 unit stage on django takes about 1.5 min per instance on one process (35,000 units), so 136 django L3 instances take about 3.5 hours unsharded (jobs 35503, 35518; resumable) | measured |
 | 2026-10-23 | Dense-measurement jobs (u22, qos low, `~/ril_x2/`): `sinfo` lists `2080ti` as a node feature on u22 (14 idle, 20 mixed nodes at the check); `myallocation` shows only account `research` with QOS `low` (`cpu=10,gres/gpu=1,mem=32000M` per user, 5 jobs); a GPU environment (torch 2.4.1 for CUDA 12.1, transformers 4.51.3, sentence-transformers 4.1.0, numpy 1.26.4) built inside a CPU job with `pip --no-cache-dir` takes 4.4 GB and about 15 minutes; CodeRankEmbed's modelling code needs transformers 4.44.2, kept as a `--target` overlay (transformers 4.44.2, sentence-transformers 3.1.1, tokenizers 0.19.1; 87 MB) put first on `PYTHONPATH`, so one torch serves both models; both models load offline (`HF_HUB_OFFLINE=1`) from the shared cache. `$HOME` had 9.4 GB free at the start (removed regenerable X1 working clones and the superseded CPU venv: 11 GB free). The QOS limit is per user, not per project: jobs of another project under the same login holding all 10 CPUs keep a GPU job pending on `QOSMaxCpuPerUserLimit`; Slurm priority is flat (500), so pending jobs start in submission order as CPUs free up | measured, jobs 36028, 36066, 36072, 36104 |
 | 2026-10-25 | Pool-rank jobs (u22, qos low, `~/ril_x3/`, reusing `~/ril_x2/venv_gpu310` with the CodeRankEmbed overlay): SweRankEmbed-Small's configuration points to modelling code in another model repository whose weight loader looks the weights up by hub name at the default revision, so a pinned revision fails offline ("Model name ... was not found", job 38198); loading from the cached snapshot directory works (`dense_encoder.local_snapshot`). Range-request reads of pool directories inside a GPU job, fetched four ahead in threads, kept the GPU busy (5 GPU jobs, 0 fetch errors over 617 directories). A listing used for range reads must carry member offsets (the 2026-10-17 listing of `swe_bench_verified.zip` did not; re-listed with `scripts/ada/zip_remote_listing.py`). `$HOME` had 2.2 GB free at the start (SweRankEmbed-Small adds 0.55 GB to the model cache) and 1.9 GB at the end; nothing was staged | measured, jobs 38198, 38201, 38202, 38213, 38295, 38296 |
+| 2026-10-25 | Training-stack validation jobs (u22, qos low, CPU only, `~/ril_t1/`, reusing `~/ril_x2/venv_gpu310`; jobs 38730, 38731, gnode004, 2.1 and 3.0 min): `/ssd_scratch` does not exist on the login node or gnode004; node-local `/tmp` on gnode004 had 1.7 TB free. One step checkpoint of CodeRankEmbed with AdamW state plus a half-precision final model took 1.8 GB (final model alone 274 MB), against 1.8 GB free in `$HOME`: training jobs keep checkpoints in node-local space and copy only the half-precision final model to `$HOME` (`scripts/ada/t1_train.sbatch`); a resubmission that lands on another node restarts from update 0. The E3 cache under `~/ril_e/e3_cache` lacks the D18 no-module gold readings (job 38730 failed on `gold_L2_units_nomod`); the X2 evaluation used the local copy with them, now also at `~/ril_t1/work/e3_cache`. CodeRankEmbed fine-tuning on 4 CPU threads (E5-2640 v4), batch 2, 128 tokens: 4.5 s per update | measured, jobs 38730, 38731 |
+| 2026-10-25 | Course login `[login]`: `ssh -o BatchMode=yes` works on `ada-gw1` and `ada-gw2` (key auth); account `[course]`, QOS `[course]` = `cpu=10,gres/gpu=1` per user, 1 job, 6 h wall time, priority 0; `$HOME` `/home2/[login]` 25 GB, 0% used; login node Python 3.9.25; `sinfo` lists u22 (77 nodes), u22-cpu, ihub, plafnet2, rrc. Partition access for this account not yet tested with a job | verified |
+| 2026-10-25 | Teammate login `[login]` (key `~/.ssh/[key]`): `ssh -o BatchMode=yes` works on `ada-gw1` and `ada-gw2`; account `research`, QOS `low` = `cpu=10,gres/gpu=1,mem=32000M` per user, 5 jobs, 4-day wall time, priority 10; `$HOME` `/home2/[login]` 50 GB, 13 GB used, 38 GB free; no jobs queued. Not yet tested with a job | verified |

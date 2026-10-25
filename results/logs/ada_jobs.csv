@@ -1,0 +1,9 @@
+date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
+2026-10-25,A,38730,T1,training-stack validation (CPU): selection cache mining tiny training evaluation,u22,6,0,00:02:05,0.0,FAILED (evaluation: E3 cache without D18 readings)
+2026-10-25,A,38731,T1,training-stack validation (CPU) rerun with the D18 cache; CodeRankEmbed CPU path,u22,6,0,00:02:59,0.0,COMPLETED
+2026-10-25,A,38740,T1,example cache of 80 pool directories (CPU),u22,2,0,00:01:06,0.0,COMPLETED
+2026-10-25,A,38741,T1,training throughput per batch shape (GPU; one process for all shapes),u22,6,1,00:00:52,0.014,COMPLETED (every shape out of memory)
+2026-10-25,A,38746,T1,training throughput (GPU) submitted with a wrong commit label,u22,6,1,00:00:06,0.002,CANCELLED
+2026-10-25,A,38747,T1,training throughput per batch shape (GPU; one process per shape and setting),u22,6,1,00:06:55,0.115,COMPLETED
+2026-10-25,A,38808,T1,torch tests of the training stack and leakage tests (CPU),u22,2,0,00:00:39,0.0,FAILED (27 passed; 2 leakage tests missed a held-out file not staged)
+2026-10-25,A,38809,T1,torch tests of the training stack and leakage tests (CPU) rerun,u22,2,0,00:00:12,0.0,COMPLETED (29 passed; peak RSS 0.52 GB)

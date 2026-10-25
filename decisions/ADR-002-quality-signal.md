@@ -62,3 +62,26 @@ non-positive functions of its snapshot (the published SweRank construction), 1,5
 - Evidence class: measured (exploratory). Cheapest experiment that could flip a choice: E-PILOT-K (FILTER at K in {10, 20, 40} under
   each teacher and their agreement), which now has a per-positive rank table to draw from (`x3_pool_ranks_features.csv`; full pool by
   `scripts/ada/x3_dense.sbatch` with `SELECT=all`, about 4.9 GPU-hours per dense teacher).
+
+## Addendum 2026-10-25 — what the training stack implements as options (no decision)
+
+The training stack (`ril/training/`, `docs/EXPERIMENTS.md` E-TRAIN-STACK) implements the quality signal and the arms so that each open
+choice is one configuration value, none of them set by code defaults:
+- *K-rank source:* a precomputed per-positive rank table (the E-POOL-RANKS feature table, any teacher column), never the model being
+  trained; an example's K-rank is the minimum over its positives (the best-ranked positive), as in SweRank's definition.
+- *FILTER:* threshold `k` under a named teacher, at `level: positive` (drop positives ranked above `k`, keep them out of the loss as
+  neither positive nor negative, drop examples left without a positive) or `level: example` (keep a pull request if its best positive
+  passes, the PR-level reading of the SweRank+ filter, ADR-001 addendum). `k: null` is the identity.
+- *WEIGHT:* `power` (`min(1, (k / rank)^p)`) or `sigmoid` (`1 / (1 + exp((rank - k) / s))`) with a floor; the loss is normalised by the
+  batch size or by the weight sum (`loss.normaliser`). Weights that are all 1 are the identity.
+- *CURRICULUM:* easy to hard by K-rank as a stable sort of the pass's random permutation, optionally by quantile bucket; repeated each
+  pass. A constant difficulty is the identity.
+- *Negatives:* held identical across arms (DEV-012, Q46); options listed there.
+- *Loss form:* CORE-Bench's multi-positive form (positives summed in the numerator) or the mean over positives with the other positives
+  out of each other's denominators (SweRank's per-positive instances).
+- Measured property (test, not an experiment): at each hook's identity limit the other arms give bit-identical batches, first gradients
+  and trained parameters to RAW's (`tests/unit/test_arms_only_differ_through_hooks.py`).
+- Open point raised: if the base encoder is CodeRankEmbed and the K-rank teacher is CodeRankEmbed, the teacher is a frozen copy of the
+  starting weights. That is not the "model being trained" (its ranks never move), but it is the model's own starting view of which
+  examples are easy, which is close to the self-confirming loop the design warns about (Q52). Evidence class: reasoned only. Cheapest
+  experiment: E-PILOT-K under CodeRankEmbed and under BM25 as teachers with CodeRankEmbed as the base, two seeds, dev repositories.

@@ -119,3 +119,11 @@ engineer sign-off — it is a design decision.
 - Impact: references only; no figure used in an experiment changes. Corrected in the derived copies with the marker of DEV-010; the master document is the engineer's to correct.
 - Reversible: yes.
 - Related: DEV-005, DEV-007, DEV-010
+
+## DEV-012 — The negative policy is held identical across the four RQ2 arms   (2026-10-25 · status: proposed)
+- Master says: `docs/08_experimental_design.md`, "The four supervision arms": RAW uses "random in-batch" negatives, FILTER, WEIGHT and CURRICULUM use "mined hard" negatives; "Varies: the supervision strategy, and nothing else."
+- We do: the training stack holds the negative policy identical across the arms; an arm enters only through three hooks (example filter, per-example weights, ordering), and a comparison of arm configurations that differ in the negative policy is refused (`ril/training/training.py`, `check_comparable`). This follows the answer to the previous wave's pushback ("structural negatives stay out of the four arms ... with the negative policy held identical across arms", ADR-003 addendum) and open question Q46. Which policy is held (random repository-local, teacher top-M, teacher top-M with a positive-relative cut) is open.
+- Why: with the table as written, RAW would differ from the other arms in two things (supervision of positives and the negative source), so a RAW-versus-FILTER difference could not be attributed to filtering. The two statements in the master section conflict; the code takes "nothing else varies".
+- Impact: RQ2's definition of RAW. It changes what is held identical, so ADR-002 owns it. If the engineer keeps the master's table, the negative policy becomes a fourth hook (one configuration key moves from the held-identical part to the arm; the identity test gains a case); the data loader already takes the policy as a parameter.
+- Reversible: yes, at the cost of that change and of stating RAW's two differences in the report.
+- Related: ADR-002, ADR-003, Q46

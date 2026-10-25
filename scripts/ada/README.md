@@ -200,3 +200,21 @@ dedup from a wall-time model of the measured runs, 8.3 conservative): four GPU s
 `python scripts/pool_ranks.py tables <sample> <rank files> --config configs/experiments/x3_pool_ranks.yaml --out-dir results/tables ...`
 (arguments as in the run log `results/logs/x3_pool_ranks_2026-10-25.json`). The listing the jobs read must carry member offsets
 (`scripts/ada/zip_remote_listing.py URL OUT.json`).
+
+## Training stack (2026-10-25)
+
+Work directory `~/ril_t1/` (`rsync -a --exclude __pycache__ ril scripts configs ada:ril_t1/`, plus `data/held_out/held_out_repos.json`,
+`data/held_out/rename_cache.json`, `results/tables/x3_pool_ranks_features.csv` and the E3 cache with the D18 no-module readings,
+`rsync -a data/processed/x2/e3_cache/ ada:ril_t1/work/e3_cache/`). It reuses `~/ril_x2/venv_gpu310` (torch 2.4.1) with the CodeRankEmbed
+overlay, the listing `~/ril_s2/raw/ziplist_train.json`, the model cache `~/ril_e/hf_cache` and the X2 preparation (`~/ril_x2/prep`,
+`~/ril_x2/raw`, `~/ril_x2/enc`, `~/ril_x2/dense`) for evaluation. `work/pool.jsonl.gz` (the example cache) holds pool text and never
+leaves the cluster; everything else is ids, scores, counts and timings. Stages, all via `scripts/train.py` (logic in `ril/training/`):
+`select` (held-out list, feature table, seeded subset) -> `cache` (range requests) -> `mine` (teacher scores; `--device cuda` for a
+dense teacher) -> `train` (resumable) -> `eval` (X2 machinery on the dev repositories).
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `t1_validate.sbatch` | CPU: the whole path on 24 real pool directories with the tiny model (FILTER hook, BM25-mined negatives, evaluation paired against CodeRankEmbed), then the CodeRankEmbed path for 4 updates (interrupted and resumed, half-precision final model, reload); checkpoints in node-local `/tmp` | `sbatch --export=ALL,RIL_COMMIT=<hash> ril_t1/scripts/ada/t1_validate.sbatch` |
+| `t1_train.sbatch` | GPU template (2080 Ti, CUDA gate before any data is read): one run of a configuration from the example cache, optional evaluation (`EVAL=1`); checkpoints in node-local space, final model copied to `~/ril_t1/models/` | `sbatch --export=ALL,CONFIG=configs/experiments/<exp>.yaml,CACHE=work/pool.jsonl.gz,MINED=<file>,EVAL=1,RIL_COMMIT=<hash> ril_t1/scripts/ada/t1_train.sbatch` |
+| `t1_measure.sbatch` | GPU (2080 Ti, CUDA gate): training throughput and peak memory per batch shape and setting (fp32, float16 autocast, plus gradient checkpointing), one process per shape, `train_step` rows (6.9 min for 27 shape-settings) | `sbatch --export=ALL,CACHE=work/pool80.jsonl.gz,RIL_COMMIT=<hash> ril_t1/scripts/ada/t1_measure.sbatch` |
+| `t1_tests.sbatch` | CPU: the torch tests and the leakage tests (the local machine runs no torch); pytest, pyyaml, pystemmer added once as a `--target` overlay (12 s, 0.52 GB peak) | `sbatch --export=ALL ril_t1/scripts/ada/t1_tests.sbatch` |

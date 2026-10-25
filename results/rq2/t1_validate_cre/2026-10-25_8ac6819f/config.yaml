@@ -1,0 +1,47 @@
+arm:
+  name: RAW
+batch:
+  batch_size: 2
+  max_positives: 1
+  negatives_per_example: 1
+budget:
+  updates: 4
+checkpoint:
+  every: 2
+  final_dtype: float16
+  keep: 1
+  log_every: 1
+exp_id: t1_validate_cre
+label: training-stack validation, CodeRankEmbed path on CPU, exploratory
+loss:
+  form: sum_in_numerator
+  normaliser: batch
+  temperature: 0.05
+model:
+  encoder: coderankembed
+  kind: sentence_transformers
+  max_tokens: 128
+negatives:
+  name: random_repo
+optimizer:
+  grad_clip: 1.0
+  lr: 2.0e-05
+  name: adamw
+  schedule: linear
+  warmup_updates: 1
+  weight_decay: 0.01
+pool:
+  feature_table: results/tables/x3_pool_ranks_features.csv
+  held_out: data/held_out/held_out_repos.json (v2, core plus Loc-Bench tier) with
+    data/held_out/rename_cache.json
+  max_instances: 24
+  selection_seed: 0
+  source: gangiswag/train_data train.zip, train/python (listing of 2026-10-17, member
+    offsets)
+  text_form: code
+provisional:
+- ADR-001
+- ADR-002
+- ADR-006
+rq: rq2
+seed: 0

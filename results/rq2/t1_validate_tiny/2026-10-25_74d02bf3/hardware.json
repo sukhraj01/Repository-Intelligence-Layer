@@ -1,0 +1,9 @@
+{
+ "cpus_visible": 40,
+ "device": "cpu",
+ "host": "gnode004",
+ "platform": "Linux-5.15.0-198-generic-x86_64-with-glibc2.35",
+ "python": "3.10.12",
+ "slurm_job_id": "38731",
+ "torch": "2.4.1+cu121"
+}
