@@ -355,3 +355,42 @@ def test_group_members_and_reference_instances() -> None:
     assert insts[0].repo == "o/r" and insts[0].pr == 7 and insts[0].corpus_bytes == 50
     with pytest.raises(ValueError):
         pr.reference_instances({"noseparator-1": groups["p_o__r-7"]}, "p_")
+
+
+def test_exact_interval_and_reference_rows() -> None:
+    lo, hi = xt.exact_interval(0, 160)
+    assert lo == 0.0 and hi == pytest.approx(0.0228, abs=2e-4)
+    lo, hi = xt.exact_interval(2, 160)
+    assert lo == pytest.approx(0.0015, abs=2e-4) and hi == pytest.approx(0.0444, abs=3e-4)
+    insts, _ = pr.build_instances(
+        [{"dir": f"o__r-{i}", "corpus_bytes": 10, "positives": 1} for i in range(4)],
+        lambda r: False,
+    )
+    rows = [
+        {
+            "dir": f"o__r-{i}",
+            "teacher": "a",
+            "functions": 9,
+            "ranks": [{"positive": "p", "rank": r, "rank_all": r, "ties": 0}],
+        }
+        for i, r in enumerate((1, 5, 50, 500))
+    ]
+    rs = xt.RankSet("a", insts, rows)
+    out = xt.reference_rows(rs, rs, [40])
+    one = [r for r in out if r["bin"] == "1"][0]
+    assert one["pool_dirs"] == 4 and one["pool_none"] == 2 and one["reference_pct_none"] == 50.0
+    by_f = xt.reference_rows(rs, rs, [40], xt.FUNCTION_BINS, by="functions")
+    small = [r for r in by_f if r["bin"] == "1-999"][0]
+    assert small["pool_dirs"] == 4  # every snapshot has 9 functions
+
+
+def test_wall_model_recovers_coefficients() -> None:
+    runs = [
+        {"functions": f, "encoded": e, "wall_seconds": 0.001 * f + 0.004 * e}
+        for f, e in ((100, 90), (1000, 100), (5000, 300))
+    ]
+    a, b = xt.wall_model(runs)
+    assert a == pytest.approx(0.001) and b == pytest.approx(0.004)
+    assert xt.gpu_hours_from_wall(a, b, 3600, 0.5) == pytest.approx((3.6 + 7.2) / 3600)
+    logs = [{"teachers": [{"teacher": "t", "cache_hits": 3, "cache_misses": 2, "wall_seconds": 1}]}]
+    assert xt.runs_from_dense_logs(logs)[0]["functions"] == 5

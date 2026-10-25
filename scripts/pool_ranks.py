@@ -6,6 +6,7 @@ Subcommands (logic in ``ril/``):
   dense  LISTING OUT LOG --teachers T [T ...] --cut C [--sample SAMPLE | --meta META] [--shard I N]
   dedup  LISTING META OUT --repos-per-bin N --seed S
   reference LISTING OUT [--prefix P] [--strip S]  (selection file of a reference archive)
+  reference-tables SAMPLE REF_SAMPLE --ranks R [R ...] --ref-ranks R [R ...] --config C --out-dir D
   tables SAMPLE RANKS [RANKS ...] --config CONFIG --out-dir DIR [--dedup DEDUP]
          [--dense-log LOG ...]
          [--pool-sample POOL_SAMPLE] [--meta META]
@@ -59,6 +60,13 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("out")
     r.add_argument("--prefix", default="swe_bench_verified/")
     r.add_argument("--strip", default="swe-bench-verified-function_")
+    rt = sub.add_parser("reference-tables")
+    rt.add_argument("sample")
+    rt.add_argument("ref_sample")
+    rt.add_argument("--ranks", nargs="+", required=True)
+    rt.add_argument("--ref-ranks", nargs="+", required=True)
+    rt.add_argument("--config", required=True)
+    rt.add_argument("--out-dir", required=True)
     t = sub.add_parser("tables")
     t.add_argument("sample")
     t.add_argument("ranks", nargs="+")
@@ -71,6 +79,14 @@ def main(argv: list[str] | None = None) -> int:
     t.add_argument("--private-dir")
     a = p.parse_args(argv)
 
+    if a.cmd == "reference-tables":
+        from ril.analysis.x3_tables import write_reference_tables
+
+        res = write_reference_tables(
+            a.sample, a.ranks, a.ref_sample, a.ref_ranks, a.config, a.out_dir
+        )
+        sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
+        return 0
     if a.cmd == "tables":
         from ril.analysis.x3_tables import write_tables
 

@@ -15,7 +15,8 @@
 # per directory (resumable). Needs x3_prepare (models in the cache, loaded offline once).
 #   sbatch --export=ALL,RIL_COMMIT=<hash> ril_x3/scripts/ada/x3_dense.sbatch
 # Text-form sensitivity: FORM=pool OUT_NAME=ranks_dense_poolform.jsonl TEACHERS=swerankembed-small.
-# Reference archive (Verified, never filtered): SAMPLE_NAME=verified_sample.json OUT_NAME=... (see README).
+# Reference archive (Verified, never filtered): LISTING=$HOME/ril_x3/work/ziplist_verified.json
+# SAMPLE_NAME=verified_sample.json OUT_NAME=... (see scripts/ada/README.md).
 # Full pool (not run by default): SELECT=all SHARD="i n" (repositories split by hash) with a longer
 # --time; see scripts/ada/README.md for the estimate.
 set -euo pipefail
@@ -24,7 +25,7 @@ X2=$HOME/ril_x2
 E=$HOME/ril_e
 PYV=$(python3 -c 'import sys; print("%d%d" % sys.version_info[:2])')
 GV=$X2/venv_gpu$PYV
-LIST=$HOME/ril_s2/raw/ziplist_train.json
+LIST=${LISTING:-$HOME/ril_s2/raw/ziplist_train.json}
 META=$HOME/ril_pc/work/pool_meta.jsonl
 export HF_HOME=$E/hf_cache HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 cd "$W"

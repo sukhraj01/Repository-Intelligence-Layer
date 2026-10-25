@@ -24,6 +24,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
@@ -606,3 +607,159 @@ def write_tables(
     ]
     summary["feature_rows"] = len(feats)
     return summary
+
+
+# --------------------------------------------------------------------------------------------
+# reference comparison (pool sample against a never-filtered reference archive)
+
+
+POSITIVE_BINS: tuple[tuple[int, int], ...] = ((1, 1), (2, 3), (4, 9), (10, 10**9))
+
+
+def exact_interval(k: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
+    """Clopper-Pearson interval of a binomial share ``k / n`` (bisection on the binomial CDF)."""
+    if n <= 0 or not 0 <= k <= n:
+        raise ValueError("need 0 <= k <= n and n > 0")
+
+    def cdf(j: int, p: float) -> float:
+        return float(sum(math.comb(n, i) * p**i * (1 - p) ** (n - i) for i in range(j + 1)))
+
+    def solve(pred: Callable[[float], bool]) -> float:
+        lo, hi = 0.0, 1.0
+        for _ in range(60):
+            mid = (lo + hi) / 2
+            if pred(mid):
+                lo = mid
+            else:
+                hi = mid
+        return lo
+
+    lower = 0.0 if k == 0 else solve(lambda p: 1 - cdf(k - 1, p) < alpha / 2)
+    upper = 1.0 if k == n else solve(lambda p: cdf(k, p) > alpha / 2)
+    return lower, upper
+
+
+def _bin_label(lo: int, hi: int) -> str:
+    return str(lo) if lo == hi else (f"{lo}+" if hi >= 10**9 else f"{lo}-{hi}")
+
+
+FUNCTION_BINS: tuple[tuple[int, int], ...] = ((1, 999), (1000, 2999), (3000, 9999), (10000, 10**9))
+
+
+def reference_rows(
+    pool: RankSet,
+    ref: RankSet,
+    ks: Sequence[int],
+    bins: Sequence[tuple[int, int]] = POSITIVE_BINS,
+    by: str = "positives",
+) -> list[Record]:
+    """Share of directories with no positive in the top k, pool sample against reference.
+
+    Within bins of positives per directory (``by='positives'``: the chance that some positive
+    ranks high grows with their number) or of functions per snapshot (``by='functions'``: ranks
+    are harder in larger snapshots); plain sample shares with exact intervals (the pool sample is
+    stratified by size and held-out flag, not weighted here).
+    """
+    out: list[Record] = []
+    for lo, hi in [*bins, (1, 10**9)]:
+        label = "all" if (lo, hi) == (1, 10**9) else _bin_label(lo, hi)
+        for k in ks:
+            row: Record = {
+                "teacher": pool.teacher,
+                "reference_teacher": ref.teacher,
+                "binned_by": by,
+                "bin": label,
+                "k": k,
+            }
+            for name, rs in (("pool", pool), ("reference", ref)):
+                size = [len(xs) for xs in rs.ranks] if by == "positives" else list(rs.functions)
+                pairs = zip(rs.ranks, size, strict=True)
+                sel = [min(xs) for xs, n in pairs if lo <= n <= hi]
+                n = len(sel)
+                none = sum(1 for m in sel if m > k)
+                row[f"{name}_dirs"] = n
+                row[f"{name}_none"] = none
+                if n:
+                    lo_ci, hi_ci = exact_interval(none, n)
+                    row[f"{name}_pct_none"] = _pct(none / n)
+                    row[f"{name}_pct_none_ci"] = [_pct(lo_ci), _pct(hi_ci)]
+            out.append(row)
+    return out
+
+
+def write_reference_tables(
+    sample_path: str,
+    rank_paths: Sequence[str],
+    ref_sample_path: str,
+    ref_rank_paths: Sequence[str],
+    config_path: str,
+    out_dir: str,
+) -> Record:
+    """Write the pool-against-reference table for every teacher present in both."""
+    with open(config_path, encoding="utf-8") as handle:
+        cfg = yaml.safe_load(handle)
+    form = str(cfg.get("text_form", "code"))
+    ks = tuple(int(k) for k in cfg["k_cuts"])
+
+    def load(sp: str, paths: Sequence[str]) -> tuple[list[pr.PoolInstance], list[Record]]:
+        with open(sp, encoding="utf-8") as handle:
+            doc = json.load(handle)
+        insts = [pr.instance_from_record(r) for r in doc["sample"]]
+        return insts, [relabel(r, form) for p in paths for r in pr.read_jsonl(p)]
+
+    p_inst, p_rows = load(sample_path, rank_paths)
+    r_inst, r_rows = load(ref_sample_path, ref_rank_paths)
+    teachers = sorted({str(r["teacher"]) for r in r_rows} & {str(r["teacher"]) for r in p_rows})
+    rows: list[Record] = []
+    covered: Record = {}
+    for t in teachers:
+        ps, rs = RankSet(t, p_inst, p_rows), RankSet(t, r_inst, r_rows)
+        covered[t] = {
+            "pool": len(ps.instances),
+            "reference": len(rs.instances),
+            "reference_positives": int(rs.flat().size),
+            "reference_median_rank": float(np.median(rs.flat())),
+        }
+        rows += reference_rows(ps, rs, ks)
+        by_size = reference_rows(ps, rs, ks, FUNCTION_BINS, by="functions")
+        rows += [r for r in by_size if r["bin"] != "all"]
+    prefix = os.path.join(out_dir, str(cfg["table_prefix"]))
+    write_csv(f"{prefix}_reference.csv", rows)
+    return {"config_hash": config_hash(cfg), "covered": covered, "rows": rows}
+
+
+def wall_model(runs: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
+    """Least-squares ``wall = a * functions + b * encoded`` (seconds) over measured GPU runs.
+
+    Why: the GPU is held for the whole loop, not only while encoding; texts found in the
+    per-repository cache still cost hashing, stacking and a product on the CPU. ``runs`` carry
+    ``functions`` (cache hits plus misses), ``encoded`` (misses) and ``wall_seconds``.
+    """
+    x = np.asarray([[float(r["functions"]), float(r["encoded"])] for r in runs])
+    y = np.asarray([float(r["wall_seconds"]) for r in runs])
+    coef, *_ = np.linalg.lstsq(x, y, rcond=None)
+    return float(coef[0]), float(coef[1])
+
+
+def gpu_hours_from_wall(
+    a: float, b: float, functions: float, dedup_ratio: float, teachers: int = 1
+) -> float:
+    """GPU-hours of the whole loop for ``functions`` texts at a dedup ratio (wall model above)."""
+    return teachers * (a * functions + b * functions * dedup_ratio) / 3600.0
+
+
+def runs_from_dense_logs(logs: Sequence[Mapping[str, Any]]) -> list[Record]:
+    """Per-teacher run records (functions, encoded, wall seconds) of dense job logs."""
+    out: list[Record] = []
+    for log in logs:
+        for t in log.get("teachers", []):
+            out.append(
+                {
+                    "teacher": t["teacher"],
+                    "form": t.get("form"),
+                    "functions": int(t["cache_hits"]) + int(t["cache_misses"]),
+                    "encoded": int(t["cache_misses"]),
+                    "wall_seconds": float(t["wall_seconds"]),
+                }
+            )
+    return out
