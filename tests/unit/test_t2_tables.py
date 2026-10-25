@@ -138,3 +138,10 @@ def test_teacher_rows_shares_and_agreement(tmp_path: Path) -> None:
     assert by[("a", 5)]["positives"] == 12
     assert by[("a+b", 5)]["positives_inside_share"] <= by[("b", 5)]["positives_inside_share"]
     assert any(r["measure"] == "spearman_rank" and r["value"] == 1.0 for r in agree)
+
+
+def test_wilson_interval_bounds_and_large_n() -> None:
+    lo, hi = tt.wilson_interval(0, 2000)
+    assert lo < 1e-12 and 0 < hi < 0.003
+    lo, hi = tt.wilson_interval(1000, 2000)
+    assert lo < 0.5 < hi and abs((lo + hi) / 2 - 0.5) < 1e-9

@@ -327,6 +327,17 @@ def pilot_tables(
 # --------------------------------------------------------------------------- teacher ranks
 
 
+def wilson_interval(k: int, n: int, z: float = 1.959964) -> tuple[float, float]:
+    """Wilson score interval of a binomial share ``k / n`` (95% by default)."""
+    if n <= 0:
+        return (float("nan"), float("nan"))
+    p = k / n
+    den = 1 + z * z / n
+    mid = (p + z * z / (2 * n)) / den
+    half = z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / den
+    return (max(0.0, mid - half), min(1.0, mid + half))
+
+
 def teacher_rows(
     rank_paths: Sequence[str],
     teachers: Sequence[str],
@@ -337,12 +348,13 @@ def teacher_rows(
     """K-rank shares per teacher (and the agreement of each pair) and pairwise agreement rows.
 
     Shares on the selection (no strata): positives inside the top K, directories with no positive
-    inside, with exact binomial intervals for the directory share (positives within one directory
+    inside, with Wilson 95% intervals for the directory share (the exact interval of E-POOL-RANKS
+    overflows a float at n = 2,000) (positives within one directory
     are not independent, so the positive share carries no interval here). Agreement: Spearman of
     ranks per positive (instance-clustered bootstrap) and Cohen's kappa of top-K membership, as in
     E-POOL-RANKS (``ril.analysis.x3_tables.agreement_rows``).
     """
-    from ril.analysis.x3_tables import RankSet, _rank_map, agreement_rows, exact_interval
+    from ril.analysis.x3_tables import RankSet, _rank_map, agreement_rows
     from ril.training import pool_ranks as pr
     from ril.training.pool_check import split_instance_dir
 
@@ -363,7 +375,7 @@ def teacher_rows(
         for k in ks:
             inside = sum(1 for xs in per_dir for x in xs if x <= k)
             none = sum(1 for xs in per_dir if not any(x <= k for x in xs))
-            lo, hi = exact_interval(none, n_dir)
+            lo, hi = wilson_interval(none, n_dir)
             shares.append(
                 {
                     "teacher": name,

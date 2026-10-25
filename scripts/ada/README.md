@@ -218,3 +218,19 @@ dense teacher) -> `train` (resumable) -> `eval` (X2 machinery on the dev reposit
 | `t1_train.sbatch` | GPU template (2080 Ti, CUDA gate before any data is read): one run of a configuration from the example cache, optional evaluation (`EVAL=1`); checkpoints in node-local space, final model copied to `~/ril_t1/models/` | `sbatch --export=ALL,CONFIG=configs/experiments/<exp>.yaml,CACHE=work/pool.jsonl.gz,MINED=<file>,EVAL=1,RIL_COMMIT=<hash> ril_t1/scripts/ada/t1_train.sbatch` |
 | `t1_measure.sbatch` | GPU (2080 Ti, CUDA gate): training throughput and peak memory per batch shape and setting (fp32, float16 autocast, plus gradient checkpointing), one process per shape, `train_step` rows (6.9 min for 27 shape-settings) | `sbatch --export=ALL,CACHE=work/pool80.jsonl.gz,RIL_COMMIT=<hash> ril_t1/scripts/ada/t1_measure.sbatch` |
 | `t1_tests.sbatch` | CPU: the torch tests and the leakage tests (the local machine runs no torch); pytest, pyyaml, pystemmer added once as a `--target` overlay (12 s, 0.52 GB peak) | `sbatch --export=ALL ril_t1/scripts/ada/t1_tests.sbatch` |
+
+## Smoke pilots (2026-10-25)
+
+Work directory `~/ril_t2/` (`rsync -a --exclude __pycache__ ril scripts configs ada:ril_t2/`, plus
+`data/held_out/held_out_repos.json` and `data/held_out/rename_cache.json`); reuses `~/ril_x2/venv_gpu310` with the CodeRankEmbed
+overlay, the model cache `~/ril_e/hf_cache`, the X2 preparation and baseline scores (`~/ril_x2/{prep,raw,enc,dense}`) and the E3
+cache with the D18 readings (`~/ril_t1/work/e3_cache`). Example caches hold pool text and stay on the cluster.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `t2_prep.sbatch` | CPU: selections A (2,000 outside the held-out list) and L (2,000 of the whole listing, leakage pilot) by the seeded order, and their example caches (52 min, 263 + 301 MB) | `sbatch --export=ALL,RIL_COMMIT=<hash> ril_t2/scripts/ada/t2_prep.sbatch` |
+| `t2_teachers.sbatch` | GPU: one pass per dense teacher over cache A (K-ranks and the top 64 candidates) | `sbatch --export=ALL,RIL_COMMIT=<hash> ril_t2/scripts/ada/t2_teachers.sbatch` |
+| `t2_bm25.sbatch` | CPU: the BM25 pass; with `FEATURES=1` (after the dense passes) the feature table and the teacher tables | `sbatch --export=ALL,RIL_COMMIT=<hash>[,FEATURES=1] ril_t2/scripts/ada/t2_bm25.sbatch` |
+| `t2_runs.sbatch` | GPU: a batch of configurations trained and evaluated from one loaded cache; models stay node-local and are deleted; finished runs skipped | `sbatch --export=ALL,CONFIGS="configs/experiments/t2/<a>.yaml ...",CACHE=work/pool_A.jsonl.gz,FEATURES=work/t2_features_A.csv,MINED=work/mined_A_coderankembed.jsonl.gz[,EXTRA=configs/experiments/t2/eval_verified_six.yaml],RIL_COMMIT=<hash> ril_t2/scripts/ada/t2_runs.sbatch` |
+
+Tables: `scripts/t2_tables.py pilots configs/experiments/t2_pilots.yaml ril_t2/results out/tables <log>` (CPU, seconds).
