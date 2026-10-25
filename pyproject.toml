@@ -25,6 +25,11 @@ rustworkx = ">=0.14"
 kuzu = ">=0.4"
 bm25s = ">=0.2"
 
+# Training stack (ril/training/trainer and its CPU tests); the same torch version as the cluster's
+# GPU environment (docs/COMPUTE.md).
+[tool.poetry.group.train.dependencies]
+torch = "2.4.1"
+
 [build-system]
 requires = ["poetry-core>=2.0"]
 build-backend = "poetry.core.masonry.api"

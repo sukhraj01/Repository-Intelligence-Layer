@@ -79,7 +79,7 @@ class EmbeddingStore:
 
 def load_model() -> Any:
     """CodeRankEmbed on CPU with the sequence cut used here."""
-    import torch  # type: ignore[import-not-found]
+    import torch  # type: ignore[import-not-found,unused-ignore]
     from sentence_transformers import SentenceTransformer  # type: ignore[import-not-found]
 
     torch.set_num_threads(int(os.environ.get("RIL_THREADS", "4")))
