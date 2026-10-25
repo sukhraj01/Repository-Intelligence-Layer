@@ -158,7 +158,13 @@ class SentenceTransformerEncoder:
 
     @classmethod
     def from_registry(
-        cls, name: str, max_tokens: int, *, device: str, local_dir: str | None = None
+        cls,
+        name: str,
+        max_tokens: int,
+        *,
+        device: str,
+        local_dir: str | None = None,
+        gradient_checkpointing: bool = False,
     ) -> SentenceTransformerEncoder:
         from sentence_transformers import (  # type: ignore[import-not-found,unused-ignore]
             SentenceTransformer,
@@ -172,7 +178,10 @@ class SentenceTransformerEncoder:
         kwargs: dict[str, Any] = {"trust_remote_code": spec.trust_remote_code, "device": device}
         if spec.revision and local_dir is None:
             kwargs["revision"] = spec.revision
-        return cls(spec, SentenceTransformer(local_dir or spec.model_id, **kwargs))
+        model = SentenceTransformer(local_dir or spec.model_id, **kwargs)
+        if gradient_checkpointing:
+            model[0].auto_model.gradient_checkpointing_enable()
+        return cls(spec, model)
 
     def embed(self, texts: Sequence[str], is_query: bool) -> torch.Tensor:
         feed = [self.spec.query_text(t) for t in texts] if is_query else list(texts)
@@ -211,7 +220,11 @@ def build_encoder(cfg: Mapping[str, Any], *, device: str, seed: int) -> TrainEnc
         enc: TrainEncoder = TinyEncoder(int(cfg["buckets"]), int(cfg["dim"]), max_tokens, seed)
     elif kind == "sentence_transformers":
         enc = SentenceTransformerEncoder.from_registry(
-            str(cfg["encoder"]), max_tokens, device=device, local_dir=cfg.get("local_dir")
+            str(cfg["encoder"]),
+            max_tokens,
+            device=device,
+            local_dir=cfg.get("local_dir"),
+            gradient_checkpointing=bool(cfg.get("gradient_checkpointing", False)),
         )
     else:
         raise ValueError(f"unknown model kind {kind!r}")

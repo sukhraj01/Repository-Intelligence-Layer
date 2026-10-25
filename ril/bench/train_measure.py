@@ -36,32 +36,42 @@ from ril.training.encoders import build_encoder
 from ril.training.negatives import Mined
 from ril.training.pool_reader import PoolExample
 from ril.training.supervision import QualitySignal
-from ril.training.training import (
-    batch_loss,
-    build_optimizer,
-    config_hash,
-    make_planner,
-    prepare_arm,
-)
+from ril.training.training import Updater, config_hash, make_planner, prepare_arm
 
 Record = dict[str, Any]
 
 
 def workload_id(cfg: Mapping[str, Any]) -> str:
-    """Throughput workload name of one batch shape."""
+    """Throughput workload name of one batch shape (precision, checkpointing when not default)."""
     m, b = cfg["model"], cfg["batch"]
     enc = m.get("encoder", m["kind"])
+    extra = ""
+    if cfg["optimizer"].get("precision", "fp32") != "fp32":
+        extra += f"-{cfg['optimizer']['precision']}"
+    if m.get("gradient_checkpointing"):
+        extra += "-gc"
     return (
         f"train-{enc}-b{b['batch_size']}-n{b['negatives_per_example']}-p{b['max_positives']}"
-        f"-t{m['max_tokens']}-v1"
+        f"-t{m['max_tokens']}{extra}-v1"
     )
 
 
 def shape_config(
-    cfg: Mapping[str, Any], batch_size: int, negatives: int, positives: int, max_tokens: int
+    cfg: Mapping[str, Any],
+    batch_size: int,
+    negatives: int,
+    positives: int,
+    max_tokens: int,
+    *,
+    precision: str | None = None,
+    gradient_checkpointing: bool | None = None,
 ) -> Record:
     """The configuration with one batch shape substituted (everything else unchanged)."""
     out = copy.deepcopy(dict(cfg))
+    if precision is not None:
+        out["optimizer"] = {**out["optimizer"], "precision": precision}
+    if gradient_checkpointing is not None:
+        out["model"] = {**out["model"], "gradient_checkpointing": gradient_checkpointing}
     out["batch"] = {
         **out["batch"],
         "batch_size": batch_size,
@@ -91,17 +101,13 @@ def measure_shape(
     batches = list(planner.batches(warmup + timed))
     enc = build_encoder(cfg["model"], device=device, seed=int(cfg["seed"]))
     enc.module.train()
-    opt, sched = build_optimizer(enc, cfg["optimizer"], warmup + timed)
+    upd = Updater(enc, cfg, warmup + timed, device)
     state = {"i": 0}
 
     def step() -> int:
         b = batches[state["i"]]
         state["i"] += 1
-        loss, _ = batch_loss(enc, b, cfg["loss"])
-        opt.zero_grad(set_to_none=True)
-        loss.backward()  # type: ignore[no-untyped-call,unused-ignore]
-        opt.step()
-        sched.step()
+        upd.step(b)
         return len(b.queries)
 
     summary: Record = {"workload_id": workload_id(cfg), "status": "ok"}
@@ -137,8 +143,11 @@ def measure_shape(
         if cuda:
             summary["peak_gpu_mem_mb"] = round(torch.cuda.max_memory_allocated() / 2**20, 1)
         return summary, rows
-    except torch.cuda.OutOfMemoryError:
+    except torch.cuda.OutOfMemoryError as exc:
         summary["status"] = "oom"
+        summary["error"] = str(exc)[:300]
+        if cuda:
+            summary["peak_gpu_mem_mb"] = round(torch.cuda.max_memory_allocated() / 2**20, 1)
         return summary, []
     finally:
         batches.clear()
@@ -156,6 +165,8 @@ def measure_job(
     device: str,
     warmup: int = 3,
     timed: int = 10,
+    precision: str | None = None,
+    gradient_checkpointing: bool | None = None,
 ) -> Record:
     """Measure every shape ``(batch, negatives, positives, tokens)``; rows to ``log_dir``."""
     from ril.training.pool_reader import read_cache
@@ -175,9 +186,10 @@ def measure_job(
     }
     for b, n, p, t in shapes:
         t0 = time.perf_counter()
-        summary, rows = measure_shape(
-            shape_config(cfg, b, n, p, t), examples, device=device, warmup=warmup, timed=timed
+        sc = shape_config(
+            cfg, b, n, p, t, precision=precision, gradient_checkpointing=gradient_checkpointing
         )
+        summary, rows = measure_shape(sc, examples, device=device, warmup=warmup, timed=timed)
         summary["wall_seconds"] = round(time.perf_counter() - t0, 1)
         gc.collect()
         out["shapes"].append(summary)

@@ -184,6 +184,66 @@ def batch_loss(
     )
 
 
+PRECISIONS = ("fp32", "amp_fp16")
+
+
+class Updater:
+    """One optimizer update of the shared training path (identical code for every arm).
+
+    ``optimizer.precision``: ``fp32``, or ``amp_fp16`` (autocast to float16 with a loss scaler, GPU
+    only; the loss itself is computed in float32). A memory and speed setting held identical across
+    arms; ``provisional: ADR-002``.
+    """
+
+    def __init__(self, enc: TrainEncoder, cfg: Mapping[str, Any], updates: int, device: str):
+        self.enc, self.cfg = enc, cfg
+        self.opt, self.sched = build_optimizer(enc, cfg["optimizer"], updates)
+        precision = str(cfg["optimizer"].get("precision", "fp32"))
+        if precision not in PRECISIONS:
+            raise ValueError(f"optimizer.precision must be one of {PRECISIONS}")
+        self.amp = precision == "amp_fp16"
+        if self.amp and not device.startswith("cuda"):
+            raise ValueError("amp_fp16 needs a GPU")
+        self.scaler = torch.amp.GradScaler("cuda") if self.amp else None  # type: ignore[attr-defined,unused-ignore]
+        clip = cfg["optimizer"].get("grad_clip")
+        self.clip = None if clip is None else float(clip)
+
+    def step(self, batch: Batch) -> tuple[torch.Tensor, Record]:
+        with torch.autocast("cuda", dtype=torch.float16, enabled=self.amp):
+            loss, diag = batch_loss(self.enc, batch, self.cfg["loss"])
+        self.opt.zero_grad(set_to_none=True)
+        if self.scaler is not None:
+            self.scaler.scale(loss).backward()  # type: ignore[no-untyped-call,unused-ignore]
+            self.scaler.unscale_(self.opt)
+        else:
+            loss.backward()  # type: ignore[no-untyped-call,unused-ignore]
+        if self.clip is not None:
+            torch.nn.utils.clip_grad_norm_(self.enc.module.parameters(), self.clip)
+        if self.scaler is not None:
+            self.scaler.step(self.opt)
+            self.scaler.update()
+        else:
+            self.opt.step()
+        self.sched.step()
+        return loss, diag
+
+    def state_dict(self) -> Record:
+        return {
+            "optimizer": self.opt.state_dict(),
+            "scheduler": self.sched.state_dict(),  # type: ignore[no-untyped-call,unused-ignore]
+            "scaler": self.scaler.state_dict() if self.scaler is not None else None,
+        }
+
+    def load_state_dict(self, d: Mapping[str, Any]) -> None:
+        self.opt.load_state_dict(d["optimizer"])
+        self.sched.load_state_dict(d["scheduler"])  # type: ignore[no-untyped-call,unused-ignore]
+        if self.scaler is not None and d.get("scaler") is not None:
+            self.scaler.load_state_dict(d["scaler"])
+
+    def lr(self) -> float:
+        return float(self.sched.get_last_lr()[0])
+
+
 # --------------------------------------------------------------------------- checkpoints
 
 
@@ -195,8 +255,7 @@ def save_checkpoint(
     ckpt_root: str,
     update: int,
     enc: TrainEncoder,
-    opt: Optimizer,
-    sched: torch.optim.lr_scheduler.LambdaLR,
+    upd: Updater,
     state: Record,
     keep: int,
 ) -> str:
@@ -207,8 +266,7 @@ def save_checkpoint(
     os.makedirs(tmp)
     blob = {
         "model": enc.module.state_dict(),
-        "optimizer": opt.state_dict(),
-        "scheduler": sched.state_dict(),  # type: ignore[no-untyped-call,unused-ignore]
+        **upd.state_dict(),
         "torch_rng": torch.random.get_rng_state(),
         "cuda_rng": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else [],
     }
@@ -225,8 +283,7 @@ def save_checkpoint(
 def load_latest(
     ckpt_root: str,
     enc: TrainEncoder,
-    opt: Optimizer,
-    sched: torch.optim.lr_scheduler.LambdaLR,
+    upd: Updater,
 ) -> Record | None:
     """Restore the newest step checkpoint; ``None`` if there is none."""
     dirs = _step_dirs(ckpt_root)
@@ -235,8 +292,7 @@ def load_latest(
     path = dirs[-1]
     blob = torch.load(os.path.join(path, "state.pt"), map_location="cpu", weights_only=False)
     enc.module.load_state_dict(blob["model"])
-    opt.load_state_dict(blob["optimizer"])
-    sched.load_state_dict(blob["scheduler"])  # type: ignore[no-untyped-call,unused-ignore]
+    upd.load_state_dict(blob)
     torch.random.set_rng_state(blob["torch_rng"])
     if blob["cuda_rng"] and torch.cuda.is_available():
         torch.cuda.set_rng_state_all(blob["cuda_rng"])
@@ -363,9 +419,9 @@ def train(
     planner = make_planner(cfg, arm, kept, weights, mined)
     enc = build_encoder(cfg["model"], device=device, seed=seed)
     enc.module.train()
-    opt, sched = build_optimizer(enc, cfg["optimizer"], updates)
+    upd = Updater(enc, cfg, updates, device)
     os.makedirs(paths.ckpt_root, exist_ok=True)
-    state = load_latest(paths.ckpt_root, enc, opt, sched) or {
+    state = load_latest(paths.ckpt_root, enc, upd) or {
         "update": -1,
         "elapsed_s": 0.0,
         "trace": [],
@@ -376,7 +432,6 @@ def train(
     plan = hashlib.sha256()
     ck = cfg["checkpoint"]
     every, keep, log_every = int(ck["every"]), int(ck["keep"]), int(ck.get("log_every", 1))
-    clip = cfg["optimizer"].get("grad_clip")
     done_now = 0
     for batch in planner.batches(updates):
         plan.update(batch.fingerprint().encode())
@@ -388,13 +443,7 @@ def train(
         if device.startswith("cuda"):
             torch.cuda.synchronize()
         t0 = time.perf_counter()
-        loss, diag = batch_loss(enc, batch, cfg["loss"])
-        opt.zero_grad(set_to_none=True)
-        loss.backward()  # type: ignore[no-untyped-call,unused-ignore]
-        if clip is not None:
-            torch.nn.utils.clip_grad_norm_(enc.module.parameters(), float(clip))
-        opt.step()
-        sched.step()
+        loss, diag = upd.step(batch)
         if device.startswith("cuda"):
             torch.cuda.synchronize()
         elapsed += time.perf_counter() - t0
@@ -405,12 +454,12 @@ def train(
                     "update": u,
                     "loss": float(loss.detach()),
                     **diag,
-                    "lr": float(sched.get_last_lr()[0]),
+                    "lr": upd.lr(),
                 }
             )
         if (u + 1) % every == 0 or u == updates - 1:
             save_checkpoint(
-                paths.ckpt_root, u, enc, opt, sched, {"elapsed_s": elapsed, "trace": trace}, keep
+                paths.ckpt_root, u, enc, upd, {"elapsed_s": elapsed, "trace": trace}, keep
             )
     last = _step_dirs(paths.ckpt_root)
     finished = bool(last) and last[-1].endswith(f"step_{updates - 1:09d}")

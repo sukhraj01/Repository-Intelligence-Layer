@@ -94,6 +94,8 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--shapes", nargs="+", required=True, help="BATCH,NEGATIVES,POSITIVES,TOKENS")
     b.add_argument("--warmup", type=int, default=3)
     b.add_argument("--timed", type=int, default=10)
+    b.add_argument("--precision", choices=["fp32", "amp_fp16"])
+    b.add_argument("--grad-ckpt", action="store_true")
     e = sub.add_parser("eval")
     for a in ("config", "model_dir", "result_dir"):
         e.add_argument(a)
@@ -161,6 +163,8 @@ def main(argv: list[str] | None = None) -> int:
             device=a.device,  # type: ignore[arg-type]
             warmup=a.warmup,
             timed=a.timed,
+            precision=a.precision,
+            gradient_checkpointing=True if a.grad_ckpt else None,
         )
     else:
         out = _evaluate(a)

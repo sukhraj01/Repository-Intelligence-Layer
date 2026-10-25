@@ -27,7 +27,15 @@ cd "$W"
 export HF_HOME=$E/hf_cache HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 export PYTHONPATH="$X2/overlay_cre:$W"
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "$W/out/nvidia_${SLURM_JOB_ID}.txt" || true
-SHAPES=${SHAPES:-"8,1,1,512 16,1,1,512 32,1,1,512 8,3,2,512 16,3,2,512 8,7,1,512 16,7,1,512 8,1,1,1024 16,1,1,1024"}
-"$PY" scripts/train.py measure configs/experiments/t1_validate_cre.yaml "$CACHE" \
-  "out/measure_${SLURM_JOB_ID}.json" out/latency --device cuda --shapes $SHAPES > "out/measure_${SLURM_JOB_ID}.stdout.json"
+# one process per shape and setting, so that an out-of-memory shape cannot hold memory for the next
+SHAPES=${SHAPES:-"2,1,1,256 4,1,1,256 4,1,1,512 8,1,1,512 8,3,2,512 16,1,1,512 16,3,2,512 32,1,1,512 8,1,1,1024"}
+SETTINGS=${SETTINGS:-"fp32 amp amp_gc"}
+for st in $SETTINGS; do
+  case $st in fp32) OPT="";; amp) OPT="--precision amp_fp16";; amp_gc) OPT="--precision amp_fp16 --grad-ckpt";; esac
+  for sh in $SHAPES; do
+    "$PY" scripts/train.py measure configs/experiments/t1_validate_cre.yaml "$CACHE" \
+      "out/measure_${SLURM_JOB_ID}_${st}_${sh//,/-}.json" out/latency --device cuda --shapes $sh $OPT \
+      > /dev/null 2>> "out/measure_${SLURM_JOB_ID}.stderr" || echo "failed $st $sh" >> "out/measure_${SLURM_JOB_ID}.stderr"
+  done
+done
 echo done

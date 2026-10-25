@@ -59,7 +59,7 @@ def info_nce(
         raise ValueError("a positive is masked out")
     if not bool(pos_mask.any(dim=1).all()):
         raise ValueError("every query needs at least one positive")
-    logits = (q @ d.T) / tau
+    logits = (q @ d.T).float() / tau  # float32 even under autocast (masks use -1e9)
     masked = logits.masked_fill(~valid_mask, _NEG)
     if form == "sum_in_numerator":
         num = torch.logsumexp(masked.masked_fill(~pos_mask, _NEG), dim=1)
