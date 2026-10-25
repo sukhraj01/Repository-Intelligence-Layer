@@ -2,10 +2,12 @@
 
 Subcommands (logic in ``ril/``):
   select LISTING HELD_OUT RENAME_CACHE OUT [--feature-table T] [--max N] --seed S
+         [--include-held-out]  (leakage pilot only)
   cache  LISTING SELECTION OUT_CACHE [--feature-table T] [--form code|pool]
   mine   CACHE OUT --teacher bm25|<encoder> --keep N [--cut C] [--device cpu|cuda]
   train  CONFIG CACHE --results-root R --work-root W --date YYYY-MM-DD [--device cpu|cuda]
          [--feature-table T] [--mined M] [--stop-after U]
+  measure CONFIG CACHE OUT_LOG LOG_DIR --shapes B,N,P,T ... [--device cpu|cuda]  (train_step rows)
   eval   CONFIG MODEL_DIR RESULT_DIR --e1-config E --prep P --e3-cache C --data-root D
          --work W [--device cpu|cuda] [--baseline NAME=ENC_DIR ...] [--dense-root R]
 Every stage prints a JSON summary; the example cache holds text and stays on the cluster.
@@ -60,6 +62,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--feature-table")
     s.add_argument("--max", type=int)
     s.add_argument("--seed", type=int, required=True)
+    s.add_argument("--include-held-out", action="store_true", help="leakage pilot only")
     c = sub.add_parser("cache")
     for a in ("listing", "selection", "out_cache"):
         c.add_argument(a)
@@ -84,6 +87,13 @@ def main(argv: list[str] | None = None) -> int:
     t.add_argument("--feature-table")
     t.add_argument("--mined")
     t.add_argument("--stop-after", type=int)
+    b = sub.add_parser("measure")
+    for x in ("config", "cache", "out_log", "log_dir"):
+        b.add_argument(x)
+    b.add_argument("--device", default="cpu")
+    b.add_argument("--shapes", nargs="+", required=True, help="BATCH,NEGATIVES,POSITIVES,TOKENS")
+    b.add_argument("--warmup", type=int, default=3)
+    b.add_argument("--timed", type=int, default=10)
     e = sub.add_parser("eval")
     for a in ("config", "model_dir", "result_dir"):
         e.add_argument(a)
@@ -105,6 +115,7 @@ def main(argv: list[str] | None = None) -> int:
             feature_table=a.feature_table,
             max_instances=a.max,
             seed=a.seed,
+            include_held_out=a.include_held_out,
         )
     elif a.cmd == "cache":
         out = tj.cache_job(
@@ -136,6 +147,20 @@ def main(argv: list[str] | None = None) -> int:
             feature_table=a.feature_table,
             mined_path=a.mined,
             stop_after=a.stop_after,
+        )
+    elif a.cmd == "measure":
+        from ril.bench.train_measure import measure_job
+
+        shapes = [tuple(int(v) for v in x.split(",")) for x in a.shapes]
+        out = measure_job(
+            a.config,
+            a.cache,
+            shapes,
+            a.out_log,
+            a.log_dir,
+            device=a.device,  # type: ignore[arg-type]
+            warmup=a.warmup,
+            timed=a.timed,
         )
     else:
         out = _evaluate(a)

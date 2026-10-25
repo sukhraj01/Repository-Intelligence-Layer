@@ -131,4 +131,13 @@ def build_stub_registry(seed: int) -> StageRegistry:
     registry.register_throughput(
         "dense_encode", lambda: int(np.stack([encode(s) for s in sources]).shape[0])
     )
+    # stand-in for one training update per source: encode, score against all, no real model
+    registry.register_throughput(
+        "train_step",
+        lambda: int(
+            (
+                np.stack([encode(s) for s in sources]) @ np.stack([encode(s) for s in sources]).T
+            ).shape[0]
+        ),
+    )
     return registry

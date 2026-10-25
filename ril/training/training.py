@@ -421,6 +421,7 @@ def train(
         "config_hash": config_hash(cfg),
         "seed": seed,
         "arm": arm.describe(),
+        "teacher_equals_base": teacher_equals_base(cfg),
         "finished": finished,
         "filter": freport,
         "weights": _weight_summary(weights),
@@ -445,6 +446,18 @@ def train(
         record["final_dtype"] = final_dtype
         write_run(cfg, record, paths, device, trace, extra_log or {})
     return record
+
+
+def teacher_equals_base(cfg: Mapping[str, Any]) -> bool:
+    """Whether an arm hook's K-rank teacher is the base checkpoint being fine-tuned (Q52).
+
+    Recorded, not refused: a frozen copy of the starting weights is not the model being trained, but
+    it is the model's own starting view of which examples are easy (SweRank filtered with the
+    encoder it then fine-tuned). Whether that is allowed is ADR-002's.
+    """
+    base = cfg["model"].get("encoder")
+    hooks = [cfg["arm"].get(k) or {} for k in ("filter", "weight", "ordering")]
+    return base is not None and any(h.get("teacher") == base for h in hooks)
 
 
 def budget_record(

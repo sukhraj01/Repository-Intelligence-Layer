@@ -37,6 +37,7 @@ from ril.training.negatives import (
     read_mined,
     write_mined,
 )
+from ril.training.pool_check import split_instance_dir
 from ril.training.pool_reader import (
     ReaderStats,
     load_feature_table,
@@ -77,16 +78,23 @@ def select_job(
     feature_table: str | None,
     max_instances: int | None,
     seed: int,
+    include_held_out: bool = False,
 ) -> Record:
-    """Write the selection file: kept directory names and the survival counts."""
+    """Write the selection file: kept directory names and the survival counts.
+
+    ``include_held_out`` keeps the held-out repositories in (their count is still recorded): only
+    for the deliberate leakage pilot (E-PILOT-LEAK), never for a pool that is reported as disjoint.
+    """
     from ril.training.pool_rank_jobs import held_out_predicate
 
     _, members = load_listing(listing_path)
     table = load_feature_table(feature_table) if feature_table else None
     st = ReaderStats()
+    pred = held_out_predicate(held_out_path, rename_cache_path)
+    held = sorted(n for n in members if (sp := split_instance_dir(n)) and pred(sp[0]))
     names = select_instances(
         members,
-        is_held_out=held_out_predicate(held_out_path, rename_cache_path),
+        is_held_out=(lambda _r: False) if include_held_out else pred,
         table=table,
         stats=st,
     )
@@ -96,6 +104,9 @@ def select_job(
         "names": names,
         "stats": st.to_dict(),
         "max_instances": max_instances,
+        "include_held_out": include_held_out,
+        "held_out_directories_in_listing": len(held),
+        "held_out_directories_selected": len(set(held) & set(names)),
         "seed": seed,
         "held_out_sha256": _sha256(held_out_path),
         "rename_cache_sha256": _sha256(rename_cache_path)

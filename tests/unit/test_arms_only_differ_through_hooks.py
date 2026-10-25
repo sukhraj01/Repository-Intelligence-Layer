@@ -135,3 +135,14 @@ def test_configurations_differing_outside_the_arm_are_refused() -> None:
     d = train_config(arm=IDENTITY_ARMS["WEIGHT"], negatives={"name": "teacher_top_m", "m": 5})
     with pytest.raises(ValueError, match="negatives"):
         check_comparable([a, d])
+
+
+def test_teacher_equal_to_base_is_recorded_not_refused() -> None:
+    from ril.training.training import teacher_equals_base
+
+    cfg = train_config(
+        arm={"name": "FILTER", "filter": {"teacher": "coderankembed", "k": 20, "level": "positive"}}
+    )
+    assert not teacher_equals_base(cfg)
+    cfg["model"] = {"kind": "sentence_transformers", "encoder": "coderankembed", "max_tokens": 512}
+    assert teacher_equals_base(cfg)
