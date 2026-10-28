@@ -1,0 +1,25 @@
+condition,kind,level,reading,queries,seeds,per_seed,range,sd
+t2_k_raw,dense,L2,units_all_nomod,351,"[0, 1]","[25.05, 25.83]",0.78,0.55
+t2_neg_topm_cre,dense,L2,units_all_nomod,351,"[0, 1]","[24.6, 25.85]",1.25,0.88
+t2_neg_poscut_cre,dense,L2,units_all_nomod,351,"[0, 1]","[25.97, 26.17]",0.2,0.14
+t2_k_raw,dense,L2,units_all,353,"[0, 1]","[26.9, 27.69]",0.78,0.55
+t2_neg_topm_cre,dense,L2,units_all,353,"[0, 1]","[26.4, 27.94]",1.55,1.09
+t2_neg_poscut_cre,dense,L2,units_all,353,"[0, 1]","[27.64, 28.02]",0.37,0.26
+t2_k_raw,dense,L3,units_all_nomod,155,"[0, 1]","[44.84, 45.1]",0.26,0.18
+t2_neg_topm_cre,dense,L3,units_all_nomod,155,"[0, 1]","[45.44, 45.2]",0.24,0.17
+t2_neg_poscut_cre,dense,L3,units_all_nomod,155,"[0, 1]","[46.27, 45.88]",0.39,0.28
+t2_k_raw,dense,L3,units_all,155,"[0, 1]","[46.33, 46.43]",0.1,0.07
+t2_neg_topm_cre,dense,L3,units_all,155,"[0, 1]","[46.94, 46.85]",0.09,0.06
+t2_neg_poscut_cre,dense,L3,units_all,155,"[0, 1]","[47.44, 47.39]",0.05,0.03
+t2_k_raw,rrf,L2,units_all_nomod,351,"[0, 1]","[27.03, 27.18]",0.15,0.11
+t2_neg_topm_cre,rrf,L2,units_all_nomod,351,"[0, 1]","[26.96, 27.21]",0.25,0.18
+t2_neg_poscut_cre,rrf,L2,units_all_nomod,351,"[0, 1]","[27.42, 27.25]",0.16,0.11
+t2_k_raw,rrf,L2,units_all,353,"[0, 1]","[28.44, 28.54]",0.09,0.07
+t2_neg_topm_cre,rrf,L2,units_all,353,"[0, 1]","[28.26, 28.46]",0.2,0.14
+t2_neg_poscut_cre,rrf,L2,units_all,353,"[0, 1]","[28.48, 28.43]",0.06,0.04
+t2_k_raw,rrf,L3,units_all_nomod,155,"[0, 1]","[47.43, 47.32]",0.11,0.08
+t2_neg_topm_cre,rrf,L3,units_all_nomod,155,"[0, 1]","[46.67, 46.63]",0.04,0.03
+t2_neg_poscut_cre,rrf,L3,units_all_nomod,155,"[0, 1]","[47.24, 47.14]",0.1,0.07
+t2_k_raw,rrf,L3,units_all,155,"[0, 1]","[48.27, 48.19]",0.08,0.06
+t2_neg_topm_cre,rrf,L3,units_all,155,"[0, 1]","[47.49, 47.48]",0.01,0.0
+t2_neg_poscut_cre,rrf,L3,units_all,155,"[0, 1]","[47.88, 48.02]",0.15,0.1

@@ -123,6 +123,11 @@ command instead. Each GPU job gets a row here when it finishes.
 | 2026-10-25 | 38741 | 2 | T1 training throughput, all shapes in one process (every shape out of memory after the first); account A, gnode045 | 1 x 00:00:52 | 0.01 | 0.01 |
 | 2026-10-25 | 38746 | 2 | T1 throughput job submitted with a wrong commit label, cancelled; account A | 1 x 00:00:06 | 0.00 | 0.02 |
 | 2026-10-25 | 38747 | 2 | T1 training throughput and peak memory per batch shape of CodeRankEmbed (fp32, float16 autocast, plus gradient checkpointing); account A, gnode046, CUDA gate passed | 1 x 00:06:55 | 0.12 | 0.13 |
+| 2026-10-25 | 39098 | 2 | T2 teacher passes over the 2,000-directory cache A: CodeRankEmbed (66 min) then SweRankEmbed-Small (66 min), K-ranks and top-64 candidates at 1,024 tokens, float16; account A, gnode057, CUDA gate passed | 1 x 02:11:57 | 2.20 | 2.33 |
+| 2026-10-25 | 39100 | 2 | T2 runs `t2_k_raw` seeds 0, 1 (63 updates each) with dev and Verified-six evaluation; account A, gnode044 | 1 x 01:24:33 | 1.41 | 3.74 |
+| 2026-10-25 | 39101 | 2 | T2 runs `t2_leak_in` seeds 0, 1 with dev and Verified-six evaluation; account A, gnode044 | 1 x 01:24:38 | 1.41 | 5.15 |
+| 2026-10-25 | 39188 | 2 | T2 run batch of 16 (FILTER under CodeRankEmbed, BM25, SweRankEmbed-Small K 10/20), dev evaluation; about 22 min per run, of which about 16 min encoding the dev unit texts (about 50 texts/s against X2's 201: the trained model's encode path); account A, gnode044 | 1 x 05:50:29 | 5.84 | 10.99 |
+| 2026-10-26 | 39212 | 2 | T2 run batch of 16 (FILTER SweRankEmbed-Small K40 and agreement, NEG, WEIGHT, CURRICULUM), dev evaluation; account A, gnode044 | 1 x 05:53:02 | 5.88 | 16.87 |
 
 ## Log of cluster verification
 

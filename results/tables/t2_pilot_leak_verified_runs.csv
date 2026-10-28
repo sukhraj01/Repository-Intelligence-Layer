@@ -1,0 +1,5 @@
+condition,seed,config_hash,result_dir,arm,teacher_equals_base,optimizer_updates,batch_size,pool_examples,unique_examples_seen,effective_epochs,positives_seen,negative_shortfall_visits,gpu_hours_train_loop,examples_kept_share,positives_kept_share,loss_first,loss_last
+t2_k_raw,0,95a25fd82572,2026-10-25_95a25fd8,RAW,False,63,32,2000,2000,1.008,2016,0,0.046,1.0,1.0,1.6415560245513916,1.091271162033081
+t2_k_raw,1,7d7b49e03419,2026-10-25_7d7b49e0,RAW,False,63,32,2000,2000,1.008,2016,0,0.0458,1.0,1.0,1.258103847503662,1.0088316202163696
+t2_leak_in,0,1ad8fd5493fb,2026-10-25_1ad8fd54,RAW,False,63,32,2000,2000,1.008,2016,0,0.0459,1.0,1.0,1.231489658355713,0.944649338722229
+t2_leak_in,1,4bec75793278,2026-10-25_4bec7579,RAW,False,63,32,2000,2000,1.008,2016,0,0.0459,1.0,1.0,1.5335007905960083,0.3958875238895416

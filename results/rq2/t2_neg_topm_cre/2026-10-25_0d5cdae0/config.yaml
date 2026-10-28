@@ -1,0 +1,66 @@
+arm:
+  name: RAW
+batch:
+  batch_size: 32
+  max_positives: 1
+  negatives_per_example: 1
+budget:
+  updates: 63
+checkpoint:
+  every: 63
+  final_dtype: float16
+  keep: 1
+  log_every: 1
+evaluation:
+  baselines:
+  - coderankembed__t512
+  batch_size: 64
+  chunks: false
+  roles:
+  - dev
+  rrf_k: 60
+  seed: 0
+exp_id: t2_neg_topm_cre
+label: 'E-PILOT-NEG: teacher top-M negatives (M = 15, CodeRankEmbed at 1,024 tokens
+  as the miner), RAW arm'
+loss:
+  form: sum_in_numerator
+  normaliser: batch
+  temperature: 0.05
+model:
+  encoder: coderankembed
+  gradient_checkpointing: true
+  kind: sentence_transformers
+  max_tokens: 512
+negatives:
+  m: 15
+  mining_keep: 64
+  mining_teacher: coderankembed
+  name: teacher_top_m
+optimizer:
+  grad_clip: 1.0
+  lr: 2.0e-05
+  name: adamw
+  precision: amp_fp16
+  schedule: linear
+  warmup_updates: 7
+  weight_decay: 0.01
+pool:
+  feature_table: t2_features_A.csv (K-ranks of selection A under CodeRankEmbed and
+    SweRankEmbed-Small at 1,024 tokens and BM25; teacher pass of 2026-10-25)
+  held_out: data/held_out/held_out_repos.json (v2, core plus Loc-Bench tier) with
+    data/held_out/rename_cache.json
+  include_held_out: false
+  max_instances: 2000
+  selection: first 2,000 directories outside the held-out list by sha256("0:<directory>")
+    (selection A)
+  selection_seed: 0
+  source: gangiswag/train_data train.zip, train/python (listing of 2026-10-17, member
+    offsets)
+  text_form: code
+provisional:
+- ADR-001
+- ADR-002
+- ADR-006
+rq: rq2
+seed: 0

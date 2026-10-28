@@ -1,0 +1,141 @@
+{
+ "pilots": [
+  {
+   "effect_rows": 368,
+   "pilot": "pilot_k",
+   "runs": {
+    "t2_k_curriculum_cre": [
+     0,
+     1
+    ],
+    "t2_k_filter_agree_k10": [
+     0,
+     1
+    ],
+    "t2_k_filter_agree_k20": [
+     0,
+     1
+    ],
+    "t2_k_filter_agree_k40": [
+     0,
+     1
+    ],
+    "t2_k_filter_bm25_k10": [
+     0,
+     1
+    ],
+    "t2_k_filter_bm25_k20": [
+     0,
+     1
+    ],
+    "t2_k_filter_bm25_k40": [
+     0,
+     1
+    ],
+    "t2_k_filter_cre_k10": [
+     0,
+     1
+    ],
+    "t2_k_filter_cre_k20": [
+     0,
+     1
+    ],
+    "t2_k_filter_cre_k40": [
+     0,
+     1
+    ],
+    "t2_k_filter_srs_k10": [
+     0,
+     1
+    ],
+    "t2_k_filter_srs_k20": [
+     0,
+     1
+    ],
+    "t2_k_filter_srs_k40": [
+     0,
+     1
+    ],
+    "t2_k_raw": [
+     0,
+     1
+    ],
+    "t2_k_weight_cre": [
+     0,
+     1
+    ]
+   },
+   "tables": [
+    "out/tables/t2_pilot_k_effects.csv",
+    "out/tables/t2_pilot_k_seeds.csv",
+    "out/tables/t2_pilot_k_runs.csv"
+   ],
+   "version": "t2-tables/v1"
+  },
+  {
+   "effect_rows": 80,
+   "pilot": "pilot_neg",
+   "runs": {
+    "t2_k_raw": [
+     0,
+     1
+    ],
+    "t2_neg_poscut_cre": [
+     0,
+     1
+    ],
+    "t2_neg_topm_cre": [
+     0,
+     1
+    ]
+   },
+   "tables": [
+    "out/tables/t2_pilot_neg_effects.csv",
+    "out/tables/t2_pilot_neg_seeds.csv",
+    "out/tables/t2_pilot_neg_runs.csv"
+   ],
+   "version": "t2-tables/v1"
+  },
+  {
+   "effect_rows": 56,
+   "pilot": "pilot_leak_dev",
+   "runs": {
+    "t2_k_raw": [
+     0,
+     1
+    ],
+    "t2_leak_in": [
+     0,
+     1
+    ]
+   },
+   "tables": [
+    "out/tables/t2_pilot_leak_dev_effects.csv",
+    "out/tables/t2_pilot_leak_dev_seeds.csv",
+    "out/tables/t2_pilot_leak_dev_runs.csv"
+   ],
+   "version": "t2-tables/v1"
+  },
+  {
+   "effect_rows": 56,
+   "pilot": "pilot_leak_verified",
+   "runs": {
+    "t2_k_raw": [
+     0,
+     1
+    ],
+    "t2_leak_in": [
+     0,
+     1
+    ]
+   },
+   "tables": [
+    "out/tables/t2_pilot_leak_verified_effects.csv",
+    "out/tables/t2_pilot_leak_verified_seeds.csv",
+    "out/tables/t2_pilot_leak_verified_runs.csv"
+   ],
+   "version": "t2-tables/v1"
+  }
+ ],
+ "spec": "configs/experiments/t2_pilots.yaml"
+}

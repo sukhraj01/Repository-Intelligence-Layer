@@ -17,3 +17,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-25,A,39187,T2,feature table and teacher tables rerun with a Wilson interval (CPU),u22,2,0,00:02:42,0.0,COMPLETED (2000 directories 25318 positives)
 2026-10-25,A,39100,T2,run batch: t2_k_raw seeds 0 and 1 trained and evaluated on dev and Verified-six (labelled),u22,4,1,01:24:33,1.41,COMPLETED (gnode044; about 42 min per run of which about 30 min evaluation)
 2026-10-25,A,39101,T2,run batch: t2_leak_in seeds 0 and 1 on cache L evaluated on dev and Verified-six (labelled),u22,4,1,01:24:38,1.41,COMPLETED (gnode044)
+2026-10-25,A,39424,T2,partial pilot tables (CPU srun),u22,1,0,00:00:05,0.0,COMPLETED
+2026-10-25,A,39188,T2,run batch: FILTER under CodeRankEmbed and BM25 (K 10/20/40) and SweRankEmbed-Small (K 10/20); 16 runs with dev evaluation,u22,4,1,05:50:29,5.84,COMPLETED (gnode044; 16 of 16 runs)
+2026-10-26,A,39212,T2,run batch: FILTER SweRankEmbed-Small K40 and agreement K 10/20/40; NEG top-M and positive cut; WEIGHT; CURRICULUM; 16 runs with dev evaluation,u22,4,1,05:53:02,5.88,COMPLETED (gnode044; 16 of 16 runs)
+2026-10-29,A,45619,T2,pilot tables (CPU srun),u22,1,0,00:00:10,0.0,COMPLETED
