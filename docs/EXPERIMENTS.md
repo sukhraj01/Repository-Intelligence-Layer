@@ -34,9 +34,9 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-GRAPH-REACH | RQ1 ext. (apparatus) | edge subset (19), control (3: same files, whole repository, whole repository of the same unit kind) | flask, requests, seaborn Verified instances (L2 11, L3 7) at their base commits, seed 0, 200 control draws per positive, 2,000 bootstrap draws, resolver `own-ast-resolver/v0` | n/a | chunk match rate and failure reasons; span categories against the first label sample; L3 positives by kind; share of new L3 positives within 1, 2, 3 hops of the L2 units and unreachable, with chance control and 95% bootstrap intervals | done (exploratory pilot, 2026-10-17; `RESULTS.md` rows `m-*`; ADR-004 and ADR-003 addenda) |
 | E-BM25-REPRO | RQ1 ext. (apparatus) | BM25 granularity (chunk, unit), module unit in or out of the index, protocol reading (cut at 10,000 before the candidate filter, or candidates only), k1/b (dev sweep) | reference tokenisation and scoring, seed 0, 2,000 bootstrap draws; dev and test repositories fixed in the config before the runs | n/a | nDCG@10 and Recall@100 with 95% intervals; agreement with the published BM25 rows | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e1-*`; ADR-004 addendum) |
 | E-LABEL-NOISE | RQ1 ext. (apparatus) | label set (all, content-cleaned, edit-overlap, both) and treatment of removed positives (kept as not relevant, or dropped from the list) | rankings of E-BM25-REPRO | n/a | score changes on the same queries with paired intervals; first-rank changes; whether a comparison changes verdict | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e2-*`) |
-| E-PILOT-LEAK | RQ2 (pilot, needs the training stack) | small encoder trained with versus without the instances of held-out and renamed repositories (the D1 rename-resolved overlap, 89 repositories in the candidate pool) | encoder, budget, seed, remaining pool, evaluation set | 3 | Verified nDCG@10 and Recall@100 of both encoders, paired; the difference is the leakage inflation | config-ready (2026-10-25, T2 smoke pilot; setup and readings stated in "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots" before any run) |
-| E-PILOT-K | RQ2 (pilot) | consistency filter K in {10, 20, 40, none} and teacher in {CodeRankEmbed, SweRankEmbed-Small, BM25, agreement of two}, at a tiny budget | encoder, matched optimization budget, pool, seed | 3 | retrieval metrics per cell with intervals; kept share per cell | config-ready (2026-10-25, T2 smoke pilot; setup and readings stated in "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots" before any run) |
-| E-PILOT-NEG | RQ2 (pilot) | negatives: random repository-local, teacher-mined, graph-structural (callers, siblings, same-file units) | positives, budget, pool, seed | 3 | retrieval metrics; false-negative rate of each negative source on a labelled sample | config-ready (2026-10-25, T2 smoke pilot; setup and readings stated in "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots" before any run) |
+| E-PILOT-LEAK | RQ2 (pilot, needs the training stack) | small encoder trained with versus without the instances of held-out and renamed repositories (the D1 rename-resolved overlap, 89 repositories in the candidate pool) | encoder, budget, seed, remaining pool, evaluation set | 3 | Verified nDCG@10 and Recall@100 of both encoders, paired; the difference is the leakage inflation | done (exploratory, 2026-10-29; rows `t2-leak-*`): 292 held-out directories in place of 292 others change nothing measurable on dev or on Verified-six (labelled: uses test repositories deliberately) at this budget; no Verified-six repository is in the pool |
+| E-PILOT-K | RQ2 (pilot) | consistency filter K in {10, 20, 40, none} and teacher in {CodeRankEmbed, SweRankEmbed-Small, BM25, agreement of two}, at a tiny budget | encoder, matched optimization budget, pool, seed | 3 | retrieval metrics per cell with intervals; kept share per cell | done (exploratory, 2026-10-29; rows `t2-k-*`): 63 updates of RAW move CodeRankEmbed +8.3 dev L2 nDCG@10 and +11.0 L3 Recall@100; no FILTER, WEIGHT or CURRICULUM cell beats RAW at L3, strict cells (K = 10, BM25 at any K, agreement at K = 10) are 0.6-1.6 points below it; nothing decided |
+| E-PILOT-NEG | RQ2 (pilot) | negatives: random repository-local, teacher-mined, graph-structural (callers, siblings, same-file units) | positives, budget, pool, seed | 3 | retrieval metrics; false-negative rate of each negative source on a labelled sample | done for random / top-M / positive cut (exploratory, 2026-10-29; rows `t2-neg-*`): positive cut +1.1 [0.35, 1.9] dev L3 Recall@100 (dense), top-M indistinguishable from random; structural factor not run (waits for Q30) |
 | E-PILOT-L3POS | RQ2 (pilot) | graph-derived test and configuration positives added to training | everything else, budget | 3 | L3 Recall@100 and L2 nDCG@10, paired with the run without them | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25). What this would decide: whether the L3-style positive (E-GRAPH-REACH, E-GRAPH-SIGNAL) is learnable from structure, i.e. whether an L3 arm is worth a place in RQ2 |
 | E-PILOT-POOL | RQ2 (pilot) | training pool (SweLoc-style candidate pool, own PR-mined set, CodeSearchNet) at a fixed number of updates | encoder, budget, seed, filter | 3 | retrieval metrics per pool; unique examples seen | planned: the training stack exists (E-TRAIN-STACK, 2026-10-25); waits for ADR-001. What this would decide: which pool the frozen configuration uses, and how much of an arm difference is a pool difference |
 | E-GRAPH-SIGNAL | RQ1 ext. (apparatus) | edge-family subset (19), seeds C (1, 3, 5), decay gamma (0.3, 0.5, 0.7), hops (1, 2), way of forming the scored list (edited list, ranked list fused by RRF) | reference BM25 over the units of the snapshot (module unit in), seeds are retrieved units, expansion limited to 50 units, seed 0, dev repositories for every sweep | n/a | change in nDCG@10 (L2) and Recall@100 (L3) against BM25 alone and against size-matched random expansions, paired 95% intervals | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e3-*`; ADR-003 addendum) |
@@ -966,6 +966,63 @@ indistinguishable at this budget. With about 15 contrasts x 2 levels, one or two
 Every condition is also shown against the untrained base (does 63 updates move the model at all). Two seeds give one
 seed-to-seed difference per condition: they can show an effect larger than one retraining's change, not a seed standard
 deviation, and the intervals carry query sampling only.
+
+**Results (2026-10-29; 36 runs, all finished; tables `results/tables/t2_pilot_*_{effects,seeds,runs}.csv`, teacher tables
+`t2_teacher_{shares,agreement}.csv`, log `results/logs/t2_pilots_2026-10-29.json`, result directories `results/rq2/t2_*/`).**
+Dev, D18 primary reading, percentage points; effect vs RAW, seed means, [query-level 95% interval]; "noise" = RAW seed 1 minus
+seed 0 on the same queries (dense: L2 0.78, L3 0.26; RRF: L2 0.15, L3 -0.11). Flag "beyond" = interval excludes 0 and |effect| > noise (the
+stated rule).
+
+| cell | positives kept | examples kept | dense L2 nDCG@10 | dense L3 Recall@100 | RRF L3 Recall@100 |
+|---|---|---|---|---|---|
+| base (untrained) | | | 17.16 | 33.93 | |
+| RAW (vs base) | 100% | 100% | 25.44 (+8.28 [6.77, 9.80]) | 44.97 (+11.03 [9.12, 12.98]) | 47.37 (+4.74 [3.65, 5.91]) |
+| FILTER CodeRankEmbed K10 / 20 / 40 | 22.5 / 31.3 / 42.0% | 82 / 91 / 96% | -0.49 / -0.17 / -0.30 | **-0.77** [-1.45, -0.08] / +0.01 / -0.25 | **-0.63** / -0.10 / -0.30 |
+| FILTER SweRankEmbed-Small K10 / 20 / 40 | 45.0 / 50.9 / 57.9% | 96 / 98 / 100% | +0.48 / +0.08 / +0.11 | **-0.98** [-1.70, -0.33] / **-0.58** / -0.30 | -0.24 / -0.21 / +0.05 |
+| FILTER BM25 K10 / 20 / 40 | 22.3 / 30.9 / 44.7% | 74 / 83 / 90% | -0.61 / -0.23 / -0.54 | **-1.13** [-1.71, -0.58] / -0.63 / **-1.61** [-2.30, -0.99] | **-0.94** / **-0.54** / **-0.79** |
+| FILTER agreement CodeRankEmbed+BM25 K10 / 20 / 40 | 12.5 / 19.9 / 31.0% | 61 / 75 / 86% | **-0.80** [-1.39, -0.23] / -0.21 / +0.13 | **-1.16** / -0.56 / **-0.41** | **-0.76** / -0.20 / -0.36 |
+| WEIGHT (CodeRankEmbed, power, K 20) | 100% | 100% | -0.32 [-0.59, -0.08] | **-0.43** [-0.72, -0.15] | -0.11 |
+| CURRICULUM (CodeRankEmbed, 4 buckets) | 100% | 100% | -0.31 | **-0.68** [-1.15, -0.27] | -0.25 |
+| NEG teacher top-15 (CodeRankEmbed miner) | | | -0.21 [-0.98, 0.52] | +0.35 [-0.71, 1.49] | -0.72 [-1.61, 0.05] |
+| NEG top-15 after the 0.95 positive cut | | | +0.63 [0.11, 1.13] | **+1.10** [0.35, 1.90] | -0.18 |
+| LEAK: selection L (292 held-out dirs) vs A, dev | | | +0.18 [-0.25, 0.57] | +0.16 [-0.21, 0.53] | +0.07 |
+| LEAK, Verified-six (uses test repositories deliberately, for the leakage effect; not a final number) | | | +0.51 [-0.46, 1.59] (L2 n = 83) | -0.25 [-0.90, 0.34] (n = 55) | -0.45 [-0.83, -0.10] |
+
+Bold: beyond the stated rule. Every flagged FILTER, WEIGHT and CURRICULUM cell is negative and the same sign in both seeds except
+SweRankEmbed-Small K20 at L3 (seeds +0.22, -1.38); the one positive flag among the arm cells is RRF L2 under SweRankEmbed-Small K10
+(+0.66 [0.18, 1.16]). About 60 arm contrasts were made, so two or three flags would be expected by chance; the pattern (strict filters,
+and BM25 at every K, lower L3) is more than that, the size (about 1 point) is not. L2 and repository-clustered intervals in
+`t2_pilot_k_effects.csv`.
+
+**Cost.** Per run: 63 optimizer updates, 2,016 example visits, 0.046-0.047 GPU-hours of training loop (about 2.8 minutes); unique
+examples seen = examples kept (FILTER 1,229-1,992; RAW, WEIGHT, CURRICULUM, NEG, LEAK 2,000), effective epochs 1.008 (RAW) to 1.64
+(agreement K10): at matched updates a strict filter re-visits its kept examples, as designed. Whole run including the dev evaluation
+about 22 minutes (about 0.37 GPU-hours; the evaluation encodes the trained model's dev unit texts at about 50 texts/s, a quarter of
+X2's rate); with the Verified-six evaluation about 42 minutes. Teacher passes 2.20 GPU-hours (both dense teachers over 1.95 million
+functions), BM25 2 CPU-minutes. Session total 16.87 GPU-hours of block 2 (jobs 39098, 39100, 39101, 39188, 39212; `docs/COMPUTE.md`).
+The positive-cut cell had 70 of 2,016 visits with no eligible negative (shortfall). Q52: `teacher_equals_base` is true for every
+cell whose teacher includes CodeRankEmbed (FILTER CodeRankEmbed and agreement, WEIGHT, CURRICULUM) and for the NEG miner; those cells
+do not behave differently from the SweRankEmbed-Small and BM25 cells at the same K (e.g. L3 K10: -0.77, -0.98, -1.13).
+
+**Teachers on selection A** (2,000 directories, 25,318 positives): positives inside the top 10 / 20 / 40: CodeRankEmbed 22.6 / 31.3 /
+42.0%, SweRankEmbed-Small 45.0 / 50.9 / 57.9%, BM25 22.3 / 30.9 / 44.7%; directories with no positive inside the top 10:
+17.9% [16.2, 19.6], 4.3% [3.5, 5.2], 26.2% [24.3, 28.1] (Wilson). Spearman per positive: CodeRankEmbed~SweRankEmbed-Small 0.854
+[0.818, 0.884], CodeRankEmbed~BM25 0.706 [0.65, 0.75], SweRankEmbed-Small~BM25 0.667 [0.60, 0.72]; kappa of top-20 membership 0.57, 0.48,
+0.43. SweRankEmbed-Small again ranks the pool's positives far better than the others (E-POOL-RANKS, Q50).
+
+**What this would change in the plan (evidence, not decisions).** ADR-002: at a 63-update budget no consistency filter, weight or
+curriculum under any teacher or K beats RAW, and the strict ones cost about 1 L3 point; the RQ2 contrast is therefore not expected to
+be large at small budgets, and K and teacher are sensitive mostly in the direction "stricter is worse" here; the positive-aware cut
+is the only setting that moved L3 upward, which bears on Q46 (the negative policy held identical across arms). ADR-001: the
+held-out filter's removal of 14.6% of the pool has no measurable effect on dev or Verified-six at this budget, so on this evidence it
+is hygiene for the claim, not a number-changer; the direct case (held-out development repositories in training) is in this pair
+only at about 30 directories and showed nothing either.
+
+**What it does not show.** Two seeds: one seed-to-seed difference per condition, not a standard deviation; the intervals carry query
+sampling only. 63 updates is about 0.3% of the master's 20,000; a filter's benefit (less label noise) may need many epochs to show and
+its cost (fewer unique positives, more repetition) dominates early. Dev has five repositories and two of them carry the L3 queries
+(Q47). One base, one batch shape (32 x (1 + 1)), one learning rate, units only (no chunk level). The structural negative factor and
+the RQ2 arms at their real budget are not run.
 
 ## Pre-registered interpretation rules
 

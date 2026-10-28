@@ -160,3 +160,15 @@ snapshot under SweRankEmbed-Small (the SweRank+ filter teacher), CodeRankEmbed a
 - *Evidence class:* measured (exploratory, n = 160 plus a 457-directory reference). *Experiment that could flip it:* creation dates of
   the pool's PRs against the checkpoint's release (needs `GITHUB_TOKEN`, D2): post-release PRs that still never lack a top-10 positive
   mean a filter. *Conditions to revisit:* that experiment; the authors' code or data card.
+
+## Addendum 2026-10-29 — smoke pilot E-PILOT-LEAK (evidence, no decision; this ADR stays Proposed)
+
+Evidence class: measured, exploratory, 2 seeds, 63 updates. Two training sets of 2,000 directories by the same seeded order, one with
+the held-out list applied (selection A) and one without (selection L: 292 held-out directories in place of 292 others, about 30 of
+them from the development repositories haystack and streamlink). No Verified-six repository has a directory in the pool (92 held-out
+repositories occur in it). Effect of not filtering, dense: dev +0.18 [-0.25, 0.57] L2 nDCG@10, +0.16 [-0.21, 0.53] L3 Recall@100;
+Verified-six (uses test repositories deliberately, for the leakage effect; not a final number) +0.51 [-0.46, 1.59] L2, -0.25
+[-0.90, 0.34] L3. At this budget the held-out filter changes no measured number; the evidence says it is hygiene for the
+disjointness claim rather than a number-changer, and it says nothing about larger budgets or about repositories (Verified-six) that the
+pool does not contain. Cheapest experiment that could flip it: the same pair at a larger budget with the held-out directories of the
+development repositories over-represented (all 249), evaluated on dev, about 2 GPU-hours.

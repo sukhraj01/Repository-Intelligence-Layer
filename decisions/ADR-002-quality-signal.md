@@ -85,3 +85,20 @@ choice is one configuration value, none of them set by code defaults:
   starting weights. That is not the "model being trained" (its ranks never move), but it is the model's own starting view of which
   examples are easy, which is close to the self-confirming loop the design warns about (Q52). Evidence class: reasoned only. Cheapest
   experiment: E-PILOT-K under CodeRankEmbed and under BM25 as teachers with CodeRankEmbed as the base, two seeds, dev repositories.
+
+## Addendum 2026-10-29 — smoke pilots E-PILOT-K and E-PILOT-NEG (evidence, no decision; this ADR stays Proposed)
+
+Evidence class: measured, exploratory, 2 seeds, 63 optimizer updates on 2,000 pool directories, CodeRankEmbed base, dev units
+(`docs/EXPERIMENTS.md` "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK"; rows `t2-*`).
+- RAW alone moves the base far (+8.3 dev L2 nDCG@10, +11.0 L3 Recall@100), so the budget is not too small to train.
+- No FILTER (K 10/20/40 under CodeRankEmbed, SweRankEmbed-Small, BM25, or CodeRankEmbed+BM25 agreement), WEIGHT or CURRICULUM cell is
+  above RAW at L3; strict cells (K = 10, BM25 at any K, agreement at K = 10) are 0.6-1.6 points below it, beyond one retraining's change.
+  At L2 every cell is within about 0.8 points of RAW. At matched updates a strict filter keeps 12-45% of the positives and re-visits
+  its examples (effective epochs up to 1.64).
+- Teacher: the self-teacher cells (Q52, CodeRankEmbed = base) do not behave differently from the SweRankEmbed-Small and BM25 cells at
+  the same K; SweRankEmbed-Small keeps the most positives (it ranks the pool's positives best, Q50) and costs least.
+- Negatives (Q46): CodeRankEmbed top-15 is indistinguishable from random repository-local; the 0.95 positive-aware cut gives +1.1
+  [0.35, 1.90] L3 Recall@100 (dense), L2 +0.6 (below the seed difference).
+- What it cannot show: a filter's effect at the RQ2 budget (63 updates is about 0.3% of 20,000); seed variance (one difference per cell).
+  Cheapest experiment that could flip the reading "filters do not help": RAW vs FILTER SweRankEmbed-Small K20 and BM25 K20 at about 2,000
+  updates on the same pool, 2 seeds (about 3 GPU-hours with a faster evaluation).
