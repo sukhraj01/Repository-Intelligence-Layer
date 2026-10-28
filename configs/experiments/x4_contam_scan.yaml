@@ -1,0 +1,31 @@
+experiment_id: E-CONTAM-SCAN
+stage: full documents-only scan of the CoRNStack python shards against the Verified function hashes, hits restricted to the instance's own base commit and a size floor
+status: exploratory (background; not part of the frozen evaluation; ADR-005 addendum, decision D23)
+date: '2026-10-29'
+seed: n/a (no randomness)
+probe_version: contam-probe/v1
+code: ril/training/contamination.py, ril/training/contamination_index.py, ril/analysis/x4_tables.py, scripts/ada/contam_probe.py, scripts/ada/contam_scan.sbatch
+corpus_side: field "document" of every row of the 240 shards of cornstack-python-v1 (STRIDE=1); negatives not scanned
+benchmark_side: function and method units of the 12 Verified repositories at the instance's own base commit (one set of hashes per instance, 499 distinct commits for 500 instances)
+hash_level: syntax tree (names and statements kept; docstring, decorators, comments, layout ignored)
+size_floor:
+  primary_nodes: 20
+  sensitivity_nodes: [50, 100]
+  unit: ast.walk node count of the matched function (the probe's own size field)
+  fixed_before: the full result; chosen from the 24-shard slice (rows x-contam-probe-slice) only
+  rationale: >
+    In the slice, the share of hit documents whose hash occurs in the base-commit probe of more
+    than one of the 12 repositories (a generic function that many repositories contain) is 39%
+    below 20 nodes, 2% at 20 to 29, 1% or less at every larger size, and 3% / 27% for floors of
+    15 / 10 nodes. 73% of all slice hits are under 20 nodes. Twenty nodes is the existing bucket
+    boundary of the slice report and the lowest bucket edge at which the generic share is at most
+    2%; below it a match says little about a given repository. Floors 50 and 100 are stated now
+    as sensitivity readings (100 is the bucket the slice report called the defensible reading).
+    The floor is a reading choice; it does not change what is scanned.
+report:
+  counts_per_repository: [instances, instances_with_a_hit, probe_hashes_above_floor, hashes_matched, hit_documents]
+  intervals: Wilson 95% on proportions; the unit of the interval is stated per row (functions are not independent draws, so they are descriptive)
+  hit_meaning: a function-level match of syntax tree; not evidence that the pair was in any model's training data
+slurm:
+  account: A
+  jobs: two sharded jobs of 4 workers (shards 0-119 and 120-239), resumable
