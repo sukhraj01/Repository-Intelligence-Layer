@@ -1,0 +1,31 @@
+experiment_id: E-GRAPH-ROLE (Q49: is the graph a retrieval signal beyond same-file expansion)
+stage: dev only, graph weight sensitivity (0.5 sat at the edge of the earlier X2 grid)
+status: exploratory pilot
+date: '2026-10-29'
+seed: 0
+roles:
+- dev
+confirm: false
+note: >-
+  Stated before any score of this configuration was read. First stage and cell are the ones X2 stated
+  and confirmed (x2_first_confirm, x2_graph_confirm): score-level form, C 5, gamma 0.7, 2 hops, graph
+  weight 0.5, cap 50, no new tuning. First stage RRF(BM25, coderankembed__t1024) with k 100, score-level alpha 0.4
+  (alpha only forms the score the graph is blended into). Variants at the same cap: a none (the
+  first-stage score), b graph as stored (core families contain, import, invoke, inherit), c same-file
+  expansion ordered by first-stage score, d same-file expansion in random order (3 draws), e graph
+  restricted to non-contain edges, f contain only. c and d are size-matched to each of b, e, f and
+  take the same graph-score values in the same order, so only which units are chosen differs.
+  Reachability: L3 gold units outside the first-stage top 100, reached from the top 5 or top 100 by
+  1 or 2 hops per edge family and not in a file of the sources. Primary reading units_all_nomod (D18),
+  units_all beside it.
+graph:
+  variant: coderankembed__t1024
+  k: 100
+  alpha: 0.4
+  seeds: [5]
+  gammas: [0.7]
+  hops: [2]
+  weights: [0.2, 0.5, 0.8]
+  cap: 50
+  draws: 3
+  reach_top: [5, 100]
