@@ -266,7 +266,7 @@ def cmd_tables(config, inst_path, scan_dir, probe_nodes, out_json, out_csv):
 def cmd_edited(ref, clones, patches, out):
     import gzip
 
-    from ril.training import contamination_edited as ce
+    from ril.evaluation import contamination_edited as ce
 
     verified = json.load(open(ref))
     pat = json.load(open(patches))

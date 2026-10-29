@@ -6,7 +6,7 @@ seed: 0
 seed_note: only the repository-clustered bootstrap is random (2,000 draws, percentile interval)
 probe_version: contam-probe/v1
 edited_version: contam-edited/v1
-code: ril/training/contamination_edited.py, ril/analysis/x5_tables.py, scripts/ada/contam_probe.py (edited, edited-tables), scripts/ada/contam_edited.sbatch
+code: ril/evaluation/contamination_edited.py, ril/analysis/x5_tables.py, scripts/ada/contam_probe.py (edited, edited-tables), scripts/ada/contam_edited.sbatch
 inputs:
   scan: results of E-CONTAM-SCAN (config hash 87ac11b7293b; 240 shards, floors 20 / 50 / 100 nodes, primary 20)
   instance_hashes: base-commit function hashes of the 500 Verified instances (floor 20 nodes)

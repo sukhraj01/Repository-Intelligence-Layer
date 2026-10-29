@@ -1215,7 +1215,7 @@ Instances: 460 have an edited function above the floor; 52 of them (11.3%, 8.7-1
 
 **What a hit does not say.** A hit is an exact syntax-tree match of a function, not proof that the issue, the patch or the (query, document) pair was in any model's training data; a post-patch match is what any corpus taken after the fix would contain. A non-hit does not show absence (renamed or edited copies, negatives not scanned, no semantic matching). The result bears on the contamination statement only: it gives no ground to a per-repository sensitivity row and no ground to the claim that the evaluation is clean.
 
-Reproduce: `contam_probe.py edited` and `edited-tables` through `scripts/ada/contam_edited.sbatch` (from `$HOME`, needs `~/ril_c/work/verified_patches.json`, built locally from the Verified table's `patch` column and copied over, untracked); summary CSV `python scripts/x5_tables.py results/logs/x5_contam_edited_2026-10-29.json results/tables/x5_contam_edited.csv`; code `ril/training/contamination_edited.py`, `ril/analysis/x5_tables.py`, tests `tests/unit/test_x5_edited.py`.
+Reproduce: `contam_probe.py edited` and `edited-tables` through `scripts/ada/contam_edited.sbatch` (from `$HOME`, needs `~/ril_c/work/verified_patches.json`, built locally from the Verified table's `patch` column and copied over, untracked); summary CSV `python scripts/x5_tables.py results/logs/x5_contam_edited_2026-10-29.json results/tables/x5_contam_edited.csv`; code `ril/evaluation/contamination_edited.py`, `ril/analysis/x5_tables.py`, tests `tests/unit/test_x5_edited.py`.
 
 
 ## E-GRAPH-ROLE: is the graph a retrieval signal beyond same-file expansion? Exploratory, done 2026-10-29

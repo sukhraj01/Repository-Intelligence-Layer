@@ -1,7 +1,7 @@
 """Tables of the edited-function follow-up of the contamination scan (E-CONTAM-EDITED).
 
 Exploratory; not part of the frozen evaluation (ADR-005 addendum, decision D23). Joins the hashes
-of the functions a reference patch edits (``ril.training.contamination_edited``) with the matched
+of the functions a reference patch edits (``ril.evaluation.contamination_edited``) with the matched
 syntax-tree hashes of the full scan and with each instance's set of base-commit function hashes, at
 the size floors fixed in ``configs/experiments/x4_contam_scan.yaml`` (20, 50, 100 nodes).
 

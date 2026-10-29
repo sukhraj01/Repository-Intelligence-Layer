@@ -7,7 +7,7 @@ import subprocess
 from pathlib import Path
 
 from ril.analysis import x5_tables as t
-from ril.training import contamination_edited as ce
+from ril.evaluation import contamination_edited as ce
 
 BASE = '''def keep(x):
     return x + 1
