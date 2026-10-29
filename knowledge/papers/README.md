@@ -65,4 +65,21 @@ Fourth reading pass (2026-10-23; refreshed scan with queries and dates in `LANDS
 | RepoNavigator — Zhang et al. 2026 | 2512.20957 (ICML 2026 per the PDF) | Symbol resolution as an agent's only tool | full, 27 pp, v6, 2026-10-23 | `reponavigator-2512.20957.md` |
 | NoCFG — Abadi et al. 2021 | 2105.03099 | Python call-graph precision and recall against test-driven dynamic graphs | full, 11 pp, v1, 2026-10-23 | `nocfg-2105.03099.md` |
 
+Fifth reading pass (2026-10-29; supervision quality: noisy or weighted supervision, false negatives, teacher independence, learning curves; queries and dates in `LANDSCAPE.md`):
+
+| Paper | arXiv / venue | Role in this project | Read depth | Note file |
+|---|---|---|---|---|
+| ARHN — Choi et al. 2026 | 2604.11092 | Rank-relative-to-the-positive edit of mined negatives | full, 10 pp, v1, 2026-10-29 | `arhn-2604.11092.md` |
+| GloFND — Balmaseda et al. 2025 | 2502.20612 (ICML 2025) | Self-judged false-negative detector needs a warm-up (images) | full, 18 pp, v2, 2026-10-29 | `glofnd-2502.20612.md` |
+| D-SCL — Long et al. 2023 | 2311.16481 | Mislabelled positives are easy positives (images) | full, 16 pp, v1, 2026-10-29 | `debiased-scl-2311.16481.md` |
+| MM-IssueLoc — Zhan et al. 2026 | 2607.15205 | Issue retriever, file-then-function schedule, same-repository negatives | full, 22 pp, v1, 2026-10-29 | `mm-issueloc-2607.15205.md` |
+| Uncertainty-aware code search — Liu et al. | AAAI 2025 (no arXiv version) | Not a confidence weighting; hard-negative selection | full, 9 pp, proceedings copy, 2026-10-29 | `uncertainty-aware-code-search-aaai2025.md` |
+| Noisy Pair Corrector — Zhang et al. 2023 | 2311.03798 (Findings of EMNLP 2023) | Loss-based detection of mismatched pairs, warm-up, code and text | full, 13 pp, v1, 2026-10-29 | `npc-2311.03798.md` |
+| ADAM — Tao et al. | 2212.10192 | Teacher-confidence shrinking subset | full, 13 pp, v2, 2026-10-29 | `adam-2212.10192.md` |
+| CL-DRD — Zeng et al. 2022 | 2204.13679 (SIGIR 2022) | Supervision-granularity curriculum with a reversed-order control | full, 5 pp, v1, 2026-10-29 | `cl-drd-2204.13679.md` |
+| Curriculum learning strategies for IR — Penha and Hauff | 1912.08555 (ECIR 2020) | Difficulty by model confidence, pacing functions, five seeds | full, 15 pp, v1, 2026-10-29 | `curriculum-ir-1912.08555.md` |
+| Self-distillation with adaptive margins — Gienapp et al. | 2407.21515 (ICTIR 2025) | Encoder's own similarity as target; learning curve in triplets | full, 11 pp, v2, 2026-10-29 | `self-distillation-margins-2407.21515.md` |
+| Promptagator — Dai et al. | 2209.11755 (ICLR 2023) | Round-trip filter judged by a retriever trained on the same data | full, 21 pp, v1, 2026-10-29 | `promptagator-2209.11755.md` |
+| When fine-tuning fails — Pande et al. 2025 | 2506.18535 | Fine-tuning an already strong small encoder (weak evidence) | full, 7 pp, v1, 2026-10-29 | `finetuning-fails-msmarco-2506.18535.md` |
+
 Full citations: `docs/11_references.md` (identifiers, titles, first authors and years audited against arXiv and Crossref on 2026-10-23; corrections and the list of mismatches in `docs/DEVIATIONS.md`, DEV-011).
