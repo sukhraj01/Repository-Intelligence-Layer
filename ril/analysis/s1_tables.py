@@ -45,10 +45,11 @@ def comparison_rows(tab: EvalTable, group: str, weight: float, seed: int) -> lis
             (f"graph|{v}", f"graph|{v}|{w}", "a_none"),
             (f"sfscore|{v}", f"sfscore|{v}|{w}", "a_none"),
             (f"sfrand|{v}", f"sfrand|{v}|{w}", "a_none"),
+            (f"topm|{v}", f"topm|{v}|{w}", "a_none"),
         ]
     add(base, "a_none")
     for v in VARIANT_FAMILIES:
-        for other in ("sfscore", "sfrand"):
+        for other in ("sfscore", "sfrand", "topm"):
             add(
                 [
                     (f"{other}|{v}", f"{other}|{v}|{w}", None),
@@ -56,13 +57,14 @@ def comparison_rows(tab: EvalTable, group: str, weight: float, seed: int) -> lis
                 ],
                 other,
             )
-        add(
-            [
-                (f"sfrand|{v}", f"sfrand|{v}|{w}", None),
-                (f"sfscore|{v}", f"sfscore|{v}|{w}", f"sfrand|{v}"),
-            ],
-            "sfrand",
-        )
+        for other in ("sfrand", "topm"):
+            add(
+                [
+                    (f"{other}|{v}", f"{other}|{v}|{w}", None),
+                    (f"sfscore|{v}", f"sfscore|{v}|{w}", f"{other}|{v}"),
+                ],
+                f"{other}_vs_sfscore",
+            )
     # graph variants against each other and against the stored graph
     add(
         [

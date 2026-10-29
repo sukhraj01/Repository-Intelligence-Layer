@@ -18,7 +18,10 @@ note: >-
   take the same graph-score values in the same order, so only which units are chosen differs.
   Reachability: L3 gold units outside the first-stage top 100, reached from the top 5 or top 100 by
   1 or 2 hops per edge family and not in a file of the sources. Primary reading units_all_nomod (D18),
-  units_all beside it.
+  units_all beside it. Declared after the first run of this configuration (the numbers of that run
+  had been read): control topm, the next best first-stage units without a file constraint, size-matched
+  like c and d, because c tops up from the ranking when the seeds' files are small; and the share of
+  each source that lies in the seeds' files.
 graph:
   variant: coderankembed__t1024
   k: 100

@@ -13,7 +13,10 @@ first stage, with six candidate sources at the same budget (``cap``):
   best first-stage score first, as many as the graph variant it is matched to produced;
 * ``d``  the same units drawn at random from the seeds' files (what earlier waves used as chance);
 * ``e``  graph expansion over non-contain edges only (``import``, ``invoke``, ``inherit``);
-* ``f``  contain edges only.
+* ``f``  contain edges only;
+* ``topm`` (control added after the first run, see the configuration note): no file constraint,
+  the next best first-stage units, as many as the matched graph variant, so that the part of
+  ``c`` that is a top-up from the ranking can be told from the part that is same-file.
 
 ``c`` and ``d`` are size-matched to each of ``b``, ``e``, ``f`` and take the *same* graph-score
 values in the same order as that variant, so what differs between a graph variant and its
@@ -289,10 +292,14 @@ def s1_level(
         m = len(exp_u)
         c_u = same_file_by_score(file_of_unit, order, seeds, m)
         seed_pos = [int(pos[s]) for s in seeds]
-        sets = {"graph": exp_u, "sfscore": c_u}
+        seed_set = set(seeds)
+        topm_u = [int(u) for u in order if int(u) not in seed_set][:m]
+        files = {int(file_of_unit[x]) for x in seeds}
+        sets = {"graph": exp_u, "sfscore": c_u, "topm": topm_u}
         for w in sp.weights:
             sc.add(f"graph|{vname}|w{w}", _blend(base, _gvec(n, exp_u, vals, seeds, snorm), w))
             sc.add(f"sfscore|{vname}|w{w}", _blend(base, _gvec(n, c_u, vals, seeds, snorm), w))
+            sc.add(f"topm|{vname}|w{w}", _blend(base, _gvec(n, topm_u, vals, seeds, snorm), w))
             acc: list[list[float]] = []
             hits: list[list[float]] = []
             for draw in range(sp.draws):
@@ -306,15 +313,16 @@ def s1_level(
             if w == sp.weights[0]:  # sizes and hits do not depend on the weight
                 aux_keys += [f"E|{vname}|sfrand"]
                 aux_rows.append([float(m), *[float(x) for x in np.mean(hits, axis=0)]])
-        for kind in ("graph", "sfscore"):
-            members = set(sets[kind])
+        for kind in ("graph", "sfscore", "topm"):
+            members = sets[kind]
+            gold_sets = [{int(x) for x in golds[r]} for r in READINGS]
             aux_keys.append(f"E|{vname}|{kind}")
             aux_rows.append(
-                [
-                    float(len(members)),
-                    *[float(len(members & {int(x) for x in golds[r]})) for r in READINGS],
-                ]
+                [float(len(members)), *[float(len(set(members) & g)) for g in gold_sets]]
             )
+            infile = [u for u in members if int(file_of_unit[u]) in files]
+            aux_keys.append(f"E|{vname}|{kind}_infile")
+            aux_rows.append([float(len(infile)), *[float(len(set(infile) & g)) for g in gold_sets]])
     reach = reach_level(graph, order, file_of_unit, golds, sp.reach_top) if with_reach else None
     return sc, aux_keys, aux_rows, reach
 

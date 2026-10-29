@@ -80,7 +80,7 @@ def test_evaluate_instance_layout_and_controls() -> None:
     keys = [str(k) for k in out["keys"]]
     assert keys[:2] == ["a_none", "a_rrf"]
     for v in "bef":
-        for kind in ("graph", "sfscore", "sfrand"):
+        for kind in ("graph", "sfscore", "sfrand", "topm"):
             assert f"{kind}|{v}|w0.5" in keys
     assert out["metrics_L2"].shape == (len(keys), 2 * len(READINGS))
     assert "reach_L3" in out and "reach_L2" not in out
