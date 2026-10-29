@@ -1,0 +1,345 @@
+{
+ "analysis_config_hash": "6aaef4fd84df",
+ "date": "2026-10-29",
+ "experiment": "E-ENCODER-NUMBERS",
+ "gpu_hours_total": 0.071,
+ "hardware_gpu": "NVIDIA GeForce RTX 2080 Ti, 11264 MiB (torch reports 10.57 GiB usable), driver 570.211.01, torch 2.4.1+cu121, nodes gnode045/gnode046, account A, partition u22, qos low",
+ "jobs": [
+  {
+   "elapsed": "00:01:53",
+   "gpu_hours": 0.031,
+   "job": 46134,
+   "note": "qwen3 shapes 32,16,8,4 in ONE process (script bug: shape list not split); only shape 32 is a clean row, later peaks carry over from earlier out-of-memory shapes; CodeRankEmbed control 32"
+  },
+  {
+   "elapsed": "00:01:23",
+   "gpu_hours": 0.023,
+   "job": 46180,
+   "note": "Qwen3 shapes failed (a comma lost in --export); CodeRankEmbed control 32; memory probe crashed at the optimizer step (out of memory), no output"
+  },
+  {
+   "elapsed": "00:01:01",
+   "gpu_hours": 0.017,
+   "job": 46183,
+   "note": "clean: Qwen3 shapes 4, 2, 1 one process each, CodeRankEmbed 8, memory probe"
+  }
+ ],
+ "runs": {
+  "e7_cre_46134_32-1-1-512": {
+   "config_hash": "8ac6819f9ba6caaf5c31d49ef41f2c694f2c5c4bff6372ac6e73774720bb9cf7",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode045",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46134",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "docs_per_update": 64,
+     "examples_per_s": 12.24,
+     "peak_gpu_mem_mb": 6879.7,
+     "seconds_per_update": 2.6134245,
+     "status": "ok",
+     "wall_seconds": 45.8,
+     "workload_id": "train-coderankembed-b32-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  },
+  "e7_cre_46180_32-1-1-512": {
+   "config_hash": "8ac6819f9ba6caaf5c31d49ef41f2c694f2c5c4bff6372ac6e73774720bb9cf7",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode046",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46180",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "docs_per_update": 64,
+     "examples_per_s": 12.35,
+     "peak_gpu_mem_mb": 6879.7,
+     "seconds_per_update": 2.5904747,
+     "status": "ok",
+     "wall_seconds": 48.1,
+     "workload_id": "train-coderankembed-b32-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  },
+  "e7_cre_46183_8-1-1-512": {
+   "config_hash": "8ac6819f9ba6caaf5c31d49ef41f2c694f2c5c4bff6372ac6e73774720bb9cf7",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode046",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46183",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "docs_per_update": 16,
+     "examples_per_s": 11.77,
+     "peak_gpu_mem_mb": 3369.3,
+     "seconds_per_update": 0.6798066,
+     "status": "ok",
+     "wall_seconds": 14.0,
+     "workload_id": "train-coderankembed-b8-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  },
+  "e7_probe_46183": {
+   "after_backward_mb": 4561.7,
+   "foreach_default": {
+    "peak_mb": 10599.7,
+    "status": "oom"
+   },
+   "foreach_false": {
+    "allocated_mb": 9107.1,
+    "peak_mb": 10599.7,
+    "status": "ok"
+   },
+   "parameters": 595776512,
+   "peak_after_backward_mb": 4561.7,
+   "weights_mb": 2272.7
+  },
+  "e7_qwen3_46134_32-1-1-512_16-1-1-512_8-1-1-512_4-1-1-512": {
+   "config_hash": "7485fdfc6c5f11625c1229cd5ddda0cbee23dfb155e070e9a1a04a5e0697b46d",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode045",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46134",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "error": "CUDA out of memory. Tried to allocate 128.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 128.06 MiB is free. Including non-PyTorch memory, this process has 10.44 GiB memory in use. Of the allocated memory 9.99 GiB is allocated by PyTorch, and 274.85 MiB is reserved by PyTorch but unallocat",
+     "peak_gpu_mem_mb": 10227.2,
+     "status": "oom",
+     "wall_seconds": 25.2,
+     "workload_id": "train-qwen3-embedding-0.6b-b32-n1-p1-t512-amp_fp16-gc-v1"
+    },
+    {
+     "error": "CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 16.06 MiB is free. Including non-PyTorch memory, this process has 10.55 GiB memory in use. Of the allocated memory 10.25 GiB is allocated by PyTorch, and 107.35 MiB is reserved by PyTorch but unallocate",
+     "peak_gpu_mem_mb": 10496.7,
+     "status": "oom",
+     "wall_seconds": 11.4,
+     "workload_id": "train-qwen3-embedding-0.6b-b16-n1-p1-t512-amp_fp16-gc-v1"
+    },
+    {
+     "error": "CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 8.06 MiB is free. Including non-PyTorch memory, this process has 10.56 GiB memory in use. Of the allocated memory 10.29 GiB is allocated by PyTorch, and 71.34 MiB is reserved by PyTorch but unallocated.",
+     "peak_gpu_mem_mb": 10540.7,
+     "status": "oom",
+     "wall_seconds": 8.7,
+     "workload_id": "train-qwen3-embedding-0.6b-b8-n1-p1-t512-amp_fp16-gc-v1"
+    },
+    {
+     "error": "CUDA out of memory. Tried to allocate 12.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 4.06 MiB is free. Including non-PyTorch memory, this process has 10.56 GiB memory in use. Of the allocated memory 10.23 GiB is allocated by PyTorch, and 136.41 MiB is reserved by PyTorch but unallocated",
+     "peak_gpu_mem_mb": 10479.6,
+     "status": "oom",
+     "wall_seconds": 5.7,
+     "workload_id": "train-qwen3-embedding-0.6b-b4-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  },
+  "e7_qwen3_46183_1-1-1-512": {
+   "config_hash": "7485fdfc6c5f11625c1229cd5ddda0cbee23dfb155e070e9a1a04a5e0697b46d",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode046",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46183",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "error": "CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 14.06 MiB is free. Including non-PyTorch memory, this process has 10.55 GiB memory in use. Of the allocated memory 10.24 GiB is allocated by PyTorch, and 121.08 MiB is reserved by PyTorch but unallocate",
+     "peak_gpu_mem_mb": 10484.9,
+     "status": "oom",
+     "wall_seconds": 5.5,
+     "workload_id": "train-qwen3-embedding-0.6b-b1-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  },
+  "e7_qwen3_46183_2-1-1-512": {
+   "config_hash": "7485fdfc6c5f11625c1229cd5ddda0cbee23dfb155e070e9a1a04a5e0697b46d",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode046",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46183",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "error": "CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 10.06 MiB is free. Including non-PyTorch memory, this process has 10.56 GiB memory in use. Of the allocated memory 10.30 GiB is allocated by PyTorch, and 67.63 MiB is reserved by PyTorch but unallocated",
+     "peak_gpu_mem_mb": 10542.4,
+     "status": "oom",
+     "wall_seconds": 6.7,
+     "workload_id": "train-qwen3-embedding-0.6b-b2-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  },
+  "e7_qwen3_46183_4-1-1-512": {
+   "config_hash": "7485fdfc6c5f11625c1229cd5ddda0cbee23dfb155e070e9a1a04a5e0697b46d",
+   "gate": {
+    "capability": [
+     7,
+     5
+    ],
+    "cuda": "12.1",
+    "device": "NVIDIA GeForce RTX 2080 Ti",
+    "matmul_max_abs_error": 0.0001220703125,
+    "torch": "2.4.1+cu121"
+   },
+   "hardware": {
+    "cpus_visible": 40,
+    "cuda": "12.1",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_capability": [
+     7,
+     5
+    ],
+    "host": "gnode046",
+    "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "slurm_job_id": "46183",
+    "torch": "2.4.1+cu121"
+   },
+   "shapes": [
+    {
+     "error": "CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 10.57 GiB of which 18.06 MiB is free. Including non-PyTorch memory, this process has 10.55 GiB memory in use. Of the allocated memory 10.26 GiB is allocated by PyTorch, and 100.22 MiB is reserved by PyTorch but unallocate",
+     "peak_gpu_mem_mb": 10501.8,
+     "status": "oom",
+     "wall_seconds": 10.9,
+     "workload_id": "train-qwen3-embedding-0.6b-b4-n1-p1-t512-amp_fp16-gc-v1"
+    }
+   ],
+   "timed": 10,
+   "warmup": 3
+  }
+ },
+ "seed": 0
+}

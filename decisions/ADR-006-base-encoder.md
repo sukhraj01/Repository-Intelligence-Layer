@@ -95,3 +95,53 @@ Zero-shot, on the same unit texts as the BM25 pilots (`docs/EXPERIMENTS.md`, E-D
   comparison). **Conditions to revisit / cheapest experiment:** the comparison that matters for RQ2 is after
   fine-tuning; a one-epoch, 2,000-instance fine-tune of each (pilot T2's budget) on the same dev evaluation would show
   whether the zero-shot gap survives training (about 1 to 2 GPU-hours each at the measured throughput).
+
+## Addendum 2026-10-29 — four numbers for the choice (E-ENCODER-NUMBERS; evidence only, this ADR stays Proposed)
+
+Source: `docs/EXPERIMENTS.md` E-ENCODER-NUMBERS (configuration hashes `6aaef4fd84df`, `7485fdfc6c5f`, `8ac6819f9ba6`; run log
+`results/logs/e7_encoder_numbers_2026-10-29.json`; tables `results/tables/e7_*.csv`; seed 0; one RTX 2080 Ti, 0.07 GPU-hours).
+Evidence class: measured, exploratory, zero-shot encoders, one seed. Encoders as selected on dev earlier and held fixed
+(CodeRankEmbed at 1,024 tokens with RRF k 100, Qwen3-Embedding-0.6B at 512 tokens with k 20).
+
+1. **Paired RRF(BM25, Qwen3) minus RRF(BM25, CodeRankEmbed)** (`units_all_nomod`; intervals query-level, then repository-clustered).
+   Dev L2 +4.29 [+2.95, +5.74], clustered [+2.22, +6.55] (351 queries, 5 repositories, all five positive); dev L3 +4.08
+   [+2.85, +5.37] (155 queries, 2 repositories, clustered interval not informative). Verified-six, read as a final-test-style
+   reading (both configurations were fixed on dev; nothing was chosen on Verified): L2 +1.85 [-1.67, +5.50], clustered [-2.01,
+   +5.93] (83 queries; 3 of 6 repositories positive); L3 +3.43 [+0.87, +6.33], clustered [-1.07, +5.68] (55 queries; 4 of 6
+   positive). Under `units_all` the picture is the same (Verified-six L3 +2.89 [+0.60, +5.44], clustered [-1.19, +4.69]).
+   Dense alone, Verified-six: L2 -0.87 [-5.28, +3.39], L3 +5.54 [+2.09, +9.57].
+2. **Class-unit text `full` against `header`, dense, dev** (D25's flip experiment; reported, nothing switched). `header` is below
+   `full` in every cell: dense alone -1.79 [-2.66, -1.00] (CodeRankEmbed L2), -0.50 [-1.06, +0.05] (L3), -1.57 [-2.34, -0.83] and
+   -1.13 [-1.65, -0.58] (Qwen3); fused -1.90 / -1.97 (CodeRankEmbed) and -1.86 / -2.06 (Qwen3), none with an interval above
+   zero. Truncation does not make `full` lose to `header` at these cuts. The caveat of the BM25 result (the gold reading counts a
+   class as gold whenever one of its methods is) applies unchanged and was not separated.
+3. **Training step at the D31 shape** (32 x (1+1), 512 tokens, float16 autocast, gradient checkpointing, AdamW as the training
+   path builds it, 2080 Ti with 10.57 GiB usable). CodeRankEmbed: 12.24 and 12.35 examples/s (2.6 s per update), peak 6,880 MiB.
+   **Qwen3-Embedding-0.6B: out of memory at every shape from 32 down to 1.** Probe: 595.8 million parameters, 2,273 MiB of float32
+   weights, 4,562 MiB with gradients, 9,107 MiB with both AdamW moments (per-tensor update; the default multi-tensor update fails at
+   the first optimizer step), peak 10,600 MiB at the step. No Qwen3 throughput was measured. Reasoned, not measured: a fitting
+   step would need of the order of 24 GiB and run about 2.4 to 4.3 times slower than CodeRankEmbed. `sinfo` and
+   `sbatch --test-only` show no card above 11 GB usable from the `research` account (D31 check). Recipe changes that might fit
+   (8-bit optimizer states, half-precision master weights, adapters, gradient caching) are design choices and were not tried.
+4. **Query latency next to the gain** (warm p50 / p95 / p99, batch 1): GPU encode 18.1 / 19.3 / 22.2 ms against 45.2 / 46.6 / 47.6
+   ms (ratio of p50 2.5); CPU encode, 4 threads, 411 / 1,265 / 2,555 ms against 1,533 / 3,591 / 3,628 ms (3.7); flat search at
+   35,860 units on CPU 4.95 and 5.98 ms p50. The extra encode is +27 ms (GPU) or +1.1 s (CPU) per query for the paired
+   differences in item 1. D33 (instruction variants of the Qwen3 query) was not run: it applies only if Qwen3 would win the choice.
+
+**What would have to be true for each choice** (no recommendation).
+
+- *CodeRankEmbed* is the choice if: the Verified-six L2 difference of +1.85 (interval including zero) and the L3 difference of
+  +3.43 (clustered interval including zero) are small enough that a smaller model's training cost matters more, or are
+  expected to shrink after fine-tuning (not measured; the T3/T4 pilots run on it); the RQ2 runs (4 arms, at least 3 seeds,
+  the 2.6 s update measured here) must fit on the 11 GB cards the account can reach, which this encoder does with 4 GB to
+  spare; and the CPU query budget of the demo matters (411 ms against 1.5 s at p50).
+- *Qwen3-Embedding-0.6B* is the choice if: a card with about 24 GB or more is available to every run of every arm (or a changed
+  training recipe, itself a design decision, is accepted and held identical across arms), since at the D31 shape it does not
+  fit the cards measured; the dev gap (+4.3 and +4.1) rather than the Verified-six gap is the better guide to how the
+  encoder will behave after fine-tuning, and the Verified-six intervals that include zero are a sample-size matter (55 and 83
+  queries); the extra training cost (2.4 to 4.3 times per update, reasoned) fits the 24 GPU-hour block together with the arms
+  and seeds; and 45 ms (GPU) or 1.5 s (CPU) of query encoding fits the latency requirement, which the repository does not yet
+  state as a number.
+- *Either* encoder: the gap between them after fine-tuning is not known; item 1 compares zero-shot retrievers. The cheapest
+  experiment that could flip the choice is the one in the 2026-10-25 addendum (a short fine-tune of each on the same dev
+  evaluation); for Qwen3 it needs the memory question in item 3 settled first.

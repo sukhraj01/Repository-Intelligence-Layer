@@ -51,7 +51,9 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 | E-POWER | RQ2, RQ3 (apparatus) | n, discordance, effect, run-to-run SD, per-query SD, correlation, seeds | alpha 0.05, power 0.8 | n/a (simulation seed 0) | power and minimum detectable effects (calculation, no data) | done (2026-10-18; row `x-power`) |
 | E-CONTAM-PROBE | RQ2/RQ3 (apparatus, contamination) | shard slice (every 10th of 240), hash level (text, syntax tree) | probe set = functions of the 12 Verified repositories at 499 base commits | n/a | function-hash matches against CoRNStack `document`, by size of function; feasibility and cost of the full scan | done as a slice (exploratory, 2026-10-18; rows `x-contam-probe-slice`, `x-contam-throughput`) |
 | E-CONTAM-SCAN | RQ2/RQ3 (apparatus, contamination), D23 | size floor 20 nodes (50 and 100 as sensitivity), fixed from the slice before the result | all 240 CoRNStack python shards, `document` field; probe = functions at each Verified instance's own base commit | n/a | hit counts and shares per repository with Wilson intervals | done 2026-10-29 (exploratory; rows `x4-contam-scan`) |
+| E-CONTAM-EDITED | RQ2/RQ3 (apparatus, contamination), D23 flip experiment | same floors as E-CONTAM-SCAN (20 primary, 50 and 100) | the functions each Verified reference patch edits (before and after the patch), against the hits of E-CONTAM-SCAN | n/a | share of edited functions in the corpus against two comparators, with repository-clustered intervals | done 2026-10-29 (exploratory; rows `x5-contam-edited`) |
 | E-DENSE-FUSION (was E-GRAPH-FUSION) | RQ1 ext. (apparatus), ADR-006, Q30 | encoder (CodeRankEmbed, Qwen3-Embedding-0.6B; `provisional: ADR-006`), cut (512, 1024 tokens; dev only), first stage (BM25, dense, RRF(BM25, dense) with k swept on dev, score-level BM25+dense), graph on top of the strongest first stage (edited list, graph as a third RRF list, score-level with weight swept on dev; core families and each family alone) | units and gold of the pilot-E3 cache, class form `full`, ambiguous sites `drop`, seeds are retrieved units, expansion at most 50 units, seed 0, dev repositories for every sweep, one stated setting on the Verified-six | n/a | nDCG@10 (L2) and Recall@100 (L3) at unit level (both D18 readings) and chunk level, query-level and repository-clustered intervals; graph cells against the first stage and size-matched chance controls; query-encode and flat-search latency p50/p95/p99 (CPU, GPU), encoding throughput and peak memory | done (exploratory, 2026-10-23 to 2026-10-25; rows `x2-*`; ADR-006 and ADR-003 addenda) |
+| E-ENCODER-NUMBERS | RQ1 ext. / RQ2 (apparatus), ADR-006, D25, D31 | encoder (CodeRankEmbed 1,024 tokens k 100, Qwen3-Embedding-0.6B 512 tokens k 20, both as selected on dev; `provisional: ADR-006`), class-unit text (`full`, `header`; dev) | everything of E-DENSE-FUSION; for the training-step measurement the D31 batch shape (32 x (1+1), float16 autocast, gradient checkpointing, 512 tokens) | n/a (one measurement, seed 0) | paired RRF difference with query-level and repository-clustered intervals (dev; Verified-six as a final-test-style reading), header against full, training-step throughput and peak memory, query-encode and flat-search latency p50/p95/p99 | done (exploratory, 2026-10-29; rows `e7-*`; ADR-006 addendum) |
 | E-GRAPH-L3 | RQ1 ext. | + test/config node and edge types | L3 eval set | n/a | L3 metrics; edge-recovery coverage | planned |
 | E-RQ2-RAW | RQ2 | arm = RAW | everything in the held-identical block | 3 | retrieval metrics + budget table | planned |
 | E-RQ2-FILTER | RQ2 | arm = FILTER (K-rank threshold) | as above | 3 | as above | planned |
@@ -726,6 +728,685 @@ tracked tree (raw code words) and are pinned by sha256 in `results/logs/x2_query
 scored at 512 tokens only (a 1024-token chunk encoding exists, unscored). Class-source forms and the `max3` policy
 were not read on the dense first stage (the per-form unit hashes are prepared on the cluster).
 
+## E-ENCODER-NUMBERS: four numbers for the encoder choice (ADR-006), exploratory, done 2026-10-29
+
+**What it measures.** Four numbers that ADR-006 turns on, on existing runs plus one short GPU measurement. Nothing is decided; the
+engineer settles ADR-006. Configuration `configs/experiments/e7_encoder_numbers.yaml` (hash `6aaef4fd84df`), training-step
+configuration `e7_train_step_qwen3.yaml` (`7485fdfc6c5f`; CodeRankEmbed control `t1_validate_cre.yaml`, `8ac6819f9ba6`), seed 0.
+Code `ril/evaluation/e7_encoders.py`, `ril/analysis/e7_tables.py`, `scripts/e7_run.py`, `scripts/ada/e7_measure.sbatch`; tables
+`results/tables/e7_*.csv`; run log `results/logs/e7_encoder_numbers_2026-10-29.json`; rows `e7-*` in `RESULTS.md`. Values are
+percentages (nDCG@10 at L2, Recall@100 at L3, mean over queries), differences points, intervals 95% bootstrap (2,000 draws), both
+query-level and repository-clustered. Encoders as selected on dev in E-DENSE-FUSION and held fixed here: CodeRankEmbed at 1,024
+tokens with RRF k 100, Qwen3-Embedding-0.6B at 512 tokens with k 20 (class form `full`, ambiguous sites dropped).
+
+**(a) Paired difference RRF(BM25, Qwen3) minus RRF(BM25, CodeRankEmbed)** (`units_all_nomod`, then `units_all`).
+
+| set | level | queries / repositories | CodeRankEmbed RRF | Qwen3 RRF | difference [query-level] | [repository-clustered] | `units_all` difference [query-level] |
+|---|---|---|---|---|---|---|---|
+| dev | L2 nDCG@10 | 351 / 5 | 24.04 | 28.32 | +4.29 [+2.95, +5.74] | [+2.22, +6.55] | +3.62 [+2.40, +4.89], cl. [+1.76, +5.18] |
+| dev | L3 Recall@100 | 155 / 2 | 43.00 | 47.08 | +4.08 [+2.85, +5.37] | [+3.78, +4.41] (two clusters) | +3.12 [+1.94, +4.36] |
+| Verified-six | L2 nDCG@10 | 83 / 6 | 23.03 | 24.88 | +1.85 [-1.67, +5.50] | [-2.01, +5.93] | +1.67 [-1.79, +5.29], cl. [-2.15, +5.79] |
+| Verified-six | L3 Recall@100 | 55 / 6 | 38.04 | 41.48 | +3.43 [+0.87, +6.33] | [-1.07, +5.68] | +2.89 [+0.60, +5.44], cl. [-1.19, +4.69] |
+
+Verified-six is a final-test-style reading: both configurations were fixed on dev before any Verified score was read, nothing was
+chosen on Verified, and this session chooses nothing on it. Per repository (`units_all_nomod`, difference in points, queries in
+brackets): dev L2 conan +4.07 (87), haystack +4.66 (72), openlibrary +1.93 (80), qutebrowser +8.47 (75), streamlink +0.67 (37), all five
+positive; dev L3 openlibrary +3.78 (81), qutebrowser +4.41 (74). Verified-six L2: astropy -0.41 (22), matplotlib +4.89 (32), seaborn
+-5.42 (2), flask +19.60 (1), requests +7.81 (8), xarray -3.59 (18); L3: astropy -2.59 (11), matplotlib +6.11 (24), seaborn -5.13 (1),
+flask +3.33 (1), requests +4.68 (5), xarray +3.79 (13). Dense alone, Qwen3 minus CodeRankEmbed: dev +6.42 [+4.79, +8.19] (L2) and
++12.71 [+10.25, +15.12] (L3); Verified-six -0.87 [-5.28, +3.39] (L2) and +5.54 [+2.09, +9.57], cl. [+0.57, +9.17] (L3). The
+numbers reproduce the E-DENSE-FUSION table (+4.3 / +4.1 / +1.9 / +3.4). Not read: a third dev repository at L3 (D32, session X5);
+Verified-six L3 has 55 queries from 6 repositories, three of them with at most one query.
+
+**(b) Dense class-unit text `full` against `header`, dev** (`units_all_nomod`; 351 L2 and 155 L3 queries, same cut and k as in (a),
+nothing re-tuned per form; value for `full`, then `header` minus `full` with query-level and clustered interval).
+
+| ranking | `full` L2 / L3 | `header` L2 | `header` L3 |
+|---|---|---|---|
+| BM25 alone | 21.17 / 37.47 | -2.34 [-3.44, -1.29], cl. [-3.31, -1.22] | -2.89 [-3.63, -2.10] |
+| CodeRankEmbed alone | 18.24 / 34.00 | -1.79 [-2.66, -1.00], cl. [-4.17, -0.76] | -0.50 [-1.06, +0.05] |
+| Qwen3 alone | 24.66 / 46.71 | -1.57 [-2.34, -0.83], cl. [-2.01, -1.15] | -1.13 [-1.65, -0.58] |
+| RRF(BM25, CodeRankEmbed) | 24.04 / 43.00 | -1.90 [-2.84, -0.99], cl. [-3.04, -0.45] | -1.97 [-2.72, -1.23] |
+| RRF(BM25, Qwen3) | 28.32 / 47.08 | -1.86 [-2.84, -0.88], cl. [-2.82, -0.69] | -2.06 [-2.79, -1.34] |
+
+Under `units_all` the signs and sizes agree (RRF: CodeRankEmbed -1.98 / -1.66, Qwen3 -1.99 / -1.75; dense alone -1.34 / -0.38 and
+-1.24 / -1.00). BM25 alone reproduces the Wave 3 rows (-2.3, -2.9). So with a dense encoder at these cuts `full` is ahead of
+`header` in every cell and no interval is above zero; the one interval that includes zero is CodeRankEmbed alone at L3 (-0.50).
+Truncation is the stated reason `full` might lose: 4.4% (CodeRankEmbed, 1,024) and 8.9% (Qwen3, 512) of all units are cut at the
+median instance (all 438 cached instances; the share for class units alone was not computed). Per D25 this is reported, nothing is
+switched; the reading dependence found for BM25 (a class is gold whenever one of its methods is, and only the full text
+contains the method) applies to the dense scores in the same way and was not separated here. Only dev; no Verified number was read for this part.
+
+**(c) Training step of Qwen3-Embedding-0.6B at the D31 shape** (one 2080 Ti, 11,264 MiB, 10.57 GiB usable to torch; CUDA gate
+passed in every job; float16 autocast, gradient checkpointing, 512 tokens, AdamW as the training path builds it; 3 warmup + 10 timed
+updates on a throwaway model; jobs 46134, 46180, 46183, 0.07 GPU-hours in all).
+
+| model | shape (batch x (positives + negatives)) | result |
+|---|---|---|
+| CodeRankEmbed (control, same job) | 32 x (1+1) | 12.24 and 12.35 examples/s (2.61 and 2.59 s per update), peak 6,880 MiB (two jobs; T1 job: 12.06, 6.9 GB) |
+| CodeRankEmbed | 8 x (1+1) | 11.77 examples/s, 0.68 s per update, peak 3,369 MiB |
+| Qwen3-Embedding-0.6B | 32, 16, 8, 4, 2, 1 x (1+1) | out of memory at every shape (peak at failure 10,227 to 10,541 MiB; for 16, 8 and 4 in job 46134 the peaks carry over from the earlier shape, the clean single-shape runs of 4, 2, 1 in job 46183 fail the same way) |
+
+Memory probe (job 46183, one short document, activations negligible): 595,776,512 parameters; float32 weights 2,272.7 MiB;
+after one backward pass (weights + gradients) 4,561.7 MiB; AdamW's default multi-tensor update runs out of memory at the first
+optimizer step (peak 10,599.7 MiB reached before the failure); with the per-tensor update (`foreach=False`) the step completes with
+9,107.1 MiB resident (four copies of the weights) and a 10,599.7 MiB peak, leaving about 1.7 GiB for everything else. So the batch
+size is not what fails: float32 weights, gradients and both AdamW moments of this model fill an 11 GB card on their own. Not
+measured: any throughput for Qwen3 (no shape ran). Reasoned, not measured: the activation share of CodeRankEmbed at 32 x (1+1) is
+6.7 GiB (6,880 MiB) minus its 2.0 GiB of weights, gradients and moments, i.e. 4.7 GiB; scaled by layers times width (28 x 1,024 against
+12 x 768, a factor of about 3) it would be of the order of 14 GiB, so the step would need of the order of 24 GiB in all, at least a 24 GB card, and its speed
+would be between the encoding-throughput ratio (2.4, E-DENSE-FUSION) and the parameter ratio (about 4.3) slower than CodeRankEmbed's
+12 examples/s. Changes that might fit the card (8-bit optimizer states, half-precision master weights, low-rank adapters, a smaller
+batch with gradient caching) alter the training recipe held identical across arms, are design choices, and were not tried. `sinfo`
+shows no card above 11 GB that account A can use: `ihub`, `plafnet2` and `rrc` (3080 Ti, 3090 cards) refuse the `research` account;
+the unlabelled `u22` nodes expose no card type. The D31 check is therefore: none reachable, so nothing was run on one.
+
+**(d) Query latency next to the retrieval gain** (per hardware spec: GPU 2080 Ti, CPU 4 threads of a Xeon E5-2640 v4; batch 1, warm,
+p50 / p95 / p99 in ms, issue-like query set of 100 queries, 295 warm timings; rows in `results/latency/latency_log.csv`, stages
+`query_encode` and `dense_search`, taken from E-DENSE-FUSION, no new latency run).
+
+| | CodeRankEmbed (1,024) | Qwen3 (512) | ratio of p50 |
+|---|---|---|---|
+| query encode, GPU | 18.07 / 19.28 / 22.15 | 45.17 / 46.59 / 47.63 | 2.5 |
+| query encode, GPU, cold | 18.26 / 21.62 / 24.52 | 45.32 / 47.13 / 48.83 | 2.5 |
+| query encode, CPU | 411.5 / 1,265 / 2,555 | 1,533 / 3,591 / 3,628 | 3.7 |
+| flat search, CPU, dev median snapshot (5,195 units) | 0.40 / 0.44 / 0.47 | 0.51 / 0.58 / 0.61 | 1.3 |
+| flat search, CPU, 35,860 units | 4.95 / 5.12 / 5.26 | 5.98 / 6.19 / 6.38 | 1.2 |
+| RRF vs BM25, dev L2 / L3 | +2.9 [+1.2, +4.6] / +5.5 [+4.0, +7.2] | +7.2 [+5.4, +8.9] / +9.6 [+8.0, +11.5] | |
+| RRF vs BM25, Verified-six L2 / L3 | +5.1 [+1.4, +8.8] / +6.2 [+2.9, +9.7] | +6.9 [+3.6, +10.5] / +9.7 [+6.8, +12.7] | |
+| Qwen3 minus CodeRankEmbed (a), Verified-six L2 / L3 | | +1.85 [-1.67, +5.50] / +3.43 [+0.87, +6.33] | |
+| extra query encode per query for the extra gain, p50 | | GPU +27.1 ms, CPU +1,122 ms | |
+
+For scale, a 1,024-token CodeRankEmbed cut costs the same GPU time as 512 (18.5 against 18.1 ms) but on the CPU its p95 and p99 rise
+(937 to 1,265 and 957 to 2,555 ms); Qwen3 at 1,024 is 46.5 ms on the GPU and 1,520 / 3,996 / 7,266 ms on the CPU. The latency requirement
+(the project's latency protocol) is p50/p95/p99 per component; whether 45 ms or 1.5 s of query encoding fits an interactive budget is the
+engineer's to state; no budget is recorded in the repository.
+
+**What it does not show.** One seed; zero-shot encoders, so (a) and (b) say nothing about the encoders after fine-tuning (the
+comparison that matters for RQ2); dev L3 has two repositories; the training-step measurement is a throwaway model for 13 updates and
+says nothing about convergence; the 4.7 GiB activation figure and the 24 GB card class are reasoning from one other model.
+Dead ends: job 46134 ran four Qwen3 shapes in one process (the shape list was not split), job 46180 lost the commas of its shape list
+in `--export` and its first probe crashed at the optimizer step; both are kept in the run log with their notes.
+
+## E-POOL-RANKS: teacher ranks of the candidate pool's positives and the pool's filter state, exploratory, done 2026-10-25
+
+**What it measures.** Whether the 24,285 directories of `gangiswag/train_data` python (E-POOL-CHECK) are before or after the
+consistency filter of SweRank+ (keep a positive only if it ranks in the top 40 of its repository under SweRankEmbed-Small;
+`knowledge/papers/swerank-plus-2512.20482.md`), and how the K-rank quality signal of ADR-002 is distributed in this pool under three
+teachers. Nothing is decided; ADR-001 (pool) and ADR-002 (quality signal) stay open.
+
+**Setup.** Configuration `configs/experiments/x3_pool_ranks.yaml` (hash `755b27136e9d`; the main part, including three readings (below), stated before any rank was read, the reference
+comparison added after the main ranks and before any reference rank). Sample: corpus-size quartile (uncompressed corpus bytes of every directory, edges 122,227 / 359,103 /
+974,092 bytes) times held-out flag (list v2, core plus Loc-Bench tier, aliases including the rename cache: 3,485 of 24,285 directories),
+20 directories per stratum by the order of sha256("0:<directory>"), 160 directories, 118 repositories, 1,522 positives, 188,566 functions
+(sample file sha256 in the run log). Each directory was read by HTTP range request; nothing but ids, ranks, counts and timings left the
+cluster. Teachers: SweRankEmbed-Small (revision `745d2a06`, the SweRank+ filter teacher), CodeRankEmbed (revision `3c4b6080`, the
+SweRank filter teacher) and BM25 (reference form, `provisional: ADR-004`); dense teachers at 1,024 tokens (the published SweRank
+mining script's length), float16, the model's query prefix. Rank, as in the published SweRank construction scripts (read
+2026-10-25; each positive is a separate instance whose candidates are the positive and every non-positive function, so the other
+positives of the same pull request are not competitors): 1 + non-positive functions with a strictly higher score (`rank_all`, which
+counts the other positives too, is in the tables). Text: the function code with the stored id line removed (as the published mining
+script encodes it); sensitivity stated in advance: SweRankEmbed-Small on the stored `<id>\n<code>` text (`@pool`). Pool estimates
+weight each stratum's sample ratio by its pool positives or directories; intervals are 95% stratified bootstrap (2,000 draws,
+instances resampled within strata, seed 0); for 0 or 2 of 160 the exact binomial interval is given. Code
+`ril/training/pool_ranks.py`, `pool_rank_jobs.py`, `ril/analysis/x3_tables.py`, `scripts/pool_ranks.py`; jobs in `scripts/ada/README.md`;
+log `results/logs/x3_pool_ranks_2026-10-25.json`; tables `results/tables/x3_pool_ranks_*.csv`; rows `x3-*` in `RESULTS.md`.
+1.24 GPU-hours (jobs 38202, 38213, 38291, 38292, 38295, 38296; `docs/COMPUTE.md`).
+
+**Positive ranks** (1,522 positives of the sample; median and quartiles of `rank`):
+
+| teacher | p25 | median | p75 | p95 | max |
+|---|---|---|---|---|---|
+| SweRankEmbed-Small | 1 | 10 | 98.8 | 448 | 7,911 |
+| SweRankEmbed-Small, stored text | 1 | 3 | 94.8 | 404 | 7,936 |
+| CodeRankEmbed | 7 | 38.5 | 154 | 688 | 7,560 |
+| BM25 | 7 | 33 | 120.8 | 714 | 7,188 |
+
+**Shares outside the top K** (pool estimates; sample values in `x3_pool_ranks_topk.csv`):
+
+| teacher | positives outside top 10 | top 20 | top 40 | directories with no positive in top 10 | top 20 | top 40 (sample count of 160) |
+|---|---|---|---|---|---|---|
+| SweRankEmbed-Small | 50.4% [34.2, 59.1] | 45.2% [29.3, 54.2] | 39.4% [24.1, 48.0] | 1.7% [0.2, 3.9] | 1.3% [0.0, 3.5] | 1.3% (2; exact [0.15, 4.4]) |
+| SweRankEmbed-Small, stored text | 43.3% [26.2, 52.0] | 40.0% [23.7, 49.0] | 34.9% [19.3, 43.4] | 0 | 0 | 0 (0 of 160; exact upper 2.3%) |
+| CodeRankEmbed | 69.4% [57.2, 75.8] | 61.6% [48.6, 68.8] | 52.7% [37.9, 60.7] | 15.3% [8.8, 22.2] | 10.0% [5.2, 15.9] | 4.3% [1.6, 8.0] (9; exact [2.6, 10.4]) |
+| BM25 | 71.3% [59.9, 78.6] | 63.5% [51.0, 71.8] | 53.4% [40.5, 62.0] | 23.2% [16.4, 31.0] | 15.1% [9.4, 21.1] | 13.4% [8.0, 19.6] (23; exact [9.3, 20.8]) |
+
+**Against the SweRank+ Table 1 Python row** (24,285 PRs, 49,973 instances; `paper_reported`). Pool estimate of the positives inside the
+top K (the instance count a SweRank-style positive-level filter would give from these directories):
+
+| teacher | K = 10 | K = 20 | K = 40 |
+|---|---|---|---|
+| SweRankEmbed-Small | 152,783 [125,891, 202,589] | 168,809 [141,025, 217,902] | 186,531 [160,311, 233,797] |
+| SweRankEmbed-Small, stored text | 174,614 [147,788, 227,173] | 184,667 [157,014, 235,010] | 200,660 [174,432, 248,435] |
+| CodeRankEmbed | 94,137 [74,664, 131,790] | 118,269 [95,988, 158,448] | 145,839 [121,145, 191,143] |
+| BM25 | 88,465 [65,884, 123,512] | 112,426 [87,016, 150,796] | 143,689 [117,119, 183,415] |
+
+Simple count rules over all 307,996 qrels rows (exploratory, no teacher) do not give 49,973 either: one positive per directory 24,285,
+at most two 42,667, at most three 57,413; positives of directories with at most 5 / 10 positives 34,769 / 63,727; distinct
+(repository, function id) pairs 226,468; no positive lies in a test file (D9 path rule), so a test-function exclusion is not the gap.
+
+**Teacher agreement per positive** (Spearman of ranks, instance-clustered bootstrap; Cohen's kappa of top-K membership):
+SweRankEmbed-Small and CodeRankEmbed 0.855 [0.791, 0.896], kappa 0.64 at K = 20 (597 both inside, 267 only under SweRankEmbed-Small,
+12 only under CodeRankEmbed, 646 neither) and 0.69 at K = 40; each dense teacher and BM25 0.53 [0.33, 0.67] and 0.53 [0.35, 0.65],
+kappa 0.36 at K = 20; the two text forms of SweRankEmbed-Small 0.899 [0.835, 0.929], kappa 0.85 at K = 20.
+
+**By repository and held-out flag** (sample, descriptive; no interval). Of 118 sampled repositories, the share with no positive in the
+top 40 is 0.9% (SweRankEmbed-Small), 5.9% (CodeRankEmbed), 13.6% (BM25); the share with every positive inside is 59%, 47%, 38%. Median
+rank in held-out against kept directories: 7 vs 14 (SweRankEmbed-Small), 31.5 vs 49 (CodeRankEmbed), 35 vs 32 (BM25); by size
+quartile the dense teachers' outside-top-40 shares range 26-45% and 32-59% (`x3_pool_ranks_groups.csv`, `x3_pool_ranks_repositories.csv`).
+
+**The three readings stated in advance.**
+(a) *If the directories are only PRs with at least one positive kept by the SweRank+ filter, the share of directories with no positive in
+the SweRankEmbed-Small top 40 is near 0.* Observed 2 of 160 (code text) and 0 of 160 (stored text, even at K = 10): consistent.
+(b) *If the qrels are the unfiltered modified functions and Table 1 counts the kept ones, the estimate of positives inside the
+SweRankEmbed-Small top 40 is near 49,973.* Observed 186,531 [160,311, 233,797] (200,660 for the stored text): not consistent; even at
+K = 10 and under every teacher the estimate is above 49,973 with its interval.
+(c) *If the qrels themselves were filtered, nearly every positive is inside the SweRankEmbed-Small top 40.* Observed 39.4% [24.1, 48.0]
+outside (34.9% for the stored text): ruled out.
+
+**Reference: the same teachers on a never-filtered set** (stated in the configuration before it was run). The authors' export of
+SWE-bench Verified in the same directory format (`swe_bench_verified.zip` of the same dataset repository; 457 of 500 directories carry
+qrels) was never consistency-filtered and its repositories are outside SweRankEmbed-Small's training pool (SweRank excludes SWE-bench
+repositories). Share of directories with no positive in the top K, plain sample shares with exact intervals
+(`x3_pool_ranks_reference.csv`):
+
+| teacher | K | pool sample (160) | Verified export (457) | pool, 1,000-2,999 functions | Verified, 1,000-2,999 functions | pool, 1 positive | Verified, 1 positive |
+|---|---|---|---|---|---|---|---|
+| SweRankEmbed-Small, stored text | 10 | 0 [0, 2.3] | 19.3% [15.7, 23.2] | 0 of 34 [0, 10.3] | 25.0% [13.6, 39.6] | 0 of 34 [0, 10.3] | 18.6% [14.6, 23.2] |
+| SweRankEmbed-Small, stored text | 40 | 0 [0, 2.3] | 9.4% [6.9, 12.5] | 0 of 34 [0, 10.3] | 12.5% [4.7, 25.3] | 0 of 34 [0, 10.3] | 9.8% [6.8, 13.4] |
+| CodeRankEmbed | 10 | 16.9% [11.4, 23.6] | 35.7% [31.3, 40.3] | 23.5% [10.8, 41.2] | 45.8% [31.4, 60.8] | 23.5% [10.8, 41.2] | 35.5% [30.4, 40.9] |
+| CodeRankEmbed | 40 | 5.6% [2.6, 10.4] | 17.5% [14.1, 21.3] | 14.7% [5.0, 31.1] | 33.3% [20.4, 48.4] | 5.9% [0.7, 19.7] | 20.4% [16.2, 25.1] |
+
+Reading: on never-filtered issues the same teacher with the same text leaves about one directory in five without a positive in its top
+10; in the pool not one of 160 is (also within matched snapshot size and positive count). Under the independent CodeRankEmbed the pool is
+easier than Verified as well (a third to a half of the no-positive share), so part of the gap is a difference between the two sets (repositories,
+issue style); the remainder, a share that goes to zero only under SweRankEmbed-Small, is specific to that model.
+
+**Conclusion (what is certain, what is not).**
+- Certain within this sample: the positive-level consistency filter of SweRank+ has not been applied to the qrels. Under the filter's
+  own teacher, in either text form, a third or more of the positive rows rank outside the top 40, and far more than 49,973 positives
+  rank inside it. So the directories' positives are the unfiltered modified functions (or a superset that no filter we can reproduce
+  explains), and a RAW arm at the positive level is available from this pool.
+- Certain: Table 1's 49,973 is not the count of these directories' positives surviving a top-K filter under the released teachers for
+  any K in {10, 20, 40}; the directories are not the paper's instance set, and the paper's count cannot stand in for the size of a
+  FILTER arm built from them.
+- Measured, with the reference: the directories are a set selected with respect to SweRankEmbed-Small. No sampled directory lacks a
+  positive in its stored-text top 10, against 19.3% [15.7, 23.2] of never-filtered Verified directories under the same teacher and
+  settings, and the gap is larger than under the independent CodeRankEmbed. This is what a PR-level consequence of the SweRank+ filter
+  (keep a PR if one of its positives passes; the published SweRank script cuts at rank 10) would produce.
+- Not decidable here: whether that selection is a filter applied to the pool or the fit of the released SweRankEmbed-Small to these pull
+  requests. The same picture arises without any filter if the released checkpoint has been trained on them: it was
+  fine-tuned on the SweRank training data (Python PRs of popular PyPI repositories, the same authors' collection), and on this pool it
+  ranks positives far better than its own base model (median 10 against 38.5; 267 against 12 positives inside the top 20 under one
+  teacher only). Inference: a PR-level filter removes the PRs whose every positive fails; how many those were is not recoverable from
+  the directories; on the Verified reference the same rule would remove 9.4% (top 40) to 19.3% (top 10) of PRs. Held-out-repository directories (14% of the pool) show the same no-positive share under SweRankEmbed-Small as the rest (1 of 80 each).
+- Cheapest experiment that would separate filter from fit: creation dates of the pool's PRs against the release date of the
+  SweRankEmbed-Small checkpoint (needs `GITHUB_TOKEN`, D2). PRs created after it cannot have been in its training data; if they too
+  never lack a top-10 positive, the pool was filtered; if they behave like the Verified reference, the selection is the checkpoint's fit.
+  A token-free variant: the pool's 2,448 repositories against SweRank's own 3,387 (not released; the authors' code may list them).
+
+**What each case means for the RQ2 arms** (evidence for ADR-001 and ADR-002, no decision).
+- *Directories unfiltered* (all collected PRs): RAW = every positive of the surviving repositories; FILTER, WEIGHT and CURRICULUM are
+  computed from a teacher's K-rank on the same positives; the four arms come from one pool as designed.
+- *Directories filtered at PR level by SweRankEmbed-Small* (qrels unfiltered, as measured): RAW is available at the positive level but
+  is "RAW given that the PR has at least one easy positive"; the hardest PRs (every positive failing) are missing in unknown number.
+  RAW-versus-FILTER contrasts measured on this pool then understate the noise RAW carries, so an effect found would be conservative and
+  a null would not exclude an effect on a fully raw pool; the limitation would be stated with the result. FILTER, WEIGHT and CURRICULUM
+  stay buildable.
+- *Qrels filtered per positive* (the case in which RAW would not exist in this pool): ruled out by (c).
+- In every case, SweRankEmbed-Small is a doubtful K-rank teacher for this pool: if it was trained on these PRs, its rank of a positive
+  is a training fit, not an independent quality signal (ADR-002's rule that the quality encoder is separately pretrained is about the
+  trained model; this is the same concern for the teacher). CodeRankEmbed (pretrained only) disagrees with it on 279 of 1,522 positives
+  at K = 20. Which teacher and K define FILTER stays with ADR-002 and E-PILOT-K.
+
+**Full-pool feature table: cost from measured throughput.** Pool functions: 24.72 GB of corpora times 0.001152 functions per byte (the
+pool check's simple random sample of 300) = 28.5 million function texts; within-repository dedup (texts repeat across a repository's
+snapshots): 16 repositories in four bins of directories per repository, distinct/all 0.998 (1 directory), 0.300 (2-9), 0.148 (10-49),
+0.058 (50+), weighted by the bins' shares of pool bytes 0.117 (conservative, each bin's largest per-repository ratio: 0.239). Measured
+encode rate on one RTX 2080 Ti at 1,024 tokens, float16: 278 texts/s (SweRankEmbed-Small), 275 (CodeRankEmbed), 260 (stored text).
+Encoding alone would take 3.3 GPU-hours per dense teacher with dedup; the GPU is held for the whole loop, so the estimate uses a wall-time
+model fitted to the five measured GPU runs (wall = 0.000203 s per function processed + 0.00355 s per text encoded; fits each run within
+2%): 4.9 GPU-hours per dense teacher with dedup (8.3 conservative; 29.7 without dedup), both teachers about 9.7 (16.6 conservative); 4.15 GB of compressed corpora to stream (about 12 minutes at the measured 6 MB/s from Hugging Face). BM25 for the whole
+pool (no dedup): 160 directories took 124 s for 188,566 functions on one process, so about 5.2 CPU-hours, about 1.3 hours in four shards.
+Commands: `x3_dense.sbatch` with `SELECT=all SHARD="i n"` and `x3_pool_full.sbatch` (BM25), resumable per directory, then
+`scripts/pool_ranks.py tables`; the estimate fits block 2's 24 GPU-hours; not run.
+
+**What this does not show.** 160 directories: the pool-level estimates of positive counts have wide intervals (the positive count per
+directory is heavy-tailed, 1 to 3,924). One cut (1,024 tokens) and float16 on one GPU type; the authors' text form, cut and precision for
+the SweRank+ filter are not stated. Ranks count ties in the positive's favour (27% of BM25 positives tie with at least one function,
+mostly at score 0). The dedup ratio rests on 16 repositories; the conservative figure bounds it from that sample only.
+
+## E-TRAIN-STACK: the training stack and its validation, 2026-10-25
+
+**What it is.** Apparatus for RQ2, not an experiment with a result: the path from pool directories to a scored checkpoint, with the
+arms entering only through three hooks (`ril/training/README.md`). Every training value (budget, learning rate and schedule, batch
+shape, negative policy, loss form, temperature, base encoder) is a configuration value marked `provisional: ADR-001, ADR-002, ADR-006`;
+none has a code default, and a provisional configuration is refused under `configs/frozen/`. The negative policy is held identical
+across arms (DEV-012, Q46).
+
+**Tests (local, CPU, synthetic pool; `make test`, `make test-all`).** (1) Arms only differ through the hooks: FILTER at K = infinity,
+WEIGHT with weights all 1 and CURRICULUM with a constant difficulty give batches, first gradients and trained parameters bit-identical to
+RAW's; away from the identity, WEIGHT changes only the weights, FILTER and CURRICULUM change the batches; configurations that differ
+outside the `arm` section are refused (`tests/unit/test_arms_only_differ_through_hooks.py`). (2) End to end on the tiny model: archive
+-> reader (held-out drop, feature-table coverage) -> BM25 mining -> FILTER -> 12 updates; a run stopped after 6 updates and resumed
+equals the uninterrupted run bit for bit (plan hash and parameters); result directory and run log written; evaluation hook paired
+against an untrained baseline; unit and chunk levels agree where the synthetic chunks are the units
+(`tests/integration/test_training_end_to_end.py`). (3) Same seed, same run; other seed, other run (`tests/reproducibility/test_training_repro.py`).
+(4) Leakage check (d) passes again: the training package reaches no evaluation, analysis or bench code (it did not before this
+session: the pool-rank jobs imported the GPU gate from evaluation code; the gate moved to `ril/util/gpu.py`).
+
+**Cluster validation (CPU only, 0 GPU-hours; jobs 38730, 38731; log `results/logs/t1_training_stack_2026-10-25.json`).**
+- *Selection* (held-out list v2 with the rename cache, the E-POOL-RANKS feature table): 24,285 directories listed, 3,485 held out (the
+  count X3 measured), 20,720 outside the table, 80 kept, 24 drawn by the seeded order; 24 streamed by range request in 17 s, 0 errors.
+- *Tiny model* (`configs/experiments/t1_validate_tiny.yaml`, hash `74d02bf3`): FILTER at K = 40 under CodeRankEmbed at the positive
+  level kept 131 of 301 positives (43.5%) and 23 of 24 examples; 30 updates at batch 8 = 240 example visits, 23 unique, 10.4 effective
+  epochs (the reuse that FILTER brings at matched updates, in miniature). Its retrieval numbers are not a result (hashed bag of words,
+  24 training instances).
+- *Evaluation hook* on the X2 development preparation, paired against CodeRankEmbed at 512 tokens: the BM25, CodeRankEmbed and RRF
+  (k = 60) rows reproduce `results/tables/x2_first_dev.csv` and `x2_chunks_dev.csv` exactly, values and repository-clustered intervals,
+  18 of 18 rows (L2 nDCG@10 and L3 Recall@100, both D18 readings and chunk level; e.g. dev L2 nDCG@10 under the primary reading: BM25
+  21.17 [13.55, 27.85], CodeRankEmbed 17.16, RRF 23.56). The hook is therefore the X2 measurement applied to a new variant.
+- *CodeRankEmbed path* (`configs/experiments/t1_validate_cre.yaml`, hash `8ac6819f`): 4 updates on the CPU, stopped after 2 and resumed
+  from the step checkpoint, half-precision final model (274 MB) reloaded and used to encode; 4.5 s per update (batch 2, 128 tokens, 4
+  threads). One step checkpoint with optimizer state plus the final model: 1.8 GB, which is what `$HOME` has free (`docs/COMPUTE.md`).
+
+**Training throughput and memory on one RTX 2080 Ti** (job 38747, account A, 0.12 GPU-hours; stage `train_step` rows in
+`results/latency/throughput_log.csv`, workloads `train-coderankembed-b<B>-n<N>-p<P>-t<T>[-amp_fp16][-gc]-v1`; 3 warmup and 10 timed
+updates per shape on a throwaway model, one process per shape). CodeRankEmbed at 512 tokens fits only 4 examples with one positive
+and one negative (8 documents) in float32 (9.2 GB peak, 7.1 examples/s) and in float16 autocast (8.1 GB, 13.8 examples/s); with
+autocast plus gradient checkpointing, batch 32 with one positive and one negative fits (64 documents, 6.9 GB, 12.1 examples/s, 2.65 s
+per update), batch 16 with two positives and three negatives (76 documents, 7.6 GB, 6.3 examples/s), and batch 8 at 1,024 tokens
+(5.8 GB, 4.9 examples/s). For scale: the SweRank recipe's batch 64 with 15 hard negatives is 1,024 documents per update; at the measured
+rate of about 24 documents/s under checkpointing, 20,000 updates of batch 32 x (1 + 1) would take about 15 GPU-hours per run (inference
+from these rows; a larger or gradient-cached batch would cost more). Batch shape, precision and checkpointing are `provisional: ADR-002`;
+nothing is chosen here.
+
+**What this does not show.** Nothing about which arm, teacher, K, negative policy or budget is better; the `sentence-transformers`
+path was trained for 4 updates on the CPU and measured for 13 updates per shape on the GPU, not run to convergence.
+
+## E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK: smoke pilots, exploratory (stated 2026-10-25, before any training run)
+
+**Purpose.** Evidence for ADR-002 (quality signal, K, teacher, negative policy) and ADR-001 (the held-out filter's effect) at a
+tiny budget; effect sizes at this budget may not transfer to the RQ2 budget, and nothing here decides anything.
+
+**Held identical across every condition** (`configs/experiments/t2/*.yaml`, one file per condition and seed; every value a
+pilot value, `provisional: ADR-001, ADR-002, ADR-006`): base CodeRankEmbed (pinned revision) at 512 tokens, float16 autocast with
+gradient checkpointing; batch 32 x (1 positive + 1 hard negative) plus in-batch negatives (Q53); multi-positive InfoNCE
+(`sum_in_numerator`, batch normaliser, temperature 0.05); AdamW lr 2e-5 (SweRank's small-retriever value), weight decay 0.01,
+7 warmup updates then linear decay, clip 1.0; **63 optimizer updates** in every run (one pass over selection A's 2,000
+examples at batch 32: 2,016 visits); the final model in half precision; evaluation by the X2 hook on the development
+repositories, units only (decision D12's level; chunks skipped for budget), RRF k = 60 with BM25 beside the dense column.
+Seeds 0 and 1 per condition (training seed; the selection is fixed). Teacher ranks: one pass over the example cache per teacher
+(CodeRankEmbed, SweRankEmbed-Small at 1,024 tokens, float16; BM25), with E-POOL-RANKS's rank definition; feature table
+`t2_features_A.csv` (untracked; ids hashed as in E-POOL-RANKS).
+
+**Pool.** Selection A: the first 2,000 directories outside the held-out list (v2 with the rename cache) by sha256("0:<directory>");
+cached with 0 fetch errors, 2,000 examples. Selection L (E-PILOT-LEAK only): the first 2,000 directories of the whole listing by
+the same order, held-out repositories included: 292 held-out directories in place of A's last 292. No Verified-six repository
+has a directory in the pool (92 held-out repositories occur in it, none of them in Verified-six; two development repositories
+do: haystack 140 and streamlink 109 directories), so on Verified-six the pilot can see only indirect leakage.
+
+**Conditions.**
+- E-PILOT-K: RAW (`t2_k_raw`); FILTER at the positive level, K in {10, 20, 40}, under CodeRankEmbed, SweRankEmbed-Small, BM25 and
+  the agreement of CodeRankEmbed and BM25 (a positive is kept if it is inside the top K under both); WEIGHT (power form
+  min(1, (20 / K-rank)^1), floor 0.1, example K-rank under CodeRankEmbed); CURRICULUM (easy to hard by the example K-rank under
+  CodeRankEmbed, 4 quantile buckets). Negatives `random_repo` in every cell. Q52: every cell whose teacher includes CodeRankEmbed
+  has `teacher_equals_base` true (recorded per run).
+- E-PILOT-NEG (RAW arm in every cell): `random_repo` (= `t2_k_raw`), `teacher_top_m` (M = 15, CodeRankEmbed miner, the base
+  checkpoint), `teacher_top_m_poscut` (M = 15 after dropping candidates scored at or above 0.95 x the best positive's score:
+  reference positive `max`).
+- E-PILOT-LEAK: `t2_k_raw` (selection A) against `t2_leak_in` (selection L), both evaluated on the development repositories and on
+  Verified-six, the latter labelled "uses test repositories deliberately, for the leakage effect; not a final number".
+- Run order (reverse priority for dropping if the 20 GPU-hour cap is reached): RAW with its Verified-six evaluation, FILTER
+  cells, NEG, LEAK, then WEIGHT and CURRICULUM.
+
+**Readings stated in advance** (tables by `scripts/t2_tables.py pilots configs/experiments/t2_pilots.yaml`, method in
+`ril/analysis/t2_tables.py`). Primary numbers: dev L2 nDCG@10 and L3 Recall@100 under the D18 primary reading, dense column (the
+trained encoder alone), RRF column beside. Effect = condition minus reference, seed means, paired over queries; 95% intervals over
+queries and over repositories (D17). A cell is called different from its reference only if its query-level interval excludes 0
+**and** its effect is larger than the reference's own seed-0-to-seed-1 difference on the same queries; otherwise
+indistinguishable at this budget. With about 15 contrasts x 2 levels, one or two intervals excluding 0 are expected by chance.
+Every condition is also shown against the untrained base (does 63 updates move the model at all). Two seeds give one
+seed-to-seed difference per condition: they can show an effect larger than one retraining's change, not a seed standard
+deviation, and the intervals carry query sampling only.
+
+**Results (2026-10-29; 36 runs, all finished; tables `results/tables/t2_pilot_*_{effects,seeds,runs}.csv`, teacher tables
+`t2_teacher_{shares,agreement}.csv`, log `results/logs/t2_pilots_2026-10-29.json`, result directories `results/rq2/t2_*/`).**
+Dev, D18 primary reading, percentage points; effect vs RAW, seed means, [query-level 95% interval]; "noise" = RAW seed 1 minus
+seed 0 on the same queries (dense: L2 0.78, L3 0.26; RRF: L2 0.15, L3 -0.11). Flag "beyond" = interval excludes 0 and |effect| > noise (the
+stated rule).
+
+| cell | positives kept | examples kept | dense L2 nDCG@10 | dense L3 Recall@100 | RRF L3 Recall@100 |
+|---|---|---|---|---|---|
+| base (untrained) | | | 17.16 | 33.93 | |
+| RAW (vs base) | 100% | 100% | 25.44 (+8.28 [6.77, 9.80]) | 44.97 (+11.03 [9.12, 12.98]) | 47.37 (+4.74 [3.65, 5.91]) |
+| FILTER CodeRankEmbed K10 / 20 / 40 | 22.5 / 31.3 / 42.0% | 82 / 91 / 96% | -0.49 / -0.17 / -0.30 | **-0.77** [-1.45, -0.08] / +0.01 / -0.25 | **-0.63** / -0.10 / -0.30 |
+| FILTER SweRankEmbed-Small K10 / 20 / 40 | 45.0 / 50.9 / 57.9% | 96 / 98 / 100% | +0.48 / +0.08 / +0.11 | **-0.98** [-1.70, -0.33] / **-0.58** / -0.30 | -0.24 / -0.21 / +0.05 |
+| FILTER BM25 K10 / 20 / 40 | 22.3 / 30.9 / 44.7% | 74 / 83 / 90% | -0.61 / -0.23 / -0.54 | **-1.13** [-1.71, -0.58] / -0.63 / **-1.61** [-2.30, -0.99] | **-0.94** / **-0.54** / **-0.79** |
+| FILTER agreement CodeRankEmbed+BM25 K10 / 20 / 40 | 12.5 / 19.9 / 31.0% | 61 / 75 / 86% | **-0.80** [-1.39, -0.23] / -0.21 / +0.13 | **-1.16** / -0.56 / **-0.41** | **-0.76** / -0.20 / -0.36 |
+| WEIGHT (CodeRankEmbed, power, K 20) | 100% | 100% | -0.32 [-0.59, -0.08] | **-0.43** [-0.72, -0.15] | -0.11 |
+| CURRICULUM (CodeRankEmbed, 4 buckets) | 100% | 100% | -0.31 | **-0.68** [-1.15, -0.27] | -0.25 |
+| NEG teacher top-15 (CodeRankEmbed miner) | | | -0.21 [-0.98, 0.52] | +0.35 [-0.71, 1.49] | -0.72 [-1.61, 0.05] |
+| NEG top-15 after the 0.95 positive cut | | | +0.63 [0.11, 1.13] | **+1.10** [0.35, 1.90] | -0.18 |
+| LEAK: selection L (292 held-out dirs) vs A, dev | | | +0.18 [-0.25, 0.57] | +0.16 [-0.21, 0.53] | +0.07 |
+| LEAK, Verified-six (uses test repositories deliberately, for the leakage effect; not a final number) | | | +0.51 [-0.46, 1.59] (L2 n = 83) | -0.25 [-0.90, 0.34] (n = 55) | -0.45 [-0.83, -0.10] |
+
+Bold: beyond the stated rule. Every flagged FILTER, WEIGHT and CURRICULUM cell is negative and the same sign in both seeds except
+SweRankEmbed-Small K20 at L3 (seeds +0.22, -1.38); the one positive flag among the arm cells is RRF L2 under SweRankEmbed-Small K10
+(+0.66 [0.18, 1.16]). About 60 arm contrasts were made, so two or three flags would be expected by chance; the pattern (strict filters,
+and BM25 at every K, lower L3) is more than that, the size (about 1 point) is not. L2 and repository-clustered intervals in
+`t2_pilot_k_effects.csv`.
+
+**Cost.** Per run: 63 optimizer updates, 2,016 example visits, 0.046-0.047 GPU-hours of training loop (about 2.8 minutes); unique
+examples seen = examples kept (FILTER 1,229-1,992; RAW, WEIGHT, CURRICULUM, NEG, LEAK 2,000), effective epochs 1.008 (RAW) to 1.64
+(agreement K10): at matched updates a strict filter re-visits its kept examples, as designed. Whole run including the dev evaluation
+about 22 minutes (about 0.37 GPU-hours; the evaluation encodes the trained model's dev unit texts at about 50 texts/s, a quarter of
+X2's rate); with the Verified-six evaluation about 42 minutes. Teacher passes 2.20 GPU-hours (both dense teachers over 1.95 million
+functions), BM25 2 CPU-minutes. Session total 16.87 GPU-hours of block 2 (jobs 39098, 39100, 39101, 39188, 39212; `docs/COMPUTE.md`).
+The positive-cut cell had 70 of 2,016 visits with no eligible negative (shortfall). Q52: `teacher_equals_base` is true for every
+cell whose teacher includes CodeRankEmbed (FILTER CodeRankEmbed and agreement, WEIGHT, CURRICULUM) and for the NEG miner; those cells
+do not behave differently from the SweRankEmbed-Small and BM25 cells at the same K (e.g. L3 K10: -0.77, -0.98, -1.13).
+
+**Teachers on selection A** (2,000 directories, 25,318 positives): positives inside the top 10 / 20 / 40: CodeRankEmbed 22.6 / 31.3 /
+42.0%, SweRankEmbed-Small 45.0 / 50.9 / 57.9%, BM25 22.3 / 30.9 / 44.7%; directories with no positive inside the top 10:
+17.9% [16.2, 19.6], 4.3% [3.5, 5.2], 26.2% [24.3, 28.1] (Wilson). Spearman per positive: CodeRankEmbed~SweRankEmbed-Small 0.854
+[0.818, 0.884], CodeRankEmbed~BM25 0.706 [0.65, 0.75], SweRankEmbed-Small~BM25 0.667 [0.60, 0.72]; kappa of top-20 membership 0.57, 0.48,
+0.43. SweRankEmbed-Small again ranks the pool's positives far better than the others (E-POOL-RANKS, Q50).
+
+**What this would change in the plan (evidence, not decisions).** ADR-002: at a 63-update budget no consistency filter, weight or
+curriculum under any teacher or K beats RAW, and the strict ones cost about 1 L3 point; the RQ2 contrast is therefore not expected to
+be large at small budgets, and K and teacher are sensitive mostly in the direction "stricter is worse" here; the positive-aware cut
+is the only setting that moved L3 upward, which bears on Q46 (the negative policy held identical across arms). ADR-001: the
+held-out filter's removal of 14.6% of the pool has no measurable effect on dev or Verified-six at this budget, so on this evidence it
+is hygiene for the claim, not a number-changer; the direct case (held-out development repositories in training) is in this pair
+only at about 30 directories and showed nothing either.
+
+**What it does not show.** Two seeds: one seed-to-seed difference per condition, not a standard deviation; the intervals carry query
+sampling only. 63 updates is about 0.3% of the master's 20,000; a filter's benefit (less label noise) may need many epochs to show and
+its cost (fewer unique positives, more repetition) dominates early. Dev has five repositories and two of them carry the L3 queries
+(Q47). One base, one batch shape (32 x (1 + 1)), one learning rate, units only (no chunk level). The structural negative factor and
+the RQ2 arms at their real budget are not run.
+
+## E-CONTAM-SCAN: full documents-only contamination scan, exploratory, done 2026-10-29
+
+Decision D23 (ADR-005 addendum). Config `configs/experiments/x4_contam_scan.yaml` (hash `87ac11b7293b`), committed (`b9680b3`) **before** the full result was read, with the floor chosen from the 24-shard slice only. Log `results/logs/x4_contam_scan_2026-10-29.json`, table `results/tables/x4_contam_scan_by_repo.csv`, row `x4-contam-scan`; jobs in `results/logs/ada_jobs.csv` (account A). Not part of the frozen evaluation.
+
+**Floor and why.** 20 syntax-tree nodes (`ast.walk` count of the matched function); 50 and 100 as sensitivity readings, all stated before the result. In the slice, the share of hit documents whose hash occurs at the base commits of more than one of the 12 repositories (a generic function) was 39% below 20 nodes, 2% at 20 to 29 and 1% or less above; 15 and 10 nodes would have left 3% and 27%. 73% of the slice hits were under 20 nodes.
+
+**What was scanned.** All 240 shards, 23,881,192 rows (every row had a `document`), 306.6 GB of compressed stream; negatives not scanned. Shard jobs 45620 and 45621 (4 workers each, 2 h 13 min and 2 h 06 min) plus 45774 for the one shard (87) whose three attempts hit transient name-resolution failures. Measured cost: 17.9 worker-hours summed over shards (the earlier 10 CPU-hour estimate counted CPU only; the rest was waiting on the network), 4.7 GB peak RSS on the first job (estimate was 1.5 GB from the slice; 8 GB requested was enough). The base-commit hashes (500 instances, 7,397,591 function entries at or above 20 nodes) came from job 45623 (32 min, 1.4 GB). No hit record was truncated (`any_hits` equals the records for all 240 shards) and no hit lacked a syntax-tree hash.
+
+**Result, all hits.** 150,198 documents (0.63%) match a Verified function by syntax-tree hash (slice: 0.61%); 32,714 distinct hashes. By size of the matched function: under 20 nodes 106,777 (71%), 20 to 49 16,290, 50 to 99 13,021, 100 or more 14,110.
+
+**Result, restricted.** Hash must be a function at an instance's own base commit of that repository and at or above the floor (a document counts for each repository whose instances contain the hash; the ALL row counts a hash once):
+
+| floor (nodes) | hit documents | distinct probe functions | of them in the corpus (Wilson 95%, descriptive) |
+|---|---|---|---|
+| 20 (primary) | 43,421 | 194,187 | 26,530 = 13.7% (13.5-13.8) |
+| 50 | 27,131 | 138,509 | 18,391 = 13.3% (13.1-13.5) |
+| 100 | 14,110 | 84,409 | 10,435 = 12.4% (12.1-12.6) |
+
+Per repository at the primary floor (instances; distinct functions above the floor; functions in the corpus with Wilson interval; hit documents; median share of an instance's functions above the floor that match, range over instances): astropy 22; 20,449; 22.3% (21.7-22.9); 5,050; 28% (20-34%). django 231; 38,826; 17.6% (17.3-18.0); 14,696; 22% (20-24%). matplotlib 34; 16,013; 12.8% (12.3-13.3); 3,417; 19% (16-21%). seaborn 2; 2,146; 14.3% (12.8-15.8); 423; 14%. flask 1; 714; 4.1% (2.8-5.8); 377; 4%. requests 8; 1,219; 26.5% (24.1-29.0); 1,679; 33% (25-37%). xarray 22; 11,241; 8.5% (8.0-9.1); 1,031; 7% (6-17%). pylint 10; 7,498; 7.7% (7.2-8.4); 740; 7% (6-18%). pytest 19; 10,407; 7.0% (6.5-7.5); 772; 5% (3-16%). scikit-learn 32; 18,809; 18.6% (18.1-19.2); 7,720; 18% (16-31%). sphinx 44; 10,732; 6.0% (5.6-6.5); 677; 4% (4-14%). sympy 75; 56,208; 10.7% (10.5-11.0); 7,382; 15% (12-22%). The full table, with the 50 and 100 floors, is in the CSV.
+
+**What this says.** Every one of the 500 instances has at least one matching function at every floor, so "does the instance have a hit" carries no information; the share of an instance's own functions that occur in the corpus does (4% to 33% by repository median at floor 20, higher in repositories whose corpus snapshot is close to the base commits). The restriction to the instance's own base commit removes nothing at repository level (the probe was built from exactly those snapshots, so the repository rows equal the union-probe counts; a first version of the tables compared the two and was dropped as vacuous); it matters per instance, which is how the shares above are computed. Floors 50 and 100 change the counts; by share of functions in the corpus, requests and astropy lead and pytest, sphinx and flask trail at all three floors, while the middle ranks (django, scikit-learn, seaborn, matplotlib, sympy, pylint, xarray) swap neighbours.
+
+**What a hit does not say.** A hit is a function-level match: a function with this exact syntax tree occurs as the `document` of a CoRNStack row. It is not proof that the (query, document) pair was trained on, that the Verified issue or its patch was seen, or that any model memorised anything; the corpus may contain the function from a different commit, a fork or a vendored copy, and a retriever trained on the corpus is not the project's encoder choice (ADR-006 open). A non-hit does not show absence (renamed or edited copies, negatives not scanned, no gold-patch matching). Functions are not independent draws, so the intervals are descriptive; the two- and one-instance repositories (seaborn, flask) carry no instance-level interval worth reading.
+
+**The D23 flip experiment (edited functions among the hits)** was run in session X5, see E-CONTAM-EDITED below.
+
+Reproduce: `scripts/ada/README.md` ("Pool check and contamination probe"). The slice command is `contam_scan.sbatch` with `STRIDE=10`; `STRIDE=1` runs the full documents-only scan.
+
+**Next (decision D23, 2026-10-18).** The full documents-only scan (`STRIDE=1`) runs in the background, with hits restricted to
+functions at the instance's own base commit and above a size floor stated before the full result is read; counts per
+repository. The probe is not part of the frozen evaluation: it supports the contamination statement of the report only, and a
+hit is not proof that a pair was trained on (ADR-005 addendum).
+
+## E-CLASS-SOURCE, E-AMBIG-POLICY, E-L3-CENSUS and the E-GRAPH-SIGNAL headline under decision D18: exploratory, done 2026-10-23
+
+Configs `configs/experiments/x1_structure_dev.yaml` (hash `3041c6121f78`; the dev sweep and the two selection rules, written before
+any run), `x1_headline_dev.yaml` (`7c42ce178063`), `x1_headline_confirm.yaml` (`063d649a918c`; the Verified setting, committed before
+any Verified extras existed), `x1_l3_census.yaml` (`3244f8775b83`). Log `results/logs/x1_structure_2026-10-23.json` (job ids, hashes,
+hardware, alignment checks), readers `results/logs/x1_oracle_flask_2026-10-23.json` and `x1_jedi_policy_2026-10-23.json`; tables
+`results/tables/x1_*`. Code: `ril/parsing/ambiguity_policy.py`, the class-source forms in `ril/parsing/repository_parser.py`,
+`ril/evaluation/{x1_prepare,x1_eval,policy_readers}.py`, `ril/analysis/{x1_tables,l3_census}.py`; jobs `scripts/ada/x1_prepare.sbatch`,
+`x1_census.sbatch`. Licence: arrays, counts, ids and paths only.
+
+**Protocol.** One extras file per instance (Ada, CPU; 355 dev and 83 Verified-six instances, no failures) holds the BM25 scores of
+the issue text under each class-unit source form, the index size and build time of each form, every ambiguous `invoke` site with
+its candidate set and receiver evidence, and four gold readings. The evaluation merges it with the pilot-E3 cache of the same
+instance and refuses to score unless the `full`-form scores equal the cached BM25 scores and the resolved invoke pairs agree in
+number (438 of 438 agree). It then runs the pilot-E3 grid unchanged (seeds, hop decay, the 50-unit cap, both list forms, both chance
+controls), so a variant differs from pilot E3 only in the class text or in which ambiguous sites become edges. Variant `full`
+with policy `drop` *is* pilot E3: under gold `units` it reproduces every pilot-E3 number (for example `contain` +4.1 [+2.9, +5.2]
+nDCG@10 at L2 on dev, `core` -0.0 [-1.4, +1.6] at L2 on Verified). **Gold readings:** `units_all_nomod` (every overlapped unit, module
+units removed) is primary (D18); `units_all` (CORE-Bench-faithful) is beside it; pilot M's mapping `units` (functions or methods a chunk
+overlaps, else the class, else the module unit) continues pilot E3. **Averages:** mean over queries with two 95% intervals,
+query-level (`micro`) and repository-clustered (`cluster`, D17). Dev has five repositories at L2 but only **two at L3** (openlibrary,
+qutebrowser): a clustered interval over two clusters is not informative (it can be narrower than the query-level one) and the L3
+text quotes the query-level interval. **Tuning discipline:** every variant ran on dev only; the selection rules were in the config
+before the first run; Verified ran one stated setting. The `pol_rebucket_nofixture` variant is a dev-only sensitivity.
+
+**Class-unit source forms (Q28).** `full` = the whole class span; `header` = the class span without its methods (decorators,
+`class` line, docstring, every class-level statement wherever it stands); `header_sigs` = `header` plus each method's decorators
+and `def` line(s). Ids, spans and every other field are identical across forms, so the unit count and the gold mapping are too.
+
+Dev (351 L2, 155 L3 queries), difference against `full` (percentage points; query-level interval, clustered interval at L2):
+
+| gold reading | ranking | `full` (L2 nDCG@10 / L3 Recall@100) | `header` L2 | `header` L3 | `header_sigs` L2 | `header_sigs` L3 |
+|---|---|---|---|---|---|---|
+| `units_all_nomod` (primary) | BM25 alone | 21.2 / 37.5 | -2.3 [-3.4, -1.3] (cl. [-3.3, -1.2]) | -2.9 [-3.6, -2.1] | -2.9 [-3.8, -2.0] (cl. [-4.1, -1.8]) | -2.2 [-2.9, -1.6] |
+| `units_all_nomod` | `contain` expansion | 23.5 / 45.1 | -2.2 [-3.6, -0.8] | -0.9 [-2.3, +0.4] | -2.9 [-4.2, -1.7] | -0.7 [-1.8, +0.4] |
+| `units_all_nomod` | `core` expansion | 22.2 / 47.4 | -2.0 [-3.1, -0.8] (cl. [-3.1, -0.8]) | -1.7 [-3.1, -0.5] | -2.7 [-3.9, -1.6] (cl. [-4.1, -1.6]) | -2.0 [-3.2, -1.0] |
+| `units_all` | BM25 alone | 21.0 / 36.8 | -2.6 [-3.7, -1.6] | -2.6 [-3.3, -1.9] | -3.1 [-4.1, -2.2] | -2.0 [-2.6, -1.4] |
+| `units_all` | `core` expansion | 22.5 / 48.8 | -2.0 [-3.2, -0.8] | -2.0 [-3.3, -0.7] | -2.7 [-3.8, -1.6] | -2.0 [-3.1, -1.0] |
+| `units` (pilot M mapping) | BM25 alone | 15.8 / 35.6 | -0.3 [-1.1, +0.4] | +0.3 [-0.3, +0.8] | +0.3 [-0.4, +1.0] | +0.4 [-0.1, +0.8] |
+| `units` | `contain` expansion | 19.9 / 44.5 | -1.4 [-2.5, -0.3] | +0.7 [-0.6, +2.1] | -1.3 [-2.4, -0.3] | +0.8 [-0.3, +1.9] |
+| `units` | `core` expansion | 17.6 / 47.5 | -0.2 [-1.1, +0.7] | -0.7 [-2.0, +0.5] | -0.2 [-1.1, +0.7] | -0.9 [-2.0, +0.1] |
+
+Expansion cells: C 5, gamma 0.5, 2 hops, list form. Per repository (`units_all_nomod`, BM25 alone and `core`), `full` is ahead or level
+in all five dev repositories (streamlink level). **Selection rule result** (`results/tables/x1_dev_selection.json`): `full` stays; neither
+header form is eligible (both are below `full` at L2 and L3). **Index size and build time** (dev, median per snapshot over 355
+snapshots; `results/tables/x1_dev_sizes.csv`): 5,195 units (755 class units) in every form; source text 5.73 M characters (`full`),
+3.70 M (`header`, -35%), 4.01 M (`header_sigs`, -30%); BM25 tokens 517,550 / 332,714 (-36%) / 359,494 (-31%); postings 207,739 /
+164,846 (-21%) / 174,660 (-16%); index arrays 3.42 / 2.73 / 2.89 MB; parse plus index build p50 2.83 / 2.45 / 2.53 s, p95 5.01 / 4.37 /
+4.75 s (Ada Xeon E5-2640 v4, four shards sharing six CPUs: indicative, not a latency row). The graph does not depend on the form.
+
+**What it shows.** Under the readings that count a unit as gold whenever a positive chunk overlaps it (D18 part 1), the full class
+text is better by 2 to 3 points at both levels, for BM25 alone and after expansion. Most of that is the reading: a class whose method
+is gold is itself gold under `units_all`, and only the full form contains the method's text. Under pilot M's mapping, where a class is
+gold only when a chunk touches no method, the three forms are not distinguishable for BM25 or `core` (all intervals include 0), and
+`header` costs 1.4 points at L2 only through the containment expansion. So the Q28 answer depends on D18 part 1, and the cost of `full`
+is about 55% more indexed tokens and 26% more postings for text that the method units already hold. **Does not show** anything about a
+dense encoder (truncation makes long class units behave differently; X2), or about chunk-level evaluation.
+
+**Ambiguous-site policies (Q35, Q36).** Applied to the `invoke` family when the graph is read (`ril/parsing/ambiguity_policy.py`):
+`keep` every candidate of every ambiguous site; `drop` none (pilot E3 as run read resolved edges only); `rebucket` drop a site whose
+receiver carries evidence of a non-repository object (literal or builtin container assigned, `*args`/`**kwargs` name, an annotation
+naming only builtin or imported external types after removing `Optional`/`Union`/container wrappers, an un-annotated parameter of a test
+or fixture function in a test file) and keep the rest; `max3` keep sites with at most three candidates. The evidence rules are this
+project's syntactic reading of the four kinds named in Q35, not type inference. Ambiguous sites are common: median per dev snapshot
+1,168 (haystack) to 5,306 (conan) ambiguous sites against 8,744 to 25,600 resolved; the evidence rules fire on 6% (haystack) to 40%
+(qutebrowser, mostly fixture parameters) of them (`results/tables/x1_dev_ambiguous.csv`).
+
+Retrieval effect, dev, `full` form, gold `units_all_nomod`, list form at the pilot-E3 cell, difference against `drop`:
+
+| policy | `invoke` L2 | `invoke` L3 | `core` L2 | `core` L3 | `invoke+contain` L3 |
+|---|---|---|---|---|---|
+| `keep` | -0.2 [-0.6, +0.1] | -2.9 [-4.2, -1.4] | -0.1 [-0.3, +0.1] | -2.4 [-3.5, -1.3] | -3.3 [-4.6, -1.9] |
+| `rebucket` | -0.1 [-0.4, +0.2] | -2.1 [-3.4, -0.8] | +0.0 [-0.2, +0.2] | -1.6 [-2.7, -0.5] | -2.1 [-3.4, -0.9] |
+| `rebucket` without the fixture rule (dev only) | -0.3 [-0.6, +0.1] | -2.3 [-3.6, -1.0] | -0.1 [-0.3, +0.1] | -2.2 [-3.4, -1.2] | -3.2 [-4.5, -1.8] |
+| `max3` | -0.0 [-0.3, +0.2] | -0.4 [-1.4, +0.6] | -0.0 [-0.2, +0.2] | +0.1 [-0.4, +0.7] | -0.4 [-1.4, +0.4] |
+
+The ordering (`max3` = `drop` > `rebucket` > `keep` at L3; nothing moves L2) is the same under all four gold readings; in the
+clustered intervals `rebucket` at L3 includes 0 (`core` [-3.2, +0.1]). **Selection rule result:** `drop` stays; no candidate is eligible.
+
+Edge quality per policy, read by two readers that are not the build author:
+
+| reader, measure | `drop` | `keep` | `rebucket` | `max3` |
+|---|---|---|---|---|
+| dynamic oracle (flask suite, 1,057 in-repository caller-callee pairs): precision of invoke pairs whose caller executed (lower bound) | 0.616 (506/821) [0.583, 0.649] | 0.315 (694/2,205) [0.296, 0.334] | 0.450 (619/1,377) [0.423, 0.476] | 0.476 (671/1,409) [0.450, 0.502] |
+| oracle: recall of all pairs / without implicit-protocol dunders (n 1,057 / 854; D15) | 0.479 / 0.592 | 0.657 / 0.813 | 0.586 / 0.725 | 0.635 / 0.786 |
+| oracle: precision of the ambiguous pairs the policy adds / drops | - / 0.136 | 0.136 (188/1,384) / - | 0.203 (113/556) / 0.091 (75/828) | 0.281 (165/588) / 0.029 (23/796) |
+
+Site level. Oracle, executed lines of the library (coverage.py): an in-repository candidate was observed for 29 of 50 executed sites
+with at most three candidates (0.58 [0.44, 0.71]) and 2 of 33 with more (0.06 [0.02, 0.20]); 4 of 650 executed `external` sites had an
+in-repository callee of that name (0.006 [0.002, 0.016]); 197 of 263 executed resolved sites had their pair observed (0.75 [0.69,
+0.80]). In the test files (judged at caller level; no line coverage there) fixture-parameter sites had a candidate observed as often
+as sites without evidence (97/433 = 0.22 [0.19, 0.27] against 95/392 = 0.24 [0.20, 0.29]): **the fixture rule does not separate
+in-repository from external receivers in flask** (a fixture often returns the repository's own object). Jedi 0.20.1 on 300 stratified
+sites (requests and the dev repository streamlink, 150 each, `results/tables/x1_jedi_policy_sample.csv`): resolved sites agree 48/50
+(0.96 [0.87, 0.99]); `external` 40/40 answered external; re-bucketed (evidence) sites 24/25 answered external (0.96 [0.80, 0.99];
+literal 21/21, annotated 4/4, fixture 0/1 answered); sites with at most three candidates 30/58 answered inside the set (0.52 [0.39,
+0.64]; requests 27/36, streamlink 3/22), with more than three 4/20 (0.20 [0.08, 0.42], 30 of 50 unanswered); `unresolved` sites were
+in-repository for Jedi in 30/44 answered (0.68). **What it shows.** Adding ambiguous candidates raises oracle recall (0.48 to 0.66)
+and lowers pair precision (0.62 to 0.32); `max3` keeps most of the recall gain (0.64) at the best precision of the three, and its
+dropped pairs are almost all wrong (0.03 supported). In retrieval none of the policies helps: at L3 every added ambiguous edge costs
+Recall@100 in proportion to how many wrong edges it adds, and L2 does not move. The receiver-evidence rules are precise for literals and
+annotations (Jedi) but those are few; the fixture rule, which fires most, is not supported by the oracle. **Does not show:** a policy
+for other edge uses (training negatives, an agent tool), or the boundary between `external` and `unresolved` beyond the counts above
+(Jedi reads 68% of `unresolved` sites as in-repository: the resolver's recall limit, not a bucket error).
+
+**L3 positive census.** Every located positive of the 438 cached instances (210 with L3 qrels; `results/tables/x1_census_cached_*.csv`),
+by kind of the unit it maps to (decision D9 path rule first: a positive in a test file is a test unit whatever its structure):
+
+| set | L3 positives | function | method | class | module residual | test unit | non-Python (docs / config / data) | Python not parsed |
+|---|---|---|---|---|---|---|---|---|
+| dev (155 instances) | 3,253 | 1,170 | 941 | 111 | 444 | 482 | 86 (6 / 30 / 50) | 19 |
+| Verified six (55) | 1,342 | 178 | 849 | 20 | 62 | 203 | 30 (2 / 0 / 28) | 0 |
+| all (210) | 4,595 | 1,348 (29.3%) | 1,790 (39.0%) | 131 (2.9%) | 506 (11.0%) | 685 (14.9%) | 116 (2.5% [1.4, 4.0]) | 19 |
+
+L2 for comparison (438 instances, 2,792 positives): no test units, 74 non-Python (2.7% [1.9, 3.5]), 586 module residuals (21.0%).
+**Novelty:** of the L3 positives of instances that also have L2 positives, 37.7% [32.9, 42.5] (instance bootstrap) lie in a file
+that holds no L2 positive (dev 29.5% [24.8, 34.4], Verified six 57.5% [49.5, 64.4]); 184 of 210 instances have at least one. Of those
+1,731 new-file positives, 685 are test units (40%), 559 methods, 344 functions, 65 module residuals, 41 non-Python. Per repository the
+new-file share runs from 28.9% (openlibrary) to 61.5% (xarray). **What it shows.** Test code is the largest structure beyond the edited
+files that L3 asks for (15% of L3 positives, 40% of those in new files); configuration and documentation are rare (30 configuration and
+8 documentation positives in 4,595); the pilot sample's 0 of 141 non-Python positives was a small-sample zero, the rate is about 2.5%.
+**Extension beyond the cached instances** (`x1_l3_census.yaml`; Ada jobs 35503 and 35518, 2.7 CPU-hours): the six other Verified
+repositories with L3 qrels (django 136, sympy 51, sphinx 26, scikit-learn 21, pytest 10, pylint 3 instances) and SWE-bench Pro ansible
+(83), the one further Python repository with L3 qrels (Live has no L3 folders; Multi-SWE-bench and Multilingual are not Python), mapped
+with the pilot-E1 unit stage; every positive located. All 540 Python L3 instances of the sub-datasets with base commits (all 302 Verified,
+155 dev, 83 ansible), 14,092 L3 positives (`results/tables/x1_census_extended_*.csv`):
+
+| set | L3 positives | function | method | class | module residual | test unit | non-Python (docs / config / data) | in a file without L2 positives |
+|---|---|---|---|---|---|---|---|---|
+| all 540 | 14,092 | 2,570 (18.2%) | 6,710 (47.6%) | 467 (3.3%) | 1,192 (8.5%) | 2,887 (20.5%) | 245 = 1.7% [1.2, 2.4] (82 / 70 / 93) | 46.2% [43.0, 49.4] |
+| Verified, all 12 repositories (302) | 8,893 | 1,034 | 4,843 | 243 | 454 | 2,248 (25.3%) | 71 = 0.8% [0.3, 1.6] (43 / 0 / 28) | 58.8% [55.6, 61.9] |
+| dev (155) | 3,253 | 1,170 | 941 | 111 | 444 | 482 (14.8%) | 86 = 2.6% [1.7, 3.8] | 29.5% [24.8, 34.4] |
+| ansible (83) | 1,946 | 366 | 926 | 113 | 294 | 157 (8.1%) | 88 = 4.5% [2.7, 6.7] (33 / 40 / 15) | 16.6% [12.7, 21.2] |
+
+Of the 6,516 L3 positives in files without L2 positives, 2,887 are test units (44%), 2,384 methods, 778 functions, 241 module residuals,
+103 non-Python. Django carries much of the Verified test share (1,459 of its 4,361 L3 positives are test units; 62.8% of its L3 positives
+lie in new files). The extension strengthens the cached-instance reading: tests are the structure beyond the edited files that L3 asks
+for (a fifth of all L3 positives, close to half of those in new files); configuration and documentation are under 2% everywhere,
+highest in ansible (4.5%, a configuration-heavy project); the dev repositories have fewer new-file positives than Verified (29.5% against
+58.8%), so a graph signal for L3 tuned on dev sees a different mix than the test set.
+
+**The E-GRAPH-SIGNAL headline under D18** (`full` form and `drop` policy, as selected; C 5, gamma 0.5, 2 hops, list form; gold
+`units_all_nomod`; query-level interval, clustered interval in brackets after it where it differs in sign):
+
+| edge subset | dev L2 vs BM25 | dev L2 vs same-file | dev L3 vs BM25 | dev L3 vs same-file | Verified-6 L2 vs BM25 | Verified-6 L2 vs same-file | Verified-6 L3 vs BM25 | Verified-6 L3 vs same-file |
+|---|---|---|---|---|---|---|---|---|
+| contain | +2.4 [+1.3, +3.5] | +3.4 [+2.5, +4.5] | +7.7 [+5.4, +10.0] | +1.6 [+0.0, +3.1] | +2.8 [+0.5, +5.1] (cl. [-0.7, +4.4]) | +4.4 [+2.6, +6.3] | +7.2 [+3.0, +12.1] | +4.0 [+0.5, +7.9] (cl. [-0.3, +6.3]) |
+| invoke | +0.4 [-0.5, +1.3] | +1.4 [+0.6, +2.3] (cl. [-0.1, +2.9]) | +7.3 [+5.4, +9.4] | +2.0 [-0.5, +4.4] | +0.8 [-0.8, +2.6] | +2.4 [+0.8, +4.2] | +1.6 [-0.8, +4.2] | -1.7 [-5.2, +1.4] |
+| import | -1.4 [-1.9, -0.8] | -1.1 [-1.6, -0.6] | -0.8 [-1.6, +0.1] | -3.0 [-4.8, -1.4] | -0.3 [-1.4, +0.8] | +0.9 [-0.1, +2.0] | -2.0 [-4.0, -0.4] | -4.9 [-8.0, -2.2] |
+| invoke+contain | +1.0 [+0.1, +2.0] | +2.1 [+1.3, +3.0] | +11.3 [+9.0, +13.9] | +4.8 [+2.2, +7.2] | +2.0 [-0.2, +4.3] | +3.4 [+1.6, +5.4] | +6.0 [+2.6, +10.4] | +2.2 [-1.7, +6.1] |
+| core | +1.0 [+0.1, +1.9] | +2.1 [+1.3, +3.0] | +9.9 [+7.7, +12.3] | +3.9 [+1.5, +6.3] | +1.7 [-0.4, +3.9] | +3.1 [+1.3, +5.0] | +5.8 [+2.3, +9.9] | +2.1 [-1.7, +5.9] |
+| all | +0.9 [+0.0, +1.9] | +2.0 [+1.1, +2.9] | +9.0 [+6.9, +11.3] | +2.8 [+0.4, +5.2] | +1.4 [-0.6, +3.4] | +2.7 [+1.0, +4.5] | +4.1 [+0.3, +8.6] | +0.5 [-3.4, +4.2] |
+| all-minus-contain | +0.0 [-0.9, +0.9] | +1.3 [+0.4, +2.2] | +5.6 [+3.8, +7.5] | -0.0 [-2.4, +2.3] | +0.6 [-1.0, +2.4] | +2.3 [+0.9, +3.9] | +0.4 [-2.2, +3.1] | -2.7 [-5.7, -0.1] |
+
+BM25 alone under this reading: dev 21.2 (L2, 351 queries) and 37.5 (L3, 155); Verified six 18.0 (83) and 31.8 (55). The full tables
+(19 subsets, both list forms, every reading and both intervals) are `results/tables/x1_headline_{dev,confirm}_cells.csv`.
+**What changes against the pilot-E3 statement.** (1) The containment result holds and is cleaner on Verified: under the primary
+reading `contain` is above same-file chance at L2 on dev and Verified (+3.4, +4.4) and at L3 on Verified (+4.0 [+0.5, +7.9]); at L3
+on dev it sits at the edge (+1.6 [+0.0, +3.1]), where pilot E3's `units_nomod` reading gave +1.2 [-0.4, +2.8]. The gain over BM25 at L2
+is smaller than pilot E3 reported (dev +2.4 rather than +4.1) because the baseline is higher under every-overlapped-unit gold (21.2
+rather than 15.8). (2) `core` and `all` remain not distinguishable from same-file chance at L3 on Verified. (3) Removing containment
+leaves nothing above same-file chance at L3 (dev -0.0, Verified -2.7). (4) **Some orderings flip between the two D18 readings** (D18's
+revisit condition), all among cells whose intervals overlap: at dev L3 against same-file chance `invoke` is ahead of `contain` without
+module units (+2.0 [-0.5, +4.4] against +1.6 [+0.0, +3.1]) and behind it with them (+0.8 [-1.5, +3.2] against +2.8 [+1.3, +4.2]);
+sign changes occur only for cells within about one point of zero (`tests`, `import+contain`, `co_change+contain` at dev L3, `co_change`
+at Verified L2). The class-source and policy orderings above do not flip between the two D18 readings. Whether a flip among
+indistinguishable cells reopens the primary reading is for the engineer (ADR-004). With six repositories, mostly matplotlib and
+astropy, the clustered intervals on Verified include 0 for `contain` at L2 against BM25, `contain` at L3 against same-file chance and
+`all` at L3 against BM25 (cl. [-0.3, +10.1]), where the query-level ones do not; D17's clustered interval is the more cautious reading.
+
+
+## E-DENSE-FUSION: dense retrieval, BM25+dense fusion and the graph on top, exploratory, done 2026-10-25
+
+**What it measures.** The first dense numbers of the project: two encoders on the same unit texts as the BM25
+pilots, fused with BM25, and the graph expansion of pilot E3 on top of the strongest first stage, in three forms.
+Nothing here is a decision; ADR-006 (encoder) and Q30 (graph role, how a graph signal enters fusion) stay open.
+
+**Setup.** Units, gold readings and edge pairs of the pilot-E3 cache (class form `full`, ambiguous sites dropped);
+355 dev instances (five development repositories) for every sweep, the 83 Verified-six instances for one stated
+setting per configuration. Encoders (`ril/retrieval/dense_encoder.py`, `provisional: ADR-006`): CodeRankEmbed
+(137M, its own query prefix) and Qwen3-Embedding-0.6B (instruction on the query only, in the model repository's
+`Instruct: <task>\nQuery:<issue>` form with the task sentence "Given a GitHub issue, retrieve the code units
+(functions, methods, classes or modules) that have to be changed to resolve it"; the report gives the format but
+no instruction for code). Truncation: queries (with prefix or instruction) and documents cut at the same number of
+tokens of each encoder's tokenizer, beginning kept; 512 and 1024 compared on dev only. Flat exact inner-product
+index over L2-normalised vectors. Float16 on one RTX 2080 Ti (agreement with float32: cosine >= 0.99998 on 64
+units). Fusion: RRF `sum 1/(k + rank)` with k swept on dev; score-level `alpha * mm(BM25) + (1 - alpha) * mm(dense)`
+with alpha swept on dev. Graph on top: seeds = top-C of the first stage; hop-decay expansion (at most 50 units) over
+core families and each alone; forms: edited list, graph list as a third RRF list (same k), score level
+`(1 - w) * first_score + w * g`; chance controls of the same size (whole snapshot, files of the seeds). Metrics:
+nDCG@10 (L2) and Recall@100 (L3), mean over queries with query-level and repository-clustered bootstrap intervals
+(2,000 draws, seed 0); D18 readings `units_all_nomod` (primary) and `units_all`. Chunk level: filter-first ranks
+of the CORE-Bench chunks of the same folders. Configurations (sha256, 12 characters): `x2_first_dev` abf0ba1e339e,
+`x2_graph_dev` f0dcbd370e66, `x2_graph_headline_dev` c0a2002b0b4e, `x2_first_confirm` 4fff5dc4f7de,
+`x2_graph_confirm` e09d169f6680, `x2_chunks_confirm` afb83c2bf13e; every selection rule was committed before the
+numbers it selects from existed, every confirmation before its Verified scores were read. Run log
+`results/logs/x2_dense_fusion_2026-10-25.json`; tables `results/tables/x2_*`.
+
+**Dev selections (stated rules).** Cut: CodeRankEmbed 1024 (dense alone at L2 +1.1 [+0.4, +1.9] over 512), Qwen3
+512 (+0.5 [-0.1, +1.1], rule keeps the cheaper cut). RRF k: 100 (CodeRankEmbed), 20 (Qwen3). Strongest first stage:
+RRF(BM25, Qwen3-Embedding-0.6B, k 20). Graph cell: score level, C 5, gamma 0.7, 2 hops, w 0.5 (w 0.5 is the edge
+of the grid). Chunk-level k: 100 and 20.
+
+**Results (unit level, `units_all_nomod`; points, mean over queries, query-level interval; under `units_all` the selections and every
+Verified ordering are the same; on dev CodeRankEmbed alone is level with BM25 at L3, -0.2 rather than -3.5).**
+
+| | dev L2 nDCG@10 | dev L3 R@100 | Verified-six L2 | Verified-six L3 |
+|---|---|---|---|---|
+| BM25 | 21.2 | 37.5 | 18.0 | 31.8 |
+| CodeRankEmbed (1024) alone | 18.2 | 34.0 | 17.9 | 33.6 |
+| Qwen3-Embedding-0.6B (512) alone | 24.7 | 46.7 | 17.0 | 39.1 |
+| RRF BM25 + CodeRankEmbed, vs BM25 | 24.0, +2.9 [+1.2, +4.6] | 43.0, +5.5 [+4.0, +7.2] | 23.0, +5.1 [+1.4, +8.8] | 38.0, +6.2 [+2.9, +9.7] |
+| RRF BM25 + Qwen3, vs BM25 | 28.3, +7.2 [+5.4, +8.9] | 47.1, +9.6 [+8.0, +11.5] | 24.9, +6.9 [+3.6, +10.5] | 41.5, +9.7 [+6.8, +12.7] |
+| RRF Qwen3 vs RRF CodeRankEmbed | +4.3 [+3.0, +5.7] | +4.1 [+2.9, +5.4] | +1.9 [-1.7, +5.5] | +3.4 [+0.9, +6.3]; clustered [-1.1, +5.7] |
+
+Chunk level (filter-first): BM25 19.3 / 41.7 (dev), 13.4 / 33.0 (Verified-six); RRF with Qwen3 +9.4 [+7.5, +11.4] /
++14.1 [+12.3, +16.2] (dev) and +8.6 [+4.1, +13.2] / +16.1 [+12.0, +20.2] (Verified-six); RRF with CodeRankEmbed +3.9
+/ +10.4 (dev, k 20 row) and +5.3 [-0.4, +10.8] / +11.4 [+6.9, +16.1] (Verified-six). At chunk level and at L3 the
+Qwen3 encoder alone is level with its RRF (dev L3 -0.5 [-2.3, +1.1]).
+
+**Graph on top of RRF(BM25, Qwen3) (stated cell; `units_all_nomod`).** Dev: core +1.9 [+0.9, +2.8] (L2) and +10.7
+[+8.8, +12.8] (L3) over the first stage; over the same-file control +0.9 [-0.0, +1.7] and +2.5 [+0.2, +4.5]; over the
+whole-snapshot control +5.9 and +17.6. `contain` alone carries it (+3.4 / +11.8; over same-file +2.3 [+1.5, +3.1] /
++3.8 [+2.0, +5.5]); `invoke` alone +5.5 at L3 but below same-file chance; `import` lowers L2. The three forms give
+overlapping best cells on dev (core: edited list +1.4 / +10.7, third RRF list +1.5 / +9.9, score level +1.9 /
++10.7). Verified-six: core +0.2 [-1.8, +2.2] (L2) and +4.4 [+0.5, +8.8] (L3; clustered [+0.8, +7.8]) over the
+first stage; over the same-file control +1.4 [-2.3, +5.1] at L3 (not distinguishable from same-file chance); over
+the whole-snapshot control +11.4 [+8.1, +15.2].
+
+**Cost (per hardware spec, `results/latency/`).** Query encoding, batch 1, warm p50 / p95 / p99: on the 2080 Ti,
+CodeRankEmbed 18.5 / 19.5 / 20.6 ms and Qwen3 45.2 / 46.6 / 47.6 ms (512); on 4 threads of a Xeon E5-2640 v4,
+378 / 937 / 957 ms and 1,533 / 3,591 / 3,628 ms. Flat exact search of 100 (CPU, numpy): 0.40 / 0.44 / 0.47 ms
+(CodeRankEmbed, 768 dimensions) and 0.51 / 0.58 / 0.61 ms (Qwen3, 1,024) at the dev median snapshot of 5,195 units;
+4.95 / 5.12 / 5.26 ms and 5.98 / 6.19 / 6.38 ms at the django scale of 35,860 units; on the GPU 0.27 and 0.33 ms at
+django scale. Encoding throughput: whole dev runs at 512 tokens 201 (CodeRankEmbed) and 84 (Qwen3) unit texts per
+second on the GPU; a fixed 128-text sample on 4 CPU threads 2.2 and 0.67 texts per second. Peak GPU memory while
+encoding: 1.4 / 4.4 GB (CodeRankEmbed at 512 / 1024) and 2.3 / 4.6 GB (Qwen3); CPU resident peak after loading 1.7
+and 4.0 GB, up to 2.5 and 6.3 GB after encoding a 1024-token sample. GPU-hours: 2.84 (jobs 36104, 38109).
+
+**What it does not show.** Zero-shot encoders only; one seed per cell (sampling over queries is the only interval);
+dev L3 has two repositories, so its clustered interval is not informative (Q47); Verified-six L3 has 55 queries.
+The graph cell was selected at the edge of its weight grid. The latency query set is built from a development
+repository's code words with issue-like lengths (median 220 tokens), not from issues; its files stay out of the
+tracked tree (raw code words) and are pinned by sha256 in `results/logs/x2_query_sets.json`. Chunk-level CodeRankEmbed was
+scored at 512 tokens only (a 1024-token chunk encoding exists, unscored). Class-source forms and the `max3` policy
+were not read on the dense first stage (the per-form unit hashes are prepared on the cluster).
+
 ## E-POOL-RANKS: teacher ranks of the candidate pool's positives and the pool's filter state, exploratory, done 2026-10-25
 
 **What it measures.** Whether the 24,285 directories of `gangiswag/train_data` python (E-POOL-CHECK) are before or after the
@@ -1052,6 +1733,32 @@ Per repository at the primary floor (instances; distinct functions above the flo
 **Not computed (the D23 flip experiment).** Whether the instances' *edited* functions (the gold-patch functions) are among the hits was not computed: it needs the patch-to-function mapping at the base commit, and the per-instance hash sets are in `out/instance_hashes.json.gz` on account A for it. Until then the flip condition of ADR-005 D23 is not tested, and no per-repository sensitivity row is proposed.
 
 Reproduce: `scripts/ada/README.md` ("Pool check and contamination probe"); tables by `contam_probe.py tables`; code `ril/analysis/x4_tables.py`, `ril/training/contamination_index.py::instance_hashes`, tests `tests/unit/test_x4_tables.py`.
+
+## E-CONTAM-EDITED: are the patched functions among the contamination hits, exploratory, done 2026-10-29
+
+The flip experiment of decision D23 (ADR-005 addendum). Config `configs/experiments/x5_contam_edited.yaml` (hash `89d73965f4af`; the floors and scan come from E-CONTAM-SCAN, hash `87ac11b7293b`), written before the result was read. Log `results/logs/x5_contam_edited_2026-10-29.json`, table `results/tables/x5_contam_edited.csv`, row `x5-contam-edited`, jobs 46133 (first run, tables later superseded: its comparison pooled (instance, function) pairs, which weights long-lived functions by the number of instances and was dropped) and 46147 (final) in `results/logs/ada_jobs.csv`; CPU only, account A, 1 min 47 s, 0.41 GB peak. Not part of the frozen evaluation.
+
+**Protocol.** For each of the 500 Verified instances the reference patch (Python sections only; the test patch is not used) is applied to the base-commit files with `git apply` in a scratch directory. An *edited* function is a function or method unit (nested definitions fold into the parent) whose line span contains an old-file line the patch touches (a removed or changed line; for a pure insertion the two old lines around it, as in E-LABEL-NOISE). Its *pre* version is the unit at the base commit, its *post* version the unit with the same file, qualified name and occurrence index after the patch; it is *changed* when the post syntax-tree hash differs from the pre hash. A *match* is a syntax-tree hash that occurs as the `document` of a corpus row (E-CONTAM-SCAN). Distinct hashes within a repository, pooled over the 12 repositories. Comparators: all other base-commit functions of the same repositories above the floor (the 13.7% of E-CONTAM-SCAN, here without the edited ones), and the unedited functions of the same patched files (same files, so a closer match in age and activity). Differences carry a repository-clustered percentile bootstrap interval (2,000 draws, seed 0, D17); single shares carry Wilson intervals that are descriptive (functions are not independent draws).
+
+**Extraction.** The patch applied in 500 of 500 instances; no file failed to parse before or after. 886 edited functions (one without a syntax-tree hash); 25 instances edit no function or method (for example patches that touch only module-level lines); 108 functions are added by patches (not edited functions; reported separately).
+
+**Result at the primary floor (20 nodes), measured.**
+
+| group (distinct functions) | matched / n | share (Wilson 95%, descriptive) | difference to edited-pre, pts (repo-clustered 95%) |
+|---|---|---|---|
+| edited, as at the base commit | 70 / 783 | 8.9% (7.1-11.1) | |
+| all other base-commit functions | 26,490 / 193,479 | 13.7% (13.5-13.8) | edited minus other -4.8 [-9.7, -0.8] |
+| unedited functions of the same patched files | 3,419 / 13,347 | 25.6% (24.9-26.4) | edited minus same-file -16.7 [-21.0, -12.1] |
+| post-patch version of the changed edited functions | 101 / 728 | 13.9% (11.6-16.6) | post minus other +0.2 [-3.8, +2.9]; post minus same-file -11.7 [-16.7, -7.0] |
+
+Instances: 460 have an edited function above the floor; 52 of them (11.3%, 8.7-14.5) have at least one that matches. Of the 719 changed edited functions that have a post version and a pre size above the floor, 17 match in both versions, 27 only before the patch, 83 only after, 592 in neither (9 more are removed by the patch). Functions added by patches: 6 of 78 match (not interpretable at this size). Floors 50 and 100: edited 55 / 631 = 8.7% and 31 / 479 = 6.5% against 13.3% and 12.4% for the other functions; post versions 13.9% (88 / 633) and 12.8% (62 / 484). By size at floor 20 (edited minus other): 20-49 nodes 9.9% against 14.6% (-4.8 [-14.1, +1.1]), 50-99 nodes 15.8% against 14.7% (+1.1 [-6.0, +10.3]), 100 or more 6.5% against 12.4% (-5.9 [-10.1, -3.6]). By repository (edited matched / edited): django 34 / 334, sympy 17 / 143, pylint 6 / 18, scikit-learn 5 / 52, matplotlib 3 / 55, astropy 2 / 29, requests 2 / 9, xarray 1 / 34, pytest 0 / 36, sphinx 0 / 68, seaborn 0 / 4, flask 0 / 1; django and sympy hold 73% of the matches and 61% of the edited functions.
+
+**What this says.** The patched functions are not over-represented among the hits. As they stand at the base commit they match less often than the other functions (8.9% against 13.7%, interval excludes zero but is wide with 12 repositories) and clearly less often than the unedited functions of the same files (25.6%); the fixed versions match at about the all-function rate (13.9% against 13.7%, difference +0.2 with an interval from -3.8 to +2.9). Reading (inference, not tested): the corpus is sampled from repository states later than most base commits, in which a fixed bug no longer has its old form, and edited functions are by selection recently active code, so the unedited neighbours in the same files are the longer-lived ones; this explains the direction without any reference to training, but the corpus snapshot dates were not checked. The condition of D23 under which a per-repository sensitivity row would be considered (a large share of edited functions in the corpus, concentrated in a few repositories) is not met: the share is below the all-function rate; pylint (6 / 18) is the only repository above it and has 18 functions.
+
+**What a hit does not say.** A hit is an exact syntax-tree match of a function, not proof that the issue, the patch or the (query, document) pair was in any model's training data; a post-patch match is what any corpus taken after the fix would contain. A non-hit does not show absence (renamed or edited copies, negatives not scanned, no semantic matching). The result bears on the contamination statement only: it gives no ground to a per-repository sensitivity row and no ground to the claim that the evaluation is clean.
+
+Reproduce: `contam_probe.py edited` and `edited-tables` through `scripts/ada/contam_edited.sbatch` (from `$HOME`, needs `~/ril_c/work/verified_patches.json`, built locally from the Verified table's `patch` column and copied over, untracked); summary CSV `python scripts/x5_tables.py results/logs/x5_contam_edited_2026-10-29.json results/tables/x5_contam_edited.csv`; code `ril/training/contamination_edited.py`, `ril/analysis/x5_tables.py`, tests `tests/unit/test_x5_edited.py`.
+
 
 ## E-GRAPH-ROLE: is the graph a retrieval signal beyond same-file expansion? Exploratory, done 2026-10-29
 

@@ -1,0 +1,15 @@
+group,level,reading,metric,repo,queries,d
+dev,L2,units_all_nomod,ndcg10,conan-io/conan,87,4.07
+dev,L2,units_all_nomod,ndcg10,deepset-ai/haystack,72,4.66
+dev,L2,units_all_nomod,ndcg10,internetarchive/openlibrary,80,1.93
+dev,L2,units_all_nomod,ndcg10,qutebrowser/qutebrowser,75,8.47
+dev,L2,units_all_nomod,ndcg10,streamlink/streamlink,37,0.67
+dev,L2,units_all,ndcg10,conan-io/conan,89,3.73
+dev,L2,units_all,ndcg10,deepset-ai/haystack,72,4.81
+dev,L2,units_all,ndcg10,internetarchive/openlibrary,80,1.12
+dev,L2,units_all,ndcg10,qutebrowser/qutebrowser,75,6.39
+dev,L2,units_all,ndcg10,streamlink/streamlink,37,0.79
+dev,L3,units_all_nomod,recall100,internetarchive/openlibrary,81,3.78
+dev,L3,units_all_nomod,recall100,qutebrowser/qutebrowser,74,4.41
+dev,L3,units_all,recall100,internetarchive/openlibrary,81,2.67
+dev,L3,units_all,recall100,qutebrowser/qutebrowser,74,3.62

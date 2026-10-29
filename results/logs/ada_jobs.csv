@@ -32,3 +32,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-29,A,46141,S1,graph-role evaluation (CPU): resubmission with the default cache,u22,4,0,00:00:02,0.0,FAILED (cache without D18 readings)
 2026-10-29,A,46146,S1,graph-role evaluation (CPU): four configurations on the D18 cache and X2 dense scores,u22,4,0,00:06:48,0.0,COMPLETED (gnode002; numbers read before the top-of-ranking control was added)
 2026-10-29,A,46171,S1,graph-role evaluation (CPU): final run with the top-of-ranking control and in-file shares,u22,4,0,00:08:03,0.0,COMPLETED (gnode002)
+2026-10-29,A,46134,E7,Qwen3-Embedding-0.6B training step at the D31 shape (out of memory) and smaller shapes in one process; CodeRankEmbed control,u22,6,1,00:01:53,0.03,COMPLETED (gnode045)
+2026-10-29,A,46180,E7,repeat: shape list lost in --export; CodeRankEmbed control; memory probe crashed,u22,4,1,00:01:23,0.02,FAILED (script) (gnode046)
+2026-10-29,A,46183,E7,clean rerun: Qwen3 shapes 4/2/1 one process each; CodeRankEmbed batch 8; memory probe,u22,4,1,00:01:01,0.02,COMPLETED (gnode046)

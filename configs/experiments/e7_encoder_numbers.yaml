@@ -1,0 +1,19 @@
+experiment_id: E-ENCODER-NUMBERS (encoder numbers for ADR-006, session E7 of Wave 4)
+stage: analysis of existing runs (CPU) plus one short measurement (GPU, e7_train_step_qwen3.yaml)
+status: exploratory
+date: '2026-10-29'
+seed: 0
+parts:
+  a_pair: >-
+    RRF(BM25, Qwen3-Embedding-0.6B at 512 tokens, k 20) minus RRF(BM25, CodeRankEmbed at 1024 tokens, k 100),
+    the dev selections of E-DENSE-FUSION, on dev (351 L2 and 155 L3 queries) and on Verified-six (83 and 55;
+    a final-test-style reading: nothing was chosen on it). Primary gold reading units_all_nomod (D18), units_all
+    beside it; mean over queries, query-level and repository-clustered bootstrap (2,000 draws).
+  b_class_form: >-
+    class-unit text `full` against `header` (X1 forms) for BM25, dense alone and RRF of the two, both encoders at the
+    same cut and k as in part a (nothing re-tuned per form), dev only.
+  c_train_step: >-
+    Qwen3-Embedding-0.6B, batch 32 x (1+1), 512 tokens, float16 autocast, gradient checkpointing (D31), 3 warmup and
+    10 timed updates on a throwaway model, one process per shape; shapes 32, 16, 8, 4, 2, 1; CodeRankEmbed at the
+    same shape as the control; a memory probe (weights, gradients, optimizer state) at one document.
+  d_latency: query-encode and flat-search rows of E-DENSE-FUSION next to the retrieval gain of part a.

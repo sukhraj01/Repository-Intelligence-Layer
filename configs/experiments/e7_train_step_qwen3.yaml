@@ -1,0 +1,24 @@
+# E7 (c): training-step throughput and peak device memory of Qwen3-Embedding-0.6B at the batch shape
+# held identical in the pilots (32 x (1 positive + 1 negative), 512 tokens, float16 autocast, gradient
+# checkpointing). A measurement of a throwaway model for a few updates; not a training run and no
+# number from it is an arm result. Values provisional: ADR-002, ADR-006; never in configs/frozen/.
+exp_id: e7_train_step_qwen3
+rq: rq2
+label: encoder cost measurement, Qwen3-Embedding-0.6B, exploratory
+provisional: [ADR-002, ADR-006]
+seed: 0
+pool:
+  source: example cache of the smoke pilots (selection of 80 directories)
+  held_out: data/held_out/held_out_repos.json (v2, core plus Loc-Bench tier) with data/held_out/rename_cache.json
+  feature_table: results/tables/x3_pool_ranks_features.csv
+  max_instances: 80
+  selection_seed: 0
+  text_form: code
+model: {kind: sentence_transformers, encoder: qwen3-embedding-0.6b, max_tokens: 512, gradient_checkpointing: true}
+batch: {batch_size: 32, negatives_per_example: 1, max_positives: 1}
+negatives: {name: random_repo}
+loss: {form: sum_in_numerator, normaliser: batch, temperature: 0.05}
+optimizer: {name: adamw, lr: 2.0e-5, weight_decay: 0.01, warmup_updates: 1, schedule: linear, grad_clip: 1.0, precision: amp_fp16}
+budget: {updates: 13}
+checkpoint: {every: 100, keep: 1, log_every: 1, final_dtype: float16}
+arm: {name: RAW}
