@@ -127,3 +127,12 @@ engineer sign-off — it is a design decision.
 - Impact: RQ2's definition of RAW. It changes what is held identical, so ADR-002 owns it. If the engineer keeps the master's table, the negative policy becomes a fourth hook (one configuration key moves from the held-identical part to the arm; the identity test gains a case); the data loader already takes the policy as a parameter.
 - Reversible: yes, at the cost of that change and of stating RAW's two differences in the report.
 - Related: ADR-002, ADR-003, Q46
+- Status update 2026-10-29: the engineer's default D28 keeps the negative policy identical across the arms (primary: random repository-local; secondary, exploratory: teacher top-M with the score-relative cut); the entry stays `proposed` until ADR-002 is settled.
+
+## DEV-013 — Pilot batch shape smaller than the master's and than SweRank's   (2026-10-29 · status: proposed)
+- Master says: `docs/08_experimental_design.md`: batch size = the number of in-batch negatives; SweRank's recipe uses batch 64 with 15 hard negatives (1,024 documents per update).
+- We do: the pilots hold 32 x (1+1), float16 autocast, gradient checkpointing, 512 tokens identical across arms (engineer default D31).
+- Why: the larger shapes do not fit the 11 GB cards reachable from the cluster account; the chosen shape is the largest measured to fit for the 137M base (2.65 s per update). The 0.6B alternative encoder does not take one float32 AdamW step on these cards at any batch size (ADR-006 addendum).
+- Impact: fewer in-batch negatives than the master's recipe; absolute pilot numbers are not comparable with SweRank's. The "held identical" block of `docs/08_experimental_design.md` is not edited; ADR-002 owns the final batch.
+- Reversible: yes (gradient caching, a larger card, or a smaller held-identical batch are the options, Q53).
+- Related: ADR-002, ADR-006, Q53

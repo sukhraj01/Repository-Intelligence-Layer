@@ -114,3 +114,11 @@ the full result is read. It is **not part of the frozen evaluation**; it support
   concentrated in a few repositories) is not met, so no per-repository sensitivity row is proposed on this evidence; the decision stays the
   engineer's. A hit is an exact syntax-tree match, not proof that any issue, patch or pair was trained on, and a non-hit does not show absence.
 - *Dev set note, 2026-10-29 (decision D32, `docs/EXPERIMENTS.md` E-DEV-ANSIBLE).* Pro `ansible/ansible` (83 instances with L3 qrels) is added as a third development L3 repository in `configs/experiments/e1_bm25_dev3.yaml`; the original configuration and Verified as the test set are unchanged. Dev L3 intervals can now cluster over three repositories instead of two.
+
+## Addendum 2026-10-29 — engineer decision D32 (Q47: a third dev L3 repository)
+
+**D32.** SWE-bench Pro `ansible` (83 instances, L3 qrels, mapped) is added as a third dev repository with L3 qrels, for dev intervals. Verified remains the final test and is not touched by the training pilots.
+- **Why.** Two dev repositories at L3 (openlibrary, qutebrowser) make a repository-clustered interval uninformative (it can be narrower than the query-level one). Three clusters are still few; the intervals are labelled accordingly.
+- **Evidence class.** Measured (the 83-instance cache was built on 2026-10-29: `configs/experiments/e1_bm25_dev3.yaml`, E-DEV-ANSIBLE).
+- **Cheapest experiment that could flip it.** Compare the clustered and query-level interval widths on dev L3 with and without ansible; if the clustered interval is still narrower than the query-level one, quote the query-level one.
+- **Also recorded (X5).** Edited functions are less often among the contamination hits than other base-commit functions (70 of 783, 8.9%, against 13.7%; difference -4.8 points [-9.7, -0.8], repository-clustered; floor 20 nodes). A hit is not proof of training, and the explanation (a corpus later than the base commits) is inference.

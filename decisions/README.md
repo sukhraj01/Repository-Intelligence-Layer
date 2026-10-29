@@ -61,5 +61,11 @@ These are locked in the design and are changed only through `docs/DEVIATIONS.md`
 | D21 GPU budget (Q42) | ADR-006 addendum; `docs/COMPUTE.md` ("GPU budget") |
 | D22 provisional pool until the filter-state experiment (Q43) | ADR-001 addendum |
 | D24 not decided in advance: Q28 (ADR-013), Q35/Q36 (ADR-011), Q30 (ADR-003), encoder (ADR-006), pool (ADR-001, after the filter-state experiment); Q45 waits for ADR-007 | the addenda named, each stating that measurement settles it |
+| D25 class unit source (Q28) | ADR-013 addendum of 2026-10-29 |
+| D26 ambiguous sites, D27 external boundary (Q35, Q36) | ADR-011 addendum of 2026-10-29 |
+| D28 negative policy, D30 teacher cells, D31 batch shape (Q51, Q52, Q53) | ADR-002 addendum of 2026-10-29 |
+| D29 pool accepted with its limitation (Q50) | ADR-001 addendum of 2026-10-29 |
+| D32 third dev L3 repository (Q47) | ADR-005 addendum of 2026-10-29 |
+| D33 no encoder-instruction variants unless needed (Q48) | ADR-006 addendum of 2026-10-29 (second) |
 
 ADR-011 (RepoGraph schema, edge taxonomy, storage) is opened as Proposed with options and no choice (`specs/repo_graph.md`, `docs/GRAPH_DESIGN.md`). ADR-012 (edge-recovery definitions) is reserved for the first parse and graph build.

@@ -168,7 +168,15 @@ the held-out list applied (selection A) and one without (selection L: 292 held-o
 them from the development repositories haystack and streamlink). No Verified-six repository has a directory in the pool (92 held-out
 repositories occur in it). Effect of not filtering, dense: dev +0.18 [-0.25, 0.57] L2 nDCG@10, +0.16 [-0.21, 0.53] L3 Recall@100;
 Verified-six (uses test repositories deliberately, for the leakage effect; not a final number) +0.51 [-0.46, 1.59] L2, -0.25
-[-0.90, 0.34] L3. At this budget the held-out filter changes no measured number; the evidence says it is hygiene for the
-disjointness claim rather than a number-changer, and it says nothing about larger budgets or about repositories (Verified-six) that the
+[-0.90, 0.34] L3. No difference is detectable at 63 updates; whether the held-out filter is hygiene for the disjointness claim
+only or changes numbers is not shown, and the pair says nothing about larger budgets or about repositories (Verified-six) that the
 pool does not contain. Cheapest experiment that could flip it: the same pair at a larger budget with the held-out directories of the
 development repositories over-represented (all 249), evaluated on dev, about 2 GPU-hours.
+
+## Addendum 2026-10-29 — engineer decision D29 (Q50: pool accepted with its limitation stated; the ADR stays Proposed)
+
+**D29.** The pool is accepted with the following limitation written into the RQ2 text: the directories look selected with respect to SweRankEmbed-Small (0 of 160 sampled directories lack a positive in its top 10; CodeRankEmbed 15.3%, BM25 23.2%, the never-filtered Verified export 19.3%), but positives inside a directory are not filtered (39.4% of SweRankEmbed-Small's ranks of positives fall outside its top 40). So RAW means "every positive of a pre-selected pull request", and FILTER and WEIGHT act at the positive level.
+- **Why.** The measurement shows a directory-level selection and no positive-level one, which fixes what RAW is; mining an own raw pull-request set costs weeks and is not needed to state the claim.
+- **Evidence class.** Measured (E-POOL-RANKS, 160 stratified directories, 1,522 positives); the cause of the selection (a pull-request filter versus the checkpoint's fit) is reasoned only.
+- **Cheapest experiment that could flip it.** E-POOL-DATES: pull-request creation date against the checkpoint release date for the 160 sampled directories. It needs a read-only `GITHUB_TOKEN` on the cluster (D2). It was not run on 2026-10-29 because the token is absent (recorded in `docs/COMPUTE.md`).
+- **Condition to revisit.** The dates show most sampled pull requests post-date the checkpoint, or a raw pull-request set becomes available.

@@ -91,8 +91,13 @@ choice is one configuration value, none of them set by code defaults:
 Evidence class: measured, exploratory, 2 seeds, 63 optimizer updates on 2,000 pool directories, CodeRankEmbed base, dev units
 (`docs/EXPERIMENTS.md` "E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK"; rows `t2-*`).
 - RAW alone moves the base far (+8.3 dev L2 nDCG@10, +11.0 L3 Recall@100), so the budget is not too small to train.
-- No FILTER (K 10/20/40 under CodeRankEmbed, SweRankEmbed-Small, BM25, or CodeRankEmbed+BM25 agreement), WEIGHT or CURRICULUM cell is
-  above RAW at L3; strict cells (K = 10, BM25 at any K, agreement at K = 10) are 0.6-1.6 points below it, beyond one retraining's change.
+- Reading, stated flat: no difference between RAW and any FILTER, WEIGHT or CURRICULUM cell is detectable at 63 updates. This is a
+  statement about the budget, not about filtering: 63 updates is about 0.3% of a planned run. RAW alone moves the dev numbers well away from
+  the untrained base, so the budget is enough to train; it is not shown to be enough for a difference in which examples are used to show. The cells themselves: no FILTER (K 10/20/40
+  under CodeRankEmbed, SweRankEmbed-Small, BM25, or CodeRankEmbed+BM25 agreement), WEIGHT or CURRICULUM cell is above RAW at L3; strict
+  cells (K = 10, BM25 at any K, agreement at K = 10) are 0.6-1.6 points below it, beyond one retraining's change. With about 60 contrasts,
+  a few such flags are expected by chance, and fewer unique positives per update (a strict filter re-visits its examples) is a
+  sufficient explanation at this budget; the sign is not evidence that filtering hurts.
   At L2 every cell is within about 0.8 points of RAW. At matched updates a strict filter keeps 12-45% of the positives and re-visits
   its examples (effective epochs up to 1.64).
 - Teacher: the self-teacher cells (Q52, CodeRankEmbed = base) do not behave differently from the SweRankEmbed-Small and BM25 cells at
@@ -100,7 +105,7 @@ Evidence class: measured, exploratory, 2 seeds, 63 optimizer updates on 2,000 po
 - Negatives (Q46): CodeRankEmbed top-15 is indistinguishable from random repository-local; the 0.95 positive-aware cut gives +1.1
   [0.35, 1.90] L3 Recall@100 (dense), L2 +0.6 (below the seed difference).
 - What it cannot show: a filter's effect at the RQ2 budget (63 updates is about 0.3% of 20,000); seed variance (one difference per cell).
-  Cheapest experiment that could flip the reading "filters do not help": RAW vs FILTER SweRankEmbed-Small K20 and BM25 K20 at about 2,000
+  Cheapest experiment that could show whether a difference exists at all: RAW vs FILTER SweRankEmbed-Small K20 and BM25 K20 at about 2,000
   updates on the same pool, 2 seeds (about 3 GPU-hours with a faster evaluation).
 
 ## Addendum 2026-10-29 — twelve papers read in full on supervision quality: what they imply for K, the weight function and the curriculum order (evidence, no decision; this ADR stays Proposed)
@@ -143,3 +148,19 @@ Designs the papers show that the four arms do not contain (named for the enginee
 - **False-negative control among same-repository non-gold candidates** for the negative policy (MM-IssueLoc mines them without it; ARHN and RLHN show the relabelling cost with language-model judges).
 
 Cheapest experiments that could change a reading above (time-box in brackets, none run): (a) read 50 positives of the pool that sit at high K-rank under the separate teacher, by hand, for whether they are wrong positives (the pool has no label for this, so a hand reading is the proxy; about one hour); this says whether the image finding about easy errors has any counterpart; (b) a reversed-order CURRICULUM cell next to the sorted one at the same updates, two seeds (the 36 pilot runs cost 16.9 GPU-hours in all, about 0.5 each); (c) the self-teacher cell with and without a warm-up of N updates, two seeds (about 1 GPU-hour at the pilot size).
+
+## Addendum 2026-10-29 — engineer decisions D28, D30 and D31 (Q51, Q52, Q53 as defaults; the ADR stays Proposed)
+
+**D28 (Q51; DEV-012 stands).** One negative policy is held identical across all four arms. Primary: random repository-local negatives (the benchmark's own recipe; uses no teacher, so it shares no signal with FILTER). Secondary, labelled exploratory: teacher top-M with the score-relative cut. The arms pilot runs RAW and the best FILTER cell under both.
+- **Why.** If RAW differed from the other arms in two things (filter and negatives) a difference could not be attributed to supervision quality. Random local negatives are the only policy independent of every teacher. The secondary policy gained +1.10 [0.35, 1.90] dev L3 Recall@100 in the smoke pilots (63 updates).
+- **Evidence class.** Reasoned (identical policy); measured for the +1.10; read in full for the selection-rule effect in text retrieval (`knowledge/papers/nv-retriever-2407.15831.md`).
+- **Cheapest experiment that could flip it.** The arms pilot itself: if the order of RAW and FILTER changes between the two policies, the held-identical choice matters for the conclusion and is reported as such.
+
+**D30 (Q52).** Teacher cells are run, not chosen: BM25, SweRankEmbed-Small and CodeRankEmbed, each recorded with `teacher_equals_base` and `teacher_correlated_with_pool_selection` (true for SweRankEmbed-Small). The base for the pilots is CodeRankEmbed (137M parameters, about four times lower CPU latency than the 0.6B encoder, 2.65 s per update measured). No cell is a design choice.
+- **Evidence class.** Measured (base cost, E-TRAIN-STACK); reasoned (the two flags).
+- **Cheapest experiment that could flip it.** The arms pilot's three teacher cells at the same K; if a self-teacher cell separates from the other two, the self-confirmation concern is measured instead of argued.
+
+**D31 (Q53).** Batch shape held identical in the pilots: 32 x (1+1), float16 autocast, gradient checkpointing, 512 tokens. If any card above 11 GB is reachable it is reported and used only if every run of a comparison can use it.
+- **Why.** It is the largest measured shape that fits an 11 GB card for the 137M base (2.65 s per update; about 15 GPU-hours for 20,000 updates). It is smaller than the master's batch and than SweRank's, which is a stated limitation.
+- **Evidence class.** Measured (`t1-train-throughput` rows).
+- **Cheapest experiment that could flip it.** Run a short comparison of batch 32 against a gradient-cached larger effective batch (not built) on the same cell; or, if a larger card appears, the same cell at the master's shape.

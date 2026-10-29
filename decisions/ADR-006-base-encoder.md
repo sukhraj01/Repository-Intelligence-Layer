@@ -145,3 +145,10 @@ Evidence class: measured, exploratory, zero-shot encoders, one seed. Encoders as
 - *Either* encoder: the gap between them after fine-tuning is not known; item 1 compares zero-shot retrievers. The cheapest
   experiment that could flip the choice is the one in the 2026-10-25 addendum (a short fine-tune of each on the same dev
   evaluation); for Qwen3 it needs the memory question in item 3 settled first.
+
+## Addendum 2026-10-29 (second) — engineer decision D33
+
+**D33 (Q48).** No Qwen3 instruction variants are measured unless E-ENCODER-NUMBERS shows that Qwen3 would win the encoder choice on its own terms.
+- **Why.** Each variant is a full re-encode of the corpora; the choice may be decided by memory before accuracy (the 0.6B encoder does not take one float32 AdamW step on an 11 GB card, see the addendum above), which would make the variants moot.
+- **Evidence class.** Measured (the memory result) plus reasoned.
+- **Cheapest experiment that could flip it.** If a larger card or a changed recipe makes Qwen3 trainable, run two instruction sentences on dev (about 1 GPU-hour); until then the instruction stays the one X2 used and is recorded in the held-identical block only if this encoder is chosen.

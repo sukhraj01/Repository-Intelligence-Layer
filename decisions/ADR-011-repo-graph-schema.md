@@ -251,3 +251,15 @@ in advance.
   tool, recall may matter more than precision and `max3` could pay off (X2's graph-on-top run with the `max3` variant, minutes on
   the extras). A typed resolver (receiver types from a type checker) instead of the syntactic rules.
 - **Not decided here:** the policy, the edge taxonomy (Q35, Q36, Q-G8, Q-G13) — the engineer's.
+
+## Addendum 2026-10-29 — engineer decisions D26 and D27 (close Q35 and Q36 as defaults; the ADR stays Proposed for the rest)
+
+**D26 (Q35).** Ambiguous call sites (one name, several in-repository candidates) are dropped in the stored graph.
+- **Why.** Of four policies tried, `drop` was best on both oracle precision (0.62 against 0.32 `keep`, 0.48 `max3`) and expansion gain (`keep` -2.4, `rebucket` -1.6, `max3` +0.1 L3 Recall@100 against `drop`); 12 of 20 inspected sets were spurious.
+- **Evidence class.** Measured (ADR-011 addendum of 2026-10-23).
+- **Cheapest experiment that could flip it.** None cheaper than the measurement already made; revisit only with a better receiver rule than the current fixture and literal rules (a receiver-type pass is the candidate, days not hours).
+
+**D27 (Q36).** The `external` / `unresolved` boundary is accepted as built.
+- **Why.** `external` was right on 20 of 20 inspected sites; the `unresolved` bucket mixes external and in-repository names, which is a resolver recall limit, not a boundary error.
+- **Evidence class.** Measured on a 40-site inspection (small sample; an interval on 20 of 20 is wide, lower 95% bound about 84%).
+- **Cheapest experiment that could flip it.** Inspect 40 more `external` sites from a repository other than flask (about an hour of reading).

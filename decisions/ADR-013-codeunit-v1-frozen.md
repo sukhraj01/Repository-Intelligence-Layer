@@ -101,3 +101,11 @@ is the subject of pilots M and E1.
   extras once dense scores exist (X2's unit texts would have to be encoded per form).
 - **What it does not settle.** Which gold reading is right for classes (ADR-004, D18 part 1) — the form question and that one are now
   the same question.
+
+## Addendum 2026-10-29 — engineer decision D25 (closes Q28 as a default; the schema is unchanged)
+
+**D25.** The class unit's `source` stays `full` (`ParseOptions.class_source = "full"`); `header` and `header_sigs` remain selectable options.
+- **Why.** Under the every-overlapped-unit gold of D18, `full` led by 2.3 nDCG@10 points on dev (BM25 and `core` expansion, L2 and L3), and indexes about 55% more tokens (ADR-013 addendum of 2026-10-23). The schema is unaffected, so the choice is reversible by a re-index.
+- **Evidence class.** Measured (sparse retrieval, dev, one gold reading; under pilot M's mapping the forms are level); reasoned only for dense retrieval, where a 512-token truncation could cut a long class text.
+- **Cheapest experiment that could flip it.** The same class-form comparison with the dense encoders on dev (E-ENCODER-NUMBERS, part b; minutes, existing scores). If truncation hurts `full` for a dense encoder, that is reported; the default is not switched on that result alone.
+- **Condition to revisit.** A change in how a class becomes gold (D18 part 1), or a token budget at assembly that makes the 55% index growth matter.
