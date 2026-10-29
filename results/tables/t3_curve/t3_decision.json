@@ -1,0 +1,154 @@
+{
+ "beyond_2000": true,
+ "knee": 2000,
+ "levels": {
+  "L2": {
+   "keeps_moving": {
+    "100->300": false,
+    "1000->2000": true,
+    "300->1000": false
+   },
+   "knee": 2000,
+   "moved": {
+    "100": true,
+    "300": true,
+    "1000": true,
+    "2000": true
+   },
+   "moved_at_last": true
+  },
+  "L3": {
+   "keeps_moving": {
+    "100->300": false,
+    "1000->2000": false,
+    "300->1000": false
+   },
+   "knee": 100,
+   "moved": {
+    "100": true,
+    "300": true,
+    "1000": true,
+    "2000": true
+   },
+   "moved_at_last": true
+  }
+ },
+ "n_for_next_pilot": 2000,
+ "no_movement": false,
+ "sensitivity_after_seeing_curves": {
+  "gain_only_clustered": {
+   "beyond_2000": false,
+   "knee": 100,
+   "levels": {
+    "L2": {
+     "keeps_moving": {
+      "100->300": false,
+      "1000->2000": false,
+      "300->1000": false
+     },
+     "knee": 100,
+     "moved": {
+      "100": true,
+      "300": true,
+      "1000": true,
+      "2000": true
+     },
+     "moved_at_last": true
+    },
+    "L3": {
+     "keeps_moving": {
+      "100->300": false,
+      "1000->2000": false,
+      "300->1000": false
+     },
+     "knee": 100,
+     "moved": {
+      "100": true,
+      "300": true,
+      "1000": true,
+      "2000": true
+     },
+     "moved_at_last": true
+    }
+   },
+   "n_for_next_pilot": 100,
+   "no_movement": false
+  },
+  "gain_only_query_level": {
+   "beyond_2000": false,
+   "knee": 100,
+   "levels": {
+    "L2": {
+     "keeps_moving": {
+      "100->300": false,
+      "1000->2000": false,
+      "300->1000": false
+     },
+     "knee": 100,
+     "moved": {
+      "100": true,
+      "300": true,
+      "1000": true,
+      "2000": true
+     },
+     "moved_at_last": true
+    },
+    "L3": {
+     "keeps_moving": {
+      "100->300": false,
+      "1000->2000": false,
+      "300->1000": false
+     },
+     "knee": 100,
+     "moved": {
+      "100": true,
+      "300": true,
+      "1000": true,
+      "2000": true
+     },
+     "moved_at_last": true
+    }
+   },
+   "n_for_next_pilot": 100,
+   "no_movement": false
+  },
+  "query_level_intervals": {
+   "beyond_2000": false,
+   "knee": 100,
+   "levels": {
+    "L2": {
+     "keeps_moving": {
+      "100->300": false,
+      "1000->2000": false,
+      "300->1000": false
+     },
+     "knee": 100,
+     "moved": {
+      "100": true,
+      "300": true,
+      "1000": true,
+      "2000": true
+     },
+     "moved_at_last": true
+    },
+    "L3": {
+     "keeps_moving": {
+      "100->300": false,
+      "1000->2000": false,
+      "300->1000": false
+     },
+     "knee": 100,
+     "moved": {
+      "100": true,
+      "300": true,
+      "1000": true,
+      "2000": true
+     },
+     "moved_at_last": true
+    }
+   },
+   "n_for_next_pilot": 100,
+   "no_movement": false
+  }
+ }
+}

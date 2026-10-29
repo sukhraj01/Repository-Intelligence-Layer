@@ -165,11 +165,26 @@ def _curve(a: argparse.Namespace) -> dict[str, object]:
         feature_table=a.feature_table,
         mined_path=a.mined,
         hook=hook,
+        stop_after=cfg["curve"].get("stop_after"),
     )
-    if rec["finished"]:
-        merge_results(str(rec["result_dir"]), "curve", {"steps": sorted(hook.steps)})
+    if rec["finished"] or cfg["curve"].get("stop_after"):
+        os.makedirs(str(rec["result_dir"]), exist_ok=True)
+        merge_results(
+            str(rec["result_dir"]),
+            "curve",
+            {"steps": sorted(hook.steps), "stop_after": cfg["curve"].get("stop_after")},
+        )
         shutil.rmtree(paths.ckpt_root, ignore_errors=True)
-    return {"result_dir": rec["result_dir"], "finished": rec["finished"], "hook": hook.log}
+    return {
+        "result_dir": rec["result_dir"],
+        "finished": rec["finished"],
+        "hook": hook.log,
+        "training": {
+            k: rec.get(k)
+            for k in ("config_hash", "seed", "budget", "loss_first", "loss_last", "plan_sha256")
+        }
+        | {"updates_this_process": rec["updates_this_process"]},
+    }
 
 
 def _label(override: str) -> str:

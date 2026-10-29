@@ -1287,6 +1287,115 @@ have to be produced), the graph carries retrieval signal that files do not. If i
 
 **Reproduce.** `scripts/ada/s1_graph_role.sbatch` (`scripts/ada/README.md`); code `ril/evaluation/s1_graph_role.py`, `ril/analysis/s1_tables.py`, tests `tests/unit/test_s1_graph_role.py`; rows `s1-*` of `RESULTS.md`.
 
+## E-PILOT-CURVE: how many updates move the encoder beyond seed noise? Exploratory, done 2026-10-29
+
+Status: exploratory pilot (outside the pre-registered RQ tables). Config hashes 70f4195c (seed 0) and 6c520027 (seed 1)
+(`configs/experiments/t3/t3_curve_raw_s{0,1}.yaml`), evaluation set `configs/experiments/e1_bm25_dev3_curve.yaml`. Hardware:
+RTX 2080 Ti (11 GB), account A, jobs 46876 and 46879 (`docs/COMPUTE.md`). Every number below is `measured` and traces to
+`results/rq2/t3_curve_raw/*/step_*/` and `results/tables/t3_curve/`.
+
+**Question.** At what number of optimizer updates does the encoder move beyond seed noise, and does it keep moving?
+
+**Setup.** RAW (no filter, unit weights, random order), CodeRankEmbed base, random repository-local negatives (D28 primary),
+batch 32 x (1+1), float16 autocast, gradient checkpointing, 512 tokens (D31), learning rate 2e-5 with 7 warm-up updates
+and the linear decay of a **3,000-update schedule**, held-out filter on, 2 seeds (0, 1). Pool: the first 5,000 directories
+outside the held-out list in the seeded order (selection A's 2,000 plus the next 3,000; `held_out_directories_selected` = 0),
+so 2,000 updates x 32 = 64,000 example visits = 12.8 passes over the pool (the 63-update smoke pilots were one pass over 2,000).
+The encoder is evaluated inside each run at 0, 100, 300, 1000 and 2000 updates on the dev subset below; the half-precision
+copy and the encoded stores are deleted after each evaluation.
+
+**Deviations from the brief, and why (budget; the engineer decides whether to extend).**
+1. The runs **stop after 2,000 updates**; the 3,000-update point was not run. The first attempt (job 46827, 0.80 GPU-hours,
+   cancelled) measured one evaluation of the full dev set at 43 minutes (229 unit texts/s over 590k texts). Six such evaluations
+   plus 3,000 updates per seed would have cost about 6.5 GPU-hours per seed against 6.2 left of the block.
+2. The evaluation uses the **dev subset** openlibrary and qutebrowser (L2 and L3) and streamlink (L2): 192 L2 queries in 3
+   repositories and 155 L3 queries in **2 repositories**. Conan, haystack and ansible (64% of the encoding time) are dropped,
+   so **D32 (ansible as a third dev L3 repository) is not honoured in the curve**; ansible was evaluated only at step 0
+   (full set, job 46827), where it cannot show movement. Step 0 for the curve is the untrained encoder's per-query rows from that
+   full-set evaluation restricted to the same queries (identical for both seeds by construction).
+3. With 2 L3 repositories the repository-clustered interval is degenerate (it can be narrower than the query-level one);
+   read the query-level interval as "queries only, not repositories". With 3 L2 repositories it is coarse.
+
+**Definition of "beyond seed noise", written before any curve was seen** (session record of 2026-10-29, before the first
+training job; implemented unchanged in `ril/analysis/t3_tables.py`). Metric: dense-only column, reading `units_all_nomod`
+(D18), L2 nDCG@10 and L3 Recall@100 in percentage points. `M(s)` = mean over the two seeds of the change from step 0, paired over
+queries; `G(s)` = seed 0 minus seed 1 at the same update count (one retraining's difference; two seeds give no standard
+deviation). *Moved beyond seed noise at s*: the repository-clustered 95% interval of `M(s)` excludes 0 and the smaller of the
+two seeds' own changes exceeds `|G(s)|`. *Keeps moving* across a step: the clustered interval of the increment `M(s_next) -
+M(s)` excludes 0 and `|increment| > |G(s_next)|`. *Knee* (per level) = the smallest checkpoint from which no later increment
+keeps moving; N for the next pilot = the larger of the two levels' knees, capped at 2,000. *No movement*: not moved at the last
+checkpoint on both levels (then the arms pilot must not run). Note the rule uses the absolute value of the increment (a
+decrease counts as movement).
+
+**Curve** (percentage points; dense column; `units_all_nomod`; the RRF(BM25, dense) column beside it; all intervals 95%
+bootstrap over 2,000 draws, queries and whole repositories):
+
+L2 nDCG@10, dense column, units_all_nomod; 192 queries, 3 repositories; step 0 = 19.0
+
+| updates | level (mean of 2 seeds) | change from step 0, M [query-level 95%] | M [repository-clustered 95%] | seed 0 / seed 1 change | seed gap G (s0 - s1) [query-level] | increment from previous step [query-level] | increment [clustered] |
+|---|---|---|---|---|---|---|---|
+| 100 | 29.5 | +10.5 [+8.3, +12.7] | +10.5 [+4.9, +12.6] | +11.2 / +9.9 | +1.3 [-0.0, +2.7] | +10.5 [+8.3, +12.7] | +10.5 [+4.9, +12.6] |
+| 300 | 29.1 | +10.1 [+7.8, +12.3] | +10.1 [+6.5, +11.3] | +10.3 / +9.9 | +0.4 [-0.8, +1.7] | -0.4 [-1.4, +0.5] | -0.4 [-1.3, +1.6] |
+| 1000 | 30.0 | +11.1 [+8.7, +13.4] | +11.1 [+7.6, +12.1] | +11.8 / +10.3 | +1.5 [-0.1, +3.1] | +1.0 [-0.1, +2.1] | +1.0 [+0.3, +1.6] |
+| 2000 | 29.0 | +10.1 [+7.6, +12.3] | +10.1 [+7.0, +11.5] | +10.2 / +9.9 | +0.3 [-1.1, +1.6] | -1.0 [-2.1, +0.1] | -1.0 [-1.6, -0.6] |
+
+L2 nDCG@10, rrf column, units_all_nomod; 192 queries, 3 repositories; step 0 = 26.9
+
+| updates | level (mean of 2 seeds) | change from step 0, M [query-level 95%] | M [repository-clustered 95%] | seed 0 / seed 1 change | seed gap G (s0 - s1) [query-level] | increment from previous step [query-level] | increment [clustered] |
+|---|---|---|---|---|---|---|---|
+| 100 | 32.0 | +5.2 [+3.6, +6.8] | +5.2 [+2.8, +7.7] | +5.9 / +4.5 | +1.4 [+0.4, +2.5] | +5.2 [+3.6, +6.8] | +5.2 [+2.8, +7.7] |
+| 300 | 31.6 | +4.8 [+3.1, +6.5] | +4.8 [+3.1, +7.2] | +5.2 / +4.3 | +0.9 [-0.1, +2.0] | -0.4 [-1.2, +0.5] | -0.4 [-0.7, +0.7] |
+| 1000 | 31.7 | +4.9 [+3.1, +6.7] | +4.9 [+2.9, +7.4] | +5.5 / +4.3 | +1.2 [+0.1, +2.3] | +0.1 [-0.8, +1.0] | +0.1 [-0.2, +0.4] |
+| 2000 | 31.3 | +4.5 [+2.7, +6.3] | +4.5 [+2.4, +7.2] | +4.6 / +4.3 | +0.3 [-0.7, +1.4] | -0.4 [-1.1, +0.3] | -0.4 [-0.6, -0.2] |
+
+L3 Recall@100, dense column, units_all_nomod; 155 queries, 2 repositories; step 0 = 34.0
+
+| updates | level (mean of 2 seeds) | change from step 0, M [query-level 95%] | M [repository-clustered 95%] | seed 0 / seed 1 change | seed gap G (s0 - s1) [query-level] | increment from previous step [query-level] | increment [clustered] |
+|---|---|---|---|---|---|---|---|
+| 100 | 45.1 | +11.1 [+9.1, +13.2] | +11.1 [+10.9, +11.3] | +11.9 / +10.4 | +1.4 [+0.6, +2.4] | +11.1 [+9.1, +13.2] | +11.1 [+10.9, +11.3] |
+| 300 | 44.8 | +10.9 [+8.6, +13.3] | +10.9 [+10.7, +11.0] | +12.2 / +9.5 | +2.6 [+1.5, +3.8] | -0.3 [-1.0, +0.4] | -0.3 [-0.3, -0.2] |
+| 1000 | 45.3 | +11.4 [+8.9, +14.1] | +11.4 [+10.5, +12.4] | +12.7 / +10.1 | +2.6 [+1.4, +4.0] | +0.5 [-0.4, +1.5] | +0.5 [-0.6, +1.7] |
+| 2000 | 45.3 | +11.3 [+8.9, +14.0] | +11.3 [+10.3, +12.4] | +11.5 / +11.1 | +0.4 [-0.5, +1.4] | -0.1 [-0.8, +0.7] | -0.1 [-0.2, +0.0] |
+
+L3 Recall@100, rrf column, units_all_nomod; 155 queries, 2 repositories; step 0 = 42.6
+
+| updates | level (mean of 2 seeds) | change from step 0, M [query-level 95%] | M [repository-clustered 95%] | seed 0 / seed 1 change | seed gap G (s0 - s1) [query-level] | increment from previous step [query-level] | increment [clustered] |
+|---|---|---|---|---|---|---|---|
+| 100 | 47.5 | +4.8 [+3.6, +6.1] | +4.8 [+3.5, +6.0] | +5.2 / +4.5 | +0.7 [+0.0, +1.4] | +4.8 [+3.6, +6.1] | +4.8 [+3.5, +6.0] |
+| 300 | 47.4 | +4.8 [+3.5, +6.1] | +4.8 [+3.6, +5.9] | +5.3 / +4.3 | +1.0 [+0.4, +1.8] | -0.0 [-0.6, +0.5] | -0.0 [-0.1, +0.0] |
+| 1000 | 47.7 | +5.1 [+3.7, +6.5] | +5.1 [+4.4, +5.7] | +5.5 / +4.6 | +0.9 [+0.2, +1.7] | +0.3 [-0.3, +0.8] | +0.3 [-0.2, +0.8] |
+| 2000 | 47.6 | +5.0 [+3.7, +6.5] | +5.0 [+4.9, +5.1] | +5.0 / +5.0 | -0.1 [-0.9, +0.7] | -0.1 [-0.5, +0.4] | -0.1 [-0.6, +0.5] |
+
+**Result.**
+- *Moved beyond seed noise*: yes at every checkpoint, both levels, both columns. At 100 updates (the first checkpoint) the
+  dense column is +10.5 [+8.3, +12.7] nDCG@10 (L2, queries only; clustered [+4.9, +12.6]) and +11.1 [+9.1, +13.2] Recall@100
+  (L3), each seed's own change (9.9 to 11.9) above the seed gap (1.3 to 1.4). For comparison the 63-update smoke pilot
+  reported +8.3 / +11.0 on a different (larger) dev set and a different pool size (E-PILOT-K); not a like-for-like pair.
+- *Keeps moving*: no, in the sense of improving. After 100 updates the change from step 0 stays between +10.1 and +11.4 on
+  both levels; every increment is within 1.0 point and the seed gap at the same update count is 0.3 to 2.6 points, the same
+  size. The only increment whose clustered interval excludes 0 and exceeds the gap is the L2 step 1000 to 2000, **-1.0**
+  [-1.6, -0.6] (clustered, 3 repositories; query-level [-2.1, +0.1]): a decrease, with a one-seed gap of 0.3.
+- *Rule as written*: both levels moved; L3 knee 100; L2 knee 2000 (the -1.0 step counts as movement because the rule uses the
+  absolute value); so the pre-registered N = 2,000 (the cap), with `still moving between 1,000 and 2,000` flagged on L2.
+- *Sensitivity readings added after seeing the curves (labelled as such, not the pre-registered rule)*: with the query-level
+  interval, or counting only improvements (either interval), no increment keeps moving and the knee is the first checkpoint, 100
+  updates, on both levels, so N = 100. The rule's outcome is therefore decided by one -1.0 step on three repositories.
+- RRF column: +4.5 to +5.2 (L2), +4.8 to +5.1 (L3), the same shape (all of it from the dense component, which is where
+  the training acts).
+
+**Reading.** Evidence for the next pilot: on this pool and recipe the encoder has moved by about 10 to 11 points on the dense
+column by 100 updates and does not improve measurably over the next 1,900 (increments within +-1.0, changes of the size of
+the seed gap). The knee is at or before 100 updates; the first checkpoint cannot resolve earlier. The 3,000-update point is not
+measured, so "no movement at 3,000" and "still moving at 3,000" are both untested. Limits: the checkpoints of one run sit at
+learning-rate values of a 3,000-update schedule (about 97%, 90%, 67%, 33% of the peak at 100, 300, 1000, 2000), so a run
+of N updates that decays to zero at N is not this curve; two seeds; 2 L3 repositories; a dev subset chosen by cost after the
+first evaluation was seen, not by results (the choice was made before any trained checkpoint was evaluated). Not evidence that
+a supervision signal helps or not: RAW only, so the arms pilot (T4) is where a difference between supervision signals would
+show, and its size N is the engineer's decision between 100 (these sensitivity readings) and 2,000 (the rule as written).
+Budget note: block 2 has 24 - 17.00 - 5.14 = 1.86 GPU-hours left, so ten 2,000-update runs do not fit; at N = 100 a run costs about 0.05
+GPU-hours of training plus a 10-minute evaluation (about 0.2 GPU-hours).
+
+
 ## Pre-registered interpretation rules
 
 Fixed in advance so results cannot be re-read after the fact:

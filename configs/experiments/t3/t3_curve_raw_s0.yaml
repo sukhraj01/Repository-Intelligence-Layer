@@ -3,10 +3,10 @@
 # shape, loss, optimizer, negative policy (random repository-local) and arm (RAW) as the smoke pilots
 # (configs/experiments/t2/t2_k_raw_s0.yaml); only the budget (3,000 updates), the pool (5,000
 # directories) and the evaluation at several update counts differ. One run per seed; the encoder is
-# evaluated inside the run at curve.steps and the copies are deleted.
+# evaluated inside the run at curve.steps and the copies are deleted. The linear schedule is that of 3,000 updates; the run stops after curve.stop_after = 2,000 updates because one dev evaluation took 43 minutes (budget).
 exp_id: t3_curve_raw
 rq: rq2
-label: "E-PILOT-CURVE: RAW, 3,000 updates, evaluated at 0, 100, 300, 1000, 2000, 3000 updates"
+label: "E-PILOT-CURVE: RAW, 3,000-update schedule stopped after 2,000 updates (GPU budget), evaluated at 0, 100, 300, 1000, 2000 updates"
 provisional: [ADR-001, ADR-002, ADR-006]
 seed: 0
 pool:
@@ -25,5 +25,5 @@ optimizer: {name: adamw, lr: 2.0e-5, weight_decay: 0.01, warmup_updates: 7, sche
 budget: {updates: 3000}
 checkpoint: {every: 100, keep: 1, log_every: 10, final_dtype: float16}
 arm: {name: RAW}
-curve: {steps: [0, 100, 300, 1000, 2000, 3000]}
+curve: {steps: [0, 100, 300, 1000, 2000], stop_after: 2000}
 evaluation: {roles: [dev], rrf_k: 60, batch_size: 64, chunks: false, seed: 0, baselines: []}

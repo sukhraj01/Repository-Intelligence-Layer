@@ -1,0 +1,146 @@
+experiment_id: E-PILOT-CURVE-subset
+status: exploratory pilot
+date: '2026-10-29'
+seed: 0
+bm25:
+  k1: 1.5
+  b: 0.75
+  stopwords: en (33 words)
+  stemmer: snowball english
+  token_pattern: (?u)\b\w\w+\b
+  provisional: ADR-004
+prefilter_k: 10000
+metrics:
+  ndcg_at: 10
+  recall_at: 100
+  gain: binary
+  aggregation: mean over queries
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  unit: queries
+note: 'Subset of e1_bm25_dev3.yaml for the learning-curve evaluation: dev repositories
+  openlibrary, qutebrowser (L2 and L3) and streamlink (L2); conan, haystack and ansible
+  are dropped because their snapshot stores are 64% of the encoding time (about 43
+  minutes per evaluation of the full dev set against the GPU budget). Folders and
+  parameters are copied unchanged.'
+folders:
+- role: test
+  dataset: SWE-bench_Verified
+  folder: astropy__astropy
+  repo: astropy/astropy
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: django__django
+  repo: django/django
+  levels:
+  - L2
+  - L3
+  units: false
+- role: test
+  dataset: SWE-bench_Verified
+  folder: matplotlib__matplotlib
+  repo: matplotlib/matplotlib
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: mwaskom__seaborn
+  repo: mwaskom/seaborn
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pallets__flask
+  repo: pallets/flask
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: psf__requests
+  repo: psf/requests
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pydata__xarray
+  repo: pydata/xarray
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pylint
+  repo: pylint-dev/pylint
+  levels:
+  - L2
+  - L3
+  units: false
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pytest
+  repo: pytest-dev/pytest
+  levels:
+  - L2
+  - L3
+  units: false
+- role: test
+  dataset: SWE-bench_Verified
+  folder: scikit
+  repo: scikit-learn/scikit-learn
+  levels:
+  - L2
+  - L3
+  units: false
+- role: test
+  dataset: SWE-bench_Verified
+  folder: sphinx
+  repo: sphinx-doc/sphinx
+  levels:
+  - L2
+  - L3
+  units: false
+- role: test
+  dataset: SWE-bench_Verified
+  folder: sympy__sympy
+  repo: sympy/sympy
+  levels:
+  - L2
+  - L3
+  units: false
+- role: dev
+  dataset: SWE-bench_Pro
+  folder: instance_internetarchive__openlibrary
+  repo: internetarchive/openlibrary
+  levels:
+  - L2
+  - L3
+  units: true
+- role: dev
+  dataset: SWE-bench_Pro
+  folder: instance_qutebrowser__qutebrowser
+  repo: qutebrowser/qutebrowser
+  levels:
+  - L2
+  - L3
+  units: true
+- role: dev
+  dataset: SWE-bench-Live
+  folder: streamlink__streamlink
+  repo: streamlink/streamlink
+  levels:
+  - L2
+  units: true

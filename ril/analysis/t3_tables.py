@@ -133,7 +133,8 @@ def curve_rows(
         meta.append(info)
 
     def mean_at(n: int) -> Arr:
-        return np.mean([vec[(s, n)] for s in seeds], axis=0) * 100
+        out: Arr = np.mean([vec[(s, n)] for s in seeds], axis=0) * 100
+        return out
 
     for n in steps:
         if n == 0:
@@ -179,12 +180,19 @@ def _get(rows: Sequence[Record], part: str, step: int, seed: Any = None) -> Reco
     raise KeyError((part, step, seed))
 
 
-def _excludes_zero(r: Record) -> bool:
-    return bool(r["c_lo"] > 0 or r["c_hi"] < 0)
+def _excludes_zero(r: Record, interval: str = "c") -> bool:
+    return bool(r[f"{interval}_lo"] > 0 or r[f"{interval}_hi"] < 0)
 
 
-def decide(rows: Sequence[Record], steps: Sequence[int]) -> Record:
-    """Apply the rule of the module docstring to one level's primary rows."""
+def decide(
+    rows: Sequence[Record], steps: Sequence[int], interval: str = "c", gain_only: bool = False
+) -> Record:
+    """Apply the rule of the module docstring to one level's primary rows.
+
+    ``interval`` ``c`` (repository-clustered, the rule as stated) or ``q`` (queries only), and
+    ``gain_only`` (an increment keeps moving only if it is an improvement): the last two are
+    sensitivity readings added after the curves were seen and are labelled as such.
+    """
     pos = [n for n in steps if n > 0]
     seeds = sorted({r["seed"] for r in rows if r["part"] == "delta"})
     info: Record = {"moved": {}, "keeps_moving": {}}
@@ -193,11 +201,14 @@ def decide(rows: Sequence[Record], steps: Sequence[int]) -> Record:
         g = abs(_get(rows, "G", n)["value"]) if any(r["part"] == "G" for r in rows) else 0.0
         sign = 1.0 if m["value"] >= 0 else -1.0
         smaller = min(sign * _get(rows, "delta", n, s)["value"] for s in seeds)
-        info["moved"][n] = bool(_excludes_zero(m) and smaller > g)
+        info["moved"][n] = bool(_excludes_zero(m, interval) and smaller > g)
     for a, b in zip(pos[:-1], pos[1:], strict=True):
         inc = next(r for r in rows if r["part"] == "I" and r["step"] == b)
         g = abs(_get(rows, "G", b)["value"]) if any(r["part"] == "G" for r in rows) else 0.0
-        info["keeps_moving"][f"{a}->{b}"] = bool(_excludes_zero(inc) and abs(inc["value"]) > g)
+        up = inc["value"] > 0 or not gain_only
+        info["keeps_moving"][f"{a}->{b}"] = bool(
+            _excludes_zero(inc, interval) and abs(inc["value"]) > g and up
+        )
     pairs = [f"{a}->{b}" for a, b in zip(pos[:-1], pos[1:], strict=True)]
     knee = pos[-1]
     for i in range(len(pairs) - 1, -1, -1):
@@ -209,9 +220,14 @@ def decide(rows: Sequence[Record], steps: Sequence[int]) -> Record:
     return info
 
 
-def decide_all(primary: Mapping[str, Sequence[Record]], steps: Sequence[int]) -> Record:
+def decide_all(
+    primary: Mapping[str, Sequence[Record]],
+    steps: Sequence[int],
+    interval: str = "c",
+    gain_only: bool = False,
+) -> Record:
     """Both levels together: ``no_movement``, per-level knees, N (capped) and ``beyond_2000``."""
-    per = {lv: decide(rows, steps) for lv, rows in primary.items() if rows}
+    per = {lv: decide(rows, steps, interval, gain_only) for lv, rows in primary.items() if rows}
     no_move = not all(p["moved_at_last"] for p in per.values()) if per else True
     knee = max(p["knee"] for p in per.values()) if per else None
     grid = [n for n in steps if n > 0]
@@ -260,4 +276,10 @@ def all_tables(
                 rows += part
                 if kind == "dense" and reading == PRIMARY_READING:
                     primary[level] = part
-    return rows, decide_all(primary, steps)
+    decision = decide_all(primary, steps)
+    decision["sensitivity_after_seeing_curves"] = {
+        "query_level_intervals": decide_all(primary, steps, "q"),
+        "gain_only_clustered": decide_all(primary, steps, "c", True),
+        "gain_only_query_level": decide_all(primary, steps, "q", True),
+    }
+    return rows, decision
