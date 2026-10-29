@@ -159,3 +159,39 @@ def build_probe(
         for commit in sorted(set(commits[repo])):
             add_snapshot(probe, stats, repo, git_dirs[repo], commit, done)
     return probe, stats
+
+
+def instance_hashes(
+    git_dirs: Mapping[str, str],
+    instances: Mapping[str, tuple[str, str]],
+    min_nodes: int = 0,
+) -> dict[str, dict[str, int]]:
+    """Syntax-tree hashes (with node counts) of the functions at each instance's own base commit.
+
+    Implements ``docs/EXPERIMENTS.md`` E-CONTAM-SCAN: the restriction of a corpus hit to a
+    function that exists at the instance's own base commit needs one hash set per instance, not
+    the union over snapshots that :func:`build_probe` keeps. ``instances`` maps an instance id to
+    ``(repo, base commit)``; hashes under ``min_nodes`` are dropped. A blob is parsed once per
+    repository. No source text is kept.
+    """
+    per_blob: dict[str, dict[str, dict[str, int]]] = {}
+    out: dict[str, dict[str, int]] = {}
+    for iid in sorted(instances):
+        repo, commit = instances[iid]
+        cache = per_blob.setdefault(repo, {})
+        fresh = [(p, s) for p, s in list_blobs(git_dirs[repo], commit) if s not in cache]
+        contents = read_blobs(git_dirs[repo], [s for _, s in fresh])
+        for path, sha in fresh:
+            raw = contents[sha]
+            found: dict[str, int] = {}
+            if path_is_probed(path, raw[:_HEAD_BYTES]):
+                for src in function_sources(path, raw, repo) or []:
+                    fh = function_hashes(src)
+                    if fh.ast is not None:
+                        found[fh.ast] = fh.nodes
+            cache[sha] = found
+        hashes: dict[str, int] = {}
+        for _, sha in list_blobs(git_dirs[repo], commit):
+            hashes.update(cache[sha])
+        out[iid] = {h: n for h, n in hashes.items() if n >= min_nodes}
+    return out

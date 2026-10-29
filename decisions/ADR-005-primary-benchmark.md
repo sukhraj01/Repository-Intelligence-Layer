@@ -88,7 +88,7 @@ reproduces the published BM25 rows.
   reopened.
 - *Conditions to revisit.* A flipped ordering; a reviewer or the benchmark authors fixing a different convention.
 
-**D23 (closes Q44 as a decision; the run is pending).** The full documents-only contamination scan runs in the background,
+**D23 (closes Q44 as a decision; the run is done, see the result note below).** The full documents-only contamination scan runs in the background,
 with hits restricted to functions at the instance's own base commit and above a size floor chosen from the slice before
 the full result is read. It is **not part of the frozen evaluation**; it supports the contamination statement in the report.
 - *Rationale.* In the slice 73% of hits were functions under 20 syntax-tree nodes and the probe set was the union of 499
@@ -99,3 +99,11 @@ the full result is read. It is **not part of the frozen evaluation**; it support
   (above the floor) in the corpus, concentrated in a few repositories: then a per-repository sensitivity row (results with
   and without those repositories) would be considered for the evaluation.
 - *Interpretation rule.* A hit is not proof that the (query, document) pair was trained on; a non-hit is not proof of absence.
+- *Result note, 2026-10-29 (X4, `docs/EXPERIMENTS.md` E-CONTAM-SCAN; measured, exploratory).* Floor 20 syntax-tree nodes was fixed from the
+  slice and committed before the result (config hash `87ac11b7293b`). All 240 shards scanned (23,881,192 rows): 150,198 documents
+  (0.63%) match a Verified function; at or above the floor and at an instance's own base commit, 26,530 of 194,187 distinct probe
+  functions (13.7%) occur in the corpus (43,421 documents), 13.3% and 12.4% at floors 50 and 100. Every instance has some matching
+  function, so the informative figure is the share of an instance's own functions: median 4% (flask, sphinx) to 33% (requests) by
+  repository. The flip experiment of this decision (the instances' *edited* functions among the hits) has **not** been run, so no
+  per-repository sensitivity row is proposed; the per-instance hash sets needed for it exist on account A. A hit is a function-level
+  match, not proof that a pair was trained on.

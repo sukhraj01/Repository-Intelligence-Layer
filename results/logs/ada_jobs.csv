@@ -21,3 +21,10 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-25,A,39188,T2,run batch: FILTER under CodeRankEmbed and BM25 (K 10/20/40) and SweRankEmbed-Small (K 10/20); 16 runs with dev evaluation,u22,4,1,05:50:29,5.84,COMPLETED (gnode044; 16 of 16 runs)
 2026-10-26,A,39212,T2,run batch: FILTER SweRankEmbed-Small K40 and agreement K 10/20/40; NEG top-M and positive cut; WEIGHT; CURRICULUM; 16 runs with dev evaluation,u22,4,1,05:53:02,5.88,COMPLETED (gnode044; 16 of 16 runs)
 2026-10-29,A,45619,T2,pilot tables (CPU srun),u22,1,0,00:00:10,0.0,COMPLETED
+2026-10-29,A,45620,X4,full documents-only contamination scan shards 0-119 (STRIDE=1; 4 workers; 216 new shards over two jobs),u22,4,0,02:12:37,0.0,COMPLETED (gnode002; 1 shard failed 3 attempts: DNS)
+2026-10-29,A,45621,X4,full documents-only contamination scan shards 120-239 (STRIDE=1; 4 workers),u22,4,0,02:05:54,0.0,COMPLETED (gnode002)
+2026-10-29,A,45622,X4,function hashes at each instance's own base commit (first submit; 3 CPUs would exceed the 10-CPU limit),u22,0,0,00:00:00,0.0,CANCELLED before start
+2026-10-29,A,45623,X4,function hashes at each instance's own base commit (500 instances; resubmitted with 2 CPUs 3G),u22,2,0,00:32:23,0.0,COMPLETED (gnode002; 1.37 GB peak)
+2026-10-29,A,45774,X4,rescan of shard 87 (DNS failures in the scan jobs),u22,4,0,00:02:07,0.0,COMPLETED (gnode002)
+2026-10-29,A,45778,X4,join tables (CPU srun; first version with a vacuous union comparison),u22,4,0,00:00:22,0.0,COMPLETED
+2026-10-29,A,45779,X4,join tables (CPU srun; final),u22,4,0,00:00:24,0.0,COMPLETED

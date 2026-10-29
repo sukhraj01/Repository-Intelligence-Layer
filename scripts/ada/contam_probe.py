@@ -8,6 +8,8 @@ Run it under the nodes' Python 3.10 (the parser needs it), CPU only, from the wo
   contam_probe.py build VERIFIED_REF.json CLONES.json OUT_PROBE.json OUT_STATS.json
   contam_probe.py measure URL MEGABYTES PROBE.json OUT.json [--negatives]
   contam_probe.py scan PROBE.json OUT_DIR URL_PREFIX FIRST LAST MEGABYTES [--negatives]
+  contam_probe.py instances VERIFIED_REF.json CLONES.json OUT.json.gz MIN_NODES
+  contam_probe.py tables CONFIG.yaml INSTANCES.json.gz SCAN_DIR PROBE_NODES.json OUT_JSON OUT_CSV
 
 ``scan`` writes OUT_DIR/shard-NNNNN.json per shard and skips shards that already have one;
 MEGABYTES 0 reads whole shards. Output holds counts and hashes only, never code text.
@@ -193,6 +195,72 @@ def cmd_scan(probe_path, out_dir, prefix, first, last, mb, negatives):
         )
 
 
+def cmd_instances(ref, clones, out, min_nodes):
+    import gzip
+
+    from ril.training import contamination_index as ci
+
+    verified = json.load(open(ref))
+    git_dirs = {r.lower(): p for r, p in json.load(open(clones)).items()}
+    inst = {i: (v["repo"].lower(), v["base_commit"]) for i, v in verified.items()}
+    t0 = time.time()
+    res = ci.instance_hashes(git_dirs, inst, int(min_nodes))
+    doc = {
+        "min_nodes": int(min_nodes),
+        "instances": {
+            i: {"repo": inst[i][0], "base_commit": inst[i][1], "hashes": h} for i, h in res.items()
+        },
+    }
+    with gzip.open(out + ".tmp", "wt") as f:
+        json.dump(doc, f, sort_keys=True, separators=(",", ":"))
+    os.replace(out + ".tmp", out)
+    print(
+        "instances",
+        len(res),
+        "functions",
+        sum(len(h) for h in res.values()),
+        "seconds",
+        round(time.time() - t0, 1),
+    )
+
+
+def cmd_tables(config, inst_path, scan_dir, probe_nodes, out_json, out_csv):
+    import csv
+    import glob
+    import gzip
+
+    import yaml
+
+    from ril.analysis import x4_tables as xt
+
+    cfg = yaml.safe_load(open(config))
+    shards = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(scan_dir, "shard-*.json")))]
+    docs, check = xt.collect_hits(shards)
+    doc = json.load(gzip.open(inst_path, "rt"))
+    inst = {i: (v["repo"], v["hashes"]) for i, v in doc["instances"].items()}
+    sizes = json.load(open(probe_nodes))["nodes"]
+    floors = [cfg["size_floor"]["primary_nodes"]] + list(cfg["size_floor"]["sensitivity_nodes"])
+    out = {
+        "scan_version": xt.SCAN_VERSION,
+        "config_hash": xt.config_hash(cfg),
+        "check": check,
+        "hit_documents_by_size": xt.size_profile(docs, sizes),
+        "distinct_matched_hashes": len(docs),
+        "per_floor": {},
+    }
+    csv_rows = []
+    for fl in floors:
+        rows = xt.repo_table(inst, docs, fl)
+        out["per_floor"][str(fl)] = {"repos": rows}
+        csv_rows += rows
+    json.dump(out, open(out_json, "w"), indent=1, sort_keys=True)
+    with open(out_csv, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(csv_rows[0]))
+        w.writeheader()
+        w.writerows(csv_rows)
+    print(json.dumps(out["check"]))
+
+
 def main():
     args = [a for a in sys.argv[1:] if a != "--negatives"]
     neg = "--negatives" in sys.argv
@@ -203,6 +271,10 @@ def main():
         cmd_measure(*args[1:5], neg)
     elif cmd == "scan":
         cmd_scan(*args[1:7], neg)
+    elif cmd == "instances":
+        cmd_instances(*args[1:5])
+    elif cmd == "tables":
+        cmd_tables(*args[1:7])
     else:
         raise SystemExit(__doc__)
 

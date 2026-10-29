@@ -1,0 +1,893 @@
+{
+ "check": {
+  "any_hits": 150198,
+  "documents": 23881192,
+  "rows": 23881192,
+  "shard_ids_max": 239,
+  "shard_ids_min": 0,
+  "shards": 240,
+  "text_only_hits": 0,
+  "truncated_shards": []
+ },
+ "config_hash": "87ac11b7293b0cfe7e64de065f6835edc55a74ead4431f846f0450e310b80192",
+ "distinct_matched_hashes": 32714,
+ "hit_documents_by_size": {
+  "100 or more": 14110,
+  "20 to 49": 16290,
+  "50 to 99": 13021,
+  "under 20": 106777
+ },
+ "per_floor": {
+  "100": {
+   "repos": [
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 9168,
+     "functions_matched": 2080,
+     "functions_matched_share_ci95": [
+      0.218419,
+      0.235562
+     ],
+     "hit_documents": 2186,
+     "instances": 22,
+     "instances_with_hit": 22,
+     "instances_with_hit_ci95": [
+      0.851345,
+      1.0
+     ],
+     "matched_per_instance_max": 1907,
+     "matched_per_instance_median": 1452,
+     "matched_share_per_instance_max": 0.3903,
+     "matched_share_per_instance_median": 0.3024,
+     "matched_share_per_instance_min": 0.1628,
+     "repo": "astropy/astropy"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 11291,
+     "functions_matched": 2126,
+     "functions_matched_share_ci95": [
+      0.181187,
+      0.195608
+     ],
+     "hit_documents": 2950,
+     "instances": 231,
+     "instances_with_hit": 231,
+     "instances_with_hit_ci95": [
+      0.983642,
+      1.0
+     ],
+     "matched_per_instance_max": 1465,
+     "matched_per_instance_median": 1127,
+     "matched_share_per_instance_max": 0.2982,
+     "matched_share_per_instance_median": 0.2673,
+     "matched_share_per_instance_min": 0.1843,
+     "repo": "django/django"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 7046,
+     "functions_matched": 759,
+     "functions_matched_share_ci95": [
+      0.100694,
+      0.115175
+     ],
+     "hit_documents": 1124,
+     "instances": 34,
+     "instances_with_hit": 34,
+     "instances_with_hit_ci95": [
+      0.898485,
+      1.0
+     ],
+     "matched_per_instance_max": 537,
+     "matched_per_instance_median": 435,
+     "matched_share_per_instance_max": 0.201,
+     "matched_share_per_instance_median": 0.1661,
+     "matched_share_per_instance_min": 0.1345,
+     "repo": "matplotlib/matplotlib"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 941,
+     "functions_matched": 146,
+     "functions_matched_share_ci95": [
+      0.133428,
+      0.179684
+     ],
+     "hit_documents": 189,
+     "instances": 2,
+     "instances_with_hit": 2,
+     "instances_with_hit_ci95": [
+      0.34238,
+      1.0
+     ],
+     "matched_per_instance_max": 146,
+     "matched_per_instance_median": 146,
+     "matched_share_per_instance_max": 0.1587,
+     "matched_share_per_instance_median": 0.1587,
+     "matched_share_per_instance_min": 0.1551,
+     "repo": "mwaskom/seaborn"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 176,
+     "functions_matched": 4,
+     "functions_matched_share_ci95": [
+      0.008873,
+      0.056971
+     ],
+     "hit_documents": 24,
+     "instances": 1,
+     "instances_with_hit": 1,
+     "instances_with_hit_ci95": [
+      0.206549,
+      1.0
+     ],
+     "matched_per_instance_max": 4,
+     "matched_per_instance_median": 4,
+     "matched_share_per_instance_max": 0.0227,
+     "matched_share_per_instance_median": 0.0227,
+     "matched_share_per_instance_min": 0.0227,
+     "repo": "pallets/flask"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 313,
+     "functions_matched": 92,
+     "functions_matched_share_ci95": [
+      0.246204,
+      0.346652
+     ],
+     "hit_documents": 383,
+     "instances": 8,
+     "instances_with_hit": 8,
+     "instances_with_hit_ci95": [
+      0.675592,
+      1.0
+     ],
+     "matched_per_instance_max": 35,
+     "matched_per_instance_median": 30,
+     "matched_share_per_instance_max": 0.4167,
+     "matched_share_per_instance_median": 0.3939,
+     "matched_share_per_instance_min": 0.1981,
+     "repo": "psf/requests"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 5509,
+     "functions_matched": 349,
+     "functions_matched_share_ci95": [
+      0.057218,
+      0.070093
+     ],
+     "hit_documents": 367,
+     "instances": 22,
+     "instances_with_hit": 22,
+     "instances_with_hit_ci95": [
+      0.851345,
+      1.0
+     ],
+     "matched_per_instance_max": 282,
+     "matched_per_instance_median": 69,
+     "matched_share_per_instance_max": 0.1415,
+     "matched_share_per_instance_median": 0.0478,
+     "matched_share_per_instance_min": 0.0365,
+     "repo": "pydata/xarray"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 2227,
+     "functions_matched": 179,
+     "functions_matched_share_ci95": [
+      0.069795,
+      0.092405
+     ],
+     "hit_documents": 190,
+     "instances": 10,
+     "instances_with_hit": 10,
+     "instances_with_hit_ci95": [
+      0.722467,
+      1.0
+     ],
+     "matched_per_instance_max": 103,
+     "matched_per_instance_median": 48,
+     "matched_share_per_instance_max": 0.2112,
+     "matched_share_per_instance_median": 0.0708,
+     "matched_share_per_instance_min": 0.0414,
+     "repo": "pylint-dev/pylint"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 2682,
+     "functions_matched": 153,
+     "functions_matched_share_ci95": [
+      0.048886,
+      0.066475
+     ],
+     "hit_documents": 159,
+     "instances": 19,
+     "instances_with_hit": 19,
+     "instances_with_hit_ci95": [
+      0.831821,
+      1.0
+     ],
+     "matched_per_instance_max": 127,
+     "matched_per_instance_median": 21,
+     "matched_share_per_instance_max": 0.1698,
+     "matched_share_per_instance_median": 0.038,
+     "matched_share_per_instance_min": 0.0148,
+     "repo": "pytest-dev/pytest"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 10392,
+     "functions_matched": 1593,
+     "functions_matched_share_ci95": [
+      0.146493,
+      0.160346
+     ],
+     "hit_documents": 3391,
+     "instances": 32,
+     "instances_with_hit": 32,
+     "instances_with_hit_ci95": [
+      0.892821,
+      1.0
+     ],
+     "matched_per_instance_max": 1183,
+     "matched_per_instance_median": 371,
+     "matched_share_per_instance_max": 0.2911,
+     "matched_share_per_instance_median": 0.1292,
+     "matched_share_per_instance_min": 0.117,
+     "repo": "scikit-learn/scikit-learn"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 4606,
+     "functions_matched": 233,
+     "functions_matched_share_ci95": [
+      0.044623,
+      0.057298
+     ],
+     "hit_documents": 235,
+     "instances": 44,
+     "instances_with_hit": 44,
+     "instances_with_hit_ci95": [
+      0.919704,
+      1.0
+     ],
+     "matched_per_instance_max": 223,
+     "matched_per_instance_median": 20,
+     "matched_share_per_instance_max": 0.1615,
+     "matched_share_per_instance_median": 0.0174,
+     "matched_share_per_instance_min": 0.0132,
+     "repo": "sphinx-doc/sphinx"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 30070,
+     "functions_matched": 2728,
+     "functions_matched_share_ci95": [
+      0.087527,
+      0.09402
+     ],
+     "hit_documents": 2972,
+     "instances": 75,
+     "instances_with_hit": 75,
+     "instances_with_hit_ci95": [
+      0.951276,
+      1.0
+     ],
+     "matched_per_instance_max": 2290,
+     "matched_per_instance_median": 1273,
+     "matched_share_per_instance_max": 0.2246,
+     "matched_share_per_instance_median": 0.1286,
+     "matched_share_per_instance_min": 0.0878,
+     "repo": "sympy/sympy"
+    },
+    {
+     "floor_nodes": 100,
+     "functions_above_floor": 84409,
+     "functions_matched": 10435,
+     "functions_matched_share_ci95": [
+      0.121421,
+      0.125862
+     ],
+     "hit_documents": 14110,
+     "instances": 500,
+     "instances_with_hit": 500,
+     "instances_with_hit_ci95": [
+      0.992376,
+      1.0
+     ],
+     "matched_per_instance_max": null,
+     "matched_per_instance_median": null,
+     "matched_share_per_instance_max": null,
+     "matched_share_per_instance_median": null,
+     "matched_share_per_instance_min": null,
+     "repo": "ALL (hash counted once)"
+    }
+   ]
+  },
+  "20": {
+   "repos": [
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 20449,
+     "functions_matched": 4557,
+     "functions_matched_share_ci95": [
+      0.217196,
+      0.228603
+     ],
+     "hit_documents": 5050,
+     "instances": 22,
+     "instances_with_hit": 22,
+     "instances_with_hit_ci95": [
+      0.851345,
+      1.0
+     ],
+     "matched_per_instance_max": 4195,
+     "matched_per_instance_median": 3480,
+     "matched_share_per_instance_max": 0.3384,
+     "matched_share_per_instance_median": 0.2832,
+     "matched_share_per_instance_min": 0.1964,
+     "repo": "astropy/astropy"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 38826,
+     "functions_matched": 6847,
+     "functions_matched_share_ci95": [
+      0.172592,
+      0.180174
+     ],
+     "hit_documents": 14696,
+     "instances": 231,
+     "instances_with_hit": 231,
+     "instances_with_hit_ci95": [
+      0.983642,
+      1.0
+     ],
+     "matched_per_instance_max": 5046,
+     "matched_per_instance_median": 4321,
+     "matched_share_per_instance_max": 0.244,
+     "matched_share_per_instance_median": 0.2237,
+     "matched_share_per_instance_min": 0.1981,
+     "repo": "django/django"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 16013,
+     "functions_matched": 2045,
+     "functions_matched_share_ci95": [
+      0.122628,
+      0.132968
+     ],
+     "hit_documents": 3417,
+     "instances": 34,
+     "instances_with_hit": 34,
+     "instances_with_hit_ci95": [
+      0.898485,
+      1.0
+     ],
+     "matched_per_instance_max": 1492,
+     "matched_per_instance_median": 1327,
+     "matched_share_per_instance_max": 0.2073,
+     "matched_share_per_instance_median": 0.1861,
+     "matched_share_per_instance_min": 0.1643,
+     "repo": "matplotlib/matplotlib"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 2146,
+     "functions_matched": 306,
+     "functions_matched_share_ci95": [
+      0.128435,
+      0.158024
+     ],
+     "hit_documents": 423,
+     "instances": 2,
+     "instances_with_hit": 2,
+     "instances_with_hit_ci95": [
+      0.34238,
+      1.0
+     ],
+     "matched_per_instance_max": 306,
+     "matched_per_instance_median": 306,
+     "matched_share_per_instance_max": 0.1444,
+     "matched_share_per_instance_median": 0.1444,
+     "matched_share_per_instance_min": 0.1431,
+     "repo": "mwaskom/seaborn"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 714,
+     "functions_matched": 29,
+     "functions_matched_share_ci95": [
+      0.028426,
+      0.057723
+     ],
+     "hit_documents": 377,
+     "instances": 1,
+     "instances_with_hit": 1,
+     "instances_with_hit_ci95": [
+      0.206549,
+      1.0
+     ],
+     "matched_per_instance_max": 29,
+     "matched_per_instance_median": 29,
+     "matched_share_per_instance_max": 0.0406,
+     "matched_share_per_instance_median": 0.0406,
+     "matched_share_per_instance_min": 0.0406,
+     "repo": "pallets/flask"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 1219,
+     "functions_matched": 323,
+     "functions_matched_share_ci95": [
+      0.240963,
+      0.290456
+     ],
+     "hit_documents": 1679,
+     "instances": 8,
+     "instances_with_hit": 8,
+     "instances_with_hit_ci95": [
+      0.675592,
+      1.0
+     ],
+     "matched_per_instance_max": 145,
+     "matched_per_instance_median": 139,
+     "matched_share_per_instance_max": 0.3702,
+     "matched_share_per_instance_median": 0.3273,
+     "matched_share_per_instance_min": 0.246,
+     "repo": "psf/requests"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 11241,
+     "functions_matched": 958,
+     "functions_matched_share_ci95": [
+      0.080203,
+      0.090528
+     ],
+     "hit_documents": 1031,
+     "instances": 22,
+     "instances_with_hit": 22,
+     "instances_with_hit_ci95": [
+      0.851345,
+      1.0
+     ],
+     "matched_per_instance_max": 801,
+     "matched_per_instance_median": 274,
+     "matched_share_per_instance_max": 0.168,
+     "matched_share_per_instance_median": 0.0723,
+     "matched_share_per_instance_min": 0.0639,
+     "repo": "pydata/xarray"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 7498,
+     "functions_matched": 581,
+     "functions_matched_share_ci95": [
+      0.07165,
+      0.083758
+     ],
+     "hit_documents": 740,
+     "instances": 10,
+     "instances_with_hit": 10,
+     "instances_with_hit_ci95": [
+      0.722467,
+      1.0
+     ],
+     "matched_per_instance_max": 420,
+     "matched_per_instance_median": 205,
+     "matched_share_per_instance_max": 0.176,
+     "matched_share_per_instance_median": 0.0716,
+     "matched_share_per_instance_min": 0.0555,
+     "repo": "pylint-dev/pylint"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 10407,
+     "functions_matched": 727,
+     "functions_matched_share_ci95": [
+      0.065116,
+      0.074915
+     ],
+     "hit_documents": 772,
+     "instances": 19,
+     "instances_with_hit": 19,
+     "instances_with_hit_ci95": [
+      0.831821,
+      1.0
+     ],
+     "matched_per_instance_max": 595,
+     "matched_per_instance_median": 165,
+     "matched_share_per_instance_max": 0.1608,
+     "matched_share_per_instance_median": 0.0496,
+     "matched_share_per_instance_min": 0.0301,
+     "repo": "pytest-dev/pytest"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 18809,
+     "functions_matched": 3505,
+     "functions_matched_share_ci95": [
+      0.180846,
+      0.191976
+     ],
+     "hit_documents": 7720,
+     "instances": 32,
+     "instances_with_hit": 32,
+     "instances_with_hit_ci95": [
+      0.892821,
+      1.0
+     ],
+     "matched_per_instance_max": 2560,
+     "matched_per_instance_median": 1013,
+     "matched_share_per_instance_max": 0.3085,
+     "matched_share_per_instance_median": 0.1756,
+     "matched_share_per_instance_min": 0.1583,
+     "repo": "scikit-learn/scikit-learn"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 10732,
+     "functions_matched": 643,
+     "functions_matched_share_ci95": [
+      0.05558,
+      0.064564
+     ],
+     "hit_documents": 677,
+     "instances": 44,
+     "instances_with_hit": 44,
+     "instances_with_hit_ci95": [
+      0.919704,
+      1.0
+     ],
+     "matched_per_instance_max": 606,
+     "matched_per_instance_median": 154,
+     "matched_share_per_instance_max": 0.1437,
+     "matched_share_per_instance_median": 0.0407,
+     "matched_share_per_instance_min": 0.0359,
+     "repo": "sphinx-doc/sphinx"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 56208,
+     "functions_matched": 6039,
+     "functions_matched_share_ci95": [
+      0.104907,
+      0.110027
+     ],
+     "hit_documents": 7382,
+     "instances": 75,
+     "instances_with_hit": 75,
+     "instances_with_hit_ci95": [
+      0.951276,
+      1.0
+     ],
+     "matched_per_instance_max": 5135,
+     "matched_per_instance_median": 3502,
+     "matched_share_per_instance_max": 0.2215,
+     "matched_share_per_instance_median": 0.1533,
+     "matched_share_per_instance_min": 0.1193,
+     "repo": "sympy/sympy"
+    },
+    {
+     "floor_nodes": 20,
+     "functions_above_floor": 194187,
+     "functions_matched": 26530,
+     "functions_matched_share_ci95": [
+      0.135101,
+      0.138156
+     ],
+     "hit_documents": 43421,
+     "instances": 500,
+     "instances_with_hit": 500,
+     "instances_with_hit_ci95": [
+      0.992376,
+      1.0
+     ],
+     "matched_per_instance_max": null,
+     "matched_per_instance_median": null,
+     "matched_share_per_instance_max": null,
+     "matched_share_per_instance_median": null,
+     "matched_share_per_instance_min": null,
+     "repo": "ALL (hash counted once)"
+    }
+   ]
+  },
+  "50": {
+   "repos": [
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 15264,
+     "functions_matched": 3402,
+     "functions_matched_share_ci95": [
+      0.216345,
+      0.229549
+     ],
+     "hit_documents": 3654,
+     "instances": 22,
+     "instances_with_hit": 22,
+     "instances_with_hit_ci95": [
+      0.851345,
+      1.0
+     ],
+     "matched_per_instance_max": 3133,
+     "matched_per_instance_median": 2518,
+     "matched_share_per_instance_max": 0.3564,
+     "matched_share_per_instance_median": 0.2891,
+     "matched_share_per_instance_min": 0.1865,
+     "repo": "astropy/astropy"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 23980,
+     "functions_matched": 4557,
+     "functions_matched_share_ci95": [
+      0.185118,
+      0.195048
+     ],
+     "hit_documents": 7656,
+     "instances": 231,
+     "instances_with_hit": 231,
+     "instances_with_hit_ci95": [
+      0.983642,
+      1.0
+     ],
+     "matched_per_instance_max": 3246,
+     "matched_per_instance_median": 2656,
+     "matched_share_per_instance_max": 0.2852,
+     "matched_share_per_instance_median": 0.2537,
+     "matched_share_per_instance_min": 0.2113,
+     "repo": "django/django"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 11574,
+     "functions_matched": 1315,
+     "functions_matched_share_ci95": [
+      0.107963,
+      0.119527
+     ],
+     "hit_documents": 2330,
+     "instances": 34,
+     "instances_with_hit": 34,
+     "instances_with_hit_ci95": [
+      0.898485,
+      1.0
+     ],
+     "matched_per_instance_max": 924,
+     "matched_per_instance_median": 791,
+     "matched_share_per_instance_max": 0.19,
+     "matched_share_per_instance_median": 0.1629,
+     "matched_share_per_instance_min": 0.1455,
+     "repo": "matplotlib/matplotlib"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 1664,
+     "functions_matched": 231,
+     "functions_matched_share_ci95": [
+      0.123039,
+      0.156269
+     ],
+     "hit_documents": 314,
+     "instances": 2,
+     "instances_with_hit": 2,
+     "instances_with_hit_ci95": [
+      0.34238,
+      1.0
+     ],
+     "matched_per_instance_max": 231,
+     "matched_per_instance_median": 231,
+     "matched_share_per_instance_max": 0.1409,
+     "matched_share_per_instance_median": 0.1409,
+     "matched_share_per_instance_min": 0.1387,
+     "repo": "mwaskom/seaborn"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 457,
+     "functions_matched": 12,
+     "functions_matched_share_ci95": [
+      0.015083,
+      0.045331
+     ],
+     "hit_documents": 41,
+     "instances": 1,
+     "instances_with_hit": 1,
+     "instances_with_hit_ci95": [
+      0.206549,
+      1.0
+     ],
+     "matched_per_instance_max": 12,
+     "matched_per_instance_median": 12,
+     "matched_share_per_instance_max": 0.0263,
+     "matched_share_per_instance_median": 0.0263,
+     "matched_share_per_instance_min": 0.0263,
+     "repo": "pallets/flask"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 718,
+     "functions_matched": 199,
+     "functions_matched_share_ci95": [
+      0.245671,
+      0.311018
+     ],
+     "hit_documents": 956,
+     "instances": 8,
+     "instances_with_hit": 8,
+     "instances_with_hit_ci95": [
+      0.675592,
+      1.0
+     ],
+     "matched_per_instance_max": 85,
+     "matched_per_instance_median": 81,
+     "matched_share_per_instance_max": 0.4357,
+     "matched_share_per_instance_median": 0.368,
+     "matched_share_per_instance_min": 0.261,
+     "repo": "psf/requests"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 8833,
+     "functions_matched": 644,
+     "functions_matched_share_ci95": [
+      0.06767,
+      0.078518
+     ],
+     "hit_documents": 686,
+     "instances": 22,
+     "instances_with_hit": 22,
+     "instances_with_hit_ci95": [
+      0.851345,
+      1.0
+     ],
+     "matched_per_instance_max": 532,
+     "matched_per_instance_median": 152,
+     "matched_share_per_instance_max": 0.1529,
+     "matched_share_per_instance_median": 0.0586,
+     "matched_share_per_instance_min": 0.0471,
+     "repo": "pydata/xarray"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 4196,
+     "functions_matched": 324,
+     "functions_matched_share_ci95": [
+      0.069521,
+      0.085685
+     ],
+     "hit_documents": 364,
+     "instances": 10,
+     "instances_with_hit": 10,
+     "instances_with_hit_ci95": [
+      0.722467,
+      1.0
+     ],
+     "matched_per_instance_max": 206,
+     "matched_per_instance_median": 95,
+     "matched_share_per_instance_max": 0.1964,
+     "matched_share_per_instance_median": 0.0652,
+     "matched_share_per_instance_min": 0.0553,
+     "repo": "pylint-dev/pylint"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 6097,
+     "functions_matched": 388,
+     "functions_matched_share_ci95": [
+      0.057781,
+      0.070044
+     ],
+     "hit_documents": 404,
+     "instances": 19,
+     "instances_with_hit": 19,
+     "instances_with_hit_ci95": [
+      0.831821,
+      1.0
+     ],
+     "matched_per_instance_max": 327,
+     "matched_per_instance_median": 72,
+     "matched_share_per_instance_max": 0.1649,
+     "matched_share_per_instance_median": 0.0418,
+     "matched_share_per_instance_min": 0.0226,
+     "repo": "pytest-dev/pytest"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 15414,
+     "functions_matched": 2647,
+     "functions_matched_share_ci95": [
+      0.165855,
+      0.177762
+     ],
+     "hit_documents": 5636,
+     "instances": 32,
+     "instances_with_hit": 32,
+     "instances_with_hit_ci95": [
+      0.892821,
+      1.0
+     ],
+     "matched_per_instance_max": 1969,
+     "matched_per_instance_median": 692,
+     "matched_share_per_instance_max": 0.3006,
+     "matched_share_per_instance_median": 0.1529,
+     "matched_share_per_instance_min": 0.137,
+     "repo": "scikit-learn/scikit-learn"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 7669,
+     "functions_matched": 426,
+     "functions_matched_share_ci95": [
+      0.050641,
+      0.060901
+     ],
+     "hit_documents": 434,
+     "instances": 44,
+     "instances_with_hit": 44,
+     "instances_with_hit_ci95": [
+      0.919704,
+      1.0
+     ],
+     "matched_per_instance_max": 408,
+     "matched_per_instance_median": 78,
+     "matched_share_per_instance_max": 0.1528,
+     "matched_share_per_instance_median": 0.0335,
+     "matched_share_per_instance_min": 0.0285,
+     "repo": "sphinx-doc/sphinx"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 42672,
+     "functions_matched": 4262,
+     "functions_matched_share_ci95": [
+      0.097069,
+      0.102759
+     ],
+     "hit_documents": 4888,
+     "instances": 75,
+     "instances_with_hit": 75,
+     "instances_with_hit_ci95": [
+      0.951276,
+      1.0
+     ],
+     "matched_per_instance_max": 3572,
+     "matched_per_instance_median": 2249,
+     "matched_share_per_instance_max": 0.2224,
+     "matched_share_per_instance_median": 0.1452,
+     "matched_share_per_instance_min": 0.1037,
+     "repo": "sympy/sympy"
+    },
+    {
+     "floor_nodes": 50,
+     "functions_above_floor": 138509,
+     "functions_matched": 18391,
+     "functions_matched_share_ci95": [
+      0.131002,
+      0.134576
+     ],
+     "hit_documents": 27131,
+     "instances": 500,
+     "instances_with_hit": 500,
+     "instances_with_hit_ci95": [
+      0.992376,
+      1.0
+     ],
+     "matched_per_instance_max": null,
+     "matched_per_instance_median": null,
+     "matched_share_per_instance_max": null,
+     "matched_share_per_instance_median": null,
+     "matched_share_per_instance_min": null,
+     "repo": "ALL (hash counted once)"
+    }
+   ]
+  }
+ },
+ "scan_version": "contam-scan/v1"
+}
