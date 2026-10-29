@@ -37,7 +37,8 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Dense encoder + flat exact index (`ril/retrieval/dense_encoder.py`, `provisional: ADR-006`; CodeRankEmbed and Qwen3-Embedding-0.6B measured zero-shot, E-DENSE-FUSION, 2026-10-25)
 - [x] Smoke pilots E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK at 63 updates, 2 seeds (exploratory, 2026-10-29; evidence for ADR-001/ADR-002, nothing decided)
 - [x] Block 1 of the supervision pilots (2026-10-29, evidence only): graph-role measurement against score-ordered same-file expansion (E-GRAPH-ROLE, ADR-003); twelve supervision-quality papers read in full (ADR-002 addendum); edited-function contamination follow-up and Pro ansible as a third dev L3 repository (E-CONTAM-EDITED, E-DEV-ANSIBLE); paired encoder numbers and Qwen3 training-memory check (E-ENCODER-NUMBERS, ADR-006); RQ3 power table (E-POWER update)
-- [ ] Block 2: learning curve of RAW (E-PILOT-CURVE), then the arms pilot at the update count the curve supports
+- [x] Block 2, T3: learning curve of RAW (E-PILOT-CURVE, 2026-10-29; reduced design, 5.14 GPU-hours; Block 2 at 22.14 of 24)
+- [ ] Block 2, T4: arms pilot (not run; update count and budget are for the engineer to decide)
 - [x] Training stack (pool reader, multi-positive InfoNCE, pluggable negative policy, the three arm hooks with the identity test, budget accounting, checkpoints, evaluation hook; `ril/training/`, E-TRAIN-STACK, 2026-10-25; every training value `provisional: ADR-001, ADR-002, ADR-006`)
 - [ ] Baseline training (multi-positive InfoNCE, repo-local hard negatives)
 - [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list

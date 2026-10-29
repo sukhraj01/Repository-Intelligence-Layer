@@ -164,3 +164,12 @@ Cheapest experiments that could change a reading above (time-box in brackets, no
 - **Why.** It is the largest measured shape that fits an 11 GB card for the 137M base (2.65 s per update; about 15 GPU-hours for 20,000 updates). It is smaller than the master's batch and than SweRank's, which is a stated limitation.
 - **Evidence class.** Measured (`t1-train-throughput` rows).
 - **Cheapest experiment that could flip it.** Run a short comparison of batch 32 against a gradient-cached larger effective batch (not built) on the same cell; or, if a larger card appears, the same cell at the master's shape.
+
+## Addendum 2026-10-30 — learning curve of the RAW arm (E-PILOT-CURVE; evidence only, no decision; this ADR stays Proposed)
+
+**Evidence class.** Measured, small n: RAW only, 2 seeds, a dev subset (3 repositories at L2, 2 at L3), reduced design (2,000 of the planned 3,000 updates; ansible only at step 0). Details and intervals: `docs/EXPERIMENTS.md` E-PILOT-CURVE.
+
+- On the dense column the RAW arm has moved about +10.5 (L2 nDCG@10) and +11.1 (L3 Recall@100) from the untrained encoder by 100 updates, and the change stays between +10.1 and +11.4 at 300, 1,000 and 2,000 updates; increments are within 1.0 point and the seed gap at the same update count is 0.3 to 2.6.
+- **Consequence for the 63-update pilots (E-PILOT-K/NEG/LEAK).** They stopped at about the point where RAW itself has already moved nearly all it moves. Differences between arms were not detectable at 63 updates, and this curve says the lack of a visible arm difference there cannot be read as a lack of an effect later: what the pilots could not see is how supervision changes the later part of training, which this RAW-only curve does not cover either.
+- **Reasoned, not measured.** If the encoder settles near 100 updates under RAW on this pool and recipe, an RQ2 update count of 20,000 (the target in `docs/08_experimental_design.md`) may be far longer than needed, and matched optimization budgets could be set much shorter. Caveats: the checkpoints sit on a 3,000-update learning-rate schedule, the pool is revisited about 12.8 times by 2,000 updates, the 3,000 point is unmeasured, and a supervision arm may keep moving where RAW stops. Whether an arm difference appears at N = 100 or at a longer N is the open question of the arms pilot (T4, not run).
+- Cheapest experiment that could flip this reading: the arms pilot at N = 100 and at one longer N (cost options in the project state).
