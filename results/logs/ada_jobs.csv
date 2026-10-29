@@ -35,3 +35,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-29,A,46134,E7,Qwen3-Embedding-0.6B training step at the D31 shape (out of memory) and smaller shapes in one process; CodeRankEmbed control,u22,6,1,00:01:53,0.03,COMPLETED (gnode045)
 2026-10-29,A,46180,E7,repeat: shape list lost in --export; CodeRankEmbed control; memory probe crashed,u22,4,1,00:01:23,0.02,FAILED (script) (gnode046)
 2026-10-29,A,46183,E7,clean rerun: Qwen3 shapes 4/2/1 one process each; CodeRankEmbed batch 8; memory probe,u22,4,1,00:01:01,0.02,COMPLETED (gnode046)
+2026-10-29,A,46133,X5,edited-function follow-up of the contamination scan (first version; pair-weighted comparison superseded),u22,2,0,00:01:55,0.0,COMPLETED (gnode002; 0.61 GB peak)
+2026-10-29,A,46147,X5,edited-function follow-up of the contamination scan (final: distinct functions, same-file comparator),u22,2,0,00:01:47,0.0,COMPLETED (gnode002; 0.41 GB peak)
+2026-10-29,A,46142,X5,SWE-bench Pro ansible as third dev L3 repository: instance cache + unit/query/chunk text stores (CPU),u22,3,0,00:43:26,0.0,COMPLETED (gnode002; 3.53 GB peak)

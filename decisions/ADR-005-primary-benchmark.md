@@ -104,6 +104,13 @@ the full result is read. It is **not part of the frozen evaluation**; it support
   (0.63%) match a Verified function; at or above the floor and at an instance's own base commit, 26,530 of 194,187 distinct probe
   functions (13.7%) occur in the corpus (43,421 documents), 13.3% and 12.4% at floors 50 and 100. Every instance has some matching
   function, so the informative figure is the share of an instance's own functions: median 4% (flask, sphinx) to 33% (requests) by
-  repository. The flip experiment of this decision (the instances' *edited* functions among the hits) has **not** been run, so no
-  per-repository sensitivity row is proposed; the per-instance hash sets needed for it exist on account A. A hit is a function-level
+  repository. A hit is a function-level
   match, not proof that a pair was trained on.
+- *Follow-up note, 2026-10-29 (X5, `docs/EXPERIMENTS.md` E-CONTAM-EDITED; measured, exploratory).* The flip experiment was run. Of 783 distinct functions
+  that the 500 reference patches edit (as at the base commit, floor 20 nodes), 70 (8.9%) occur in the corpus, against 13.7% of the other
+  base-commit functions (difference -4.8 points, repository-clustered interval [-9.7, -0.8]) and 25.6% of the unedited functions in the same
+  files; the post-patch versions of the 728 changed edited functions match at 13.9% (+0.2 points over the other functions, [-3.8, +2.9]). 52 of
+  460 instances (11.3%) have an edited function among the hits. The condition of the flip (a large share of the edited functions in the corpus,
+  concentrated in a few repositories) is not met, so no per-repository sensitivity row is proposed on this evidence; the decision stays the
+  engineer's. A hit is an exact syntax-tree match, not proof that any issue, patch or pair was trained on, and a non-hit does not show absence.
+- *Dev set note, 2026-10-29 (decision D32, `docs/EXPERIMENTS.md` E-DEV-ANSIBLE).* Pro `ansible/ansible` (83 instances with L3 qrels) is added as a third development L3 repository in `configs/experiments/e1_bm25_dev3.yaml`; the original configuration and Verified as the test set are unchanged. Dev L3 intervals can now cluster over three repositories instead of two.

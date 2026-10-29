@@ -10,6 +10,8 @@ Run it under the nodes' Python 3.10 (the parser needs it), CPU only, from the wo
   contam_probe.py scan PROBE.json OUT_DIR URL_PREFIX FIRST LAST MEGABYTES [--negatives]
   contam_probe.py instances VERIFIED_REF.json CLONES.json OUT.json.gz MIN_NODES
   contam_probe.py tables CONFIG.yaml INSTANCES.json.gz SCAN_DIR PROBE_NODES.json OUT_JSON OUT_CSV
+  contam_probe.py edited VERIFIED_REF.json CLONES.json PATCHES.json OUT.json.gz
+  contam_probe.py edited-tables CONFIG.yaml INSTANCES.json.gz EDITED.json.gz SCAN_DIR OUT_JSON
 
 ``scan`` writes OUT_DIR/shard-NNNNN.json per shard and skips shards that already have one;
 MEGABYTES 0 reads whole shards. Output holds counts and hashes only, never code text.
@@ -261,6 +263,50 @@ def cmd_tables(config, inst_path, scan_dir, probe_nodes, out_json, out_csv):
     print(json.dumps(out["check"]))
 
 
+def cmd_edited(ref, clones, patches, out):
+    import gzip
+
+    from ril.training import contamination_edited as ce
+
+    verified = json.load(open(ref))
+    pat = json.load(open(patches))
+    git_dirs = {r.lower(): p for r, p in json.load(open(clones)).items()}
+    inst = {i: (v["repo"].lower(), v["base_commit"], pat[i]) for i, v in verified.items()}
+    t0 = time.time()
+    res = ce.edited_for_instances(git_dirs, inst)
+    doc = {"version": ce.EDITED_VERSION, "instances": res}
+    with gzip.open(out + ".tmp", "wt") as f:
+        json.dump(doc, f, sort_keys=True, separators=(",", ":"))
+    os.replace(out + ".tmp", out)
+    print("instances", len(res), "seconds", round(time.time() - t0, 1))
+
+
+def cmd_edited_tables(config, inst_path, edited_path, scan_dir, out_json):
+    import glob
+    import gzip
+
+    import yaml
+
+    from ril.analysis import x4_tables as xt
+    from ril.analysis import x5_tables as x5
+
+    cfg = yaml.safe_load(open(config))
+    shards = [json.load(open(f)) for f in sorted(glob.glob(os.path.join(scan_dir, "shard-*.json")))]
+    docs, check = xt.collect_hits(shards)
+    doc = json.load(gzip.open(inst_path, "rt"))
+    inst = {i: (v["repo"], v["hashes"]) for i, v in doc["instances"].items()}
+    edited = json.load(gzip.open(edited_path, "rt"))["instances"]
+    floors = [cfg["size_floor"]["primary_nodes"]] + list(cfg["size_floor"]["sensitivity_nodes"])
+    out = {
+        "scan_check": check,
+        "config_hash": xt.config_hash(cfg),
+        "diagnostics": x5.diagnostics(edited),
+        "per_floor": {str(f): x5.floor_table(edited, inst, docs, f) for f in floors},
+    }
+    json.dump(out, open(out_json, "w"), indent=1, sort_keys=True)
+    print(json.dumps(out["diagnostics"]))
+
+
 def main():
     args = [a for a in sys.argv[1:] if a != "--negatives"]
     neg = "--negatives" in sys.argv
@@ -275,6 +321,10 @@ def main():
         cmd_instances(*args[1:5])
     elif cmd == "tables":
         cmd_tables(*args[1:7])
+    elif cmd == "edited":
+        cmd_edited(*args[1:5])
+    elif cmd == "edited-tables":
+        cmd_edited_tables(*args[1:6])
     else:
         raise SystemExit(__doc__)
 

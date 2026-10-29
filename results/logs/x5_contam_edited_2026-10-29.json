@@ -1,0 +1,918 @@
+{
+ "config_hash": "87ac11b7293b0cfe7e64de065f6835edc55a74ead4431f846f0450e310b80192",
+ "diagnostics": {
+  "added_functions": 108,
+  "edited_functions": 886,
+  "edited_functions_without_ast_hash": 1,
+  "instances": 500,
+  "instances_without_edited_function": 25,
+  "instances_without_python_file_edit": 0,
+  "patch_applied": 500,
+  "patch_not_applied": [],
+  "unparseable_post_files": 0,
+  "unparseable_pre_files": 0
+ },
+ "per_floor": {
+  "100": {
+   "added_functions_matched": 1,
+   "added_functions_n": 15,
+   "all_base_commit_functions_matched": 10435,
+   "all_base_commit_functions_n": 84409,
+   "all_base_commit_functions_share": 0.123624,
+   "by_repo": {
+    "astropy/astropy": {
+     "file_matched": 74,
+     "file_n": 200,
+     "other_matched": 2078,
+     "other_n": 9149,
+     "post_matched": 7,
+     "post_n": 16,
+     "pre_matched": 2,
+     "pre_n": 19
+    },
+    "django/django": {
+     "file_matched": 297,
+     "file_n": 979,
+     "other_matched": 2109,
+     "other_n": 11093,
+     "post_matched": 33,
+     "post_n": 198,
+     "pre_matched": 17,
+     "pre_n": 198
+    },
+    "matplotlib/matplotlib": {
+     "file_matched": 187,
+     "file_n": 735,
+     "other_matched": 758,
+     "other_n": 7008,
+     "post_matched": 4,
+     "post_n": 39,
+     "pre_matched": 1,
+     "pre_n": 38
+    },
+    "mwaskom/seaborn": {
+     "file_matched": 12,
+     "file_n": 37,
+     "other_matched": 146,
+     "other_n": 937,
+     "post_matched": 0,
+     "post_n": 4,
+     "pre_matched": 0,
+     "pre_n": 4
+    },
+    "pallets/flask": {
+     "file_matched": 0,
+     "file_n": 4,
+     "other_matched": 4,
+     "other_n": 175,
+     "post_matched": 0,
+     "post_n": 1,
+     "pre_matched": 0,
+     "pre_n": 1
+    },
+    "psf/requests": {
+     "file_matched": 15,
+     "file_n": 44,
+     "other_matched": 91,
+     "other_n": 307,
+     "post_matched": 1,
+     "post_n": 8,
+     "pre_matched": 1,
+     "pre_n": 6
+    },
+    "pydata/xarray": {
+     "file_matched": 56,
+     "file_n": 503,
+     "other_matched": 349,
+     "other_n": 5493,
+     "post_matched": 2,
+     "post_n": 21,
+     "pre_matched": 0,
+     "pre_n": 16
+    },
+    "pylint-dev/pylint": {
+     "file_matched": 32,
+     "file_n": 84,
+     "other_matched": 177,
+     "other_n": 2217,
+     "post_matched": 1,
+     "post_n": 11,
+     "pre_matched": 2,
+     "pre_n": 10
+    },
+    "pytest-dev/pytest": {
+     "file_matched": 6,
+     "file_n": 129,
+     "other_matched": 153,
+     "other_n": 2662,
+     "post_matched": 1,
+     "post_n": 20,
+     "pre_matched": 0,
+     "pre_n": 20
+    },
+    "scikit-learn/scikit-learn": {
+     "file_matched": 77,
+     "file_n": 221,
+     "other_matched": 1590,
+     "other_n": 10354,
+     "post_matched": 1,
+     "post_n": 35,
+     "pre_matched": 3,
+     "pre_n": 38
+    },
+    "sphinx-doc/sphinx": {
+     "file_matched": 6,
+     "file_n": 498,
+     "other_matched": 233,
+     "other_n": 4559,
+     "post_matched": 2,
+     "post_n": 50,
+     "pre_matched": 0,
+     "pre_n": 47
+    },
+    "sympy/sympy": {
+     "file_matched": 311,
+     "file_n": 1116,
+     "other_matched": 2723,
+     "other_n": 29988,
+     "post_matched": 10,
+     "post_n": 81,
+     "pre_matched": 5,
+     "pre_n": 82
+    }
+   },
+   "by_size_pre_vs_other": [
+    {
+     "a_ci95_descriptive": [
+      0.045965,
+      0.090398
+     ],
+     "a_matched": 31,
+     "a_n": 479,
+     "a_share": 0.064718,
+     "b_ci95_descriptive": [
+      0.121814,
+      0.126273
+     ],
+     "b_matched": 10411,
+     "b_n": 83942,
+     "b_share": 0.124026,
+     "bootstrap_draws": 2000,
+     "difference_a_minus_b": -0.059308,
+     "difference_ci95_repo_clustered": [
+      -0.101256,
+      -0.036073
+     ],
+     "nodes": [
+      100,
+      null
+     ],
+     "repositories": 12,
+     "seed": 0
+    }
+   ],
+   "changed_neither_match": 383,
+   "changed_post_function_removed": 1,
+   "changed_post_only_match": 56,
+   "changed_pre_and_post_looked_up": 459,
+   "changed_pre_and_post_match": 6,
+   "changed_pre_only_match": 14,
+   "floor_nodes": 100,
+   "instances": 500,
+   "instances_with_a_matched_edited_function": 29,
+   "instances_with_a_matched_edited_function_ci95": [
+    0.060765,
+    0.121206
+   ],
+   "instances_with_edited_function_above_floor": 336,
+   "post_vs_other": {
+    "a_ci95_descriptive": [
+     0.101227,
+     0.160828
+    ],
+    "a_matched": 62,
+    "a_n": 484,
+    "a_share": 0.128099,
+    "b_ci95_descriptive": [
+     0.121814,
+     0.126273
+    ],
+    "b_matched": 10411,
+    "b_n": 83942,
+    "b_share": 0.124026,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": 0.004073,
+    "difference_ci95_repo_clustered": [
+     -0.050811,
+     0.029682
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "post_vs_same_file": {
+    "a_ci95_descriptive": [
+     0.101227,
+     0.160828
+    ],
+    "a_matched": 62,
+    "a_n": 484,
+    "a_share": 0.128099,
+    "b_ci95_descriptive": [
+     0.223715,
+     0.248379
+    ],
+    "b_matched": 1073,
+    "b_n": 4550,
+    "b_share": 0.235824,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.107725,
+    "difference_ci95_repo_clustered": [
+     -0.16675,
+     -0.046871
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "pre_vs_other": {
+    "a_ci95_descriptive": [
+     0.045965,
+     0.090398
+    ],
+    "a_matched": 31,
+    "a_n": 479,
+    "a_share": 0.064718,
+    "b_ci95_descriptive": [
+     0.121814,
+     0.126273
+    ],
+    "b_matched": 10411,
+    "b_n": 83942,
+    "b_share": 0.124026,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.059308,
+    "difference_ci95_repo_clustered": [
+     -0.101256,
+     -0.036073
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "pre_vs_same_file": {
+    "a_ci95_descriptive": [
+     0.045965,
+     0.090398
+    ],
+    "a_matched": 31,
+    "a_n": 479,
+    "a_share": 0.064718,
+    "b_ci95_descriptive": [
+     0.223715,
+     0.248379
+    ],
+    "b_matched": 1073,
+    "b_n": 4550,
+    "b_share": 0.235824,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.171106,
+    "difference_ci95_repo_clustered": [
+     -0.218281,
+     -0.109135
+    ],
+    "repositories": 12,
+    "seed": 0
+   }
+  },
+  "20": {
+   "added_functions_matched": 6,
+   "added_functions_n": 78,
+   "all_base_commit_functions_matched": 26530,
+   "all_base_commit_functions_n": 194187,
+   "all_base_commit_functions_share": 0.136621,
+   "by_repo": {
+    "astropy/astropy": {
+     "file_matched": 216,
+     "file_n": 562,
+     "other_matched": 4555,
+     "other_n": 20420,
+     "post_matched": 10,
+     "post_n": 27,
+     "pre_matched": 2,
+     "pre_n": 29
+    },
+    "django/django": {
+     "file_matched": 926,
+     "file_n": 3292,
+     "other_matched": 6813,
+     "other_n": 38492,
+     "post_matched": 50,
+     "post_n": 316,
+     "pre_matched": 34,
+     "pre_n": 334
+    },
+    "matplotlib/matplotlib": {
+     "file_matched": 539,
+     "file_n": 1864,
+     "other_matched": 2042,
+     "other_n": 15958,
+     "post_matched": 5,
+     "post_n": 50,
+     "pre_matched": 3,
+     "pre_n": 55
+    },
+    "mwaskom/seaborn": {
+     "file_matched": 39,
+     "file_n": 98,
+     "other_matched": 306,
+     "other_n": 2142,
+     "post_matched": 0,
+     "post_n": 4,
+     "pre_matched": 0,
+     "pre_n": 4
+    },
+    "pallets/flask": {
+     "file_matched": 0,
+     "file_n": 21,
+     "other_matched": 29,
+     "other_n": 713,
+     "post_matched": 0,
+     "post_n": 1,
+     "pre_matched": 0,
+     "pre_n": 1
+    },
+    "psf/requests": {
+     "file_matched": 73,
+     "file_n": 134,
+     "other_matched": 321,
+     "other_n": 1210,
+     "post_matched": 1,
+     "post_n": 9,
+     "pre_matched": 2,
+     "pre_n": 9
+    },
+    "pydata/xarray": {
+     "file_matched": 171,
+     "file_n": 1127,
+     "other_matched": 957,
+     "other_n": 11207,
+     "post_matched": 5,
+     "post_n": 34,
+     "pre_matched": 1,
+     "pre_n": 34
+    },
+    "pylint-dev/pylint": {
+     "file_matched": 84,
+     "file_n": 264,
+     "other_matched": 575,
+     "other_n": 7480,
+     "post_matched": 1,
+     "post_n": 17,
+     "pre_matched": 6,
+     "pre_n": 18
+    },
+    "pytest-dev/pytest": {
+     "file_matched": 66,
+     "file_n": 496,
+     "other_matched": 727,
+     "other_n": 10371,
+     "post_matched": 2,
+     "post_n": 30,
+     "pre_matched": 0,
+     "pre_n": 36
+    },
+    "scikit-learn/scikit-learn": {
+     "file_matched": 204,
+     "file_n": 504,
+     "other_matched": 3500,
+     "other_n": 18757,
+     "post_matched": 6,
+     "post_n": 47,
+     "pre_matched": 5,
+     "pre_n": 52
+    },
+    "sphinx-doc/sphinx": {
+     "file_matched": 60,
+     "file_n": 1421,
+     "other_matched": 643,
+     "other_n": 10664,
+     "post_matched": 2,
+     "post_n": 67,
+     "pre_matched": 0,
+     "pre_n": 68
+    },
+    "sympy/sympy": {
+     "file_matched": 1041,
+     "file_n": 3564,
+     "other_matched": 6022,
+     "other_n": 56065,
+     "post_matched": 19,
+     "post_n": 126,
+     "pre_matched": 17,
+     "pre_n": 143
+    }
+   },
+   "by_size_pre_vs_other": [
+    {
+     "a_ci95_descriptive": [
+      0.060719,
+      0.156434
+     ],
+     "a_matched": 15,
+     "a_n": 152,
+     "a_share": 0.098684,
+     "b_ci95_descriptive": [
+      0.143526,
+      0.149405
+     ],
+     "b_matched": 8138,
+     "b_n": 55572,
+     "b_share": 0.146441,
+     "bootstrap_draws": 2000,
+     "difference_a_minus_b": -0.047756,
+     "difference_ci95_repo_clustered": [
+      -0.140518,
+      0.01056
+     ],
+     "nodes": [
+      20,
+      49
+     ],
+     "repositories": 12,
+     "seed": 0
+    },
+    {
+     "a_ci95_descriptive": [
+      0.10846,
+      0.224195
+     ],
+     "a_matched": 24,
+     "a_n": 152,
+     "a_share": 0.157895,
+     "b_ci95_descriptive": [
+      0.144187,
+      0.150165
+     ],
+     "b_matched": 7941,
+     "b_n": 53965,
+     "b_share": 0.147151,
+     "bootstrap_draws": 2000,
+     "difference_a_minus_b": 0.010744,
+     "difference_ci95_repo_clustered": [
+      -0.060401,
+      0.102678
+     ],
+     "nodes": [
+      50,
+      99
+     ],
+     "repositories": 12,
+     "seed": 0
+    },
+    {
+     "a_ci95_descriptive": [
+      0.045965,
+      0.090398
+     ],
+     "a_matched": 31,
+     "a_n": 479,
+     "a_share": 0.064718,
+     "b_ci95_descriptive": [
+      0.121814,
+      0.126273
+     ],
+     "b_matched": 10411,
+     "b_n": 83942,
+     "b_share": 0.124026,
+     "bootstrap_draws": 2000,
+     "difference_a_minus_b": -0.059308,
+     "difference_ci95_repo_clustered": [
+      -0.101256,
+      -0.036073
+     ],
+     "nodes": [
+      100,
+      null
+     ],
+     "repositories": 12,
+     "seed": 0
+    }
+   ],
+   "changed_neither_match": 592,
+   "changed_post_function_removed": 9,
+   "changed_post_only_match": 83,
+   "changed_pre_and_post_looked_up": 719,
+   "changed_pre_and_post_match": 17,
+   "changed_pre_only_match": 27,
+   "floor_nodes": 20,
+   "instances": 500,
+   "instances_with_a_matched_edited_function": 52,
+   "instances_with_a_matched_edited_function_ci95": [
+    0.087254,
+    0.145242
+   ],
+   "instances_with_edited_function_above_floor": 460,
+   "post_vs_other": {
+    "a_ci95_descriptive": [
+     0.115517,
+     0.165748
+    ],
+    "a_matched": 101,
+    "a_n": 728,
+    "a_share": 0.138736,
+    "b_ci95_descriptive": [
+     0.13539,
+     0.138453
+    ],
+    "b_matched": 26490,
+    "b_n": 193479,
+    "b_share": 0.136914,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": 0.001822,
+    "difference_ci95_repo_clustered": [
+     -0.038031,
+     0.028818
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "post_vs_same_file": {
+    "a_ci95_descriptive": [
+     0.115517,
+     0.165748
+    ],
+    "a_matched": 101,
+    "a_n": 728,
+    "a_share": 0.138736,
+    "b_ci95_descriptive": [
+     0.248828,
+     0.263637
+    ],
+    "b_matched": 3419,
+    "b_n": 13347,
+    "b_share": 0.256162,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.117426,
+    "difference_ci95_repo_clustered": [
+     -0.166966,
+     -0.070014
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "pre_vs_other": {
+    "a_ci95_descriptive": [
+     0.071368,
+     0.111441
+    ],
+    "a_matched": 70,
+    "a_n": 783,
+    "a_share": 0.0894,
+    "b_ci95_descriptive": [
+     0.13539,
+     0.138453
+    ],
+    "b_matched": 26490,
+    "b_n": 193479,
+    "b_share": 0.136914,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.047514,
+    "difference_ci95_repo_clustered": [
+     -0.096652,
+     -0.00755
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "pre_vs_same_file": {
+    "a_ci95_descriptive": [
+     0.071368,
+     0.111441
+    ],
+    "a_matched": 70,
+    "a_n": 783,
+    "a_share": 0.0894,
+    "b_ci95_descriptive": [
+     0.248828,
+     0.263637
+    ],
+    "b_matched": 3419,
+    "b_n": 13347,
+    "b_share": 0.256162,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.166763,
+    "difference_ci95_repo_clustered": [
+     -0.21015,
+     -0.12107
+    ],
+    "repositories": 12,
+    "seed": 0
+   }
+  },
+  "50": {
+   "added_functions_matched": 3,
+   "added_functions_n": 43,
+   "all_base_commit_functions_matched": 18391,
+   "all_base_commit_functions_n": 138509,
+   "all_base_commit_functions_share": 0.132778,
+   "by_repo": {
+    "astropy/astropy": {
+     "file_matched": 144,
+     "file_n": 353,
+     "other_matched": 3400,
+     "other_n": 15238,
+     "post_matched": 9,
+     "post_n": 26,
+     "pre_matched": 2,
+     "pre_n": 26
+    },
+    "django/django": {
+     "file_matched": 563,
+     "file_n": 1894,
+     "other_matched": 4529,
+     "other_n": 23713,
+     "post_matched": 49,
+     "post_n": 271,
+     "pre_matched": 28,
+     "pre_n": 267
+    },
+    "matplotlib/matplotlib": {
+     "file_matched": 318,
+     "file_n": 1227,
+     "other_matched": 1312,
+     "other_n": 11525,
+     "post_matched": 5,
+     "post_n": 48,
+     "pre_matched": 3,
+     "pre_n": 49
+    },
+    "mwaskom/seaborn": {
+     "file_matched": 25,
+     "file_n": 66,
+     "other_matched": 231,
+     "other_n": 1660,
+     "post_matched": 0,
+     "post_n": 4,
+     "pre_matched": 0,
+     "pre_n": 4
+    },
+    "pallets/flask": {
+     "file_matched": 0,
+     "file_n": 11,
+     "other_matched": 12,
+     "other_n": 456,
+     "post_matched": 0,
+     "post_n": 1,
+     "pre_matched": 0,
+     "pre_n": 1
+    },
+    "psf/requests": {
+     "file_matched": 52,
+     "file_n": 94,
+     "other_matched": 197,
+     "other_n": 709,
+     "post_matched": 1,
+     "post_n": 9,
+     "pre_matched": 2,
+     "pre_n": 9
+    },
+    "pydata/xarray": {
+     "file_matched": 109,
+     "file_n": 821,
+     "other_matched": 643,
+     "other_n": 8806,
+     "post_matched": 2,
+     "post_n": 30,
+     "pre_matched": 1,
+     "pre_n": 27
+    },
+    "pylint-dev/pylint": {
+     "file_matched": 47,
+     "file_n": 156,
+     "other_matched": 318,
+     "other_n": 4179,
+     "post_matched": 1,
+     "post_n": 15,
+     "pre_matched": 6,
+     "pre_n": 17
+    },
+    "pytest-dev/pytest": {
+     "file_matched": 31,
+     "file_n": 278,
+     "other_matched": 388,
+     "other_n": 6068,
+     "post_matched": 2,
+     "post_n": 27,
+     "pre_matched": 0,
+     "pre_n": 29
+    },
+    "scikit-learn/scikit-learn": {
+     "file_matched": 133,
+     "file_n": 361,
+     "other_matched": 2643,
+     "other_n": 15366,
+     "post_matched": 5,
+     "post_n": 46,
+     "pre_matched": 4,
+     "pre_n": 48
+    },
+    "sphinx-doc/sphinx": {
+     "file_matched": 29,
+     "file_n": 894,
+     "other_matched": 426,
+     "other_n": 7613,
+     "post_matched": 2,
+     "post_n": 62,
+     "pre_matched": 0,
+     "pre_n": 56
+    },
+    "sympy/sympy": {
+     "file_matched": 634,
+     "file_n": 2177,
+     "other_matched": 4253,
+     "other_n": 42574,
+     "post_matched": 12,
+     "post_n": 94,
+     "pre_matched": 9,
+     "pre_n": 98
+    }
+   },
+   "by_size_pre_vs_other": [
+    {
+     "a_ci95_descriptive": [
+      0.10846,
+      0.224195
+     ],
+     "a_matched": 24,
+     "a_n": 152,
+     "a_share": 0.157895,
+     "b_ci95_descriptive": [
+      0.144187,
+      0.150165
+     ],
+     "b_matched": 7941,
+     "b_n": 53965,
+     "b_share": 0.147151,
+     "bootstrap_draws": 2000,
+     "difference_a_minus_b": 0.010744,
+     "difference_ci95_repo_clustered": [
+      -0.060401,
+      0.102678
+     ],
+     "nodes": [
+      50,
+      99
+     ],
+     "repositories": 12,
+     "seed": 0
+    },
+    {
+     "a_ci95_descriptive": [
+      0.045965,
+      0.090398
+     ],
+     "a_matched": 31,
+     "a_n": 479,
+     "a_share": 0.064718,
+     "b_ci95_descriptive": [
+      0.121814,
+      0.126273
+     ],
+     "b_matched": 10411,
+     "b_n": 83942,
+     "b_share": 0.124026,
+     "bootstrap_draws": 2000,
+     "difference_a_minus_b": -0.059308,
+     "difference_ci95_repo_clustered": [
+      -0.101256,
+      -0.036073
+     ],
+     "nodes": [
+      100,
+      null
+     ],
+     "repositories": 12,
+     "seed": 0
+    }
+   ],
+   "changed_neither_match": 489,
+   "changed_post_function_removed": 2,
+   "changed_post_only_match": 68,
+   "changed_pre_and_post_looked_up": 594,
+   "changed_pre_and_post_match": 13,
+   "changed_pre_only_match": 24,
+   "floor_nodes": 50,
+   "instances": 500,
+   "instances_with_a_matched_edited_function": 44,
+   "instances_with_a_matched_edited_function_ci95": [
+    0.07916,
+    0.13804
+   ],
+   "instances_with_edited_function_above_floor": 419,
+   "post_vs_other": {
+    "a_ci95_descriptive": [
+     0.11424,
+     0.168156
+    ],
+    "a_matched": 88,
+    "a_n": 633,
+    "a_share": 0.139021,
+    "b_ci95_descriptive": [
+     0.131293,
+     0.134878
+    ],
+    "b_matched": 18352,
+    "b_n": 137907,
+    "b_share": 0.133075,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": 0.005945,
+    "difference_ci95_repo_clustered": [
+     -0.040437,
+     0.025465
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "post_vs_same_file": {
+    "a_ci95_descriptive": [
+     0.11424,
+     0.168156
+    ],
+    "a_matched": 88,
+    "a_n": 633,
+    "a_share": 0.139021,
+    "b_ci95_descriptive": [
+     0.241056,
+     0.259654
+    ],
+    "b_matched": 2085,
+    "b_n": 8332,
+    "b_share": 0.25024,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.11122,
+    "difference_ci95_repo_clustered": [
+     -0.162803,
+     -0.066699
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "pre_vs_other": {
+    "a_ci95_descriptive": [
+     0.067577,
+     0.111745
+    ],
+    "a_matched": 55,
+    "a_n": 631,
+    "a_share": 0.087163,
+    "b_ci95_descriptive": [
+     0.131293,
+     0.134878
+    ],
+    "b_matched": 18352,
+    "b_n": 137907,
+    "b_share": 0.133075,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.045912,
+    "difference_ci95_repo_clustered": [
+     -0.090384,
+     -0.00841
+    ],
+    "repositories": 12,
+    "seed": 0
+   },
+   "pre_vs_same_file": {
+    "a_ci95_descriptive": [
+     0.067577,
+     0.111745
+    ],
+    "a_matched": 55,
+    "a_n": 631,
+    "a_share": 0.087163,
+    "b_ci95_descriptive": [
+     0.241056,
+     0.259654
+    ],
+    "b_matched": 2085,
+    "b_n": 8332,
+    "b_share": 0.25024,
+    "bootstrap_draws": 2000,
+    "difference_a_minus_b": -0.163077,
+    "difference_ci95_repo_clustered": [
+     -0.209628,
+     -0.107755
+    ],
+    "repositories": 12,
+    "seed": 0
+   }
+  }
+ },
+ "scan_check": {
+  "any_hits": 150198,
+  "documents": 23881192,
+  "rows": 23881192,
+  "shard_ids_max": 239,
+  "shard_ids_min": 0,
+  "shards": 240,
+  "text_only_hits": 0,
+  "truncated_shards": []
+ }
+}

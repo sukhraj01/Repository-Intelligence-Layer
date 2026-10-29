@@ -1,0 +1,27 @@
+experiment_id: E-CONTAM-EDITED
+stage: 'edited-function follow-up of the full contamination scan (decision D23): are the functions a reference patch edits among the corpus hits'
+status: exploratory (not part of the frozen evaluation; ADR-005 addendum, decision D23)
+date: '2026-10-29'
+seed: 0
+seed_note: only the repository-clustered bootstrap is random (2,000 draws, percentile interval)
+probe_version: contam-probe/v1
+edited_version: contam-edited/v1
+code: ril/training/contamination_edited.py, ril/analysis/x5_tables.py, scripts/ada/contam_probe.py (edited, edited-tables), scripts/ada/contam_edited.sbatch
+inputs:
+  scan: results of E-CONTAM-SCAN (config hash 87ac11b7293b; 240 shards, floors 20 / 50 / 100 nodes, primary 20)
+  instance_hashes: base-commit function hashes of the 500 Verified instances (floor 20 nodes)
+  patches: the reference ("gold") patch of each instance, Python sections only; the test patch is not used
+definitions:
+  edited_function: 'function or method unit (nested definitions fold into the parent) whose line span contains an old-file line touched by the patch (removed or changed line; for a pure insertion the two old lines around it)'
+  pre_version: the unit at the base commit
+  post_version: 'unit with the same file, qualified name and occurrence index after applying the patch to the base file'
+  changed: post syntax-tree hash differs from pre hash (docstring-, comment- and layout-only edits do not change it)
+  match: the syntax-tree hash occurs as the document of a corpus row
+comparisons:
+  pre_vs_other: edited functions as at the base commit against all other base-commit functions of the same repositories above the floor
+  pre_vs_same_file: against the unedited functions of the same patched files
+  post_vs_other: post versions of changed edited functions against all other base-commit functions
+  post_vs_same_file: against the unedited functions of the same patched files
+unit: distinct syntax-tree hashes within a repository, pooled over the 12 repositories
+interval: difference of shares with a repository-clustered percentile bootstrap (2,000 draws, seed 0, decision D17); Wilson 95% for single shares, descriptive
+hit_meaning: a function-level match of syntax tree; not evidence that any pair or patch was in any model's training data
