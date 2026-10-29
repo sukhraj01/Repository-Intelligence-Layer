@@ -28,3 +28,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-29,A,45774,X4,rescan of shard 87 (DNS failures in the scan jobs),u22,4,0,00:02:07,0.0,COMPLETED (gnode002)
 2026-10-29,A,45778,X4,join tables (CPU srun; first version with a vacuous union comparison),u22,4,0,00:00:22,0.0,COMPLETED
 2026-10-29,A,45779,X4,join tables (CPU srun; final),u22,4,0,00:00:24,0.0,COMPLETED
+2026-10-29,A,46136,S1,graph-role evaluation (CPU): first submission,u22,4,0,00:00:01,0.0,FAILED (configuration title not valid YAML)
+2026-10-29,A,46141,S1,graph-role evaluation (CPU): resubmission with the default cache,u22,4,0,00:00:02,0.0,FAILED (cache without D18 readings)
+2026-10-29,A,46146,S1,graph-role evaluation (CPU): four configurations on the D18 cache and X2 dense scores,u22,4,0,00:06:48,0.0,COMPLETED (gnode002; numbers read before the top-of-ranking control was added)
+2026-10-29,A,46171,S1,graph-role evaluation (CPU): final run with the top-of-ranking control and in-file shares,u22,4,0,00:08:03,0.0,COMPLETED (gnode002)

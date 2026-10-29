@@ -151,3 +151,31 @@ What changed relative to the BM25-only pilots (`docs/EXPERIMENTS.md`, E-DENSE-FU
   expansion that is not random but ordered by the first-stage score (a "file neighbours by score" baseline), from the
   existing dev and Verified evaluation inputs (minutes, no GPU); if it matches the graph, the graph's L3 role reduces
   to file-level expansion.
+
+## Addendum 2026-10-29 — is the graph a retrieval signal beyond same-file expansion? (E-GRAPH-ROLE; evidence only, no choice made)
+
+The cheapest experiment named in the addendum of 2026-10-25 was run (`docs/EXPERIMENTS.md` E-GRAPH-ROLE, rows `s1-*`; minutes of CPU, no GPU): the X2 cell on RRF(BM25, Qwen3-Embedding-0.6B) and on
+RRF(BM25, CodeRankEmbed), with same-file expansion ordered by the first-stage score, same-file expansion in random order, non-contain-only and contain-only graphs and a no-file-constraint control at
+the same candidate budget (cap 50, sizes matched), plus where the L3 gold units that the first stage misses can be reached. Evidence class: measured, exploratory, one stated cell, 55 Verified L3
+queries in six repositories, two dev L3 repositories (clustered dev intervals not informative, Q47); gold `units_all_nomod` with `units_all` beside it (no ordering flips).
+
+**Which roles of the graph have evidence, stated flat.**
+
+- **Role A, retrieval-time signal.** Evidence for *expansion of the first stage's best units with other units of the same files*: Recall@100 at L3 rises by +6.5 [3.3, 10.1] (Qwen3) and +7.7 [4.0, 12.2]
+  (CodeRankEmbed) on Verified-six, +11.3 and +13.2 on dev, with no graph at all. **No evidence that graph edges add to that.** The stored graph is level with or below the score-ordered same-file expansion
+  (L3: -2.7 [-6.0, 0.8], clustered [-6.5, 3.9] and -2.0 [-5.2, 0.8], clustered [-6.4, 0.6] on Verified-six; -1.0 on dev; at L2 it is ahead by 0.6 to 1.7 points, clustered intervals above 0 for one first stage only).
+  Containment-only equals the stored graph; in this graph containment edges never leave a file. Non-contain edges (import, invoke, inherit) reach 8% of the missed L3 gold units from the top 5
+  in two hops and not through their files (invoke carries most), but as an expansion they add nothing measurable on Verified-six (-0.5 [-2.0, 1.1]) and are 6 to 7 points below same-file expansion.
+  The earlier comparison against *random* same-file units (ADR-003 addenda of 2026-10-18 and 2026-10-23) understated what a file-level baseline reaches. Not shown: that edges add nothing (the
+  interval allows about -6 to +4 points).
+- **Role B, training-time structure.** No evidence. The only graph-for-supervision measurement is fitted family weights (no effect on L3, no supervision involved); structural negatives and graph-derived
+  positives have not been run (E-PILOT-L3POS is the named test).
+- **Role C, agent tool.** No evidence. No experiment has been run; the agent is not integrated, and the references on it (GRAPH_DESIGN section 2) are papers read, not project measurements.
+
+**Flip experiment for "the graph is a retrieval signal".** Stacked expansion at equal total budget: same-file units by first-stage score, then replace the lowest-scored 10 and 25 with the best non-contain
+neighbours of the seeds, against the unreplaced list; success is a clustered interval above 0 at L3 over dev, Verified-six and the Pro ansible L3 repository (D32). About an hour of code and ten minutes of CPU;
+about 300 L3 queries are needed to see a 2-point difference with 80% power (reasoned estimate), against 155 dev and 55 Verified. If it is level or negative, the retrieval role reduces to file-level
+expansion. **Conditions to revisit:** a better receiver rule for call sites (Q35), a hop-decay variant ordered by something other than the seeds' score, more L3 repositories.
+
+This addendum decides nothing: the role (Q30) stays with the engineer. Prior statements in this ADR that the graph "helps a lexical first stage at L3" stand for the BM25 seeds and are read together with this one:
+the help is the help of file-level expansion.

@@ -251,6 +251,12 @@ App. D.1, p.17).
 
 Each is a design question; none is answered here. They come with the nearest evidence.
 
+**Evidence status after the graph-role measurement of 2026-10-29 (`docs/EXPERIMENTS.md` E-GRAPH-ROLE; ADR-003 addendum of the same date; measured, exploratory).**
+Role A (retrieval-time signal): evidence for same-file expansion of the best first-stage units (L3 Recall@100 +6.5 to +7.7 on Verified-six, +11.3 to +13.2 on dev); **no evidence that edges add to it**
+(stored graph minus score-ordered same-file expansion: -2.7 [-6.0, 0.8] and -2.0 [-5.2, 0.8] at Verified-six L3; non-contain-only 6 to 7 points below same-file; containment edges never leave their file).
+Role B (training-time structure): no evidence. Role C (agent tool): no evidence. Flip experiment for A: stacked same-file plus non-contain-neighbour expansion at equal budget over dev, Verified-six and the
+Pro ansible repository (ADR-003). Questions 1 and 2 below stay open for the engineer; the measurement bears on them as stated here.
+
 1. **Which role or roles are in the frozen configuration** (A, B, C, or a combination), and which is
    only a demonstration feature. Evidence: section 4; no paper compares roles on one benchmark.
 2. **How a graph signal enters a rank-fused stack.** The design fixes rank-based fusion. A hop-decay

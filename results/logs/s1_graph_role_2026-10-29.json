@@ -1,0 +1,56 @@
+{
+ "experiment": "E-GRAPH-ROLE",
+ "date": "2026-10-29",
+ "status": "exploratory pilot",
+ "seed": 0,
+ "code_commit": "5f6dd2c",
+ "job": {
+  "account": "A",
+  "id": 46171,
+  "partition": "u22",
+  "cpus": 4,
+  "gpus": 0,
+  "elapsed": "00:08:03",
+  "node": "gnode002",
+  "cpu": "Intel Xeon E5-2640 v4 @ 2.40GHz",
+  "python": "3.10.12"
+ },
+ "earlier_jobs": {
+  "46146": "first run of the same code before the top-of-ranking control and in-file shares were added; its numbers were read before the control was declared (stated in the configuration notes)",
+  "46136": "failed: title not valid YAML",
+  "46141": "failed: cache without D18 readings"
+ },
+ "inputs": {
+  "cache": "ril_t1/work/e3_cache (438 instances, D18 readings)",
+  "dense": "ril_x2/dense/<variant> (X2 scores, unchanged)"
+ },
+ "configs_sha256_12": {
+  "s1_graph_role_qwen3": "cac71c9811d4",
+  "s1_graph_role_cre": "d457d884b16e",
+  "s1_graph_role_qwen3_sens": "58fdd0b5993a",
+  "s1_graph_role_cre_sens": "3f2b238712e5"
+ },
+ "cell": {
+  "form": "score level",
+  "C": 5,
+  "gamma": 0.7,
+  "hops": 2,
+  "weight": 0.5,
+  "cap": 50,
+  "draws": 3,
+  "first_stage": {
+   "qwen3": "RRF(BM25, qwen3-embedding-0.6b t512) k20 alpha0.2",
+   "cre": "RRF(BM25, coderankembed t1024) k100 alpha0.4"
+  }
+ },
+ "queries": {
+  "dev_L2": 351,
+  "dev_L3": 155,
+  "dev_L3_repos": 2,
+  "verified6_L2": 83,
+  "verified6_L3": 55,
+  "verified6_repos": 6
+ },
+ "tables": "results/tables/s1/",
+ "intervals": "2,000 draws seed 0; query-level and repository-clustered (D17)"
+}

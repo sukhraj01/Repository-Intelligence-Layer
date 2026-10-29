@@ -1053,6 +1053,75 @@ Per repository at the primary floor (instances; distinct functions above the flo
 
 Reproduce: `scripts/ada/README.md` ("Pool check and contamination probe"); tables by `contam_probe.py tables`; code `ril/analysis/x4_tables.py`, `ril/training/contamination_index.py::instance_hashes`, tests `tests/unit/test_x4_tables.py`.
 
+## E-GRAPH-ROLE: is the graph a retrieval signal beyond same-file expansion? Exploratory, done 2026-10-29
+
+**What it measures.** Q49 and the first half of the graph-role question of ADR-003: on the two fused first stages of X2, does expansion over graph
+edges add anything to what taking more units of the files already found adds, at the same candidate budget? Nothing is decided; the graph role
+(Q30) stays open.
+
+**Setup.** Inputs unchanged: the E3 cache with the D18 readings (class form `full`, ambiguous call sites dropped, D19 families), the X2 dense
+scores, the X2 cell (score level, C 5, gamma 0.7, two hops, graph weight 0.5, cap 50), no new tuning. First stages: RRF(BM25, Qwen3-Embedding-0.6B at
+512 tokens, k 20, alpha 0.2) and RRF(BM25, CodeRankEmbed at 1024 tokens, k 100, alpha 0.4), the settings X2 stated for each. Candidate sources
+(`ril/evaluation/s1_graph_role.py`): a none (first-stage score); b graph as stored (contain, import, invoke, inherit); c same-file expansion ordered
+by first-stage score; d same-file expansion in random order (3 draws); e graph over non-contain edges only (import, invoke, inherit); f contain only;
+and a control added after the first run (the numbers of that run had been read; declared in the configuration notes): `topm`, the next best
+first-stage units with no file constraint. c, d and topm are size-matched to each of b, e, f and take the same graph-score values in the same order, so
+the only difference between a graph variant and its counterparts is which units get the boost. The expansion sizes are in
+`results/tables/s1/*_sizes.csv` (about 50 for b, 44 to 50 for e and f). Dev: 351 L2 and 155 L3 queries (five and two repositories); Verified-six: 83 and 55
+(six repositories). Gold `units_all_nomod` (D18 primary), `units_all` beside it. Metrics nDCG@10 (L2), Recall@100 (L3), mean over queries, 2,000 bootstrap
+draws seed 0, query-level interval `q` and repository-clustered interval `cl.` (D17). **Dev L3 has two repositories, so its clustered interval is not
+informative (Q47); the Verified-six clustered interval is the cautious one.** Verified is read as a final-test style reading; no choice is made from it.
+Configurations (sha256, 12 characters): `s1_graph_role_qwen3` cac71c9811d4, `s1_graph_role_cre` d457d884b16e, `_qwen3_sens` 58fdd0b5993a, `_cre_sens`
+3f2b238712e5. Run log `results/logs/s1_graph_role_2026-10-29.json`; tables `results/tables/s1/`; job 46171 (CPU, 8.1 min, 195 MB), 0 GPU-hours.
+
+**Results, RRF(BM25, Qwen3), Recall@100 at L3 (points; difference to the first-stage score `none`; `q` query-level, `cl.` clustered).**
+
+| source | dev L3 (none 47.6) | Verified-six L3 (none 42.1) |
+|---|---|---|
+| b graph as stored | +10.3 [8.3, 12.3] | +3.8 [0.8, 7.4], cl. [1.0, 6.7] |
+| c same-file by score | +11.3 [9.0, 13.6] | +6.5 [3.3, 10.1], cl. [1.7, 8.2] |
+| d same-file random | +8.2 [6.1, 10.6] | +2.0 [-0.8, 5.2], cl. [1.2, 3.2] |
+| topm (no file constraint) | +0.1 [-0.5, 0.7] | -0.1 [-1.7, 2.2] |
+| e non-contain only | +3.9 [2.4, 5.5] | -0.5 [-2.0, 1.1], cl. [-1.9, -0.04] |
+| f contain only | +11.3 [9.0, 13.7] | +4.9 [1.6, 8.7], cl. [2.1, 9.5] |
+| **b minus c** | -1.0 [-2.9, 0.8] | -2.7 [-6.0, 0.8], cl. [-6.5, 3.9] |
+| b minus d | +2.0 [-0.2, 4.1] | +1.7 [-1.7, 5.3], cl. [-1.9, 4.0] |
+| e minus c | -6.2 [-8.6, -4.0] | -7.0 [-10.2, -4.1], cl. [-9.0, -2.9] |
+| f minus b | +1.1 [-0.9, 3.0] | +1.1 [-0.8, 3.4], cl. [-1.3, 5.6] |
+
+RRF(BM25, CodeRankEmbed), Verified-six L3 (none 37.8): b +5.7 [2.5, 9.2], c +7.7 [4.0, 12.2], d +2.5 [-0.2, 5.4], e +0.4 [-1.5, 2.3], f +5.0 [1.7, 8.9];
+b minus c -2.0 [-5.2, 0.8], cl. [-6.4, 0.6]; e minus c -7.3 [-11.6, -3.5]. Dev L3 (none 42.1): b +12.2, c +13.2, b minus c -1.0 [-3.3, 1.2]. At L2
+(nDCG@10) the graph (b) minus same-file by score is +0.6 [-0.2, 1.4] (Qwen3 dev), +1.7 [0.1, 3.4] (Qwen3 Verified, cl. [-0.4, 2.9]), +0.7 [0.0, 1.6] (CodeRankEmbed
+dev), +1.4 [-0.3, 3.2] (CodeRankEmbed Verified, cl. [0.2, 3.1]): small, point estimates all positive; the clustered interval includes 0 for the two Qwen3 pairs and excludes it for the two CodeRankEmbed pairs (cl. [0.1, 1.3] dev, [0.2, 3.1] Verified). Non-contain
+only at L2 is below same-file by score on dev (-1.3 [-2.2, -0.4] Qwen3) and level on Verified. The full tables (both readings, every pair) are in `s1_graph_role_*_compare.csv`.
+Under `units_all` no ordering above flips (b minus c at L3: -0.2 to -2.3, e minus c: -5.7 to -7.8; contain only minus same-file by score on Qwen3 dev L3 +1.3 [cl. 0.3, 2.4]).
+Weight sensitivity (dev, `_sens` configurations, w 0.2 / 0.5 / 0.8): b minus c at L3 is -1.0 to -1.3 at every weight and e minus c -3.6 to -6.3; nothing depends on the edge-of-grid 0.5.
+
+**Reachability** (RRF(BM25, Qwen3); L3 gold units that the first stage leaves outside its top 100: dev 2,935 units in 149 queries, 2 repositories; Verified-six 1,926 units in 52
+queries, 6 repositories; `s1_graph_role_*_reach.csv` has both first stages, both readings, top-5 and top-100 sources and every family). Share reached from the top 5 units *and not in a file
+of any of them*, by hop limit (dev / Verified-six, clustered intervals in the csv): non-contain edges 2.2% / 0.9% in 1 hop, 8.3% [4.1, 10.3] / 8.4% [5.9, 14.9] in 2 hops (244 and 161
+units); by family at 2 hops invoke 6.6% / 5.5%, import 1.3% / 2.3%, inherit 0.2% / 0.4%. All edges together (contain included) reach 13.5% / 15.8% not in the source files;
+containment alone reaches none outside the sources' files (0 of 855 and 385 reached units): in this graph a containment edge never leaves its file, so contain-only expansion is a
+tree-restricted same-file expansion. The files of the top 5 units hold 45.4% / 32.5% of those gold units. From the top 100 units: non-contain 2 hops not in a source file 3.4% / 4.3%; the files
+of 100 sources hold 91.7% / 89.7%. CodeRankEmbed: 8.2% / 7.8% (top 5, non-contain, 2 hops, not same-file), same-file 47.6% / 25.5%.
+
+**What it says (evidence class: measured, exploratory, one stated cell, 55 Verified L3 queries in six repositories, two dev L3 repositories, zero-shot encoders, random baselines from 3 draws).**
+(1) The L3 gain of the graph over the first stage is real and is reproduced (+3.8 / +5.7 Verified, +10.3 / +12.2 dev), but a same-file expansion ordered by the first-stage score gets at least as much
+(+6.5 / +7.7, +11.3 / +13.2). The part of that gain that is "other units of the files already found" is the whole of it that can be separated at this sample; the unordered same-file control (d) that earlier
+waves used as chance understated what a file-level baseline reaches. (2) Taking the next best units of the ranking with no file constraint gives nothing at Recall@100 (topm +0.1 / -0.1), so the same-file
+effect is not a top-of-ranking re-weighting. (3) Edges that leave the file: non-contain-only expansion reaches 8% of the missed L3 gold units from the top 5 in two hops, yet as an expansion
+of 46 to 50 units it adds +3.9 / +5.7 on dev and nothing on Verified, and is 6 to 7 points below same-file by score on both. (4) Containment-only carries the whole effect here; it equals
+the stored graph within the intervals. (5) At L2 the graph is ahead of same-file by score by 0.6 to 1.7 points in every pair; the evidence is inconsistent across first stages (clustered intervals above 0 for CodeRankEmbed only).
+**Not shown:** that edges add nothing (b minus c at Verified L3 has an interval of about -6 to +4 points); the paired standard deviation implied is about 12 points, so a 2-point difference needs
+roughly 300 L3 queries for 80% power (reasoned estimate), against 155 dev and 55 Verified. Ranking by hop-decay score rather than by first-stage score, a second budget, and graph-ordered same-file are not tried.
+
+**Flip experiment for "the graph is a retrieval signal" (not run; time-box about 1 hour of code and 10 minutes of CPU, no GPU).** Stacked expansion at the same total budget: fill with same-file units by
+first-stage score, then replace the lowest-scored 10 and 25 of them with the best non-contain neighbours (hop-decay order) of the seeds, and compare with the unreplaced same-file list. If the replaced
+list beats the unreplaced one at L3 with a repository-clustered interval above 0 on dev plus Verified-six plus the Pro ansible L3 repository (D32; its cache exists as `e3_cache_ansible`, dense scores would
+have to be produced), the graph carries retrieval signal that files do not. If it is level or below, the retrieval role reduces to file-level expansion and the graph's retrieval role is a demonstration feature.
+
+**Reproduce.** `scripts/ada/s1_graph_role.sbatch` (`scripts/ada/README.md`); code `ril/evaluation/s1_graph_role.py`, `ril/analysis/s1_tables.py`, tests `tests/unit/test_s1_graph_role.py`; rows `s1-*` of `RESULTS.md`.
+
 ## Pre-registered interpretation rules
 
 Fixed in advance so results cannot be re-read after the fact:

@@ -236,3 +236,7 @@ cache with the D18 readings (`~/ril_t1/work/e3_cache`). Example caches hold pool
 | `t2_runs.sbatch` | GPU: a batch of configurations trained and evaluated from one loaded cache; models stay node-local and are deleted; finished runs skipped | `sbatch --export=ALL,CONFIGS="configs/experiments/t2/<a>.yaml ...",CACHE=work/pool_A.jsonl.gz,FEATURES=work/t2_features_A.csv,MINED=work/mined_A_coderankembed.jsonl.gz[,EXTRA=configs/experiments/t2/eval_verified_six.yaml],RIL_COMMIT=<hash> ril_t2/scripts/ada/t2_runs.sbatch` |
 
 Tables: `scripts/t2_tables.py pilots configs/experiments/t2_pilots.yaml ril_t2/results out/tables <log>` (CPU, seconds).
+
+### Graph-role measurement (S1)
+
+`s1_graph_role.sbatch` (CPU, 4 CPUs, about 8 minutes): runs the four `configs/experiments/s1_graph_role_*.yaml` configurations on the D18 cache (`~/ril_t1/work/e3_cache`, override with `CACHE=`) and the X2 dense scores in `~/ril_x2/dense`, then writes `~/ril_x2/results_s1/*_{compare,sizes,reach}.csv`. Submit from `$HOME` after `rsync -a --exclude __pycache__ ril scripts configs ada:ril_x2/`. Code `ril/evaluation/s1_graph_role.py`, `ril/analysis/s1_tables.py`, wrapper `scripts/s1_run.py`; copy the tables with `rsync -a ada:ril_x2/results_s1/ results/tables/s1/`.
