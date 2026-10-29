@@ -36,7 +36,7 @@ import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 import torch
@@ -71,6 +71,14 @@ ARM_KEYS = frozenset({"arm"})
 LABEL_KEYS = frozenset({"exp_id", "label", "notes"})
 """Keys that name a run and do not change what it computes."""
 Record = dict[str, Any]
+
+
+class StepHook(Protocol):
+    """A callback at chosen update counts (learning-curve evaluation); see :func:`train`."""
+
+    steps: frozenset[int]
+
+    def __call__(self, n: int, enc: TrainEncoder) -> None: ...
 
 
 # --------------------------------------------------------------------------- configuration
@@ -402,11 +410,17 @@ def train(
     mined: Mapping[str, Mined] | None = None,
     stop_after: int | None = None,
     extra_log: Mapping[str, Any] | None = None,
+    hook: StepHook | None = None,
 ) -> Record:
     """Run (or resume) one training run; returns the results record.
 
     ``stop_after`` ends the process after that many updates have been done in total (a test of
     resumption, or a time-boxed job); the run is then incomplete and a rerun continues it.
+
+    ``hook`` (a learning curve): called as ``hook(n, enc)`` when ``n`` updates are done, for every
+    ``n`` in ``hook.steps`` (0 = before the first update). It runs after the step's checkpoint is
+    written, and again on entry when a resumed run starts exactly at such an ``n`` (the hook must
+    be idempotent); it must not change the encoder. Its time is not counted in the run's GPU time.
     """
     seed = int(cfg["seed"])
     updates = int(cfg["budget"]["updates"])
@@ -433,6 +447,8 @@ def train(
     ck = cfg["checkpoint"]
     every, keep, log_every = int(ck["every"]), int(ck["keep"]), int(ck.get("log_every", 1))
     done_now = 0
+    if hook is not None and start in hook.steps:
+        hook(start, enc)
     for batch in planner.batches(updates):
         plan.update(batch.fingerprint().encode())
         u = batch.update
@@ -461,6 +477,8 @@ def train(
             save_checkpoint(
                 paths.ckpt_root, u, enc, upd, {"elapsed_s": elapsed, "trace": trace}, keep
             )
+        if hook is not None and (u + 1) in hook.steps:
+            hook(u + 1, enc)
     last = _step_dirs(paths.ckpt_root)
     finished = bool(last) and last[-1].endswith(f"step_{updates - 1:09d}")
     record: Record = {

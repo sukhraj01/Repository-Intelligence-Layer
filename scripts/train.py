@@ -1,7 +1,7 @@
 """Retriever training stack: thin command line over ``ril.training.train_jobs``.
 
 Subcommands (logic in ``ril/``):
-  select LISTING HELD_OUT RENAME_CACHE OUT [--feature-table T] [--max N] --seed S
+  select LISTING HELD_OUT RENAME_CACHE OUT [--feature-table T] [--max N] --seed S [--exclude SEL]
          [--include-held-out]  (leakage pilot only)
   cache  LISTING SELECTION OUT_CACHE [--feature-table T] [--form code|pool]
   mine   CACHE OUT --teacher bm25|<encoder> --keep N [--cut C] [--device cpu|cuda]
@@ -18,6 +18,9 @@ Subcommands (logic in ``ril/``):
   run-batch CONFIG [CONFIG ...] --cache C [--feature-table T] [--mined M] --results-root R
          --work-root W --date D --device D <eval options> [--extra-eval O.yaml ...] [--keep-models]
          (train then evaluate each configuration; the cache is read once; finished runs skipped)
+  curve  CONFIG CACHE --results-root R --work-root W --date D --device D [--feature-table T]
+         [--mined M] <eval options>   (one training run with the evaluation of the configuration's
+         `curve.steps` update counts inside the run; CACHE may join several caches with ':')
 Every stage prints a JSON summary; the example cache holds text and stays on the cluster.
 """
 
@@ -128,6 +131,47 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
     return {"done": done, "skipped": skipped, "inputs": inputs.hashes}
 
 
+def _curve(a: argparse.Namespace) -> dict[str, object]:
+    """Wiring only: one run with the dev evaluation at the configuration's ``curve.steps``."""
+    import os
+    import shutil
+
+    from ril.evaluation.curve_eval import CurveHook
+    from ril.training import train_jobs as tj
+    from ril.training.training import RunPaths, load_train_config, merge_results
+
+    cfg = load_train_config(a.config)
+    paths = RunPaths.of(cfg, a.results_root, a.work_root, a.date)
+    ev = dict(cfg["evaluation"])
+    ev["variant"] = f"{cfg['exp_id']}__{os.path.basename(paths.result_dir)}"
+    hook = CurveHook(
+        cfg["curve"]["steps"],
+        eval_cfg=ev,
+        result_dir=paths.result_dir,
+        tmp_dir=a.work,
+        e1_config=a.e1_config,
+        prep_dir=a.prep,
+        cache_dir=a.e3_cache,
+        data_root=a.data_root,
+        device=a.device,
+    )
+    rec = tj.train_job(
+        a.config,
+        a.cache,
+        results_root=a.results_root,
+        work_root=a.work_root,
+        device=a.device,
+        date=a.date,
+        feature_table=a.feature_table,
+        mined_path=a.mined,
+        hook=hook,
+    )
+    if rec["finished"]:
+        merge_results(str(rec["result_dir"]), "curve", {"steps": sorted(hook.steps)})
+        shutil.rmtree(paths.ckpt_root, ignore_errors=True)
+    return {"result_dir": rec["result_dir"], "finished": rec["finished"], "hook": hook.log}
+
+
 def _label(override: str) -> str:
     import yaml
 
@@ -145,6 +189,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--max", type=int)
     s.add_argument("--seed", type=int, required=True)
     s.add_argument("--include-held-out", action="store_true", help="leakage pilot only")
+    s.add_argument("--exclude", help="selection file whose names are removed from this one")
     c = sub.add_parser("cache")
     for a in ("listing", "selection", "out_cache"):
         c.add_argument(a)
@@ -198,6 +243,16 @@ def main(argv: list[str] | None = None) -> int:
         q.add_argument("--baseline", nargs="*", default=[])
         q.add_argument("--dense-root")
     e.add_argument("--eval-override")
+    cv = sub.add_parser("curve")
+    for x in ("config", "cache"):
+        cv.add_argument(x)
+    for x in ("--results-root", "--work-root", "--date", "--e1-config", "--prep", "--e3-cache"):
+        cv.add_argument(x, required=True)
+    cv.add_argument("--data-root", required=True)
+    cv.add_argument("--work", required=True)
+    cv.add_argument("--device", default="cpu")
+    cv.add_argument("--feature-table")
+    cv.add_argument("--mined")
     th = sub.add_parser("teacher")
     for a in ("cache", "ranks_out", "mined_out"):
         th.add_argument(a)
@@ -226,6 +281,7 @@ def main(argv: list[str] | None = None) -> int:
             max_instances=a.max,
             seed=a.seed,
             include_held_out=a.include_held_out,
+            exclude_path=a.exclude,
         )
     elif a.cmd == "cache":
         out = tj.cache_job(
@@ -295,6 +351,8 @@ def main(argv: list[str] | None = None) -> int:
         )
     elif a.cmd == "run-batch":
         out = _run_batch(a)
+    elif a.cmd == "curve":
+        out = _curve(a)
     else:
         out = _evaluate(a, a.config, a.model_dir, a.result_dir, a.eval_override)
     json.dump(out, sys.stdout, indent=1, sort_keys=True, default=str)

@@ -82,8 +82,13 @@ def select_job(
     max_instances: int | None,
     seed: int,
     include_held_out: bool = False,
+    exclude_path: str | None = None,
 ) -> Record:
     """Write the selection file: kept directory names and the survival counts.
+
+    ``exclude_path``: a selection file whose names are removed after the seeded subset is drawn.
+    Because the subset is a prefix of one seeded order, ``--max 5000`` minus the 2,000 of selection
+    A is exactly the next 3,000 directories (the learning-curve pool adds them to A's cache).
 
     ``include_held_out`` keeps the held-out repositories in (their count is still recorded): only
     for the deliberate leakage pilot (E-PILOT-LEAK), never for a pool that is reported as disjoint.
@@ -103,11 +108,16 @@ def select_job(
     )
     if max_instances is not None and len(names) > max_instances:
         names = sorted(sorted(names, key=lambda n: pr.seeded_key(seed, n))[:max_instances])
+    if exclude_path:
+        with open(exclude_path, encoding="utf-8") as handle:
+            drop = set(json.load(handle)["names"])
+        names = [n for n in names if n not in drop]
     doc: Record = {
         "names": names,
         "stats": st.to_dict(),
         "max_instances": max_instances,
         "include_held_out": include_held_out,
+        "exclude_path": exclude_path,
         "held_out_directories_in_listing": len(held),
         "held_out_directories_selected": len(set(held) & set(names)),
         "seed": seed,
@@ -390,16 +400,24 @@ class TrainInputs:
 def load_inputs(
     cache_path: str, feature_table: str | None = None, mined_path: str | None = None
 ) -> TrainInputs:
-    """Read the example cache, the feature table's quality signals and the mined scores."""
+    """Read the example cache, the feature table's quality signals and the mined scores.
+
+    ``cache_path`` may name several caches joined by ``os.pathsep`` (the learning-curve pool is
+    selection A's cache plus an extra one); their instances must be distinct.
+    """
+    paths = cache_path.split(os.pathsep)
+    examples = [e for p in paths for e in read_cache(p)]
+    if len({e.instance_id for e in examples}) != len(examples):
+        raise ValueError("the example caches overlap (an instance appears twice)")
     return TrainInputs(
         cache_path=cache_path,
-        examples=read_cache(cache_path),
+        examples=examples,
         feature_table=feature_table,
         signals=signals_from_table(feature_table),
         mined_path=mined_path,
         mined=read_mined(mined_path) if mined_path else None,
         hashes={
-            "cache_sha256": _sha256(cache_path),
+            "cache_sha256": ",".join(_sha256(p) for p in paths),
             "feature_table_sha256": _sha256(feature_table) if feature_table else None,
             "mined_sha256": _sha256(mined_path) if mined_path else None,
         },
@@ -418,6 +436,7 @@ def train_job(
     mined_path: str | None = None,
     stop_after: int | None = None,
     inputs: TrainInputs | None = None,
+    hook: Any = None,
 ) -> Record:
     """One training run from the example cache (resumable: rerun the same command).
 
@@ -463,4 +482,5 @@ def train_job(
         mined=inputs.mined,
         stop_after=stop_after,
         extra_log=extra,
+        hook=hook,
     )

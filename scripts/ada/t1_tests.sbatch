@@ -24,7 +24,7 @@ mkdir -p logs out
 export PYTHONPATH="$W:$OV:$HOME/ril_x2/overlay_cre"
 /usr/bin/time -v "$PY" -m pytest -q -p no:cacheprovider -p no:xdist -rs \
   tests/unit/test_contrastive_loss.py tests/unit/test_arms_only_differ_through_hooks.py \
-  tests/unit/test_train_measure.py tests/integration/test_training_end_to_end.py tests/integration/test_run_batch.py \
+  tests/unit/test_train_measure.py tests/integration/test_training_end_to_end.py tests/integration/test_run_batch.py tests/integration/test_curve_hook.py \
   tests/reproducibility/test_training_repro.py tests/leakage \
   > "out/tests_${SLURM_JOB_ID}.txt" 2> "out/tests_${SLURM_JOB_ID}.time"
 echo done

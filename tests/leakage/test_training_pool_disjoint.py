@@ -57,3 +57,21 @@ def test_selection_is_repository_disjoint_from_the_held_out_list(tmp_path: Path)
         include_held_out=True,
     )
     assert rec2["include_held_out"] and rec2["held_out_directories_selected"] == 3
+
+
+def test_extension_selection_is_the_next_directories_and_stays_disjoint(tmp_path: Path) -> None:
+    """A larger pool (--max N) minus the smaller one's names is the seeded prefix extension and is
+    still disjoint from the held-out list; nothing of the smaller selection repeats."""
+    listing = _listing(tmp_path)
+    pred = held_out_predicate(str(HELD), str(RENAMES))
+    base, big, extra = (tmp_path / f"{n}.json" for n in ("base", "big", "extra"))
+    args = (listing, str(HELD), str(RENAMES))
+    select_job(*args, str(base), feature_table=None, max_instances=2, seed=0)
+    select_job(*args, str(big), feature_table=None, max_instances=4, seed=0)
+    rec = select_job(
+        *args, str(extra), feature_table=None, max_instances=4, seed=0, exclude_path=str(base)
+    )
+    a, b, c = (set(json.loads(p.read_text())["names"]) for p in (base, big, extra))
+    assert a <= b and c == b - a and not (a & c) and len(c) == 2
+    assert not any(pred(split_instance_dir(n)[0]) for n in c)  # type: ignore[index]
+    assert rec["held_out_directories_selected"] == 0
