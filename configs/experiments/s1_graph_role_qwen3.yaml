@@ -1,4 +1,4 @@
-experiment_id: E-GRAPH-ROLE (Q49: is the graph a retrieval signal beyond same-file expansion)
+experiment_id: E-GRAPH-ROLE (Q49, is the graph a retrieval signal beyond same-file expansion)
 stage: stated cell on dev and Verified-six (no sweep; a final-test style reading on Verified, no choice made from it)
 status: exploratory pilot
 date: '2026-10-29'

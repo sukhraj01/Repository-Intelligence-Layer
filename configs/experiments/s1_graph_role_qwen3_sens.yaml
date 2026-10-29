@@ -1,4 +1,4 @@
-experiment_id: E-GRAPH-ROLE (Q49: is the graph a retrieval signal beyond same-file expansion)
+experiment_id: E-GRAPH-ROLE (Q49, is the graph a retrieval signal beyond same-file expansion)
 stage: dev only, graph weight sensitivity (0.5 sat at the edge of the earlier X2 grid)
 status: exploratory pilot
 date: '2026-10-29'
