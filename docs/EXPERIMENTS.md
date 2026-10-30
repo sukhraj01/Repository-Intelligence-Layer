@@ -1543,3 +1543,67 @@ torch skips; ruff/format and strict typing pass. The per-commit harness ran sepa
 20 latency and four throughput rows under `results/rq2/c2_latency_smoke`; these are explicitly
 synthetic stub stages, not model encoding or training measurements. Validation log:
 `results/logs/c2_validation_2026-10-30.json`.
+
+## E-C3-AGENT-PILOT: scaffold criteria and synthetic execution, apparatus, 2026-10-30
+
+**Scope and gates.** Exploratory apparatus only, outside pre-registered RQ3 result tables.
+Configuration `configs/experiments/c_agent_pilot.yaml`: seed 0, temperature 0, 20 synthetic
+fixtures from four artificial repositories, each under none/BM25/oracle-gold-file context.
+These are not SWE-bench Pro/Live instances. Actual development instances n=0; no Verified
+execution, model service call, local model load, encoding or cluster job. ADR-007 and ADR-008
+remain Proposed; the scripted fixture harness is not a replication of a published scaffold.
+Model access, explicit spend cap, pinned scaffold/model/harness and staged real dev data are
+missing. Live execution fails closed; scientific cost, discordance and MDE remain unavailable.
+
+**Method stated before the recorded pilot.** The model receives issue text and one tool's
+returned source files. It proposes exact source edits; a separate grader applies them in a
+fresh temporary directory and executes trusted hidden fail-to-pass and pass-to-pass checks.
+Unmodified/reference-patch controls fail/pass for every fixture. Reference edits and test labels
+never enter the model; gold file identities enter only the oracle retrieval tool and post-run
+report join. These trusted subprocess fixtures are not a sandbox for untrusted live code.
+
+Report per-condition resolved count/rate, token surrogates, synthetic dollar totals, actual
+spend zero and wall time; per-instance paired outcomes/discordance; exact McNemar; query means
+with repository-clustered 95% intervals (2,000 draws, seed 0). The repeated synthetic pattern
+may give degenerate intervals and is not population uncertainty. Illustrative exact MDE at
+n=302/432 uses only fixture discordance, alpha .05, target .80 and .25-point grid; it is never
+an empirical power estimate for real RQ3. Tokens are UTF-8 bytes rounded up after dividing by
+four, not a model tokenizer. Synthetic prices are configured accounting inputs, not quotes.
+
+**Reading and decisions.** Five versioned papers read in full across 216 pages, with checked
+notes and numerical figures: SWE-agent v3 (118), OpenHands v3 (38), Agentless v2 (25), LocAgent
+v2 (18), CoSIL v3 (17). Historical criteria and exact page references are in `docs/EVAL_API.md`.
+None establishes an exclusive ready-made one-tool retrieval treatment or live seeded replay.
+Current software releases and hosted prices were not reviewed. The lead must choose scaffold,
+model/access/spend and treatment boundary; no ADR, final setting or RQ3 claim is settled here.
+
+**Recorded result (measured, synthetic only).** Config SHA256
+`4cf5f835395a8d01ba137a7a09e7c7e0d4bc29fecbf34314da750c062b764cb1`, source checksum
+`6503d2e1c30663ed7f7afb0b79f1bd892edffd431b4c7a544e57cb9b3a074de6`, git 645925b
+with dirty flag 1 and per-file source hashes. Linux aarch64 CPU, Python 3.11.18, no GPU.
+Final log `results/logs/c3_fixture_pilot_guarded_2026-10-30.json`; resources in
+`results/logs/c3_fixture_resources_guarded_2026-10-30.json`; tables `results/tables/c3_fixture_guarded_*.csv`.
+Earlier recorded runs are retained under distinct paths and superseded by this guarded replay.
+Natural-language issues exclude reference new-code text; tests enforce that boundary.
+
+| Condition | Synthetic resolved count/rate [clustered 95%] | Surrogate input/output tokens | Synthetic dollars / actual dollars | Execution wall seconds |
+|---|---|---|---|---|
+| None | 4/20; 20% [20,20] | 312/98 | .000508 / 0 | .653064 |
+| BM25 | 12/20; 60% [60,60] | 640/329 | .001298 / 0 | .661065 |
+| Oracle gold files | 16/20; 80% [80,80] | 596/333 | .001262 / 0 | .636558 |
+
+| Pair, first/second | Fixture discordance [clustered 95%] | Only first/second | Exact McNemar p | Illustrative fixture MDE at 302/432, pp |
+|---|---|---|---|---|
+| BM25/none | 40% [40,40] | 8/0 | .0078125 | 10.50/8.75 |
+| BM25/oracle | 20% [20,20] | 0/4 | .125 | 7.50/6.25 |
+| None/oracle | 60% [60,60] | 0/12 | .00048828125 | 12.75/10.75 |
+
+The large constructed effects and degenerate intervals demonstrate expected fixture behavior,
+not agent performance or real uncertainty. Scientific discordance/cost/MDE remain unavailable
+at real n=0. Whole CLI wall time 14.86 s including exact statistics; agent/test execution 1.955611 s;
+peak RSS 42,696 KiB. Single-fixture retained-object probe 1,787 bytes, linear 20-fixture projection
+35,740 bytes; this does not size a real repository or model. Deterministic non-timing artifacts
+reproduce. 538 unit tests pass, three optional torch tests skip; full lint/format and strict
+mypy pass. Per-commit synthetic harness artifacts are under
+`results/rq3/c3_fixture_pilot_guarded/commit_{latency,throughput}_log.csv` (20/4 rows); these stages are
+synthetic CPU stubs, not model inference or training measurements. Actual spend and GPU-hours: 0.

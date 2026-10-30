@@ -1,0 +1,3186 @@
+{
+  "bootstrap_draws": 2000,
+  "comparisons": [
+    {
+      "discordance": 0.4,
+      "discordance_high": 0.4,
+      "discordance_low": 0.4,
+      "effect_high": -0.4,
+      "effect_low": -0.4,
+      "effect_second_minus_first": -0.4,
+      "exact_mcnemar_p": 0.007812500000000002,
+      "first": "bm25",
+      "illustrative_fixture_mde": {
+        "302": 0.105,
+        "432": 0.0875
+      },
+      "n": 20,
+      "only_first": 8,
+      "only_second": 0,
+      "second": "none"
+    },
+    {
+      "discordance": 0.2,
+      "discordance_high": 0.2,
+      "discordance_low": 0.2,
+      "effect_high": 0.2,
+      "effect_low": 0.2,
+      "effect_second_minus_first": 0.2,
+      "exact_mcnemar_p": 0.125,
+      "first": "bm25",
+      "illustrative_fixture_mde": {
+        "302": 0.075,
+        "432": 0.0625
+      },
+      "n": 20,
+      "only_first": 0,
+      "only_second": 4,
+      "second": "oracle"
+    },
+    {
+      "discordance": 0.6,
+      "discordance_high": 0.6,
+      "discordance_low": 0.6,
+      "effect_high": 0.6,
+      "effect_low": 0.6,
+      "effect_second_minus_first": 0.6,
+      "exact_mcnemar_p": 0.0004882812500000003,
+      "first": "none",
+      "illustrative_fixture_mde": {
+        "302": 0.1275,
+        "432": 0.1075
+      },
+      "n": 20,
+      "only_first": 0,
+      "only_second": 12,
+      "second": "oracle"
+    }
+  ],
+  "conditions": [
+    {
+      "actual_usd": 0.0,
+      "input_tokens": 650,
+      "n": 20,
+      "output_tokens": 329,
+      "resolved_count": 12,
+      "resolved_high": 0.6,
+      "resolved_low": 0.6,
+      "resolved_rate": 0.6,
+      "retriever_id": "bm25",
+      "synthetic_usd": 0.0013080000000000001,
+      "wall_seconds": 0.6781824239915295
+    },
+    {
+      "actual_usd": 0.0,
+      "input_tokens": 322,
+      "n": 20,
+      "output_tokens": 98,
+      "resolved_count": 4,
+      "resolved_high": 0.2,
+      "resolved_low": 0.2,
+      "resolved_rate": 0.2,
+      "retriever_id": "none",
+      "synthetic_usd": 0.000518,
+      "wall_seconds": 0.662672721013223
+    },
+    {
+      "actual_usd": 0.0,
+      "input_tokens": 606,
+      "n": 20,
+      "output_tokens": 333,
+      "resolved_count": 16,
+      "resolved_high": 0.8,
+      "resolved_low": 0.8,
+      "resolved_rate": 0.8,
+      "retriever_id": "oracle",
+      "synthetic_usd": 0.001272,
+      "wall_seconds": 0.6480012410102063
+    }
+  ],
+  "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+  "discordance_rows": [
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-000",
+      "second": "none",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-001",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-002",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-003",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-004",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-005",
+      "second": "none",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-006",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-007",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-008",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-009",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-010",
+      "second": "none",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-011",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-012",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-013",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-014",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-015",
+      "second": "none",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-016",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-017",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-018",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-019",
+      "second": "none",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-000",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-001",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-002",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-003",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-004",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-005",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-006",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-007",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-008",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-009",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-010",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-011",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-012",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-013",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-014",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-015",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-016",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": true,
+      "instance_id": "fixture-017",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-018",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "bm25",
+      "first_resolved": false,
+      "instance_id": "fixture-019",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": true,
+      "instance_id": "fixture-000",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-001",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-002",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-003",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-004",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": true,
+      "instance_id": "fixture-005",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-006",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-007",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-008",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-009",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": true,
+      "instance_id": "fixture-010",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-011",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-012",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-013",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-014",
+      "second": "oracle",
+      "second_resolved": false
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": true,
+      "instance_id": "fixture-015",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-016",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-017",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": true,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-018",
+      "second": "oracle",
+      "second_resolved": true
+    },
+    {
+      "discordant": false,
+      "first": "none",
+      "first_resolved": false,
+      "instance_id": "fixture-019",
+      "second": "oracle",
+      "second_resolved": false
+    }
+  ],
+  "environment": {
+    "branch": "c/eval-rq3",
+    "commit": "645925b8b21f31ca78401d59c30b044bb5380b4e",
+    "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+    "cpu_cores": 8,
+    "cpu_model": "aarch64",
+    "cuda_version": "",
+    "dirty": 1,
+    "gpu_driver": "",
+    "gpu_name": "none",
+    "host": "local-cpu",
+    "python": "3.11.18",
+    "ram_gb": 11.7,
+    "timestamp_utc": "2026-10-30T20:51:08Z",
+    "torch": "not imported"
+  },
+  "evidence_class": "measured_synthetic_plumbing_only",
+  "experiment_id": "E-C3-AGENT-PILOT",
+  "provisional": [
+    "ADR-007",
+    "ADR-008"
+  ],
+  "published_scaffold_replication": false,
+  "real_instances": 0,
+  "rows": [
+    {
+      "edits": [
+        {
+          "new": "return value + 2",
+          "old": "return value - 2",
+          "path": "module_0.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_0.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-000",
+      "issue_sha256": "8b81248d69afba9d114086ca6d0885985e3c83514870d0a2abebbe99e7037a85",
+      "patch_sha256": "0aed91d58594e1a4cc54522bf6ca59c0af94db794c25c80eb4c63b926d255cfc",
+      "repo": "fixture/dev-0",
+      "request_sha256": "460bf0ea39d8e89b2db90452a522b956b46bba1159b634771dcc10b913b51ff0",
+      "resolved": true,
+      "retrieval_ms": 0.0011999982234556228,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "6500dc1db6f56872c7096ffb9cca312dda83bba7bf23828f97a71f72bce1816d",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 17,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 5.7e-05
+      },
+      "wall_seconds": 0.03597640900261467
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 2",
+          "old": "return value - 2",
+          "path": "module_0.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_0.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-000",
+      "issue_sha256": "8b81248d69afba9d114086ca6d0885985e3c83514870d0a2abebbe99e7037a85",
+      "patch_sha256": "0aed91d58594e1a4cc54522bf6ca59c0af94db794c25c80eb4c63b926d255cfc",
+      "repo": "fixture/dev-0",
+      "request_sha256": "d0545eb47d69517dd939cad3f63a5ec07c8bc1d5ebfbaf9655c987ec3e32ed4d",
+      "resolved": true,
+      "retrieval_ms": 0.08760200216784142,
+      "retrieved": [
+        {
+          "path": "module_0.py",
+          "score": 0.704412233855529,
+          "sha256": "7154886d9796a72967586de255564d1d98071ef2e706c263ebd56bf3a15c3c7c"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "6500dc1db6f56872c7096ffb9cca312dda83bba7bf23828f97a71f72bce1816d",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7.1e-05
+      },
+      "wall_seconds": 0.03103791099783848
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 2",
+          "old": "return value - 2",
+          "path": "module_0.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_0.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-000",
+      "issue_sha256": "8b81248d69afba9d114086ca6d0885985e3c83514870d0a2abebbe99e7037a85",
+      "patch_sha256": "0aed91d58594e1a4cc54522bf6ca59c0af94db794c25c80eb4c63b926d255cfc",
+      "repo": "fixture/dev-0",
+      "request_sha256": "6ef7ba71310e5b14c01abfcfac36e24c7a7cb5cde29e566ae87dfacca4464e6e",
+      "resolved": true,
+      "retrieval_ms": 0.004300000000512227,
+      "retrieved": [
+        {
+          "path": "module_0.py",
+          "score": null,
+          "sha256": "7154886d9796a72967586de255564d1d98071ef2e706c263ebd56bf3a15c3c7c"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "6500dc1db6f56872c7096ffb9cca312dda83bba7bf23828f97a71f72bce1816d",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7.1e-05
+      },
+      "wall_seconds": 0.028555659999256022
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_1.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-001",
+      "issue_sha256": "cf2e1220d48d704709623cf3c2b7f989e6b8f5fa57678ba60dd3cac10ab95998",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-0",
+      "request_sha256": "6160266f42b37fac320843809456cab06f1a217ede28d6a6955f6f8e8d717069",
+      "resolved": false,
+      "retrieval_ms": 0.0013999997463542968,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bde90625fea26d5d0bcf9d970e6b94f285693b9e61a48f6e1c7d16a80a746c48",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-78hhz97d/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_1(7), 7 + 3)\nAssertionError: 4 != 10\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 16,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.8e-05
+      },
+      "wall_seconds": 0.03207132899842691
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 3",
+          "old": "return value - 3",
+          "path": "module_1.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_1.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-001",
+      "issue_sha256": "cf2e1220d48d704709623cf3c2b7f989e6b8f5fa57678ba60dd3cac10ab95998",
+      "patch_sha256": "7ca12803a3d69c8d3b547318cb5f3aaa214d7060ac00b4399ed7deb3d387ebf5",
+      "repo": "fixture/dev-0",
+      "request_sha256": "9b9da92a2ea1d0035330ee19a46a824fac4873c890efb51ebd46122791719d1a",
+      "resolved": true,
+      "retrieval_ms": 0.0805020026746206,
+      "retrieved": [
+        {
+          "path": "module_1.py",
+          "score": 0.3814426189633807,
+          "sha256": "dd07cbdfe3c984784d757c600a3da9652c09af17116bac48b0c64337f0ee476e"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bde90625fea26d5d0bcf9d970e6b94f285693b9e61a48f6e1c7d16a80a746c48",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.03300574700188008
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 3",
+          "old": "return value - 3",
+          "path": "module_1.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_1.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-001",
+      "issue_sha256": "cf2e1220d48d704709623cf3c2b7f989e6b8f5fa57678ba60dd3cac10ab95998",
+      "patch_sha256": "7ca12803a3d69c8d3b547318cb5f3aaa214d7060ac00b4399ed7deb3d387ebf5",
+      "repo": "fixture/dev-0",
+      "request_sha256": "eda14a1e40f243e98dccd9cdee63c435799a2b32020d6cf0ca9239902608367d",
+      "resolved": true,
+      "retrieval_ms": 0.004599998646881431,
+      "retrieved": [
+        {
+          "path": "module_1.py",
+          "score": null,
+          "sha256": "dd07cbdfe3c984784d757c600a3da9652c09af17116bac48b0c64337f0ee476e"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bde90625fea26d5d0bcf9d970e6b94f285693b9e61a48f6e1c7d16a80a746c48",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.030181690999597777
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_2.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-002",
+      "issue_sha256": "efe7a3e139bddb796c2a1b2bd50a49cba25ad7e6ba8b1d92cbcb5f2c450e1e0c",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-0",
+      "request_sha256": "e254001a8105f306fbcdc84486da160221a947bc8be3872f5d91de97b566dedc",
+      "resolved": false,
+      "retrieval_ms": 0.0011999982234556228,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bb080b221a796b8b0ab95a0b118fb76ec0613c43224284450c031f6dcccf34b7",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-ujslbdwz/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_2(7), 7 + 4)\nAssertionError: 3 != 11\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 16,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.8e-05
+      },
+      "wall_seconds": 0.031096008999156766
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 4",
+          "old": "return value - 4",
+          "path": "module_2.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_2.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-002",
+      "issue_sha256": "efe7a3e139bddb796c2a1b2bd50a49cba25ad7e6ba8b1d92cbcb5f2c450e1e0c",
+      "patch_sha256": "9c677707977b8b205722cd459272a5c920df8bdd28e7dff3be8c98cf3f1ba459",
+      "repo": "fixture/dev-0",
+      "request_sha256": "ff8d999ae913ceb5aecfc39affbaba1bbe0fc106be5ad039aa7b0475b1b55fef",
+      "resolved": true,
+      "retrieval_ms": 0.06890100121381693,
+      "retrieved": [
+        {
+          "path": "module_2.py",
+          "score": 0.3814426189633807,
+          "sha256": "4aea8d27bde48d2e192534a630b38e2c6e89ab1a9eeb8c7403e411123fc655a4"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bb080b221a796b8b0ab95a0b118fb76ec0613c43224284450c031f6dcccf34b7",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.031846524001593934
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 4",
+          "old": "return value - 4",
+          "path": "module_2.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_2.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-002",
+      "issue_sha256": "efe7a3e139bddb796c2a1b2bd50a49cba25ad7e6ba8b1d92cbcb5f2c450e1e0c",
+      "patch_sha256": "9c677707977b8b205722cd459272a5c920df8bdd28e7dff3be8c98cf3f1ba459",
+      "repo": "fixture/dev-0",
+      "request_sha256": "f88c4f0e5f8560eec56e6f86fa0a907a847c1c406dac855494c70e0f2d0156b8",
+      "resolved": true,
+      "retrieval_ms": 0.005600002623395994,
+      "retrieved": [
+        {
+          "path": "module_2.py",
+          "score": null,
+          "sha256": "4aea8d27bde48d2e192534a630b38e2c6e89ab1a9eeb8c7403e411123fc655a4"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bb080b221a796b8b0ab95a0b118fb76ec0613c43224284450c031f6dcccf34b7",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.03274964199954411
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_3.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-003",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-0",
+      "request_sha256": "d3e0607fd34a37cff13aafd62de33d141263850d76058e31327c2280984a266f",
+      "resolved": false,
+      "retrieval_ms": 0.0008999995770864189,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "05a73a5eb2f8422df9d206e0722b821734805977cf83431240ed631821f39111",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-me1hcamb/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_3(7), 7 + 5)\nAssertionError: 2 != 12\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 19,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.1e-05
+      },
+      "wall_seconds": 0.035798601998976665
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 5",
+          "old": "return value - 5",
+          "path": "decoy.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_3.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-003",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "1cab55c1d386429e42900fdbd70162320c20c1a94171f2d3e36f787e87ce9791",
+      "repo": "fixture/dev-0",
+      "request_sha256": "057b9d8e7aef88f5fb4eda6d42c37d4679b323eb1c0dc940398f331e4e419bd4",
+      "resolved": false,
+      "retrieval_ms": 0.0812010002846364,
+      "retrieved": [
+        {
+          "path": "decoy.py",
+          "score": 1.3344723555739297,
+          "sha256": "0b31bbe6cf7f37c8044b30ef3a05e4216b1fe18952078cc7c1f6e21abd2dda02"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "05a73a5eb2f8422df9d206e0722b821734805977cf83431240ed631821f39111",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-vmd03ql1/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_3(7), 7 + 5)\nAssertionError: 2 != 12\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 44,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 19,
+        "synthetic_usd": 8.2e-05
+      },
+      "wall_seconds": 0.029738681998424
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 5",
+          "old": "return value - 5",
+          "path": "module_3.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_3.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-003",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "81904ff02bbdcdbd53cf6b582f5a8fc04b9f17964ea600d9012a99f96ee1d2ca",
+      "repo": "fixture/dev-0",
+      "request_sha256": "d530356e64edd96c339ecd02f72693737f6cc6ddda21e81e892bc0fb7c21ca18",
+      "resolved": true,
+      "retrieval_ms": 0.004500001523410901,
+      "retrieved": [
+        {
+          "path": "module_3.py",
+          "score": null,
+          "sha256": "97f9330cc3ffacd2bddeba19582876d74b7cc3c1dc8cd55316c4fa99cc889926"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "05a73a5eb2f8422df9d206e0722b821734805977cf83431240ed631821f39111",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.0422124270007771
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_4.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-004",
+      "issue_sha256": "cd3437071c7b6fdfa2bd481f2f9e2c42ceaf967464e344591a5d812edff1653f",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-0",
+      "request_sha256": "2bfc140270bdca46884e505433d4dea395d4aa5a0637dd67e6fd9eee0aacd8c5",
+      "resolved": false,
+      "retrieval_ms": 0.0011000010999850929,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "5f3801e260c3f5602fb4bef24c8ca2660cf96cf2d9ffeeb67186a56326363375",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-8v8co9cu/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_4(7), 7 * 6)\nAssertionError: 1 != 42\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 11,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.3e-05
+      },
+      "wall_seconds": 0.031455516000278294
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_4.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-004",
+      "issue_sha256": "cd3437071c7b6fdfa2bd481f2f9e2c42ceaf967464e344591a5d812edff1653f",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-0",
+      "request_sha256": "d6a5a62f5ee821e4318b94aa27407a41d0af4ca97eab78026c19dd0432d93846",
+      "resolved": false,
+      "retrieval_ms": 0.06360100087476894,
+      "retrieved": [
+        {
+          "path": "module_4.py",
+          "score": 0.2772588722239781,
+          "sha256": "dc7f73be7b11fe9f14a02287bad36674e54c4f23d5b8dd39f22533aeee55bfd1"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "5f3801e260c3f5602fb4bef24c8ca2660cf96cf2d9ffeeb67186a56326363375",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-rfigl3z0/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_4(7), 7 * 6)\nAssertionError: 1 != 42\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 25,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.7e-05
+      },
+      "wall_seconds": 0.030631699999503326
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_4.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-004",
+      "issue_sha256": "cd3437071c7b6fdfa2bd481f2f9e2c42ceaf967464e344591a5d812edff1653f",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-0",
+      "request_sha256": "179366a2d8b072b0272dd10686af25c6bc0d3193a3be894895955b5a312e21aa",
+      "resolved": false,
+      "retrieval_ms": 0.0034000004234258085,
+      "retrieved": [
+        {
+          "path": "module_4.py",
+          "score": null,
+          "sha256": "dc7f73be7b11fe9f14a02287bad36674e54c4f23d5b8dd39f22533aeee55bfd1"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "5f3801e260c3f5602fb4bef24c8ca2660cf96cf2d9ffeeb67186a56326363375",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-hii2zr33/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_4(7), 7 * 6)\nAssertionError: 1 != 42\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 25,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.7e-05
+      },
+      "wall_seconds": 0.02961897999921348
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 7",
+          "old": "return value - 7",
+          "path": "module_5.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_5.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-005",
+      "issue_sha256": "3fc9a5e3d3a54dfc532c4c04c26b7537e833d7c2dc8eeae67a3fb0e8d0e0eb31",
+      "patch_sha256": "bdbb7d62227b3e74a56dd6b54ac1a747266b55a98a1e629e7ccfb8e2c3e616cd",
+      "repo": "fixture/dev-1",
+      "request_sha256": "75e9ebed38785836c47f158f04a86d3aa14aa5e1588ae8fe45053f5702e8d0be",
+      "resolved": true,
+      "retrieval_ms": 0.000700001692166552,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bea0151fc4a4f1cdbbc9b0ec1ace23d1a8360b228cc1a3976aa0fe3e5996cf1d",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 17,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 5.7e-05
+      },
+      "wall_seconds": 0.03169581600013771
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 7",
+          "old": "return value - 7",
+          "path": "module_5.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_5.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-005",
+      "issue_sha256": "3fc9a5e3d3a54dfc532c4c04c26b7537e833d7c2dc8eeae67a3fb0e8d0e0eb31",
+      "patch_sha256": "bdbb7d62227b3e74a56dd6b54ac1a747266b55a98a1e629e7ccfb8e2c3e616cd",
+      "repo": "fixture/dev-1",
+      "request_sha256": "cc6ac120d75af7897a813b15d346838925998503581d6da10f89da893b978436",
+      "resolved": true,
+      "retrieval_ms": 0.06650000068475492,
+      "retrieved": [
+        {
+          "path": "module_5.py",
+          "score": 0.704412233855529,
+          "sha256": "11521323a1d831f1e336613380894bba408675e5a1ea36fb4e5194a380016300"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bea0151fc4a4f1cdbbc9b0ec1ace23d1a8360b228cc1a3976aa0fe3e5996cf1d",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7.1e-05
+      },
+      "wall_seconds": 0.0317149110014725
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 7",
+          "old": "return value - 7",
+          "path": "module_5.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_5.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-005",
+      "issue_sha256": "3fc9a5e3d3a54dfc532c4c04c26b7537e833d7c2dc8eeae67a3fb0e8d0e0eb31",
+      "patch_sha256": "bdbb7d62227b3e74a56dd6b54ac1a747266b55a98a1e629e7ccfb8e2c3e616cd",
+      "repo": "fixture/dev-1",
+      "request_sha256": "285df68d7e6d6d83b3fd5907f183d63bf8afbee6cde23632bc9663da42213af0",
+      "resolved": true,
+      "retrieval_ms": 0.0032999996619764715,
+      "retrieved": [
+        {
+          "path": "module_5.py",
+          "score": null,
+          "sha256": "11521323a1d831f1e336613380894bba408675e5a1ea36fb4e5194a380016300"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "bea0151fc4a4f1cdbbc9b0ec1ace23d1a8360b228cc1a3976aa0fe3e5996cf1d",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7.1e-05
+      },
+      "wall_seconds": 0.029413210002530832
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_6.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-006",
+      "issue_sha256": "3fd7a4f41c6dd6c0714f8a2efe2ad65c9e727c2d9451562cee45832ded59f0f7",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-1",
+      "request_sha256": "7c7a699daf3979fd3a4d2f46f32905995f8a09af0a8453da94c17dd9129932d8",
+      "resolved": false,
+      "retrieval_ms": 0.0008999995770864189,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "37b11acc594f1ecdc047f5112a8d87633e82e63a21f0fd10efab4c1a8d0fcf30",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-tftssfyq/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_6(7), 7 + 8)\nAssertionError: -1 != 15\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 16,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.8e-05
+      },
+      "wall_seconds": 0.029625911000039196
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 8",
+          "old": "return value - 8",
+          "path": "module_6.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_6.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-006",
+      "issue_sha256": "3fd7a4f41c6dd6c0714f8a2efe2ad65c9e727c2d9451562cee45832ded59f0f7",
+      "patch_sha256": "3491281c98378a3d5c4dcc2ac956ef37a31b1478fc23c22e91d8224b7b37b9cc",
+      "repo": "fixture/dev-1",
+      "request_sha256": "0185c1c84740020861b33f32780fdfdd9476e65770370cd789493a0cf80bd2e8",
+      "resolved": true,
+      "retrieval_ms": 0.05980000059935264,
+      "retrieved": [
+        {
+          "path": "module_6.py",
+          "score": 0.3814426189633807,
+          "sha256": "da6f934ec960db08ec1e1f09dfcd258dbfd1f214318f0c94bf8f589f525e3d53"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "37b11acc594f1ecdc047f5112a8d87633e82e63a21f0fd10efab4c1a8d0fcf30",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.02921060999869951
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 8",
+          "old": "return value - 8",
+          "path": "module_6.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_6.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-006",
+      "issue_sha256": "3fd7a4f41c6dd6c0714f8a2efe2ad65c9e727c2d9451562cee45832ded59f0f7",
+      "patch_sha256": "3491281c98378a3d5c4dcc2ac956ef37a31b1478fc23c22e91d8224b7b37b9cc",
+      "repo": "fixture/dev-1",
+      "request_sha256": "202995c9fd679be3983c46d68c8ed33b5a7d48dfda3d3d9d3df56e229c2090c4",
+      "resolved": true,
+      "retrieval_ms": 0.003999997716164216,
+      "retrieved": [
+        {
+          "path": "module_6.py",
+          "score": null,
+          "sha256": "da6f934ec960db08ec1e1f09dfcd258dbfd1f214318f0c94bf8f589f525e3d53"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "37b11acc594f1ecdc047f5112a8d87633e82e63a21f0fd10efab4c1a8d0fcf30",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.03032421100215288
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_7.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-007",
+      "issue_sha256": "fa71af2f1143cadce5cf292d065d918f3e780507a3791ed479c63ac947daca12",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-1",
+      "request_sha256": "1f82dbc0973792951e289e5505fbc1852c061931a229908bd64961b9cf9e0884",
+      "resolved": false,
+      "retrieval_ms": 0.0008999995770864189,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "cecef2e207529df6a12f1ab42793bf233e8b5afbe75c2b6aad8e0960210133f8",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-61l9ppb9/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_7(7), 7 + 9)\nAssertionError: -2 != 16\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 16,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.8e-05
+      },
+      "wall_seconds": 0.0313500109987217
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 9",
+          "old": "return value - 9",
+          "path": "module_7.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_7.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-007",
+      "issue_sha256": "fa71af2f1143cadce5cf292d065d918f3e780507a3791ed479c63ac947daca12",
+      "patch_sha256": "8f8ab6e37a241ff4de6042a90df70e8320721212719a9cae7ce5302918178011",
+      "repo": "fixture/dev-1",
+      "request_sha256": "c802b39a81eb8c37613c6ead0d2141abb0b9a6edc6725eebdedbcfbb5e95a0e5",
+      "resolved": true,
+      "retrieval_ms": 0.06860000212327577,
+      "retrieved": [
+        {
+          "path": "module_7.py",
+          "score": 0.3814426189633807,
+          "sha256": "91a0cf7a29da2c671ad8b6f73f5bd1de360479799d6dc0a1d837ea8a3d655e21"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "cecef2e207529df6a12f1ab42793bf233e8b5afbe75c2b6aad8e0960210133f8",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.029751710997516057
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 9",
+          "old": "return value - 9",
+          "path": "module_7.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_7.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-007",
+      "issue_sha256": "fa71af2f1143cadce5cf292d065d918f3e780507a3791ed479c63ac947daca12",
+      "patch_sha256": "8f8ab6e37a241ff4de6042a90df70e8320721212719a9cae7ce5302918178011",
+      "repo": "fixture/dev-1",
+      "request_sha256": "21fad6503e4697123919e5c8a6e45dea66fcd5dbaceb83bfd53c95f309852b7d",
+      "resolved": true,
+      "retrieval_ms": 0.0036999990697950125,
+      "retrieved": [
+        {
+          "path": "module_7.py",
+          "score": null,
+          "sha256": "91a0cf7a29da2c671ad8b6f73f5bd1de360479799d6dc0a1d837ea8a3d655e21"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "cecef2e207529df6a12f1ab42793bf233e8b5afbe75c2b6aad8e0960210133f8",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 30,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 7e-05
+      },
+      "wall_seconds": 0.029279010002937866
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_8.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-008",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-1",
+      "request_sha256": "103b015197ee63512d872614d9bdb118099188d6a4534994b741557154530340",
+      "resolved": false,
+      "retrieval_ms": 0.0007999988156370819,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "28523cedd88e16e42322e0efcb5e778f26a66a42bb63c0fadfe5dd2003bc6839",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-398hlfv0/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_8(7), 7 + 10)\nAssertionError: -3 != 17\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 19,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.1e-05
+      },
+      "wall_seconds": 0.03469641300034709
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 10",
+          "old": "return value - 10",
+          "path": "decoy.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_8.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-008",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "0388dc1ee9e89b460c8fa5d7994b7ee313f01b787065b93f3ffcb0bea1642b51",
+      "repo": "fixture/dev-1",
+      "request_sha256": "6da080b3920f2cbc9afc83ba0d50448848fd553b8aa6fcb2c5cb31653aed4b7a",
+      "resolved": false,
+      "retrieval_ms": 0.07760000153211877,
+      "retrieved": [
+        {
+          "path": "decoy.py",
+          "score": 1.3485454515293425,
+          "sha256": "464c3fcd5e0b335a6b8f0ee7ce30b81b2479fc16198738e1f3d977b961c7464e"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "28523cedd88e16e42322e0efcb5e778f26a66a42bb63c0fadfe5dd2003bc6839",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-h7bpjt84/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_8(7), 7 + 10)\nAssertionError: -3 != 17\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 44,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 8.4e-05
+      },
+      "wall_seconds": 0.042018514999654144
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 10",
+          "old": "return value - 10",
+          "path": "module_8.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_8.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-008",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "4f407b9d8f2535c313062c95d13b7e35c157e9982375ca2edd70a259e9bebff2",
+      "repo": "fixture/dev-1",
+      "request_sha256": "8581ba3620ea9a20a45868086c1c0f5f9807857b9f023af15de86e6b4cf9ef20",
+      "resolved": true,
+      "retrieval_ms": 0.004300000000512227,
+      "retrieved": [
+        {
+          "path": "module_8.py",
+          "score": null,
+          "sha256": "0d4b9f69f2de4435766ae075e8768953028e88fddb659bb670d62965e2740707"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "28523cedd88e16e42322e0efcb5e778f26a66a42bb63c0fadfe5dd2003bc6839",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.042676414999732515
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_9.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-009",
+      "issue_sha256": "32c08f11edaf1b87fa41c2fde146054d59e8d3654afe76a0499f2b39e775887f",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-1",
+      "request_sha256": "2faa65917ef933b510bdc49a33f7827759996fc7e14ab1b43b2fe8abb5310f1a",
+      "resolved": false,
+      "retrieval_ms": 0.0011000010999850929,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "eb1aca6dad27b83b9938e5d90fd3b64cf2fe59ac7d84343039dfb31bf05bf521",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-ciu8hfqe/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_9(7), 7 * 11)\nAssertionError: -4 != 77\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 11,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.3e-05
+      },
+      "wall_seconds": 0.03969151400087867
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_9.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-009",
+      "issue_sha256": "32c08f11edaf1b87fa41c2fde146054d59e8d3654afe76a0499f2b39e775887f",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-1",
+      "request_sha256": "f225324bc934f6265b1d8e6a5a13b7f656af0545116dc80a9ac3fc0ca4abfebd",
+      "resolved": false,
+      "retrieval_ms": 0.0681000019540079,
+      "retrieved": [
+        {
+          "path": "module_9.py",
+          "score": 0.35018749494156,
+          "sha256": "d08797c1dfcbc4172b8b711266efce820787f04f7e68e8356c472babbf431d30"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "eb1aca6dad27b83b9938e5d90fd3b64cf2fe59ac7d84343039dfb31bf05bf521",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-x_733gf4/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_9(7), 7 * 11)\nAssertionError: -4 != 77\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 25,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.7e-05
+      },
+      "wall_seconds": 0.0457578170025954
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_9.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-009",
+      "issue_sha256": "32c08f11edaf1b87fa41c2fde146054d59e8d3654afe76a0499f2b39e775887f",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-1",
+      "request_sha256": "5559c7d07e8ef60131b1437027c8004f063aaeb17df5de52f0db3b6d3c96aa30",
+      "resolved": false,
+      "retrieval_ms": 0.005500001861946657,
+      "retrieved": [
+        {
+          "path": "module_9.py",
+          "score": null,
+          "sha256": "d08797c1dfcbc4172b8b711266efce820787f04f7e68e8356c472babbf431d30"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "eb1aca6dad27b83b9938e5d90fd3b64cf2fe59ac7d84343039dfb31bf05bf521",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-8gzu5z86/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_9(7), 7 * 11)\nAssertionError: -4 != 77\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 25,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.7e-05
+      },
+      "wall_seconds": 0.040457314000377664
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 12",
+          "old": "return value - 12",
+          "path": "module_10.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_10.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-010",
+      "issue_sha256": "98289245bfd34f808a1c3a06e498963d4e935bda2c7e1dca599c6a530e8c4006",
+      "patch_sha256": "06d48887bfd90ef5d5910a3166c22539a9ea801a95a1f60a9b23649224b47b2a",
+      "repo": "fixture/dev-2",
+      "request_sha256": "1ee3afd7071c2f07a461d2a4a58f83ab10fc3dc113e06494122f0fbd54aa5cf3",
+      "resolved": true,
+      "retrieval_ms": 0.0008999995770864189,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "9efe8991b76f4f9d4a3c0038dd4eccee7eab9457694ede3b28b2d77e9a6a1c3f",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 18,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 6e-05
+      },
+      "wall_seconds": 0.03191331100242678
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 12",
+          "old": "return value - 12",
+          "path": "module_10.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_10.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-010",
+      "issue_sha256": "98289245bfd34f808a1c3a06e498963d4e935bda2c7e1dca599c6a530e8c4006",
+      "patch_sha256": "06d48887bfd90ef5d5910a3166c22539a9ea801a95a1f60a9b23649224b47b2a",
+      "repo": "fixture/dev-2",
+      "request_sha256": "c115dcb6e06f01962201e0673996fc78d0165b0b6e1af6990365cc2ccbd4d671",
+      "resolved": true,
+      "retrieval_ms": 0.07379999806289561,
+      "retrieved": [
+        {
+          "path": "module_10.py",
+          "score": 0.8502694792906926,
+          "sha256": "1dfee67e3ad3b3aff7d9e46dcdcd1dc3596cc79590bce47c183077d3d7a29a62"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "9efe8991b76f4f9d4a3c0038dd4eccee7eab9457694ede3b28b2d77e9a6a1c3f",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.03342801200051326
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 12",
+          "old": "return value - 12",
+          "path": "module_10.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_10.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-010",
+      "issue_sha256": "98289245bfd34f808a1c3a06e498963d4e935bda2c7e1dca599c6a530e8c4006",
+      "patch_sha256": "06d48887bfd90ef5d5910a3166c22539a9ea801a95a1f60a9b23649224b47b2a",
+      "repo": "fixture/dev-2",
+      "request_sha256": "bb4af19270255459bdd67cd1295205a4f9933118623df0eda11d8811b526fd0d",
+      "resolved": true,
+      "retrieval_ms": 0.0036999990697950125,
+      "retrieved": [
+        {
+          "path": "module_10.py",
+          "score": null,
+          "sha256": "1dfee67e3ad3b3aff7d9e46dcdcd1dc3596cc79590bce47c183077d3d7a29a62"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "9efe8991b76f4f9d4a3c0038dd4eccee7eab9457694ede3b28b2d77e9a6a1c3f",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.031739509002363775
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_11.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-011",
+      "issue_sha256": "e8bc523d582ddcf725cf79971d2611c0cc13e645248e2b5221ecf5a6ba0c0770",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-2",
+      "request_sha256": "67640887018ed12e75f166c5615a3ec4810b503aaf833801e6597a9fb6daf644",
+      "resolved": false,
+      "retrieval_ms": 0.000800002453615889,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "477c84f064edf7d100ad2c1f6d3c8eaa6f9f55daae8ee251ae396618c172da72",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-dy_wzqe_/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_11(7), 7 + 13)\nAssertionError: -6 != 20\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 17,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.9e-05
+      },
+      "wall_seconds": 0.03420610900138854
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 13",
+          "old": "return value - 13",
+          "path": "module_11.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_11.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-011",
+      "issue_sha256": "e8bc523d582ddcf725cf79971d2611c0cc13e645248e2b5221ecf5a6ba0c0770",
+      "patch_sha256": "4cbda0b54eff4e0852fd07b032650818578ca39ac4170fcacccee988d082c308",
+      "repo": "fixture/dev-2",
+      "request_sha256": "e5adf0d1be12dc9d7e15cea09678975a36481314d2d425fa602c2271b467c370",
+      "resolved": true,
+      "retrieval_ms": 0.06510000093840063,
+      "retrieved": [
+        {
+          "path": "module_11.py",
+          "score": 0.4543712416809626,
+          "sha256": "62595cdc679bf704a33a5fdcb1c25f7c2f7d2a1dbce8d1d89551bf7976164b8a"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "477c84f064edf7d100ad2c1f6d3c8eaa6f9f55daae8ee251ae396618c172da72",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.031243307999829995
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 13",
+          "old": "return value - 13",
+          "path": "module_11.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_11.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-011",
+      "issue_sha256": "e8bc523d582ddcf725cf79971d2611c0cc13e645248e2b5221ecf5a6ba0c0770",
+      "patch_sha256": "4cbda0b54eff4e0852fd07b032650818578ca39ac4170fcacccee988d082c308",
+      "repo": "fixture/dev-2",
+      "request_sha256": "0857a1068a2d1f9de531c2f0e5483464a549c841d2bd77244eaab75b329978ad",
+      "resolved": true,
+      "retrieval_ms": 0.0042000028770416975,
+      "retrieved": [
+        {
+          "path": "module_11.py",
+          "score": null,
+          "sha256": "62595cdc679bf704a33a5fdcb1c25f7c2f7d2a1dbce8d1d89551bf7976164b8a"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "477c84f064edf7d100ad2c1f6d3c8eaa6f9f55daae8ee251ae396618c172da72",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.030814707999525126
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_12.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-012",
+      "issue_sha256": "74527d423a5a1665bf9f6d50e55a14f019915a182da92cbe0a4e1deb80f657fc",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-2",
+      "request_sha256": "04fba4fced3d3784c6fed418f5de9e2c68774962a818bb6627a2d509575876c9",
+      "resolved": false,
+      "retrieval_ms": 0.0008999995770864189,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "472da315ae3e55ec2f59cae0151b049e1ed6f140d4fc80f4620d562f95929c6c",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-vyengr1c/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_12(7), 7 + 14)\nAssertionError: -7 != 21\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 17,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.9e-05
+      },
+      "wall_seconds": 0.02943430799859925
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 14",
+          "old": "return value - 14",
+          "path": "module_12.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_12.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-012",
+      "issue_sha256": "74527d423a5a1665bf9f6d50e55a14f019915a182da92cbe0a4e1deb80f657fc",
+      "patch_sha256": "be8a31f4486d4f8cd3f4393acf75aca89d5f65757d0d88f07f8b6d5d0651e523",
+      "repo": "fixture/dev-2",
+      "request_sha256": "13f8b38578a784650aafacd5d02238871527060e5066a02b4473b5966b6226d4",
+      "resolved": true,
+      "retrieval_ms": 0.06990000110818073,
+      "retrieved": [
+        {
+          "path": "module_12.py",
+          "score": 0.4543712416809626,
+          "sha256": "b249cb71171f2d374479c3c960490621ae2dceebe2e2ff861be893b63a1212d2"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "472da315ae3e55ec2f59cae0151b049e1ed6f140d4fc80f4620d562f95929c6c",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.03158350899684592
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 14",
+          "old": "return value - 14",
+          "path": "module_12.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_12.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-012",
+      "issue_sha256": "74527d423a5a1665bf9f6d50e55a14f019915a182da92cbe0a4e1deb80f657fc",
+      "patch_sha256": "be8a31f4486d4f8cd3f4393acf75aca89d5f65757d0d88f07f8b6d5d0651e523",
+      "repo": "fixture/dev-2",
+      "request_sha256": "75d4c1f98d963ef89aee8524227bd41f0427f9bee136864f8e3262c3695e194c",
+      "resolved": true,
+      "retrieval_ms": 0.0032999996619764715,
+      "retrieved": [
+        {
+          "path": "module_12.py",
+          "score": null,
+          "sha256": "b249cb71171f2d374479c3c960490621ae2dceebe2e2ff861be893b63a1212d2"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "472da315ae3e55ec2f59cae0151b049e1ed6f140d4fc80f4620d562f95929c6c",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.03112610799871618
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_13.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-013",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-2",
+      "request_sha256": "98ff64afbd52d237915c07a476de76ec0131de553266ae17882bb36f6e15ffef",
+      "resolved": false,
+      "retrieval_ms": 0.000700001692166552,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "a86915e494453e653f8f30ed2af7074c6a78b6cfa400a634db4c3d514d6d5338",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-663qb2mz/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_13(7), 7 + 15)\nAssertionError: -8 != 22\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 19,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.1e-05
+      },
+      "wall_seconds": 0.029851808001694735
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 15",
+          "old": "return value - 15",
+          "path": "decoy.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_13.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-013",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "3e9f5ab1c3ec7670da3bd553a0cf797893b9e2c9258b5160a11720f88fb0ba57",
+      "repo": "fixture/dev-2",
+      "request_sha256": "4a1c805952eaf3729b91e74890514a21dade9f877ab30a5277bee05e78a75ebc",
+      "resolved": false,
+      "retrieval_ms": 0.07670000195503235,
+      "retrieved": [
+        {
+          "path": "decoy.py",
+          "score": 1.3485454515293425,
+          "sha256": "920bfd7ae0cc0f1998d6e2d183f919453832f2876619e6741574b5cc91409232"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "a86915e494453e653f8f30ed2af7074c6a78b6cfa400a634db4c3d514d6d5338",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-ca8lz7x_/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_13(7), 7 + 15)\nAssertionError: -8 != 22\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 44,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 8.4e-05
+      },
+      "wall_seconds": 0.03228130899879034
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 15",
+          "old": "return value - 15",
+          "path": "module_13.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_13.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-013",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "d00517e53483884e2932187bc811d7f8b3fc62befd1b19a789bb0a758454c895",
+      "repo": "fixture/dev-2",
+      "request_sha256": "ad24bc3389d001c0bfdebc04bca6cd8f6fb467cb4d80890f4c3e1dabf83b831e",
+      "resolved": true,
+      "retrieval_ms": 0.0039000005926936865,
+      "retrieved": [
+        {
+          "path": "module_13.py",
+          "score": null,
+          "sha256": "0b66630ad338b8055bf5007f917800caacbf674fa24e98a22a32e93b139416e9"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "a86915e494453e653f8f30ed2af7074c6a78b6cfa400a634db4c3d514d6d5338",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.029873507999582216
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_14.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-014",
+      "issue_sha256": "222e072250d90585e4485f154d7dcfd30dfbfcbb9e324df068b4cd41d44a1f6c",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-2",
+      "request_sha256": "21b2b363a1d7e33f649ebe166c94f4317a2a10ec0d9a324857c3c4049ad8cc65",
+      "resolved": false,
+      "retrieval_ms": 0.0007999988156370819,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "8c4e763891dfb2ae2ab93c0ff4ff98c194405dc0fa0f60f88e5459a6998e2487",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-ucj_sto8/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_14(7), 7 * 16)\nAssertionError: -9 != 112\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 11,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.3e-05
+      },
+      "wall_seconds": 0.030906708001566585
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_14.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-014",
+      "issue_sha256": "222e072250d90585e4485f154d7dcfd30dfbfcbb9e324df068b4cd41d44a1f6c",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-2",
+      "request_sha256": "f5cc84106d1b34bb45bb474e2e509f234480f8ff1ad30dacb57b50ab83af1c21",
+      "resolved": false,
+      "retrieval_ms": 0.08629999865661375,
+      "retrieved": [
+        {
+          "path": "module_14.py",
+          "score": 0.35018749494156,
+          "sha256": "a93501eaa62f613463f3db2ed1c84e10ef25e6548bf552de85add2087f9daac0"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "8c4e763891dfb2ae2ab93c0ff4ff98c194405dc0fa0f60f88e5459a6998e2487",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-xf8fxb_8/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_14(7), 7 * 16)\nAssertionError: -9 != 112\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 26,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.8e-05
+      },
+      "wall_seconds": 0.036417109997273656
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_14.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-014",
+      "issue_sha256": "222e072250d90585e4485f154d7dcfd30dfbfcbb9e324df068b4cd41d44a1f6c",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-2",
+      "request_sha256": "29c81c67802e2357c13671ae8b1dba814de45c67d59c36498c8437dfd08bc199",
+      "resolved": false,
+      "retrieval_ms": 0.004300000000512227,
+      "retrieved": [
+        {
+          "path": "module_14.py",
+          "score": null,
+          "sha256": "a93501eaa62f613463f3db2ed1c84e10ef25e6548bf552de85add2087f9daac0"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "8c4e763891dfb2ae2ab93c0ff4ff98c194405dc0fa0f60f88e5459a6998e2487",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-4mnp2k5_/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_14(7), 7 * 16)\nAssertionError: -9 != 112\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 26,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.8e-05
+      },
+      "wall_seconds": 0.03155390800020541
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 17",
+          "old": "return value - 17",
+          "path": "module_15.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_15.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-015",
+      "issue_sha256": "8b22edb103966755510659f3daf86d5b668ce52ef146598fc2482bdf22cc882d",
+      "patch_sha256": "6f1ac43b8220e482cada5948fbfa6d6ce5f2f2698015224b0ab5890966f0b760",
+      "repo": "fixture/dev-3",
+      "request_sha256": "b334c5dadacdb178f79dd1062965475ae25da632b6def713e7218b1fa2c30861",
+      "resolved": true,
+      "retrieval_ms": 0.000700001692166552,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "87706ed7d9cebdef744bd15413a3da7c0eed2e31e921168b2b25cd32cad32104",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 18,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 6e-05
+      },
+      "wall_seconds": 0.033084409002185566
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 17",
+          "old": "return value - 17",
+          "path": "module_15.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_15.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-015",
+      "issue_sha256": "8b22edb103966755510659f3daf86d5b668ce52ef146598fc2482bdf22cc882d",
+      "patch_sha256": "6f1ac43b8220e482cada5948fbfa6d6ce5f2f2698015224b0ab5890966f0b760",
+      "repo": "fixture/dev-3",
+      "request_sha256": "ec85cd663062094867adfc79b808430b99f63a10afef94be0afecd842c63e314",
+      "resolved": true,
+      "retrieval_ms": 0.07099999857018702,
+      "retrieved": [
+        {
+          "path": "module_15.py",
+          "score": 0.8502694792906926,
+          "sha256": "f94d424fdaf7032ef5c693648026d8d4e14b7c304e09fbb499939368211bd87c"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "87706ed7d9cebdef744bd15413a3da7c0eed2e31e921168b2b25cd32cad32104",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.032942409001407214
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 17",
+          "old": "return value - 17",
+          "path": "module_15.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_15.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-015",
+      "issue_sha256": "8b22edb103966755510659f3daf86d5b668ce52ef146598fc2482bdf22cc882d",
+      "patch_sha256": "6f1ac43b8220e482cada5948fbfa6d6ce5f2f2698015224b0ab5890966f0b760",
+      "repo": "fixture/dev-3",
+      "request_sha256": "1c043da2929e42f70df6b783ab1a00a8b5cb61d43dd3a4f65f0a62225e1156de",
+      "resolved": true,
+      "retrieval_ms": 0.0034000004234258085,
+      "retrieved": [
+        {
+          "path": "module_15.py",
+          "score": null,
+          "sha256": "f94d424fdaf7032ef5c693648026d8d4e14b7c304e09fbb499939368211bd87c"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "87706ed7d9cebdef744bd15413a3da7c0eed2e31e921168b2b25cd32cad32104",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.03324130900000455
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_16.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-016",
+      "issue_sha256": "38eb6c37331adbc6554a15ec3f2630aee8d18cc2e329481bddcfa5e1f3530622",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-3",
+      "request_sha256": "0b7b34268ce8309905d59d8852f576d92cd76d06249cd56c28b976b369092b59",
+      "resolved": false,
+      "retrieval_ms": 0.0010999974620062858,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "3acc6d1b98308702e0f1b0de1c75c633f5c039bb9d9edca5c63871c4e73e1e8c",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-la7a_ebz/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_16(7), 7 + 18)\nAssertionError: -11 != 25\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 17,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.9e-05
+      },
+      "wall_seconds": 0.031216108000080567
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 18",
+          "old": "return value - 18",
+          "path": "module_16.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_16.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-016",
+      "issue_sha256": "38eb6c37331adbc6554a15ec3f2630aee8d18cc2e329481bddcfa5e1f3530622",
+      "patch_sha256": "1d7d52d13c1c607206a08115e0d684366e175f955d1d3f0ad8f4d194fb39a58c",
+      "repo": "fixture/dev-3",
+      "request_sha256": "3591329a95b6ac4cf30ed73296cd790c565555172045255d04927faecd04d107",
+      "resolved": true,
+      "retrieval_ms": 0.07270000060088933,
+      "retrieved": [
+        {
+          "path": "module_16.py",
+          "score": 0.4543712416809626,
+          "sha256": "2ecef54c9599b47a54ceff7b67d768611ff1777bf1428723fc7abafb2f2f2baf"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "3acc6d1b98308702e0f1b0de1c75c633f5c039bb9d9edca5c63871c4e73e1e8c",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.03110190900042653
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 18",
+          "old": "return value - 18",
+          "path": "module_16.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_16.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-016",
+      "issue_sha256": "38eb6c37331adbc6554a15ec3f2630aee8d18cc2e329481bddcfa5e1f3530622",
+      "patch_sha256": "1d7d52d13c1c607206a08115e0d684366e175f955d1d3f0ad8f4d194fb39a58c",
+      "repo": "fixture/dev-3",
+      "request_sha256": "296b0dd6f497b24044cd3cdc11a0826e92d9365a6db9520463f343a9277f8d96",
+      "resolved": true,
+      "retrieval_ms": 0.0035999983083456755,
+      "retrieved": [
+        {
+          "path": "module_16.py",
+          "score": null,
+          "sha256": "2ecef54c9599b47a54ceff7b67d768611ff1777bf1428723fc7abafb2f2f2baf"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "3acc6d1b98308702e0f1b0de1c75c633f5c039bb9d9edca5c63871c4e73e1e8c",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.03237180799987982
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_17.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-017",
+      "issue_sha256": "1a5e40addf7d8c2b869e9bf03fc18fb3833f57a5d574e0247857229ca09c2675",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-3",
+      "request_sha256": "e13068ecb8a58fa8ba3692977a7304f4c08005b3117338998809428cb079034f",
+      "resolved": false,
+      "retrieval_ms": 0.000800002453615889,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "a558adab99af61cdaeb106d1be73e7c93a85f92b801616b6b44339c54aafe5d8",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-cahknjvt/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_17(7), 7 + 19)\nAssertionError: -12 != 26\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 17,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.9e-05
+      },
+      "wall_seconds": 0.03857671100195148
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 19",
+          "old": "return value - 19",
+          "path": "module_17.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_17.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-017",
+      "issue_sha256": "1a5e40addf7d8c2b869e9bf03fc18fb3833f57a5d574e0247857229ca09c2675",
+      "patch_sha256": "a82748058c3f9420fe544b7e58b609af97af93ee9c6dfffec1d40007e76e5096",
+      "repo": "fixture/dev-3",
+      "request_sha256": "0c15c3725f04a3e995b7483ef79c19911ea0e3adde19eb0b5d3265ffc1a8c6c8",
+      "resolved": true,
+      "retrieval_ms": 0.06619999840040691,
+      "retrieved": [
+        {
+          "path": "module_17.py",
+          "score": 0.4543712416809626,
+          "sha256": "d2dfef061844ee49836e9ecc895fda8e32a33e23a9e3d31fa004df0e46bfa26b"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "a558adab99af61cdaeb106d1be73e7c93a85f92b801616b6b44339c54aafe5d8",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.03973740999936126
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 19",
+          "old": "return value - 19",
+          "path": "module_17.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_17.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-017",
+      "issue_sha256": "1a5e40addf7d8c2b869e9bf03fc18fb3833f57a5d574e0247857229ca09c2675",
+      "patch_sha256": "a82748058c3f9420fe544b7e58b609af97af93ee9c6dfffec1d40007e76e5096",
+      "repo": "fixture/dev-3",
+      "request_sha256": "f0a244f15bb5a2679c084675f3c79ff3d6aee1b0da858df2dab123c9a4449d0e",
+      "resolved": true,
+      "retrieval_ms": 0.0037999998312443495,
+      "retrieved": [
+        {
+          "path": "module_17.py",
+          "score": null,
+          "sha256": "d2dfef061844ee49836e9ecc895fda8e32a33e23a9e3d31fa004df0e46bfa26b"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "a558adab99af61cdaeb106d1be73e7c93a85f92b801616b6b44339c54aafe5d8",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 31,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.3e-05
+      },
+      "wall_seconds": 0.02932280700042611
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_18.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-018",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-3",
+      "request_sha256": "4b0f2ba3d67dafcb2554a58028f3215a21551640668502162ac4bc8d624c436a",
+      "resolved": false,
+      "retrieval_ms": 0.0008999995770864189,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "53992a251326a0c783c115a4126279b7203b4aa97832384213430114c80e15cb",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-vuzjuoy9/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_18(7), 7 + 20)\nAssertionError: -13 != 27\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 19,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.1e-05
+      },
+      "wall_seconds": 0.031376509003166575
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 20",
+          "old": "return value - 20",
+          "path": "decoy.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_18.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-018",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "17bbc5481cbd8946a1120fc90b041bf107d10ba8d46b4beab9040fea469c317a",
+      "repo": "fixture/dev-3",
+      "request_sha256": "e0a5ae3641d328ae0eddd6b4f33b9d49ae94e3a854ad364af805d4d58558dded",
+      "resolved": false,
+      "retrieval_ms": 0.0895000011951197,
+      "retrieved": [
+        {
+          "path": "decoy.py",
+          "score": 1.3485454515293425,
+          "sha256": "e76e29b237e74828c1f6b60813f87c3f7c9ad88172f6b7b94d5b947c60e41881"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "53992a251326a0c783c115a4126279b7203b4aa97832384213430114c80e15cb",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-gjeg4wpo/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_18(7), 7 + 20)\nAssertionError: -13 != 27\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 44,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 20,
+        "synthetic_usd": 8.4e-05
+      },
+      "wall_seconds": 0.03264910899815732
+    },
+    {
+      "edits": [
+        {
+          "new": "return value + 20",
+          "old": "return value - 20",
+          "path": "module_18.py"
+        }
+      ],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_18.py"
+      ],
+      "grade_status": "passed",
+      "instance_id": "fixture-018",
+      "issue_sha256": "7056bfec4f6e5def508abe3e136ea5b80f4a39d582499cdf010830bbe1c16893",
+      "patch_sha256": "8e48ccb31fe135800c40e2c1ba29720afdbf5382aec521793613baa335acd3a5",
+      "repo": "fixture/dev-3",
+      "request_sha256": "648a46f6c26dd6c987bf6d600c50ecb2545a5b99517809337c7fdaacc2e64746",
+      "resolved": true,
+      "retrieval_ms": 0.0040000013541430235,
+      "retrieved": [
+        {
+          "path": "module_18.py",
+          "score": null,
+          "sha256": "8013ecc89a052ec7378e5d8b3f1af53138916d96180a7288008103cfc723ab32"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "53992a251326a0c783c115a4126279b7203b4aa97832384213430114c80e15cb",
+      "temperature": 0,
+      "test_log": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 33,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 21,
+        "synthetic_usd": 7.5e-05
+      },
+      "wall_seconds": 0.03175290800209041
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_19.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-019",
+      "issue_sha256": "5076558f38d76df4127a759f0979b62c6b077bcb2f7330070741110f5c968dd6",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-3",
+      "request_sha256": "bd7e1115e64d6e28b3a87d99f862e85a5f9ca052c533e2680c689723230b2434",
+      "resolved": false,
+      "retrieval_ms": 0.000700001692166552,
+      "retrieved": [],
+      "retriever_id": "none",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "0e0b7abc8675bb0fd147768f472be0f7ba1d0d3897b6d8776d29d62ba4520665",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-4n1ezxch/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_19(7), 7 * 21)\nAssertionError: -14 != 147\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 11,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 1.3e-05
+      },
+      "wall_seconds": 0.0386492100005853
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_19.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-019",
+      "issue_sha256": "5076558f38d76df4127a759f0979b62c6b077bcb2f7330070741110f5c968dd6",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-3",
+      "request_sha256": "e4189f31302391ca5fe4c7d899922568394f0d57a7e434d9d55d43569a0263b0",
+      "resolved": false,
+      "retrieval_ms": 0.06809999831602909,
+      "retrieved": [
+        {
+          "path": "module_19.py",
+          "score": 0.35018749494156,
+          "sha256": "9f201c7b545e64c9065e9d7b57ea5ee1e13a1e4e58d42a7c6b9d17e33a01bf27"
+        }
+      ],
+      "retriever_id": "bm25",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "0e0b7abc8675bb0fd147768f472be0f7ba1d0d3897b6d8776d29d62ba4520665",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-qg5gmxca/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_19(7), 7 * 21)\nAssertionError: -14 != 147\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 26,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.8e-05
+      },
+      "wall_seconds": 0.042084210999746574
+    },
+    {
+      "edits": [],
+      "execution_identity": {
+        "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+        "model": "scripted-fixture-v1",
+        "scaffold": "scripted-agent-pilot/v1",
+        "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+      },
+      "gold_files": [
+        "module_19.py"
+      ],
+      "grade_status": "tests_failed",
+      "instance_id": "fixture-019",
+      "issue_sha256": "5076558f38d76df4127a759f0979b62c6b077bcb2f7330070741110f5c968dd6",
+      "patch_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "repo": "fixture/dev-3",
+      "request_sha256": "7739237808994f72667e16ee9dcda6e0f9ef16385f28dfb136a12cbb27ba9cfd",
+      "resolved": false,
+      "retrieval_ms": 0.0039000005926936865,
+      "retrieved": [
+        {
+          "path": "module_19.py",
+          "score": null,
+          "sha256": "9f201c7b545e64c9065e9d7b57ea5ee1e13a1e4e58d42a7c6b9d17e33a01bf27"
+        }
+      ],
+      "retriever_id": "oracle",
+      "role": "fixture",
+      "seed": 0,
+      "snapshot_sha256": "0e0b7abc8675bb0fd147768f472be0f7ba1d0d3897b6d8776d29d62ba4520665",
+      "temperature": 0,
+      "test_log": "F.\n======================================================================\nFAIL: test_fail_to_pass (__main__.Checks.test_fail_to_pass)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ril-fixture-p5oi2y4r/_checks.py\", line 9, in test_fail_to_pass\n    self.assertEqual(subject.transform_19(7), 7 * 21)\nAssertionError: -14 != 147\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+      "usage": {
+        "actual_usd": 0.0,
+        "input_tokens": 26,
+        "kind": "synthetic_surrogate",
+        "output_tokens": 1,
+        "synthetic_usd": 2.8e-05
+      },
+      "wall_seconds": 0.03073610800129245
+    }
+  ],
+  "scaffold": "scripted-fixture-v1",
+  "scientific_cost_discordance_mde": null,
+  "seed": 0,
+  "source_manifest": {
+    "files": {
+      "ril/agent/__init__.py": "2bf4a2120bbb88fe7b5bb6a46b7e56cc5525b0a1a9838bc28de6a16a1f47504c",
+      "ril/agent/contracts.py": "c49ed70e33fc7e9605ba2775e33c664f33d56b3f33fa5b599daf4d983b56825e",
+      "ril/agent/fixtures.py": "4a2c007a213bd4371487bf7fb784aa9ee94d4b8163c9e9df6724e17d3eaaa9bb",
+      "ril/agent/grading.py": "8ac81c411d2fdc05ba2bd7d739ca3b0b38dc0fa9743e9831935ba5b16eb38e3b",
+      "ril/agent/pilot.py": "bcba3f0b9968c029a4fb5f55b73ffa8dbe34ac1fc7a8e8dece78c9cb2414a519",
+      "ril/agent/scripted.py": "c47182d5c90758f6574e0ac65dfd2ab6bd4d55fc7ea097aee66fe92951c729a3",
+      "ril/agent/tools.py": "19def831f5fcfdd3ed442ffdbcb509543552707876e891a3bb7b928b1deadb22",
+      "ril/evaluation/run.py": "070be658e1998e0341cb25f8c480cef94235b4abb4210a73cdaa95cc9618d654",
+      "ril/evaluation/stats.py": "e69c8329d1abe09406be3c630eb8b7c0d2bada70f6af680f1b851a8051697685",
+      "ril/retrieval/bm25_index.py": "2f75a11dfb7093068d7997e205b5157ea2a30b8987404b29052e3270dd45c662"
+    },
+    "sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+  },
+  "usage_kind": "synthetic_surrogate_bytes_divided_by_four",
+  "version": "scripted-agent-pilot/v1",
+  "wall_seconds": 1.9941863159983768
+}

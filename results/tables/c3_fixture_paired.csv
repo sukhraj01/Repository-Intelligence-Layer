@@ -1,0 +1,4 @@
+config_hash,seed,discordance,discordance_high,discordance_low,effect_high,effect_low,effect_second_minus_first,exact_mcnemar_p,first,n,only_first,only_second,second,fixture_mde_n302,fixture_mde_n432
+0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53,0,0.4,0.4,0.4,-0.4,-0.4,-0.4,0.007812500000000002,bm25,20,8,0,none,0.105,0.0875
+0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53,0,0.2,0.2,0.2,0.2,0.2,0.2,0.125,bm25,20,0,4,oracle,0.075,0.0625
+0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53,0,0.6,0.6,0.6,0.6,0.6,0.6,0.0004882812500000003,none,20,0,12,oracle,0.1275,0.1075

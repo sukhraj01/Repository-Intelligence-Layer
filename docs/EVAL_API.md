@@ -150,3 +150,98 @@ uses the pinned cached model (no download while holding the GPU). It rejects sco
 its configurable memory ceiling and writes each completed file atomically. This does not replace
 measured full-process memory sizing before a new scale. Current account access/data absence blocks
 these actual-data commands; no completed ablation or GPU cost is claimed.
+
+## Agent pilot boundary (provisional: ADR-007, ADR-008)
+
+Run the model-free C3 apparatus from the repository root:
+
+```sh
+PYTHONPATH=. python scripts/c_agent_pilot.py --config configs/experiments/c_agent_pilot.yaml
+```
+
+This command admits only synthetic `fixture-*` tasks in artificial `fixture/` repositories.
+It runs 20 fixtures under no context, reference BM25 file retrieval and oracle gold-file retrieval.
+No real SWE-bench instance is loaded; actual dev n=0. The model is a deterministic scripted repair
+stub, and this is not a replication of any published scaffold. No model service is called.
+
+```python
+RetrievalTool.search(query: str, limit: int) -> Sequence[RetrievedFile]
+RepairModel.propose(request: ModelRequest) -> ModelResponse
+PatchGrader.grade(task: Task, edits: Sequence[FileEdit]) -> Grade
+run_instance(task, *, retriever_id, tool, model, grader, seed, temperature,
+             top_k, execution_identity=None) -> dict
+summarize(rows, *, draws, seed) -> dict
+source_manifest() -> dict
+```
+
+`Task` contains public issue text and the source snapshot. `ModelRequest` contains only instance
+identity, issue, returned source context, seed and temperature. Reference edits and executable
+checks stay outside this request. Only the oracle tool receives gold file identities; other tools
+reject them. Gold identities join output rows after the model call. Retrieved files must match
+the snapshot, with unique paths, finite scores and a respected limit. Retrieval parameters use
+RIL's existing `BM25Params`; other retrievers can implement the same tool boundary. This adapter
+is file-level apparatus; a unit-level RIL adapter must explicitly preserve ranking and assembly.
+
+The response contains exact old/new source edits and usage, with no resolved field. The grader
+applies edits only to existing snapshot files, requiring one exact old-text occurrence. It writes
+a fresh temporary directory, runs hidden trusted Python unittest checks in a separate process,
+keeps return status/output and removes the directory. Every baseline/reference control fails/
+passes as intended. This is trusted-fixture execution, not a live untrusted-code sandbox or the
+official benchmark harness. The live gate refuses missing access, spend cap, pinned model,
+scaffold and harness; it also refuses a live adapter because none has been installed/reviewed.
+Supplying access fields alone never permits a call. Real data must follow the registered dev
+membership and single-look final-test rules before a future harness can admit it.
+
+Rows store instance/retriever identity, fixed seed/temperature/execution identity, issue and
+snapshot digests, retrieved paths/content digests/scores, attempted edits and patch digest,
+independently graded outcome/status/test output, token/cost accounting and wall/retrieval time.
+The execution identity carries model/scaffold/config/source identities; paired summaries reject
+missing/duplicate pairs or mismatched task/fixed settings. Source checksums resolve from the
+package location rather than the caller's directory. Config and source checksums are separate.
+A dirty git run records the actual executed source manifest rather than claiming the base commit
+alone describes it. Stored fixture inputs can be reconstructed; raw model conversation is not
+persisted by this stub. Future live adapters must preserve complete request/response/failure logs.
+
+Tokens are explicitly synthetic UTF-8-byte/4 surrogates. Configured per-million rates produce
+nonzero synthetic dollar values to exercise accounting; actual dollars are zero. Neither is an
+estimate of a chosen model's cost. `wall_seconds` at result level is execution time before
+statistical summarization; condition totals include retrieval, scripted proposal and test grading.
+CLI wall time including exact power calculations is recorded separately. Retrieval percentiles
+exclude index build and grading and use a tiny cold synthetic workload, without warmup; they are
+not end-to-end agent latency. Timing and test-log elapsed text may vary on replay, while patch,
+request, usage, resolved outcomes and paired statistics reproduce for this deterministic stub.
+
+Output `results.json` and the configured log contain condition summaries, all individual rows,
+per-instance discordance rows and exact McNemar comparisons. Effects mean second minus first.
+Condition ordering in comparisons is lexical and explicitly named. Clustered intervals use
+query-weighted means and whole artificial repositories (2,000 draws, seed 0). Four identical
+synthetic patterns produce degenerate intervals; they do not measure real sampling uncertainty.
+`illustrative_fixture_mde` calls the shared exact statistics at n=302 and 432 using the observed
+fixture discordance. These are arithmetic smoke checks. `real_instances=0` and
+`scientific_cost_discordance_mde=null` prevent their promotion to RQ3 empirical power evidence.
+C4 owns the full paired/resumable/idempotent/spend-capped orchestration and failure reports.
+
+## Scaffold options: historical source evidence, no selection
+
+Five versioned papers were read in full, including appendices, result tables and numerical
+figures (216 PDF pages total); all five notes pass numeric/page checks. The table below separates
+paper-supported extensibility from an unimplemented controlled retrieval intervention. Costs
+are **paper_reported historical** values with their stated scope, not current prices or limits.
+No current release, dependency installation, hosted availability or local memory feasibility was
+verified. Paper-version evidence does not establish present software behavior.
+
+| Candidate | One replaceable RIL retrieval tool | Seed/temperature and reproducibility | Cost and logs; hosted/local scope |
+|---|---|---|---|
+| SWE-agent | Configurable Bash/Python command files make integration plausible; several native searches and shell access can bypass the added retriever. Exclusive boundary needs a pinned-source test (Appendix A.2–A.3, pp.21–24). | Temperature zero was selected, yet repeated outcomes vary; decoding seed contract absent (Appendix B.1 p.25; Table 10 p.35). | Episode trajectories/patches and a historical $4 cutoff are described; full failure/token/retry schema needs audit. Table 1 p.6 cost averages are **success-only**, not all-attempt budgets. API/local adapters claimed, local replication unestablished ([v3](https://arxiv.org/pdf/2405.15793v3), pp.5,21,37–38). |
+| OpenHands / fixed CodeActAgent | Python AgentSkills extension is explicit; ordinary shell/search paths remain. Platform must be reduced to one pinned agent/configuration and tested at the chosen boundary (pp.3–5). | Exact-input mocked tests are deterministic; no live seed/temperature/repeatability guarantee (Appendix E p.19). | Ordered actions/observations and cumulative cost state are documented; raw retry/usage/termination completeness and hard caps are unverified. Hosted historical averages $1.72/$1.10 per issue are not ceilings; no controlled local replica ([v3](https://arxiv.org/pdf/2407.16741v3), Table 4 p.8, pp.3,19–22). |
+| Agentless | Staged tree localization, folder filtering, embedding retrieval and fusion; no native single retrieval tool. Choose and audit a stage adapter before a causal swap (pp.6–7). | Some greedy stages plus stochastic edit sets, patches and tests; temperature .8, no seed/replay guarantee (p.9). | Historical $0.70 and 78,166 tokens per issue average; no cap/full failure log contract. Dated hosted generator and separate embedding service, no demonstrated local equivalent ([v2](https://arxiv.org/pdf/2407.01489v2), Table 1 p.10, pp.9,18). |
+| LocAgent + fixed repair | Three localization tools; SearchEntity alone leaves traversal and direct code reads. Downstream repair uses Agentless; not itself a patch scaffold (Table 2 p.5; p.11). | Temperature 1.0, two interactions and reciprocal-rank aggregation; no seed guarantee (Appendix A.2 p.14). | Localizer averages $0.05/$0.09 with fine-tuned open models and $0.66 with a closed-source model; excludes fixed repair and is based on service prices. Event log diagram, full audit schema/cap absent; native/text tool modes differ ([v2](https://arxiv.org/pdf/2503.09089v2), Table 5 p.9, pp.14–15). |
+| CoSIL + Agentless-1.5 repair | Multi-stage graph localizer with pruner/reflection; its reported repair agent is Agentless. A fixed repair-stage adapter is plausible; one native interchangeable retrieval tool is not shown (pp.4–6). | Greedy localization; repair uses one greedy plus nine sampled patches at .8. No seed guarantee; published/reproduced repair totals differ (pp.6,10). | Localization mini-sample service costs $0.022/$0.341 are not whole-repair budgets; message history exists, full trace/cap unestablished. Local vLLM and hosted supplementary modes are described, equivalence untested ([v3](https://arxiv.org/pdf/2503.22424v3), Table VII p.9, pp.5–6). |
+
+Reasoned recommendation pending the lead: retain Agentless as the existing provisional ADR-007
+candidate, and compare a narrowly specified stage adapter with an extensible SWE-agent or
+OpenHands adapter. First inspect a pinned revision and prove the same tool signature, alternative
+search policy, context assembly and repair/grading settings remain fixed in an offline fixture.
+Then repeat an authorized paired dev subset to measure real cost, discordance and run noise.
+Local or hosted model selection and spend remain ADR-008 questions. The scripted pilot clears
+apparatus checks only and cannot select any candidate or supply those real measurements.

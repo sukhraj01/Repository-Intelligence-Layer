@@ -1,0 +1,33 @@
+{
+  "actual_usd": 0,
+  "cli_system_seconds": 0.57,
+  "cli_user_seconds": 15.28,
+  "cli_wall_seconds": 15.14,
+  "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+  "dirty": 1,
+  "evidence_class": "measured_synthetic_plumbing_only",
+  "exit_code": 0,
+  "git_hash": "645925b8b21f31ca78401d59c30b044bb5380b4e",
+  "gpu_hours": 0,
+  "hardware": {
+    "branch": "c/eval-rq3",
+    "commit": "645925b8b21f31ca78401d59c30b044bb5380b4e",
+    "config_hash": "0416686adb57223e76e9e5910233e3c91f03a8d1201932a70828a5880e27ec53",
+    "cpu_cores": 8,
+    "cpu_model": "aarch64",
+    "cuda_version": "",
+    "dirty": 1,
+    "gpu_driver": "",
+    "gpu_name": "none",
+    "host": "local-cpu",
+    "python": "3.11.18",
+    "ram_gb": 11.7,
+    "timestamp_utc": "2026-10-30T20:51:08Z",
+    "torch": "not imported"
+  },
+  "method": "external /usr/bin/time -v; whole CLI including statistics; process high-water RSS",
+  "peak_rss_kib": 42780,
+  "real_instances": 0,
+  "seed": 0,
+  "source_sha256": "7f2bfb1187c4f272cc31bf772ac633b9f7f5d66ad8226b54ce945f96c1fc899d"
+}
