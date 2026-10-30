@@ -376,7 +376,7 @@ def prepare_arm(
     signals: Mapping[str, QualitySignal],
 ) -> tuple[Arm, list[PoolExample], list[float], Record]:
     """Apply the arm's filter and weigher: the arm, kept examples, weights, filter report."""
-    arm = arm_from_config(cfg["arm"], signals)
+    arm = arm_from_config(cfg["arm"], signals, int(cfg["seed"]))
     kept, report = arm.filter.apply(examples)
     weights = [arm.weigher.weight(e) for e in kept]
     return arm, kept, weights, report.to_dict()
@@ -424,6 +424,7 @@ def train(
     """
     seed = int(cfg["seed"])
     updates = int(cfg["budget"]["updates"])
+    end = planned_end(cfg)
     paths = RunPaths.of(cfg, results_root, work_root, date)
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -454,6 +455,8 @@ def train(
         u = batch.update
         if u < start:
             continue  # replay to the checkpoint: the plan is deterministic
+        if u >= end:
+            break  # planned stop (budget.stop_after): the schedule stays that of ``updates``
         if stop_after is not None and u >= stop_after:
             break
         if device.startswith("cuda"):
@@ -464,7 +467,7 @@ def train(
             torch.cuda.synchronize()
         elapsed += time.perf_counter() - t0
         done_now += 1
-        if u % log_every == 0 or u == updates - 1:
+        if u % log_every == 0 or u == end - 1:
             trace.append(
                 {
                     "update": u,
@@ -473,14 +476,14 @@ def train(
                     "lr": upd.lr(),
                 }
             )
-        if (u + 1) % every == 0 or u == updates - 1:
+        if (u + 1) % every == 0 or u == end - 1:
             save_checkpoint(
                 paths.ckpt_root, u, enc, upd, {"elapsed_s": elapsed, "trace": trace}, keep
             )
         if hook is not None and (u + 1) in hook.steps:
             hook(u + 1, enc)
     last = _step_dirs(paths.ckpt_root)
-    finished = bool(last) and last[-1].endswith(f"step_{updates - 1:09d}")
+    finished = bool(last) and last[-1].endswith(f"step_{end - 1:09d}")
     record: Record = {
         "version": TRAINING_VERSION,
         "provisional": PROVISIONAL,
@@ -515,6 +518,22 @@ def train(
     return record
 
 
+def planned_end(cfg: Mapping[str, Any]) -> int:
+    """Update count at which a run is complete: ``budget.stop_after`` if set, else ``updates``.
+
+    ``budget.stop_after`` ends the run early on the learning-rate schedule of ``budget.updates``
+    (warm-up and linear decay are functions of the planned total, so a run that is meant to be
+    "N updates of a longer schedule" keeps that schedule). The run is then finished: the final
+    model is exported and the results written, without a learning-curve hook. It is part of the
+    configuration hash.
+    """
+    updates = int(cfg["budget"]["updates"])
+    end = int(cfg["budget"].get("stop_after") or updates)
+    if not 0 < end <= updates:
+        raise ValueError("budget.stop_after must be in 1..budget.updates")
+    return end
+
+
 def teacher_equals_base(cfg: Mapping[str, Any]) -> bool:
     """Whether an arm hook's K-rank teacher is the base checkpoint being fine-tuned (Q52).
 
@@ -540,7 +559,8 @@ def budget_record(
     counts = planner.counts.to_dict() if finished else {}
     hours = elapsed_s / 3600.0
     return {
-        "optimizer_updates": int(cfg["budget"]["updates"]),
+        "optimizer_updates": planned_end(cfg),
+        "schedule_updates": int(cfg["budget"]["updates"]),
         "batch_size": int(cfg["batch"]["batch_size"]),
         "gpu_hours_train_loop": hours if device.startswith("cuda") else 0.0,
         "wall_hours_train_loop": hours,

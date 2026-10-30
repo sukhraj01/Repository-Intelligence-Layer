@@ -38,7 +38,7 @@ import numpy as np
 from ril.training.pool_reader import FeatureTable, PoolExample
 
 PROVISIONAL = "provisional: ADR-002"
-ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM")
+ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM", "NOISE")
 Record = dict[str, Any]
 
 
@@ -199,6 +199,52 @@ class KRankThreshold:
         return out, _report(examples, out)
 
 
+class NoisePositives:
+    """Negative control (D38): each example's positives are replaced by random functions of the
+    same repository; query, count of positives, negatives and everything else stay as in RAW.
+
+    The replacement is drawn from the example's non-positive functions (the snapshot is one
+    repository) with a generator keyed by the seed and the instance id, so it does not depend on
+    the order of examples. The true positives become masked: they are neither positive nor
+    negative for this example. The question it answers is how much of a gain is adaptation to the
+    format of the data (issue-style queries, function text, prefix, length) and not supervision.
+    """
+
+    name = "noise_positives"
+
+    def __init__(self, seed: int) -> None:
+        self.seed = seed
+
+    def apply(self, examples: Sequence[PoolExample]) -> tuple[list[PoolExample], FilterReport]:
+        out: list[PoolExample] = []
+        for ex in examples:
+            n = len(ex.positive_ids)
+            if len(ex.candidate_ids) <= n:
+                continue  # too small a snapshot to draw a replacement without exhausting it
+            pick = sorted(
+                int(i)
+                for i in rng_for(self.seed, "noise", ex.instance_id).choice(
+                    len(ex.candidate_ids), size=n, replace=False
+                )
+            )
+            chosen = set(pick)
+            out.append(
+                replace(
+                    ex,
+                    positive_ids=tuple(ex.candidate_ids[i] for i in pick),
+                    positive_texts=tuple(ex.candidate_texts[i] for i in pick),
+                    candidate_ids=tuple(
+                        c for i, c in enumerate(ex.candidate_ids) if i not in chosen
+                    ),
+                    candidate_texts=tuple(
+                        t for i, t in enumerate(ex.candidate_texts) if i not in chosen
+                    ),
+                    masked_ids=ex.masked_ids + ex.positive_ids,
+                )
+            )
+        return out, _report(examples, out)
+
+
 # --------------------------------------------------------------------------- hook 2: weights
 
 
@@ -282,10 +328,13 @@ class Curriculum:
         self,
         difficulty: Callable[[PoolExample], float],
         buckets: int = 0,
+        reverse: bool = False,
     ) -> None:
         if buckets < 0:
             raise ValueError("buckets must be non-negative")
-        self.difficulty, self.buckets = difficulty, buckets
+        self.difficulty, self.buckets, self.reverse = difficulty, buckets, reverse
+        if reverse:
+            self.name = "curriculum_reversed"
 
     def order(self, examples: Sequence[PoolExample], seed: int, epoch: int) -> list[int]:
         base = RandomOrder().order(examples, seed, epoch)
@@ -293,6 +342,8 @@ class Curriculum:
         if self.buckets > 0 and len(d):
             ranks = np.argsort(np.argsort(d, kind="stable"), kind="stable")
             d = np.floor(ranks * self.buckets / len(d))
+        if self.reverse:
+            d = -d  # hard to easy (the reversed-order control, D37)
         perm = np.argsort(d, kind="stable")
         return [base[int(i)] for i in perm]
 
@@ -353,11 +404,15 @@ def _signal(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> Qua
     raise KeyError(f"no quality signal for teacher {t!r}")
 
 
-def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> Arm:
+def arm_from_config(
+    cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal], seed: int = 0
+) -> Arm:
     """Build an arm from the configuration's ``arm`` section.
 
     ``{name, filter: {...}|null, weight: {...}|null, ordering: {...}|null}``; a missing or null
-    hook is the identity. ``signals`` maps teacher names to quality signals.
+    hook is the identity. ``signals`` maps teacher names to quality signals. ``seed`` keys the
+    NOISE control's draw. NOISE takes no hook section; ``ordering.reverse: true`` reverses the
+    CURRICULUM order.
     """
     name = str(cfg["name"])
     if name not in ARM_NAMES:
@@ -366,6 +421,10 @@ def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]
     w: ExampleWeigher = UnitWeight()
     o: Ordering = RandomOrder()
     fc, wc, oc = cfg.get("filter"), cfg.get("weight"), cfg.get("ordering")
+    if name == "NOISE":
+        if fc or wc or oc:
+            raise ValueError("the NOISE control takes no filter, weight or ordering section")
+        f = NoisePositives(seed)
     if fc:
         k = fc.get("k")
         f = KRankThreshold(_signal(fc, signals), None if k is None else int(k), str(fc["level"]))
@@ -379,5 +438,9 @@ def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]
         )
     if oc:
         sig = _signal(oc, signals)
-        o = Curriculum(lambda ex: float(sig.example_rank(ex)), int(oc.get("buckets", 0)))
+        o = Curriculum(
+            lambda ex: float(sig.example_rank(ex)),
+            int(oc.get("buckets", 0)),
+            bool(oc.get("reverse", False)),
+        )
     return Arm(name=name, filter=f, weigher=w, ordering=o)

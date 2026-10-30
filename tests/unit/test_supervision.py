@@ -123,3 +123,38 @@ def test_agreement_signal_is_the_worst_rank_of_its_teachers() -> None:
             {"name": "FILTER", "filter": {"teacher": "t+v", "k": 10, "level": "positive"}},
             {"t": a, "u": b},
         )
+
+
+def test_noise_control_replaces_positives_inside_the_repository() -> None:
+    exs = synthetic_examples(repos=2, prs=3)
+    arm = arm_from_config({"name": "NOISE"}, {}, seed=3)
+    out, rep = arm.filter.apply(exs)
+    again, _ = arm_from_config({"name": "NOISE"}, {}, seed=3).filter.apply(exs)
+    other, _ = arm_from_config({"name": "NOISE"}, {}, seed=4).filter.apply(exs)
+    assert out == again and out != other  # keyed by the seed and the instance, not by order
+    assert out == arm.filter.apply(list(reversed(exs)))[0][::-1]
+    assert rep.examples_out == rep.examples_in
+    for a, b in zip(exs, out, strict=True):
+        assert len(b.positive_ids) == len(a.positive_ids) and b.query == a.query
+        assert not set(b.positive_ids) & set(a.positive_ids)  # none of the true positives
+        assert set(a.positive_ids) <= set(b.masked_ids)  # and they never serve as negatives
+        assert set(b.positive_ids) <= set(a.candidate_ids)  # same snapshot
+        assert not set(b.positive_ids) & set(b.candidate_ids)
+        assert len(b.candidate_ids) == len(a.candidate_ids) - len(b.positive_ids)
+    with pytest.raises(ValueError):
+        bad = {"teacher": "t", "k": 1, "level": "positive"}
+        arm_from_config({"name": "NOISE", "filter": bad}, {}, 0)
+
+
+def test_reversed_curriculum_is_hard_to_easy() -> None:
+    exs = synthetic_examples(repos=2, prs=3)
+    sig = _signal()
+    fwd = Curriculum(lambda e: float(sig.example_rank(e))).order(exs, 7, 0)
+    rev = Curriculum(lambda e: float(sig.example_rank(e)), reverse=True).order(exs, 7, 0)
+    key = [sig.example_rank(exs[i]) for i in rev]
+    assert key == sorted(key, reverse=True) and sorted(rev) == sorted(fwd)
+    arm = arm_from_config(
+        {"name": "CURRICULUM", "ordering": {"teacher": "t", "buckets": 4, "reverse": True}},
+        {"t": sig},
+    )
+    assert arm.ordering.name == "curriculum_reversed"
