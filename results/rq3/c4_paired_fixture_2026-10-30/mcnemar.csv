@@ -1,0 +1,2 @@
+first,second,n,only_first,only_second,discordance,discordance_low,discordance_high,effect_second_minus_first,effect_low,effect_high,exact_mcnemar_p,illustrative_fixture_mde
+bm25,oracle,10,0,2,0.2,0.2,0.2,0.2,0.2,0.2,0.5,"{'302': 0.075, '432': 0.0625}"

@@ -1,76 +1,89 @@
 # Person C status
 
-Updated 2026-10-30. Branch `c/eval-rq3`, based on `foundation-v0` (04da656).
+Updated 2026-10-30 UTC. Branch `c/eval-rq3`, based on `foundation-v0` (04da656).
 
 ## Current state
 
-C1 apparatus: original-label L2/L3 Rewrite loader (D13), shared exact/clustered statistics,
-BM25/cached dense adapters and `make eval`. API: `docs/EVAL_API.md`. Commit 66d0f6f passed 503
-unit tests/three optional torch skips, full lint and strict typing. Published BM25 artifact
-values pinned; actual-corpus reproduction and dense paired dev ablation remain blocked.
-Synthetic n=2 queries/2 repositories per level, seed 0/2,000 draws: Rewrite-original nDCG@10
--36.9070 pp [-36.9070,-36.9070], Recall@100 0 [0,0]; intentional fixture anchor removal only.
-Config hash `66d0c46d7b3a0bf6ba2517d107a427a2ec52ce37525dff1851dcd2e29c462b3e`.
+C1 apparatus (66d0f6f): original-label L2/L3 Rewrite loader (D13), shared exact/clustered
+statistics, BM25/cached-dense adapters and `make eval`; published BM25 artifact values pinned.
+Synthetic n=2 queries/2 repositories per level: Rewrite-original nDCG@10 -36.9070 pp
+[-36.9070,-36.9070], Recall@100 0 [0,0], 2,000 draws, seed 0; intentional anchor-removal fixture.
+Actual-corpus reproduction and dense paired dev ablation remain blocked. API: `docs/EVAL_API.md`.
 
-C2 raw PR miner preserves every base-commit overlapping function/method, including tests and
-ordinal collisions, with unchanged training-reader compatibility, request/PR checkpoints,
-rate-limit/retry handling, both-side name resolution, content-audit status and provenance.
-Standard two-parent merges admitted; unsupported histories quarantined/counted. Added functions
-have no base target; partial parses/discovery quarantine a PR. No retriever filters positives.
+C2 raw PR miner (645925b): every base-commit overlapping function/method retained, including
+tests/ordinal collisions; unchanged training reader, resumable request/PR state, rate limits,
+both-side current names and content-audit provenance. Standard two-parent merges only;
+unsupported histories and partial discovery/parsing quarantined. No retriever filters positives.
 Measured synthetic plumbing: 200 candidates; 199/198/197 after exact/current-name/Loc-Bench;
-1,970 merged PRs, 1,773 issue-linked, 197 parse-incomplete, 1,379 retained PRs/1,576 positives;
-7,688 mock calls. BM25 no-positive-top-10 85.714% [85.714,85.714], n=1,379/197 repositories,
-2,000 clustered draws, seed 0. Repeated templates explain the degenerate interval; no scientific
-yield/rank evidence. Actual-data/dense audit n=0; actual content audit blocked, not zero.
-Archived teacher-labelled comparison table includes CodeRankEmbed 15.3%, BM25 23.2%, and
-19.3% Verified under SweRankEmbed-Small stored text. C2 commit 645925b passed 522 unit tests.
+1,970 merged PRs, 1,773 linked, 197 parse-incomplete, 1,379 retained/1,576 positives; 7,688 mock calls.
+BM25 no-positive-top-10 85.714% [85.714,85.714], n=1,379/197 artificial repositories, 2,000 draws,
+seed 0. Repeated templates explain the degenerate interval; no scientific yield/rank evidence.
+Published comparison retained; actual-data/dense/content audit n=0, blocked rather than zero yield.
 
-C3 agent interfaces and complete scripted fixture path now built: one retrieval boundary,
-independent exact-edit application and executable hidden fixture tests, three conditions,
-per-instance paired/discordance rows, usage/timing/source identities and exact statistics.
-Five versioned papers read in full across 216 pages, including appendices/tables/numeric figures;
-checked source notes are ready for the documentation owner. Historical criteria/options and
-page-specific sources are in `docs/EVAL_API.md`; no current-release capability claim or ADR choice.
-Agentless remains the existing provisional ADR-007 candidate, not a selected scaffold.
+C3 agent boundary (af41eb1): public issues/source go to one retrieval tool and scripted repair;
+hidden trusted executable tests independently grade exact edits. Gold file names reach only the
+oracle and post-call report join. Five versioned scaffold papers read in full across 216 pages;
+qualified criteria and page-specific sources in EVAL_API, owner integration pending. Agentless
+remains the provisional ADR-007 candidate; no scaffold selected or published replica claimed.
+Synthetic 20 fixtures/4 artificial repositories per condition: none/BM25/oracle resolve4/12/16
+(20/60/80%, clustered intervals [20,20]/[60,60]/[80,80]); discordance40/20/60% for BM25-none/
+BM25-oracle/none-oracle. Synthetic dollars .000508/.001298/.001262; actual dollars0. Fixture
+MDE arithmetic at n302/432 is illustrative only; real cost/discordance/MDE remain unmeasured.
+C3 final log: `results/logs/c3_fixture_pilot_guarded_2026-10-30.json`.
 
-Measured synthetic plumbing only: 20 fixtures/4 artificial repositories per condition;
-none/BM25/oracle resolve 4/12/16 (20/60/80%, intervals [20,20]/[60,60]/[80,80]); discordance
-40/20/60% for BM25-none/BM25-oracle/none-oracle. These constructed patterns/degenerate intervals
-are not real dev results. Synthetic accounting dollars .000508/.001298/.001262; actual dollars 0.
-Illustrative fixture MDE at n=302/432 is reported only as arithmetic; scientific cost/discordance/
-MDE unavailable at real n=0. Whole CLI 14.86 s, peak RSS 42,696 KiB; no model call or local load.
-Config `4cf5f835395a8d01ba137a7a09e7c7e0d4bc29fecbf34314da750c062b764cb1`; source hash
-`6503d2e1c30663ed7f7afb0b79f1bd892edffd431b4c7a544e57cb9b3a074de6`. Final log
-`results/logs/c3_fixture_pilot_guarded_2026-10-30.json`. Not a published-scaffold replication.
+C4 fixture runner: fixed model/scaffold/seed/temperature/tasks, configurable retrieval boundary,
+atomic checksummed checkpoints and exclusive invocation lock. Durable conservative synthetic
+reservations precede dispatch; unknown calls never replay or refund. Quote violations persistently
+halt dispatch and expose observed usage/cap breach. Resume rejects config/source/retriever/task/
+gold/reference/hidden-grader identity drift and corrupted/missing state. Incomplete pairs block all
+paired statistics; unknown outcomes never become resolved=false. Reports retain every gold hit,
+missing count and attempted-edit file proxy; this does not measure attention or causation.
 
-Current unit suite: 538 pass/three optional torch skips; full ruff/format passes (282 files),
-strict mypy passes (121 modules). Synthetic per-commit 20 latency/4 throughput rows stored in
-C3 results. Append-only evidence: `results/ledger_c.md`, E-C1-EVAL, E-C2-RAW-PR, E-C3-AGENT-PILOT.
+Measured C4 plumbing: requested/completed20/20 pairs, complete paired instances10/10, missing0;
+BM25/oracle6/8 of10, clustered95% [60,60]/[80,80]%, 2,000 draws, seed0, two artificial repositories.
+Discordance20% [20,20], oracle-BM25 +20pp [20,20], only-first/second0/2, exact McNemar p=.5.
+Failures not-retrieved/retrieved-not-used/used-wrong: BM25 2/2/0; oracle0/2/0. Wrong-gold-edit,
+abstention and multi-gold tests cover categories even where default table counts are zero.
+Synthetic observed/reserved/cap dollars .001258/.164734/1; actual dollars0, unknown calls0.
+First CLI2.29s, peakRSS42,240KiB; not model performance. Two same-seed resumes reused20pairs,
+0new calls; all9data artifacts byte-identical. Independent fresh10x2 replay matches semantic rows,
+statistics, diagnostics and budget; timing/test-log/output-identity exclusions declared.
+Config `017ac065f974e9e64d31768681943a1f338de2925ac0d008585d85d90ca4bdcf`;
+source `448a951830ee8b17168d99eea8ff79b8a960ef91920319af8ef1747b42cb1953`.
+Artifacts: `results/rq3/c4_paired_fixture_2026-10-30/`; audits under `results/logs/c4_*`.
+
+Validation: 577 unit passes/3 optional Torch skips (56.47s); 39 C4 cases; 60 additional CPU
+integration/leakage/reproducibility passes/5 expected skips (four Torch, one absent checkout).
+Ruff/format285 files and strict mypy122 modules pass. Per-commit20latency/4throughput stub rows
+under `results/rq3/c4_commit_stubs_2026-10-30`; C4 cold retrieval rows in each run directory.
+Stubs are not model encoding/training measurements. Evidence: `results/ledger_c.md`, E-C1–C4.
 
 ## Blockers and compute
 
-Original/Rewrite corpora, pinned dense artifacts, read-only mining token, real held-out content
-index and real agent dev inputs are absent. Account C connection/quota/partition/card unverified.
-C2 pool remains in memory: measure real sample memory/disk before scaling. Above 200 repositories/
-2,000 PRs rejected; full scale waits for real pilot and explicit engineer go. No cluster job.
-No model selection/access/spend cap or reviewed real scaffold/harness; live gate fails closed.
-Synthetic fixtures are trusted subprocess tests, not a live-code sandbox. GPU-hours used: 0 of 8.
+Original/Rewrite corpora, pinned dense artifacts, real dev tasks, read-only mining token and
+held-out content index absent. Account C connection/allocation/partition/card remain unverified.
+C2 real sample memory/disk/yield/ranks must be measured before expansion; hard caps remain
+200repositories/2,000PRs. No real pilot go, no full-scale mining, no model/provider selection.
+Live execution still fails closed: reviewed adapter/scaffold, pinned model, official trusted
+harness, staged dev data and explicit spend authorization are required. Fixture subprocesses are
+not a sandbox for real repository code. Actual dev n=0; scientific cost/discordance/MDE=null.
+GPU-hours used0 of8; actual dollars0; no cluster job. Build-only teaching backlog remains;
+no project understanding or learning completion is claimed.
 
 ## Requests for the lead
 
 | Question | Options | Evidence class | Cheapest experiment | Recommendation | Meanwhile |
 |---|---|---|---|---|---|
-| Adopt shared statistics/timing API? | migrate consumers; retain duplicates | measured parity | owner runs table tests | preserve frozen outputs | compatibility exports; separate cache timing |
-| Supply account C data/access? | real dev ablation and PR pilot; apparatus only | measured absence | verify allocation; stage one folder | supply corpora, pinned scores, read-only token/content index | D13/D17; no substitution |
-| Support other merge histories? | validate squash/rebase patches; quarantine | measured Git fixture; reasoned coverage bias | compare two representative PR diffs | validate before admission | standard merge parents only |
-| Expand mining after pilot? | approve measured scale; defer | measured synthetic only | real 200-repository pilot and memory probe | defer full scale pending yield/cost/ranks | provisional ADR-001, D1/D3; hard 200/2,000 caps |
-| Which scaffold/boundary? | Agentless stage; SWE-agent/OpenHands tool | read in full | pinned offline adapter fixture | compare treatment isolation | provisional ADR-007; scripted only |
-| Which model/spend? | hosted; pinned local | measured absence | capped paired dev pilot | obtain real cost/discordance | provisional ADR-008; no calls |
-| Admit qualified paper notes? | owner integrates; retain separately | read in full | check five notes | preserve page qualifications | criteria sources only |
+| API/paper integration? | adopt; retain | measured/read-full | owner parity/note checks | integrate compatible evidence | exports; qualified notes |
+| Data/access? | stage; defer | measured absence | allocation plus one folder | supply inputs/token/index | D13/D17; no substitution |
+| Mining histories/scale? | validate/expand; defer | measured mock | real 200-repo pilot/two diffs | defer expansion | ADR-001; 200/2,000 caps |
+| Scaffold/boundary? | Agentless-stage; SWE-agent/OpenHands | read-full | pinned offline adapter fixture | compare isolation | ADR-007; scripted only |
+| Model/spend? | hosted; pinned-local | measured absence | capped dev pairs | obtain cost/noise | ADR-008; no calls |
+| Q45 test/estimate? | hypothesis-test; interval-estimate | reasoned | repeated dev pairs | state worthwhile effect | unmeasured; no selection |
 
 ## Next work
 
-C4: build paired/resumable/idempotent/spend-capped orchestration and diagnostics; dry-run 10
-synthetic fixtures with two retrievers, verify deterministic replay or explicit mismatch reasons.
-Then stage bounded real data and audited scaffold only when access/cap/approval gates clear.
-Scientific pilot n=0, full mining scale and all design decisions remain open.
+Lead/owners integrate compatible API/paper notes and roadmap evidence; supply bounded inputs/access,
+then select and review the fixed scaffold/model/treatment adapter, grading harness and spend cap.
+Run the authorized repeated dev pilot before mining expansion or RQ3 power/design decisions.
+All scientific conclusions and final-test settings remain open; no push performed.

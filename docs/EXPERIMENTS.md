@@ -1607,3 +1607,72 @@ reproduce. 538 unit tests pass, three optional torch tests skip; full lint/forma
 mypy pass. Per-commit synthetic harness artifacts are under
 `results/rq3/c3_fixture_pilot_guarded/commit_{latency,throughput}_log.csv` (20/4 rows); these stages are
 synthetic CPU stubs, not model inference or training measurements. Actual spend and GPU-hours: 0.
+
+## E-C4-RQ3: persistent paired fixture runner, apparatus, 2026-10-30
+
+Registered before measured execution. `configs/agent/c_paired_fixture.yaml` specifies 10 synthetic
+fixtures/two artificial repositories, BM25 and oracle through the same file retrieval boundary,
+seed 0, temperature 0, fixed scripted model and scaffold, 2,000 repository-clustered draws.
+ADR-007/008 remain provisional. No real development instance, Verified instance, model service,
+local model, or GPU is admitted. Scientific cost/discordance/MDE remain unmeasured at real n=0.
+
+Each requested pair is reserved durably before dispatch under an exclusive process lock.
+Conservative synthetic input/output maxima bound synthetic costs; actual dollars are always zero.
+Unknown dispatch outcomes retain reservations and are never automatically replayed. Config,
+source, model/scaffold, task snapshots, gold/reference and hidden-grader identity must match.
+Completed rows are reused unchanged; corrupt/missing state or changed identity fails closed.
+Incomplete pairs block all paired statistics, with explicit requested/completed/missing counts.
+Reports are immutable; recovery requires a new report path and preserves earlier evidence.
+
+Report per-file gold hits and attempted-edit file use proxies; successes have no failure label.
+Failure hierarchy: no gold retrieved; gold retrieved but no retrieved gold edited; otherwise used
+wrong. Multi-file hits are retained individually. These proxies do not measure attention or causal
+reasoning. Tables include outcomes, exact McNemar discordances, clustered differences and diagnostics.
+The repeated synthetic fixtures may yield degenerate intervals and demonstrate plumbing only.
+Resume must produce zero new model/grader calls and byte-identical checkpoints. Crash/cap/usage,
+concurrency, tampering, identity drift, hidden-label isolation and multi-gold cases are tested.
+
+Pre-execution configuration SHA-256: `017ac065f974e9e64d31768681943a1f338de2925ac0d008585d85d90ca4bdcf`; n=10 fixtures/2 artificial
+repositories per retriever, seed 0, 2,000 clustered draws. Source checksums and actual dirty Git
+identity are recorded by the initial durable checkpoint before any dispatch.
+
+Registered fresh seeded replay before execution: `configs/agent/c_paired_fixture_fresh.yaml`,
+SHA-256 `a3790f26eaf7b5014f5b89a1a3fcde94c858a170af57b13172a04e51d6e29c19`; same 10 fixtures/two retrievers and settings, new output path.
+Compare requests/retrieval/edits/grades/usage/statistics after excluding declared timing/test-log
+variations and output-dependent identity/checksum fields. Same-output resume still requires exact bytes.
+
+**Recorded result (measured synthetic plumbing only).** Complete requested/completed pairs20/20,
+complete paired instances10/10, missing0; two artificial repositories. BM25 resolves6/10 (60%,
+clustered95% [60,60]); oracle8/10 (80%, [80,80]); 2,000 whole-repository draws, seed0. Oracle-minus-
+BM25 effect +20pp [20,20], discordance20% [20,20], only-first/second0/2, exact McNemar p=.5.
+These repeated constructed patterns do not measure population uncertainty or real agent capability.
+Scientific cost, discordance and MDE remain null at real development n=0.
+
+| Condition | Requested/completed/missing | Independently resolved | Failed: not retrieved / retrieved not used / used wrong | Surrogate input/output tokens | Synthetic / actual dollars |
+|---|---|---|---|---|---|
+| BM25 | 10/10/0 | 6 | 2/2/0 | 316/161 | .000638 / 0 |
+| Oracle gold files | 10/10/0 | 8 | 0/2/0 | 294/163 | .000620 / 0 |
+
+Gold hits/misses are retained individually; used-wrong is an aggregate attempted-edit proxy and
+can coexist with another missing gold file. Explicit wrong-gold-edit, abstention and multi-gold
+checks cover zero-count categories. Completed reservations .164734 synthetic dollars against cap1;
+observed .001258, unknown dispatches0. Synthetic dollars are accounting test inputs, not model prices.
+Actual spend/GPU-hours0; trusted fixture tests are not a live untrusted-code sandbox.
+
+Main artifacts: `results/rq3/c4_paired_fixture_2026-10-30/`; source identity
+`448a951830ee8b17168d99eea8ff79b8a960ef91920319af8ef1747b42cb1953`, base Git af41eb1,
+dirty1 with actual per-file hashes. First CLI2.29s, peakRSS42,240KiB; stored per-pair execution totals
+BM25 .314394s and oracle .317048s. Cold retrieval percentiles are separate from scaffold/grading.
+No new model call occurs on either same-seed resume; 20 pairs reused and all9data files remain
+byte-identical (`results/logs/c4_replay_verification_2026-10-30.json`). The empty persistent lock
+coordinates concurrent invocations and carries no result content. Independent fresh10x2 replay
+matches semantic requests/retrieval/edits/grades/usage, diagnostics, budgets and exact statistics;
+wall/retrieval timing, elapsed test text, output-dependent execution identity and row checksums
+are explicitly excluded (`results/logs/c4_fresh_verification_2026-10-30.json`).
+
+Validation: 39 focused C4 tests; full unit577pass/3optional Torch skips in56.47s; additional CPU
+integration/leakage/reproducibility60pass/5skips (four Torch, one absent checkout); ruff/format285
+files, strict mypy122modules pass. Per-commit CPU stubs20latency/4throughput rows under
+`results/rq3/c4_commit_stubs_2026-10-30/`; explicit per-row ledger entries, no central CSV changes.
+These are synthetic stubs, not real model encoding/training measurements. No live adapter,
+provider selection, scientific pilot or ADR choice is claimed.

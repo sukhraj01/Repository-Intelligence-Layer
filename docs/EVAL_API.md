@@ -245,3 +245,64 @@ search policy, context assembly and repair/grading settings remain fixed in an o
 Then repeat an authorized paired dev subset to measure real cost, discordance and run noise.
 Local or hosted model selection and spend remain ADR-008 questions. The scripted pilot clears
 apparatus checks only and cannot select any candidate or supply those real measurements.
+
+## Durable paired runner (C4 apparatus)
+
+```sh
+PYTHONPATH=. python scripts/c_paired_runner.py --config configs/agent/c_paired_fixture.yaml \
+  --audit-output results/logs/c4_fixture_first_2026-10-30.json
+# Same config/output: exact stored pair reuse, zero new model or grading calls.
+PYTHONPATH=. python scripts/c_paired_runner.py --config configs/agent/c_paired_fixture.yaml \
+  --audit-output results/logs/c4_fixture_resume_2026-10-30.json
+```
+
+`ril.agent.paired.run_config(path, *, report_dir=None)` reuses C3's `run_instance`, independent
+trusted fixture grader, RIL BM25 parameters and shared statistics. The configuration fixes scaffold,
+scripted model, seed, temperature, tasks and synthetic pricing; each retriever has an explicit unique
+id plus kind/top-k/BM25 parameters. `none`, `bm25`, and oracle-gold-file kinds are supported.
+Only fixtures are admitted. This adds no reviewed live adapter, benchmark harness or code sandbox;
+access keys alone cannot enable real execution. Actual development n=0 and actual dollars=0.
+
+The output contains checksummed `checkpoint.json`, `results.json`, `paired.csv`, `conditions.csv`,
+`mcnemar.csv`, `diagnostics.csv`, `latency_log.csv`, config and hardware metadata. Every row is
+keyed by instance/retriever id and includes all C3 request, patch, retrieval, grade and usage data.
+Gold files join only after model execution/grading. `gold_file_hits` retains every gold file's
+retrieved/attempted-edit booleans separately, including partial misses; `gold_files_missing` counts
+absent gold files. `attempted_edit_file` is an observable file-use proxy, never model attention,
+correct application or a causal reasoning label. Independently resolved successes get no failure
+label, including successful edits inferred without retrieved context.
+
+For a failed row the aggregate hierarchy is: no gold file retrieved => `not_retrieved`; at least
+one gold retrieved but no retrieved gold file edited => `retrieved_not_used`; otherwise `used_wrong`.
+Thus an aggregate used-wrong row can still have another gold file missing; use individual flags and
+missing count for multi-file interpretation. Failed exact-edit application also counts as attempted
+use. Default fixtures may produce zero rows in some categories; explicit abstention, wrong-gold-edit
+and multi-gold tests exercise all branches without manufacturing table counts.
+
+An exclusive filesystem lock spans checkpoint inspection, reservation, model/grader execution and
+report writing. Atomic temporary-file replacement with file and directory synchronization protects
+checkpoints. Config/version/source, fixed model/scaffold/seed/temperature, source snapshots, issue,
+reference edits, gold files and hidden grader hashes must match on resume. Changing a retriever's
+parameters under the same id fails. Missing keys, corrupted envelopes or changed rows fail closed.
+Checksums detect accidental corruption; they are not signatures against an adversarial file editor.
+Do not delete checkpoints or lock files to recover a potentially charged dispatch.
+
+The runner durably reserves a conservative synthetic maximum before calling the scripted model:
+input bounds cover the entire public snapshot/issue and output tokens have an explicit ceiling.
+Nonzero synthetic prices test accounting only. Completed and unknown reservations remain charged
+against the configured synthetic cap; known completion does not reclaim headroom. Exceptions or
+interruptions never replay an ambiguous dispatch. A response exceeding quoted token/dollar maxima
+is retained as observed usage, blocks the whole run across restarts and records an observed cap
+breach when applicable. Unknown usage is counted separately; zero actual dollars does not estimate
+what a real model would cost. Future live adapters need reviewed billing/retry/idempotency handling.
+
+Requested/completed pair counts, complete paired-instance count and each missing reason are explicit.
+An unknown outcome is absent from completed rows and never becomes resolved=false. Any incomplete
+pair blocks all paired statistics (`summary=null`, `statistics_status=blocked_incomplete_pairs`);
+the CLI returns status 2. Diagnostic counts still name requested/completed/missing denominators.
+Reports are immutable. Recovery that changes completion requires `--report-dir` naming a fresh
+path; prior reports remain. Completed-run resume preserves checkpoint and report bytes, recording
+new/reused call counts only in a new invocation audit. Fresh replay compares semantic fields while
+excluding wall/retrieval timing, test-log elapsed text, output-dependent execution identity and row
+checksum; model requests, edits, grades, usage and paired statistics must agree. Cold retrieval
+percentiles exclude index building/model/grading, discard no warmups, and measure tiny fixtures.
