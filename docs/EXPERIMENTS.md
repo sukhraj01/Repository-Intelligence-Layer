@@ -1408,3 +1408,26 @@ Fixed in advance so results cannot be re-read after the fact:
   effect size up front; report arms differing by ~3 pp as indistinguishable.
 - **RQ2 claims** are about *which interventions matter and in what combination*, not about inventing
   an intervention.
+
+## E-C1-EVAL: shared retrieval evaluation and Rewrite pairing, apparatus, 2026-10-30
+
+D13 and D17 are retained. The shared evaluator scores released chunks, not D18 unit gold.
+Original qrels/candidates/corpus order are authoritative for both wordings. L2/L3 are separate,
+paired by dataset/folder/query identity, clustered by canonical repository. No setting is chosen
+from Verified. Actual dev configurations include ansible alongside openlibrary/qutebrowser for L3.
+
+| Run | Evidence class | Config hash | n | 95% interval | Seed | Result / gate |
+|---|---|---|---|---|---|---|
+| c1-eval-fixture-host312 | measured, synthetic apparatus | `66d0c46d7b3a0bf6ba2517d107a427a2ec52ce37525dff1851dcd2e29c462b3e` | 2 queries, 2 repositories per level | nDCG delta -36.9070 pp [-36.9070,-36.9070]; Recall delta [0,0], 2000 repository-clustered draws | 0 | CPU entry point completes under preliminary host Python 3.12.3; intentionally removed anchors; no scientific Rewrite claim |
+| Published BM25 artifact regression | measured correctness check, not a new corpus reproduction | `8681e08cb825b99e7000c1a286cf9c3c4efc865c80f4f1cb212b9c3df043f317` | 3 archived aggregate rows | not applicable: deterministic equality to recorded precision | 0 | Verified L2 11.9392/46.7412, L3 22.1917/33.8884; all-L2 mean of dataset folder means 13.0029/38.818; paper rounding matches |
+| Power/statistics compatibility | measured correctness check, calculation | `8681e08cb825b99e7000c1a286cf9c3c4efc865c80f4f1cb212b9c3df043f317` | 9 archived MDE cells, 45 archived exact power cells | not applicable: deterministic numerical agreement | 0 | 2026-10-18 cells retained; compatibility bootstrap equals existing table implementation for shared draws |
+| Actual-data BM25/dense Rewrite dev ablation | blocked, no measurement | hashes assigned when ready configurations run | 0 | unavailable | 0 | original/Rewrite corpora and pinned dense caches absent; account C not verified; no GPU used |
+
+The synthetic result is a fixture invariant, not an estimate of rewriting's effect. Dense plumbing
+is tested with explicitly synthetic score arrays; actual CodeRankEmbed caches use its pinned
+revision, sequence limit 1024 and the existing encoder. Cached-score timing is lookup only and
+must not be compared with BM25 or a real dense search. Clustered uncertainty with few repositories
+is coarse; primary science waits for the registered dev data run. GPU-hours used: 0.
+
+Implementation contract and exact commands: `docs/EVAL_API.md`. Existing analysis table modules
+are outside C ownership; the lead must migrate them to the shared statistics after review.

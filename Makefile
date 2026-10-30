@@ -16,7 +16,7 @@ PYTHON ?= python3.11
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks
+.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks eval
 
 setup:
 	poetry env use $(PYTHON)
@@ -31,6 +31,10 @@ setup-train:
 
 test:
 	$(RUN) pytest tests/unit -q -p no:xdist -m "not torch and not slow"
+
+eval:
+	@test -n "$(CONFIG)" || (echo 'Usage: make eval CONFIG=<yaml>'; exit 2)
+	$(RUN) python -m ril.evaluation.run --config "$(CONFIG)"
 
 # Ada only (needs `make setup-train`).
 test-all:

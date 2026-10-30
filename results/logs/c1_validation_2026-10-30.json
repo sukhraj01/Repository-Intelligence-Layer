@@ -1,0 +1,54 @@
+{
+  "config": {
+    "bootstrap_compatibility_seed": 7,
+    "commands": [
+      "PYTHONPATH=/tmp/ril-small python3 -m pytest tests/unit/test_c_eval.py tests/unit/test_c_stats.py tests/unit/test_core_bench.py tests/unit/test_power.py tests/unit/test_metrics.py -q -p no:xdist",
+      "/tmp/ril-ruff/bin/ruff check ril tests scripts",
+      "/tmp/ril-ruff/bin/ruff format --check ril tests scripts"
+    ],
+    "experiment_id": "E-C1-VALIDATION",
+    "python": "3.12.3",
+    "scope": "synthetic and archived artifacts only",
+    "seed": 0
+  },
+  "config_hash": "8681e08cb825b99e7000c1a286cf9c3c4efc865c80f4f1cb212b9c3df043f317",
+  "dirty": 1,
+  "gate_limitations": [
+    "Actual original/Rewrite corpus absent",
+    "Actual dense cache absent",
+    "Python 3.11 integration gate pending environment",
+    "Full host type check has existing outside-owned NumPy errors"
+  ],
+  "git_hash": "04da656d7307c925140d2cf54407a5ae5c3743f3",
+  "hardware": {
+    "architecture": "aarch64",
+    "gpu": "none",
+    "host": "local-cpu",
+    "python": "3.12.3"
+  },
+  "results": {
+    "actual_corpus_reproductions": 0,
+    "fixture_bytes": 1804,
+    "fixture_maxrss_kib": 35584,
+    "fixture_tracemalloc_peak_bytes": 215501,
+    "focused_tests_passed": 48,
+    "focused_tests_seconds": 16.31,
+    "gpu_hours": 0,
+    "published_bm25_artifact_rows_checked": 3,
+    "published_mde_cells_checked": 9,
+    "published_power_cells_checked": 45,
+    "ruff_check": "pass",
+    "ruff_format_files": 266
+  },
+  "source_sha256": {
+    "ril/evaluation/core_bench.py": "97017118e986dba24544e0214d25b37426146b0dd3c7488a1faaec311aaa4f2b",
+    "ril/evaluation/metrics.py": "e6a14303983120542f404ce974051114cd7b71f97081e67c73e60e284e6eb254",
+    "ril/evaluation/power.py": "d833b1401179e9779d715f192528c7f35bd1420e13e79eca1d637069f75df055",
+    "ril/evaluation/rewrite.py": "17f8b94bbf6fbe9e6a08010a79fec6a23821b77e2d38247ca270e3dd886d2df9",
+    "ril/evaluation/rewrite_cache.py": "7bead3494d501593ed0ee5685d2bc74a64dea50b5480712a7b2effd8df5bd5ec",
+    "ril/evaluation/run.py": "070be658e1998e0341cb25f8c480cef94235b4abb4210a73cdaa95cc9618d654",
+    "ril/evaluation/stats.py": "e69c8329d1abe09406be3c630eb8b7c0d2bada70f6af680f1b851a8051697685",
+    "tests/unit/test_c_eval.py": "5b9e572cce5d19dff0d50b1cc11b231d2befe03729a292d12c9b837966f6ef36",
+    "tests/unit/test_c_stats.py": "61ca32a38dc42b8192269d4aed8d9506acd7438a42df6364fd1d5a885110baf7"
+  }
+}
