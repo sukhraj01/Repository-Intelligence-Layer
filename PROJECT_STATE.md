@@ -84,7 +84,20 @@ storage stages and now `bm25`, `graph_expand_1hop/2hop` and `graph_expansion` wi
 
 ## Next task
 
-**For the engineer: decide how to spend the rest of Block 2 (T4, the arms pilot, was not run).**
+**For the engineer: publish the repository (pre-push checklist, exact commands in order), then decide how to spend the rest of Block 2.**
+
+Identifying login, key-file and course names are removed from the tracked tree and from all local history (accounts are A, B, C only); the head is tagged `foundation-v0`. Nothing has been pushed and there is no remote.
+
+PRE-PUSH CHECKLIST (engineer's own terminal):
+
+1. `git remote -v` shows `origin` (already added by the engineer).
+2. `git log --oneline | head` and read it once; `git status` must be clean.
+3. Run the history audit script from the engineer's tooling directory; it must pass.
+4. `git push -u origin main`; if the push hook blocks the IDE terminal: `RIL_ENGINEER_PUSH=1 git push -u origin main`.
+5. `git push origin foundation-v0`
+6. Both teammates clone the repository and follow the Getting started section of `README.md`.
+
+*Decision list that was already open (unchanged):*
 
 *T3 result (E-PILOT-CURVE, exploratory, measured, 2 seeds, RAW, CodeRankEmbed base, D28 primary negatives, D31 shape).* Reduced design: **2,000 updates, not 3,000** (the 3,000 point was not measured); evaluation on a **dev subset** (L2: openlibrary, qutebrowser, streamlink, 192 queries; L3: openlibrary and qutebrowser only, **two repositories**, 155 queries); **ansible only at step 0**, so D32 is not honoured in the curve. Dense column, L2 nDCG@10 from 19.0 and L3 Recall@100 from 34.0: by 100 updates +10.5 [+8.3, +12.7] (L2, query-level) and +11.1 [+9.1, +13.2] (L3); at 300, 1000 and 2000 updates the change stays between +10.1 and +11.4 on both levels, every increment within 1.0 point, the seed gap 0.3 to 2.6. By the rule fixed before the curves were seen, N = 2,000 (one L2 step 1000 to 2000 of -1.0 [-1.6, -0.6], clustered over 3 repositories, counts as movement because the rule uses the absolute value); by readings added after seeing the curves (query-level interval, or improvements only), N = 100. Limits: checkpoints of one run sit on a 3,000-update schedule, two seeds, RAW only (says nothing about whether a supervision signal helps).
 
@@ -123,11 +136,6 @@ Accounts: only account A has an SSH alias locally; B and C are not configured, s
 | Q55 | Query-latency budget for the encoder choice: warm p50 GPU 18.1 ms (CodeRankEmbed) vs 45.2 ms (Qwen3), CPU 411 ms vs 1,533 ms; the paired fused gain is +1.85 (Verified-six L2, interval includes 0) and +3.43 (L3, clustered interval includes 0) | ADR-006 | engineer |
 | Q56 | R5 shows two cheap controls the arms lack: a reversed-order CURRICULUM cell (pacing and a reversal control are what make a curriculum claim interpretable) and a warm-up before the self-teacher cell (every learner-as-judge paper adds one). Not added to the arms; about 0.5 GPU-hours per cell at pilot size | ADR-002, T4 | engineer |
 Resolved this block (as engineer defaults, evidence class in the owning ADR): Q28 (D25), Q35, Q36 (D26, D27), Q46 primary and Q51, Q52, Q53 (D28, D30, D31), Q50 (D29, with the limitation stated), Q47 (D32), Q48 (D33); Q49 answered by E-GRAPH-ROLE (evidence only; Q30 stays open). Earlier: Q24, Q25, Q27, Q29, Q32, Q34, Q37, Q38, Q40, Q42 (D14-D21); Q39, Q41 provisionally (D18); Q43 (D22); Q44 (D23, edited-function check done: flip condition not met); Q8, Q9, Q13-Q23, Q26, Q10, Q2, Q6.
-
-## Pre-push checklist (before the engineer's first push)
-
-- Remove real Ada login names, the course code and key file names from tracked files (accounts as A, B, C only; the mapping
-  stays in an untracked local note). Do it then, not now (engineer, 2026-10-25).
 
 ## Carried debt
 

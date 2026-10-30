@@ -51,9 +51,25 @@ reports/          proposal + final (LaTeX)
   `docs/source/MASTER_PROJECT_DOCUMENT.md`.
 - **Deciding things:** `decisions/README.md` — ten decisions must close by end of week 2.
 
-## Quick start
+## Getting started
 
-*Not available yet.* `make setup`, `make test`, `make bench` are created in the week-1 bootstrap.
+Requirements: Python 3.11 (pinned in `pyproject.toml` as `>=3.11,<3.12`) and [Poetry](https://python-poetry.org/).
+
+```
+make setup    # create the virtual environment and install dependencies
+make lint     # ruff and mypy --strict
+make test     # fast unit tests: one worker, no torch
+```
+
+Anything that imports PyTorch, trains or encodes runs on the Ada cluster, not on a laptop (see
+`docs/COMPUTE.md`). The optional `train` dependency group is installed only there, with
+`make setup-train`. For the repository layout and the reading order, start at `docs/README.md`.
+
+### Contributing
+
+- One branch per workstream, named `<initial>/<topic>` (for example `a/parser-callgraph`).
+- No direct commits to `main`; the maintainer merges.
+- Run `make lint` and `make test` before opening a merge request.
 
 ## Compute
 
