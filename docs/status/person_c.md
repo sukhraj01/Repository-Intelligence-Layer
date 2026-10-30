@@ -4,45 +4,60 @@ Updated 2026-10-30. Branch `c/eval-rq3`, based on `foundation-v0` (04da656).
 
 ## Current state
 
-C1 apparatus is implemented: D13 original-label L2/L3 Rewrite loader; BM25 and validated cached
-dense scorer; shared statistics with power and legacy metric compatibility; `make eval CONFIG=...`;
-config/git/input hashes, per-query paired metrics, anchor diagnostic, timing/throughput CSV output;
-CPU synthetic fixture and actual dev configurations. API: `docs/EVAL_API.md`.
+C1 apparatus is implemented: original-label L2/L3 Rewrite loader (D13); shared statistics,
+paired repository-clustered intervals, power compatibility, BM25/cached dense scorer and
+`make eval CONFIG=...`. API: `docs/EVAL_API.md`. Parent verification of exact commit 66d0f6f on
+Python 3.11.18: 503 unit tests pass, three optional torch suites skip; full ruff/format and strict
+mypy pass. Synthetic original/Rewrite smoke runs; published BM25 artifact values are pinned exactly.
+Actual-corpus BM25 reproduction and paired dense dev ablation remain blocked, not passed by fixtures.
 
-Evidence class measured: 48 focused C1/loader/metric/power tests pass under preliminary Python
-3.12. Full-project ruff check/format passes (266 source files). Focused strict typing passes for
-C1 modules with imported modules suppressed; full strict typing has six existing NumPy-version
-errors outside C ownership on the host environment. Target Python 3.11 integration remains pending
-its environment. Full host unit baseline reported four environment-only failures. No local model
-runtime imports, model encoding or training occurred.
+C1 synthetic config hash `66d0c46d7b3a0bf6ba2517d107a427a2ec52ce37525dff1851dcd2e29c462b3e`,
+seed 0, 2,000 clustered draws: each level n=2 queries/2 repositories; Rewrite-original nDCG@10
+-36.9070 pp [-36.9070,-36.9070], Recall@100 0 [0,0]. This measures intentional fixture anchor
+removal. Shared statistics preserve nine archived MDE cells and 45 archived exact power cells.
 
-`make eval` runs through the synthetic two-repository L2/L3 split on CPU. Config hash
-`66d0c46d7b3a0bf6ba2517d107a427a2ec52ce37525dff1851dcd2e29c462b3e`, seed 0, 2000 clustered draws:
-per level n=2, Rewrite-original nDCG@10 -36.9070 pp [-36.9070,-36.9070], Recall@100 0 [0,0].
-This tests intentional fixture anchor removal only. Results: `results/ledger_c.md` and E-C1-EVAL.
+C2 raw PR miner, CPU acquisition job, gated dense audit job and recorded-response pilot are built.
+Every base-commit overlapping function/method is kept, including tests and ordinal collisions;
+no retriever selects positives. Output is readable by the unchanged training reader. Request/PR
+checkpoints, API reset/retry handling, both-side name resolution, Loc-Bench counts, content-audit
+status, immutable history provenance and identity-validated score caches are implemented.
+Standard two-parent merges are admitted; unsupported histories are quarantined and counted.
+Added functions/files have no base target. Partial parses/discovery quarantine the whole PR.
 
-Published BM25 artifact rows are pinned exactly at recorded precision and match paper rounding.
-The full-corpus reproduction gate is **blocked**, not passed by the artifact regression.
-Statistics agree with the nine 2026-10-18 MDE cells and 45 exact power cells; shared bootstrap
-compatibility matches the existing table implementation. Off-grid measured discordance is handled.
+Evidence class measured **synthetic plumbing only**: 200 repository candidates; 199/198/197 after
+exact/current-name/Loc-Bench rules; 1,970 merged PRs; 1,773 issue-linked; 197 parse-incomplete;
+1,379 retained PRs/1,576 positives. 7,688 mock transport calls; timing and memory in E-C2-RAW-PR.
+BM25 no-positive-top-10 share 85.714% [85.714,85.714], n=1,379/197 repositories, 2,000 clustered
+bootstrap draws, seed 0. Repeated synthetic templates explain the degenerate interval; this is
+not scientific yield or rank evidence. Teacher-labelled archived comparisons exist in
+`results/tables/c2_raw_pr_rank_comparison.csv`; 19.3% Verified uses SweRankEmbed-Small stored text.
+Actual-data pilot/dense ranks have n=0; real content-overlap audit is blocked, never assumed zero.
+
+C2 focused tests pass (19); full Python 3.11.18 unit suite: 522 pass, three optional torch skips.
+Full ruff/format and strict mypy pass (114 modules). No local model load, encoding or training.
+Logs and append-only evidence: `results/ledger_c.md`, E-C1-EVAL and E-C2-RAW-PR.
 
 ## Blockers and compute
 
-Original/Rewrite corpora and dense model/score caches are absent. Account C connection, quota,
-partition and CUDA card remain unverified. Actual dev Rewrite ablation has n=0 and no interval.
-GPU-hours used: 0 of the C allocation. Dense score lookup timing is not encoding/search latency.
-No dataset or model acquisition was attempted locally.
+Original/Rewrite corpora, pinned dense artifacts, read-only mining token and real held-out content
+index are absent. Account C connection/quota/partition/card remain unverified in this checkout.
+Synthetic memory does not size real snapshots: the miner and rank reader retain the selected pool
+in memory, so measure real sample memory/disk before scaling. GPU-hours used: 0 of C's 8.
+C2 mock gate passed; actual-data gate blocked. Limits above 200 repositories/2,000 PRs are rejected.
+Full-scale mining waits for a real pilot and explicit engineer go. No cluster job was submitted.
 
 ## Requests for the lead
 
 | Question | Options | Evidence class | Cheapest experiment | Recommendation | Meanwhile |
 |---|---|---|---|---|---|
-| Migrate existing analysis bootstrap consumers into the shared API? | replace duplicate implementations after parity review; retain compatibility indefinitely | measured: shared Boot matches current weights/results | run all analysis table tests using the shared class, no new data | owner migrates imports and retains frozen output parity | old analysis code retained; power/metric exports delegate to stats |
-| Supply original/Rewrite dev corpus and pinned CodeRankEmbed cache on account C? | acquire and run registered dev ablation; keep apparatus only | measured absence; no actual-data estimate | verify account/quota, stage one dev folder, measure memory, then paired evaluation | run BM25 and pinned dense on stated dev repos before any new final-test look | ready configs, original qrels D13, query weighting D17; no substitution |
-| Admit evaluator timing stages to central harness taxonomy? | add bm25_index/cached_scores_load/cached_scores_lookup; keep per-run schema only | reasoned: lookup timing excludes model/search | inspect one fixture CSV and one real-cache run | retain explicit cache-only names until full search latency is available | standard CSV columns in per-run outputs only; no central harness edits |
+| Adopt shared statistics/timing API? | migrate consumers; retain duplicates | measured parity | owner runs table tests | preserve frozen outputs | compatibility exports; separate cache timing |
+| Supply account C data/access? | real dev ablation and PR pilot; apparatus only | measured absence | verify allocation; stage one folder | supply corpora, pinned scores, read-only token/content index | D13/D17; no substitution |
+| Support other merge histories? | validate squash/rebase patches; quarantine | measured Git fixture; reasoned coverage bias | compare two representative PR diffs | validate before admission | standard merge parents only |
+| Expand mining after pilot? | approve measured scale; defer | measured synthetic only | real 200-repository pilot and memory probe | defer full scale pending yield/cost/ranks | provisional ADR-001, D1/D3; hard 200/2,000 caps |
 
 ## Next work
 
-Acquire original/Rewrite dev data and pinned dense artifacts on verified account C; size from a
-measured small sample, then run both stated configurations. Continue the raw mining pilot against
-recorded responses while service access is unavailable. No design decision was made in C1.
+Verify account C and a real sample's memory/disk; run the bounded CPU mining pilot, report actual
+held-out loss/parse/history yield/cost/content audit, then run pinned dense audit within budget.
+Exact commands are in E-C2-RAW-PR. Obtain original/Rewrite dev inputs for C1. No design decision
+was made. Full scale and live agent execution remain gated on the engineer's instructions.

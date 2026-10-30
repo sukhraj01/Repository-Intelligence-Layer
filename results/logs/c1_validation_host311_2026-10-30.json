@@ -1,0 +1,37 @@
+{
+  "actual_data_gates": "blocked: original and Rewrite corpora and dense caches absent",
+  "config": {
+    "commands": [
+      "PYTHONPATH=. make test RUN=",
+      "make lint RUN=",
+      "make eval RUN= CONFIG=configs/experiments/c_eval_smoke.yaml"
+    ],
+    "commit": "66d0f6f2546cceb3be7a384655b00af6d747b18b",
+    "python": "3.11.18",
+    "top_level_dependencies": "poetry.lock versions, CPU only",
+    "torch": "absent"
+  },
+  "config_hash": "43f4038cd8b2f8d798e13edbebda7926b6147a9b320152590a9051a357fb7ecc",
+  "gpu_hours": 0,
+  "hardware": {
+    "architecture": "aarch64",
+    "gpu": "none",
+    "host": "local-cpu",
+    "logical_cpus": 8
+  },
+  "kind": "measured",
+  "lint": {
+    "format": "pass",
+    "mypy": "pass",
+    "mypy_files": 109,
+    "ruff": "pass"
+  },
+  "make_eval": "pass synthetic 2 queries per level, not corpus reproduction",
+  "seed": 0,
+  "tests": {
+    "passed": 503,
+    "seconds": 53.42,
+    "skip_reason": "optional torch absent, as local policy requires",
+    "skipped": 3
+  }
+}

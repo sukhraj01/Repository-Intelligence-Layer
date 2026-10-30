@@ -1431,3 +1431,115 @@ is coarse; primary science waits for the registered dev data run. GPU-hours used
 
 Implementation contract and exact commands: `docs/EVAL_API.md`. Existing analysis table modules
 are outside C ownership; the lead must migrate them to the shared statistics after review.
+
+## E-C2-RAW-PR: raw PR miner and recorded-response pilot, apparatus, 2026-10-30
+
+Evidence class: measured **synthetic plumbing only**. Configuration
+`configs/experiments/c_raw_pr_pilot.yaml`, hash
+`7bd4a210bfc82de113b99d5549c60b27911d2dadfe8767687c1edf996dec9280`, seed 0.
+Source, implementation and interpretation: `ril/data_mining/`; CLI `scripts/c_mine_prs.py`.
+Log `results/logs/c2_raw_pr_mock_pilot_2026-10-30.json`; comparison
+`results/tables/c2_raw_pr_rank_comparison.csv`. Actual-data acquisition has n=0; no scientific
+estimate of mining yield, live API cost, content overlap or dense ranks follows from these fixtures.
+GPU-hours used: 0.
+
+| Synthetic stage | Count or cost | Interval |
+|---|---:|---|
+| Python repository candidates selected | 200 | deterministic fixture count, not applicable |
+| After exact core / current name / Loc-Bench | 199 / 198 / 197 | deterministic fixture count, not applicable |
+| Merged PRs / linked PRs / linked issues | 1,970 / 1,773 / 1,773 | deterministic fixture count, not applicable |
+| Parse-incomplete / no overlapping base function | 197 / 197 | deterministic fixture count, not applicable |
+| Kept PRs / positive functions | 1,379 / 1,576 | deterministic fixture count, not applicable |
+| Positive functions per kept PR | 1.142857 | deterministic fixture ratio, not applicable |
+| Parse-incomplete among linked PRs | 11.111% (197/1,773) | deterministic fixture ratio, not applicable |
+| Transport replay calls / mining wall time | 7,688 / 9.620 seconds | single local replay; not live API cost |
+| BM25 directories without a positive in top 10 | 85.714% (n=1,379; 197 repositories) | [85.714,85.714], 2,000 repository-clustered draws, seed 0 |
+| Actual pilot / CodeRankEmbed / real content audit | blocked | unavailable |
+
+Every synthetic repository repeats the same seven retained PR templates, which explains the
+degenerate BM25 interval. This is a regression fixture, not evidence of a distribution difference.
+The comparison table preserves the archived E-POOL-RANKS cells with teacher, text form, weighting
+and interval method: CodeRankEmbed pool 15.3% [8.8,22.2], BM25 pool 23.2% [16.4,31.0],
+SweRankEmbed-Small **stored-text** never-filtered Verified 19.3% [15.7,23.2], and CodeRankEmbed
+Verified 35.7% [31.3,40.3]. No Verified measurement was rerun. These are distinct teachers and
+corpora; the synthetic row is not a scientific comparator.
+
+Acquisition follows paginated repository search (Python primary language, descending stars),
+closed PR listing restricted to merged PRs, and paginated GraphQL closing-issue references.
+The issue title/body becomes the query; PR text and commit messages do not. Both candidate and
+held-out names are resolved; unresolved coverage is explicit, and post-name-loss counts remain
+incomplete when resolution is incomplete. The content audit uses the existing informative-line
+hash algorithm and is reported without filtering. Without a supplied held-out content index it
+reports a blocker, never zero overlap. Fork-network matching is sensitivity only (D1).
+
+For supported histories the immutable merge commit has two parents and its second parent must
+match the recorded PR head. Compare the first parent with that head to obtain their merge base;
+parse that snapshot through the shared parser and use a complete Git diff to the head. A real
+local Git fixture covers an upstream sync into the feature branch followed by another target
+advance, demonstrating exclusion of unrelated target edits. Squash/rebase, merge queues,
+unavailable identities and unverifiable merge bases are quarantined and counted as
+`history_unverifiable`; broader history support needs validation. This conservatism can bias
+collection by merge style and is not a pool-policy decision.
+
+Keep **every** overlapping base function/method, including tests and collision ordinals; no rank,
+score, test-change requirement or consistency filter selects examples. Other parsed functions
+are candidates. Classes and module residuals are outside this function-level pool. Pure insertions
+anchor the adjoining old lines; renames refer to the old file and deletions retain their old units.
+Added files/functions have no base unit and are not recoverable positives; PRs with no base-unit
+overlap are counted. Partial parsing/discovery quarantines the entire PR, preventing unknown
+positives from becoming negatives. Per-positive provenance records CodeUnit identity, span,
+touched old lines and source hash, alongside PR/issue URLs and immutable commit identities.
+
+Each successful API response and PR is checkpointed atomically. Resume rejects changed config,
+held-out document, source recording or overlap-index identity. Rate reset and Retry-After are
+honored with bounded retries and sleeps of at most 60 seconds. Credentials exist only in the
+live HTTP header. Output `pool.jsonl.gz` is written and read by the unchanged training pool
+reader; audit ranks call the unchanged pool-rank implementation. Dense score caches validate
+run, candidate, query, text and pinned-encoder identities and reject nonfinite scores.
+
+Memory probe: five selected repositories, 41,592 recording bytes, peak RSS 39,944 KiB versus
+39,432 KiB baseline. The linear 200-repository projection was 59,912 KiB; observed peak was
+86,732 KiB, so the estimate **underpredicted by 45%**, while observed usage stayed below 100 MiB.
+This tiny synthetic source size does not size real repositories. Before real acquisition or dense
+encoding, measure real-sample memory/disk and verify account C allocation and remaining GPU budget.
+
+Reproduce synthetic checks locally (CPU, no model runtime):
+
+```bash
+python scripts/c_mine_prs.py record --out data/raw/c_raw_pr_recording.json
+python scripts/c_mine_prs.py mine --recording data/raw/c_raw_pr_recording.json --config configs/experiments/c_raw_pr_pilot.yaml --out data/raw/c_raw_pr_mock_pilot
+python scripts/c_mine_prs.py ranks --out data/raw/c_raw_pr_mock_pilot
+```
+
+On Ada, after access, quota, partition/account/QOS, a Python 3.11 environment and read-only
+`GITHUB_TOKEN` are verified: stage `ril`, `scripts`, `configs` and `data/held_out`, create `logs`,
+set `RIL_ROOT`, `RIL_PYTHON` and optionally `RIL_OUT` in the submitting environment, then
+`sbatch -p <verified-partition> -A <verified-account> -q <verified-qos> --export=ALL scripts/ada/c_raw_pr_pilot.sbatch`.
+A supplied real content index can be passed to the `mine` command with `--overlap-index FILE`:
+JSON fields `hashes` (integers from `ril.training.content_overlap.build_index`), `corpus_sha256`,
+`complete: true`. Its hash enters the resume identity; adding it to an old run requires a new
+output directory. This does not change training examples.
+
+Only after the real pilot, pinned encoder files, supported card, memory and remaining budget
+are verified, submit `scripts/ada/c_raw_pr_ranks.sbatch` with the verified Slurm flags and
+`--constraint=<supported-card>`. Its 30-minute allocation bounds one attempt to 0.5 GPU-hours,
+not a completion estimate; its existing teacher path performs a real CUDA operation as a gate.
+Interrupted score checkpoints resume. The CPU acquisition job never reserves a GPU; GPU jobs
+run offline and acquire no data/models. Record any submitted job under account C in the shared
+job ledger. **No job has been submitted.**
+
+The mock gate is passed by correctness tests and recorded yield/cost/comparison artifacts.
+The actual-data gate remains blocked on access, token, content corpus and dense scores.
+Both CLI and miner reject limits above 200 repositories or 2,000 PRs. Full scale requires a
+real pilot review and explicit engineer go; this implementation has no full-scale bypass.
+
+Final source-identified replay: same deterministic counts and rank interval; 7,688 mock calls in
+9.601 seconds, peak RSS 86,840 KiB. Distinct initial and final logs retain both replays; final evidence is
+`results/logs/c2_raw_pr_mock_final_2026-10-30.json`. The final replay records the dirty
+working-tree flag and SHA-256 hashes of nine implementation/dependency files, so its base Git hash
+66d0f6f is not presented as the commit containing the new miner. The source manifest also enters
+resume identity. Validation: 19 focused tests; complete Python 3.11 suite 522 passed, three optional
+torch skips; ruff/format and strict typing pass. The per-commit harness ran separately, recording
+20 latency and four throughput rows under `results/rq2/c2_latency_smoke`; these are explicitly
+synthetic stub stages, not model encoding or training measurements. Validation log:
+`results/logs/c2_validation_2026-10-30.json`.

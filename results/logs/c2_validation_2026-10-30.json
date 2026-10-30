@@ -1,0 +1,43 @@
+{
+  "config_hash": "7bd4a210bfc82de113b99d5549c60b27911d2dadfe8767687c1edf996dec9280",
+  "evidence_class": "measured correctness",
+  "focused_tests": {
+    "passed": 19,
+    "seconds": 1.0
+  },
+  "full_unit_suite": {
+    "passed": 522,
+    "seconds": 53.34,
+    "skipped": 3,
+    "skips": "optional torch suites; torch absent locally"
+  },
+  "git_dirty": true,
+  "git_hash": "66d0f6f2546cceb3be7a384655b00af6d747b18b",
+  "gpu_hours": 0,
+  "interval": "not applicable to deterministic correctness checks",
+  "latency_harness": {
+    "path": "results/rq2/c2_latency_smoke",
+    "rows": {
+      "latency": 20,
+      "throughput": 4
+    },
+    "scope": "synthetic stub stages; no model loading, encoding or training"
+  },
+  "lint": "ruff check, format and strict mypy passed (114 modules)",
+  "mock_gate": "passed",
+  "python": "3.11.18",
+  "real_data_gate": "blocked",
+  "run_id": "c2-validation",
+  "seed": 0,
+  "source_manifest": {
+    "ril/data_mining/__init__.py": "7e3d405066962f58ce00de068edcb9f1fde5c99709295e7dcb9fcad0152bea11",
+    "ril/data_mining/github.py": "db0f701a6e3bb490d743857ea1e73ad8a241c21ab43a1d4466cef89fb2a22494",
+    "ril/data_mining/miner.py": "8b568864540e7fb36b3401c3460bb0709eb0e6ee9cc377c866dedbf5302bca93",
+    "ril/data_mining/ranks.py": "2d140870adde553779e3ff3be23565ac935d9a4641e6063211d601548d94653e",
+    "ril/data_mining/recording.py": "d9d57afd353013f521182039d913a72bb9bf5aab313a5a0a8eebe04c0d9e2ab8",
+    "ril/parsing/repository_parser.py": "7dd4b7f82c07e4b3d179708e85d556056a8f5de03e3af31afb2130db1fd6c6a0",
+    "ril/training/pool_ranks.py": "a5ea38e55dbd9dec6148333811261d7093455e9048afbb5909dcf469f9b9bc7c",
+    "ril/training/pool_reader.py": "523d1a9553987dd829dd453841f5f98976a780c6fcb8f1a194007fb055b8e6ae",
+    "scripts/c_mine_prs.py": "a869ae265ecb65e7bf95a2f5e016ab8ef46bbe1b28ec5dd6c1589bd9757a9436"
+  }
+}
