@@ -175,6 +175,46 @@ def arms_tables(
     }
 
 
+def persistence_tables(
+    results_root: str,
+    conditions: Sequence[str],
+    reference: str,
+    step0_rows: str,
+    out_dir: str,
+    seed: int = 0,
+) -> Record:
+    """Stage 2 tables: the cells at 1,000 updates against RAW at 1,000 updates (two seeds)."""
+    conds = {c: tt.load_condition(results_root, c) for c in conditions}
+    for runs in conds.values():
+        attach_base(runs, step0_rows)
+    labels = {"pilot": "t4b", "evaluation": "evaluation", "label": "E-PILOT-ARMS stage 2"}
+    effects: list[Record] = []
+    spread: list[Record] = []
+    for kind in ("dense", "rrf"):
+        for level in ("L2", "L3"):
+            for reading in tt.READINGS:
+                effects += tt.contrast_rows(
+                    conds,
+                    reference,
+                    kind=kind,
+                    level=level,
+                    reading=reading,
+                    seed=seed,
+                    labels=labels,
+                )
+                spread += tt.seed_spread(conds, kind=kind, level=level, reading=reading)
+    os.makedirs(out_dir, exist_ok=True)
+    stem = os.path.join(out_dir, "t4b")
+    write_csv(f"{stem}_effects.csv", effects)
+    write_csv(f"{stem}_seeds.csv", spread)
+    write_csv(f"{stem}_runs.csv", tt.cost_rows(conds))
+    return {
+        "version": T4_TABLES_VERSION,
+        "runs": {c: [r.seed for r in rs] for c, rs in conds.items()},
+        "tables": [f"{stem}_{n}.csv" for n in ("effects", "seeds", "runs")],
+    }
+
+
 def dump(record: Mapping[str, Any], path: str) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as handle:

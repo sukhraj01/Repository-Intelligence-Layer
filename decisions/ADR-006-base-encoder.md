@@ -156,3 +156,11 @@ Evidence class: measured, exploratory, zero-shot encoders, one seed. Encoders as
 ## Addendum 2026-10-30 — cost note on the D31 figures after the RAW learning curve (evidence only; this ADR stays Proposed)
 
 The D31 cost figure (2.65 s per update, about 15 GPU-hours for 20,000 updates, `t1-train-throughput` rows) was measured for training alone. The RAW curve (E-PILOT-CURVE, measured) adds two costs the figure did not include: one evaluation of the full dev set costs 43 minutes on an 11 GB card (590k unit texts at 229 per second), and the whole curve (2 seeds, 2,000 updates, evaluation on a dev subset) cost 5.14 GPU-hours. Any plan that evaluates several checkpoints per run should budget evaluation separately. The curve also suggests the encoder settles near 100 updates under RAW (reasoned beyond that, see the ADR-002 addendum of the same date), so the 20,000-update figure is an upper bound on the training cost rather than a requirement. No encoder or shape decision follows from this.
+
+## Addendum 2026-10-31 — engineer defaults D34 and D35 (Q54, Q55) and the plateau reading
+
+**D34 (Q54).** RQ2 trains CodeRankEmbed only; Qwen3-Embedding-0.6B stays zero-shot (retrieval only). Evidence class: measured (one float32 AdamW step runs out of memory on an 11 GB card, peak 10.6 GiB) and reasoned (the fused gain over CodeRankEmbed is +1.85 L2 and +3.43 L3 with intervals that include 0; 4x CPU latency). Cheapest experiment that could flip it: a 24 GB card on a partition the account can use plus a recipe with documented equivalence (adapters), tested on RAW only; time-box one day of cluster time.
+
+**D35 (Q55).** Query-latency budget (provisional, reasoned): median dense query encode on CPU at most 500 ms and end-to-end p95 at most 1 s on CPU for one query. Qwen3 (1,533 ms median) fails it, CodeRankEmbed (411 ms) passes. Cheapest experiment that could flip it: count retrieval calls per instance in the agent pilot; added wall time per instance is calls times latency.
+
+**Evidence from E-PILOT-ARMS (measured, exploratory).** The RAW run on the 2,000-example pool reaches +10.7 (L2) and +11.9 (L3) at 100 updates and falls 3.0 and 2.4 points by 1,000 updates (16 passes); the 5,000-directory curve stayed flat to 2,000. So the plateau is a property of the pool size as well as of the base encoder.

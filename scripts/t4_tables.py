@@ -29,9 +29,21 @@ def main(argv: list[str] | None = None) -> int:
     for x in ("results_root", "step0_rows", "out_dir", "log"):
         p.add_argument(x)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--stage", type=int, choices=[1, 2], default=1)
     a = p.parse_args(argv)
     from ril.analysis import t4_tables as t4
 
+    if a.stage == 2:
+        out = t4.persistence_tables(
+            a.results_root,
+            ("t4b_raw", "t4b_filter_cre", "t4b_curr_cre"),
+            "t4b_raw",
+            a.step0_rows,
+            a.out_dir,
+            a.seed,
+        )
+        t4.dump(out, a.log)
+        return 0
     out = t4.arms_tables(a.results_root, CELLS, a.step0_rows, a.out_dir, a.seed)
     t4.dump(out, a.log)
     json.dump(out["trigger"], sys.stdout, indent=1, sort_keys=True, default=str)

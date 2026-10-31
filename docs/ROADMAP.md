@@ -38,7 +38,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Smoke pilots E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK at 63 updates, 2 seeds (exploratory, 2026-10-29; evidence for ADR-001/ADR-002, nothing decided)
 - [x] Block 1 of the supervision pilots (2026-10-29, evidence only): graph-role measurement against score-ordered same-file expansion (E-GRAPH-ROLE, ADR-003); twelve supervision-quality papers read in full (ADR-002 addendum); edited-function contamination follow-up and Pro ansible as a third dev L3 repository (E-CONTAM-EDITED, E-DEV-ANSIBLE); paired encoder numbers and Qwen3 training-memory check (E-ENCODER-NUMBERS, ADR-006); RQ3 power table (E-POWER update)
 - [x] Block 2, T3: learning curve of RAW (E-PILOT-CURVE, 2026-10-29; reduced design, 5.14 GPU-hours; Block 2 at 22.14 of 24)
-- [ ] Block 2, T4: arms pilot (not run; update count and budget are for the engineer to decide)
+- [x] Block 2, T4: arms pilot, run as E-PILOT-ARMS (2026-10-31, N = 100 and 1,000; see the last item)
 - [x] Training stack (pool reader, multi-positive InfoNCE, pluggable negative policy, the three arm hooks with the identity test, budget accounting, checkpoints, evaluation hook; `ril/training/`, E-TRAIN-STACK, 2026-10-25; every training value `provisional: ADR-001, ADR-002, ADR-006`)
 - [ ] Baseline training (multi-positive InfoNCE, repo-local hard negatives)
 - [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list
@@ -95,3 +95,6 @@ still complete and defensible.
 | 9 | RQ1 ablation table with the latency column | [ ] |
 | 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [ ] |
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
+
+> Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).
+- [x] Arms pilot E-PILOT-ARMS, stage 1 (24 runs at 100 updates) and stage 2 (6 runs at 1,000 updates), exploratory (2026-10-31; 11.4 GPU-hours; Block 2 at 33.53 of 36)
