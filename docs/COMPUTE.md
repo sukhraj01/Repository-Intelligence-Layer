@@ -177,4 +177,6 @@ command instead. Each GPU job gets a row here when it finishes.
 | 2026-10-31 | 49430 | 2 | Stage 1, seed 2 (resubmission); gnode044 | 1 x 01:52:38 | 1.88 | 28.02 |
 | 2026-10-31 | 49624 | 2 | Stage 2 (E-PILOT-ARMS), seed 0: RAW, FILTER (CodeRankEmbed teacher) and CURRICULUM at 1,000 updates of the 3,000-update schedule; gnode063 | 1 x 02:45:25 | 2.76 | 30.78 |
 | 2026-10-31 | 49625 | 2 | Stage 2, seed 1; gnode049 | 1 x 02:44:48 | 2.75 | 33.53 |
+| 2026-10-31 | 50091 | 2 | Teacher pass, CodeRankEmbed, 3,000 pool directories outside selection A (1,024 tokens, float16); gnode054 | 1 x 01:35:08 | 1.59 | 35.12 |
+| 2026-10-31 | 50092 | 2 | Teacher pass, SweRankEmbed-Small, same directories; gnode045 | 1 x 01:34:09 | 1.57 | 36.69 |
 | 2026-10-30 | n/a | 2 | Wave 5 disk note (account A, `~/ril_t4`): `df` showed 8.4 GB available and `quota -s` 3.17 GB to the soft quota before the stage, 8.3 GB after; the two pool files and the teacher tables are links to `~/ril_t2` and `~/ril_t3`, checkpoints and encoded stores are in node-local `/tmp`; results of 30 runs take 29 MB (1.25 MB per run, mostly the per-unit rows), the code copy 0.3 MB. The block cap was raised from 24 to 36 GPU-hours (33.53 used, 2.47 left). Jobs started 3 to 8 hours after submission (per-user CPU and GPU limits); one node had no usable GPU and was caught by the gate | measured |

@@ -51,3 +51,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-31,A,49430,T4a,arms pilot stage 1 seed 2 (resubmission),u22,4,1,01:52:38,1.88,COMPLETED
 2026-10-31,A,49624,T4b,arms pilot stage 2 seed 0: RAW + FILTER(coderankembed) + CURRICULUM x 1000 updates,u22,4,1,02:45:25,2.76,COMPLETED
 2026-10-31,A,49625,T4b,arms pilot stage 2 seed 1,u22,4,1,02:44:48,2.75,COMPLETED
+2026-10-31,A,50090,P0,pool ranks: BM25 teacher over 3000 new pool directories (CPU),u22,2,0,00:03:56,0.0,COMPLETED
+2026-10-31,A,50091,P0,pool ranks: CodeRankEmbed teacher over 3000 new pool directories,u22,4,1,01:35:08,1.59,COMPLETED
+2026-10-31,A,50092,P0,pool ranks: SweRankEmbed-Small teacher over 3000 new pool directories,u22,4,1,01:34:09,1.57,COMPLETED
+2026-10-31,A,50313,P0,pool ranks: 5000-directory feature table and loader check (CPU),u22,2,0,00:06:23,0.0,COMPLETED
