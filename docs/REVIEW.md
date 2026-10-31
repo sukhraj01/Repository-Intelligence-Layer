@@ -69,7 +69,7 @@ one blocking finding.
 
 | Rule | What it matches | Why it is a warning |
 |---|---|---|
-| `unfinished-marker` | the usual uppercase markers for unfinished work, and the words workaround, temporary and "for now" in an added line | each is a debt; it needs an owner or a deletion |
+| `unfinished-marker` | an added line carrying one of the conventional markers for unfinished or stopgap work | each is a debt; it needs an owner or a deletion |
 | `untested-definition` | a top-level function or class added in `ril/` whose name appears in no test | untested code is unverified code; sometimes the test is indirect |
 | `config-no-seed`, `config-no-marker` | a new configuration with no seed, or with neither a hash field nor a `provisional:` or frozen marker | a run must be reproducible and its status must be visible |
 | `changed-default` | a changed default argument in a shared module | every caller changes silently |

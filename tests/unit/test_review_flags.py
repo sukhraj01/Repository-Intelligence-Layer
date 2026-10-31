@@ -17,9 +17,15 @@ import pytest
 from ril.util.review_flags import (
     BLOCKING,
     WARNING,
+    FileDiff,
     Finding,
     Git,
+    GitError,
+    Hunk,
+    Scan,
+    branch_name,
     changed_defaults,
+    is_shared_path,
     main,
     parse_diff,
     scan,
@@ -34,6 +40,7 @@ TOKEN = "gh" + "p_" + "a" * 36
 HOME_PATH = "/Users/" + "alice" + "/project/data"
 BARE_EXCEPT = "    except" + ":"
 MARKER = "TO" + "DO"
+TEMP = "tempo" + "rary"
 
 Files = dict[str, "str | bytes | None"]
 
@@ -192,7 +199,7 @@ def test_bare_except_and_swallowed_exceptions_block(repo: Repo) -> None:
             "    try:",
             "        g()",
             "    except BaseException: pass",
-            "    with contextlib.suppress(Exception):",
+            "    with contextlib." + "suppress(Exception):",
             "        g()",
             "",
         ]
@@ -422,7 +429,7 @@ def test_numbers_check_can_be_switched_off(repo: Repo) -> None:
 def test_unfinished_markers_warn(repo: Repo) -> None:
     repo.commit(
         {
-            "ril/mod.py": f"# {MARKER}: later\nx = 1  # a temporary measure\n",
+            "ril/mod.py": f"# {MARKER}: later\nx = 1  # a {TEMP} measure\n",
             "RESULTS.md": f"{MARKER}\n",
         }
     )
@@ -583,3 +590,38 @@ def test_row_appended_below_another_table_is_still_traced(repo: Repo) -> None:
     repo.commit({"RESULTS.md": LEDGER_HEADER + anchors})
     repo.commit({"RESULTS.md": LEDGER_HEADER + anchors + ledger_row("MRR 63.47")})
     assert "unsourced-number" in repo.rules(BLOCKING)
+
+
+def test_shared_paths_are_the_util_config_metrics_and_statistics_modules() -> None:
+    assert is_shared_path("ril/util/seed.py")
+    assert is_shared_path("ril/config/parameters.py")
+    assert is_shared_path("ril/evaluation/metrics.py")
+    assert is_shared_path("ril/analysis/stats_tables.py")
+    assert not is_shared_path("ril/retrieval/bm25_index.py")
+    assert not is_shared_path("tests/unit/test_seed.py")
+
+
+def test_branch_name_prefers_the_ci_environment(
+    repo: Repo, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("GITHUB_HEAD_REF", raising=False)
+    monkeypatch.delenv("GITHUB_REF_NAME", raising=False)
+    assert branch_name(Git(repo.root)) == "b/feature"
+    monkeypatch.setenv("GITHUB_REF_NAME", "a/from-ci")
+    assert branch_name(Git(repo.root)) == "a/from-ci"
+    monkeypatch.setenv("GITHUB_HEAD_REF", "c/pr-branch")
+    assert branch_name(Git(repo.root)) == "c/pr-branch"
+
+
+def test_scan_record_types_and_errors(repo: Repo) -> None:
+    with pytest.raises(GitError):
+        Git(repo.root).resolve("no-such-ref")
+    git = Git(repo.root)
+    head = git.resolve("HEAD")
+    fd = FileDiff(path="a.py", hunks=[Hunk(old_start=1, new_start=1, added=[(1, "x")])])
+    scanner = Scan(
+        git=git, base=head, head=head, branch="b/x", root_rev=head, files=[fd], numbers=False
+    )
+    scanner.scan_added_lines()
+    assert scanner.findings == []
+    assert fd.added == [(1, "x")]

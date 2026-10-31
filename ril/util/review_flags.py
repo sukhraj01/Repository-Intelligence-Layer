@@ -20,7 +20,7 @@ import os
 import re
 import subprocess
 import sys
-from collections.abc import Iterable, Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -988,16 +988,3 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"(merge base {merge_base[:10]}, head {head_sha[:10]})\n"
     )
     return 1 if blocking else 0
-
-
-def iter_rules() -> Iterable[str]:
-    """Names of the rules, for documentation checks."""
-    return sorted(
-        {
-            "test-skip", "suppression-without-reason", "bare-except", "swallowed-exception",
-            "assert-removed", "tolerance-widened", "expected-number-changed", "frozen-config",
-            "large-file", "forbidden-file", "secret", "home-path", "verified-in-tuning-config",
-            "unsourced-number", "unfinished-marker", "untested-definition", "config-no-seed",
-            "config-no-marker", "changed-default", "deleted-file", "done-without-output",
-        }
-    )  # fmt: skip
