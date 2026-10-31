@@ -77,6 +77,7 @@ _TICK = re.compile(r"`([^`\n]+)`")
 _ADR = re.compile(r"\bADR-(\d{3})\b")
 _DEV = re.compile(r"\bDEV-(\d{3})\b")
 _Q = re.compile(r"(?<![\w-])Q(\d{1,3})\b")
+_Q_RANGE = re.compile(r"(?<![\w-])Q(\d{1,3})\s*[-\u2013]\s*Q(\d{1,3})\b")
 _ADR_RANGE = re.compile(r"ADR-(\d{3})\s*(?:\.\.\.?|…|to|-)\s*(?:ADR-)?(\d{3})")
 _PLACEHOLDER = re.compile(r"[<>*{}$|\\\[\]()=,;\"'~]|\.\.\.|…|\bNN\b|\bNNN\b|[0-9]NN")
 
@@ -187,6 +188,20 @@ def highest_question(text: str) -> int:
     return max(nums) if nums else 0
 
 
+def question_gaps(text: str) -> list[int]:
+    """Numbers missing between 1 and the highest open-question number named in the state file.
+
+    A range written ``Qa-Qb`` names every number between its ends. The check is on contiguity up to
+    the highest number found, not on a fixed upper bound, so a new question needs no edit
+    here.
+    """
+    named = {int(n) for n in _Q.findall(text)}
+    for lo, hi in _Q_RANGE.findall(text):
+        named.update(range(int(lo), int(hi) + 1))
+    top = max(named, default=0)
+    return [n for n in range(1, top + 1) if n not in named]
+
+
 def check_document(
     name: str,
     text: str,
@@ -251,6 +266,11 @@ def check_tree(root: Path, files: set[str] | None = None) -> list[Finding]:
     state = root / "PROJECT_STATE.md"
     max_q = highest_question(state.read_text(encoding="utf-8")) if state.exists() else 0
     findings: list[Finding] = []
+    if state.exists():
+        gaps = question_gaps(state.read_text(encoding="utf-8"))
+        findings.extend(
+            Finding("PROJECT_STATE.md", 1, f"Q{n}", "open-question number skipped") for n in gaps
+        )
     for name in checked_documents(tracked):
         text = (root / name).read_text(encoding="utf-8")
         findings.extend(check_document(name, text, known, adrs, devs, max_q))

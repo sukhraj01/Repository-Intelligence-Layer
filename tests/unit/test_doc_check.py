@@ -10,6 +10,7 @@ from ril.util.doc_check import (
     deviation_numbers,
     highest_question,
     looks_like_repo_path,
+    question_gaps,
     with_directories,
 )
 
@@ -80,6 +81,20 @@ def test_adr_range_checks_both_ends() -> None:
 def test_state_file_helpers() -> None:
     assert highest_question("Q1 and Q57, also Q-G9") == 57
     assert deviation_numbers("## DEV-001 — a\n## DEV-003 — b\nDEV-002 inline") == {1, 3}
+
+
+def test_question_numbers_must_be_contiguous_to_the_highest() -> None:
+    assert question_gaps("Q1 Q2 Q3") == []
+    assert question_gaps("Q1, Q2 and Q4") == [3]
+    assert question_gaps("Q1 Q2 Q5, Q-G9") == [3, 4]
+    assert question_gaps("Q1 Q2 Q4-Q6 Q7") == [3]
+    assert question_gaps("Q1 Q3-Q5 Q2") == []
+    assert question_gaps("no questions") == []
+
+
+def test_check_tree_reports_a_skipped_question_number(tmp_path: Path) -> None:
+    (tmp_path / "PROJECT_STATE.md").write_text("Q1 Q3\n")
+    assert [f.target for f in check_tree(tmp_path, {"PROJECT_STATE.md"})] == ["Q2"]
 
 
 def test_check_tree_on_a_small_tree(tmp_path: Path) -> None:
