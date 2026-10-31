@@ -199,7 +199,7 @@ def test_bare_except_and_swallowed_exceptions_block(repo: Repo) -> None:
             "    try:",
             "        g()",
             "    except BaseException: pass",
-            "    with contextlib." + "suppress(Exception):",
+            "    with contextlib." + "suppress(" + "Exception):",
             "        g()",
             "",
         ]
