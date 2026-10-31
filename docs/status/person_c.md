@@ -73,8 +73,11 @@ explicit current-VM host receipt and separate CPU acquisition/GPU encoding. Nati
 and verified Drive snapshots preserve completed work; one active VM per store is required.
 Default notebook cells run setup and synthetic checks only; real jobs remain opt-in.
 Validation:684unit/60additional CPU passes, documented optional skips;lint292/mypy124pass. Source
-archives retain the pinned original commit and explicit unavailable Git status. No actual Colab,
-Drive, dependency installation or CUDA/model validation has run; browser execution is pending.
+archives retain the pinned original commit and explicit unavailable Git status. Operator-supplied
+CPU readiness report matches the kit source/profile,26CPU/buildpins and runtime-proof checksum:
+Colab x86_64/2CPU,projectPython3.11.18,hostPython3.13,noGPU. CUDA/GPU,reset-restoration and actual
+data/model/scientific validation remain pending; compute billing is unknown. Evidence:
+`results/logs/c_colab_cpu_ready_2026-10-31.json`.
 
 ## Blockers and compute
 
@@ -102,7 +105,7 @@ no project understanding or learning completion is claimed.
 ## Next work
 
 Lead/owners integrate compatible API/paper notes and roadmap evidence; supply bounded inputs/access,
-execute the prepared Colab CPU notebook, then review the fixed scaffold/model/treatment adapter,
+obtain the pinned Colab metadata-only source plan, then review the fixed scaffold/model/treatment adapter,
 grading harness and spend cap.
 Run the authorized repeated dev pilot before mining expansion or RQ3 power/design decisions.
 All scientific conclusions and final-test settings remain open; no push performed.
