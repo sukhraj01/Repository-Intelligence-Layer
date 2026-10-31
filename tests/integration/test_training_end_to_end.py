@@ -160,3 +160,28 @@ def test_tiny_model_end_to_end_with_resume_and_evaluation(tmp_path: Path) -> Non
         "rrf:t1_e2e",
     }
     assert len(qrows) == 5 * len({(r["instance"], r["level"]) for r in qrows})
+
+
+def test_planned_stop_keeps_the_longer_schedule(tmp_path: Path) -> None:
+    """``budget.stop_after``: finished at N on the schedule of ``updates`` (no hook needed)."""
+    exs, signals = _pool(tmp_path)
+    cfg = train_config(
+        exp_id="t1_stop",
+        negatives={"name": "random_repo"},
+        arm={"name": "RAW"},
+        budget={"updates": 40, "stop_after": 4},
+        checkpoint={"every": 100, "keep": 1},
+    )
+    rec = train(
+        cfg,
+        exs,
+        results_root=str(tmp_path / "r"),
+        work_root=str(tmp_path / "w"),
+        date="2026-10-30",
+        signals=signals,  # type: ignore[arg-type]
+    )
+    assert rec["finished"] and rec["updates_this_process"] == 4 and "final_model" in rec
+    assert rec["budget"]["optimizer_updates"] == 4 and rec["budget"]["schedule_updates"] == 40
+    # a 4-update schedule would have decayed to zero by now; the 40-update one has not
+    assert rec["loss_last"]["update"] == 3 and rec["loss_last"]["lr"] > 0.5 * cfg["optimizer"]["lr"]
+    assert (Path(rec["result_dir"]) / "results.json").exists()

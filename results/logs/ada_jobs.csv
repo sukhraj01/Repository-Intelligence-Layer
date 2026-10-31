@@ -44,3 +44,17 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-29,A,46875,T3,learning curve relaunch (subset helper key error),u22,4,1,00:00:04,0.0,FAILED (script)
 2026-10-29,A,46876,T3,learning curve seed 0: RAW 2000 updates of a 3000 schedule + 4 dev-subset evaluations,u22,4,1,02:11:27,2.19,COMPLETED (11.1 GB peak)
 2026-10-29,A,46879,T3,learning curve seed 1,u22,4,1,02:09:04,2.15,COMPLETED (11.8 GB peak)
+2026-10-30,A,48674,T4a,torch tests of the training stack on CPU (planned stop, noise control, reversed order),u22,2,0,00:01:00,0.0,COMPLETED (37 passed)
+2026-10-30,A,48679,T4a,arms pilot stage 1 seed 0: 8 cells x 100 updates of a 3000 schedule + dev-subset evaluation,u22,4,1,02:00:06,2.00,COMPLETED
+2026-10-30,A,48747,T4a,arms pilot stage 1 seed 1,u22,4,1,01:59:33,1.99,COMPLETED
+2026-10-30,A,48748,T4a,arms pilot stage 1 seed 2 (CUDA gate: no CUDA on the allocated node),u22,4,1,00:00:24,0.01,FAILED (gate)
+2026-10-31,A,49430,T4a,arms pilot stage 1 seed 2 (resubmission),u22,4,1,01:52:38,1.88,COMPLETED
+2026-10-31,A,49624,T4b,arms pilot stage 2 seed 0: RAW + FILTER(coderankembed) + CURRICULUM x 1000 updates,u22,4,1,02:45:25,2.76,COMPLETED
+2026-10-31,A,49625,T4b,arms pilot stage 2 seed 1,u22,4,1,02:44:48,2.75,COMPLETED
+2026-10-31,A,50090,P0,pool ranks: BM25 teacher over 3000 new pool directories (CPU),u22,2,0,00:03:56,0.0,COMPLETED
+2026-10-31,A,50091,P0,pool ranks: CodeRankEmbed teacher over 3000 new pool directories,u22,4,1,01:35:08,1.59,COMPLETED
+2026-10-31,A,50092,P0,pool ranks: SweRankEmbed-Small teacher over 3000 new pool directories,u22,4,1,01:34:09,1.57,COMPLETED
+2026-10-31,A,50313,P0,pool ranks: 5000-directory feature table and loader check (CPU),u22,2,0,00:06:23,0.0,COMPLETED
+2026-10-31,A,50335,T5a,matched-pool arms pilot stage 1 seed 0: 7 cells at 100 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,02:38:17,2.64,COMPLETED
+2026-10-31,A,50356,T5a,matched-pool arms pilot stage 1 seed 1: 7 cells at 100 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,02:38:22,2.64,COMPLETED
+2026-10-31,A,50942,T5b,matched-pool arms pilot stage 2 seed 0: RAW / subsample / WEIGHT at 1000 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,03:10:37,3.18,COMPLETED

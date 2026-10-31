@@ -123,3 +123,92 @@ def test_agreement_signal_is_the_worst_rank_of_its_teachers() -> None:
             {"name": "FILTER", "filter": {"teacher": "t+v", "k": 10, "level": "positive"}},
             {"t": a, "u": b},
         )
+
+
+def test_noise_control_replaces_positives_inside_the_repository() -> None:
+    exs = synthetic_examples(repos=2, prs=3)
+    arm = arm_from_config({"name": "NOISE"}, {}, seed=3)
+    out, rep = arm.filter.apply(exs)
+    again, _ = arm_from_config({"name": "NOISE"}, {}, seed=3).filter.apply(exs)
+    other, _ = arm_from_config({"name": "NOISE"}, {}, seed=4).filter.apply(exs)
+    assert out == again and out != other  # keyed by the seed and the instance, not by order
+    assert out == arm.filter.apply(list(reversed(exs)))[0][::-1]
+    assert rep.examples_out == rep.examples_in
+    for a, b in zip(exs, out, strict=True):
+        assert len(b.positive_ids) == len(a.positive_ids) and b.query == a.query
+        assert not set(b.positive_ids) & set(a.positive_ids)  # none of the true positives
+        assert set(a.positive_ids) <= set(b.masked_ids)  # and they never serve as negatives
+        assert set(b.positive_ids) <= set(a.candidate_ids)  # same snapshot
+        assert not set(b.positive_ids) & set(b.candidate_ids)
+        assert len(b.candidate_ids) == len(a.candidate_ids) - len(b.positive_ids)
+    with pytest.raises(ValueError):
+        bad = {"teacher": "t", "k": 1, "level": "positive"}
+        arm_from_config({"name": "NOISE", "filter": bad}, {}, 0)
+
+
+def test_reversed_curriculum_is_hard_to_easy() -> None:
+    exs = synthetic_examples(repos=2, prs=3)
+    sig = _signal()
+    fwd = Curriculum(lambda e: float(sig.example_rank(e))).order(exs, 7, 0)
+    rev = Curriculum(lambda e: float(sig.example_rank(e)), reverse=True).order(exs, 7, 0)
+    key = [sig.example_rank(exs[i]) for i in rev]
+    assert key == sorted(key, reverse=True) and sorted(rev) == sorted(fwd)
+    arm = arm_from_config(
+        {"name": "CURRICULUM", "ordering": {"teacher": "t", "buckets": 4, "reverse": True}},
+        {"t": sig},
+    )
+    assert arm.ordering.name == "curriculum_reversed"
+
+
+def test_random_subset_is_deterministic_sized_and_order_independent() -> None:
+    exs = synthetic_examples(repos=3, prs=4)
+    arm = arm_from_config({"name": "RAW_SUBSAMPLE", "subsample": {"size": 7, "draw": 0}}, {}, 5)
+    out, rep = arm.filter.apply(exs)
+    assert len(out) == 7 and rep.examples_in == len(exs) and rep.examples_out == 7
+    assert len({e.instance_id for e in out}) == 7
+    positions = [exs.index(e) for e in out]
+    assert positions == sorted(positions)  # pool order kept
+    again, _ = arm_from_config(
+        {"name": "RAW_SUBSAMPLE", "subsample": {"size": 7, "draw": 0}}, {}, 5
+    ).filter.apply(exs)
+    assert [e.instance_id for e in again] == [e.instance_id for e in out]
+    shuffled, _ = arm.filter.apply(list(reversed(exs)))  # the draw does not depend on read order
+    assert {e.instance_id for e in shuffled} == {e.instance_id for e in out}
+
+
+def test_random_subset_draws_and_seeds_are_independent() -> None:
+    exs = synthetic_examples(repos=3, prs=4)
+
+    def ids(seed: int, draw: int) -> set[str]:
+        a = arm_from_config(
+            {"name": "RAW_SUBSAMPLE", "subsample": {"size": 6, "draw": draw}}, {}, seed
+        )
+        return {e.instance_id for e in a.filter.apply(exs)[0]}
+
+    assert ids(0, 0) != ids(0, 1) and ids(0, 0) != ids(1, 0)
+    full, _ = arm_from_config(
+        {"name": "RAW_SUBSAMPLE", "subsample": {"size": len(exs)}}, {}, 0
+    ).filter.apply(exs)
+    assert full == exs  # the limit is the identity
+
+
+def test_random_subset_refuses_bad_configurations() -> None:
+    exs = synthetic_examples(repos=1, prs=3)
+    with pytest.raises(ValueError):
+        arm_from_config({"name": "RAW_SUBSAMPLE"}, {}, 0)
+    with pytest.raises(ValueError):
+        arm_from_config({"name": "RAW", "subsample": {"size": 2}}, {}, 0)
+    with pytest.raises(ValueError):
+        arm_from_config(
+            {
+                "name": "RAW_SUBSAMPLE",
+                "subsample": {"size": 2},
+                "filter": {"teacher": "t", "level": "positive"},
+            },
+            {"t": _signal()},
+            0,
+        )
+    with pytest.raises(ValueError):
+        arm_from_config(
+            {"name": "RAW_SUBSAMPLE", "subsample": {"size": len(exs) + 1}}, {}, 0
+        ).filter.apply(exs)

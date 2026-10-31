@@ -1,0 +1,22 @@
+{
+ "runs": {
+  "t4b_curr_cre": [
+   0,
+   1
+  ],
+  "t4b_filter_cre": [
+   0,
+   1
+  ],
+  "t4b_raw": [
+   0,
+   1
+  ]
+ },
+ "tables": [
+  "results/tables/t4/t4b_effects.csv",
+  "results/tables/t4/t4b_seeds.csv",
+  "results/tables/t4/t4b_runs.csv"
+ ],
+ "version": "t4-tables/v1"
+}

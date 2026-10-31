@@ -1,0 +1,330 @@
+{
+ "largest_cells": [
+  {
+   "condition": "t5a_weight_cre",
+   "max_abs_d": 1.59
+  },
+  {
+   "condition": "t5a_filter_srs",
+   "max_abs_d": 1.1
+  }
+ ],
+ "minimum_detectable": [
+  {
+   "binding": 1.4,
+   "level": "L2",
+   "mean_interval_half_width": 0.98,
+   "pooled_seed_sd": 0.521,
+   "query_mdd": 1.4,
+   "seed_df": 7,
+   "seed_mdd": 1.19,
+   "seeds": 3
+  },
+  {
+   "binding": 1.67,
+   "level": "L3",
+   "mean_interval_half_width": 0.59,
+   "pooled_seed_sd": 0.73,
+   "query_mdd": 0.85,
+   "seed_df": 7,
+   "seed_mdd": 1.67,
+   "seeds": 3
+  }
+ ],
+ "runs": {
+  "t5a_curr_cre": [
+   0,
+   1
+  ],
+  "t5a_filter_bm25": [
+   0,
+   1
+  ],
+  "t5a_filter_cre": [
+   0,
+   1
+  ],
+  "t5a_filter_srs": [
+   0,
+   1
+  ],
+  "t5a_raw": [
+   0,
+   1
+  ],
+  "t5a_sub_d0": [
+   0,
+   1
+  ],
+  "t5a_weight_cre": [
+   0,
+   1
+  ]
+ },
+ "tables": [
+  "results/tables/t5/t5a_effects.csv",
+  "results/tables/t5/t5a_seeds.csv",
+  "results/tables/t5/t5a_unique.csv"
+ ],
+ "trigger": {
+  "cells": [
+   {
+    "L2": {
+     "d": -0.53,
+     "excludes_zero": false,
+     "hi": 1.23,
+     "interval": "repository-clustered",
+     "lo": -2.3,
+     "sign": -1
+    },
+    "L3": {
+     "d": 0.61,
+     "excludes_zero": false,
+     "hi": 1.42,
+     "interval": "query-level",
+     "lo": -0.19,
+     "sign": 1
+    },
+    "condition": "t5a_filter_bm25",
+    "literal_i": false,
+    "reference": "t5a_raw",
+    "same_sign": false,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": -0.56,
+     "excludes_zero": false,
+     "hi": 0.36,
+     "interval": "repository-clustered",
+     "lo": -1.36,
+     "sign": -1
+    },
+    "L3": {
+     "d": 0.21,
+     "excludes_zero": false,
+     "hi": 0.67,
+     "interval": "query-level",
+     "lo": -0.27,
+     "sign": 1
+    },
+    "condition": "t5a_filter_srs",
+    "literal_i": false,
+    "reference": "t5a_raw",
+    "same_sign": false,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": -0.6,
+     "excludes_zero": false,
+     "hi": 0.52,
+     "interval": "repository-clustered",
+     "lo": -1.59,
+     "sign": -1
+    },
+    "L3": {
+     "d": 0.24,
+     "excludes_zero": false,
+     "hi": 1.01,
+     "interval": "query-level",
+     "lo": -0.5,
+     "sign": 1
+    },
+    "condition": "t5a_filter_cre",
+    "literal_i": false,
+    "reference": "t5a_raw",
+    "same_sign": false,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": -0.29,
+     "excludes_zero": true,
+     "hi": -0.01,
+     "interval": "repository-clustered",
+     "lo": -0.58,
+     "sign": -1
+    },
+    "L3": {
+     "d": -0.28,
+     "excludes_zero": true,
+     "hi": -0.02,
+     "interval": "query-level",
+     "lo": -0.54,
+     "sign": -1
+    },
+    "condition": "t5a_weight_cre",
+    "literal_i": true,
+    "reference": "t5a_raw",
+    "same_sign": true,
+    "strict_i": true
+   },
+   {
+    "L2": {
+     "d": -0.23,
+     "excludes_zero": false,
+     "hi": 0.59,
+     "interval": "repository-clustered",
+     "lo": -1.27,
+     "sign": -1
+    },
+    "L3": {
+     "d": 0.87,
+     "excludes_zero": true,
+     "hi": 1.56,
+     "interval": "query-level",
+     "lo": 0.2,
+     "sign": 1
+    },
+    "condition": "t5a_curr_cre",
+    "literal_i": false,
+    "reference": "t5a_raw",
+    "same_sign": false,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": -0.2,
+     "excludes_zero": false,
+     "hi": 0.45,
+     "interval": "repository-clustered",
+     "lo": -0.89,
+     "sign": -1
+    },
+    "L3": {
+     "d": -0.7,
+     "excludes_zero": false,
+     "hi": 0.05,
+     "interval": "query-level",
+     "lo": -1.45,
+     "sign": -1
+    },
+    "condition": "t5a_filter_bm25",
+    "literal_i": false,
+    "reference": "t5a_sub",
+    "same_sign": true,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": -0.23,
+     "excludes_zero": false,
+     "hi": 0.66,
+     "interval": "repository-clustered",
+     "lo": -1.2,
+     "sign": -1
+    },
+    "L3": {
+     "d": -1.1,
+     "excludes_zero": true,
+     "hi": -0.32,
+     "interval": "query-level",
+     "lo": -1.88,
+     "sign": -1
+    },
+    "condition": "t5a_filter_srs",
+    "literal_i": true,
+    "reference": "t5a_sub",
+    "same_sign": true,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": -0.28,
+     "excludes_zero": false,
+     "hi": 0.66,
+     "interval": "repository-clustered",
+     "lo": -1.38,
+     "sign": -1
+    },
+    "L3": {
+     "d": -1.07,
+     "excludes_zero": true,
+     "hi": -0.35,
+     "interval": "query-level",
+     "lo": -1.76,
+     "sign": -1
+    },
+    "condition": "t5a_filter_cre",
+    "literal_i": true,
+    "reference": "t5a_sub",
+    "same_sign": true,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": 0.04,
+     "excludes_zero": false,
+     "hi": 1.31,
+     "interval": "repository-clustered",
+     "lo": -1.34,
+     "sign": 1
+    },
+    "L3": {
+     "d": -1.59,
+     "excludes_zero": true,
+     "hi": -0.78,
+     "interval": "query-level",
+     "lo": -2.4,
+     "sign": -1
+    },
+    "condition": "t5a_weight_cre",
+    "literal_i": false,
+    "reference": "t5a_sub",
+    "same_sign": false,
+    "strict_i": false
+   },
+   {
+    "L2": {
+     "d": 0.1,
+     "excludes_zero": false,
+     "hi": 0.67,
+     "interval": "repository-clustered",
+     "lo": -0.35,
+     "sign": 1
+    },
+    "L3": {
+     "d": -0.44,
+     "excludes_zero": false,
+     "hi": 0.21,
+     "interval": "query-level",
+     "lo": -1.02,
+     "sign": -1
+    },
+    "condition": "t5a_curr_cre",
+    "literal_i": false,
+    "reference": "t5a_sub",
+    "same_sign": false,
+    "strict_i": false
+   }
+  ],
+  "i_literal": true,
+  "i_strict": true,
+  "ii_raw_gap_above_1": true,
+  "raw_seed_gap": [
+   {
+    "level": "L2",
+    "per_seed": [
+     27.18,
+     26.34
+    ],
+    "range": 0.84
+   },
+   {
+    "level": "L3",
+    "per_seed": [
+     45.82,
+     44.38
+    ],
+    "range": 1.45
+   }
+  ],
+  "reading": "units_all_nomod"
+ },
+ "unique_flags": {
+  "below_common": [],
+  "repeats": []
+ },
+ "version": "t5-tables/v1"
+}
