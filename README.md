@@ -4,7 +4,6 @@ A repository-level code retrieval layer for LLM coding agents, **plus** a contro
 whether the retriever's *training supervision* affects whether the agent actually resolves the
 issue.
 
-Lead: Sukhraj Singh (IIIT Hyderabad) · Team of 3 · NLP semester project · 16 weeks · Python only.
 
 > **Status: design locked, implementation not started.** Nothing in this repository runs yet.
 > See `PROJECT_STATE.md` for the current truth.
