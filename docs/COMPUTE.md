@@ -14,7 +14,7 @@ Poetry group: `make setup` never installs it; `make setup-train` (Ada only) adds
 `torch` and `slow` markers; `make test-all` is Ada only. The training stack's torch tests run as
 `scripts/ada/t1_tests.sbatch`.
 
-**Ada accounts.** Jobs are ledgered per account in `results/logs/ada_jobs.csv` (accounts named A, B, C in
+**Ada accounts.** Jobs are ledgered per account in `results/logs/ada_jobs.csv` (the lead's; workstreams A and C keep `results/logs/ada_jobs_a.csv` and `ada_jobs_c.csv` so that three people never append to one file; accounts named A, B, C in
 tracked text); GPU budgets are summed across accounts; one job never spans two accounts; per-user QOS limits
 apply per account. On 2026-10-25 only account A has an alias in the local SSH configuration (it answers
 `ssh -o BatchMode=yes -o ConnectTimeout=10`); B and C have no alias yet, so whether homes are shared is

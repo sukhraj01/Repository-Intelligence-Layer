@@ -46,11 +46,15 @@ format:
 	$(RUN) ruff check --fix ril tests scripts
 	$(RUN) ruff format ril tests scripts
 
+# Latency and throughput rows go to RIL_LATENCY_DIR (default results/latency, the lead's log). Each
+# workstream sets its own directory (results/latency/a, results/latency/c) so the CSVs never conflict.
+RIL_LATENCY_DIR ?= results/latency
+
 bench:
-	$(RUN) python scripts/bench.py run
+	$(RUN) python scripts/bench.py run --log-dir $(RIL_LATENCY_DIR)
 
 bench-check:
-	$(RUN) python scripts/bench.py check
+	$(RUN) python scripts/bench.py check --log-dir $(RIL_LATENCY_DIR)
 
 # Real parse and graph_build throughput and graph expansion latency (all storage options) for the
 # checkouts under data/raw/repos (flask, requests and, if present, django); appends to results/latency.
