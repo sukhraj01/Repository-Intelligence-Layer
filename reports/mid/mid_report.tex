@@ -31,9 +31,8 @@ Chaitanya Shah\\ \small 2025202033}
 \section{Problem}
 
 Coding agents work inside a fixed context window, while a real repository is many times larger.
-Before an agent can fix an issue, something has to decide which code it reads. When that choice is
-poor, the agent spends tokens and time exploring irrelevant files, or never sees the code it has to
-change. We build the \emph{Repository Intelligence Layer} (RIL): given an issue, it returns a small,
+Something has to decide which code the agent reads; when that choice is poor, the agent wastes tokens
+exploring irrelevant files or never sees the code it has to change. We build the \emph{Repository Intelligence Layer} (RIL): given an issue, it returns a small,
 ranked set of code units, so that the agent works only on the part of the repository that matters.
 
 \paragraph{The system.} RIL indexes a Python repository at function level: every top-level function,
@@ -42,19 +41,18 @@ against the issue text: \emph{BM25}, a lexical match on words and identifiers; a
 encoder}, semantic similarity from a code embedding model; and a \emph{code graph} of calls, imports,
 inheritance and containment, which can pull in structurally related units. The signals are fused by
 reciprocal rank fusion, and the top units are packed into the agent's context under a token budget.
-Every stage is profiled for latency (p50/p95/p99).
+Every stage is profiled for latency.
 
 \paragraph{What differs from current practice.} Retrievers for code agents are usually trained with
 conventional data-cleaning choices and judged on retrieval metrics alone. We make the training data
 the experimental variable and follow its effect through retrieval quality to whether the agent
 actually fixes the bug, with the agent held fixed. Our literature audit did not identify a study
 that evaluates this chain end to end. We also extend the code graph with links to tests and
-configuration files: no published graph schema has them, although the benchmark's Level-3 task
-scores exactly that context.
+configuration files. One published system links such files but reports no ablation of their value,
+although the benchmark's Level-3 task scores exactly that context.
 
-\paragraph{Study.} Training pairs for repository retrieval are mined from pull requests, with the
-issue text as the query and the edited functions as positives. They are noisy: an edited function is
-not always the one the issue is about. We compare four ways of handling that noise, each training the
+\paragraph{Study.} Training pairs are mined from pull requests (issue text as query, edited functions as
+positives) and are noisy: an edited function is not always the one the issue is about. We compare four ways of handling that noise, each training the
 same encoder for the same number of optimizer updates (\emph{matched optimization budgets}):
 \textsc{Raw} (all pairs); \textsc{Filter} (drop pairs whose positive a separately pretrained
 retriever ranks below $K$, the K-rank signal of SweRank); \textsc{Weight} (keep all pairs,
@@ -76,16 +74,15 @@ failures from reasoning failures, so a null result can still be explained.
 are built. Every choice is tuned on development repositories (SWE-bench Pro and Live), SWE-bench
 Verified is kept for one final look, and intervals are bootstrapped over repositories.
 \emph{Finding:} our BM25 reproduces the published baseline to the printed decimal (Verified L2
-nDCG@10 \num{11.94} vs.\ 11.9; L3 Recall@100 \num{33.89} vs.\ 33.9), so our numbers are directly
-comparable to the literature.
+nDCG@10 \num{11.94} vs.\ 11.9; L3 Recall@100 \num{33.89} vs.\ 33.9).
 
 \paragraph{2. Leakage and contamination control.} A held-out list of 605 benchmark repositories
 (plus 169 from a second benchmark), with renamed repositories resolved, filters every training pool
 at repository level. \emph{Findings:} the public training pool used by recent work contains
-\num{89 benchmark repositories (14.1\% of its pull requests)}; we removed them. In a large public code
-corpus, \num{13.7\%} of the test repositories' functions appear verbatim, but only \num{8.9\%} of the
-functions the reference fixes edit. Memorisation therefore touches the surrounding code more than the
-code that has to change.
+\num{92 benchmark repositories (14.4\% of its pull requests)}; we removed them. In a large public code
+corpus, \num{13.7\%} of the test repositories' functions appear, but only \num{8.9\%} of the
+functions the reference fixes edit: memorisation touches the surrounding code more than the code
+that has to change.
 
 \paragraph{3. Parser and code graph.} Function-level units with a frozen schema, our own static call
 resolver, and typed edges that carry a status (resolved, ambiguous, external, unresolved). Rebuilds
@@ -93,12 +90,11 @@ are byte-identical (django: 35,860 units). We added an \emph{incremental update}
 the files a commit changes and the files that depend on them. \emph{Finding:} on 100 real commits of
 five repositories, the incremental graph was \num{identical to a full rebuild every time} and up to
 \num{9.6$\times$ faster} (django: 29.2\,s $\to$ 3.0\,s per commit; Fig.~\ref{fig:incremental}). The
-equality check also exposed a cache in the resolver that made some edges depend on the order in which
-files were processed; it is fixed.
+equality check also exposed an order-dependent cache in the resolver; it is fixed.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig_incremental.pdf}
+\includegraphics[width=0.86\columnwidth]{fig_incremental.pdf}
 \caption{Graph update cost per commit, incremental vs.\ full rebuild (median of 20 commits; labels
 give the median per-commit speedup). Every update equals the full rebuild.}
 \label{fig:incremental}
@@ -106,40 +102,51 @@ give the median per-commit speedup). Every update equals the full rebuild.}
 
 \paragraph{4. The graph as a retrieval signal.} \emph{Finding:} on top of a fused BM25 and dense
 first stage, expanding along typed graph edges is no better than adding other functions from the same
-file (L3 Recall@100 \num{$-2.7$} [$-6.0$, $+0.8$]). Tests do matter: test functions are \num{20.5\%}
-of the relevant units in L3 and \num{44\%} of those outside the issue's main files. The planned test
-edges target exactly these.
+file (L3 Recall@100 \num{$-2.7$} [$-6.0$, $+0.8$]). Tests do matter: they are \num{20.5\%}
+of the relevant units in L3 and \num{44\%} of those outside the issue's main files, which the
+planned test edges target.
 
 \paragraph{5. Lexical signal.} Identifier splitting (\texttt{get\_adapter} $\to$ \emph{get},
 \emph{adapter}) and per-field weights. \emph{Finding} (local pilot: 2,649 queries, each a function's
 docstring summary, over five repositories, with all docstrings removed from the index): MRR rises from
 \num{18.7 to 27.6} ($+8.9$ [$+6.9$, $+10.5$]), and to \num{31.9} with a higher weight on the function
-name. Query latency is unchanged (at most 1.3\,ms p99 over 41k units; Fig.~\ref{fig:bm25}). Docstrings
-share words with function names more than bug reports do, so this is an upper bound until the
-benchmark runs.
+name. Query latency is unchanged (at most 1.3\,ms p99; Fig.~\ref{fig:bm25}). Docstrings
+share words with function names more than bug reports do, so this is an upper bound.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{fig_bm25.pdf}
+\includegraphics[width=0.86\columnwidth]{fig_bm25.pdf}
 \caption{BM25 variants on docstring-to-function retrieval (five repositories, docstrings removed
 from the index; exploratory pilot).}
 \label{fig:bm25}
 \end{figure}
 
 \paragraph{6. Dense encoders.} CodeRankEmbed and Qwen3-Embedding-0.6B, used without fine-tuning
-over an exact index. \emph{Finding:} the larger model's gain after fusion is small and not
-significant ($+1.9$ L2, $+3.4$ L3; both intervals include 0), while its query latency is
-\num{2.5--3.7$\times$} higher (GPU 18 vs.\ 45\,ms; CPU 0.41 vs.\ 1.53\,s). It also cannot be
-fine-tuned on an 11\,GB GPU. CodeRankEmbed is therefore the base encoder.
+over an exact index. \emph{Finding:} the larger model's gain after fusion is not significant ($+1.9$ L2, $+3.4$ L3;
+intervals include 0), its query latency is \num{2.5--3.7$\times$} higher (GPU 18 vs.\ 45\,ms; CPU
+0.41 vs.\ 1.53\,s), and it cannot be fine-tuned on an 11\,GB GPU. CodeRankEmbed is therefore the RQ2
+base encoder.
 
 \paragraph{7. Training stack and pilots.} Multi-positive contrastive training with negatives from
 the same repository. The arms differ only through filter, weight and ordering hooks, and a test
-confirms that everything else is bit-identical. \emph{Findings:} \textsc{Raw} training lifts L2
-nDCG@10 by \num{$+10.5$} [$+8.3$, $+12.7$] within 100 updates, then stays flat up to 2,000. At pilot
-scale no \textsc{Filter}, \textsc{Weight} or \textsc{Curriculum} setting beats \textsc{Raw} (strict
-filters are 0.6--1.6 points below). A likely reason: the public pool already looks filtered by a
-retriever. \num{0 of 160} sampled training directories lack a positive in that retriever's top 10,
-against \num{19.3\%} on benchmark data that was never filtered. So ``raw'' is not raw.
+confirms that everything else is bit-identical. \emph{Findings} (exploratory pilots, two seeds,
+development repositories only): \textsc{Raw} training lifts L2 nDCG@10 by \num{$+10.5$} [$+8.3$,
+$+12.7$] within 100 updates, then stays flat up to 2,000. A control trained on randomly
+re-assigned positives stays at the untrained encoder ($-2$\% / $+3$\% of \textsc{Raw}'s gain at
+L2/L3), so the gain needs correct labels and is not format adaptation. On a pool
+of 5,000 pull requests, where every arm sees the same 3,232 distinct examples, no
+\textsc{Filter}, \textsc{Weight} or \textsc{Curriculum} setting beats \textsc{Raw} at both levels
+($-0.6$ to $+0.9$ points; \textsc{Filter} with the two stronger teachers is $1.1$ points below a random
+subset of the same size at L3, one draw). The minimum detectable difference at three seeds is 1.4 (L2) and
+1.7 (L3), above every observed gap, so these are bounds, not proofs of no effect. One candidate
+reason is that the public pool already looks filtered by a retriever: \num{0 of 160} sampled training
+directories lack a positive in that retriever's top 10, against \num{19.3\%} on benchmark data
+that was never filtered. So ``raw'' may not be raw.
+
+\paragraph{8. Team and review.} Three workstreams (retrieval stack and RQ1; RQ2 and integration;
+evaluation, an unfiltered training set and RQ3). Every branch merges through a reviewed pull request
+in which headline numbers are recomputed from stored run outputs (four of five matched exactly on the
+first merged branch; the fifth had no stored source and is now stored).
 
 % =============================================================================================
 \section{Risks}
@@ -147,35 +154,31 @@ against \num{19.3\%} on benchmark data that was never filtered. So ``raw'' is no
 \begin{itemize}
   \item \textbf{A pre-filtered training pool.} If the public pool was already selected by a
   retriever, \textsc{Raw} and \textsc{Filter} differ less than intended and the RQ2 effects shrink.
-  This is why we are building our own unfiltered set mined from pull requests.
-  \item \textbf{Small effects against benchmark size.} Pilot differences between arms are at most
-  1.6 points. On SWE-bench Verified (432 issues), a resolved-rate test detects differences of
-  roughly 4.5--7.75 points or more, so a real but small RQ3 effect may not be distinguishable.
+  We are therefore building our own unfiltered set.
+  \item \textbf{Small effects against benchmark size.} Pilot differences between arms are about one
+  point, below the 1.4--1.7 detectable at three seeds. On SWE-bench Verified (432 issues), a
+  resolved-rate test detects roughly 4.5--7.75 points or more, so RQ3 may have to be reported as an
+  estimate with an interval.
   \item \textbf{A static call resolver.} Dynamic calls stay unresolved, and the cache bug showed that
-  subtle errors can hide in edges. Weak edges may explain the graph's null result as much as the idea
-  does.
+  subtle errors can hide in edges; weak edges may explain the graph's null result.
   \item \textbf{Proxy measurements.} Local pilots (docstring queries, short training runs) can
   overstate or understate effects on real issue text.
-  \item \textbf{Benchmark labels.} Level-3 labels are judged by a language model, Level-2 positives
-  include import blocks, and mapping benchmark chunks to our function units involves choices; some
-  orderings flip between the two ways of reading the gold labels.
-  \item \textbf{Contamination.} Pretraining exposure inflates absolute scores. It is identical across
-  arms, so comparisons hold, but absolute numbers are not capability claims.
-  \item \textbf{Compute.} Benchmark-scale encoding and training run on a shared cluster. Queueing and
-  the memory of the available GPUs limit model choice and the number of runs.
+  \item \textbf{Labels and contamination.} Level-3 labels are model-judged, Level-2 positives include
+  import blocks, and some orderings flip between two readings of the gold labels. Pretraining exposure
+  inflates absolute scores equally across arms, so we claim comparisons only.
+  \item \textbf{Compute.} Cluster queueing and 11\,GB GPUs limit models and run counts.
 \end{itemize}
 
 % =============================================================================================
 \section{Plan}
 
 \begin{itemize}
-  \item Tune and freeze the retrieval stack (BM25, encoder, fusion, rerank); RQ1 ablation with
-  latency.
-  \item Build the unfiltered training set; train four arms $\times$ three seeds at matched budgets
-  (RQ2).
-  \item Go/no-go: at least two retrievers with a measurable retrieval difference.
-  \item Fixed-agent paired runs with the failure breakdown (RQ3); test and config edges for L3.
-  \item Analysis and final report. If RQ3 is cut, the fallback is RQ1 + RQ2 + the latency study.
+  \item Tune and freeze the retrieval stack; RQ1 ablation with latency.
+  \item Close the ten open design decisions on the evidence above; build the unfiltered training set
+  and rerun the four arms $\times$ three seeds at matched unique examples on it (RQ2).
+  \item Go/no-go: at least two retrievers with a measurable retrieval difference; then fixed-agent
+  paired runs with the failure breakdown (RQ3) and test and config edges for L3.
+  \item Final report; if RQ3 is cut, the fallback is RQ1 + RQ2 + latency.
 \end{itemize}
 
 \end{document}
