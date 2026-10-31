@@ -1676,3 +1676,22 @@ files, strict mypy122modules pass. Per-commit CPU stubs20latency/4throughput row
 `results/rq3/c4_commit_stubs_2026-10-30/`; explicit per-row ledger entries, no central CSV changes.
 These are synthetic stubs, not real model encoding/training measurements. No live adapter,
 provider selection, scientific pilot or ADR choice is claimed.
+
+
+## E-C1-LAUNCH — bounded staging preparation (2026-10-31)
+
+Registered before the offline plan and per-commit stub measurements. Verify the exact paired
+dev path manifest, transfer integrity/resume/disk guards and shell launch gates using recorded
+responses only. No source acquisition, model load or cluster job; actual dev n=0, GPU-hours0,
+actual dollars0. Offline full-config plan selects36files across9repository/level pairs with
+artificial contents/checksums, seed0. Standard harness outputs use synthetic-v1 CPU stubs and
+cannot estimate actual indexing/encoding/training or network performance. Config hash and
+executed source hash are recorded with the validation artifacts; no scientific interval applies.
+
+Completed offline checks:41focused recorded-response cases,618unit passes/3optionalTorchskips
+(59.90s),lint/format288files andstrictmypy123modules,4shell syntax/local refusal checks. Full
+36-file artificial plan is byte-bounded;source configSHA`1926df709c9c8e524bd00b57415b9ad749d9612f22967363d9860d9f057ad8de`,
+executed sourceSHA`e7ae79960c3d955556cf810173e1b2a00a88bcef5fd533417c7200a1c8b41d0f`,seed0,no scientific
+interval. Twenty latency/four throughput stub rows and the validation artifact are preserved
+under `results/rq1/c_rewrite_launch_cpu_2026-10-31/` and `results/logs/c1_rewrite_*2026-10-31.json`.
+All actual acquisition/evaluation/model access remains blocked;no cluster availability claim.

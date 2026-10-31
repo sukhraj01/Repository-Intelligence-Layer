@@ -1,0 +1,13 @@
+# Latency harness configuration (specs/latency_harness.md).
+# Changing query_set starts a new comparison series; rows are comparable only within one id.
+seed: 0
+query_set: synthetic-v1
+warmup_n: 5          # first N warm calls are discarded and recorded in the log
+repeats: 3           # passes over the query set in the warm run (later passes hit caches)
+throughput_repeats: 1
+regression:
+  # provisional: Q33 -- conservative defaults chosen to avoid false alarms on a shared laptop;
+  # the thresholds are the engineer's to set. A stage regresses when p50 or p95 exceeds the
+  # previous comparable row by more than rel_threshold AND by more than abs_floor_ms.
+  rel_threshold: 0.5
+  abs_floor_ms: 0.5

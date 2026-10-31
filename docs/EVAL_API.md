@@ -151,6 +151,74 @@ its configurable memory ceiling and writes each completed file atomically. This 
 measured full-process memory sizing before a new scale. Current account access/data absence blocks
 these actual-data commands; no completed ablation or GPU cost is claimed.
 
+## Bounded C1 cluster staging and launch
+
+`python scripts/c_stage_rewrite.py {manifest,plan,fetch,verify} --config CONFIG
+--manifest MANIFEST --max-total-bytes N --max-file-bytes N` stages only the existing six
+registered dev repository identities and their available L2/L3 levels. The full configs need
+36 files: original corpus/query/qrels plus Rewrite queries for nine repository/level pairs.
+Rewrite corpora/qrels are not fetched. Repository label, dataset directory, folder and level
+must all match the allowlist; relabeling Verified as a dev repository fails.
+
+On an Ada CPU allocation, resolve the public dataset revision once, then explicitly pin it:
+
+```sh
+# Read-only lookup; this neither clones a dataset nor changes a remote.
+git ls-remote https://huggingface.co/datasets/zhangfw123/CORE-Bench refs/heads/main
+# Set RIL_DATA_REVISION to the returned full 40-character SHA before staging.
+```
+
+`manifest --revision SHA` reads only selected directory metadata at that pinned commit. LFS
+files require the upstream SHA-256; ordinary Git files require their blob SHA-1 (including the
+Git blob header). Every downloaded file additionally records SHA-256, byte size and JSONL row
+count in `data_root/provenance.json`. A final line without a newline counts as a row. The plan
+prints required files, pinned revision, total bytes, manifest hash and an initial conservative
+free-disk bound (total plus largest file). `plan` is entirely offline with a recorded manifest;
+its file/total bounds reject missing identities, unknown paths and oversized inputs before any
+transfer. Source identity is durable before dispatch and cannot change within one data root.
+
+`fetch` requires `RIL_CLUSTER=1` and a positive Slurm job id in a CPU-only allocation. These are
+operational guards, not host attestation. No real acquisition was performed to validate Ada or
+upstream availability. Downloads stream in bounded blocks, validate HTTP status, Content-Range,
+Content-Length and encoding, resume durable `.part` files, verify upstream checksums before
+atomic rename, and refuse corrupt completed files instead of replacing them. Exclusive locking
+serializes acquisition. Changed source identities, orphan partials and symlink destinations or
+ancestors fail closed. Restart disk checks use remaining bytes plus the largest remainder;
+a fully completed recheck needs no payload space and makes no network calls. `verify` checks
+all files and completed provenance without network or writes; it is also valid in the GPU job.
+
+Four submission templates are ready but have not been submitted:
+
+| Job | Purpose / required preparation |
+|---|---|
+| `scripts/ada/c_rewrite_stage.sbatch` | CPU manifest/plan/fetch/verify; pinned `RIL_DATA_REVISION`, explicit total/file byte bounds and disk/quota review |
+| `scripts/ada/c_rewrite_bm25.sbatch` | CPU source verification then existing BM25 config; measured indexing memory and fresh output/log paths |
+| `scripts/ada/c_rewrite_dense_cache.sbatch` | GPU cache preparation only; staged model/source, supported-card constraint, safe measured batch/score ceiling, remaining GPU-hours |
+| `scripts/ada/c_rewrite_dense_eval.sbatch` | CPU source verification and cached-score evaluation; measured load memory and fresh output/log paths |
+
+First run `sinfo`, `sacctmgr show qos`, `myallocation` and disk/quota probes for account C. Set
+`RIL_ROOT`, `RIL_PYTHON`, `RIL_CONFIG`, `RIL_STAGE_MANIFEST`, `RIL_STAGE_TOTAL_BYTES`,
+`RIL_STAGE_FILE_BYTES`, and `RIL_RESOURCES_VERIFIED=1` only after review. Create `logs/` before
+submission. No account/partition/QOS/card is selected by the templates; pass the verified values:
+
+```sh
+sbatch --partition=VERIFIED --account=VERIFIED --qos=VERIFIED scripts/ada/c_rewrite_stage.sbatch
+sbatch --partition=VERIFIED --account=VERIFIED --qos=VERIFIED scripts/ada/c_rewrite_bm25.sbatch
+# After CPU-only model acquisition and source completion, GPU job also requires a supported
+# --constraint, RIL_GPU_HOURS_REMAINING, RIL_BATCH_SIZE and RIL_SCORE_BYTES.
+sbatch --partition=VERIFIED --account=VERIFIED --qos=VERIFIED --constraint=VERIFIED scripts/ada/c_rewrite_dense_cache.sbatch
+sbatch --partition=VERIFIED --account=VERIFIED --qos=VERIFIED scripts/ada/c_rewrite_dense_eval.sbatch
+```
+
+Submit downstream steps only after their predecessors pass (or use verified `afterok` job ids).
+Register actual evaluations before execution and record each job/cost in the account ledger.
+The cache job requests one GPU for30minutes (.5 GPU-hours); its remaining-budget gate assumes
+that submitted envelope, which must be checked if submission options override it. Requests for
+1/8/16GiB and runtime limits in these templates are conservative **estimates**, not measured
+capacity or permission to skip per-unit sizing. Neither source/model availability nor these
+resource estimates have been validated. No source fetch or model load runs locally; the actual
+BM25 reproduction, dense ablation and GPU cost remain blocked. Account C access is unavailable.
+
 ## Agent pilot boundary (provisional: ADR-007, ADR-008)
 
 Run the model-free C3 apparatus from the repository root:

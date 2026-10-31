@@ -1,6 +1,6 @@
 # Person C status
 
-Updated 2026-10-30 UTC. Branch `c/eval-rq3`, based on `foundation-v0` (04da656).
+Updated 2026-10-31 UTC. Branch `c/eval-rq3`, based on `foundation-v0` (04da656).
 
 ## Current state
 
@@ -58,10 +58,19 @@ Ruff/format285 files and strict mypy122 modules pass. Per-commit20latency/4throu
 under `results/rq3/c4_commit_stubs_2026-10-30`; C4 cold retrieval rows in each run directory.
 Stubs are not model encoding/training measurements. Evidence: `results/ledger_c.md`, E-C1–C4.
 
+C1 launch preparation: pinned dev-only manifest/plan/acquire/verify CLI and separate CPU staging,
+BM25, GPU-cache and CPU dense-evaluation templates are ready. Exact folder identity allowlist,
+upstream checksums, strict range validation, durable partial/source provenance and restart-aware
+disk bounds are mock-tested. Full configs select36files across9repository/level pairs. No source
+or model fetched; envelopes are estimates and need cluster disk/quota/card/memory probes.
+Validation:41focused and618full unit passes/3Torchskips;lint288files/mypy123modules;4shell
+syntax/local-refusal gates. Standard20latency/4throughput rows are synthetic CPU stubs only.
+Commands/gates: `docs/EVAL_API.md`;validation log `results/logs/c1_rewrite_launch_validation_2026-10-31.json`.
+
 ## Blockers and compute
 
 Original/Rewrite corpora, pinned dense artifacts, real dev tasks, read-only mining token and
-held-out content index absent. Account C connection/allocation/partition/card remain unverified.
+held-out content index absent. Account C access is unavailable; allocation/partition/card unverified.
 C2 real sample memory/disk/yield/ranks must be measured before expansion; hard caps remain
 200repositories/2,000PRs. No real pilot go, no full-scale mining, no model/provider selection.
 Live execution still fails closed: reviewed adapter/scaffold, pinned model, official trusted
