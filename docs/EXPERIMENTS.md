@@ -1717,3 +1717,37 @@ cases; source SHA`a7e7d636d9ab0a8b022ecc4ec2736434dbb826a421dae02f6b35338747dacf
 Twenty latency/four throughput CPU stub rows retained under `results/rq1/c_colab_setup_cpu_2026-10-31/`,
 with every row in C ledger. Only personal host label normalized to local-cpu; numeric rows unchanged.
 Actual Colab/Drive/GPU installs and scientific data/model runs remain unperformed.
+
+## E-C1-COLAB-DEV — paired original/Rewrite BM25, registered 2026-10-31
+
+Registered before the first scientific execution of `dev-v1`; completion/metrics pending.
+Retains E-C1-EVAL D13/D17, the existing dev allowlist and all stated scoring parameters.
+Source kit `dcc19574386fc66c578bb42c872e38f9e95d0201`; dataset
+`zhangfw123/CORE-Bench` revision `23da5d97a8a4495d4bd6d5616aa86d5a12a60699`;
+manifest SHA256 `1b1e022998ab6ac7906514345ab8e82f4817a621d8e4c6a866a05915ccc385ac`.
+Exact isolated-runtime config file SHA256
+`451a81484271bfe5366ce499b069a650b44733cbdbfe98730c3d07f079d53e37`;
+evaluator semantic config hash
+`ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452`.
+These include Colab-specific data/output/log paths; scientific settings are unchanged.
+
+Expected workload: nine folder/level pairs in six DEV repositories, L2 442 and L3 238 queries
+per condition according to the capacity report; actual evaluator membership must be checked.
+Original corpus, qrels, candidate lists and exact paired query IDs remain authoritative.
+BM25 k1=1.5,b=.75; prefilter10000; seed0; warmup1,repeats3. Report query-weighted
+nDCG@10 and Recall@100 separately by level/wording and Rewrite minus original with95%
+repository-clustered percentile intervals,2000draws. No Verified queries, tuning or sweep.
+Both wordings share each folder index and one CPU environment. Standard index-throughput
+and warm tokenization/scoring latency rows are emitted; they do not measure cold query latency.
+
+Preflight: operator supplied36-file checksum verification and all9full-folder loader/index
+capacity results,125.72s,peak2788168KiB versus12141277184bytes available. Evidence:
+`results/logs/c_colab_capacity_2026-10-31.json`; capacity is not scientific performance.
+Full execution uses an8GiB effective available-RAM preflight and6GiB virtual-address cap
+respecting tighter inherited limits. Scoring/ranking/retained rows/bootstrap are additional;
+record allocation failures and actual execution resources rather than assuming this peak is exact.
+
+Native outputs: `runs/dev-v1/bm25/` and `runs/dev-v1/bm25-log.json` beneath the Colab work
+root, followed by the existing Drive checkpoint. Existing output/log paths refuse overwrite.
+Receive actual metrics/config/source/runtime evidence before appending scientific result rows.
+No dense/model/GPU/mining/live-agent execution is included; compute billing remains unknown.

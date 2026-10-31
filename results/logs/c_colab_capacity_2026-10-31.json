@@ -1,0 +1,212 @@
+{
+  "date_received": "2026-10-31",
+  "evidence_class": "operator_supplied_runtime_report",
+  "independent_remote_execution": false,
+  "report": {
+    "purpose": "Full-folder CPU capacity check; no scientific metrics",
+    "source_commit": "dcc19574386fc66c578bb42c872e38f9e95d0201",
+    "dataset_revision": "23da5d97a8a4495d4bd6d5616aa86d5a12a60699",
+    "manifest_sha256": "1b1e022998ab6ac7906514345ab8e82f4817a621d8e4c6a866a05915ccc385ac",
+    "verified_files": 36,
+    "config_file_sha256": "451a81484271bfe5366ce499b069a650b44733cbdbfe98730c3d07f079d53e37",
+    "effective_available_bytes_before_check": 12141277184,
+    "baseline_current_rss_bytes": 40390656,
+    "baseline_process_peak_rss_KiB": 138480,
+    "sample_interval_observed_peak_rss_bytes": 2325975040,
+    "final_process_peak_rss_KiB": 2788168,
+    "virtual_address_space_cap_bytes": 4462088192,
+    "rss_sampling_interval_seconds": 0.005,
+    "wall_seconds_capacity_check": 125.7204493320005,
+    "folders": [
+      {
+        "identity": [
+          "L2",
+          "SWE-bench_Pro",
+          "instance_internetarchive__openlibrary"
+        ],
+        "corpus_docs": 17934,
+        "original_queries": 81,
+        "rewrite_queries": 81,
+        "loaded_current_rss_bytes": 215916544,
+        "indexed_current_rss_bytes": 275300352,
+        "process_peak_rss_KiB": 394924,
+        "labels_sha256": "c752b48b399c15053ba75c9124cfdf2ca57bad82df5e15db6cac691f6c59e4a4",
+        "folder_hashes": {
+          "corpus_sha256": "f9bd050bee6f9cd73e074f2a763112e8aa13d03862698050491453f13137c0b5",
+          "original_sha256": "5f8ecffa133f7bb4c49a18f364a605b199ec4f16bf5049fbb24cc190361d2969",
+          "rewrite_sha256": "9735792b1c5db57990e12b1a19e8aece993cb609c9a658fe913dece464eedd73"
+        }
+      },
+      {
+        "identity": [
+          "L3",
+          "SWE-bench_Pro",
+          "instance_internetarchive__openlibrary"
+        ],
+        "corpus_docs": 17934,
+        "original_queries": 81,
+        "rewrite_queries": 81,
+        "loaded_current_rss_bytes": 285372416,
+        "indexed_current_rss_bytes": 330240000,
+        "process_peak_rss_KiB": 462604,
+        "labels_sha256": "a54fd009a1c6709736418c1ae3e44886663b324bf0215042e3602c02c796d6e1",
+        "folder_hashes": {
+          "corpus_sha256": "2d0e39c2a79316fe092a83a64d419d8ad9aa2a38507102d14ae7d9eb0ed6cf21",
+          "original_sha256": "5f8ecffa133f7bb4c49a18f364a605b199ec4f16bf5049fbb24cc190361d2969",
+          "rewrite_sha256": "da702fcccb4beda98f0423754aa0775363d6988b46178f7fdba7fc917202e8f2"
+        }
+      },
+      {
+        "identity": [
+          "L2",
+          "SWE-bench_Pro",
+          "instance_qutebrowser__qutebrowser"
+        ],
+        "corpus_docs": 20001,
+        "original_queries": 75,
+        "rewrite_queries": 75,
+        "loaded_current_rss_bytes": 345362432,
+        "indexed_current_rss_bytes": 363651072,
+        "process_peak_rss_KiB": 515836,
+        "labels_sha256": "becfb37d8f005846c3024c20db7bcf10f9766c854b60503f67ed9ce47176c4c1",
+        "folder_hashes": {
+          "corpus_sha256": "46669d1137db3481b67515303f8ab94055cb08c87230ea18308a1391fe39d1d7",
+          "original_sha256": "cdad14c0a1ae35cce2b803a86b342d0c2ec10cd2ffcad09896b1bf13f383bdd5",
+          "rewrite_sha256": "99e608403535b86783f2f661a28f91e98877a9acd107a6b56caad0f16e51cd4b"
+        }
+      },
+      {
+        "identity": [
+          "L3",
+          "SWE-bench_Pro",
+          "instance_qutebrowser__qutebrowser"
+        ],
+        "corpus_docs": 19955,
+        "original_queries": 74,
+        "rewrite_queries": 74,
+        "loaded_current_rss_bytes": 366161920,
+        "indexed_current_rss_bytes": 303017984,
+        "process_peak_rss_KiB": 535632,
+        "labels_sha256": "c44f76653eb8033f66b419637cbef356b0baedc71467372b0cb58a2469437179",
+        "folder_hashes": {
+          "corpus_sha256": "b512888dead1f7d3b01d417afe6046c02324d27eaf88d14ee6fca422d9202eaf",
+          "original_sha256": "0602f6e063267faa1f7307aaab2103e07189a4a468e136f65067fdd609ab72a3",
+          "rewrite_sha256": "7b519fa9319c82b1e06f579f2443c5753c9157e05d3eda6b1e20dd70297e8637"
+        }
+      },
+      {
+        "identity": [
+          "L2",
+          "SWE-bench-Live",
+          "conan"
+        ],
+        "corpus_docs": 13445,
+        "original_queries": 90,
+        "rewrite_queries": 90,
+        "loaded_current_rss_bytes": 357388288,
+        "indexed_current_rss_bytes": 357400576,
+        "process_peak_rss_KiB": 535632,
+        "labels_sha256": "264f4c01d54a0fcdd2def3503b041547d9b1cbec309d04053be978a74a0a1e84",
+        "folder_hashes": {
+          "corpus_sha256": "e4e24b7b800beeb8f206a72bad6c1f79192f0e3ee9654db8d729164f8382f24a",
+          "original_sha256": "a4d39231d29ddecbf65336c754fc6dd64a301a28f93524f7a0a5bc8c9272828c",
+          "rewrite_sha256": "f1aedc18373c8fef6204e50e8bfc428a7c130df867418dd4ecbade459828e1c9"
+        }
+      },
+      {
+        "identity": [
+          "L2",
+          "SWE-bench-Live",
+          "deepset"
+        ],
+        "corpus_docs": 13486,
+        "original_queries": 72,
+        "rewrite_queries": 72,
+        "loaded_current_rss_bytes": 313634816,
+        "indexed_current_rss_bytes": 313643008,
+        "process_peak_rss_KiB": 535632,
+        "labels_sha256": "409bd94f8dfcfea3cc1b3045e68b1d50fb386f6cdf7ee5f79c540712c61e27d1",
+        "folder_hashes": {
+          "corpus_sha256": "f5df31ec00ce7837eacdac491396ca5ad8a4f08c99c047f30548b3e6fae5968e",
+          "original_sha256": "9ccbb80be3de4560c03594b4f9410cc2a5e7717678cd949baee1aec60a09659a",
+          "rewrite_sha256": "5628731b17cc4599f254bcc499aefaf81f480660e5c7d249b94fdbbf7681c1f4"
+        }
+      },
+      {
+        "identity": [
+          "L2",
+          "SWE-bench-Live",
+          "streamlink__streamlink"
+        ],
+        "corpus_docs": 6345,
+        "original_queries": 37,
+        "rewrite_queries": 37,
+        "loaded_current_rss_bytes": 282824704,
+        "indexed_current_rss_bytes": 282824704,
+        "process_peak_rss_KiB": 535632,
+        "labels_sha256": "8bb18c08c3949a76b82a5f9abb2e16a36e8c81e97a1149ac469f3460cfd3cc43",
+        "folder_hashes": {
+          "corpus_sha256": "504cd7c66301bb7bea2439e337fd5d331165b94224e233f4dcaabce5a8b13276",
+          "original_sha256": "f385a848316a5fd9eae57576018922341ffaa34e272550504710d6fd57e85237",
+          "rewrite_sha256": "28082d4da4060f924c2b23acf638e55f3584a7d3f2c315d42fe48f32b8e85723"
+        }
+      },
+      {
+        "identity": [
+          "L2",
+          "SWE-bench_Pro",
+          "instance_ansible__ansible"
+        ],
+        "corpus_docs": 131385,
+        "original_queries": 87,
+        "rewrite_queries": 87,
+        "loaded_current_rss_bytes": 940146688,
+        "indexed_current_rss_bytes": 1094180864,
+        "process_peak_rss_KiB": 2470404,
+        "labels_sha256": "74eca3beb5c9e31f1c19ed8af81b75e411120504928692978a349d4264445a24",
+        "folder_hashes": {
+          "corpus_sha256": "c445a4f70b9aa908ba5ed543794f2975a6b6663cdb18400cc4128ebcc0a072a3",
+          "original_sha256": "8a772eadebecf26c75e4fea9e84c1f18a637fe4b33fb096d899790fbf2b6e5df",
+          "rewrite_sha256": "8a2480a716e87f77ba66605c226700e4434ce4aeaf508764d613dd24e787b58b"
+        }
+      },
+      {
+        "identity": [
+          "L3",
+          "SWE-bench_Pro",
+          "instance_ansible__ansible"
+        ],
+        "corpus_docs": 130342,
+        "original_queries": 83,
+        "rewrite_queries": 83,
+        "loaded_current_rss_bytes": 1280421888,
+        "indexed_current_rss_bytes": 1245560832,
+        "process_peak_rss_KiB": 2788168,
+        "labels_sha256": "87b3efb0c9a2dabfb6f0a249dd0a94ded11c46cfa0ab81f2d4c9d8d75408cbcd",
+        "folder_hashes": {
+          "corpus_sha256": "f2e66a1c8c8f736d73603520d67cd3491272f43d3d5a6282d5d837c0874977c9",
+          "original_sha256": "f8c8bd309b146b02cd0400759370722535968082a47867bf02a7a4f855d851a7",
+          "rewrite_sha256": "a325d8955bdc5533b9f050b85ad1d4975c37d43db9009942dce40c99d245af85"
+        }
+      }
+    ],
+    "limits": "all nine registered DEV pairs; extra virtual address space capped at 4 GiB",
+    "excluded_memory": "full query scoring/ranking and accumulation of scientific result rows/bootstrap",
+    "scientific_metrics_computed": false,
+    "full_evaluation_memory_verified": false
+  },
+  "local_consistency_checks": {
+    "source_matches_uploaded_kit": true,
+    "revision_and_manifest_match_reviewed_plan": true,
+    "all_nine_folder_identities_and_counts_match_config_and_prior_report": true,
+    "adapted_config_file_sha256_matches": true,
+    "evaluator_config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452"
+  },
+  "interpretation": {
+    "use_larger_peak_bytes": 2855084032,
+    "capacity_not_scientific_metrics": true,
+    "scientific_run_executed": false,
+    "next_run": "dev-v1 original/Rewrite BM25 with unchanged configuration; 6 GiB virtual-address cap and 8 GiB effective available-RAM preflight",
+    "remaining_capacity_costs": "complete scoring/ranking, retained metric rows and clustered bootstrap; allow headroom rather than treating capacity peak as a full-run bound"
+  }
+}
