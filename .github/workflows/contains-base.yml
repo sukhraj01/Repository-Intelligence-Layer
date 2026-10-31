@@ -1,0 +1,35 @@
+name: contains-base
+
+# A pull request must contain the current tip of the branch it targets, so that
+# every change is reviewed and tested on top of what is already merged.
+# To fix a failure: git fetch origin && git merge origin/<base>, then push.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  contains-base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the head of the pull request with full history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Head contains the base tip
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --no-tags origin "$BASE_REF"
+          if git merge-base --is-ancestor "origin/$BASE_REF" HEAD; then
+            echo "head contains origin/$BASE_REF"
+          else
+            missing=$(git rev-list --count "HEAD..origin/$BASE_REF")
+            echo "::error::head lacks $missing commit(s) of origin/$BASE_REF; merge it into the branch (no rebase) and push"
+            exit 1
+          fi
