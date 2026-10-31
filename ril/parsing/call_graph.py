@@ -293,6 +293,10 @@ class GraphBuilder:
         self._expr_cache: dict[str, ast.expr | None] = {}
         self._text_cache: dict[tuple[str, str], Val] = {}
         self._text_in_progress: set[tuple[str, str]] = set()
+        # Results computed while a cycle was cut short depend on where the lookup started, so
+        # they are not cached: every file's edges are then a function of the summaries alone,
+        # whatever order files are resolved in (needed by incremental updates).
+        self._cycle_cuts = 0
         self.edges: list[Edge] = []
 
     # ------------------------------------------------------------------ modules and imports
@@ -358,13 +362,16 @@ class GraphBuilder:
         if hit is not None:
             return hit
         if key in self._member_in_progress:
+            self._cycle_cuts += 1
             return _NOT_FOUND
+        cuts = self._cycle_cuts
         self._member_in_progress.add(key)
         try:
             val = self._member_uncached(path, name)
         finally:
             self._member_in_progress.discard(key)
-        self._member_cache[key] = val
+        if self._cycle_cuts == cuts:
+            self._member_cache[key] = val
         return val
 
     def _member_uncached(self, path: str, name: str) -> Val:
@@ -411,7 +418,9 @@ class GraphBuilder:
         if key in self._text_cache:
             return self._text_cache[key]
         if key in self._text_in_progress:
+            self._cycle_cuts += 1
             return UNKNOWN
+        cuts = self._cycle_cuts
         self._text_in_progress.add(key)
         try:
             ctx = Ctx(fs, fs.module_unit, "", None)
@@ -426,7 +435,8 @@ class GraphBuilder:
                 val = self.eval_expr(node, ctx) if node is not None else UNKNOWN
         finally:
             self._text_in_progress.discard(key)
-        self._text_cache[key] = val
+        if self._cycle_cuts == cuts:
+            self._text_cache[key] = val
         return val
 
     def annotation_val(self, text: str, ctx: Ctx) -> Val:
@@ -601,7 +611,9 @@ class GraphBuilder:
         if hit is not None:
             return hit
         if cid in self._mro_in_progress:
+            self._cycle_cuts += 1
             return MroInfo((cid,), False, True)
+        cuts = self._cycle_cuts
         self._mro_in_progress.add(cid)
         try:
             cs = self.class_info[cid]
@@ -638,7 +650,8 @@ class GraphBuilder:
             info = MroInfo(tuple(order), external, unresolved)
         finally:
             self._mro_in_progress.discard(cid)
-        self._mro_cache[cid] = info
+        if self._cycle_cuts == cuts:
+            self._mro_cache[cid] = info
         return info
 
     @staticmethod
@@ -827,6 +840,10 @@ class GraphBuilder:
         full = os.path.join(self.parsed.root, fs.path)
         _, raw = read_source(full)
         tree = ast.parse(raw, filename=fs.path)
+        self.process_tree(fs, tree)
+
+    def process_tree(self, fs: FileSummary, tree: ast.Module) -> None:
+        """Import edges and call-site edges of one file's syntax tree."""
         node_unit = self._unit_ids_for(fs.path, tree)
         self._import_edges(tree, fs)
         module_ctx = Ctx(fs, fs.module_unit, "", None)
@@ -1201,7 +1218,16 @@ class GraphBuilder:
         nodes, edges = self.structure_edges()
         for path in sorted(self.parsed.files):
             self.process_file(self.parsed.files[path])
-        all_edges = edges + self.edges
+        return self.assemble(nodes, edges + self.edges, snapshot_commit, extra_meta)
+
+    def assemble(
+        self,
+        nodes: dict[str, tuple[str, str]],
+        all_edges: list[Edge],
+        snapshot_commit: str = "",
+        extra_meta: dict[str, object] | None = None,
+    ) -> RepoGraph:
+        """The graph and its metadata from nodes and every edge (shared with incremental builds)."""
         meta: dict[str, object] = {
             "repo_id": self.parsed.repo_id,
             "snapshot_commit": snapshot_commit,
