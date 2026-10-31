@@ -1,8 +1,12 @@
 # Roadmap
 
 Live plan. Tick boxes as work lands. Source: `10_timeline_and_fallback.md` and
-`12_open_decisions.md` (master doc rev 16). Owners are Person A / B / C — mapping is Open question Q1
-in `PROJECT_STATE.md`.
+`12_open_decisions.md` (master doc rev 16).
+
+**Owners.** Person A = Neill Rawani (retrieval stack, RQ1; status page `status/person_a.md`).
+Person B = Sukhraj Singh (decisions, RQ2, integration). Person C = Chaitanya Shah (evaluation, raw
+PR set, RQ3). An item is ticked only once its work is merged into `main` and has a commit and
+evidence (a `RESULTS.md` row, a ledger row or a registry entry in `EXPERIMENTS.md`).
 
 Dependency structure matters more than dates: **RQ2 cannot start until the training pipeline works;
 RQ3 cannot start until RQ2 has produced at least two distinguishable checkpoints.**
@@ -30,7 +34,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 - [x] Repository parser + CodeUnit emission (`ril/parsing/repository_parser.py`; first build of 2026-10-17)
 - [x] Call / import / inherit graph with edge-recovery coverage (`ril/parsing/call_graph.py`; the coverage is reported under several definitions, ADR-012)
-- [ ] BM25 index (identifier splitting, field weights, tune b) — reference-tokenisation index built (`ril/retrieval/bm25_index.py`); identifier splitting, fields and b tuning open
+- [ ] BM25 index (identifier splitting, field weights, tune b) — reference form built (`ril/retrieval/bm25_index.py`, `RESULTS.md` rows `e1-*`); identifier splitting and field weights added as options and piloted locally (A1-PILOT, `results/ledger_a.md`, merged 2026-10-31); the development-set runs and the b tuning are open
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
@@ -38,11 +42,11 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Smoke pilots E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK at 63 updates, 2 seeds (exploratory, 2026-10-29; evidence for ADR-001/ADR-002, nothing decided)
 - [x] Block 1 of the supervision pilots (2026-10-29, evidence only): graph-role measurement against score-ordered same-file expansion (E-GRAPH-ROLE, ADR-003); twelve supervision-quality papers read in full (ADR-002 addendum); edited-function contamination follow-up and Pro ansible as a third dev L3 repository (E-CONTAM-EDITED, E-DEV-ANSIBLE); paired encoder numbers and Qwen3 training-memory check (E-ENCODER-NUMBERS, ADR-006); RQ3 power table (E-POWER update)
 - [x] Block 2, T3: learning curve of RAW (E-PILOT-CURVE, 2026-10-29; reduced design, 5.14 GPU-hours; Block 2 at 22.14 of 24)
-- [x] Block 2, T4: arms pilot, run as E-PILOT-ARMS (2026-10-31, N = 100 and 1,000; see the last item)
 - [x] Block 2, Wave 6: teacher ranks for the 5,000-directory pool (3.16 GPU-hours) and the matched-pool arms pilot E-PILOT-ARMS2 (2026-10-31, exploratory; stage 1 two seeds, stage 2 one seed on three cells; Block 2 at 45.15 of 46)
+- [x] Arms pilot E-PILOT-ARMS, stage 1 (24 runs at 100 updates) and stage 2 (6 runs at 1,000 updates), exploratory (2026-10-31; 11.4 GPU-hours; Block 2 at 33.53 of 36)
 - [x] Training stack (pool reader, multi-positive InfoNCE, pluggable negative policy, the three arm hooks with the identity test, budget accounting, checkpoints, evaluation hook; `ril/training/`, E-TRAIN-STACK, 2026-10-25; every training value `provisional: ADR-001, ADR-002, ADR-006`)
-- [ ] Baseline training (multi-positive InfoNCE, repo-local hard negatives)
-- [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list
+- [x] Baseline training (multi-positive InfoNCE, repo-local hard negatives): implemented and run at pilot scale as the RAW arm (E-TRAIN-STACK, E-PILOT-CURVE; provisional, not the frozen run)
+- [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list — the SweLoc part is read, filtered and cached (`ril/training/pool_reader.py`, E-POOL-RANKS); the own PR-mined set (Person C) is not merged
 
 ## Weeks 3–6 — Person C: evaluation harness
 
@@ -67,7 +71,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 7–10 — Person A: graph extension
 
-- [ ] Test and configuration node types, `tests` / `configures` edges (census of 2026-10-23 over 540 Python L3 instances: test units are 20.5% of L3 positives and 44% of those outside the L2 files; non-Python positives 1.7%)
+- [x] Test and configuration node types, `tests` / `configures` edges (built and off by default; precision sampled, `ril/parsing/exploratory_edges.py`, `RESULTS.md` rows `p-*`; census of 2026-10-23 over 540 Python L3 instances: test units are 20.5% of L3 positives and 44% of those outside the L2 files; non-Python positives 1.7%)
 - [ ] CORE-Bench L3 evaluation
 
 ## Week 12 — go / no-go
@@ -98,5 +102,3 @@ still complete and defensible.
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
 
 > Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).
-- [x] Arms pilot E-PILOT-ARMS, stage 1 (24 runs at 100 updates) and stage 2 (6 runs at 1,000 updates), exploratory (2026-10-31; 11.4 GPU-hours; Block 2 at 33.53 of 36)
-- [x] Matched-pool arms pilot E-PILOT-ARMS2 (2026-10-31; 2 seeds at 100 updates, 1 seed at 1,000; no cell above RAW or the size-matched subsample beyond seed noise)

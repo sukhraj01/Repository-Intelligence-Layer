@@ -47,7 +47,7 @@ _Pending._
 ### 2026-10-17 — public-page check (not a decision)
 - The master doc describes SweLoc as released. The public pages checked do not show a dataset release:
   the SweRank README documents how SweLoc is *collected* (`src/collect/collect_data.sh`,
-  `negative_mining.sh`, output `repo_contrastive_mined_filtered.jsonl`) and links only models and
+  the published negative-mining script, output `repo_contrastive_mined_filtered.jsonl`) and links only models and
   the SWE-bench-Lite / Loc-Bench evaluation data; the paper's Hugging Face page says "Code, Data and
   Models: Coming soon!" and lists no dataset; the follow-up paper (arXiv:2512.20482) says its
   multilingual extension (4,060 repositories, 56,279 PRs, 155,663 instances) "will be released" at the

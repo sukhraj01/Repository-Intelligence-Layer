@@ -5,7 +5,7 @@
 - **Decide by:** end of week 2 (all ten decisions)
 - **Decided by:** _pending — team_
 - **Master doc:** open decision #9 (`docs/12_open_decisions.md`)
-- **Affects:** Latency Pareto, RQ1, `ril/retrieval/ranking.py`
+- **Affects:** Latency Pareto, RQ1, the rerank step of the retrieval stack (not written yet)
 
 ## Context
 Hypothesis from the master doc: reranking 100 candidates costs ~500–1000 ms while every other stage is a few ms, so ranking dominates sourcing by ~two orders of magnitude. Optimisation axes: rerank 20 instead of 100, distil the cross-encoder, or drop it and measure the nDCG cost.

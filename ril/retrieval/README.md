@@ -1,6 +1,6 @@
 # ril/retrieval/
 
-**Built:** `bm25_index.py` (reference tokenisation and Lucene-variant scoring; k1/b `provisional: ADR-004`). **Planned files:** `dense_encoder.py`, `hybrid_retriever.py`, `ranking.py`.
+**Built:** `bm25_index.py` (reference tokenisation and Lucene-variant scoring, k1/b `provisional: ADR-004`; identifier splitting and field weights as options), `dense_encoder.py` (registered encoders and a flat exact index, `provisional: ADR-006`), `graph_expansion.py` and `recency.py` (measurement code; fusion forms in `graph_expansion.py`). **Not written yet:** the fusion stage, rerank and `assemble()`.
 Design: `docs/09_architecture.md` "Offline indexing" / "Online retrieval".
 
 - BM25: identifier splitting (camelCase, snake_case); name / signature / docstring / body as

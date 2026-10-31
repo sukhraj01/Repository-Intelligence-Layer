@@ -6,3 +6,6 @@ parses arguments (always `--seed`), calls into `ril/`, and writes outputs. `scri
 
 - `scripts/ada/` — Slurm job scripts and helpers for the Ada cluster (see its README).
 - No CLI entry point / console script is built until ADR-010 (usable by others?) is decided.
+- `scripts/check_docs.py` — lists dangling links, paths and ADR / DEV / Q numbers in the tracked
+  documents (`ril/util/doc_check.py`); run `python -I scripts/check_docs.py` after editing any
+  document. It is also a unit test (`tests/unit/test_doc_check.py`).

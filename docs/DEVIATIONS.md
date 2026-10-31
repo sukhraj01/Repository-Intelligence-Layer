@@ -74,7 +74,7 @@ engineer sign-off — it is a design decision.
 - Master says: CodeR is arXiv 2508.11442; Sun et al. 2022 give "+19.2% MRR" from filtering noisy queries and "over a third noisy"; "false negatives are pervasive" is a measured finding; "expect 70-85% edge recovery".
 - We find: 2508.11442 is CoDiEmb, a different paper; CodeR is 2505.12697. The +19.2% MRR is for DeepCS on Java only, relative, on three small evaluation sets, with half the data and half the training time, and the noisy share is 33.1%. The false-negative claim is cited from earlier work, not measured. PyCG reports 69.9% on five small packages against hand-built truth; Jarvis 0.76 and 0.82 against its own truth; DyPyBench 49% of executed edges; none supports 70-85% for arbitrary repositories. Agent Retrieval Bench supports complementarity of two systems, not a signal ablation, and disclaims any resolved-rate claim.
 - Why: the notes of the third reading session in `knowledge/papers/` (`coder-2505.12697.md`, `codiemb-2508.11442.md`, `sun-2202.06649.md`, `pycg-2103.00587.md`, `jarvis-2305.05949.md`, `dypybench-2403.00539.md`, `agent-retrieval-bench-2607.24882.md`).
-- Impact: `docs/03`, `docs/05`, `docs/11` wording; the edge-recovery expectation must be reported as a measurement, never as an expected range. Edge-recovery definitions are the subject of ADR-012.
+- Impact: wording in `docs/03_literature_map.md`, `docs/05_structural_signals.md` and `docs/11_references.md`; the edge-recovery expectation must be reported as a measurement, never as an expected range. Edge-recovery definitions are the subject of ADR-012.
 - Reversible: yes.
 - Related: ADR-002, ADR-012 (stub, planned)
 
