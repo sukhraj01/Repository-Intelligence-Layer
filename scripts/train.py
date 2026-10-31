@@ -15,7 +15,9 @@ Subcommands (logic in ``ril/``):
   teacher CACHE RANKS_OUT MINED_OUT --teacher bm25|<encoder> --keep N [--cut C] [--device D]
          (one pass: K-ranks of every positive and mined candidates)
   features RANKS [RANKS ...] --out CSV --teachers T [T ...] --held-out H --rename-cache R
-  run-batch CONFIG [CONFIG ...] --cache C [--feature-table T] [--mined M] --results-root R
+  score  CACHE OUT --teacher bm25|<encoder> [--cut C] [--device D]  (per-function scores)
+  run-batch CONFIG [CONFIG ...] --cache C [--feature-table T] [--mined M]
+         [--noise-scores T=PATH ...] --results-root R
          --work-root W --date D --device D <eval options> [--extra-eval O.yaml ...] [--keep-models]
          [--drop-eval-stores]
          (train then evaluate each configuration; the cache is read once; finished runs skipped)
@@ -95,7 +97,8 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
     from ril.training import train_jobs as tj
     from ril.training.training import RunPaths, load_train_config
 
-    inputs = tj.load_inputs(a.cache, a.feature_table, a.mined)
+    noise_scores = dict(x.split("=", 1) for x in a.noise_scores)
+    inputs = tj.load_inputs(a.cache, a.feature_table, a.mined, noise_scores)
     done: list[str] = []
     skipped: list[str] = []
     for config in a.configs:
@@ -119,6 +122,7 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
             feature_table=a.feature_table,
             mined_path=a.mined,
             inputs=inputs,
+            noise_scores=noise_scores,
         )
         sys.stdout.write(_json.dumps({"trained": config, "result_dir": rec["result_dir"]}) + "\n")
         sys.stdout.flush()
@@ -251,6 +255,7 @@ def main(argv: list[str] | None = None) -> int:
     rb.add_argument("--cache", required=True)
     rb.add_argument("--feature-table")
     rb.add_argument("--mined")
+    rb.add_argument("--noise-scores", nargs="*", default=[], help="teacher=score store path pairs")
     rb.add_argument("--results-root", required=True)
     rb.add_argument("--work-root", required=True)
     rb.add_argument("--date", required=True)
@@ -286,6 +291,13 @@ def main(argv: list[str] | None = None) -> int:
     th.add_argument("--cut", type=int, default=1024)
     th.add_argument("--device", default="cpu")
     th.add_argument("--batch-size", type=int, default=64)
+    sc = sub.add_parser("score")
+    sc.add_argument("cache")
+    sc.add_argument("out")
+    sc.add_argument("--teacher", required=True)
+    sc.add_argument("--cut", type=int, default=1024)
+    sc.add_argument("--device", default="cpu")
+    sc.add_argument("--batch-size", type=int, default=64)
     ft = sub.add_parser("features")
     ft.add_argument("ranks", nargs="+")
     ft.add_argument("--out", required=True)
@@ -365,6 +377,10 @@ def main(argv: list[str] | None = None) -> int:
             cut=a.cut,
             device=a.device,
             batch_size=a.batch_size,
+        )
+    elif a.cmd == "score":
+        out = tj.score_job(
+            a.cache, a.out, teacher=a.teacher, cut=a.cut, device=a.device, batch_size=a.batch_size
         )
     elif a.cmd == "features":
         out = tj.feature_table_job(

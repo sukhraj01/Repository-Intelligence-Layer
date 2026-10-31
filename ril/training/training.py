@@ -49,7 +49,7 @@ from ril.training.data_loader import Batch, BatchPlanner, BatchSpec
 from ril.training.encoders import TrainEncoder, build_encoder
 from ril.training.negatives import Mined, make_policy, needs_mining
 from ril.training.pool_reader import PoolExample
-from ril.training.supervision import Arm, QualitySignal, arm_from_config
+from ril.training.supervision import Arm, NoiseKnowledge, QualitySignal, arm_from_config
 from ril.util.portable import neutral_paths
 
 TRAINING_VERSION = "training/v1"
@@ -375,9 +375,10 @@ def prepare_arm(
     cfg: Mapping[str, Any],
     examples: Sequence[PoolExample],
     signals: Mapping[str, QualitySignal],
+    ledger: NoiseKnowledge | None = None,
 ) -> tuple[Arm, list[PoolExample], list[float], Record]:
     """Apply the arm's filter and weigher: the arm, kept examples, weights, filter report."""
-    arm = arm_from_config(cfg["arm"], signals, int(cfg["seed"]))
+    arm = arm_from_config(cfg["arm"], signals, int(cfg["seed"]), ledger)
     kept, report = arm.filter.apply(examples)
     weights = [arm.weigher.weight(e) for e in kept]
     return arm, kept, weights, report.to_dict()
@@ -412,8 +413,12 @@ def train(
     stop_after: int | None = None,
     extra_log: Mapping[str, Any] | None = None,
     hook: StepHook | None = None,
+    ledger: NoiseKnowledge | None = None,
 ) -> Record:
     """Run (or resume) one training run; returns the results record.
+
+    ``ledger`` is the injected-noise indicator of a noised pool; only the ORACLE_CLEAN arm and a
+    size-matched subsample read it (``ril.training.noise``).
 
     ``stop_after`` ends the process after that many updates have been done in total (a test of
     resumption, or a time-boxed job); the run is then incomplete and a rerun continues it.
@@ -431,7 +436,7 @@ def train(
     np.random.seed(seed)
     if device == "cpu":
         torch.use_deterministic_algorithms(True)
-    arm, kept, weights, freport = prepare_arm(cfg, examples, signals or {})
+    arm, kept, weights, freport = prepare_arm(cfg, examples, signals or {}, ledger)
     planner = make_planner(cfg, arm, kept, weights, mined)
     enc = build_encoder(cfg["model"], device=device, seed=seed)
     enc.module.train()

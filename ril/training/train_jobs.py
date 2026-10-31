@@ -26,7 +26,8 @@ import hashlib
 import json
 import os
 import time
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 from typing import Any
 
 from ril.training import pool_ranks as pr
@@ -270,6 +271,59 @@ def teacher_job(
     return rec
 
 
+def score_job(
+    cache_paths: str,
+    out_path: str,
+    *,
+    teacher: str,
+    cut: int = 1024,
+    device: str = "cpu",
+    batch_size: int = 64,
+) -> Record:
+    """Per-function scores of one teacher for every snapshot of the example cache(s).
+
+    Implements ``docs/EXPERIMENTS.md`` E-PILOT-NOISE (D48): the rank of a replacement positive
+    needs the score of every function of the snapshot, and the earlier rank files keep only the
+    positives' ranks. Scores are stored in the order ``positives + candidates`` of the original
+    pair (``ril.training.noise``), as float32, one row per directory; text never leaves the cache.
+    Resumable per directory; visited grouped by repository (the dense teachers' vector cache).
+    """
+    from ril.training.noise import encode_scores
+
+    paths = cache_paths.split(os.pathsep)
+    examples = sorted(
+        (e for p in paths for e in read_cache(p)), key=lambda e: (e.repo, e.instance_id)
+    )
+    done = {str(r["dir"]) for r in pr.read_jsonl(out_path)}
+    todo = [e for e in examples if e.instance_id not in done]
+    score_fn, gate = teacher_score_fn(teacher, cut=cut, device=device, batch_size=batch_size)
+    t0 = time.perf_counter()
+    for ex in todo:
+        s = score_fn(ex, list(ex.positive_texts) + list(ex.candidate_texts))
+        pr.append_jsonl(
+            out_path,
+            {
+                "dir": ex.instance_id,
+                "teacher": teacher,
+                "functions": len(ex.ids),
+                "max_tokens": cut if teacher != "bm25" else None,
+                "scores": encode_scores(s),
+            },
+        )
+    rec = {
+        "teacher": teacher,
+        "cut": cut,
+        "examples": len(examples),
+        "done_before": len(examples) - len(todo),
+        "scored_now": len(todo),
+        "gate": gate,
+        "seconds": round(time.perf_counter() - t0, 1),
+        "cache_sha256": ",".join(_sha256(p) for p in paths),
+    }
+    _dump(f"{out_path}.json", rec)
+    return rec
+
+
 def feature_table_job(
     rank_paths: list[str],
     out_csv: str,
@@ -395,10 +449,15 @@ class TrainInputs:
     mined_path: str | None
     mined: dict[str, Mined] | None
     hashes: Record
+    noise_scores: dict[str, str] = field(default_factory=dict)
+    noise_store: dict[str, dict[str, Any]] = field(default_factory=dict)
 
 
 def load_inputs(
-    cache_path: str, feature_table: str | None = None, mined_path: str | None = None
+    cache_path: str,
+    feature_table: str | None = None,
+    mined_path: str | None = None,
+    noise_scores: dict[str, str] | None = None,
 ) -> TrainInputs:
     """Read the example cache, the feature table's quality signals and the mined scores.
 
@@ -420,8 +479,37 @@ def load_inputs(
             "cache_sha256": ",".join(_sha256(p) for p in paths),
             "feature_table_sha256": _sha256(feature_table) if feature_table else None,
             "mined_sha256": _sha256(mined_path) if mined_path else None,
+            **{
+                f"noise_scores_{t}_sha256": _sha256(p)
+                for t, p in sorted((noise_scores or {}).items())
+            },
         },
+        noise_scores=dict(noise_scores or {}),
     )
+
+
+def apply_noise(
+    cfg: Mapping[str, Any], inputs: TrainInputs
+) -> tuple[list[PoolExample], dict[str, QualitySignal], Any, Record | None]:
+    """The pool, quality signals and noise ledger a configuration trains on.
+
+    A configuration without a ``noise`` section trains on the pool as read. With ``noise: {rate}``
+    the pool is noised with the run's seed (the same realisation for every cell of a seed), the
+    teachers named in ``--noise-scores`` get K-ranks recomputed on the noised positive sets, and
+    the ledger is returned for the ORACLE_CLEAN arm and the size-matched subsample only.
+    """
+    from ril.training.noise import inject, noisy_signal, read_score_store
+
+    spec = cfg.get("noise")
+    if not spec:
+        return inputs.examples, inputs.signals, None, None
+    noised, ledger = inject(inputs.examples, float(spec["rate"]), int(cfg["seed"]))
+    signals: dict[str, QualitySignal] = {}
+    for teacher, path in inputs.noise_scores.items():
+        if path not in inputs.noise_store:
+            inputs.noise_store[path] = read_score_store(path)
+        signals[teacher] = noisy_signal(inputs.examples, noised, inputs.noise_store[path], teacher)
+    return noised, signals, ledger, ledger.summary()
 
 
 def train_job(
@@ -437,6 +525,7 @@ def train_job(
     stop_after: int | None = None,
     inputs: TrainInputs | None = None,
     hook: Any = None,
+    noise_scores: dict[str, str] | None = None,
 ) -> Record:
     """One training run from the example cache (resumable: rerun the same command).
 
@@ -456,15 +545,17 @@ def train_job(
     else:
         torch.set_num_threads(int(os.environ.get("RIL_THREADS", "4")))
     if inputs is None:
-        inputs = load_inputs(cache_path, feature_table, mined_path)
+        inputs = load_inputs(cache_path, feature_table, mined_path, noise_scores)
     elif (inputs.cache_path, inputs.feature_table, inputs.mined_path) != (
         cache_path,
         feature_table,
         mined_path,
     ):
         raise ValueError("preloaded inputs come from other paths")
+    examples, signals, ledger, noise_summary = apply_noise(cfg, inputs)
     extra = {
         "gate": gate,
+        "noise": noise_summary,
         "inputs": {
             "config_path": config_path,
             "config_file_sha256": _sha256(config_path),
@@ -473,14 +564,15 @@ def train_job(
     }
     return train(
         cfg,
-        inputs.examples,
+        examples,
         results_root=results_root,
         work_root=work_root,
         date=date,
         device=device,
-        signals=inputs.signals,
+        signals=signals,
         mined=inputs.mined,
         stop_after=stop_after,
         extra_log=extra,
         hook=hook,
+        ledger=ledger,
     )

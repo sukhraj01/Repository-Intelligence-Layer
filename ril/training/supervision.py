@@ -38,7 +38,7 @@ import numpy as np
 from ril.training.pool_reader import FeatureTable, PoolExample
 
 PROVISIONAL = "provisional: ADR-002"
-ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM", "NOISE", "RAW_SUBSAMPLE")
+ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM", "NOISE", "RAW_SUBSAMPLE", "ORACLE_CLEAN")
 Record = dict[str, Any]
 
 
@@ -275,6 +275,31 @@ class RandomSubset:
         return out, _report(examples, out)
 
 
+class NoiseKnowledge(Protocol):
+    """What the oracle control may know about injected noise (``noise.NoiseLedger``)."""
+
+    def is_injected(self, instance_id: str) -> bool: ...
+
+    def clean_count(self) -> int: ...
+
+
+class OracleClean:
+    """ORACLE-CLEAN (D46): RAW on the pairs whose positives were not noised.
+
+    The best any filter can do against injected noise. It is the only arm that reads the
+    injected-noise indicator; every other arm is built without it.
+    """
+
+    name = "oracle_clean"
+
+    def __init__(self, ledger: NoiseKnowledge) -> None:
+        self.ledger = ledger
+
+    def apply(self, examples: Sequence[PoolExample]) -> tuple[list[PoolExample], FilterReport]:
+        out = [e for e in examples if not self.ledger.is_injected(e.instance_id)]
+        return out, _report(examples, out)
+
+
 # --------------------------------------------------------------------------- hook 2: weights
 
 
@@ -435,7 +460,10 @@ def _signal(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> Qua
 
 
 def arm_from_config(
-    cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal], seed: int = 0
+    cfg: Mapping[str, Any],
+    signals: Mapping[str, QualitySignal],
+    seed: int = 0,
+    ledger: NoiseKnowledge | None = None,
 ) -> Arm:
     """Build an arm from the configuration's ``arm`` section.
 
@@ -443,7 +471,9 @@ def arm_from_config(
     hook is the identity. ``signals`` maps teacher names to quality signals. ``seed`` keys the
     NOISE control's and the subsample's draw (``RAW_SUBSAMPLE``: ``subsample: {size, draw}``).
     NOISE takes no hook section; ``ordering.reverse: true`` reverses the
-    CURRICULUM order.
+    CURRICULUM order. ``ledger`` (the injected-noise indicator) is read by ORACLE_CLEAN and by a
+    ``RAW_SUBSAMPLE`` whose ``subsample.size`` is ``match_clean`` (the number of clean pairs); no
+    other arm is given it.
     """
     name = str(cfg["name"])
     if name not in ARM_NAMES:
@@ -456,11 +486,23 @@ def arm_from_config(
         if fc or wc or oc:
             raise ValueError("the NOISE control takes no filter, weight or ordering section")
         f = NoisePositives(seed)
+    if name == "ORACLE_CLEAN":
+        if fc or wc or oc:
+            raise ValueError("ORACLE_CLEAN takes no filter, weight or ordering section")
+        if ledger is None:
+            raise ValueError("ORACLE_CLEAN needs the injected-noise indicator")
+        f = OracleClean(ledger)
     sc = cfg.get("subsample")
     if name == "RAW_SUBSAMPLE":
         if fc or wc or oc or not sc:
             raise ValueError("RAW_SUBSAMPLE takes a 'subsample' section and no other hook")
-        f = RandomSubset(int(sc["size"]), seed, int(sc.get("draw", 0)))
+        if sc["size"] == "match_clean":
+            if ledger is None:
+                raise ValueError("a match_clean subsample needs the injected-noise indicator")
+            size = ledger.clean_count()
+        else:
+            size = int(sc["size"])
+        f = RandomSubset(size, seed, int(sc.get("draw", 0)))
     elif sc:
         raise ValueError("a 'subsample' section belongs to the RAW_SUBSAMPLE arm")
     if fc:
