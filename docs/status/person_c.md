@@ -4,13 +4,13 @@ Updated 2026-10-31 UTC. Branch `c/eval-rq3`, based on `foundation-v0` (04da656).
 
 ## Current state
 
-C1 apparatus (66d0f6f): original-label L2/L3 Rewrite loader (D13), shared exact/clustered
+C1 apparatus (0141176): original-label L2/L3 Rewrite loader (D13), shared exact/clustered
 statistics, BM25/cached-dense adapters and `make eval`; published BM25 artifact values pinned.
 Synthetic n=2 queries/2 repositories per level: Rewrite-original nDCG@10 -36.9070 pp
 [-36.9070,-36.9070], Recall@100 0 [0,0], 2,000 draws, seed 0; intentional anchor-removal fixture.
 Actual-corpus reproduction and dense paired dev ablation remain blocked. API: `docs/EVAL_API.md`.
 
-C2 raw PR miner (645925b): every base-commit overlapping function/method retained, including
+C2 raw PR miner (e3ee90d): every base-commit overlapping function/method retained, including
 tests/ordinal collisions; unchanged training reader, resumable request/PR state, rate limits,
 both-side current names and content-audit provenance. Standard two-parent merges only;
 unsupported histories and partial discovery/parsing quarantined. No retriever filters positives.
@@ -20,7 +20,7 @@ BM25 no-positive-top-10 85.714% [85.714,85.714], n=1,379/197 artificial reposito
 seed 0. Repeated templates explain the degenerate interval; no scientific yield/rank evidence.
 Published comparison retained; actual-data/dense/content audit n=0, blocked rather than zero yield.
 
-C3 agent boundary (af41eb1): public issues/source go to one retrieval tool and scripted repair;
+C3 agent boundary (969b3bd): public issues/source go to one retrieval tool and scripted repair;
 hidden trusted executable tests independently grade exact edits. Gold file names reach only the
 oracle and post-call report join. Five versioned scaffold papers read in full across 216 pages;
 qualified criteria and page-specific sources in EVAL_API, owner integration pending. Agentless
@@ -31,7 +31,7 @@ BM25-oracle/none-oracle. Synthetic dollars .000508/.001298/.001262; actual dolla
 MDE arithmetic at n302/432 is illustrative only; real cost/discordance/MDE remain unmeasured.
 C3 final log: `results/logs/c3_fixture_pilot_guarded_2026-10-30.json`.
 
-C4 fixture runner: fixed model/scaffold/seed/temperature/tasks, configurable retrieval boundary,
+C4 fixture runner (e0e29d4): fixed model/scaffold/seed/temperature/tasks, configurable retrieval boundary,
 atomic checksummed checkpoints and exclusive invocation lock. Durable conservative synthetic
 reservations precede dispatch; unknown calls never replay or refund. Quote violations persistently
 halt dispatch and expose observed usage/cap breach. Resume rejects config/source/retriever/task/
@@ -96,3 +96,6 @@ Lead/owners integrate compatible API/paper notes and roadmap evidence; supply bo
 then select and review the fixed scaffold/model/treatment adapter, grading harness and spend cap.
 Run the authorized repeated dev pilot before mining expansion or RQ3 power/design decisions.
 All scientific conclusions and final-test settings remain open; no push performed.
+
+Commit messages were shortened on2026-10-31; all five corresponding file trees are identical.
+Historical measurement IDs remain intact; mapping: `results/logs/c_commit_reword_2026-10-31.json`.
