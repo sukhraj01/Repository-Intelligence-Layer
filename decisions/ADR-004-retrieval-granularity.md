@@ -131,3 +131,11 @@ whether any ranking of conditions flips between the two readings.
   class-source forms are indistinguishable (ADR-013 addendum of today). The gold reading for classes and Q28 are one question.
 - Evidence class: measured (exploratory). Experiment that could flip it: a reading that counts a class only through lines outside
   its methods, computed from the same records (minutes).
+
+### Addendum 2026-10-31: tokenisation evidence from the retrieval-stack pilot (status stays Proposed)
+
+- On a docstring-to-function task over five local checkouts (2,649 queries, docstrings removed from the index), splitting
+  identifiers raised MRR from 18.7 to 27.6 (clustered difference +8.9 [+6.9, +10.5]) and a name weight of 2 to 31.9 (+13.1
+  [+10.3, +15.9]); query latency unchanged, index build throughput roughly halved. Recomputed from the stored log.
+- Evidence class: measured (exploratory, local, not benchmark repositories). The gain is an upper bound for issue-style queries.
+  Experiment that could flip it: the development-repository runs with the reference tokenisation as the regression control.
