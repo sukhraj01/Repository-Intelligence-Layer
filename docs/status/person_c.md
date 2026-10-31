@@ -8,7 +8,10 @@ C1 apparatus (0141176): original-label L2/L3 Rewrite loader (D13), shared exact/
 statistics, BM25/cached-dense adapters and `make eval`; published BM25 artifact values pinned.
 Synthetic n=2 queries/2 repositories per level: Rewrite-original nDCG@10 -36.9070 pp
 [-36.9070,-36.9070], Recall@100 0 [0,0], 2,000 draws, seed 0; intentional anchor-removal fixture.
-BM25 dev data/capacity now ready per operator; paired run registered, metrics pending.
+Actual dev BM25 completed per operator: L2n442/6repos,L3n238/3repos per condition.
+Rewrite-original L2 nDCG/Recall +1.9258/+2.4049pp;95%intervals include0.
+L3 -2.0436pp[-2.6646,-0.9102]/-1.6005pp[-1.7655,-1.3556];only3repository clusters.
+Aggregates match registration; full query-pair/interval/timing artifact audit pending.
 Dense paired ablation remains gated. API: `docs/EVAL_API.md`.
 
 C2 raw PR miner (e3ee90d): every base-commit overlapping function/method retained, including
@@ -64,7 +67,8 @@ BM25, GPU-cache and CPU dense-evaluation templates are ready. Exact folder ident
 upstream checksums, strict range validation, durable partial/source provenance and restart-aware
 disk bounds are mock-tested. Colab now reports36files checksum-verified at pinned revision
 23da5d97a8a4495d4bd6d5616aa86d5a12a60699; all9folder pairs loaded/indexed in125.72s.
-PeakRSS2788168KiB versus12141277184bytes available; no model fetched or scientific metric.
+Capacity peakRSS2788168KiB versus12141277184bytes available; subsequent BM25 completed
+with waited-child peakRSS2914944KiB. No model fetched.
 Validation:41focused and618full unit passes/3Torchskips;lint288files/mypy123modules;4shell
 syntax/local-refusal gates. Standard20latency/4throughput rows are synthetic CPU stubs only.
 Commands/gates: `docs/EVAL_API.md`;validation log `results/logs/c1_rewrite_launch_validation_2026-10-31.json`.
@@ -78,10 +82,11 @@ Validation:684unit/60additional CPU passes, documented optional skips;lint292/my
 archives retain the pinned original commit and explicit unavailable Git status. Operator-supplied
 CPU readiness report matches the kit source/profile,26CPU/buildpins and runtime-proof checksum:
 Colab x86_64/2CPU,projectPython3.11.18,hostPython3.13,noGPU. Data/capacity operator reports
-locally matched; CUDA/GPU,reset-restoration,model/scientific execution remain pending. Evidence:
+locally matched; actual BM25 summary received; CUDA/GPU,reset-restoration/model work pending. Evidence:
 `results/logs/c_colab_cpu_ready_2026-10-31.json`, `c_colab_capacity_2026-10-31.json`.
 E-C1-COLAB-DEV freezes paired BM25 config hash ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452;
-run dev-v1 pending,6GiBaddresscap/8GiBavailable preflight. Both conditions share one runtime.
+run dev-v1 complete per operator,6GiBaddresscap/8GiBavailable preflight; matched runtime.
+Results:`results/logs/c1_colab_bm25_dev_v1_2026-10-31.json`;12 exact CSV rows beside other tables.
 
 ## Blockers and compute
 
@@ -91,7 +96,7 @@ C2 real sample memory/disk/yield/ranks must be measured before expansion; hard c
 200repositories/2,000PRs. No real pilot go, no full-scale mining, no model/provider selection.
 Live execution still fails closed: reviewed adapter/scaffold, pinned model, official trusted
 harness, staged dev data and explicit spend authorization are required. Fixture subprocesses are
-not a sandbox for real repository code. Actual dev n=0; scientific cost/discordance/MDE=null.
+not a sandbox for real repository code. Actual agent dev n=0;agent cost/discordance/MDE=null.
 GPU-hours used0 of8; actual dollars0; no cluster job. Build-only teaching backlog remains;
 no project understanding or learning completion is claimed.
 
@@ -109,7 +114,7 @@ no project understanding or learning completion is claimed.
 ## Next work
 
 Lead/owners integrate compatible API/paper notes and roadmap evidence; supply bounded inputs/access,
-execute registered paired Colab BM25 after the successful capacity checks, then review fixed scaffold/model/treatment adapter,
+collect and audit completed Colab BM25 artifacts, then review fixed scaffold/model/treatment adapter,
 grading harness and spend cap.
 Run the authorized repeated dev pilot before mining expansion or RQ3 power/design decisions.
 All scientific conclusions and final-test settings remain open; no push performed.

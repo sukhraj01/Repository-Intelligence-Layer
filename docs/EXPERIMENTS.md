@@ -1720,7 +1720,8 @@ Actual Colab/Drive/GPU installs and scientific data/model runs remain unperforme
 
 ## E-C1-COLAB-DEV — paired original/Rewrite BM25, registered 2026-10-31
 
-Registered before the first scientific execution of `dev-v1`; completion/metrics pending.
+Registered before the first scientific execution of `dev-v1`; operator completion/metrics now received.
+Aggregate checks are complete; full artifact/row/timing audit remains pending.
 Retains E-C1-EVAL D13/D17, the existing dev allowlist and all stated scoring parameters.
 Source kit `dcc19574386fc66c578bb42c872e38f9e95d0201`; dataset
 `zhangfw123/CORE-Bench` revision `23da5d97a8a4495d4bd6d5616aa86d5a12a60699`;
@@ -1751,3 +1752,27 @@ Native outputs: `runs/dev-v1/bm25/` and `runs/dev-v1/bm25-log.json` beneath the 
 root, followed by the existing Drive checkpoint. Existing output/log paths refuse overwrite.
 Receive actual metrics/config/source/runtime evidence before appending scientific result rows.
 No dense/model/GPU/mining/live-agent execution is included; compute billing remains unknown.
+
+Operator result received 2026-10-31: stage returned complete;36 files reverified; source/config
+hashes match the registration. Raw stdout, qualified JSON and exact fractional CSV are retained:
+`results/logs/c1_colab_bm25_dev_v1_2026-10-31_stdout.txt`,
+`results/logs/c1_colab_bm25_dev_v1_2026-10-31.json`,
+`results/tables/c1_colab_bm25_dev_v1_2026-10-31.csv`.
+
+| Level | Metric | Original (%) | Rewrite (%) | Paired difference (pp),95% interval | n / repos per condition |
+|---|---|---:|---:|---|---|
+| L2 | nDCG@10 | 19.7741 | 21.6999 | +1.9258 [-2.4594,+8.7810] | 442 / 6 |
+| L2 | Recall@100 | 39.5668 | 41.9717 | +2.4049 [-1.3140,+8.0869] | 442 / 6 |
+| L3 | nDCG@10 | 31.6875 | 29.6439 | -2.0436 [-2.6646,-0.9102] | 238 / 3 |
+| L3 | Recall@100 | 37.4682 | 35.8677 | -1.6005 [-1.7655,-1.3556] | 238 / 3 |
+
+Both L2 paired intervals include zero. Both L3 paired intervals are below zero in this DEV
+workload, with only three repository clusters; do not generalize to other repositories/models
+or the final test. These are actual-data operator-supplied summaries, not fixture outcomes.
+Local checks establish duplicated metric-output equality, registered identities/counts,
+finite interval bounds and paired point-estimate arithmetic. Full query rows and saved
+input/hardware/config/timing artifacts are not yet received: independent pairing and bootstrap
+recomputation remain pending. No timing rows or elapsed runtime inferred from capacity timing.
+Reported waited-child peak RSS2914944KiB(2.779907GiB). The archive Git warning was handled
+through the existing pinned-source fallback. No dense/model/agent execution or paid call;
+compute billing unknown. Preserve this completed run and collect artifacts rather than rerunning.

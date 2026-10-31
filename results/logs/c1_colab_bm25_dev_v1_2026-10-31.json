@@ -1,0 +1,174 @@
+{
+  "date_received": "2026-10-31",
+  "run_id": "dev-v1",
+  "registration": "E-C1-COLAB-DEV",
+  "evidence_class": "operator_supplied_actual_dev_evaluation_summary",
+  "independent_remote_execution": false,
+  "reported_cli_summary": {
+    "config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452",
+    "git_hash": "dcc19574386fc66c578bb42c872e38f9e95d0201",
+    "metrics": [
+      {
+        "condition": "original",
+        "high": 0.260939236732899,
+        "level": "L2",
+        "low": 0.13496123876103078,
+        "mean": 0.1977405161049095,
+        "metric": "ndcg10",
+        "n": 442,
+        "repositories": 6
+      },
+      {
+        "condition": "original",
+        "high": 0.4807263855273917,
+        "level": "L2",
+        "low": 0.32107756369302537,
+        "mean": 0.3956677242451303,
+        "metric": "recall100",
+        "n": 442,
+        "repositories": 6
+      },
+      {
+        "condition": "rewrite",
+        "high": 0.2737296145771141,
+        "level": "L2",
+        "low": 0.1701175435916194,
+        "mean": 0.21699874298067928,
+        "metric": "ndcg10",
+        "n": 442,
+        "repositories": 6
+      },
+      {
+        "condition": "rewrite",
+        "high": 0.5194746871512866,
+        "level": "L2",
+        "low": 0.3428012511499857,
+        "mean": 0.41971669204071504,
+        "metric": "recall100",
+        "n": 442,
+        "repositories": 6
+      },
+      {
+        "condition": "rewrite_minus_original",
+        "high": 0.08781015946421965,
+        "level": "L2",
+        "low": -0.0245936420916281,
+        "mean": 0.019258226875769814,
+        "metric": "ndcg10",
+        "n": 442,
+        "repositories": 6
+      },
+      {
+        "condition": "rewrite_minus_original",
+        "high": 0.08086945251267617,
+        "level": "L2",
+        "low": -0.013139851104577693,
+        "mean": 0.02404896779558476,
+        "metric": "recall100",
+        "n": 442,
+        "repositories": 6
+      },
+      {
+        "condition": "original",
+        "high": 0.38490448981905434,
+        "level": "L3",
+        "low": 0.26828369563812565,
+        "mean": 0.3168749864231047,
+        "metric": "ndcg10",
+        "n": 238,
+        "repositories": 3
+      },
+      {
+        "condition": "original",
+        "high": 0.5175417940749051,
+        "level": "L3",
+        "low": 0.295087452946582,
+        "mean": 0.3746817746763577,
+        "metric": "recall100",
+        "n": 238,
+        "repositories": 3
+      },
+      {
+        "condition": "rewrite",
+        "high": 0.37580215959966196,
+        "level": "L3",
+        "low": 0.24380237510522798,
+        "mean": 0.2964386942395671,
+        "metric": "ndcg10",
+        "n": 238,
+        "repositories": 3
+      },
+      {
+        "condition": "rewrite",
+        "high": 0.5039859754041888,
+        "level": "L3",
+        "low": 0.27851036548494,
+        "mean": 0.35867723479978414,
+        "metric": "recall100",
+        "n": 238,
+        "repositories": 3
+      },
+      {
+        "condition": "rewrite_minus_original",
+        "high": -0.009102330219392298,
+        "level": "L3",
+        "low": -0.026645870360696523,
+        "mean": -0.020436292183537617,
+        "metric": "ndcg10",
+        "n": 238,
+        "repositories": 3
+      },
+      {
+        "condition": "rewrite_minus_original",
+        "high": -0.013555818670716377,
+        "level": "L3",
+        "low": -0.017654958637965592,
+        "mean": -0.016004539876573565,
+        "metric": "recall100",
+        "n": 238,
+        "repositories": 3
+      }
+    ],
+    "split": "core-bench-dev3-original-rewrite-v1"
+  },
+  "reported_stage_status": "complete",
+  "reported_reverified_files": 36,
+  "reported_waited_child_peak_rss_KiB": 2914944,
+  "reported_waited_child_peak_rss_GiB": 2.7799072265625,
+  "stdout_artifact": "results/logs/c1_colab_bm25_dev_v1_2026-10-31_stdout.txt",
+  "stdout_sha256": "75baf707d2af05c52cc8ba82d4e47e374a7dab55b06a6246f4332c0818dfe795",
+  "registered_context": {
+    "dataset": "zhangfw123/CORE-Bench",
+    "dataset_revision": "23da5d97a8a4495d4bd6d5616aa86d5a12a60699",
+    "manifest_sha256": "1b1e022998ab6ac7906514345ab8e82f4817a621d8e4c6a866a05915ccc385ac",
+    "config_file_sha256": "451a81484271bfe5366ce499b069a650b44733cbdbfe98730c3d07f079d53e37",
+    "seed": 0,
+    "bootstrap_draws": 2000,
+    "interval": "95% repository-clustered percentile bootstrap",
+    "means": "query-weighted",
+    "metric_units": "fractions; multiply by 100 for percentages or paired percentage-point differences",
+    "hardware_from_prior_operator_report": "Colab x86_64,2 CPU cores,project Python3.11.18,noGPU",
+    "runtime_limits": "8GiB effective available-RAM preflight;6GiB virtual-address cap; tighter inherited limits respected"
+  },
+  "local_consistency_checks": {
+    "duplicated_metric_outputs_identical": true,
+    "source_and_config_hash_match_registration": true,
+    "all_12_unique_metric_rows_present": true,
+    "reported_counts_match_registered_expectations": true,
+    "finite_ordered_intervals_with_valid_metric_ranges": true,
+    "paired_point_estimates_match_rewrite_minus_original": true
+  },
+  "audit_state": {
+    "full_artifact_bundle_received": false,
+    "query_level_pairing_independently_checked": false,
+    "bootstrap_intervals_independently_recomputed": false,
+    "timing_csv_rows_reviewed": false,
+    "current_hardware_artifact_reviewed": false,
+    "vm_reset_restoration_verified": false
+  },
+  "limits": "Aggregate console summary only; native results/config/hardware/input-hash/timing artifacts remain to collect and audit. L3 uses only three repository clusters. No across-model or final-test conclusion; no actual dense or agent result. Git warning is expected for the source archive; checked fallback source identity matches registration. Stage returned complete; Drive reset restoration has not been tested.",
+  "compute_usd": null,
+  "model_api_usd": 0,
+  "operator_input_sha256": "2d3add97831ac56a9fa3ae8ef832cc5bfde3d2e912dd0b448c2a79e3aef41121",
+  "stdout_line_endings": "LF normalized from supplied CRLF; metric values unchanged"
+}
