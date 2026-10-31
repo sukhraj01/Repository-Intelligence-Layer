@@ -443,6 +443,20 @@ def test_result_line_number_is_traced_to_the_section_files(repo: Repo) -> None:
     assert "55.55" in found[0].message
 
 
+def test_ledger_row_citing_a_workstream_log_section_is_traced_to_that_section(repo: Repo) -> None:
+    section = "## A9: a\n\nTable `results/tables/a9.csv`.\n"
+    repo.commit({"docs/experiments/A.md": section, "results/tables/a9.csv": "m\n12.34\n"})
+    repo.commit({"RESULTS.md": LEDGER_HEADER})
+    repo.commit(
+        {"RESULTS.md": LEDGER_HEADER + ledger_row("MRR 12.34", log="`docs/experiments/A.md` A9")}
+    )
+    assert "unsourced-number" not in repo.rules()
+    repo.commit(
+        {"RESULTS.md": LEDGER_HEADER + ledger_row("MRR 12.35", log="`docs/experiments/A.md` A9")}
+    )
+    assert "unsourced-number" in repo.rules(BLOCKING)
+
+
 def test_numbers_check_can_be_switched_off(repo: Repo) -> None:
     repo.commit({"RESULTS.md": LEDGER_HEADER})
     repo.commit({"RESULTS.md": LEDGER_HEADER + ledger_row("MRR 18.7", log="n/a")})

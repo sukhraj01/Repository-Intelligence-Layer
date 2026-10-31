@@ -42,6 +42,7 @@ RESULT_PATH_RE = re.compile(r"results/[A-Za-z0-9_.*/-]*(?:\{[^{}]*\}[A-Za-z0-9_.
 Claim = tuple[str, int, float, int, str, list[str]]
 LEDGER_RE = re.compile(r"^(RESULTS\.md|results/ledger[^/]*\.md)$")
 REGISTRY_FILES = LOG_FILES
+REGISTRY_CITE = r"(?:docs/EXPERIMENTS\.md|docs/experiments/[AC]\.md)"
 # Paths each workstream branch (``a/...``, ``c/...``) edits; the lead's branches (``b/...``) are not
 # restricted. Taken from the workstream briefs; a path outside the list is flagged, not refused.
 OWNED_PATHS: dict[str, tuple[str, ...]] = {
@@ -748,7 +749,7 @@ class Scan:
             sources = RESULT_PATH_RE.findall(row)
             if not sources:
                 # a row that cites a registry section is read against the paths that section names
-                m = re.search(r"docs/EXPERIMENTS\.md\s+([A-Z][A-Za-z0-9-]*)", row)
+                m = re.search(rf"{REGISTRY_CITE}[`\s]+([A-Z][A-Za-z0-9-]*)", row)
                 if m:
                     sources = _section_paths(doc.split("\n"), m.group(1))
             out.extend((fd.path, no, *c, sources) for c in _numbers_in(cells[col - width]))
