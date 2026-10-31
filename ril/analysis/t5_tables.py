@@ -341,3 +341,47 @@ def matched_tables(
         "minimum_detectable": minimum_detectable(spread, effects, seeds_for_mdd),
         "tables": [f"{stem}_{n}.csv" for n in ("effects", "seeds", "unique")],
     }
+
+
+def persistence_tables(
+    results_root: str,
+    cells: Sequence[str],
+    raw: str,
+    sub: str,
+    step0_rows: str,
+    out_dir: str,
+    seed: int = 0,
+) -> Record:
+    """Stage 2 (1,000 updates): the cells against RAW and the size-matched subsample.
+
+    ``cells`` lists exp_ids (RAW and the subsample included); with the seeds that were run (stage
+    2 is partial by budget), the rows are descriptive: intervals carry query sampling only.
+    """
+    conds = {c: tt.load_condition(results_root, c) for c in cells}
+    for runs in conds.values():
+        t4.attach_base(runs, step0_rows)
+    labels = {"pilot": "t5b", "evaluation": "evaluation", "label": "E-PILOT-ARMS2 stage 2"}
+    effects: list[Record] = []
+    for ref in (raw, sub):
+        for kind in ("dense", "rrf"):
+            for level in ("L2", "L3"):
+                for reading in tt.READINGS:
+                    effects += tt.contrast_rows(
+                        conds,
+                        ref,
+                        kind=kind,
+                        level=level,
+                        reading=reading,
+                        seed=seed,
+                        labels={**labels, "reference": ref},
+                    )
+    uniq = unique_rows(conds)
+    os.makedirs(out_dir, exist_ok=True)
+    stem = os.path.join(out_dir, "t5b")
+    write_csv(f"{stem}_effects.csv", effects)
+    write_csv(f"{stem}_unique.csv", uniq)
+    return {
+        "version": T5_TABLES_VERSION,
+        "runs": {c: [r.seed for r in rs] for c, rs in conds.items()},
+        "tables": [f"{stem}_effects.csv", f"{stem}_unique.csv"],
+    }

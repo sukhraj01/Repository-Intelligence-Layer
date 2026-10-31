@@ -55,3 +55,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-31,A,50091,P0,pool ranks: CodeRankEmbed teacher over 3000 new pool directories,u22,4,1,01:35:08,1.59,COMPLETED
 2026-10-31,A,50092,P0,pool ranks: SweRankEmbed-Small teacher over 3000 new pool directories,u22,4,1,01:34:09,1.57,COMPLETED
 2026-10-31,A,50313,P0,pool ranks: 5000-directory feature table and loader check (CPU),u22,2,0,00:06:23,0.0,COMPLETED
+2026-10-31,A,50335,T5a,matched-pool arms pilot stage 1 seed 0: 7 cells at 100 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,02:38:17,2.64,COMPLETED
+2026-10-31,A,50356,T5a,matched-pool arms pilot stage 1 seed 1: 7 cells at 100 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,02:38:22,2.64,COMPLETED
+2026-10-31,A,50942,T5b,matched-pool arms pilot stage 2 seed 0: RAW / subsample / WEIGHT at 1000 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,03:10:37,3.18,COMPLETED

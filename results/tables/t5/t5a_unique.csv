@@ -1,0 +1,15 @@
+condition,seed,config_hash,arm,teacher_equals_base,pool_before_arm,pool_examples,optimizer_updates,examples_seen,unique_examples_seen,effective_epochs,positives_seen,negative_shortfall_visits,gpu_hours_train_loop,repeats_examples,below_common_unique_count
+t5a_raw,0,c885796815f6,RAW,False,5000,5000,100,3232,3232,0.646,3232,0,0.0745,False,False
+t5a_raw,1,507b7f655b14,RAW,False,5000,5000,100,3232,3232,0.646,3232,0,0.0746,False,False
+t5a_filter_bm25,0,18907194d082,FILTER,False,5000,4169,100,3232,3232,0.775,3232,0,0.0746,False,False
+t5a_filter_bm25,1,7967af785f6b,FILTER,False,5000,4169,100,3232,3232,0.775,3232,0,0.0745,False,False
+t5a_filter_srs,0,1323e07a43f5,FILTER,False,5000,4924,100,3232,3232,0.656,3232,0,0.0745,False,False
+t5a_filter_srs,1,bdb054beb429,FILTER,False,5000,4924,100,3232,3232,0.656,3232,0,0.0747,False,False
+t5a_filter_cre,0,5037977f6b24,FILTER,True,5000,4592,100,3232,3232,0.704,3232,0,0.0745,False,False
+t5a_filter_cre,1,ec77a2528b15,FILTER,True,5000,4592,100,3232,3232,0.704,3232,0,0.0745,False,False
+t5a_weight_cre,0,c2cd00098f80,WEIGHT,True,5000,5000,100,3232,3232,0.646,3232,0,0.0746,False,False
+t5a_weight_cre,1,a64291d2f1a1,WEIGHT,True,5000,5000,100,3232,3232,0.646,3232,0,0.0746,False,False
+t5a_curr_cre,0,3529efa45c1a,CURRICULUM,True,5000,5000,100,3232,3232,0.646,3232,0,0.0745,False,False
+t5a_curr_cre,1,09b92b0f9e29,CURRICULUM,True,5000,5000,100,3232,3232,0.646,3232,0,0.0746,False,False
+t5a_sub_d0,0,2720ea8c3045,RAW_SUBSAMPLE,False,5000,4592,100,3232,3232,0.704,3232,0,0.0746,False,False
+t5a_sub_d0,1,690d7f906a58,RAW_SUBSAMPLE,False,5000,4592,100,3232,3232,0.704,3232,0,0.0746,False,False

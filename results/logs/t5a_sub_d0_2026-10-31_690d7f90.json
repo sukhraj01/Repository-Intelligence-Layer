@@ -1,0 +1,194 @@
+{
+ "config_hash": "690d7f906a587c15f03666207a19a78c77d04e420b65e8f7d8a19094e9ffc1ef",
+ "exp_id": "t5a_sub_d0",
+ "gate": {
+  "capability": [
+   7,
+   5
+  ],
+  "cuda": "12.1",
+  "device": "NVIDIA GeForce RTX 2080 Ti",
+  "matmul_max_abs_error": 0.0001220703125,
+  "torch": "2.4.1+cu121"
+ },
+ "hardware": {
+  "cpus_visible": 40,
+  "cuda": "12.1",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 2080 Ti",
+  "gpu_capability": [
+   7,
+   5
+  ],
+  "host": "gnode054",
+  "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12",
+  "slurm_job_id": "50356",
+  "torch": "2.4.1+cu121"
+ },
+ "inputs": {
+  "cache_sha256": "c8cb78abf7ffcfe384b6f21184fd74c60665b84188df6daa5f5f9189b1939d4b,3fe3228202526d20ae00710a45bc00bd5f81ae93a2ab16b517f651a9ae686e28",
+  "config_file_sha256": "e0db48dabb1b78b81a78f2722342a7efe7e9d5421346433c5348e5305f750dce",
+  "config_path": "configs/experiments/t5/t5a_sub_d0_s1.yaml",
+  "feature_table_sha256": "eee710503793e3305f98ca603c64b4ac2f1375edf38718a4c05aa55b881c76d5",
+  "mined_sha256": null
+ },
+ "loss_trace": [
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.4075926542282104,
+   "loss_unweighted": 1.4075926542282104,
+   "lr": 5.7142857142857145e-06,
+   "positives_per_query": 1.0,
+   "update": 0
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.625649094581604,
+   "loss_unweighted": 1.625649094581604,
+   "lr": 1.9973270965586367e-05,
+   "positives_per_query": 1.0,
+   "update": 10
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.1145297288894653,
+   "loss_unweighted": 1.1145297288894653,
+   "lr": 1.990644837955229e-05,
+   "positives_per_query": 1.0,
+   "update": 20
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.2465941905975342,
+   "loss_unweighted": 1.2465941905975342,
+   "lr": 1.9839625793518213e-05,
+   "positives_per_query": 1.0,
+   "update": 30
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 0.6545016765594482,
+   "loss_unweighted": 0.6545016765594482,
+   "lr": 1.9772803207484132e-05,
+   "positives_per_query": 1.0,
+   "update": 40
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.8237358331680298,
+   "loss_unweighted": 1.8237358331680298,
+   "lr": 1.970598062145005e-05,
+   "positives_per_query": 1.0,
+   "update": 50
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.2880282402038574,
+   "loss_unweighted": 1.2880282402038574,
+   "lr": 1.9639158035415974e-05,
+   "positives_per_query": 1.0,
+   "update": 60
+  },
+  {
+   "candidates_per_query": 63.96875,
+   "loss": 0.7787727117538452,
+   "loss_unweighted": 0.7787727117538452,
+   "lr": 1.9572335449381893e-05,
+   "positives_per_query": 1.0,
+   "update": 70
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 0.8307943940162659,
+   "loss_unweighted": 0.8307943940162659,
+   "lr": 1.9505512863347813e-05,
+   "positives_per_query": 1.0,
+   "update": 80
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.0829038619995117,
+   "loss_unweighted": 1.0829038619995117,
+   "lr": 1.9438690277313735e-05,
+   "positives_per_query": 1.0,
+   "update": 90
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 0.7914165258407593,
+   "loss_unweighted": 0.7914165258407593,
+   "lr": 1.9378549949883064e-05,
+   "positives_per_query": 1.0,
+   "update": 99
+  }
+ ],
+ "seed": 1,
+ "training": {
+  "arm": {
+   "filter": "random_subset",
+   "name": "RAW_SUBSAMPLE",
+   "ordering": "random",
+   "weigher": "unit"
+  },
+  "budget": {
+   "batch_size": 32,
+   "effective_epochs": 0.7038327526132404,
+   "examples_seen": 3232,
+   "gpu_hours_train_loop": 0.07460853778860635,
+   "negative_shortfall_visits": 0,
+   "negatives_seen": 3232,
+   "optimizer_updates": 100,
+   "passes_started": 1,
+   "pool_examples": 4592,
+   "positives_seen": 3232,
+   "schedule_updates": 3000,
+   "unique_examples_seen": 3232,
+   "wall_hours_train_loop": 0.07460853778860635
+  },
+  "checkpoint_root": "/tmp/ril_t5_50356/ckpt/t5a_sub_d0/690d7f90",
+  "config_hash": "690d7f906a587c15f03666207a19a78c77d04e420b65e8f7d8a19094e9ffc1ef",
+  "exp_id": "t5a_sub_d0",
+  "filter": {
+   "examples_in": 5000,
+   "examples_kept_share": 0.9184,
+   "examples_out": 4592,
+   "positives_in": 62238,
+   "positives_kept_share": 0.9112278672193836,
+   "positives_out": 56713
+  },
+  "final_dtype": "float16",
+  "final_model": "/tmp/ril_t5_50356/ckpt/t5a_sub_d0/690d7f90/final",
+  "finished": true,
+  "loss_first": {
+   "candidates_per_query": 64.0,
+   "loss": 1.4075926542282104,
+   "loss_unweighted": 1.4075926542282104,
+   "lr": 5.7142857142857145e-06,
+   "positives_per_query": 1.0,
+   "update": 0
+  },
+  "loss_last": {
+   "candidates_per_query": 64.0,
+   "loss": 0.7914165258407593,
+   "loss_unweighted": 0.7914165258407593,
+   "lr": 1.9378549949883064e-05,
+   "positives_per_query": 1.0,
+   "update": 99
+  },
+  "plan_sha256": "333b71344e82fab4232f4a43e2c8272811cf28a6e09d7e14e6006c99fbee2174",
+  "provisional": "provisional: ADR-001, ADR-002, ADR-006",
+  "result_dir": "/home2/sukhraj.singh/ril_t5/results/rq2/t5a_sub_d0/2026-10-31_690d7f90",
+  "seed": 1,
+  "teacher_equals_base": false,
+  "updates_this_process": 100,
+  "version": "training/v1",
+  "weights": {
+   "max": 1.0,
+   "mean": 1.0,
+   "min": 1.0,
+   "n": 4592,
+   "share_below_1": 0.0
+  }
+ }
+}

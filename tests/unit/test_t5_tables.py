@@ -271,3 +271,35 @@ def test_minimum_detectable_scales_with_seed_sd() -> None:
     assert abs(l2["seed_mdd"] - round(t5.Z_POWER * (2 / 3) ** 0.5, 2)) < 1e-9
     l3 = next(r for r in out if r["level"] == "L3")
     assert l3["pooled_seed_sd"] is None and l3["binding"] is None
+
+
+def test_persistence_tables_pair_cells_with_both_references(tmp_path: Path) -> None:
+    rng = np.random.default_rng(2)
+    for name, shift, arm in (
+        ("t5b_raw", 0.10, "RAW"),
+        ("t5b_sub_d0", 0.11, "RAW_SUBSAMPLE"),
+        ("t5b_weight_cre", 0.13, "WEIGHT"),
+    ):
+        _write_run(tmp_path, name, 0, shift, rng, arm=arm)
+    out = t5.persistence_tables(
+        str(tmp_path),
+        ["t5b_raw", "t5b_sub_d0", "t5b_weight_cre"],
+        "t5b_raw",
+        "t5b_sub_d0",
+        _step0(tmp_path / "step0.csv"),
+        str(tmp_path / "tables"),
+    )
+    assert out["runs"]["t5b_weight_cre"] == [0]
+    with open(tmp_path / "tables" / "t5b_effects.csv", encoding="utf-8") as h:
+        rows = list(csv.DictReader(h))
+    pick = [
+        r
+        for r in rows
+        if r["condition"] == "t5b_weight_cre"
+        and r["part"] == "mean"
+        and r["kind"] == "dense"
+        and r["level"] == "L2"
+        and r["reading"] == "units_all_nomod"
+    ]
+    by = {r["ref"]: float(r["d"]) for r in pick}
+    assert abs(by["t5b_raw:mean"] - 3.0) < 0.3 and abs(by["t5b_sub_d0:mean"] - 2.0) < 0.3

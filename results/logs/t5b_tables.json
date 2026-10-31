@@ -1,0 +1,18 @@
+{
+ "runs": {
+  "t5b_raw": [
+   0
+  ],
+  "t5b_sub_d0": [
+   0
+  ],
+  "t5b_weight_cre": [
+   0
+  ]
+ },
+ "tables": [
+  "results/tables/t5/t5b_effects.csv",
+  "results/tables/t5/t5b_unique.csv"
+ ],
+ "version": "t5-tables/v1"
+}
