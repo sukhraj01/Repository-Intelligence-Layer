@@ -50,6 +50,7 @@ from ril.training.encoders import TrainEncoder, build_encoder
 from ril.training.negatives import Mined, make_policy, needs_mining
 from ril.training.pool_reader import PoolExample
 from ril.training.supervision import Arm, QualitySignal, arm_from_config
+from ril.util.portable import neutral_paths
 
 TRAINING_VERSION = "training/v1"
 PROVISIONAL = "provisional: ADR-001, ADR-002, ADR-006"
@@ -576,8 +577,13 @@ def write_run(
     trace: Sequence[Record],
     extra_log: Mapping[str, Any],
 ) -> None:
-    """Write the result directory and the run log."""
+    """Write the result directory and the run log.
+
+    Stored copies spell home-directory paths as ``/home/<user>/...`` (``ril.util.portable``); the
+    ``record`` returned to callers keeps the real paths.
+    """
     os.makedirs(paths.result_dir, exist_ok=True)
+    stored: Record = neutral_paths(record)
     with open(os.path.join(paths.result_dir, "config.yaml"), "w", encoding="utf-8") as handle:
         yaml.safe_dump(dict(cfg), handle, sort_keys=True)
     hw = hardware_info(device)
@@ -587,18 +593,20 @@ def write_run(
     if os.path.exists(results_path):
         with open(results_path, encoding="utf-8") as handle:
             old = json.load(handle)
-    _dump(results_path, {**old, "training": record})
+    _dump(results_path, {**old, "training": stored})
     _dump(
         paths.log_path,
-        {
-            "exp_id": cfg["exp_id"],
-            "config_hash": record["config_hash"],
-            "seed": record["seed"],
-            "hardware": hw,
-            "training": record,
-            "loss_trace": list(trace),
-            **dict(extra_log),
-        },
+        neutral_paths(
+            {
+                "exp_id": cfg["exp_id"],
+                "config_hash": record["config_hash"],
+                "seed": record["seed"],
+                "hardware": hw,
+                "training": record,
+                "loss_trace": list(trace),
+                **dict(extra_log),
+            }
+        ),
     )
 
 

@@ -416,7 +416,7 @@
   },
   "plan_sha256": "96af35983e12cb6248040ebfc08fbe71c69dfe7b515b509a5d0e967a121a12c5",
   "provisional": "provisional: ADR-001, ADR-002, ADR-006",
-  "result_dir": "/home2/sukhraj.singh/ril_t5/results/rq2/t5b_sub_d0/2026-10-31_c5436f15",
+  "result_dir": "/home/<user>/ril_t5/results/rq2/t5b_sub_d0/2026-10-31_c5436f15",
   "seed": 0,
   "teacher_equals_base": false,
   "updates_this_process": 1000,

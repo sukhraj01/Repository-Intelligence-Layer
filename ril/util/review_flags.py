@@ -27,6 +27,8 @@ from typing import Any
 
 import yaml
 
+from ril.util.portable import HOME_PATH_RE
+
 BLOCKING = "BLOCKING"
 WARNING = "WARNING"
 
@@ -75,10 +77,7 @@ TOLERANCE_ASSIGN_RE = re.compile(
     r"^\s*\w*(?:tol|eps|epsilon|delta)\w*\s*(?::[^=]+)?=\s*(?P<num>\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)\s*$",
     re.IGNORECASE,
 )
-HOME_RE = re.compile(
-    r"(?<![\w.])(?:/Users/(?P<mac>[A-Za-z0-9._-]+)|/home\d*/(?P<lin>[A-Za-z0-9._-]+)"
-    r"|[A-Za-z]:\\Users\\(?P<win>[A-Za-z0-9._-]+))"
-)
+HOME_RE = HOME_PATH_RE
 HOME_PLACEHOLDERS = {"user", "username", "you", "me", "name", "yourname", "someone", "USER"}
 TOKEN_RES: dict[str, re.Pattern[str]] = {
     "github token": re.compile(r"\bgh[pousr]_[A-Za-z0-9]{36,}\b"),
@@ -951,6 +950,42 @@ def scan(
     return ordered, merge_base, head_sha
 
 
+def scan_tree(git: Git, head: str) -> list[Finding]:
+    """Flag absolute home-directory paths anywhere in the tracked tree at ``head``.
+
+    The added-line scan only sees new text; this covers what is already committed, in every text
+    format (run logs and tables included), and needs no list of login names. Placeholder names
+    (``HOME_PLACEHOLDERS``) pass, so documentation examples stay legal.
+    """
+    head_sha = git.resolve(head)
+    sizes = git.tree(head_sha)
+    paths = sorted(p for p, n in sizes.items() if n <= SOURCE_MAX_BYTES)
+    found: list[Finding] = []
+    for path in paths:
+        if HOME_PATH_RE.search(path) and not _placeholder_only(path):
+            found.append(
+                Finding(BLOCKING, "home-path", path, 0, "home-directory path in a file name")
+            )
+    for start in range(0, len(paths), 500):
+        for path, raw in git.blobs(head_sha, paths[start : start + 500]).items():
+            if raw is None or b"\0" in raw:
+                continue
+            for no, text in enumerate(raw.decode("utf-8", errors="replace").splitlines(), 1):
+                if not _placeholder_only(text):
+                    found.append(
+                        Finding(BLOCKING, "home-path", path, no, "absolute home-directory path")
+                    )
+    return sorted(found, key=lambda f: (f.path, f.line))
+
+
+def _placeholder_only(text: str) -> bool:
+    """True when ``text`` has no home path, or every one uses a placeholder name."""
+    for m in HOME_RE.finditer(text):
+        if (m.group("mac") or m.group("lin") or m.group("win") or "") not in HOME_PLACEHOLDERS:
+            return False
+    return True
+
+
 def branch_name(git: Git) -> str:
     for var in ("GITHUB_HEAD_REF", "GITHUB_REF_NAME"):
         value = os.environ.get(var, "")
@@ -972,8 +1007,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=True,
         help="trace ledger and result-line numbers to files under results/ (default: on)",
     )
+    ap.add_argument(
+        "--tree",
+        action="store_true",
+        help="scan every tracked file at --head for home-directory paths instead of a diff",
+    )
     args = ap.parse_args(argv)
     git = Git(Path(args.root).resolve())
+    if args.tree:
+        try:
+            tree_findings = scan_tree(git, args.head)
+        except GitError as exc:
+            sys.stderr.write(f"review_flags: {exc}\n")
+            return 2
+        for f in tree_findings:
+            sys.stdout.write(f.render() + "\n")
+        sys.stdout.write(f"{len(tree_findings)} blocking (tracked tree at {args.head})\n")
+        return 1 if tree_findings else 0
     try:
         findings, merge_base, head_sha = scan(git, args.base, args.head, args.branch, args.numbers)
     except GitError as exc:

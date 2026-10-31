@@ -67,6 +67,7 @@ hooks:
 # (docs/REVIEW.md). Exits non-zero on a blocking finding.
 review-flags:
 	$(RUN) python scripts/review_flags.py --base $(BASE)
+	$(RUN) python scripts/review_flags.py --tree
 
 # What a pull request must show: lint, the fast tests and the flags.
 review: lint test review-flags

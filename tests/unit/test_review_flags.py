@@ -29,6 +29,7 @@ from ril.util.review_flags import (
     main,
     parse_diff,
     scan,
+    scan_tree,
 )
 
 NOQA = "# " + "no" + "qa"
@@ -336,6 +337,31 @@ def test_home_directory_path_blocks_and_placeholder_passes(repo: Repo) -> None:
     repo.commit({"scripts/run.sh": f"cd {HOME_PATH}\n", "docs/a.md": "see /home/user/data\n"})
     found = [f for f in repo.findings() if f.rule == "home-path"]
     assert [f.path for f in found] == ["scripts/run.sh"]
+
+
+def test_tree_scan_finds_home_paths_in_every_format_and_file_name(repo: Repo) -> None:
+    json_line = '{"result_dir": "/home2/' + "carol" + '/runs/a"}\n'
+    repo.commit(
+        {
+            "results/logs/run.json": json_line,
+            "results/tables/t.csv": "path\n/Users/" + "dave" + "/x\n",
+            "docs/a.md": "see /home/user/data and /home/<user>/data\n",
+            "results/home/" + "erin" + "/note.txt": "ok\n",
+        }
+    )
+    found = scan_tree(Git(repo.root), "HEAD")
+    assert {(f.path, f.line) for f in found} == {
+        ("results/logs/run.json", 1),
+        ("results/tables/t.csv", 2),
+    }
+
+
+def test_tree_scan_cli_exit_code(repo: Repo, capsys: pytest.CaptureFixture[str]) -> None:
+    repo.commit({"docs/a.md": "see /home/user/data\n"})
+    assert main(["--tree", "--root", str(repo.root)]) == 0
+    repo.commit({"docs/b.md": "cd /home/" + "frank" + "/p\n"})
+    assert main(["--tree", "--root", str(repo.root)]) == 1
+    assert "docs/b.md:1" in capsys.readouterr().out
 
 
 # -- blocking: the Verified split in tuning configs ----------------------------------------------

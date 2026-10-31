@@ -43,3 +43,6 @@ jobs:
 
       - name: Review flags against the base branch
         run: poetry run python scripts/review_flags.py --base origin/main
+
+      - name: Home-directory paths in the tracked tree
+        run: poetry run python scripts/review_flags.py --tree
