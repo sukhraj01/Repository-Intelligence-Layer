@@ -38,7 +38,7 @@ import numpy as np
 from ril.training.pool_reader import FeatureTable, PoolExample
 
 PROVISIONAL = "provisional: ADR-002"
-ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM", "NOISE")
+ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM", "NOISE", "RAW_SUBSAMPLE")
 Record = dict[str, Any]
 
 
@@ -245,6 +245,36 @@ class NoisePositives:
         return out, _report(examples, out)
 
 
+class RandomSubset:
+    """Size-matched control for FILTER (D43): a random subset of ``size`` examples.
+
+    The draw is keyed by the seed and ``draw`` (a purpose path, so independent draws of one seed
+    are independent of each other and of the batch plan) and made over the examples sorted by
+    instance id, so it does not depend on the order the pool was read in. The kept examples keep
+    their pool order. Positives, negatives and every other property of an example are untouched.
+    """
+
+    name = "random_subset"
+
+    def __init__(self, size: int, seed: int, draw: int = 0) -> None:
+        if size < 1:
+            raise ValueError("size must be at least 1")
+        if draw < 0:
+            raise ValueError("draw must be non-negative")
+        self.size, self.seed, self.draw = size, seed, draw
+
+    def apply(self, examples: Sequence[PoolExample]) -> tuple[list[PoolExample], FilterReport]:
+        if self.size > len(examples):
+            raise ValueError(f"subset of {self.size} asked from a pool of {len(examples)}")
+        by_id = sorted(range(len(examples)), key=lambda i: examples[i].instance_id)
+        pick = rng_for(self.seed, "subsample", self.draw).choice(
+            len(examples), size=self.size, replace=False
+        )
+        keep = sorted(by_id[int(i)] for i in pick)
+        out = [examples[i] for i in keep]
+        return out, _report(examples, out)
+
+
 # --------------------------------------------------------------------------- hook 2: weights
 
 
@@ -411,7 +441,8 @@ def arm_from_config(
 
     ``{name, filter: {...}|null, weight: {...}|null, ordering: {...}|null}``; a missing or null
     hook is the identity. ``signals`` maps teacher names to quality signals. ``seed`` keys the
-    NOISE control's draw. NOISE takes no hook section; ``ordering.reverse: true`` reverses the
+    NOISE control's and the subsample's draw (``RAW_SUBSAMPLE``: ``subsample: {size, draw}``).
+    NOISE takes no hook section; ``ordering.reverse: true`` reverses the
     CURRICULUM order.
     """
     name = str(cfg["name"])
@@ -425,6 +456,13 @@ def arm_from_config(
         if fc or wc or oc:
             raise ValueError("the NOISE control takes no filter, weight or ordering section")
         f = NoisePositives(seed)
+    sc = cfg.get("subsample")
+    if name == "RAW_SUBSAMPLE":
+        if fc or wc or oc or not sc:
+            raise ValueError("RAW_SUBSAMPLE takes a 'subsample' section and no other hook")
+        f = RandomSubset(int(sc["size"]), seed, int(sc.get("draw", 0)))
+    elif sc:
+        raise ValueError("a 'subsample' section belongs to the RAW_SUBSAMPLE arm")
     if fc:
         k = fc.get("k")
         f = KRankThreshold(_signal(fc, signals), None if k is None else int(k), str(fc["level"]))

@@ -17,6 +17,7 @@ Subcommands (logic in ``ril/``):
   features RANKS [RANKS ...] --out CSV --teachers T [T ...] --held-out H --rename-cache R
   run-batch CONFIG [CONFIG ...] --cache C [--feature-table T] [--mined M] --results-root R
          --work-root W --date D --device D <eval options> [--extra-eval O.yaml ...] [--keep-models]
+         [--drop-eval-stores]
          (train then evaluate each configuration; the cache is read once; finished runs skipped)
   curve  CONFIG CACHE --results-root R --work-root W --date D --device D [--feature-table T]
          [--mined M] <eval options>   (one training run with the evaluation of the configuration's
@@ -127,6 +128,10 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
             _evaluate(a, config, final, str(rec["result_dir"]), override=o)
         if not a.keep_models:
             shutil.rmtree(paths.ckpt_root, ignore_errors=True)
+        if a.drop_eval_stores:
+            variant = f"{cfg['exp_id']}__{os.path.basename(str(rec['result_dir']))}"
+            for part in ("enc", "eval", "dense"):
+                shutil.rmtree(os.path.join(a.work, part, variant), ignore_errors=True)
         done.append(config)
     return {"done": done, "skipped": skipped, "inputs": inputs.hashes}
 
@@ -251,6 +256,11 @@ def main(argv: list[str] | None = None) -> int:
     rb.add_argument("--date", required=True)
     rb.add_argument("--extra-eval", nargs="*", default=[])
     rb.add_argument("--keep-models", action="store_true")
+    rb.add_argument(
+        "--drop-eval-stores",
+        action="store_true",
+        help="delete the encoded stores and scores of a run after its evaluation (node-local disk)",
+    )
     for q in (e, rb):
         for a in ("--e1-config", "--prep", "--e3-cache", "--data-root", "--work"):
             q.add_argument(a, required=True)

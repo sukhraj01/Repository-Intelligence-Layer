@@ -1,0 +1,31 @@
+# E-PILOT-ARMS2 stage 1 (exploratory, labelled; outside the pre-registered RQ tables). Every value is a pilot
+# value, provisional ADR-001, ADR-002, ADR-006, never in configs/frozen/. Same model, batch shape, loss, optimizer,
+# negative policy (random repository-local, D28 primary) and schedule as the learning curve (configs/experiments/t3/)
+# and the first arms pilot (configs/experiments/t4/): the schedule is that of 3,000 updates (warm-up 7, linear),
+# the run is complete after budget.stop_after = 100 updates. Pool: the 5,000 directories of the learning curve
+# (pool_A + pool_T3x caches), K-ranks of all three teachers in p0_features_5000.csv. Only exp_id, label, seed and
+# arm differ between cells. RAW_SUBSAMPLE is the size-matched control of the FILTER cells: a random subset of
+# 4,592 examples, the median of the three FILTER K=20 pool sizes (BM25 4,169; CodeRankEmbed 4,592; SweRankEmbed-Small 4,924).
+exp_id: t5a_filter_bm25
+rq: rq2
+label: "E-PILOT-ARMS2 stage 1: FILTER K=20, teacher BM25; N = 100 updates of a 3,000-update schedule"
+provisional: [ADR-001, ADR-002, ADR-006]
+seed: 0
+pool:
+  source: gangiswag/train_data train.zip, train/python (listing of 2026-10-17, member offsets)
+  held_out: data/held_out/held_out_repos.json (v2, core plus Loc-Bench tier) with data/held_out/rename_cache.json
+  selection: first 5,000 directories outside the held-out list by sha256("0:<directory>") = selection A (first 2,000) plus the next 3,000 (cache pool_A + pool_T3x)
+  include_held_out: false
+  max_instances: 5000
+  selection_seed: 0
+  text_form: code
+  feature_table: p0_features_5000.csv (K-ranks of the 5,000 directories under CodeRankEmbed and SweRankEmbed-Small at 1,024 tokens and BM25; teacher passes of 2026-10-25 and 2026-10-31)
+model: {kind: sentence_transformers, encoder: coderankembed, max_tokens: 512, gradient_checkpointing: true}
+batch: {batch_size: 32, negatives_per_example: 1, max_positives: 1}
+negatives: {name: random_repo}
+loss: {form: sum_in_numerator, normaliser: batch, temperature: 0.05}
+optimizer: {name: adamw, lr: 2.0e-5, weight_decay: 0.01, warmup_updates: 7, schedule: linear, grad_clip: 1.0, precision: amp_fp16}
+budget: {updates: 3000, stop_after: 100}
+checkpoint: {every: 100, keep: 1, log_every: 10, final_dtype: float16}
+arm: {name: FILTER, filter: {teacher: bm25, k: 20, level: positive}}
+evaluation: {roles: [dev], rrf_k: 60, batch_size: 64, chunks: false, seed: 0, baselines: []}
