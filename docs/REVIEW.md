@@ -61,7 +61,7 @@ one blocking finding.
 | `large-file` | an added or changed file over 5 MB | the repository is not storage for data |
 | `forbidden-file` | model weights, archives, environment files, key and credential files | they must not be published |
 | `secret` | text shaped like an access token, secret key or private key block | published credentials must be revoked |
-| `home-path` | an absolute home-directory path in an added line | it exposes a login name and does not run on another machine |
+| `home-path` | an absolute home-directory path in an added line, or (with `--tree`) anywhere in the tracked tree, any file format | it exposes a login name and does not run on another machine |
 | `verified-in-tuning-config` | the Verified split named in a file under `configs/experiments/` whose name or `purpose` field says tuning, sweep, search or dev, outside an entry marked `role: test` | the split is the final test; a choice made on it is leakage |
 | `unsourced-number` | a number in a ledger row or a "Result" line that is found in no file the row or its section names under `results/` | a figure with no stored source cannot be re-derived |
 
