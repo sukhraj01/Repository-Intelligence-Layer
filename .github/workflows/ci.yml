@@ -1,0 +1,45 @@
+name: ci
+
+# The minimum every branch must meet before a reviewer starts: lint, the fast tests and the review
+# flags (docs/REVIEW.md). A green run is not a verdict. No secrets are used and nothing is fetched
+# beyond the package install.
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Set up Python (version from pyproject.toml)
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: pyproject.toml
+          cache: poetry
+
+      - name: Install the project without the training group
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --no-interaction
+
+      - name: Lint
+        run: make lint
+
+      - name: Fast tests
+        run: make test
+
+      - name: Review flags against the base branch
+        run: poetry run python scripts/review_flags.py --base origin/main

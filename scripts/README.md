@@ -9,3 +9,6 @@ parses arguments (always `--seed`), calls into `ril/`, and writes outputs. `scri
 - `scripts/check_docs.py` — lists dangling links, paths and ADR / DEV / Q numbers in the tracked
   documents (`ril/util/doc_check.py`); run `python -I scripts/check_docs.py` after editing any
   document. It is also a unit test (`tests/unit/test_doc_check.py`).
+- `scripts/review_flags.py` — scans the added lines of a branch for shortcuts and traces ledger numbers
+  to files under `results/` (`ril/util/review_flags.py`, rules and limits in `docs/REVIEW.md`); run it as
+  `make review-flags BASE=main`. Exit status 1 on a blocking finding. Tests: `tests/unit/test_review_flags.py`.

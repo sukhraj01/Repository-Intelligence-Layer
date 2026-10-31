@@ -13,10 +13,11 @@
 # torch ones included) is for Ada only.
 
 PYTHON ?= python3.11
+BASE ?= main
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks
+.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks review review-flags
 
 setup:
 	poetry env use $(PYTHON)
@@ -61,3 +62,11 @@ bench-graph:
 
 hooks:
 	@sh scripts/hooks/install.sh
+
+# Flags on the added lines of this branch against BASE, and a trace of ledger numbers to results/
+# (docs/REVIEW.md). Exits non-zero on a blocking finding.
+review-flags:
+	$(RUN) python scripts/review_flags.py --base $(BASE)
+
+# What a pull request must show: lint, the fast tests and the flags.
+review: lint test review-flags

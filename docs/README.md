@@ -21,6 +21,7 @@ the task at hand needs**. This page says what each file is and when to read it.
 | `ROADMAP.md` | **Live** checkbox plan by week and owner (owners are named at the top) | planning; tick as work lands |
 | `EXPERIMENTS.md` | **Live** experiment registry: IDs, protocol, status | planning or running an experiment |
 | `DEVIATIONS.md` | **Live** departures from the master doc, DEV-001 onward, with rationale | before departing from the design |
+| `REVIEW.md` | **Live** review standard: checks on every branch, the flag rules and their limits, re-deriving a number, proxies, hand-back and verdict | reviewing or handing back a branch |
 | `GRAPH_DESIGN.md` | **Live** options, evidence and costs for the knowledge graph (does not choose) | graph schema, storage, roles |
 | `COMPUTE.md` | Local box and Ada: environment, quotas, inherited lessons, job log | before any cluster or data work |
 | `status/` | **Live** one status page per workstream (`status/person_a.md`), replaced at the end of each block | picking up or reviewing a workstream |
