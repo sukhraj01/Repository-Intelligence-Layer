@@ -136,3 +136,12 @@ engineer sign-off — it is a design decision.
 - Impact: fewer in-batch negatives than the master's recipe; absolute pilot numbers are not comparable with SweRank's. The "held identical" block of `docs/08_experimental_design.md` is not edited; ADR-002 owns the final batch.
 - Reversible: yes (gradient caching, a larger card, or a smaller held-identical batch are the options, Q53).
 - Related: ADR-002, ADR-006, Q53
+
+## DEV-014 — The matched-pool arms pilot ran a reduced design   (2026-10-31 · status: proposed)
+- Master says: `docs/ROADMAP.md` milestone 12: four RQ2 arms, three seeds each; the Wave 6 plan: three seeds at 100 updates, three independent subsample draws per seed, ansible among the dev repositories, a second stage at 1,000 updates for RAW, the subsample and the two largest cells with two seeds.
+- We do: two seeds instead of three at 100 updates; one subsample draw per seed (draw 0) instead of three (configurations for draws 1 and 2 exist, not run); Pro ansible not evaluated in any cell (five dev repositories, 351 L2 and 155 L3 queries); stage 2 at 1,000 updates on seed 0 only, with RAW, the subsample and WEIGHT (FILTER with SweRankEmbed-Small and the second seed not run).
+- Why: measured per-run cost exceeded the plan (0.38 GPU-hours at 100 updates, 1.06 at 1,000; stage 2 about 8.5 GPU-hours against the planned 3) and Block 2 had 46 GPU-hours, 45.15 used. Ansible's 274k unit texts serve L2 and L3 alike and cost 20 minutes a run.
+- Impact: intervals carry query sampling only and are descriptive; the minimum detectable difference at three seeds (1.4 L2, 1.7 L3) exceeds every observed gap, so the pilot cannot rule out smaller effects. The stage 2 subsample (4,592 distinct examples against 5,000) is below the common unique count and is flagged. Nothing here enters the pre-registered RQ tables.
+- Reversible: yes, at about 2.6 GPU-hours per extra seed and 0.4 per extra subsample draw run at 100 updates.
+- Related: ADR-002, ADR-001
+

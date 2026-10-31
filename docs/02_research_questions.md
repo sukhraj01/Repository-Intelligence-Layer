@@ -15,7 +15,7 @@ Incremental ablation measuring what lexical and structural signals add to a dens
 
 **RQ2 — How does training supervision quality and composition affect repository-level retrieval under matched optimization budgets?**
 
-Core controlled experiment. Four arms — raw, filtering, weighting, curriculum — trained for the same number of optimizer updates at matched batch size and schedule. Compute cost, unique examples seen, and effective epochs are reported, not controlled. Secondary: the quantity–quality tradeoff. Ablation: positive-side versus negative-side quality.
+Core controlled experiment. Four arms — raw, filtering, weighting, curriculum — trained for the same number of optimizer updates at matched batch size and schedule. Compute cost, unique examples seen, and effective epochs are reported, not controlled: every table row states the number of optimizer updates, the distinct examples seen, the effective epochs and the pool it drew from, and a cell that cannot reach the common distinct-example count without repeating examples is flagged, never silently included. A random subsample of the raw pool, of the size of each filtered pool, is trained alongside every filtering comparison, and "quality beyond quantity" means beating that subsample, not only the full-pool raw arm. Secondary: the quantity–quality tradeoff. Ablation: positive-side versus negative-side quality.
 
 **RQ3 — Does improving retriever supervision translate into improved coding-agent performance?**
 
