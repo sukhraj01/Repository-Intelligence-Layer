@@ -279,7 +279,7 @@ Paper values are `paper_reported`.
 - **Failure modes.** Common words that are also identifiers (high ambiguity); versioned docs that
   describe a different commit.
 - **Who used it.** LARGER (confidence 0.6; `larger-2605.16352.md`, Table 11, p.19). In the
-  co-change literature scan, documentation files were the category missed most (73% for `docs/docsite/`
+  co-change literature scan, documentation files were the category missed most (73% for the docsite directory
   gold files; `exploration-structure-2606.11976.md`, Table 5, p.14), which is a reason to consider the
   family and not evidence that it helps.
 - **Leakage.** Snapshot only.

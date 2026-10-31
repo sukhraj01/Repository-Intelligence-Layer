@@ -5,7 +5,7 @@
 - **Decide by:** end of week 2 (all ten decisions)
 - **Decided by:** _pending — team_
 - **Master doc:** open decision #7 (`docs/12_open_decisions.md`)
-- **Affects:** RQ3, `ril/evaluation/agent_integration.py`
+- **Affects:** RQ3, the agent integration module (not written yet)
 
 ## Context
 RQ3 needs one fixed scaffold, one fixed base model, fixed temperature and seed, over the same instances, with the retriever as the only thing that changes.

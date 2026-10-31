@@ -1064,7 +1064,7 @@ examples at batch 32: 2,016 visits); the final model in half precision; evaluati
 repositories, units only (decision D12's level; chunks skipped for budget), RRF k = 60 with BM25 beside the dense column.
 Seeds 0 and 1 per condition (training seed; the selection is fixed). Teacher ranks: one pass over the example cache per teacher
 (CodeRankEmbed, SweRankEmbed-Small at 1,024 tokens, float16; BM25), with E-POOL-RANKS's rank definition; feature table
-`t2_features_A.csv` (untracked; ids hashed as in E-POOL-RANKS).
+the feature table of selection A (untracked; ids hashed as in E-POOL-RANKS).
 
 **Pool.** Selection A: the first 2,000 directories outside the held-out list (v2 with the rename cache) by sha256("0:<directory>");
 cached with 0 fetch errors, 2,000 examples. Selection L (E-PILOT-LEAK only): the first 2,000 directories of the whole listing by
@@ -1453,7 +1453,7 @@ first-parent commits that touch Python files of each repository: the first is bu
 by an incremental update and also built from scratch with `build_repository`; graph digest and unit bytes are compared.
 
 **Resolver fix found by the equality check.** On requests the first runs disagreed on 3 of 5 commits: the resolver cached
-the value of a lookup that had been cut short by a cycle (`str = str` in `compat.py`), so the edge of `from .compat import
+the value of a lookup that had been cut short by a cycle (`str = str` in a `compat` module), so the edge of `from .compat import
 str` depended on which file had been resolved first. Results computed under a cycle cut are no longer cached
 (`ril/parsing/call_graph.py`). Effect on a full build: 2 of 4,163 edges change on requests (from `resolved` to `external`,
 the re-exported builtin), 0 of 5,892 on flask and 0 of 262,361 on django; build time unchanged. Regression test:

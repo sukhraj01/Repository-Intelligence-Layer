@@ -1,6 +1,6 @@
 # ril/evaluation/
 
-**Planned files:** `metrics.py`, `core_bench.py`, `agent_integration.py`.
+**Built:** the loaders, metrics, chunk mapping, pilot and checkpoint evaluation, power calculations and edge-recovery measurements listed below and in `docs/ARCHITECTURE.md`. **Not written yet:** `agent_integration.py`.
 Design: `docs/06_core_bench.md`, `docs/08_experimental_design.md`.
 
 - `core_bench.py` — loaders for `LEVEL-2/<dataset>/<repository>/{corpus,queries,qrels}.jsonl` and the

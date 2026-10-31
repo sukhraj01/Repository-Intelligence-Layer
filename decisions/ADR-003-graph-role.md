@@ -5,7 +5,7 @@
 - **Decide by:** end of week 2 (all ten decisions)
 - **Decided by:** _pending — team_
 - **Master doc:** open decision #3 (`docs/12_open_decisions.md`)
-- **Affects:** `ril/retrieval/hybrid_retriever.py`, RQ1, the graph extension, agent integration
+- **Affects:** the fusion step of the retrieval stack (not written yet), RQ1, the graph extension, agent integration
 
 ## Context
 LocAgent uses the graph as a tool the agent calls; RIL's design uses it as a signal (struct(u) = γ^dist(ℓ,u), γ ≈ 0.5, then possibly personalized PageRank). These are different systems with different latency profiles. Pick deliberately; do not drift between them.

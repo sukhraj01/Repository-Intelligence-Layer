@@ -12,8 +12,8 @@ spec is what the work is held to.
 | `repo_graph.md` | The RepoGraph typed edge store: DRAFT v0, options only, own version constant |
 | `parse_one_repo.md` | Parse one real repo end to end; ten CodeUnits; edge-recovery % |
 
-Specs to add when their week arrives (do not write them early): `supervision_arms.md` (week 6),
-`rq3_protocol.md` (week 10), `graph_extension.md` (week 7).
+Specs to add when their week arrives (do not write them early): a supervision-arms spec (week 6),
+an RQ3 protocol (week 10) and a graph-extension spec (week 7).
 
 Each spec has the same sections: **Purpose · Inputs · Outputs · Settled · Open design questions ·
 Acceptance criteria · Tests.**

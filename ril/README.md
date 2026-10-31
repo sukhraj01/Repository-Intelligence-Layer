@@ -1,8 +1,8 @@
 # ril/ — the package
 
 Python 3.11, type-hinted, `mypy --strict`. Each subpackage has an `__init__.py`; module files are
-added by the work that owns them. `config/` and `util/` (seed, logger, sanity checks) are
-implemented; the other subpackages hold a README stating their contract.
+added by the work that owns them. `config/` and `util/` (seed, logger, sanity checks, document checks) and the
+subpackages listed in `docs/ARCHITECTURE.md` are implemented; each subpackage README states its contract.
 Design: `docs/ARCHITECTURE.md` (live) and `docs/09_architecture.md` (master-derived).
 
 ```

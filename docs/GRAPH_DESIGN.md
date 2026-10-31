@@ -2,11 +2,12 @@
 
 Status: working design document for `specs/repo_graph.md` (DRAFT v0) and ADR-011. **It records options,
 evidence and costs. It does not choose.** The graph's role is ADR-003; the graph's schema, edge
-taxonomy and storage are ADR-011; how edge recovery is defined and reported is ADR-012 (planned).
+taxonomy and storage are ADR-011; how edge recovery is defined and reported is ADR-012.
 
 Evidence labels: **read in full** (a note in `knowledge/papers/`, value `paper_reported`), **measured**
 (a project run with a log), **reasoned** (no source, no run). Nothing below is **measured** unless it
-says so: no graph has been built yet in this project. Page numbers are PDF pages of the version named in
+says so. The first graphs were built on 2026-10-17 (flask, requests, django; ADR-011 and ADR-012 addenda) and the
+sections written before that date still describe the options as they stood then. Page numbers are PDF pages of the version named in
 each note.
 
 ## 1. Why a separate, versioned graph
