@@ -57,6 +57,7 @@ one blocking finding.
 | `assert-removed` | more assertion lines removed than added in an existing test file | the check was weakened to make the test pass |
 | `tolerance-widened` | a tolerance argument or tolerance constant changed to a looser value in an existing test | same, in smaller steps |
 | `expected-number-changed` | a number changed inside an assertion of an existing test | an expectation that moves with the output proves nothing; the change needs an explanation |
+| `foreign-log` | a branch named `a/...` or `c/...` that changes `docs/EXPERIMENTS.md`, another workstream's experiment log, status page or ledger | each person appends to one log only, so merges of logs never conflict; the index row is the lead's |
 | `frozen-config` | any change under `configs/frozen/` on a branch that is not a lead branch | the frozen configuration is the experiment's control |
 | `large-file` | an added or changed file over 5 MB | the repository is not storage for data |
 | `forbidden-file` | model weights, archives, environment files, key and credential files | they must not be published |
@@ -73,13 +74,14 @@ one blocking finding.
 | `untested-definition` | a top-level function or class added in `ril/` whose name appears in no test | untested code is unverified code; sometimes the test is indirect |
 | `config-no-seed`, `config-no-marker` | a new configuration with no seed, or with neither a hash field nor a `provisional:` or frozen marker | a run must be reproducible and its status must be visible |
 | `changed-default` | a changed default argument in a shared module | every caller changes silently |
+| `outside-ownership` | a branch named `a/...` or `c/...` that changes a path outside the list its workstream owns (`OWNED_PATHS` in `ril/util/review_flags.py`) | the change belongs in a request to the lead |
 | `deleted-file` | a deleted file under `results/` or `tests/` | evidence or a check was removed (empty placeholder files are exempt) |
 | `done-without-output` | a registry row marked done whose row and section name no path under `results/` | done means there is an output to look at |
 
 ### What the trace-to-source check does
 
 For each ledger row added in `RESULTS.md` or a `results/ledger_*.md` file it reads the
-"headline result" cell; for each added line beginning "**Result" in `EXPERIMENTS.md` it reads that
+"headline result" cell; for each added line beginning "**Result" in `docs/EXPERIMENTS.md` or a file under `docs/experiments/` it reads that
 line. In those places it extracts numbers with decimals and integers written with thousands
 separators. It then looks for each number, at the precision printed (and as a fraction when the
 printed value is a percentage), in the files under `results/` that the ledger row names (paths,
@@ -106,7 +108,7 @@ Keep this list in mind; the flags are a floor.
 - A skip written as ordinary control flow (an early return, a condition that is always false) is
   not seen.
 - Secrets are matched by the shape of common tokens only. A token of an unusual shape passes.
-- Ownership is judged from the branch name only; it does not know who pushed the commits.
+- Ownership is judged from the branch name only; it does not know who pushed the commits. A branch that does not start with `a/`, `c/` or `b/` is not checked.
 - The Verified rule reads the structure of the file. A split referred to by another name, or by a
   path to a file that lists it, passes; an entry marked `role: test` is trusted.
 - It does not judge whether the experiment measures what the text says it measures.
@@ -161,6 +163,22 @@ When a branch is handed back for review, the pull request, filled from the templ
 - requests for the lead: decisions, settings and compute needed.
 
 A hand-back that omits the list of cut or skipped items is returned without review.
+
+## Merging
+
+- `main` changes only by merging a reviewed pull request. Nobody commits to it directly or pushes to it, the
+  lead included once the repository is shared; the pre-push hook of the team kit refuses a push to
+  `main`, and the repository setting that blocks direct pushes is the enforcement that does not depend on a
+  local hook.
+- Experiment entries are written to the log of the workstream that ran them: `docs/EXPERIMENTS.md` (lead),
+  `docs/experiments/A.md`, `docs/experiments/C.md`. Nobody edits another person's log. The index table in
+  `docs/EXPERIMENTS.md` gets its row for a new entry from the lead at merge time; the pull request text carries
+  the row to add (entry id, owner, file, status, date).
+- A conflict in a log, a ledger or any other append-only file is resolved by keeping both sides, in the order they
+  were written, never by choosing one. After resolving, `python -I scripts/check_docs.py` must report no dangling
+  reference (it fails on an entry id defined twice and on a citation of an entry that exists nowhere).
+- Files that several people append to are split by person (one file each) or by unique name (one file per entry) so
+  that a conflict cannot arise; where a shared file remains, only the lead edits it.
 
 ## Recording a verdict
 

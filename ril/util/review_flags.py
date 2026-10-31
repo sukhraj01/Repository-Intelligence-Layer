@@ -27,6 +27,7 @@ from typing import Any
 
 import yaml
 
+from ril.util.experiment_registry import LOG_FILES, owned_log
 from ril.util.portable import HOME_PATH_RE
 
 BLOCKING = "BLOCKING"
@@ -40,7 +41,21 @@ SOURCE_SUFFIXES = {".csv", ".tsv", ".json", ".jsonl", ".md", ".txt", ".yaml", ".
 RESULT_PATH_RE = re.compile(r"results/[A-Za-z0-9_.*/-]*(?:\{[^{}]*\}[A-Za-z0-9_.*/-]*)*")
 Claim = tuple[str, int, float, int, str, list[str]]
 LEDGER_RE = re.compile(r"^(RESULTS\.md|results/ledger[^/]*\.md)$")
-REGISTRY_FILE = "docs/EXPERIMENTS.md"
+REGISTRY_FILES = LOG_FILES
+# Paths each workstream branch (``a/...``, ``c/...``) edits; the lead's branches (``b/...``) are not
+# restricted. Taken from the workstream briefs; a path outside the list is flagged, not refused.
+OWNED_PATHS: dict[str, tuple[str, ...]] = {
+    "a": (
+        "ril/parsing/", "ril/retrieval/", "ril/bench/", "ril/analysis/rq1_", "scripts/a_",
+        "scripts/ada/a_", "configs/experiments/a_", "configs/candidates/", "tests/", "results/",
+        "docs/status/person_a.md", "docs/experiments/A.md",
+    ),
+    "c": (
+        "ril/evaluation/", "ril/agent/", "ril/data_mining/", "scripts/c_", "scripts/ada/c_",
+        "configs/experiments/c_", "configs/agent/", "tests/", "results/",
+        "docs/status/person_c.md", "docs/EVAL_API.md", "docs/experiments/C.md",
+    ),
+}  # fmt: skip
 SHARED_PREFIXES = ("ril/util/", "ril/config/")
 SHARED_FILES = {"ril/evaluation/metrics.py"}
 TEXT_SUFFIXES = {
@@ -414,6 +429,7 @@ class Scan:
                 and not fd.path.endswith("/.gitkeep")
             ):
                 self.add(WARNING, "deleted-file", fd.path, 1, "file deleted")
+        self.scan_ownership()
         for fd in touched:
             size = sizes.get(fd.path, 0)
             if size > MAX_FILE_BYTES:
@@ -601,10 +617,12 @@ class Scan:
                 )
 
     def scan_registry(self) -> None:
-        fd = next((f for f in self.files if f.path == REGISTRY_FILE and f.status != "D"), None)
-        if fd is None:
-            return
-        text = self.git.text(self.head, REGISTRY_FILE)
+        for fd in self.files:
+            if fd.path in REGISTRY_FILES and fd.status != "D":
+                self._scan_registry_file(fd)
+
+    def _scan_registry_file(self, fd: FileDiff) -> None:
+        text = self.git.text(self.head, fd.path)
         if text is None:
             return
         lines = text.split("\n")
@@ -621,10 +639,48 @@ class Scan:
             self.add(
                 WARNING,
                 "done-without-output",
-                REGISTRY_FILE,
+                fd.path,
                 no,
                 f"{ident} is marked done but neither the row nor its section names a result path",
             )
+
+    @staticmethod
+    def _foreign(letter: str) -> set[str]:
+        """Status page and ledger of the other workstreams."""
+        return {
+            f"{stem}{other}.md"
+            for other in OWNED_PATHS
+            if other != letter
+            for stem in ("docs/status/person_", "results/ledger_")
+        }
+
+    def scan_ownership(self) -> None:
+        """Flag a workstream branch that touches a path outside its ownership list."""
+        letter = self.branch.split("/", 1)[0] if "/" in self.branch else ""
+        owned = OWNED_PATHS.get(letter)
+        if owned is None:
+            return
+        own_log = owned_log(self.branch)
+        for fd in self.files:
+            other_log = fd.path in REGISTRY_FILES and fd.path != own_log
+            if other_log or fd.path in self._foreign(letter):
+                self.add(
+                    BLOCKING,
+                    "foreign-log",
+                    fd.path,
+                    1,
+                    f"branch '{self.branch}' edits another person's file; its own log is "
+                    f"{own_log} (the lead adds the index row at merge time)",
+                )
+            elif not fd.path.startswith(owned) and fd.path not in owned:
+                self.add(
+                    WARNING,
+                    "outside-ownership",
+                    fd.path,
+                    1,
+                    f"path is outside the files workstream '{letter}' owns; "
+                    "write a request for the lead instead",
+                )
 
     # -- trace to source -------------------------------------------------------------------------
 
@@ -661,7 +717,7 @@ class Scan:
                 continue
             if LEDGER_RE.match(fd.path):
                 claims.extend(self._ledger_claims(fd))
-            elif fd.path == REGISTRY_FILE:
+            elif fd.path in REGISTRY_FILES:
                 claims.extend(self._result_line_claims(fd))
         return claims
 
@@ -670,7 +726,7 @@ class Scan:
         if text is None:
             return []
         lines = text.split("\n")
-        doc = self.git.text(self.head, REGISTRY_FILE) or ""
+        doc = "\n".join(self.git.text(self.head, f) or "" for f in REGISTRY_FILES)
         ledger_header = next(
             (_cells(ln) for ln in lines if ln.startswith("|") and "headline" in ln.lower()), None
         )
@@ -699,7 +755,7 @@ class Scan:
         return out
 
     def _result_line_claims(self, fd: FileDiff) -> list[Claim]:
-        text = self.git.text(self.head, REGISTRY_FILE)
+        text = self.git.text(self.head, fd.path)
         if text is None:
             return []
         lines = text.split("\n")

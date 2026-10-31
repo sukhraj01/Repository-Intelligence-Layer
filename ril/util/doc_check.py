@@ -17,15 +17,21 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+from ril.util.experiment_registry import LOG_FILES, check_registry
+
 CHECKED_GLOBS: tuple[str, ...] = (
     "README.md",
     "PROJECT_STATE.md",
     "RESULTS.md",
     "docs/*.md",
     "docs/status/*.md",
+    "docs/experiments/*.md",
     "decisions/*.md",
     "specs/*.md",
 )
+
+# Files scanned for citations of experiment-log entries (a path or an id that resolves to nothing).
+CITING_SUFFIXES: tuple[str, ...] = (".md", ".py", ".yaml", ".sh", ".sbatch")
 
 # Directories rebuilt by jobs on the cluster and never tracked (see data/README.md).
 REBUILT_PREFIXES: tuple[str, ...] = (
@@ -274,4 +280,21 @@ def check_tree(root: Path, files: set[str] | None = None) -> list[Finding]:
     for name in checked_documents(tracked):
         text = (root / name).read_text(encoding="utf-8")
         findings.extend(check_document(name, text, known, adrs, devs, max_q))
+    findings.extend(_registry_findings(root, tracked))
     return findings
+
+
+def _registry_findings(root: Path, tracked: set[str]) -> list[Finding]:
+    """Entry-id checks over the three experiment logs and everything that cites them."""
+    logs = {p: (root / p).read_text(encoding="utf-8") for p in LOG_FILES if p in tracked}
+    if not logs:
+        return []
+    citing = {
+        p: (root / p).read_text(encoding="utf-8")
+        for p in sorted(tracked)
+        if p not in logs
+        and not p.startswith("tests/")  # fixtures cite invented ids
+        and p.endswith(CITING_SUFFIXES)
+        and (root / p).is_file()
+    }
+    return [Finding(f.path, f.line, f.token, f.message) for f in check_registry(logs, citing)]

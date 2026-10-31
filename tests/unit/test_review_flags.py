@@ -550,6 +550,50 @@ def test_done_registry_row_with_a_section_path_passes(repo: Repo) -> None:
     assert "done-without-output" not in repo.rules()
 
 
+def test_registry_rows_in_a_workstream_log_are_scanned(repo: Repo) -> None:
+    repo.commit({"docs/experiments/A.md": REGISTRY_HEAD})
+    row = "| A9 | RQ1 | a | b | 0 | c | done 2026-01-01 |\n"
+    repo.commit({"docs/experiments/A.md": REGISTRY_HEAD + row})
+    assert "done-without-output" in repo.rules(WARNING)
+
+
+@pytest.mark.parametrize(
+    ("branch", "path", "rule"),
+    [
+        ("a/rq1", "docs/EXPERIMENTS.md", "foreign-log"),
+        ("a/rq1", "docs/experiments/C.md", "foreign-log"),
+        ("c/eval", "docs/experiments/A.md", "foreign-log"),
+        ("c/eval", "docs/status/person_a.md", "foreign-log"),
+        ("a/rq1", "results/ledger_c.md", "foreign-log"),
+        ("a/rq1", "ril/training/training.py", "outside-ownership"),
+        ("c/eval", "ril/retrieval/bm25_index.py", "outside-ownership"),
+    ],
+)
+def test_a_workstream_branch_touching_foreign_files_is_flagged(
+    repo: Repo, branch: str, path: str, rule: str
+) -> None:
+    repo.commit({path: "x\n"})
+    found = [f for f in repo.findings(branch=branch) if f.rule == rule]
+    assert [f.path for f in found] == [path]
+
+
+@pytest.mark.parametrize(
+    ("branch", "path"),
+    [
+        ("a/rq1", "docs/experiments/A.md"),
+        ("a/rq1", "ril/parsing/build.py"),
+        ("c/eval", "docs/experiments/C.md"),
+        ("c/eval", "docs/status/person_c.md"),
+        ("b/lead", "docs/EXPERIMENTS.md"),
+        ("b/lead", "ril/training/training.py"),
+    ],
+)
+def test_own_files_and_the_lead_are_not_flagged(repo: Repo, branch: str, path: str) -> None:
+    repo.commit({path: "x\n"})
+    rules = {f.rule for f in repo.findings(branch=branch)}
+    assert not rules & {"foreign-log", "outside-ownership"}
+
+
 # -- the planted branch, end to end --------------------------------------------------------------
 
 

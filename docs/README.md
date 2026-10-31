@@ -19,7 +19,8 @@ the task at hand needs**. This page says what each file is and when to read it.
 | `12_open_decisions.md` | The 10 open decisions + week-1 deliverables, as written in the master | closing decisions |
 | `ARCHITECTURE.md` | **Live** component design: interfaces, assumptions, limitations, changelog | changing any component boundary |
 | `ROADMAP.md` | **Live** checkbox plan by week and owner (owners are named at the top) | planning; tick as work lands |
-| `EXPERIMENTS.md` | **Live** experiment registry: IDs, protocol, status | planning or running an experiment |
+| `EXPERIMENTS.md` | **Live** experiment registry: rules, index of all entries, the lead's entries | planning or running an experiment |
+| `experiments/A.md`, `experiments/C.md` | experiment logs of workstreams A and C (append-only, one writer each) | reading or adding an entry of that workstream |
 | `DEVIATIONS.md` | **Live** departures from the master doc, DEV-001 onward, with rationale | before departing from the design |
 | `REVIEW.md` | **Live** review standard: checks on every branch, the flag rules and their limits, re-deriving a number, proxies, hand-back and verdict | reviewing or handing back a branch |
 | `GRAPH_DESIGN.md` | **Live** options, evidence and costs for the knowledge graph (does not choose) | graph schema, storage, roles |

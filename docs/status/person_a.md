@@ -1,7 +1,7 @@
 # Status: workstream A (retrieval stack and RQ1)
 
 > Current truth only, replaced at the end of each block (at most 150 lines). Result rows are in
-> `results/ledger_a.md`; protocols and full tables in `docs/EXPERIMENTS.md` (sections A1-PILOT, A2a).
+> `results/ledger_a.md`; protocols and full tables in `docs/experiments/A.md` (sections A1-PILOT, A2a).
 
 **Last updated:** 2026-10-31 · branch `a/rq1` from `foundation-v0` · block 1 partly done (A1 code and a local pilot; A2 part a).
 

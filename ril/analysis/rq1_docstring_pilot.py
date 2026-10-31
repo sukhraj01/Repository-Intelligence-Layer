@@ -5,7 +5,7 @@ question on local checkouts, with a task that needs no labels: the first line of
 docstring is the query, the function is the one relevant unit, and every docstring is removed
 from every unit's indexed text first (otherwise the query would be found verbatim). It measures
 whether identifier splitting and field weights move natural-language-to-code retrieval at all
-before the development-set runs; it chooses nothing (``docs/EXPERIMENTS.md``, section A1-PILOT).
+before the development-set runs; it chooses nothing (``docs/experiments/A.md``, section A1-PILOT).
 
 Variants, all over the same units in the same order (ties: lower index first):
 
