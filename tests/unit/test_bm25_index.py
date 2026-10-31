@@ -7,7 +7,15 @@ import math
 import numpy as np
 import pytest
 
-from ril.retrieval.bm25_index import BM25Index, BM25Params, order_by_score, tokenize
+from ril.retrieval.bm25_index import (
+    BM25Index,
+    BM25Params,
+    field_tokens,
+    order_by_score,
+    split_identifier,
+    tokenize,
+    tokenize_code,
+)
 
 
 def test_tokenize_lowercases_drops_stopwords_short_tokens_and_stems() -> None:
@@ -91,3 +99,29 @@ def test_top_k_equals_the_head_of_the_full_order_including_ties() -> None:
         assert list(top_k_of(scores, k)) == list(order_by_score(scores))[:k]
     zeros = np.zeros(6)
     assert list(top_k_of(zeros, 3)) == [0, 1, 2]
+
+
+def test_identifiers_split_at_case_underscore_and_digit_boundaries() -> None:
+    assert split_identifier("parseHTTPResponse2") == ["parse", "HTTP", "Response", "2"]
+    assert split_identifier("max_retries") == ["max", "retries"]
+    assert split_identifier("XMLParser") == ["XML", "Parser"]
+    assert split_identifier("plain") == ["plain"]
+
+
+def test_code_tokens_add_parts_and_optionally_keep_the_whole_identifier() -> None:
+    text = "def get_adapter(self): return HTTPAdapter"
+    kept = tokenize_code(text)
+    assert set(tokenize(text)) <= set(kept)  # the reference tokens are all still there
+    assert {"get", "adapt", "http"} <= set(kept)
+    dropped = tokenize_code(text, keep_original=False)
+    assert "get_adapt" not in dropped and "httpadapt" not in dropped
+    assert "self" in dropped  # a single-part token stays whatever the option
+    assert tokenize_code("the a_b") == ["a_b"]  # stop words and one-letter parts are dropped
+
+
+def test_field_weights_repeat_field_tokens() -> None:
+    fields = {"name": "fetch", "body": "return fetch(url)", "path": "net/io.py"}
+    toks = field_tokens(fields, {"name": 3, "body": 1}, tokenize)
+    assert toks.count("fetch") == 4 and "net" not in toks
+    with pytest.raises(ValueError):
+        field_tokens(fields, {"name": -1}, tokenize)
