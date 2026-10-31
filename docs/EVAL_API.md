@@ -374,3 +374,80 @@ new/reused call counts only in a new invocation audit. Fresh replay compares sem
 excluding wall/retrieval timing, test-log elapsed text, output-dependent execution identity and row
 checksum; model requests, edits, grades, usage and paired statistics must agree. Cold retrieval
 percentiles exclude index building/model/grading, discard no warmups, and measure tiny fixtures.
+
+
+## Google Colab development kit
+
+The selected development runtime can be Colab without fabricating Slurm identifiers.
+Build an uploadable kit from a clean committed checkout:
+
+```sh
+python scripts/c_colab.py package --out data/processed/c_colab_kit
+```
+
+Upload `ril-cpu.ipynb` through Colab's File / Upload notebook, select a CPU runtime and run
+cells top to bottom. Mount Google Drive through its consent dialog and choose the matching
+`ril-colab-source.zip` when prompted. No GitHub push/read credentials are needed for this source
+transfer. The notebooks verify the whole ZIP plus every committed source file and manifest before
+execution. Existing modified local source is refused. Private or untracked files are excluded
+by packaging the committed tree only. `kit.json` identifies the original commit and ZIP SHA-256.
+Source archives contain no Git repository; evaluation logs retain the original commit fallback
+and explicit unknown/dirty Git status. Mining explicitly reports `archive_without_git`, requires
+a full pinned source commit and records actual implementation checksums before dispatch.
+
+Default CPU cells install Python3.11.18 and the exact25CPU lock pins plus a pinned build backend
+in an isolated environment. They execute retrieval and paired synthetic checks, including a
+zero-new-call replay, and finish with `COLAB_READY`. Real data, mining and model preparation
+flags default to false. The report verifies every expected installed package and interpreter;
+model API cost is zero, while compute billing is unmeasured. No hosted repair service or
+real grading harness is configured by this kit.
+
+`configs/experiments/c_colab_environment.yaml` pins the separate CodeRankEmbed environment:
+Torch2.4.1+cu121, NumPy1.26.4, transformers4.44.2, sentence-transformers3.1.1 and tokenizers0.19.1,
+matching the recorded Ada compatibility path. Its47-package closure was resolved from metadata;
+actual Colab installation, Drive behavior and CUDA execution were not performed here. CPU
+NumPy remains the project lock version. The declared official indexes and exact requirements
+are used; the pinned build backend prevents an unbounded build-dependency substitution.
+
+For dense preparation, enable the CPU notebook's explicit environment/weight preparation cell.
+It acquires the existing pinned encoder revision on CPU and stores a checksum-identified portable
+Python/GPU-environment snapshot in Drive. Only then open `ril-gpu.ipynb` in an NVIDIA GPU runtime.
+It restores the snapshot without package/model downloads, rechecks profile/architecture/source
+identity, verifies the installed pins and runs a real CUDA matrix product. Dense encoding remains
+opt-in, refuses existing cache artifacts, verifies every staged upstream source first and reserves
+0.5 of the8encoding hours per30-minute subprocess attempt. Unknown interrupted reservations are
+not refunded. This does not meter idle notebook GPU allocation or cloud billing. Return to the
+CPU notebook's explicit `RUN_DENSE_EVAL` cell for cached-score evaluation with the same run id.
+
+Local native `/content` storage holds working files, locks and environments; Drive receives
+immutable checksum blobs and an atomic completed-file index. Source acquisition checkpoints after
+each verified completed file; an unfinished transfer can need replay after VM loss. Mining snapshots
+stable API/instance files every60seconds and omits regenerable bare Git caches. Sudden VM loss can
+lose work since the last completed snapshot. Corrupt blobs, partial restore targets, symlinks and
+source drift fail closed. Only one active VM may use a persistent work area: a local lock does not
+coordinate independent Colab VMs. Environment snapshots and model caches can consume several GiB;
+Drive capacity and actual full-process memory still need checking on the real runtime.
+
+Operational runtime proof is issued by the original `google.colab` kernel and re-probed from
+that host interpreter when the project uses its isolated Python3.11 environment:
+
+```python
+from ril.evaluation.runtime import issue_colab_receipt
+issue_colab_receipt('/content/ril-runtime.json')
+# Project subprocess environment: RIL_RUNTIME=colab,
+# RIL_COLAB_RECEIPT=/content/ril-runtime.json; no Slurm or cluster flags.
+```
+
+A receipt matches the current VM boot identity and actual accelerator inventory. Reissue it
+after a restart or accelerator change. CPU acquisition refuses an attached NVIDIA GPU even when
+CUDA visibility is masked. GPU encoding requires an attached GPU and retains the existing CUDA
+test. These are operational guards, not security attestation against the notebook owner. Slurm
+remains supported through its existing explicit job/cluster admission; account/card selection
+and allocation review are unchanged.
+
+The real dev source plan stays at the existing36files, original labels and candidate identities.
+The notebook's initial transfer bounds are2GiB total/512MiB per file; a bound failure requires a
+reviewed sizing change. No final test repository or full-scale mining option was added. Scientific
+runs require measured memory sizing and registration before execution. Colab/Ada agreement has not
+been measured; use a shared dev overlap before pooling accuracy and label hardware-sensitive timing
+separately. The actual live agent/scaffold/model/harness/spend gates remain open.

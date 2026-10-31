@@ -22,6 +22,7 @@ from ril.data_mining.github import (  # noqa: E402
 from ril.data_mining.miner import GitSnapshots, RecordedSnapshots, mine  # noqa: E402
 from ril.data_mining.ranks import dense_audit_scores, rank_audit  # noqa: E402
 from ril.data_mining.recording import synthetic_recording  # noqa: E402
+from ril.evaluation.runtime import require_runtime  # noqa: E402
 
 
 def main() -> None:
@@ -69,8 +70,12 @@ def main() -> None:
     else:
         if not args.live or not args.config:
             parser.error("live mode needs --live --config; otherwise supply --recording")
-        if not os.environ.get("SLURM_JOB_ID") or not os.environ.get("GITHUB_TOKEN"):
-            parser.error("live acquisition requires a Slurm CPU job and GITHUB_TOKEN")
+        try:
+            require_runtime(cpu_only=True)
+        except RuntimeError as exc:
+            parser.error(str(exc))
+        if not os.environ.get("GITHUB_TOKEN"):
+            parser.error("live acquisition requires GITHUB_TOKEN in the executing runtime")
         config = yaml.safe_load(args.config.read_text())
         held_out = json.loads(args.held_out.read_text())
         client = Client(args.out / "api", GitHubTransport())

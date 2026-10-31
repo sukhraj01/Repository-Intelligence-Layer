@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import os
 import platform
 import re
 import resource
@@ -255,6 +256,54 @@ def extract_example(
     ), metadata
 
 
+def source_checkout(repository_root: Path) -> Record:
+    """Describe Git or a verified archive, never label an archive as a clean checkout."""
+    try:
+        top = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=repository_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        if Path(top).resolve() != repository_root.resolve():
+            raise ValueError("source archive is nested beneath an unrelated checkout")
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repository_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        dirty = bool(
+            subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=repository_root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        )
+        return {
+            "git_hash": commit,
+            "git_dirty": dirty,
+            "source_control": "git",
+            "git_status": "dirty" if dirty else "clean",
+        }
+    except (OSError, subprocess.SubprocessError, ValueError):
+        commit = os.environ.get("RIL_COMMIT", "")
+        if not _SHA.fullmatch(commit):
+            raise ValueError(
+                "source archive requires the verified package's full RIL_COMMIT"
+            ) from None
+        return {
+            "git_hash": commit.lower(),
+            "git_dirty": True,
+            "source_control": "archive_without_git",
+            "git_status": "unavailable",
+        }
+
+
 def mine(
     config: Record,
     out: Path,
@@ -271,9 +320,11 @@ def mine(
     if not 1 <= int(config["repositories"]) <= 200 or not 1 <= int(config["pull_requests"]) <= 2000:
         raise ValueError("pilot limits are 200 repositories and 2000 PRs; full scale needs review")
     repository_root = Path(__file__).resolve().parents[2]
+    checkout = source_checkout(repository_root)
     source_paths = [
         *Path(__file__).parent.glob("*.py"),
         repository_root / "scripts/c_mine_prs.py",
+        repository_root / "ril/evaluation/runtime.py",
         repository_root / "ril/parsing/repository_parser.py",
         repository_root / "ril/training/pool_reader.py",
         repository_root / "ril/training/pool_ranks.py",
@@ -437,14 +488,7 @@ def mine(
         "config_hash": digest(config),
         "run_identity": digest(identity),
         "version": VERSION,
-        "git_hash": subprocess.run(
-            ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
-        ).stdout.strip(),
-        "git_dirty": bool(
-            subprocess.run(
-                ["git", "status", "--porcelain"], check=True, capture_output=True, text=True
-            ).stdout.strip()
-        ),
+        **checkout,
         "implementation_sources": implementation_sources,
         "hardware": {
             "platform": platform.system(),

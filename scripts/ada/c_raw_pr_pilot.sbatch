@@ -10,7 +10,7 @@ cd "${RIL_ROOT:?set RIL_ROOT to the staged checkout}"
 : "${GITHUB_TOKEN:?read-only token must be set in the submitting environment}"
 : "${RIL_PYTHON:?set RIL_PYTHON to the verified Python 3.11 interpreter}"
 "$RIL_PYTHON" -c 'import sys; assert sys.version_info[:2] == (3, 11)'
-export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}" RIL_CLUSTER=1
 "$RIL_PYTHON" scripts/c_mine_prs.py mine --live \
   --config configs/experiments/c_raw_pr_pilot.yaml \
   --out "${RIL_OUT:-data/raw/c_raw_pr_pilot}"

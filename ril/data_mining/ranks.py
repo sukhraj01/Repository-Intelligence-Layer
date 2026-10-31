@@ -5,11 +5,11 @@ from __future__ import annotations
 import csv
 import json
 import math
-import os
 from pathlib import Path
 from typing import Any
 
 from ril.data_mining.github import atomic_json, digest
+from ril.evaluation.runtime import require_runtime
 from ril.evaluation.stats import clustered_mean_ci
 from ril.training import pool_ranks
 from ril.training.pool_reader import read_cache
@@ -24,9 +24,11 @@ ENCODER = {
 
 
 def dense_audit_scores(out: Path) -> Path:
-    """Use the existing pinned teacher and CUDA gate on a real pilot in a Slurm GPU job."""
-    if not os.environ.get("SLURM_JOB_ID") or not os.environ.get("CUDA_VISIBLE_DEVICES"):
-        raise ValueError("dense audit requires a verified Slurm GPU allocation")
+    """Use the pinned teacher and real CUDA gate on an admitted GPU runtime and real pilot."""
+    try:
+        require_runtime(cpu_only=False, require_gpu=True)
+    except RuntimeError as exc:
+        raise ValueError(str(exc)) from exc
     provenance = json.loads((out / "provenance.json").read_text())
     if provenance["source_kind"] != "live_github":
         raise ValueError("dense audit waits for a real pilot")

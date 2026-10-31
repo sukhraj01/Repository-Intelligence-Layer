@@ -1695,3 +1695,25 @@ executed sourceSHA`e7ae79960c3d955556cf810173e1b2a00a88bcef5fd533417c7200a1c8b41
 interval. Twenty latency/four throughput stub rows and the validation artifact are preserved
 under `results/rq1/c_rewrite_launch_cpu_2026-10-31/` and `results/logs/c1_rewrite_*2026-10-31.json`.
 All actual acquisition/evaluation/model access remains blocked;no cluster availability claim.
+
+
+## E-COLAB-SETUP — isolated runtime and notebook preparation (2026-10-31)
+
+Registered before the packaging/resource and required stub measurements. Validate explicit Colab
+host-receipt admission, preservation of Slurm operation, exact CPU/GPU package profiles, committed
+source ZIP verification, notebook syntax/default flags, model-free fixture execution and durable
+checkpoint copies using offline constructed inputs. No actual Colab, Drive, CUDA/model or scientific
+data workload is available here; real development n=0, actual external dollars/GPU-hours0. The full
+source package is about47MiB before compression; a conservative local packaging memory envelope is
+four source copies plus100MiB interpreter/metadata overhead (under300MiB), well below available RAM.
+This is an estimate, not a measured peak. CPU stub latency/throughput uses synthetic-v1, seed0 and
+own output paths; it does not estimate actual network/model/Colab performance. Actual source/config
+hashes, counts and validation limitations are recorded with the resulting artifacts; no scientific
+interval applies. Live data/agent choices and cross-platform parity remain unmeasured.
+
+Recorded offline result:684unit pass/3optionalTorchskips in62.29s;60additional CPU pass/5expected
+skips in2.69s;ruff/format292files and strictmypy124modules pass.33notebook/package/checkpoint
+cases; source SHA`a7e7d636d9ab0a8b022ecc4ec2736434dbb826a421dae02f6b35338747dacfec` (base570cb1b,dirty1).
+Twenty latency/four throughput CPU stub rows retained under `results/rq1/c_colab_setup_cpu_2026-10-31/`,
+with every row in C ledger. Only personal host label normalized to local-cpu; numeric rows unchanged.
+Actual Colab/Drive/GPU installs and scientific data/model runs remain unperformed.

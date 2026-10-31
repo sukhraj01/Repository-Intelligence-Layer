@@ -21,6 +21,8 @@ from typing import Any
 
 import yaml
 
+from ril.evaluation.runtime import require_runtime
+
 Record = dict[str, Any]
 Open = Callable[[urllib.request.Request], Any]
 DATASET = "zhangfw123/CORE-Bench"
@@ -67,16 +69,8 @@ def atomic_json(path: Path, value: object) -> None:
 
 
 def require_cluster(*, cpu_only: bool = True) -> None:
-    job = os.environ.get("SLURM_JOB_ID", "")
-    if os.environ.get("RIL_CLUSTER") != "1" or not job.isdecimal() or int(job) < 1:
-        raise RuntimeError("data acquisition requires an explicitly verified Slurm cluster job")
-    if cpu_only and (
-        os.environ.get("SLURM_JOB_GPUS", "")
-        or any(
-            os.environ.get(key, "") not in {"", "0"} for key in ("SLURM_GPUS_ON_NODE", "SLURM_GPUS")
-        )
-    ):
-        raise RuntimeError("data acquisition requires a CPU-only allocation")
+    """Compatibility entry for admitted Slurm or explicitly selected Colab execution."""
+    require_runtime(cpu_only=cpu_only)
 
 
 def required_paths(config: Mapping[str, Any]) -> list[str]:
@@ -302,7 +296,18 @@ def download(target: Path, item: Mapping[str, Any], revision: str, *, opener: Op
     return actual
 
 
-def acquire(config: Mapping[str, Any], plan: Record, *, opener: Open = open_url) -> Record:
+def acquire(
+    config: Mapping[str, Any],
+    plan: Record,
+    *,
+    opener: Open = open_url,
+    on_completed: Callable[[Path, Record], None] | None = None,
+) -> Record:
+    """Acquire sources; optional checkpoint callback follows each verified durable publication.
+
+    The callback receives the final file path and current read-only provenance mapping, including
+    already completed files on resume. A callback error aborts without undoing durable local data.
+    """
     require_cluster()
     # Revalidate even when called directly with a purported plan.
     manifest = {k: plan[k] for k in ("version", "dataset", "revision", "files")}
@@ -354,6 +359,8 @@ def acquire(config: Mapping[str, Any], plan: Record, *, opener: Open = open_url)
             if state["completed"].get(item["path"]) != record:
                 state["completed"][item["path"]] = record
                 atomic_json(state_path, state)
+            if on_completed is not None:
+                on_completed(path, state)
         return state
 
 

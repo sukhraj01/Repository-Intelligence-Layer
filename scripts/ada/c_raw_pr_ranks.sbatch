@@ -9,7 +9,7 @@
 set -euo pipefail
 cd "${RIL_ROOT:?set RIL_ROOT to the staged checkout}"
 : "${RIL_PYTHON:?set RIL_PYTHON to the prepared interpreter}"
-export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}" RIL_CLUSTER=1
 export HF_HUB_OFFLINE=1
 "$RIL_PYTHON" scripts/c_mine_prs.py dense --out "${RIL_OUT:-data/raw/c_raw_pr_pilot}"
 "$RIL_PYTHON" scripts/c_mine_prs.py ranks --out "${RIL_OUT:-data/raw/c_raw_pr_pilot}" \

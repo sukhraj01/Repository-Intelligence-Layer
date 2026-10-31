@@ -67,6 +67,15 @@ Validation:41focused and618full unit passes/3Torchskips;lint288files/mypy123modu
 syntax/local-refusal gates. Standard20latency/4throughput rows are synthetic CPU stubs only.
 Commands/gates: `docs/EVAL_API.md`;validation log `results/logs/c1_rewrite_launch_validation_2026-10-31.json`.
 
+Colab setup: user selected Colab instead of Ada. A generated CPU/GPU notebook kit uses a
+checksum-pinned committed source ZIP, isolated Python3.11,25CPU/47GPU exact dependency pins,
+explicit current-VM host receipt and separate CPU acquisition/GPU encoding. Native local locks
+and verified Drive snapshots preserve completed work; one active VM per store is required.
+Default notebook cells run setup and synthetic checks only; real jobs remain opt-in.
+Validation:684unit/60additional CPU passes, documented optional skips;lint292/mypy124pass. Source
+archives retain the pinned original commit and explicit unavailable Git status. No actual Colab,
+Drive, dependency installation or CUDA/model validation has run; browser execution is pending.
+
 ## Blockers and compute
 
 Original/Rewrite corpora, pinned dense artifacts, real dev tasks, read-only mining token and
@@ -93,7 +102,8 @@ no project understanding or learning completion is claimed.
 ## Next work
 
 Lead/owners integrate compatible API/paper notes and roadmap evidence; supply bounded inputs/access,
-then select and review the fixed scaffold/model/treatment adapter, grading harness and spend cap.
+execute the prepared Colab CPU notebook, then review the fixed scaffold/model/treatment adapter,
+grading harness and spend cap.
 Run the authorized repeated dev pilot before mining expansion or RQ3 power/design decisions.
 All scientific conclusions and final-test settings remain open; no push performed.
 

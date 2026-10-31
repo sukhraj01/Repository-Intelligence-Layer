@@ -396,3 +396,57 @@ def test_cli_explicit_revision_drift_refused_before_dispatch(
     with pytest.raises(ValueError, match="manifest revision differs"):
         s.main()
     assert not Path(config["data_root"]).exists()
+
+
+def test_completion_callback_follows_verified_durable_publication(config: dict[str, Any]) -> None:
+    manifest, blobs = recorded(config)
+    p = plan(config, manifest)
+    calls: list[tuple[str, int]] = []
+    completed = []
+
+    def checkpoint(path: Path, state: dict[str, Any]) -> None:
+        relative = str(path.relative_to(Path(config["data_root"])))
+        assert path.read_bytes() == blobs[relative]
+        assert not path.with_name(path.name + ".part").exists()
+        assert json.loads(Path(config["data_root"], "provenance.json").read_text()) == state
+        assert relative in state["completed"]
+        completed.append(relative)
+
+    s.acquire(config, p, opener=opener_for(blobs, calls), on_completed=checkpoint)
+    s.acquire(config, p, opener=opener_for(blobs, calls), on_completed=checkpoint)
+    assert completed == sorted(blobs) * 2
+    assert len(calls) == 4
+
+
+def test_callback_failure_keeps_verified_source_for_resume(config: dict[str, Any]) -> None:
+    manifest, blobs = recorded(config)
+    p = plan(config, manifest)
+    calls: list[tuple[str, int]] = []
+
+    def unavailable_store(path: Path, state: dict[str, Any]) -> None:
+        raise OSError("recorded persistent store unavailable")
+
+    with pytest.raises(OSError, match="persistent store"):
+        s.acquire(config, p, opener=opener_for(blobs, calls), on_completed=unavailable_store)
+    state = json.loads(Path(config["data_root"], "provenance.json").read_text())
+    assert len(state["completed"]) == len(calls) == 1
+    s.acquire(config, p, opener=opener_for(blobs, calls))
+    assert len(calls) == 4
+
+
+def test_corrupt_source_never_reaches_checkpoint_callback(config: dict[str, Any]) -> None:
+    manifest, _ = recorded(config)
+    completed = []
+
+    def corrupt(req: urllib.request.Request) -> Response:
+        item = manifest["files"][0]
+        return Response(b"x" * item["bytes"])
+
+    with pytest.raises(ValueError, match="checksum"):
+        s.acquire(
+            config,
+            plan(config, manifest),
+            opener=corrupt,
+            on_completed=lambda *a: completed.append(a),
+        )
+    assert not completed

@@ -14,6 +14,7 @@ import yaml
 
 from ril.evaluation.core_bench import CoreBenchFolder, read_split
 from ril.evaluation.rewrite import folder_hashes
+from ril.evaluation.runtime import require_runtime
 from ril.retrieval.dense_encoder import ENCODERS, DenseEncoder, local_snapshot
 
 
@@ -71,14 +72,13 @@ def write_score_cache(
 
 
 def main() -> None:
-    """Cluster-only encoding; cached weights and a working CUDA card are required."""
+    """Admitted-runtime encoding; cached weights and a working CUDA card are required."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--max-score-bytes", type=int, default=512 * 2**20)
     args = parser.parse_args()
-    if os.environ.get("RIL_CLUSTER") != "1":
-        raise RuntimeError("encoding runs on the compute cluster; set RIL_CLUSTER=1 there")
+    require_runtime(cpu_only=False, require_gpu=True)
     # This entry point is never invoked by local tests or CPU evaluation.
     import importlib
 

@@ -377,7 +377,9 @@ def test_dense_execution_requires_allocation_and_real_data(
     recording = synthetic_recording(3)
     run_recording(tmp_path, recording)
     assert rank_audit(tmp_path)["comparison"][0]["n"] == 0
-    monkeypatch.setenv("SLURM_JOB_ID", "synthetic")
+    monkeypatch.setenv("RIL_CLUSTER", "1")
+    monkeypatch.setenv("SLURM_JOB_ID", "17")
+    monkeypatch.setenv("SLURM_JOB_GPUS", "0")
     monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0")
     with pytest.raises(ValueError, match="real pilot"):
         dense_audit_scores(tmp_path)
