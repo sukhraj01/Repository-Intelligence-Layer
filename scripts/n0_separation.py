@@ -1,6 +1,7 @@
 """Gate N0 of E-PILOT-NOISE: command line over ``ril.analysis.n0_tables``.
 
 CACHE FEATURE_TABLE OUT_JSON --scores TEACHER=PATH [...] [--rates 0.2 0.4] [--seeds 0 1 2] [--k 20]
+[--kind uniform|sibling]
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--rates", nargs="+", type=float, default=[0.2, 0.4])
     p.add_argument("--seeds", nargs="+", type=int, default=[0, 1, 2])
     p.add_argument("--k", type=int, default=20)
+    p.add_argument("--kind", choices=("uniform", "sibling"), default="uniform")
     a = p.parse_args(argv)
     from ril.analysis import n0_tables as n0
     from ril.training.noise import read_score_store
@@ -37,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
         repro.append(n0.reproduction(examples, store, table, teacher))
         for seed in a.seeds:
             for rate in a.rates:
-                sep.append(n0.separation(examples, store, teacher, rate, seed, a.k))
+                sep.append(n0.separation(examples, store, teacher, rate, seed, a.k, a.kind))
     out["reproduction"], out["separation"] = repro, sep
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     with open(a.out, "w", encoding="utf-8") as handle:

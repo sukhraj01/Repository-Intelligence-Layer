@@ -100,7 +100,11 @@ def rate_effects(
 
 
 def reading_d47(
-    effects: Sequence[Record], prefix: str, rates: Sequence[int], anchor: str = ANCHOR
+    effects: Sequence[Record],
+    prefix: str,
+    rates: Sequence[int],
+    anchor: str = ANCHOR,
+    methods: Sequence[str] = METHODS,
 ) -> Record:
     """The pre-registered reading, per rate; every statement carries its numbers."""
     out: dict[str, Any] = {"reading": tt.READINGS[0], "rates": {}}
@@ -119,27 +123,33 @@ def reading_d47(
             lv: _ratio(rec[lv], deg[lv], negate_den=True) for lv in ("L2", "L3")
         }
         # (iii) methods against RAW, as a share of the oracle's recovery; (iv) against the subsample
-        methods: dict[str, Record] = {}
-        for m in METHODS:
+        per_method: dict[str, Record] = {}
+        for m in methods:
             c = cond(prefix, rate, m)
             vs_raw = {lv: _level(effects, c, raw, lv) for lv in ("L2", "L3")}
             vs_sub = {lv: _level(effects, c, sub, lv) for lv in ("L2", "L3")}
             share = {lv: _ratio(vs_raw[lv], rec[lv]) for lv in ("L2", "L3")}
-            methods[m] = {
+            per_method[m] = {
                 "vs_raw": vs_raw,
                 "vs_subsample": vs_sub,
                 "share_of_oracle_recovery": share,
                 "works": all(v is not None and v["positive"] for v in vs_raw.values()),
                 "beats_subsample": all(v is not None and v["positive"] for v in vs_sub.values()),
             }
-        r["iii_methods"] = methods
+        r["iii_methods"] = per_method
         r["subsample_vs_raw"] = {lv: _level(effects, sub, raw, lv) for lv in ("L2", "L3")}
         out["rates"][str(rate)] = r
     return out
 
 
 def minimum_detectable(
-    spread: Sequence[Record], effects: Sequence[Record], prefix: str, rate: int, seeds: int = 2
+    spread: Sequence[Record],
+    effects: Sequence[Record],
+    prefix: str,
+    rate: int,
+    seeds: int = 2,
+    cells: Sequence[str] = CELLS,
+    methods: Sequence[str] = METHODS,
 ) -> list[Record]:
     """Smallest difference between two cells detectable at 5% and 80% power, from observed variance.
 
@@ -149,7 +159,7 @@ def minimum_detectable(
     """
     reading = tt.READINGS[0]
     raw = cond(prefix, rate, "raw")
-    mine = {cond(prefix, rate, c) for c in CELLS}
+    mine = {cond(prefix, rate, c) for c in cells}
     out: list[Record] = []
     for level in ("L2", "L3"):
         ss, df = 0.0, 0
@@ -167,7 +177,7 @@ def minimum_detectable(
                 df += k - 1
         sd = math.sqrt(ss / df) if df else float("nan")
         halves = []
-        for m in METHODS:
+        for m in methods:
             e = _effect(effects, cond(prefix, rate, m), raw, level, reading)
             if e is not None:
                 lo, hi, _ = interval(e)
@@ -199,8 +209,16 @@ def noise_tables(
     out_dir: str,
     seed: int = 0,
     anchor: str = ANCHOR,
+    cells: Sequence[str] = CELLS,
+    methods: Sequence[str] = METHODS,
+    stem_name: str = "n1",
+    label: str = "E-PILOT-NOISE",
 ) -> Record:
-    """All tables of the pilot; returns the log record (the D47 reading, unique-example table)."""
+    """All tables of the pilot; returns the log record (the D47 reading, unique-example table).
+
+    ``cells`` and ``methods`` select the cells a run set contains (E-PILOT-NOISE-SIB drops WEIGHT);
+    ``stem_name`` names the output tables; ``label`` is written into the effect rows.
+    """
     anchor_runs = tt.load_condition(results_root, anchor)
     effects: list[Record] = []
     spread: list[Record] = []
@@ -209,7 +227,7 @@ def noise_tables(
     runs_seen: dict[str, list[int]] = {anchor: [r.seed for r in anchor_runs]}
     for rate in rates:
         conds: dict[str, list[tt.Run]] = {anchor: anchor_runs}
-        for cell in CELLS:
+        for cell in cells:
             name = cond(prefix, rate, cell)
             conds[name] = tt.load_condition(results_root, name)
             runs_seen[name] = [r.seed for r in conds[name]]
@@ -220,21 +238,22 @@ def noise_tables(
             {k: v for k, v in conds.items() if v},
             [anchor, raw, sub],
             seed,
-            f"E-PILOT-NOISE r={rate / 100:g}",
+            f"{label} r={rate / 100:g}",
         )
         effects += e
         spread += [x for x in s if x["condition"] != anchor or rate == rates[0]]
-        mdd += minimum_detectable(s, e, prefix, rate)
+        mdd += minimum_detectable(s, e, prefix, rate, cells=cells, methods=methods)
         unique += unique_rows({k: v for k, v in conds.items() if v})
     os.makedirs(out_dir, exist_ok=True)
-    stem = os.path.join(out_dir, "n1")
+    stem = os.path.join(out_dir, stem_name)
     write_csv(f"{stem}_effects.csv", effects)
     write_csv(f"{stem}_seeds.csv", spread)
     write_csv(f"{stem}_unique.csv", unique)
     return {
         "version": N1_TABLES_VERSION,
         "runs": runs_seen,
-        "reading": reading_d47(effects, prefix, rates, anchor),
+        "reading": reading_d47(effects, prefix, rates, anchor, methods),
         "minimum_detectable": mdd,
         "tables": [f"{stem}_{n}.csv" for n in ("effects", "seeds", "unique")],
+        "cells": list(cells),
     }

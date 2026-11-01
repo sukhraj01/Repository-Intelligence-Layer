@@ -11,6 +11,14 @@ loses? That needs the noise to be plausible, known and identical across the arms
   control (D38). One uniform draw ``u`` per pair, keyed by the seed and the instance id, decides
   ``u < r``: the realisation does not depend on the order of the pool, is the same for every cell
   of a seed, and is nested across rates (the pairs noised at 0.2 are also noised at 0.4).
+* **Sibling kind** (``kind="sibling"``, E-PILOT-NOISE-SIB, D54): the replacement comes from the
+  neighbourhood of the true positives, as a real mislabel does (the edited function is next to the
+  one the issue is about). Per pair the first level that holds at least as many non-positive
+  functions as there are positives is used: the file(s) of the true positives, then their class,
+  then their directory, then the whole snapshot (the uniform draw above). The class level is a
+  subset of the file level, so it is only reached if the file level is empty, which it never is for
+  a pair whose positives share a file; its share is reported anyway. The pairs noised are the same
+  as under the uniform kind (same uniform draw ``u``), only the replacement differs.
 * **Ledger** (:class:`NoiseLedger`): the per-pair indicator. It lives outside the examples, so no
   arm can read it; only the ORACLE-CLEAN control and the analysis get it.
 * **Ranks** (:func:`noisy_signal`): the K-rank of a (possibly replaced) positive is 1 + the
@@ -39,6 +47,10 @@ from ril.training.pool_reader import PoolExample
 from ril.training.supervision import MappingKRank, QualitySignal, rng_for
 
 NOISE_VERSION = "noise-dose/v1"
+SIBLING_VERSION = "noise-sibling/v1"
+KINDS = ("uniform", "sibling")
+SIBLING_LEVELS = ("file", "class", "directory", "uniform")
+SCHEME_KINDS = {"same_snapshot_uniform": "uniform", "sibling_same_file": "sibling"}
 PROVISIONAL = "provisional: ADR-002"
 Record = dict[str, Any]
 
@@ -53,6 +65,8 @@ class NoiseLedger:
     replaced_ids: Mapping[str, tuple[str, ...]] = field(default_factory=dict)
     uninjectable: int = 0
     text_duplicates: int = 0
+    kind: str = "uniform"
+    levels: Mapping[str, str] = field(default_factory=dict)
 
     def is_injected(self, instance_id: str) -> bool:
         return bool(self.injected.get(instance_id, False))
@@ -65,22 +79,32 @@ class NoiseLedger:
 
     def digest(self) -> str:
         """SHA-256 of the realisation (rate, seed, indicator, replacements)."""
-        payload = json.dumps(
-            [
-                self.rate,
-                self.seed,
-                sorted(self.injected.items()),
-                sorted(self.replaced_ids.items()),
-            ],
-            sort_keys=True,
-        )
-        return hashlib.sha256(payload.encode()).hexdigest()
+        parts: list[Any] = [
+            self.rate,
+            self.seed,
+            sorted(self.injected.items()),
+            sorted(self.replaced_ids.items()),
+        ]
+        if self.kind != "uniform":  # the uniform digest is the one logged in Wave 7
+            parts += [self.kind, sorted(self.levels.items())]
+        return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()
+
+    def level_shares(self) -> dict[str, float]:
+        """Share of the injected pairs per sibling level (empty for the uniform kind)."""
+        if self.kind != "sibling" or not self.levels:
+            return {}
+        n = len(self.levels)
+        return {lv: sum(1 for v in self.levels.values() if v == lv) / n for lv in SIBLING_LEVELS}
 
     def summary(self) -> Record:
         n = len(self.injected)
         k = self.injected_count()
+        extra: Record = {}
+        if self.kind == "sibling":
+            extra = {"kind": self.kind, "level_shares": self.level_shares()}
         return {
-            "version": NOISE_VERSION,
+            **extra,
+            "version": SIBLING_VERSION if self.kind == "sibling" else NOISE_VERSION,
             "rate": self.rate,
             "seed": self.seed,
             "pairs": n,
@@ -93,29 +117,69 @@ class NoiseLedger:
         }
 
 
-def _draw(ex: PoolExample, rate: float, seed: int) -> tuple[str, list[int]]:
-    """``("clean"|"hit"|"uninjectable", candidate indices replacing the positives)``."""
+def split_function_id(fid: str) -> tuple[str, str, str | None]:
+    """``(directory, file, class or None)`` of a pool function id ``dir/file.py/Class/name``."""
+    segs = fid.split("/")
+    cut = next((i for i, g in enumerate(segs) if g.endswith(".py")), max(len(segs) - 1, 0))
+    rest = segs[cut + 1 :]
+    return "/".join(segs[:cut]), "/".join(segs[: cut + 1]), ("/".join(rest[:-1]) or None)
+
+
+def sibling_pools(ex: PoolExample) -> dict[str, list[int]]:
+    """Candidate indices of ``ex`` per sibling level (all non-positives of the pair)."""
+    pos = [split_function_id(p) for p in ex.positive_ids]
+    dirs = {d for d, _, _ in pos}
+    files = {f for _, f, _ in pos}
+    classes = {(f, c) for _, f, c in pos if c is not None}
+    pools: dict[str, list[int]] = {lv: [] for lv in SIBLING_LEVELS}
+    for i, cid in enumerate(ex.candidate_ids):
+        d, f, c = split_function_id(cid)
+        if f in files:
+            pools["file"].append(i)
+        if c is not None and (f, c) in classes:
+            pools["class"].append(i)
+        if d in dirs:
+            pools["directory"].append(i)
+        pools["uniform"].append(i)
+    return pools
+
+
+def _draw(
+    ex: PoolExample, rate: float, seed: int, kind: str = "uniform"
+) -> tuple[str, list[int], str]:
+    """``("clean"|"hit"|"uninjectable", candidate indices replacing the positives, level)``."""
     n = len(ex.positive_ids)
     u = float(rng_for(seed, "noise-dose", "u", ex.instance_id).random())
     if not u < rate:
-        return "clean", []
+        return "clean", [], ""
     if len(ex.candidate_ids) <= n:
-        return "uninjectable", []  # a snapshot too small to draw a replacement from
-    pick = rng_for(seed, "noise-dose", "pick", ex.instance_id).choice(
-        len(ex.candidate_ids), size=n, replace=False
+        return "uninjectable", [], ""  # a snapshot too small to draw a replacement from
+    if kind == "uniform":
+        pick = rng_for(seed, "noise-dose", "pick", ex.instance_id).choice(
+            len(ex.candidate_ids), size=n, replace=False
+        )
+        return "hit", sorted(int(i) for i in pick), ""
+    pools = sibling_pools(ex)
+    level = next(lv for lv in SIBLING_LEVELS if len(pools[lv]) >= n)
+    pool = pools[level]
+    pick = rng_for(seed, "noise-sibling", "pick", ex.instance_id).choice(
+        len(pool), size=n, replace=False
     )
-    return "hit", sorted(int(i) for i in pick)
+    return "hit", sorted(pool[int(i)] for i in pick), level
 
 
 def inject(
-    examples: Sequence[PoolExample], rate: float, seed: int
+    examples: Sequence[PoolExample], rate: float, seed: int, kind: str = "uniform"
 ) -> tuple[list[PoolExample], NoiseLedger]:
     """Noise the pairs at ``rate`` (0 = the identity: the same objects, an all-clean ledger)."""
     if not 0.0 <= rate <= 1.0:
         raise ValueError("rate must be in [0, 1]")
+    if kind not in KINDS:
+        raise ValueError(f"unknown noise kind {kind!r}")
     out: list[PoolExample] = []
     injected: dict[str, bool] = {}
     replaced: dict[str, tuple[str, ...]] = {}
+    levels: dict[str, str] = {}
     uninjectable = 0
     duplicates = 0
     for ex in examples:
@@ -123,7 +187,7 @@ def inject(
             out.append(ex)
             injected[ex.instance_id] = False
             continue
-        status, pick = _draw(ex, rate, seed)
+        status, pick, level = _draw(ex, rate, seed, kind)
         if status != "hit":
             uninjectable += status == "uninjectable"
             out.append(ex)
@@ -147,7 +211,9 @@ def inject(
         )
         injected[ex.instance_id] = True
         replaced[ex.instance_id] = new_ids
-    ledger = NoiseLedger(rate, seed, injected, replaced, uninjectable, duplicates)
+        if kind == "sibling":
+            levels[ex.instance_id] = level
+    ledger = NoiseLedger(rate, seed, injected, replaced, uninjectable, duplicates, kind, levels)
     return out, ledger
 
 

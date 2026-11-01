@@ -498,12 +498,13 @@ def apply_noise(
     teachers named in ``--noise-scores`` get K-ranks recomputed on the noised positive sets, and
     the ledger is returned for the ORACLE_CLEAN arm and the size-matched subsample only.
     """
-    from ril.training.noise import inject, noisy_signal, read_score_store
+    from ril.training.noise import SCHEME_KINDS, inject, noisy_signal, read_score_store
 
     spec = cfg.get("noise")
     if not spec:
         return inputs.examples, inputs.signals, None, None
-    noised, ledger = inject(inputs.examples, float(spec["rate"]), int(cfg["seed"]))
+    kind = SCHEME_KINDS[str(spec.get("scheme", "same_snapshot_uniform"))]
+    noised, ledger = inject(inputs.examples, float(spec["rate"]), int(cfg["seed"]), kind)
     signals: dict[str, QualitySignal] = {}
     for teacher, path in inputs.noise_scores.items():
         if path not in inputs.noise_store:

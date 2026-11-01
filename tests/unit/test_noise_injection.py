@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
+import json
 import math
 import random
 
@@ -18,6 +19,7 @@ from ril.training.noise import (
     inject,
     noisy_ranks,
     noisy_signal,
+    split_function_id,
 )
 from ril.training.pool_reader import PoolExample
 from ril.training.supervision import (
@@ -169,3 +171,124 @@ def test_ledger_summary_is_json_ready(pool: list[PoolExample]) -> None:
     s = led.summary()
     assert s["pairs"] == len(pool) and s["injected"] + s["clean"] == len(pool)
     assert len(s["digest"]) == 64
+
+
+# --------------------------------------------------------------------------- sibling kind (D54)
+
+
+def _sibling_pool() -> list[PoolExample]:
+    return synthetic_examples(repos=10, prs=60, funcs=24)
+
+
+def test_split_function_id_forms() -> None:
+    assert split_function_id("pkg/mod0.py/Klass1/run") == ("pkg", "pkg/mod0.py", "Klass1")
+    assert split_function_id("pkg/mod0.py/run") == ("pkg", "pkg/mod0.py", None)
+    assert split_function_id("a/b/c.py/A/B/run") == ("a/b", "a/b/c.py", "A/B")
+    assert split_function_id("top.py/run") == ("", "top.py", None)
+
+
+def test_sibling_same_pairs_as_uniform_and_rate_in_tolerance() -> None:
+    pool = _sibling_pool()
+    _, uni = inject(pool, 0.4, seed=0)
+    _, sib = inject(pool, 0.4, seed=0, kind="sibling")
+    assert uni.injected == sib.injected  # the same pairs are noised; only the replacement differs
+    sd = math.sqrt(len(pool) * 0.4 * 0.6)
+    assert abs(sib.injected_count() - len(pool) * 0.4) < 4 * sd
+
+
+def test_sibling_replacements_are_non_positives_from_the_stated_level() -> None:
+    pool = _sibling_pool()
+    noised, led = inject(pool, 0.4, seed=1, kind="sibling")
+    seen = set()
+    for orig, new in zip(pool, noised, strict=True):
+        if not led.is_injected(orig.instance_id):
+            assert new is orig
+            continue
+        assert not set(new.positive_ids) & set(orig.positive_ids)
+        assert set(new.positive_ids) <= set(orig.candidate_ids)
+        assert len(new.positive_ids) == len(orig.positive_ids)
+        assert set(orig.positive_ids) <= set(new.masked_ids)
+        level = led.levels[orig.instance_id]
+        seen.add(level)
+        files = {split_function_id(p)[1] for p in orig.positive_ids}
+        dirs = {split_function_id(p)[0] for p in orig.positive_ids}
+        if level == "file":
+            assert {split_function_id(p)[1] for p in new.positive_ids} <= files
+        elif level == "directory":
+            assert {split_function_id(p)[0] for p in new.positive_ids} <= dirs
+    assert "file" in seen
+
+
+def test_sibling_falls_back_when_the_file_is_too_small() -> None:
+    ex = synthetic_examples(repos=1, prs=1, funcs=24)[0]
+    pos = ("pkg/lonely.py/only", "pkg/other.py/a")
+    cand = ("pkg/other.py/b", "pkg/third.py/c", "pkg/third.py/d", "z/y.py/e")
+    ex = dataclasses.replace(
+        ex,
+        positive_ids=pos,
+        positive_texts=("p0", "p1"),
+        candidate_ids=cand,
+        candidate_texts=("c0", "c1", "c2", "c3"),
+    )
+    new, led = inject([ex], 1.0, seed=0, kind="sibling")
+    # files {lonely, other} hold one other function (< 2 positives): the directory level (pkg) does
+    assert led.levels[ex.instance_id] == "directory"
+    assert set(new[0].positive_ids) <= {"pkg/other.py/b", "pkg/third.py/c", "pkg/third.py/d"}
+    assert led.level_shares()["directory"] == 1.0
+
+
+def test_sibling_uniform_level_is_the_last_resort() -> None:
+    ex = synthetic_examples(repos=1, prs=1, funcs=24)[0]
+    ex = dataclasses.replace(
+        ex,
+        positive_ids=("a/x.py/p",),
+        positive_texts=("p",),
+        candidate_ids=("b/y.py/q", "c/z.py/r"),
+        candidate_texts=("q", "r"),
+    )
+    _, led = inject([ex], 1.0, seed=3, kind="sibling")
+    assert led.levels[ex.instance_id] == "uniform"
+
+
+def test_sibling_is_deterministic_hidden_and_distinct_from_uniform() -> None:
+    pool = _sibling_pool()
+    a, la = inject(pool, 0.4, seed=4, kind="sibling")
+    shuffled = list(pool)
+    random.Random(1).shuffle(shuffled)
+    b, lb = inject(shuffled, 0.4, seed=4, kind="sibling")
+    assert la.digest() == lb.digest()
+    assert {e.instance_id: e.positive_ids for e in a} == {e.instance_id: e.positive_ids for e in b}
+    _, uni = inject(pool, 0.4, seed=4)
+    assert uni.digest() != la.digest()
+    assert not hasattr(a[0], "injected") and "levels" not in {
+        f.name for f in dataclasses.fields(a[0])
+    }
+    summary = la.summary()
+    assert summary["kind"] == "sibling" and abs(sum(summary["level_shares"].values()) - 1) < 1e-9
+    json.dumps(summary)
+
+
+def test_uniform_digest_and_summary_are_unchanged_by_the_new_kind() -> None:
+    pool = _sibling_pool()
+    _, led = inject(pool, 0.2, seed=0)
+    assert led.kind == "uniform" and led.level_shares() == {} and "kind" not in led.summary()
+    assert led.summary()["version"] == "noise-dose/v1"
+
+
+def test_unknown_kind_is_refused() -> None:
+    with pytest.raises(ValueError):
+        inject(_sibling_pool(), 0.2, seed=0, kind="nearby")
+
+
+def test_sibling_ranks_come_from_stored_scores_for_every_replacement() -> None:
+    pool = _sibling_pool()[:40]
+    noised, led = inject(pool, 0.5, seed=2, kind="sibling")
+    rng = np.random.default_rng(0)
+    store = {ex.instance_id: rng.random(len(ex.ids)) for ex in pool}
+    sig = noisy_signal(pool, noised, store, "t")
+    for ex in noised:
+        for p in ex.positive_ids:
+            assert sig.positive_rank(ex, p) >= 1
+    del store[pool[0].instance_id]
+    with pytest.raises(KeyError):
+        noisy_signal(pool, noised, store, "t")

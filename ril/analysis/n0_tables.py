@@ -64,9 +64,10 @@ def separation(
     rate: float,
     seed: int,
     k: int = 20,
+    kind: str = "uniform",
 ) -> Record:
     """AUC and drop shares of one teacher on one noise realisation."""
-    noised, ledger = noise.inject(examples, rate, seed)
+    noised, ledger = noise.inject(examples, rate, seed, kind)
     sig = noise.noisy_signal(examples, noised, store, teacher)
     inj_pair: list[int] = []
     cln_pair: list[int] = []
@@ -86,6 +87,8 @@ def separation(
 
     return {
         "teacher": teacher,
+        "kind": kind,
+        "level_shares": ledger.level_shares(),
         "rate": rate,
         "seed": seed,
         "k": k,
