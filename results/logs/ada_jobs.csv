@@ -63,3 +63,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-01,A,51459,N0,separation gate: AUC of the K-rank for injected vs clean pairs (CPU),u22,2,0,00:01:14,0.0,COMPLETED
 2026-11-01,A,51412,N0,torch tests of the noise arms (first run: leakage tests lacked the held-out list on the cluster copy),u22,2,0,00:00:22,0.0,FAILED (setup)
 2026-11-01,A,51460,N0,torch tests of the noise arms (36 passed),u22,2,0,00:00:09,0.0,COMPLETED
+2026-11-01,A,51971,N1,noise pilot seed 0 r=0.4 six cells (E-PILOT-NOISE),u22,4,1,02:42:19,2.71,COMPLETED

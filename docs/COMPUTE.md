@@ -190,3 +190,7 @@ command instead. Each GPU job gets a row here when it finishes.
 ### Block 2 cap raised to 60 GPU-hours (D44, 2026-11-01)
 
 The engineer raised the Block 2 cap from 46 to 60 GPU-hours for the noise dose-response pilot (E-PILOT-NOISE). Used at the end of the scoring stage: 47.32 (account A 47.26 by the ledger, accounts B and C 0). The scoring pass cost 2.17 GPU-hours against the 3.5 allowed by D48 (estimate 1.6; the cache pass over 4.9M functions took 7,732 s). Disk added: two score stores of 26.7 MB each and one separation file (`~/ril_n7`; `df` not remeasured). Stage N1 (36 runs of 100 updates, 0.377 GPU-hours each from E-PILOT-ARMS2, 13.6 in all) was not launched: it exceeds the 11 GPU-hours the brief allows for the stage and the 12.68 left under the cap. See the open question in `docs/EXPERIMENTS.md` E-PILOT-NOISE.
+
+### N1 stage limit raised to 11 and Block 2 cap to 62 GPU-hours (D52, D53, 2026-11-01)
+
+Measured cost of a noise-pilot run is 0.45 GPU-hours (job 51971, seed 0, r = 0.4: 2.71 GPU-hours for six cells), so the 24 runs of D49 cost about 10.8; the engineer raised the stage limit from 9.5 to 11 (D52) and the Block 2 cap from 60 to 62 (D53) so that the third-seed trigger (up to 2.3) still fits. Jobs 52143, 52144, 52145 (seed 0 r = 0.2, seed 1 r = 0.4, seed 1 r = 0.2) were submitted with the same code commit as 51971.
