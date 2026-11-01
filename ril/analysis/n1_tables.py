@@ -139,7 +139,7 @@ def reading_d47(
 
 
 def minimum_detectable(
-    spread: Sequence[Record], effects: Sequence[Record], prefix: str, rate: int, seeds: int = 3
+    spread: Sequence[Record], effects: Sequence[Record], prefix: str, rate: int, seeds: int = 2
 ) -> list[Record]:
     """Smallest difference between two cells detectable at 5% and 80% power, from observed variance.
 

@@ -67,3 +67,5 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-01,A,52143,N1,noise pilot seed 0 r=0.2 six cells (E-PILOT-NOISE),u22,4,1,02:14:02,2.23,COMPLETED
 2026-11-01,C,52384,N1,CUDA gate of the staged copy on account C (matmul),u22,4,1,00:00:09,0.0,COMPLETED
 2026-11-01,A,52145,N1,seed 1 r=0.2 six cells: cancelled while pending and moved to account C (never ran),u22,4,1,00:00:00,0.0,CANCELLED
+2026-11-01,A,52144,N1,noise pilot seed 1 r=0.4 six cells (E-PILOT-NOISE),u22,4,1,02:14:46,2.25,COMPLETED
+2026-11-01,C,52385,N1,noise pilot seed 1 r=0.2 six cells (E-PILOT-NOISE; moved from A's queue),u22,4,1,02:14:17,2.24,COMPLETED

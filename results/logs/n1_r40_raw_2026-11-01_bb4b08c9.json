@@ -1,0 +1,208 @@
+{
+ "config_hash": "bb4b08c9ccf399306fce85980c5017c8758eb7b60157a503b0cc4aed79b7c164",
+ "exp_id": "n1_r40_raw",
+ "gate": {
+  "capability": [
+   7,
+   5
+  ],
+  "cuda": "12.1",
+  "device": "NVIDIA GeForce RTX 2080 Ti",
+  "matmul_max_abs_error": 0.0001220703125,
+  "torch": "2.4.1+cu121"
+ },
+ "hardware": {
+  "cpus_visible": 40,
+  "cuda": "12.1",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 2080 Ti",
+  "gpu_capability": [
+   7,
+   5
+  ],
+  "host": "gnode044",
+  "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12",
+  "slurm_job_id": "52144",
+  "torch": "2.4.1+cu121"
+ },
+ "inputs": {
+  "cache_sha256": "c8cb78abf7ffcfe384b6f21184fd74c60665b84188df6daa5f5f9189b1939d4b,3fe3228202526d20ae00710a45bc00bd5f81ae93a2ab16b517f651a9ae686e28",
+  "config_file_sha256": "c7f2b2b9c1e9a4d6839e83dcfb5abf2d3dc34d6d2e84b56234db4c3365a3d157",
+  "config_path": "configs/experiments/n1/n1_r40_raw_s1.yaml",
+  "feature_table_sha256": null,
+  "mined_sha256": null,
+  "noise_scores_bm25_sha256": "1f3590608021c6d343d93683bd1d8a842f0b600423f64019a0adb9dc626bb19f",
+  "noise_scores_swerankembed-small_sha256": "cfb1aeedf153831476c9651b9ef480ff38dfb80e3baacddf6407032e6d39747c"
+ },
+ "loss_trace": [
+  {
+   "candidates_per_query": 64.0,
+   "loss": 2.4830470085144043,
+   "loss_unweighted": 2.4830470085144043,
+   "lr": 5.7142857142857145e-06,
+   "positives_per_query": 1.0,
+   "update": 0
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.9518646001815796,
+   "loss_unweighted": 1.9518646001815796,
+   "lr": 1.9973270965586367e-05,
+   "positives_per_query": 1.0,
+   "update": 10
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.7881025075912476,
+   "loss_unweighted": 1.7881025075912476,
+   "lr": 1.990644837955229e-05,
+   "positives_per_query": 1.0,
+   "update": 20
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.655331015586853,
+   "loss_unweighted": 1.655331015586853,
+   "lr": 1.9839625793518213e-05,
+   "positives_per_query": 1.0,
+   "update": 30
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.827793836593628,
+   "loss_unweighted": 1.827793836593628,
+   "lr": 1.9772803207484132e-05,
+   "positives_per_query": 1.0,
+   "update": 40
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.856194257736206,
+   "loss_unweighted": 1.856194257736206,
+   "lr": 1.970598062145005e-05,
+   "positives_per_query": 1.0,
+   "update": 50
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.8993940353393555,
+   "loss_unweighted": 1.8993940353393555,
+   "lr": 1.9639158035415974e-05,
+   "positives_per_query": 1.0,
+   "update": 60
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.5497777462005615,
+   "loss_unweighted": 1.5497777462005615,
+   "lr": 1.9572335449381893e-05,
+   "positives_per_query": 1.0,
+   "update": 70
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 2.0934224128723145,
+   "loss_unweighted": 2.0934224128723145,
+   "lr": 1.9505512863347813e-05,
+   "positives_per_query": 1.0,
+   "update": 80
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.5996696949005127,
+   "loss_unweighted": 1.5996696949005127,
+   "lr": 1.9438690277313735e-05,
+   "positives_per_query": 1.0,
+   "update": 90
+  },
+  {
+   "candidates_per_query": 64.0,
+   "loss": 1.9136039018630981,
+   "loss_unweighted": 1.9136039018630981,
+   "lr": 1.9378549949883064e-05,
+   "positives_per_query": 1.0,
+   "update": 99
+  }
+ ],
+ "noise": {
+  "clean": 3017,
+  "digest": "1c084d13df3bee99932705e56dd81ba6602f8cd159dc60ce579188365ca64926",
+  "injected": 1983,
+  "injected_share": 0.3966,
+  "pairs": 5000,
+  "rate": 0.4,
+  "replacement_text_equals_true_positive": 10,
+  "seed": 1,
+  "uninjectable": 27,
+  "version": "noise-dose/v1"
+ },
+ "seed": 1,
+ "training": {
+  "arm": {
+   "filter": "keep_all",
+   "name": "RAW",
+   "ordering": "random",
+   "weigher": "unit"
+  },
+  "budget": {
+   "batch_size": 32,
+   "effective_epochs": 0.6464,
+   "examples_seen": 3232,
+   "gpu_hours_train_loop": 0.07438581804266303,
+   "negative_shortfall_visits": 0,
+   "negatives_seen": 3232,
+   "optimizer_updates": 100,
+   "passes_started": 1,
+   "pool_examples": 5000,
+   "positives_seen": 3232,
+   "schedule_updates": 3000,
+   "unique_examples_seen": 3232,
+   "wall_hours_train_loop": 0.07438581804266303
+  },
+  "checkpoint_root": "/tmp/ril_n7_52144/ckpt/n1_r40_raw/bb4b08c9",
+  "config_hash": "bb4b08c9ccf399306fce85980c5017c8758eb7b60157a503b0cc4aed79b7c164",
+  "exp_id": "n1_r40_raw",
+  "filter": {
+   "examples_in": 5000,
+   "examples_kept_share": 1.0,
+   "examples_out": 5000,
+   "positives_in": 62238,
+   "positives_kept_share": 1.0,
+   "positives_out": 62238
+  },
+  "final_dtype": "float16",
+  "final_model": "/tmp/ril_n7_52144/ckpt/n1_r40_raw/bb4b08c9/final",
+  "finished": true,
+  "loss_first": {
+   "candidates_per_query": 64.0,
+   "loss": 2.4830470085144043,
+   "loss_unweighted": 2.4830470085144043,
+   "lr": 5.7142857142857145e-06,
+   "positives_per_query": 1.0,
+   "update": 0
+  },
+  "loss_last": {
+   "candidates_per_query": 64.0,
+   "loss": 1.9136039018630981,
+   "loss_unweighted": 1.9136039018630981,
+   "lr": 1.9378549949883064e-05,
+   "positives_per_query": 1.0,
+   "update": 99
+  },
+  "plan_sha256": "dd1056a8971c76c044e347e4f97f8be575859ec3d8134257a7108ec950b4e9b5",
+  "provisional": "provisional: ADR-001, ADR-002, ADR-006",
+  "result_dir": "/home/<user>/ril_n7/results/rq2/n1_r40_raw/2026-11-01_bb4b08c9",
+  "seed": 1,
+  "teacher_equals_base": false,
+  "updates_this_process": 100,
+  "version": "training/v1",
+  "weights": {
+   "max": 1.0,
+   "mean": 1.0,
+   "min": 1.0,
+   "n": 5000,
+   "share_below_1": 0.0
+  }
+ }
+}
