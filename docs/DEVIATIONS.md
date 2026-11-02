@@ -201,3 +201,11 @@ engineer sign-off — it is a design decision.
 - Impact: (1) is a bug fix: corpora now contain every Python file of the commit; the test-function share of the corpus is large (see `results/mining/m1_agreement.md`). (2) to (5) change speed and bytes only.
 - Reversible: (2) to (5) yes (flags); (1) no, and should not be.
 - Related: DEV-015 to DEV-020, `ril/data_mining/snapshot.py`, `ril/data_mining/files.py`
+
+## DEV-022 — Stage M3 runs the dense teachers on a seeded prefix of the directories and reads two corpora   (2026-11-03 · status: proposed)
+- Master says: the brief (M3): ranks under BM25, CodeRankEmbed and SweRankEmbed-Small for the pilot directories, stage limit 2 GPU-hours.
+- We do: BM25 (CPU) on every mined directory; the dense teachers on the first N directories of the seeded order (`sha256("0:<directory>")`) that the reading keeps, N set from the measured cost so that three dense passes (the two teachers on the code text, SweRankEmbed-Small also on the stored text, the form of the Verified row) stay under 2 GPU-hours. Two readings: as mined, and pool-like (no test-file function in the corpora, no test positive; the pool has neither, `results/mining/m1_agreement.md`).
+- Why: `rank-estimate` on the first 252 mined directories counted 1,268,309 distinct function texts (542,660 outside tests), which is 3.3 and 1.4 GPU-hours for three passes at 320 texts per second (rate from ledger job 38202: 188,566 functions, two teachers, 19.6 min), before the other 450 directories; the whole pilot does not fit 2 GPU-hours as mined.
+- Impact: the dense shares rest on N directories, a seeded prefix, not on every directory; intervals are directory-level Wilson and repository-clustered bootstrap as stated; the comparison is read only if the set has at least 100 directories with a positive (README of `results/mining/`). The as-mined reading is not comparable with the pool's shares.
+- Reversible: yes (raise the limit, rerun; ranks are resumable per directory and teacher).
+- Related: DEV-019 to DEV-021, `docs/COMPUTE.md` (cap)

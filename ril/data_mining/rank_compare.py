@@ -121,7 +121,9 @@ def reading_rule(directories_with_positive: int, yield_per_pr: float) -> dict[st
     }
 
 
-def rank_sample(root: str, drop_tests: bool = False) -> dict[str, Any]:
+def rank_sample(
+    root: str, drop_tests: bool = False, only: Sequence[str] | None = None
+) -> dict[str, Any]:
     """A selection file (as ``pool_rank_jobs`` reads it) covering every directory of a run root.
 
     With ``drop_tests`` the sizes and positive counts are those of the pool-like reading and a
@@ -130,7 +132,7 @@ def rank_sample(root: str, drop_tests: bool = False) -> dict[str, Any]:
     import json
 
     insts = []
-    for name in list_dirs(root):
+    for name in list_dirs(root) if only is None else sorted(set(only)):
         base = os.path.join(root, "pr", name)
         with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:
             meta = json.load(handle)

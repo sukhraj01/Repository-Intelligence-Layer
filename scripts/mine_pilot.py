@@ -89,6 +89,7 @@ def main(argv: list[str] | None = None) -> int:
     rd.add_argument("--form", default="code")
     re_ = sub.add_parser("rank-estimate")
     re_.add_argument("out")
+    re_.add_argument("--limit", type=int, help="estimate for the first N directories (pool-like)")
     re_.add_argument("--texts-per-second", type=float, required=True)
     rt = sub.add_parser("rank-tables")
     rt.add_argument("work")
@@ -136,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
         from ril.data_mining import rank_jobs
 
         if a.cmd == "rank-prepare":
-            res = rank_jobs.prepare(a.out, a.work, a.drop_tests)
+            res = rank_jobs.prepare(a.out, a.work, a.drop_tests, a.limit)
         elif a.cmd == "rank-bm25":
             res = rank_jobs.bm25(a.work, a.ranks, form=a.form)
         elif a.cmd == "rank-dense":
@@ -144,7 +145,7 @@ def main(argv: list[str] | None = None) -> int:
                 a.work, a.ranks, a.log, teachers=a.teachers, cut=a.cut, form=a.form
             )
         elif a.cmd == "rank-estimate":
-            res = rank_jobs.estimate(a.out, a.texts_per_second)
+            res = rank_jobs.estimate(a.out, a.texts_per_second, limit=a.limit)
         else:
             res = rank_jobs.tables(f"{a.work}/sample.json", a.ranks, yield_per_pr=a.yield_per_pr)
             Path(a.json).write_text(

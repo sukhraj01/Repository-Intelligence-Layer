@@ -18,7 +18,8 @@
 # READING=all (default): the corpora as mined, test-file functions and test positives included (D69).
 # READING=non_test: the pool-like reading, no test-file function in the corpora, no test positive,
 # directories left without a positive dropped (the pool has none of either).
-#   sbatch --export=ALL,RUN=pilot,READING=non_test,RIL_COMMIT=<hash> ril_mine/scripts/ada/mine_ranks.sbatch
+# LIMIT=N: dense passes on the first N directories of the seeded order only (BM25 runs on both sets).
+#   sbatch --export=ALL,RUN=pilot,READING=non_test,LIMIT=<N>,RIL_COMMIT=<hash> ril_mine/scripts/ada/mine_ranks.sbatch
 set -euo pipefail
 M=$HOME/ril_mine
 X2=$HOME/ril_x2
@@ -36,10 +37,19 @@ nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "$W/nvidi
 df -h "$HOME" | tail -1 > "$W/disk_${SLURM_JOB_ID}.txt"
 PY=$GV/bin/python
 DROP=""; [ "$READING" = non_test ] && DROP="--drop-tests"
-$PY scripts/mine_pilot.py rank-prepare "runs/$R" "$W" $DROP
-$PY scripts/mine_pilot.py rank-bm25 "$W" "$W/ranks_bm25.jsonl"
-$PY scripts/mine_pilot.py rank-dense "$W" "$W/ranks_dense.jsonl" "$W/dense_${SLURM_JOB_ID}.json" \
+# BM25 (CPU) on every directory of the reading
+$PY scripts/mine_pilot.py rank-prepare "runs/$R" "$W/full" $DROP
+$PY scripts/mine_pilot.py rank-bm25 "$W/full" "$W/full/ranks_bm25.jsonl"
+# dense passes on the first LIMIT directories of the seeded order (stage limit of 2 GPU-hours); all
+# directories if LIMIT is unset
+D="$W/full"
+if [ -n "${LIMIT:-}" ]; then
+  D="$W/limit${LIMIT}"
+  $PY scripts/mine_pilot.py rank-prepare "runs/$R" "$D" $DROP --limit "$LIMIT"
+  $PY scripts/mine_pilot.py rank-bm25 "$D" "$D/ranks_bm25.jsonl"
+fi
+$PY scripts/mine_pilot.py rank-dense "$D" "$D/ranks_dense.jsonl" "$D/dense_${SLURM_JOB_ID}.json" \
   --teachers swerankembed-small coderankembed --cut 1024 --form code
-$PY scripts/mine_pilot.py rank-dense "$W" "$W/ranks_dense_stored.jsonl" "$W/dense_stored_${SLURM_JOB_ID}.json" \
+$PY scripts/mine_pilot.py rank-dense "$D" "$D/ranks_dense_stored.jsonl" "$D/dense_stored_${SLURM_JOB_ID}.json" \
   --teachers swerankembed-small --cut 1024 --form pool
 echo done

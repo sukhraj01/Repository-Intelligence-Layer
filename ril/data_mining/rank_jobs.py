@@ -16,14 +16,33 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from ril.data_mining.pack import list_dirs, local_fetch, pack_zip, write_listing
+from ril.data_mining.pack import instance_bytes, list_dirs, local_fetch, pack_zip, write_listing
 from ril.data_mining.rank_compare import min_ranks, rank_sample, reading_rule, share_row
 from ril.training import pool_ranks as pr
 
 TOP_KS: tuple[int, ...] = (10, 20, 40)
 
 
-def prepare(run_root: str, work: str, drop_tests: bool = False) -> dict[str, Any]:
+def select_dirs(run_root: str, drop_tests: bool, limit: int | None) -> list[str] | None:
+    """The first ``limit`` directories of the seeded order that the reading keeps (``None``: all).
+
+    The order is ``sha256("0:<directory>")``, the rule of the population; with ``drop_tests`` a
+    directory with no positive outside test files is not kept. Used to bound the dense passes by
+    the stage's GPU limit; BM25 runs on every directory.
+    """
+    if limit is None:
+        return None
+    kept = [
+        d
+        for d in list_dirs(run_root)
+        if instance_bytes(os.path.join(run_root, "pr", d), drop_tests) is not None
+    ]
+    return sorted(kept, key=lambda d: pr.seeded_key(0, d))[:limit]
+
+
+def prepare(
+    run_root: str, work: str, drop_tests: bool = False, limit: int | None = None
+) -> dict[str, Any]:
     """Zip, listing and selection file of a run root under ``work`` (idempotent, same bytes).
 
     ``drop_tests`` prepares the pool-like reading (no test-file functions in the corpora, no test
@@ -31,12 +50,13 @@ def prepare(run_root: str, work: str, drop_tests: bool = False) -> dict[str, Any
     """
     os.makedirs(work, exist_ok=True)
     zip_path = os.path.join(work, "mined.zip")
-    n = pack_zip(run_root, zip_path, drop_tests=drop_tests)
+    only = select_dirs(run_root, drop_tests, limit)
+    n = pack_zip(run_root, zip_path, drop_tests=drop_tests, only=only)
     write_listing(zip_path, os.path.join(work, "mined.listing.json"))
-    sample = rank_sample(run_root, drop_tests)
+    sample = rank_sample(run_root, drop_tests, only)
     with open(os.path.join(work, "sample.json"), "w", encoding="utf-8") as handle:
         handle.write(json.dumps(sample, sort_keys=True) + "\n")
-    return {"directories": n, "zip": zip_path, "drop_tests": drop_tests}
+    return {"directories": n, "zip": zip_path, "drop_tests": drop_tests, "limit": limit}
 
 
 def bm25(work: str, out: str, *, form: str = "code") -> dict[str, Any]:
@@ -104,7 +124,9 @@ def tables(
     return {"rows": rows, "reading": reading_rule(with_positive, yield_per_pr)}
 
 
-def estimate(run_root: str, texts_per_second: float, teachers: int = 3) -> dict[str, Any]:
+def estimate(
+    run_root: str, texts_per_second: float, teachers: int = 3, limit: int | None = None
+) -> dict[str, Any]:
     """Distinct function texts per repository over the run's directories, and the GPU cost.
 
     The rank tooling encodes each distinct text of a repository once (``RepoVectorCache``), so the
@@ -122,7 +144,8 @@ def estimate(run_root: str, texts_per_second: float, teachers: int = 3) -> dict[
     seen_all: dict[str, set[str]] = {}
     seen_non_test: dict[str, set[str]] = {}
     rows_all = rows_non_test = 0
-    for name in list_dirs(run_root):
+    dirs = select_dirs(run_root, True, limit) or list_dirs(run_root)
+    for name in dirs:
         base = os.path.join(run_root, "pr", name)
         with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:
             repo = str(_json.load(handle)["repo"])
@@ -143,7 +166,7 @@ def estimate(run_root: str, texts_per_second: float, teachers: int = 3) -> dict[
     hours = pr.gpu_hours_estimate
 
     return {
-        "directories": len(list_dirs(run_root)),
+        "directories": len(dirs),
         "repositories": len(seen_all),
         "corpus_rows": {"all": rows_all, "non_test": rows_non_test},
         "distinct_texts": {"all": distinct_all, "non_test": distinct_nt},

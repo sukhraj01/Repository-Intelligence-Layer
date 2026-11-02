@@ -238,3 +238,32 @@ def test_pool_like_reading_drops_test_functions_positives_and_empty_directories(
     sample = rank_sample(store.root, drop_tests=True)["sample"]
     assert [r["dir"] for r in sample] == ["acme__widgets-1"] and sample[0]["positives"] == 1
     assert len(rank_sample(store.root)["sample"]) == 2
+
+
+def test_select_dirs_takes_the_seeded_prefix_that_the_reading_keeps(tmp_path) -> None:
+    from ril.data_mining.rank_jobs import estimate, prepare, select_dirs
+
+    store = MiningStore(str(tmp_path / "run"))
+    corpus = [("a.py/f", "a.py/f\ndef f(): pass"), ("tests/test_a.py/t", "x\ndef t(): pass")]
+    for n in range(1, 6):
+        qrels = ["a.py/f"] if n % 2 else ["tests/test_a.py/t"]
+        inst = MinedInstance(
+            "acme/widgets",
+            n,
+            f"acme__widgets-{n}",
+            "q",
+            "m" * 40,
+            corpus,
+            qrels,
+            {"repo": "acme/widgets", "pr": n, "counters": {"positives": 1}},
+        )
+        store.write_instance(inst)
+    assert select_dirs(store.root, False, None) is None
+    kept = select_dirs(store.root, True, 99)
+    assert kept is not None and sorted(kept) == [f"acme__widgets-{n}" for n in (1, 3, 5)]
+    two = select_dirs(store.root, True, 2)
+    assert two == kept[:2]
+    out = prepare(store.root, str(tmp_path / "work"), drop_tests=True, limit=2)
+    assert out["directories"] == 2
+    est = estimate(store.root, 100.0, limit=2)
+    assert est["directories"] == 2 and est["distinct_texts"]["non_test"] == 1
