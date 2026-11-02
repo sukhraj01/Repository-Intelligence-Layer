@@ -202,3 +202,7 @@ Accounts B and C answer on the gateway but the home directories are private to t
 ### N1 completed (2026-11-02)
 
 Jobs: 51971 (A, 2.71 GPU-hours), 52143 (A, 2.23), 52144 (A, 2.25), 52385 (C, 2.24); 24 runs, 9.43 GPU-hours with the gate and queue overhead counted by job time (0.45 per run on the first node, 0.37 on the others). Ledger sum 56.69 of the cap 62 (A 54.45, C 2.24, B 0). Disk added: results 11 MB on A and a similar amount on C; the staged copy on C is about 10 GB in `~/ril_*` (quota 25 GB). Nothing deleted on either cluster account. The 24-run cost estimate that stopped the stage (10.8) was high because the first job ran on a slower node.
+
+### Sibling-noise pilot (E-PILOT-NOISE-SIB, 2026-11-02)
+
+Jobs on account A (`~/ril_n7`, no new staging): 52619 (CPU gate, 1 min 8 s), 52622 (seed 0, five cells, 1.86 GPU-hours), 52685 (seed 1, five cells, 1.86); 10 runs, 3.73 GPU-hours (0.37 per run on one 2080 Ti node; the first run's cost was checked before seed 1 was submitted, stage limit 5.0). Ledger sum 60.41 of the Block 2 cap 62 (A 58.17, C 2.24, B 0); 1.59 left. Only account A has an alias on the local machine, so no job ran elsewhere. Disk added: 10 result directories of about 0.65 MB each; `df` not remeasured. Nothing deleted.
