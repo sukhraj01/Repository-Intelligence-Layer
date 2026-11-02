@@ -1,0 +1,13 @@
+condition,seed,config_hash,arm,teacher_equals_base,pool_before_arm,pool_examples,optimizer_updates,examples_seen,unique_examples_seen,effective_epochs,positives_seen,negative_shortfall_visits,gpu_hours_train_loop,repeats_examples,below_common_unique_count
+t5a_raw,0,c885796815f6,RAW,False,5000,5000,100,3232,3232,0.646,3232,0,0.0745,False,False
+t5a_raw,1,507b7f655b14,RAW,False,5000,5000,100,3232,3232,0.646,3232,0,0.0746,False,False
+n8_r40_raw,0,500fb868dbad,RAW,False,5000,5000,100,3232,3232,0.646,3232,0,0.0735,False,False
+n8_r40_raw,1,e2d34e0e8ee1,RAW,False,5000,5000,100,3232,3232,0.646,3232,0,0.0736,False,False
+n8_r40_filter_bm25,0,4070ac91adc2,FILTER,False,5000,3502,100,3232,3232,0.923,3232,0,0.0735,False,False
+n8_r40_filter_bm25,1,52a5fe9c0d1b,FILTER,False,5000,3439,100,3232,3232,0.94,3232,0,0.0735,False,False
+n8_r40_filter_srs,0,6fcd2f3a8ba9,FILTER,False,5000,4107,100,3232,3232,0.787,3232,0,0.0736,False,False
+n8_r40_filter_srs,1,5429f43d1a98,FILTER,False,5000,4092,100,3232,3232,0.79,3232,0,0.0735,False,False
+n8_r40_oracle,0,fad23c773227,ORACLE_CLEAN,False,5000,3054,100,3232,3054,1.058,3232,0,0.0736,True,True
+n8_r40_oracle,1,e5cbbc1e2093,ORACLE_CLEAN,False,5000,3017,100,3232,3017,1.071,3232,0,0.0736,True,True
+n8_r40_sub,0,b13053709c54,RAW_SUBSAMPLE,False,5000,3054,100,3232,3054,1.058,3232,0,0.0736,True,True
+n8_r40_sub,1,f4c384924a83,RAW_SUBSAMPLE,False,5000,3017,100,3232,3017,1.071,3232,0,0.0737,True,True
