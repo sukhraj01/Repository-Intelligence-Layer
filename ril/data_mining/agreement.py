@@ -90,8 +90,12 @@ def compare_pr(
     mined_corpus_ids: frozenset[str],
     pool_positives: frozenset[str],
     pool_corpus_ids: frozenset[str],
+    mined_async_ids: frozenset[str] = frozenset(),
 ) -> dict[str, Any]:
-    """One row: sets, agreement in both readings and the classification of every difference."""
+    """One row: sets, agreement in both readings and the classification of every difference.
+
+    ``mined_async_ids`` are the mined corpus functions defined with ``async def``.
+    """
     positives = list(meta["positives"])
     mined = frozenset(str(p["pool_id"]) for p in positives if p["in_corpus"])
     side = frozenset(str(p["pool_id"]) for p in positives if not p["in_corpus"])
@@ -136,6 +140,37 @@ def compare_pr(
             "missing": len(pool_non_test - ids),
         }
         for name, ids in variant_sets(positives, pool_corpus_ids).items()
+    }
+    by_id = {str(p["pool_id"]): p for p in positives}
+    classes: dict[str, int] = {}
+    for i in sorted(mined - pool_positives):
+        if is_test_id(i):
+            continue
+        if i in pool_corpus_ids:
+            p = by_id[i]
+            kind = (
+                "pure_insertion"
+                if _pure_insertion(p)
+                else "whole_function_removal"
+                if _whole_removal(p)
+                else "other"
+            )
+            key = f"in_pool_corpus:{kind}"
+        else:
+            key = "not_in_pool_corpus:" + ("async" if i in mined_async_ids else "other")
+        classes[key] = classes.get(key, 0) + 1
+    out["extra_class"] = dict(sorted(classes.items()))
+    only_mined = mined_corpus_ids - pool_corpus_ids
+    out["corpus_diff"] = {
+        "both": len(mined_corpus_ids & pool_corpus_ids),
+        "mined_only_test_path": sum(1 for i in only_mined if is_test_id(i)),
+        "mined_only_async": sum(
+            1 for i in only_mined if not is_test_id(i) and i in mined_async_ids
+        ),
+        "mined_only_other": sum(
+            1 for i in only_mined if not is_test_id(i) and i not in mined_async_ids
+        ),
+        "pool_only": len(pool_corpus_ids - mined_corpus_ids),
     }
     out["matched"] = sorted(mined & pool_positives)
     out["extra_in_pool_corpus"] = sorted(i for i in mined - pool_positives if i in pool_corpus_ids)
@@ -184,6 +219,12 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         for v in r["extra_why"].values():
             ex[v] = ex.get(v, 0) + 1
     out["extra_why"] = dict(sorted(ex.items()))
+    for field in ("extra_class", "corpus_diff"):
+        merged: dict[str, int] = {}
+        for r in rows:
+            for k, v in r[field].items():
+                merged[k] = merged.get(k, 0) + int(v)
+        out[field] = dict(sorted(merged.items()))
     out["pool_positives_in_test_files"] = sum(
         1 for r in rows for i in [*r["matched"], *r["all"]["missing"]] if is_test_id(i)
     )

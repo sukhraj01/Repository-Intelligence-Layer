@@ -38,12 +38,19 @@ def _mined_meta(store: MiningStore, name: str) -> dict[str, Any]:
     return meta
 
 
-def _mined_corpus_ids(store: MiningStore, name: str) -> frozenset[str]:
+def _mined_corpus(store: MiningStore, name: str) -> tuple[frozenset[str], frozenset[str]]:
+    """``(ids, ids defined with async def)`` of a mined corpus (text is ``id`` newline source)."""
     ids = set()
+    asyncs = set()
     for line in read_corpus(store.pr_path(name)).decode("utf-8").splitlines():
-        if line.strip():
-            ids.add(str(json.loads(line)["_id"]))
-    return frozenset(ids)
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        ids.add(str(row["_id"]))
+        _, _, source = str(row["text"]).partition("\n")
+        if source.lstrip().startswith("async def"):
+            asyncs.add(str(row["_id"]))
+    return frozenset(ids), frozenset(asyncs)
 
 
 def agreement_job(
@@ -65,12 +72,14 @@ def agreement_job(
         except (OSError, ValueError) as exc:
             errors.append({"dir": name, "error": f"{type(exc).__name__}: {str(exc)[:120]}"})
             continue
+        ids, asyncs = _mined_corpus(store, name)
         rows.append(
             agreement.compare_pr(
                 _mined_meta(store, name),
-                _mined_corpus_ids(store, name),
+                ids,
                 frozenset(pool.positives),
                 frozenset(pool.ids),
+                asyncs,
             )
         )
     metas = [_mined_meta(store, n) for n in names]

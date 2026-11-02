@@ -121,3 +121,41 @@ def test_variants_drop_insertions_removals_and_functions_the_pool_corpus_lacks()
     table = agreement.summarize([row])
     name = "non_test_no_insertion_no_removal_in_pool_corpus"
     assert table["variants"][name]["exact_share"] == 1.0
+
+
+def test_extra_classes_and_corpus_differences() -> None:
+    ins = dict(_pos("pkg/a.py/ins"), removed_lines=0, inserted_lines=3)
+    gone = dict(_pos("pkg/a.py/gone"), removed_lines=5, inserted_lines=0, unit_lines=5)
+    asyn = _pos("pkg/a.py/asyn")
+    other = _pos("pkg/a.py/other")
+    meta = _meta(
+        [_pos("pkg/a.py/keep"), ins, gone, asyn, other, _pos("tests/t.py/x", is_test=True)]
+    )
+    mined_corpus = frozenset(
+        {"pkg/a.py/keep", "pkg/a.py/ins", "pkg/a.py/gone", "pkg/a.py/asyn", "pkg/a.py/other"}
+        | {"tests/t.py/x", "pkg/a.py/extra_async"}
+    )
+    pool_corpus = frozenset({"pkg/a.py/keep", "pkg/a.py/ins", "pkg/a.py/gone", "pkg/a.py/n"})
+    row = agreement.compare_pr(
+        meta,
+        mined_corpus,
+        frozenset({"pkg/a.py/keep"}),
+        pool_corpus,
+        frozenset({"pkg/a.py/asyn", "pkg/a.py/extra_async"}),
+    )
+    assert row["extra_class"] == {
+        "in_pool_corpus:pure_insertion": 1,
+        "in_pool_corpus:whole_function_removal": 1,
+        "not_in_pool_corpus:async": 1,
+        "not_in_pool_corpus:other": 1,
+    }
+    assert row["corpus_diff"] == {
+        "both": 3,
+        "mined_only_test_path": 1,
+        "mined_only_async": 2,
+        "mined_only_other": 1,
+        "pool_only": 1,
+    }
+    table = agreement.summarize([row, row])
+    assert table["extra_class"]["not_in_pool_corpus:async"] == 2
+    assert table["corpus_diff"]["pool_only"] == 2
