@@ -207,3 +207,7 @@ Jobs: 51971 (A, 2.71 GPU-hours), 52143 (A, 2.23), 52144 (A, 2.25), 52385 (C, 2.2
 ### Sibling-noise pilot (E-PILOT-NOISE-SIB, 2026-11-02)
 
 Jobs on account A (`~/ril_n7`, no new staging): 52619 (CPU gate, 1 min 8 s), 52622 (seed 0, five cells, 1.86 GPU-hours), 52685 (seed 1, five cells, 1.86); 10 runs, 3.73 GPU-hours (0.37 per run on one 2080 Ti node; the first run's cost was checked before seed 1 was submitted, stage limit 5.0). Ledger sum 60.41 of the Block 2 cap 62 (A 58.17, C 2.24, B 0); 1.59 left. Only account A has an alias on the local machine, so no job ran elsewhere. Disk added: 10 result directories of about 0.65 MB each; `df` not remeasured. Nothing deleted.
+
+### Third seed at r = 0.4 (D58, 2026-11-02)
+
+D58: the Block 2 cap is raised from 62 to 66 GPU-hours (60.41 used before this run). Job 53271 on account A (`~/ril_n7`, no new staging): seed 2, r = 0.4, six cells, six runs, 02:23:53 on one 2080 Ti node (gnode067) = 2.40 GPU-hours (0.40 per run), submitted with the same command and `RIL_COMMIT` label as the other N1 jobs; the CUDA matmul gate runs inside each training and evaluation and passed. The cluster copy of the code equals the main branch at submission; it differs from the commit that labelled the earlier N1 jobs only by the sibling-noise kind, whose default is the uniform kind of E-PILOT-NOISE (`ril/training/noise.py`). Ledger sum 62.81 of the cap 66 (A 60.57, C 2.24, B 0); 3.19 left. `$HOME` on A before: 21,831 of 25,000 MB, files 832 of 3,000; unchanged after (six result directories, about 4 MB). Nothing deleted.

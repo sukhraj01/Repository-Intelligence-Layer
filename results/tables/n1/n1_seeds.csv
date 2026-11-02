@@ -55,51 +55,51 @@ n1_r20_filter_srs,rrf,L3,units_all,155,"[0, 1]","[48.15, 48.44]",0.29,0.21
 n1_r20_weight_srs,rrf,L3,units_all,155,"[0, 1]","[48.1, 47.4]",0.7,0.5
 n1_r20_oracle,rrf,L3,units_all,155,"[0, 1]","[48.34, 47.88]",0.46,0.33
 n1_r20_sub,rrf,L3,units_all,155,"[0, 1]","[47.37, 48.11]",0.73,0.52
-n1_r40_raw,dense,L2,units_all_nomod,351,"[0, 1]","[23.14, 23.03]",0.11,0.08
-n1_r40_filter_bm25,dense,L2,units_all_nomod,351,"[0, 1]","[25.66, 24.97]",0.69,0.49
-n1_r40_filter_srs,dense,L2,units_all_nomod,351,"[0, 1]","[25.56, 26.7]",1.14,0.81
-n1_r40_weight_srs,dense,L2,units_all_nomod,351,"[0, 1]","[24.56, 25.14]",0.58,0.41
-n1_r40_oracle,dense,L2,units_all_nomod,351,"[0, 1]","[26.04, 25.88]",0.16,0.12
-n1_r40_sub,dense,L2,units_all_nomod,351,"[0, 1]","[22.09, 24.32]",2.23,1.57
-n1_r40_raw,dense,L2,units_all,353,"[0, 1]","[24.67, 24.87]",0.2,0.14
-n1_r40_filter_bm25,dense,L2,units_all,353,"[0, 1]","[27.22, 26.7]",0.51,0.36
-n1_r40_filter_srs,dense,L2,units_all,353,"[0, 1]","[26.92, 28.15]",1.23,0.87
-n1_r40_weight_srs,dense,L2,units_all,353,"[0, 1]","[26.08, 26.6]",0.52,0.36
-n1_r40_oracle,dense,L2,units_all,353,"[0, 1]","[27.34, 26.93]",0.41,0.29
-n1_r40_sub,dense,L2,units_all,353,"[0, 1]","[24.26, 25.96]",1.69,1.2
-n1_r40_raw,dense,L3,units_all_nomod,155,"[0, 1]","[43.25, 42.32]",0.93,0.65
-n1_r40_filter_bm25,dense,L3,units_all_nomod,155,"[0, 1]","[44.32, 44.72]",0.39,0.28
-n1_r40_filter_srs,dense,L3,units_all_nomod,155,"[0, 1]","[46.06, 45.43]",0.63,0.44
-n1_r40_weight_srs,dense,L3,units_all_nomod,155,"[0, 1]","[44.4, 42.59]",1.82,1.29
-n1_r40_oracle,dense,L3,units_all_nomod,155,"[0, 1]","[46.19, 46.04]",0.15,0.11
-n1_r40_sub,dense,L3,units_all_nomod,155,"[0, 1]","[42.45, 43.18]",0.73,0.51
-n1_r40_raw,dense,L3,units_all,155,"[0, 1]","[44.74, 43.56]",1.18,0.83
-n1_r40_filter_bm25,dense,L3,units_all,155,"[0, 1]","[45.63, 45.71]",0.08,0.05
-n1_r40_filter_srs,dense,L3,units_all,155,"[0, 1]","[47.18, 46.46]",0.72,0.51
-n1_r40_weight_srs,dense,L3,units_all,155,"[0, 1]","[45.9, 43.78]",2.12,1.5
-n1_r40_oracle,dense,L3,units_all,155,"[0, 1]","[47.0, 46.98]",0.02,0.01
-n1_r40_sub,dense,L3,units_all,155,"[0, 1]","[43.77, 44.55]",0.78,0.55
-n1_r40_raw,rrf,L2,units_all_nomod,351,"[0, 1]","[26.31, 26.34]",0.03,0.02
-n1_r40_filter_bm25,rrf,L2,units_all_nomod,351,"[0, 1]","[27.13, 26.96]",0.17,0.12
-n1_r40_filter_srs,rrf,L2,units_all_nomod,351,"[0, 1]","[28.22, 28.41]",0.18,0.13
-n1_r40_weight_srs,rrf,L2,units_all_nomod,351,"[0, 1]","[27.44, 27.18]",0.25,0.18
-n1_r40_oracle,rrf,L2,units_all_nomod,351,"[0, 1]","[27.76, 28.04]",0.28,0.2
-n1_r40_sub,rrf,L2,units_all_nomod,351,"[0, 1]","[25.44, 26.66]",1.22,0.86
-n1_r40_raw,rrf,L2,units_all,353,"[0, 1]","[27.64, 27.66]",0.02,0.02
-n1_r40_filter_bm25,rrf,L2,units_all,353,"[0, 1]","[28.37, 28.07]",0.29,0.21
-n1_r40_filter_srs,rrf,L2,units_all,353,"[0, 1]","[29.36, 29.38]",0.03,0.02
-n1_r40_weight_srs,rrf,L2,units_all,353,"[0, 1]","[28.45, 28.32]",0.13,0.09
-n1_r40_oracle,rrf,L2,units_all,353,"[0, 1]","[28.79, 28.86]",0.07,0.05
-n1_r40_sub,rrf,L2,units_all,353,"[0, 1]","[26.67, 27.8]",1.13,0.8
-n1_r40_raw,rrf,L3,units_all_nomod,155,"[0, 1]","[46.5, 45.95]",0.56,0.4
-n1_r40_filter_bm25,rrf,L3,units_all_nomod,155,"[0, 1]","[46.93, 46.96]",0.04,0.03
-n1_r40_filter_srs,rrf,L3,units_all_nomod,155,"[0, 1]","[47.62, 47.21]",0.41,0.29
-n1_r40_weight_srs,rrf,L3,units_all_nomod,155,"[0, 1]","[46.95, 46.43]",0.52,0.37
-n1_r40_oracle,rrf,L3,units_all_nomod,155,"[0, 1]","[48.05, 47.58]",0.46,0.33
-n1_r40_sub,rrf,L3,units_all_nomod,155,"[0, 1]","[46.28, 46.44]",0.17,0.12
-n1_r40_raw,rrf,L3,units_all,155,"[0, 1]","[47.42, 46.73]",0.69,0.49
-n1_r40_filter_bm25,rrf,L3,units_all,155,"[0, 1]","[47.68, 47.54]",0.14,0.1
-n1_r40_filter_srs,rrf,L3,units_all,155,"[0, 1]","[48.26, 47.82]",0.44,0.31
-n1_r40_weight_srs,rrf,L3,units_all,155,"[0, 1]","[47.81, 47.22]",0.59,0.42
-n1_r40_oracle,rrf,L3,units_all,155,"[0, 1]","[48.43, 47.98]",0.45,0.32
-n1_r40_sub,rrf,L3,units_all,155,"[0, 1]","[47.07, 47.07]",0.0,0.0
+n1_r40_raw,dense,L2,units_all_nomod,351,"[0, 1, 2]","[23.14, 23.03, 23.55]",0.51,0.27
+n1_r40_filter_bm25,dense,L2,units_all_nomod,351,"[0, 1, 2]","[25.66, 24.97, 24.54]",1.12,0.56
+n1_r40_filter_srs,dense,L2,units_all_nomod,351,"[0, 1, 2]","[25.56, 26.7, 26.5]",1.14,0.61
+n1_r40_weight_srs,dense,L2,units_all_nomod,351,"[0, 1, 2]","[24.56, 25.14, 25.63]",1.08,0.54
+n1_r40_oracle,dense,L2,units_all_nomod,351,"[0, 1, 2]","[26.04, 25.88, 25.82]",0.23,0.12
+n1_r40_sub,dense,L2,units_all_nomod,351,"[0, 1, 2]","[22.09, 24.32, 22.63]",2.23,1.16
+n1_r40_raw,dense,L2,units_all,353,"[0, 1, 2]","[24.67, 24.87, 25.5]",0.83,0.43
+n1_r40_filter_bm25,dense,L2,units_all,353,"[0, 1, 2]","[27.22, 26.7, 26.3]",0.92,0.46
+n1_r40_filter_srs,dense,L2,units_all,353,"[0, 1, 2]","[26.92, 28.15, 27.6]",1.23,0.62
+n1_r40_weight_srs,dense,L2,units_all,353,"[0, 1, 2]","[26.08, 26.6, 26.99]",0.91,0.45
+n1_r40_oracle,dense,L2,units_all,353,"[0, 1, 2]","[27.34, 26.93, 27.69]",0.76,0.38
+n1_r40_sub,dense,L2,units_all,353,"[0, 1, 2]","[24.26, 25.96, 24.5]",1.69,0.92
+n1_r40_raw,dense,L3,units_all_nomod,155,"[0, 1, 2]","[43.25, 42.32, 44.16]",1.84,0.92
+n1_r40_filter_bm25,dense,L3,units_all_nomod,155,"[0, 1, 2]","[44.32, 44.72, 44.26]",0.46,0.25
+n1_r40_filter_srs,dense,L3,units_all_nomod,155,"[0, 1, 2]","[46.06, 45.43, 45.95]",0.63,0.33
+n1_r40_weight_srs,dense,L3,units_all_nomod,155,"[0, 1, 2]","[44.4, 42.59, 46.17]",3.58,1.79
+n1_r40_oracle,dense,L3,units_all_nomod,155,"[0, 1, 2]","[46.19, 46.04, 46.42]",0.38,0.19
+n1_r40_sub,dense,L3,units_all_nomod,155,"[0, 1, 2]","[42.45, 43.18, 41.02]",2.16,1.1
+n1_r40_raw,dense,L3,units_all,155,"[0, 1, 2]","[44.74, 43.56, 45.31]",1.75,0.89
+n1_r40_filter_bm25,dense,L3,units_all,155,"[0, 1, 2]","[45.63, 45.71, 45.65]",0.08,0.04
+n1_r40_filter_srs,dense,L3,units_all,155,"[0, 1, 2]","[47.18, 46.46, 46.96]",0.72,0.37
+n1_r40_weight_srs,dense,L3,units_all,155,"[0, 1, 2]","[45.9, 43.78, 47.23]",3.45,1.74
+n1_r40_oracle,dense,L3,units_all,155,"[0, 1, 2]","[47.0, 46.98, 47.56]",0.59,0.33
+n1_r40_sub,dense,L3,units_all,155,"[0, 1, 2]","[43.77, 44.55, 42.8]",1.74,0.87
+n1_r40_raw,rrf,L2,units_all_nomod,351,"[0, 1, 2]","[26.31, 26.34, 26.5]",0.19,0.1
+n1_r40_filter_bm25,rrf,L2,units_all_nomod,351,"[0, 1, 2]","[27.13, 26.96, 26.54]",0.6,0.31
+n1_r40_filter_srs,rrf,L2,units_all_nomod,351,"[0, 1, 2]","[28.22, 28.41, 27.95]",0.45,0.23
+n1_r40_weight_srs,rrf,L2,units_all_nomod,351,"[0, 1, 2]","[27.44, 27.18, 27.57]",0.38,0.2
+n1_r40_oracle,rrf,L2,units_all_nomod,351,"[0, 1, 2]","[27.76, 28.04, 27.55]",0.49,0.24
+n1_r40_sub,rrf,L2,units_all_nomod,351,"[0, 1, 2]","[25.44, 26.66, 25.81]",1.22,0.63
+n1_r40_raw,rrf,L2,units_all,353,"[0, 1, 2]","[27.64, 27.66, 27.73]",0.09,0.05
+n1_r40_filter_bm25,rrf,L2,units_all,353,"[0, 1, 2]","[28.37, 28.07, 27.92]",0.44,0.23
+n1_r40_filter_srs,rrf,L2,units_all,353,"[0, 1, 2]","[29.36, 29.38, 28.84]",0.54,0.3
+n1_r40_weight_srs,rrf,L2,units_all,353,"[0, 1, 2]","[28.45, 28.32, 28.52]",0.2,0.1
+n1_r40_oracle,rrf,L2,units_all,353,"[0, 1, 2]","[28.79, 28.86, 28.67]",0.19,0.1
+n1_r40_sub,rrf,L2,units_all,353,"[0, 1, 2]","[26.67, 27.8, 27.27]",1.13,0.57
+n1_r40_raw,rrf,L3,units_all_nomod,155,"[0, 1, 2]","[46.5, 45.95, 46.84]",0.89,0.45
+n1_r40_filter_bm25,rrf,L3,units_all_nomod,155,"[0, 1, 2]","[46.93, 46.96, 46.27]",0.69,0.39
+n1_r40_filter_srs,rrf,L3,units_all_nomod,155,"[0, 1, 2]","[47.62, 47.21, 47.89]",0.67,0.34
+n1_r40_weight_srs,rrf,L3,units_all_nomod,155,"[0, 1, 2]","[46.95, 46.43, 47.66]",1.23,0.62
+n1_r40_oracle,rrf,L3,units_all_nomod,155,"[0, 1, 2]","[48.05, 47.58, 47.97]",0.46,0.25
+n1_r40_sub,rrf,L3,units_all_nomod,155,"[0, 1, 2]","[46.28, 46.44, 45.91]",0.53,0.27
+n1_r40_raw,rrf,L3,units_all,155,"[0, 1, 2]","[47.42, 46.73, 47.65]",0.92,0.48
+n1_r40_filter_bm25,rrf,L3,units_all,155,"[0, 1, 2]","[47.68, 47.54, 47.07]",0.61,0.32
+n1_r40_filter_srs,rrf,L3,units_all,155,"[0, 1, 2]","[48.26, 47.82, 48.41]",0.59,0.31
+n1_r40_weight_srs,rrf,L3,units_all,155,"[0, 1, 2]","[47.81, 47.22, 48.36]",1.14,0.57
+n1_r40_oracle,rrf,L3,units_all,155,"[0, 1, 2]","[48.43, 47.98, 48.69]",0.71,0.36
+n1_r40_sub,rrf,L3,units_all,155,"[0, 1, 2]","[47.07, 47.07, 46.89]",0.18,0.1

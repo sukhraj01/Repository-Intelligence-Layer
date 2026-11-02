@@ -1,4 +1,12 @@
 {
+ "cells": [
+  "raw",
+  "filter_bm25",
+  "filter_srs",
+  "weight_srs",
+  "oracle",
+  "sub"
+ ],
  "minimum_detectable": [
   {
    "binding": 1.56,
@@ -21,24 +29,24 @@
    "seeds": 2
   },
   {
-   "binding": 2.15,
+   "binding": 1.78,
    "level": "L2",
-   "pooled_seed_sd": 0.769,
-   "query_mdd": 1.73,
+   "pooled_seed_sd": 0.634,
+   "query_mdd": 1.78,
    "rate": 0.4,
-   "seed_df": 6,
-   "seed_mdd": 2.15,
-   "seeds": 2
+   "seed_df": 12,
+   "seed_mdd": 1.45,
+   "seeds": 3
   },
   {
-   "binding": 1.86,
+   "binding": 2.18,
    "level": "L3",
-   "pooled_seed_sd": 0.662,
-   "query_mdd": 1.24,
+   "pooled_seed_sd": 0.955,
+   "query_mdd": 1.18,
    "rate": 0.4,
-   "seed_df": 6,
-   "seed_mdd": 1.86,
-   "seeds": 2
+   "seed_df": 12,
+   "seed_mdd": 2.18,
+   "seeds": 3
   }
  ],
  "reading": {
@@ -243,18 +251,18 @@
     "i_degrades": true,
     "i_raw_vs_clean": {
      "L2": {
-      "d": -3.67,
-      "hi": -1.97,
+      "d": -3.52,
+      "hi": -1.55,
       "interval": "repository-clustered",
-      "lo": -4.85,
+      "lo": -4.9,
       "negative": true,
       "positive": false
      },
      "L3": {
-      "d": -2.32,
-      "hi": -1.42,
+      "d": -1.86,
+      "hi": -0.97,
       "interval": "query-level",
-      "lo": -3.21,
+      "lo": -2.71,
       "negative": true,
       "positive": false
      }
@@ -262,65 +270,65 @@
     "ii_oracle_recovers": true,
     "ii_oracle_vs_raw": {
      "L2": {
-      "d": 2.87,
-      "hi": 4.24,
+      "d": 2.67,
+      "hi": 3.91,
       "interval": "repository-clustered",
-      "lo": 1.66,
+      "lo": 1.28,
       "negative": false,
       "positive": true
      },
      "L3": {
-      "d": 3.33,
-      "hi": 4.45,
+      "d": 2.97,
+      "hi": 4.0,
       "interval": "query-level",
-      "lo": 2.22,
+      "lo": 1.92,
       "negative": false,
       "positive": true
      }
     },
     "ii_share_of_loss_recovered": {
-     "L2": 0.782016348773842,
-     "L3": 1.435344827586207
+     "L2": 0.7585227272727273,
+     "L3": 1.596774193548387
     },
     "iii_methods": {
      "filter_bm25": {
       "beats_subsample": true,
       "share_of_oracle_recovery": {
-       "L2": 0.7770034843205574,
-       "L3": 0.5225225225225225
+       "L2": 0.6816479400749064,
+       "L3": 0.4006734006734006
       },
       "vs_raw": {
        "L2": {
-        "d": 2.23,
-        "hi": 3.38,
+        "d": 1.82,
+        "hi": 2.86,
         "interval": "repository-clustered",
-        "lo": 1.01,
+        "lo": 0.36,
         "negative": false,
         "positive": true
        },
        "L3": {
-        "d": 1.74,
-        "hi": 2.8,
+        "d": 1.19,
+        "hi": 2.12,
         "interval": "query-level",
-        "lo": 0.75,
+        "lo": 0.25,
         "negative": false,
         "positive": true
        }
       },
       "vs_subsample": {
        "L2": {
-        "d": 2.11,
-        "hi": 3.08,
+        "d": 2.05,
+        "hi": 3.23,
         "interval": "repository-clustered",
-        "lo": 0.96,
+        "lo": 0.56,
         "negative": false,
         "positive": true
        },
        "L3": {
-        "d": 1.7,
-        "hi": 2.93,
+        "d": 2.22,
+        "hi": 3.56,
         "interval": "query-level",
-        "lo": 0.57,
+        "lo": 1.05,
         "negative": false,
         "positive": true
        }
@@ -330,41 +338,41 @@
      "filter_srs": {
       "beats_subsample": true,
       "share_of_oracle_recovery": {
-       "L2": 1.0592334494773519,
-       "L3": 0.8888888888888888
+       "L2": 1.1273408239700373,
+       "L3": 0.8653198653198652
       },
       "vs_raw": {
        "L2": {
-        "d": 3.04,
-        "hi": 4.74,
+        "d": 3.01,
+        "hi": 4.26,
         "interval": "repository-clustered",
-        "lo": 1.49,
+        "lo": 1.13,
         "negative": false,
         "positive": true
        },
        "L3": {
-        "d": 2.96,
-        "hi": 4.02,
+        "d": 2.57,
+        "hi": 3.56,
         "interval": "query-level",
-        "lo": 1.88,
+        "lo": 1.59,
         "negative": false,
         "positive": true
        }
       },
       "vs_subsample": {
        "L2": {
-        "d": 2.93,
-        "hi": 4.42,
+        "d": 3.24,
+        "hi": 4.76,
         "interval": "repository-clustered",
-        "lo": 1.21,
+        "lo": 1.22,
         "negative": false,
         "positive": true
        },
        "L3": {
-        "d": 2.93,
-        "hi": 4.29,
+        "d": 3.6,
+        "hi": 5.05,
         "interval": "query-level",
-        "lo": 1.67,
+        "lo": 2.25,
         "negative": false,
         "positive": true
        }
@@ -372,45 +380,45 @@
       "works": true
      },
      "weight_srs": {
-      "beats_subsample": false,
+      "beats_subsample": true,
       "share_of_oracle_recovery": {
-       "L2": 0.6132404181184669,
-       "L3": 0.2132132132132132
+       "L2": 0.700374531835206,
+       "L3": 0.38383838383838376
       },
       "vs_raw": {
        "L2": {
-        "d": 1.76,
-        "hi": 2.51,
+        "d": 1.87,
+        "hi": 2.67,
         "interval": "repository-clustered",
-        "lo": 0.86,
+        "lo": 0.81,
         "negative": false,
         "positive": true
        },
        "L3": {
-        "d": 0.71,
-        "hi": 1.22,
+        "d": 1.14,
+        "hi": 1.67,
         "interval": "query-level",
-        "lo": 0.2,
+        "lo": 0.57,
         "negative": false,
         "positive": true
        }
       },
       "vs_subsample": {
        "L2": {
-        "d": 1.64,
-        "hi": 2.77,
+        "d": 2.1,
+        "hi": 2.97,
         "interval": "repository-clustered",
-        "lo": 0.48,
+        "lo": 0.94,
         "negative": false,
         "positive": true
        },
        "L3": {
-        "d": 0.68,
-        "hi": 1.68,
+        "d": 2.17,
+        "hi": 3.44,
         "interval": "query-level",
-        "lo": -0.18,
+        "lo": 1.15,
         "negative": false,
-        "positive": false
+        "positive": true
        }
       },
       "works": true
@@ -418,19 +426,19 @@
     },
     "subsample_vs_raw": {
      "L2": {
-      "d": 0.12,
-      "hi": 0.45,
+      "d": -0.23,
+      "hi": 0.03,
       "interval": "repository-clustered",
-      "lo": -0.25,
+      "lo": -0.56,
       "negative": false,
       "positive": false
      },
      "L3": {
-      "d": 0.03,
-      "hi": 0.83,
+      "d": -1.02,
+      "hi": -0.13,
       "interval": "query-level",
-      "lo": -0.9,
-      "negative": false,
+      "lo": -2.17,
+      "negative": true,
       "positive": false
      }
     }
@@ -465,27 +473,33 @@
   ],
   "n1_r40_filter_bm25": [
    0,
-   1
+   1,
+   2
   ],
   "n1_r40_filter_srs": [
    0,
-   1
+   1,
+   2
   ],
   "n1_r40_oracle": [
    0,
-   1
+   1,
+   2
   ],
   "n1_r40_raw": [
    0,
-   1
+   1,
+   2
   ],
   "n1_r40_sub": [
    0,
-   1
+   1,
+   2
   ],
   "n1_r40_weight_srs": [
    0,
-   1
+   1,
+   2
   ],
   "t5a_raw": [
    0,
