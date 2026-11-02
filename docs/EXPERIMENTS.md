@@ -1479,6 +1479,53 @@ re-resolves one file, while a change to the symbols of a module that a package r
 most of a small repository (requests, click). Finer dependencies (per imported name instead of per module) would cut that
 further; not attempted. Times are wall clock, one process, warm file cache, local CPU, history read included.
 
+## A2c: the stored graph as a versioned, hashed edge-list directory, done 2026-10-31
+
+**Question.** Decision D16 fixes the read structure of the first stored graph (a typed edge-list file read into an
+in-memory adjacency). What does a versioned, deterministic and verified version of that file cost to write and load?
+
+**Format** (`ril/parsing/edge_store.py`, `EDGE_STORE_VERSION = 1`): `manifest.json` (format and version, graph metadata
+with schema, resolver and unit-set hash, node and edge counts, counts per family and status, graph digest, SHA-256 and size
+of each data file) plus `nodes.jsonl.gz` and `edges.jsonl.gz` (the canonical graph bytes, gzip with a fixed header). The
+same graph always writes the same bytes, whatever order its edges were built in. A load always checks format version and
+counts; by default it also checks the file hashes; `deep` also recomputes the graph digest. A failed check raises
+instead of returning a graph. Tests: `tests/unit/test_edge_store.py` (round trip, byte identity, tampered file, unknown
+version).
+
+**Result** (history off, seven loads per check level, nearest-rank p50, local CPU, warm file cache; every round trip
+reproduced the graph digest):
+
+| repository | edges | raw JSONL | store | write | load, counts only | load, hashes (default) | load, deep | adjacency |
+|---|---|---|---|---|---|---|---|---|
+| requests | 4,163 | 1.1 MB | 68 KB | 0.19 s | 0.04 s | 0.04 s | 0.13 s | 0.004 s |
+| flask | 5,892 | 1.5 MB | 90 KB | 0.17 s | 0.03 s | 0.03 s | 0.09 s | 0.002 s |
+| click | 9,654 | 2.6 MB | 146 KB | 0.23 s | 0.05 s | 0.05 s | 0.16 s | 0.005 s |
+| pytest | 39,145 | 11.2 MB | 627 KB | 0.93 s | 0.25 s | 0.24 s | 0.65 s | 0.02 s |
+| django | 262,361 | 90.8 MB | 4.5 MB | 6.84 s | 1.98 s | 2.26 s | 5.31 s | 0.53 s |
+
+Table `results/tables/a2c_edge_store.csv`, log `results/logs/a2c_edge_store_2026-10-31.json`.
+
+**Reading.** Evidence class: measured. The store is 16 to 20 times smaller than the raw canonical JSONL, and hash checking
+costs almost nothing over an unchecked load (django 2.26 s against 1.98 s); recomputing the digest costs about 2.4 times a
+load, so it is opt-in. Load time is JSON parsing of the edge records; a reader that needs only the adjacency of resolved
+edges could store that projection separately (not done: D16 reads the typed edge list).
+
+## A2b (preparation): where the resolver fails, by call-site rule, 2026-10-31
+
+The resolver-recall pilots of A2b need the dynamic oracle (D15), which runs a repository's own test suite under the call
+tracer. That suite was not run on this machine (running a checked-out project's code locally is not permitted here), so
+no recall number is reported. What can be measured statically is where the resolver fails today. Over the 232,474
+`invoke` sites of the five checkouts of A1-PILOT (default-branch heads): 92,071 resolved, 89,168 external, 38,420
+ambiguous, 12,815 unresolved. Of the 51,235 ambiguous or unresolved sites, **41,147 (80%)** are calls on a receiver of
+unknown type (`unknown-receiver:name-match` 36,743 ambiguous, `unknown-receiver:too-many-name-matches` 4,404 unresolved);
+next are attributes missing from a known class's MRO (3,934), calls through a local name (1,622), several module-level
+definitions of one name (1,174) and attributes of a class with an unresolved base (1,113). Log
+`results/logs/a2b_invoke_breakdown_2026-10-31.json`.
+
+**Reading.** Of the three pilots the brief names, attribute and variable typing (constructor assignments, parameter
+annotations, local assignments) targets the largest failure class; import-aware resolution and decorated or property calls
+target classes of a few hundred to a few thousand sites. Order for the pilots once the oracle can run: typing first.
+
 ## Pre-registered interpretation rules
 
 Fixed in advance so results cannot be re-read after the fact:
