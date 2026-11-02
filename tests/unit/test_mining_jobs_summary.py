@@ -268,3 +268,43 @@ def test_rank_glue_prepares_the_run_and_ranks_with_bm25_through_the_pool_tooling
     assert all(r["directories"] == 3 and r["teacher"] == "bm25" for r in out["rows"])
     assert out["reading"]["reading"] == "too small to compare"
     assert out["reading"]["prs_needed_at_measured_yield"] == 100
+
+
+def test_listing_shards_write_only_their_repositories_and_no_mining_outputs(tmp_path) -> None:
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    common = {
+        "config": MiningConfig(n_repos=2, max_prs=3),
+        "out_root": root,
+        "population": pop,
+        "is_held_out": lambda r: False,
+        "client": client,
+        "snapshots": snaps,
+        "created": "2026-11-02",
+        "code_commit": "abc1234",
+        "repos": [REPO, "zeta/other"],
+        "list_only": True,
+    }
+    res = jobs.run_pilot(shard=(0, 2), **common)
+    assert res["listed"] == 1 and res["failed"] == {}
+    assert sorted(os.listdir(os.path.join(root, "listing"))) == ["acme__widgets.json"]
+    assert not os.path.exists(os.path.join(root, "pr")) and not os.path.exists(
+        os.path.join(root, "summary.json")
+    )
+    res2 = jobs.run_pilot(shard=(1, 2), **common)
+    assert res2["listed"] == 1
+    assert len(os.listdir(os.path.join(root, "listing"))) == 2
+    full = jobs.run_pilot(**{**common, "list_only": False})  # the mining session reuses both
+    assert full["attempted"] == 3
+    sessions = [json.loads(x) for x in open(os.path.join(root, "sessions.jsonl"))]
+    assert sessions[-1]["listings_reused"] == 2 and sessions[-1]["listed_now"] == 0
+
+
+def test_etag_store_can_be_switched_off(tmp_path) -> None:
+    on = jobs.etag_store_for(str(tmp_path))
+    off = jobs.etag_store_for(str(tmp_path), enabled=False)
+    on.put("k" * 64, "e", b"x")
+    off.put("j" * 64, "e", b"x")
+    assert on.get("k" * 64) is not None and off.get("j" * 64) is None
+    assert not os.path.exists(os.path.join(str(tmp_path), "etag", "jj"))

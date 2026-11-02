@@ -170,12 +170,13 @@ def main(argv: list[str] | None = None) -> int:
     config = MiningConfig.from_dict(yaml.safe_load(Path(a.config).read_text(encoding="utf-8")))
     is_held_out = held_out_predicate(a.held_out, a.rename_cache)
     population = jobs.population_from_listing(a.listing, is_held_out, config)
+    events = f"api_events_shard{a.shard[0]}of{a.shard[1]}.jsonl" if a.shard else "api_events.jsonl"
     client = ApiClient(
         UrllibTransport(),
         token=token_from_env(),
-        etags=jobs.etag_store_for(a.out),
+        etags=jobs.etag_store_for(a.out, enabled=a.etag_cache),
         config=ClientConfig(),
-        sink=jobs.jsonl_sink(str(Path(a.out) / "api_events.jsonl")),
+        sink=jobs.jsonl_sink(str(Path(a.out) / events)),
     )
     repos = None
     if a.repos is not None:
@@ -188,6 +189,8 @@ def main(argv: list[str] | None = None) -> int:
         client=client,
         snapshots=GitSnapshots(a.work, workers=max(1, a.lookahead)),
         lookahead=a.lookahead,
+        list_only=a.list_only,
+        shard=tuple(a.shard) if a.shard else None,
         created=a.created,
         code_commit=_commit(),
         stop_after=a.stop_after,

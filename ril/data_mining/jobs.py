@@ -106,20 +106,34 @@ def run_pilot(
     stop_after: int | None = None,
     repos: list[str] | None = None,
     lookahead: int = 1,
+    list_only: bool = False,
+    shard: tuple[int, int] | None = None,
 ) -> dict[str, Any]:
     """List, select and mine (resumable), then write the summary and ``provenance.json``.
 
     ``repos`` overrides the population's first ``n_repos`` (stage M1 validates on five).
-    ``lookahead`` is a speed setting only (base commits are fetched ahead); it is not part of the
-    config hash because the outputs do not depend on it.
+    ``list_only`` and ``shard`` (``(i, n)``: every n-th repository from i) split the long listing
+    stage over several jobs; they write listing files only. ``lookahead`` is a speed setting only
+    (base commits are fetched ahead); it is not part of the config hash because the outputs do
+    not depend on it.
     """
     store = MiningStore(out_root)
     store.ensure_run(config.config_hash(), created)
     budget_before = client.budget.to_dict()
     names = repos if repos is not None else first_repos(population, config.n_repos)
+    if shard is not None:
+        names = names[shard[0] :: shard[1]]
     t_list = time.perf_counter()
     listings, stats = list_population(client, names, store, is_held_out=is_held_out)
     listing_seconds = time.perf_counter() - t_list
+    if list_only:  # listing shards: only the per-repository listing files are written
+        return {
+            "listed": stats.listed,
+            "reused": stats.reused,
+            "failed": dict(sorted(stats.failed.items())),
+            "listing_seconds": round(listing_seconds, 1),
+            "api": budget_delta(budget_before, client.budget.to_dict()),
+        }
     selected = select_prs(listings, config, population.published)
     t_mine = time.perf_counter()
     session = mine_selected(
@@ -208,9 +222,13 @@ def jsonl_sink(path: str) -> Callable[[dict[str, Any]], None]:
     return write
 
 
-def etag_store_for(out_root: str) -> EtagStore:
-    """The conditional-request store of a run root (under ``etag/``)."""
-    return EtagStore(os.path.join(out_root, "etag"))
+def etag_store_for(out_root: str, *, enabled: bool = True) -> EtagStore:
+    """The conditional-request store of a run root (under ``etag/``); ``enabled=False``: none.
+
+    Every URL of a mining run is requested once, so a stored response is never reused, and each
+    one costs a file and the compressed body (a compare response holds the patches).
+    """
+    return EtagStore(os.path.join(out_root, "etag") if enabled else None)
 
 
 def summarize_budget(budget: Mapping[str, Any]) -> str:
