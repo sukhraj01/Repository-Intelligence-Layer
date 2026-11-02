@@ -1,0 +1,173 @@
+{
+ "date": "2026-10-31",
+ "experiment": "a2c-edge-store",
+ "hardware": {
+  "cpus_visible": 16,
+  "host": "local-laptop",
+  "mem_total_kb": 15681632,
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.39",
+  "python": "3.11.15"
+ },
+ "repositories": [
+  {
+   "adjacency_seconds": {
+    "p50": 0.0035,
+    "p95": 0.0049,
+    "p99": 0.0049
+   },
+   "config_hash": "2ee0a09384b2f38608a7675628d5a34e84343496fc6156d0d64861ae05977bfb",
+   "format_version": 1,
+   "load_deep_seconds": {
+    "p50": 0.1263,
+    "p95": 0.1297,
+    "p99": 0.1297
+   },
+   "load_fast_seconds": {
+    "p50": 0.0412,
+    "p95": 0.0515,
+    "p99": 0.0515
+   },
+   "load_verify_seconds": {
+    "p50": 0.0422,
+    "p95": 0.0456,
+    "p99": 0.0456
+   },
+   "n_edges": 4163,
+   "n_nodes": 760,
+   "raw_jsonl_bytes": 1108571,
+   "repeats": 7,
+   "repo_id": "psf/requests",
+   "round_trip_equal": true,
+   "store_bytes": 67514,
+   "write_seconds": 0.1918
+  },
+  {
+   "adjacency_seconds": {
+    "p50": 0.0024,
+    "p95": 0.0131,
+    "p99": 0.0131
+   },
+   "config_hash": "2d9e32753b5be447506d6cdedb4730b56e9f4d255f9d4d2ae6c26077ca79b4a6",
+   "format_version": 1,
+   "load_deep_seconds": {
+    "p50": 0.0873,
+    "p95": 0.0918,
+    "p99": 0.0918
+   },
+   "load_fast_seconds": {
+    "p50": 0.0285,
+    "p95": 0.0464,
+    "p99": 0.0464
+   },
+   "load_verify_seconds": {
+    "p50": 0.0277,
+    "p95": 0.0318,
+    "p99": 0.0318
+   },
+   "n_edges": 5892,
+   "n_nodes": 1037,
+   "raw_jsonl_bytes": 1545138,
+   "repeats": 7,
+   "repo_id": "pallets/flask",
+   "round_trip_equal": true,
+   "store_bytes": 90248,
+   "write_seconds": 0.1722
+  },
+  {
+   "adjacency_seconds": {
+    "p50": 0.0049,
+    "p95": 0.015,
+    "p99": 0.015
+   },
+   "config_hash": "3688fa26bad1e962795d5ebc9330940f0342620ab4209e7d9f24715ecf9cec13",
+   "format_version": 1,
+   "load_deep_seconds": {
+    "p50": 0.1562,
+    "p95": 0.1646,
+    "p99": 0.1646
+   },
+   "load_fast_seconds": {
+    "p50": 0.0522,
+    "p95": 0.0681,
+    "p99": 0.0681
+   },
+   "load_verify_seconds": {
+    "p50": 0.053,
+    "p95": 0.0703,
+    "p99": 0.0703
+   },
+   "n_edges": 9654,
+   "n_nodes": 1539,
+   "raw_jsonl_bytes": 2644045,
+   "repeats": 7,
+   "repo_id": "pallets/click",
+   "round_trip_equal": true,
+   "store_bytes": 146296,
+   "write_seconds": 0.2297
+  },
+  {
+   "adjacency_seconds": {
+    "p50": 0.0234,
+    "p95": 0.0794,
+    "p99": 0.0794
+   },
+   "config_hash": "11723fa6473b180bdae31119be03d61a04d6bfddd3c5c3672fbdbe3844853dd0",
+   "format_version": 1,
+   "load_deep_seconds": {
+    "p50": 0.648,
+    "p95": 0.6817,
+    "p99": 0.6817
+   },
+   "load_fast_seconds": {
+    "p50": 0.2474,
+    "p95": 0.2563,
+    "p99": 0.2563
+   },
+   "load_verify_seconds": {
+    "p50": 0.2449,
+    "p95": 0.272,
+    "p99": 0.272
+   },
+   "n_edges": 39145,
+   "n_nodes": 6902,
+   "raw_jsonl_bytes": 11217967,
+   "repeats": 7,
+   "repo_id": "pytest-dev/pytest",
+   "round_trip_equal": true,
+   "store_bytes": 626717,
+   "write_seconds": 0.9289
+  },
+  {
+   "adjacency_seconds": {
+    "p50": 0.5275,
+    "p95": 0.8415,
+    "p99": 0.8415
+   },
+   "config_hash": "8fa8d5d679f94eecd773a867ff16d0a658933cb801ce2f12336371ecec33578d",
+   "format_version": 1,
+   "load_deep_seconds": {
+    "p50": 5.306,
+    "p95": 5.3292,
+    "p99": 5.3292
+   },
+   "load_fast_seconds": {
+    "p50": 1.9827,
+    "p95": 2.3679,
+    "p99": 2.3679
+   },
+   "load_verify_seconds": {
+    "p50": 2.2603,
+    "p95": 2.2997,
+    "p99": 2.2997
+   },
+   "n_edges": 262361,
+   "n_nodes": 41904,
+   "raw_jsonl_bytes": 90821881,
+   "repeats": 7,
+   "repo_id": "django/django",
+   "round_trip_equal": true,
+   "store_bytes": 4451820,
+   "write_seconds": 6.8352
+  }
+ ]
+}
