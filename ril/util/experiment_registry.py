@@ -1,9 +1,9 @@
 """Entry ids of the experiment logs, and the checks that keep them unique and citable.
 
 The experiment log is split by workstream so that three people never append to one file:
-``docs/EXPERIMENTS.md`` (the lead: rules, index, own entries), ``docs/experiments/A.md`` and
-``docs/experiments/C.md``. An entry id is the first cell of a registry row or the leading id(s) of a
-``##`` heading. Ids must be unique across the three files, every citation of the form
+``docs/EXPERIMENTS.md`` (the lead: rules, index, own entries), ``docs/experiments/A.md``,
+``docs/experiments/B.md`` and ``docs/experiments/C.md``. An entry id is the first cell of a registry row or the leading id(s) of a
+``##`` heading. Ids must be unique across the four files, every citation of the form
 a citation (the log file, then the id) must name the file that defines the id, and the index in
 ``docs/EXPERIMENTS.md`` must agree with the definitions.
 
@@ -19,6 +19,7 @@ from dataclasses import dataclass
 LOG_FILES: tuple[str, ...] = (
     "docs/EXPERIMENTS.md",
     "docs/experiments/A.md",
+    "docs/experiments/B.md",
     "docs/experiments/C.md",
 )
 INDEX_FILE = "docs/EXPERIMENTS.md"
@@ -31,7 +32,7 @@ _HEAD_LEAD = re.compile(
     rf"^##\s+(?P<ids>{_ID}(?:\s*\([^)]*\))?(?:(?:\s*,\s*|\s+and\s+){_ID}(?:\s*\([^)]*\))?)*)"
 )
 _HEAD_ID = re.compile(_ID)
-_FILE = r"(?:docs/EXPERIMENTS\.md|docs/experiments/[AC]\.md)"
+_FILE = r"(?:docs/EXPERIMENTS\.md|docs/experiments/[ABC]\.md)"
 _CITE = re.compile(
     rf"(?P<file>{_FILE})[`\s,:;(]*(?:(?:section|sections|entry|entries)\s+)?(?P<id>{_ID})(?![\w-])"
 )
