@@ -1,0 +1,37 @@
+{
+ "complementarity": {
+  "queries": 506,
+  "rows": 58
+ },
+ "config_hash": "03b6fdd4362005facec8dcfa6a92f2b41a22f4c11eb685e3c41f0e5c0df5b23f",
+ "decomposition": {
+  "components": 48,
+  "mdd": 40
+ },
+ "draws": 2000,
+ "gain": {
+  "queries": 506,
+  "rows": 28
+ },
+ "hardware": {
+  "device": "cpu",
+  "gpu": null,
+  "platform": "macOS-15.7.1-arm64-arm-64bit",
+  "python": "3.11.14"
+ },
+ "metrics": {
+  "L2": "ndcg10",
+  "L3": "recall100"
+ },
+ "noise": {
+  "queries": 506,
+  "rows": 110
+ },
+ "reading": "units_all_nomod",
+ "seed": 0,
+ "skipped": [
+  "item 2(c) lexical overlap: issue and unit texts of the dev repositories not available",
+  "Wave 5 (t4a_*): per-query rows not under results/rq2"
+ ],
+ "version": "stored-analysis/v1"
+}

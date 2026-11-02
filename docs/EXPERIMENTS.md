@@ -58,7 +58,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-PILOT-ARMS2 | lead | `docs/EXPERIMENTS.md` | done | 2026-10-31 |
 | E-PILOT-NOISE | lead | `docs/EXPERIMENTS.md` | gate N0 and stage N1 done (two seeds) | 2026-11-01 |
 | E-PILOT-NOISE-SIB | lead | `docs/EXPERIMENTS.md` | done; sanity (i) not passed, reading not answered | 2026-11-02 |
-| E-STORED-ANALYSIS | B | `docs/experiments/B.md` | readings stated, tables follow | 2026-11-02 |
+| E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-POWER | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-PROBE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-SCAN | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
