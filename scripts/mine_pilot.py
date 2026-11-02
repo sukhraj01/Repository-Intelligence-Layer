@@ -8,6 +8,9 @@ Subcommands (logic in ``ril/``):
   rank-sample OUT SAMPLE      selection file covering every mined directory (for the rank tooling)
   agreement OUT JSON --listing L
                               mined positives against the pool's, for pull requests in both
+  rank-prepare OUT WORK       zip, listing and selection file of the run for the rank tooling
+  rank-bm25 WORK RANKS        BM25 ranks (CPU);  rank-dense WORK RANKS LOG --teachers T ...  (GPU)
+  rank-tables WORK JSON --ranks R ... --yield-per-pr Y   shares with no positive in the top K
   handcheck OUT MD --n N --seed S
                               markdown for a human to read: issue title, hunks, mined positives
 """
@@ -57,6 +60,25 @@ def main(argv: list[str] | None = None) -> int:
     h.add_argument("md")
     h.add_argument("--n", type=int, default=20)
     h.add_argument("--seed", type=int, default=0)
+    rp = sub.add_parser("rank-prepare")
+    rp.add_argument("out")
+    rp.add_argument("work")
+    rb = sub.add_parser("rank-bm25")
+    rb.add_argument("work")
+    rb.add_argument("ranks")
+    rb.add_argument("--form", default="code")
+    rd = sub.add_parser("rank-dense")
+    rd.add_argument("work")
+    rd.add_argument("ranks")
+    rd.add_argument("log")
+    rd.add_argument("--teachers", nargs="+", required=True)
+    rd.add_argument("--cut", type=int, default=1024)
+    rd.add_argument("--form", default="code")
+    rt = sub.add_parser("rank-tables")
+    rt.add_argument("work")
+    rt.add_argument("json")
+    rt.add_argument("--ranks", nargs="+", required=True)
+    rt.add_argument("--yield-per-pr", type=float, required=True)
     a = p.parse_args(argv)
 
     from ril.data_mining import jobs
@@ -79,6 +101,24 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
         return 0
 
+    if a.cmd.startswith("rank-"):
+        from ril.data_mining import rank_jobs
+
+        if a.cmd == "rank-prepare":
+            res = rank_jobs.prepare(a.out, a.work)
+        elif a.cmd == "rank-bm25":
+            res = rank_jobs.bm25(a.work, a.ranks, form=a.form)
+        elif a.cmd == "rank-dense":
+            res = rank_jobs.dense(
+                a.work, a.ranks, a.log, teachers=a.teachers, cut=a.cut, form=a.form
+            )
+        else:
+            res = rank_jobs.tables(f"{a.work}/sample.json", a.ranks, yield_per_pr=a.yield_per_pr)
+            Path(a.json).write_text(
+                json.dumps(res, indent=1, sort_keys=True) + "\n", encoding="utf-8"
+            )
+        sys.stdout.write(json.dumps(res if a.cmd != "rank-tables" else {"written": a.json}) + "\n")
+        return 0
     if a.cmd == "agreement":
         from ril.data_mining import validation
 

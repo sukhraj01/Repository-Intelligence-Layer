@@ -235,3 +235,36 @@ def test_agreement_job_against_the_run_packed_as_a_pool_and_handcheck_sample(tmp
     assert empty["also_in_pool"] == 0 and empty["table"]["prs_compared"] == 0
     first = validation.handcheck_sample(root, 2, 0)
     assert first == validation.handcheck_sample(root, 2, 0) and len(first) == 2
+
+
+def test_rank_glue_prepares_the_run_and_ranks_with_bm25_through_the_pool_tooling(tmp_path) -> None:
+    from ril.data_mining import rank_jobs
+
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    jobs.run_pilot(
+        config=MiningConfig(n_repos=1, max_prs=3),
+        out_root=root,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="abc1234",
+        repos=[REPO],
+    )
+    work = str(tmp_path / "work")
+    assert rank_jobs.prepare(root, work)["directories"] == 3
+    first = open(os.path.join(work, "mined.zip"), "rb").read()
+    rank_jobs.prepare(root, work)
+    assert open(os.path.join(work, "mined.zip"), "rb").read() == first
+    ranks = str(tmp_path / "ranks_bm25.jsonl")
+    res = rank_jobs.bm25(work, ranks)
+    assert res["selected"] == 3 and res["written"] == 3
+    assert rank_jobs.bm25(work, ranks)["written"] == 0  # resumable
+    out = rank_jobs.tables(os.path.join(work, "sample.json"), [ranks], yield_per_pr=1.0)
+    assert {r["k"] for r in out["rows"]} == {10, 20, 40}
+    assert all(r["directories"] == 3 and r["teacher"] == "bm25" for r in out["rows"])
+    assert out["reading"]["reading"] == "too small to compare"
+    assert out["reading"]["prs_needed_at_measured_yield"] == 100
