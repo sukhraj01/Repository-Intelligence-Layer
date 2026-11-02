@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from collections.abc import Callable, Mapping
 from typing import Any
 
@@ -113,8 +114,11 @@ def run_pilot(
     store.ensure_run(config.config_hash(), created)
     budget_before = client.budget.to_dict()
     names = repos if repos is not None else first_repos(population, config.n_repos)
+    t_list = time.perf_counter()
     listings, stats = list_population(client, names, store, is_held_out=is_held_out)
+    listing_seconds = time.perf_counter() - t_list
     selected = select_prs(listings, config, population.published)
+    t_mine = time.perf_counter()
     session = mine_selected(
         selected,
         client=client,
@@ -123,6 +127,7 @@ def run_pilot(
         config=config,
         stop_after=stop_after,
     )
+    mining_seconds = time.perf_counter() - t_mine
     budget = store.add_budget(budget_delta(budget_before, client.budget.to_dict()))
     summary = build_summary(store, listings, population)
     summary["listing"] = {
@@ -152,6 +157,7 @@ def run_pilot(
             "adopted": session.adopted,
             "outcomes": dict(sorted(session.outcomes.items())),
             "stopped": session.stopped,
+            "seconds": {"listing": round(listing_seconds, 1), "mining": round(mining_seconds, 1)},
             "api": budget_delta(budget_before, client.budget.to_dict()),
         }
     )
