@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from ril.data_mining.files import corpus_size
-from ril.data_mining.pack import list_dirs
+from ril.data_mining.pack import instance_bytes, list_dirs
 from ril.training import pool_ranks as pr
 
 MIN_DIRECTORIES = 100
@@ -121,8 +121,12 @@ def reading_rule(directories_with_positive: int, yield_per_pr: float) -> dict[st
     }
 
 
-def rank_sample(root: str) -> dict[str, Any]:
-    """A selection file (as ``pool_rank_jobs`` reads it) covering every directory of a run root."""
+def rank_sample(root: str, drop_tests: bool = False) -> dict[str, Any]:
+    """A selection file (as ``pool_rank_jobs`` reads it) covering every directory of a run root.
+
+    With ``drop_tests`` the sizes and positive counts are those of the pool-like reading and a
+    directory with no positive outside test files is left out (as ``pack.pack_zip`` does).
+    """
     import json
 
     insts = []
@@ -131,13 +135,20 @@ def rank_sample(root: str) -> dict[str, Any]:
         with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:
             meta = json.load(handle)
         size = corpus_size(base)
+        positives = int(meta["counters"]["positives"])
+        if drop_tests:
+            kept = instance_bytes(base, True)
+            if kept is None:
+                continue
+            size = len(kept[0])
+            positives = len(kept[1].decode("utf-8").splitlines()) - 1
         insts.append(
             pr.PoolInstance(
                 dir=name,
                 repo=str(meta["repo"]),
                 pr=int(meta["pr"]),
                 corpus_bytes=size,
-                positives=int(meta["counters"]["positives"]),
+                positives=positives,
                 held_out=False,
                 size_bin=0,
             )

@@ -195,3 +195,46 @@ def test_corpus_is_stored_compressed_deterministically_and_packed_plain(tmp_path
     with open(os.path.join(base, "corpus.jsonl"), "wb") as handle:
         handle.write(raw)
     assert read_corpus(base) == raw and corpus_size(base) == len(raw)
+
+
+def test_pool_like_reading_drops_test_functions_positives_and_empty_directories(tmp_path) -> None:
+    import zipfile
+
+    from ril.data_mining.rank_compare import rank_sample
+
+    store = MiningStore(str(tmp_path / "run"))
+    corpus = [("a.py/f", "a.py/f\ndef f(): pass"), ("tests/test_a.py/t", "x\ndef t(): pass")]
+    both = MinedInstance(
+        "acme/widgets",
+        1,
+        "acme__widgets-1",
+        "q",
+        "m" * 40,
+        corpus,
+        ["a.py/f", "tests/test_a.py/t"],
+        {"repo": "acme/widgets", "pr": 1, "counters": {"positives": 2}},
+    )
+    only_test = MinedInstance(
+        "acme/widgets",
+        2,
+        "acme__widgets-2",
+        "q",
+        "m" * 40,
+        corpus,
+        ["tests/test_a.py/t"],
+        {"repo": "acme/widgets", "pr": 2, "counters": {"positives": 1}},
+    )
+    store.write_instance(both)
+    store.write_instance(only_test)
+    zpath = str(tmp_path / "pool_like.zip")
+    assert pack_zip(store.root, zpath, drop_tests=True) == 1
+    with zipfile.ZipFile(zpath) as zf:
+        assert [n for n in zf.namelist() if n.endswith("corpus.jsonl")] == [
+            "train/python/acme__widgets-1/corpus.jsonl"
+        ]
+        rows = zf.read("train/python/acme__widgets-1/corpus.jsonl").decode().splitlines()
+        assert [json.loads(r)["_id"] for r in rows] == ["a.py/f"]
+        assert zf.read("train/python/acme__widgets-1/qrels/test.tsv").decode().count("\n") == 2
+    sample = rank_sample(store.root, drop_tests=True)["sample"]
+    assert [r["dir"] for r in sample] == ["acme__widgets-1"] and sample[0]["positives"] == 1
+    assert len(rank_sample(store.root)["sample"]) == 2

@@ -18,6 +18,7 @@ import struct
 import zipfile
 from typing import Any
 
+from ril.data_mining.agreement import is_test_id
 from ril.data_mining.files import read_corpus
 
 POOL_PREFIX = "train/python/"
@@ -38,21 +39,55 @@ def list_dirs(root: str) -> list[str]:
     )
 
 
-def pack_zip(root: str, zip_path: str, *, deflate: bool = True) -> int:
+def instance_bytes(base: str, drop_tests: bool) -> tuple[bytes, bytes] | None:
+    """``(corpus, qrels)`` bytes of one instance directory, or ``None`` if nothing is left.
+
+    With ``drop_tests`` the corpus loses the functions of test files (D9 path rule) and the qrels
+    lose their positives; a directory with no positive left is dropped. This is the pool-like
+    reading: the published pool's corpora hold no test-file functions and none of its positives is
+    in a test file (``results/mining/m1_agreement.md``).
+    """
+    corpus = read_corpus(base)
+    with open(os.path.join(base, "qrels", "test.tsv"), "rb") as handle:
+        qrels = handle.read()
+    if not drop_tests:
+        return corpus, qrels
+    keep_rows = [
+        line
+        for line in corpus.decode("utf-8").splitlines(keepends=True)
+        if line.strip() and not is_test_id(str(json.loads(line)["_id"]))
+    ]
+    lines = qrels.decode("utf-8").splitlines(keepends=True)
+    kept_qrels = [lines[0]] + [
+        line for line in lines[1:] if line.strip() and not is_test_id(line.split("\t")[1])
+    ]
+    if len(kept_qrels) < 2:
+        return None
+    return "".join(keep_rows).encode("utf-8"), "".join(kept_qrels).encode("utf-8")
+
+
+def pack_zip(root: str, zip_path: str, *, deflate: bool = True, drop_tests: bool = False) -> int:
     """Write ``zip_path`` with ``train/python/<dir>/{corpus.jsonl, queries.jsonl, qrels/test.tsv}``.
 
     Returns the number of instances packed. ``pr_meta.json`` stays out (the pool has no such
-    member).
+    member). ``drop_tests`` writes the pool-like reading (see :func:`instance_bytes`).
     """
     names = list_dirs(root)
+    packed = len(names)
     tmp = zip_path + ".tmp"
     method = zipfile.ZIP_DEFLATED if deflate else zipfile.ZIP_STORED
     with zipfile.ZipFile(tmp, "w", compression=method) as zf:
         for name in names:
             base = os.path.join(root, "pr", name)
+            kept = instance_bytes(base, drop_tests)
+            if kept is None:
+                packed -= 1
+                continue
             for member in INSTANCE_FILES:
                 if member == "corpus.jsonl":
-                    data = read_corpus(base)
+                    data = kept[0]
+                elif member == "qrels/test.tsv":
+                    data = kept[1]
                 else:
                     with open(os.path.join(base, *member.split("/")), "rb") as handle:
                         data = handle.read()
@@ -61,7 +96,7 @@ def pack_zip(root: str, zip_path: str, *, deflate: bool = True) -> int:
                 info.external_attr = 0o644 << 16
                 zf.writestr(info, data)
     os.replace(tmp, zip_path)
-    return len(names)
+    return packed
 
 
 def listing_of(zip_path: str, url: str) -> dict[str, Any]:

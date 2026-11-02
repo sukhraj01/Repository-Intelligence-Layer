@@ -16,23 +16,27 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from ril.data_mining.pack import local_fetch, pack_zip, write_listing
+from ril.data_mining.pack import list_dirs, local_fetch, pack_zip, write_listing
 from ril.data_mining.rank_compare import min_ranks, rank_sample, reading_rule, share_row
 from ril.training import pool_ranks as pr
 
 TOP_KS: tuple[int, ...] = (10, 20, 40)
 
 
-def prepare(run_root: str, work: str) -> dict[str, Any]:
-    """Zip, listing and selection file of a run root under ``work`` (idempotent, same bytes)."""
+def prepare(run_root: str, work: str, drop_tests: bool = False) -> dict[str, Any]:
+    """Zip, listing and selection file of a run root under ``work`` (idempotent, same bytes).
+
+    ``drop_tests`` prepares the pool-like reading (no test-file functions in the corpora, no test
+    positives, directories left without a positive dropped).
+    """
     os.makedirs(work, exist_ok=True)
     zip_path = os.path.join(work, "mined.zip")
-    n = pack_zip(run_root, zip_path)
+    n = pack_zip(run_root, zip_path, drop_tests=drop_tests)
     write_listing(zip_path, os.path.join(work, "mined.listing.json"))
-    sample = rank_sample(run_root)
+    sample = rank_sample(run_root, drop_tests)
     with open(os.path.join(work, "sample.json"), "w", encoding="utf-8") as handle:
         handle.write(json.dumps(sample, sort_keys=True) + "\n")
-    return {"directories": n, "zip": zip_path}
+    return {"directories": n, "zip": zip_path, "drop_tests": drop_tests}
 
 
 def bm25(work: str, out: str, *, form: str = "code") -> dict[str, Any]:
@@ -98,3 +102,55 @@ def tables(
                 }
             )
     return {"rows": rows, "reading": reading_rule(with_positive, yield_per_pr)}
+
+
+def estimate(run_root: str, texts_per_second: float, teachers: int = 3) -> dict[str, Any]:
+    """Distinct function texts per repository over the run's directories, and the GPU cost.
+
+    The rank tooling encodes each distinct text of a repository once (``RepoVectorCache``), so the
+    cost is the number of distinct texts, not of corpus rows. Counted twice: over whole corpora,
+    and over corpora outside test files (the pool-like variant). ``teachers`` is the number of
+    dense passes (SweRankEmbed-Small and CodeRankEmbed on the code text, SweRankEmbed-Small on the
+    stored text). ``texts_per_second`` is a measured rate the caller names.
+    """
+    import hashlib
+    import json as _json
+
+    from ril.data_mining.agreement import is_test_id
+    from ril.data_mining.files import read_corpus
+
+    seen_all: dict[str, set[str]] = {}
+    seen_non_test: dict[str, set[str]] = {}
+    rows_all = rows_non_test = 0
+    for name in list_dirs(run_root):
+        base = os.path.join(run_root, "pr", name)
+        with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:
+            repo = str(_json.load(handle)["repo"])
+        a = seen_all.setdefault(repo, set())
+        b = seen_non_test.setdefault(repo, set())
+        for line in read_corpus(base).decode("utf-8").splitlines():
+            if not line.strip():
+                continue
+            row = _json.loads(line)
+            digest = hashlib.sha1(str(row["text"]).encode("utf-8")).hexdigest()
+            rows_all += 1
+            a.add(digest)
+            if not is_test_id(str(row["_id"])):
+                rows_non_test += 1
+                b.add(digest)
+    distinct_all = sum(len(v) for v in seen_all.values())
+    distinct_nt = sum(len(v) for v in seen_non_test.values())
+    hours = pr.gpu_hours_estimate
+
+    return {
+        "directories": len(list_dirs(run_root)),
+        "repositories": len(seen_all),
+        "corpus_rows": {"all": rows_all, "non_test": rows_non_test},
+        "distinct_texts": {"all": distinct_all, "non_test": distinct_nt},
+        "texts_per_second": texts_per_second,
+        "dense_passes": teachers,
+        "gpu_hours": {
+            "all": round(hours(distinct_all, texts_per_second, encoders=teachers), 3),
+            "non_test": round(hours(distinct_nt, texts_per_second, encoders=teachers), 3),
+        },
+    }

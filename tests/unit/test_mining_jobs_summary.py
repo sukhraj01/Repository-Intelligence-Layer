@@ -375,3 +375,28 @@ def test_report_renders_tables_and_measures_unit_costs_of_a_run(tmp_path) -> Non
     secs = report.session_seconds(root)
     assert secs["listing"] >= 0 and secs["mining"] >= 0
     assert report.api_totals(root)["calls"] == 0  # no event sink in this run
+
+
+def test_rank_estimate_counts_distinct_texts_per_repository_and_outside_tests(tmp_path) -> None:
+    from ril.data_mining import rank_jobs
+
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    jobs.run_pilot(
+        config=MiningConfig(n_repos=1, max_prs=3),
+        out_root=root,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="abc1234",
+        repos=[REPO],
+    )
+    est = rank_jobs.estimate(root, 100.0, teachers=2)
+    assert est["directories"] == 3 and est["repositories"] == 1
+    assert est["corpus_rows"]["all"] == 3 * est["distinct_texts"]["all"]  # same snapshot, three PRs
+    assert est["distinct_texts"]["non_test"] <= est["distinct_texts"]["all"]
+    expect = round(2 * est["distinct_texts"]["all"] / 100.0 / 3600, 3)
+    assert est["gpu_hours"]["all"] == expect

@@ -73,6 +73,9 @@ def main(argv: list[str] | None = None) -> int:
     rp = sub.add_parser("rank-prepare")
     rp.add_argument("out")
     rp.add_argument("work")
+    rp.add_argument(
+        "--drop-tests", action="store_true", help="pool-like reading (no test functions)"
+    )
     rb = sub.add_parser("rank-bm25")
     rb.add_argument("work")
     rb.add_argument("ranks")
@@ -84,6 +87,9 @@ def main(argv: list[str] | None = None) -> int:
     rd.add_argument("--teachers", nargs="+", required=True)
     rd.add_argument("--cut", type=int, default=1024)
     rd.add_argument("--form", default="code")
+    re_ = sub.add_parser("rank-estimate")
+    re_.add_argument("out")
+    re_.add_argument("--texts-per-second", type=float, required=True)
     rt = sub.add_parser("rank-tables")
     rt.add_argument("work")
     rt.add_argument("json")
@@ -130,13 +136,15 @@ def main(argv: list[str] | None = None) -> int:
         from ril.data_mining import rank_jobs
 
         if a.cmd == "rank-prepare":
-            res = rank_jobs.prepare(a.out, a.work)
+            res = rank_jobs.prepare(a.out, a.work, a.drop_tests)
         elif a.cmd == "rank-bm25":
             res = rank_jobs.bm25(a.work, a.ranks, form=a.form)
         elif a.cmd == "rank-dense":
             res = rank_jobs.dense(
                 a.work, a.ranks, a.log, teachers=a.teachers, cut=a.cut, form=a.form
             )
+        elif a.cmd == "rank-estimate":
+            res = rank_jobs.estimate(a.out, a.texts_per_second)
         else:
             res = rank_jobs.tables(f"{a.work}/sample.json", a.ranks, yield_per_pr=a.yield_per_pr)
             Path(a.json).write_text(
