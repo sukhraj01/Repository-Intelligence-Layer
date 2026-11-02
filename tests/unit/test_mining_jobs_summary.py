@@ -308,3 +308,23 @@ def test_etag_store_can_be_switched_off(tmp_path) -> None:
     off.put("j" * 64, "e", b"x")
     assert on.get("k" * 64) is not None and off.get("j" * 64) is None
     assert not os.path.exists(os.path.join(str(tmp_path), "etag", "jj"))
+
+
+def test_command_line_accepts_the_run_options_the_job_script_passes() -> None:
+    import subprocess
+    import sys
+
+    out = subprocess.run(
+        [sys.executable, "scripts/mine_pilot.py", "run", "--help"],
+        capture_output=True,
+        check=True,
+    ).stdout.decode()
+    for flag in (
+        "--list-only",
+        "--shard",
+        "--etag-cache",
+        "--lookahead",
+        "--stop-after",
+        "--repos",
+    ):
+        assert flag in out

@@ -44,6 +44,9 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--work", required=True)
     r.add_argument("--repos", type=int)
     r.add_argument("--stop-after", type=int)
+    r.add_argument("--list-only", action="store_true", help="write the listing files only")
+    r.add_argument("--shard", type=int, nargs=2, metavar=("I", "N"), help="every N-th repository")
+    r.add_argument("--etag-cache", action="store_true", help="keep conditional-request responses")
     r.add_argument(
         "--lookahead", type=int, default=1, help="base commits fetched ahead (speed only)"
     )
