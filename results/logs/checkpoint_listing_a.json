@@ -1,0 +1,25 @@
+{
+ "inspected": "2026-11-02",
+ "account": "A (the only account with a local alias; B and C not inspected)",
+ "home_token": "<home>",
+ "commands": [
+  "ls -d ~/ril_*",
+  "find ~/ril_* -type d (name ckpt|final|step_0*|checkpoints), pruning venv trees (read-only predicates, no exec)",
+  "find ~/ril_* -type f (name *.pt|*.pth|*.safetensors|pytorch_model*) -printf size date path",
+  "du -sk ~/ril_*; df -k ~; quota -s"
+ ],
+ "retained": [
+  {"path": "<home>/ril_t1/work/ckpt/t1_validate_tiny/74d02bf3/final", "config_hash8": "74d02bf3", "run_id": "t1_validate_tiny", "step": "final", "bytes": 530174, "files": "tiny.pt 530111, encoder.json 63"},
+  {"path": "<home>/ril_t1/work/ckpt/t1_validate_tiny/74d02bf3/step_000000019", "config_hash8": "74d02bf3", "run_id": "t1_validate_tiny", "step": 19, "bytes": 1598181, "files": "state.pt 1594765, state.json 3416"},
+  {"path": "<home>/ril_t1/work/ckpt/t1_validate_tiny/74d02bf3/step_000000029", "config_hash8": "74d02bf3", "run_id": "t1_validate_tiny", "step": 29, "bytes": 1599890, "files": "state.pt 1594765, state.json 5125"}
+ ],
+ "weights_elsewhere": [
+  {"path": "<home>/ril_e/hf_cache/hub/models--*/snapshots/*/model.safetensors", "what": "downloaded base encoders (CodeRankEmbed, Qwen3-Embedding-0.6B, SweRankEmbed-Small), not trained here", "bytes": [546938168, 1191586416, 273474944]}
+ ],
+ "disk": {
+  "df_total_kb": 52428800, "df_used_kb": 43890688, "df_available_kb": 8538112, "df_use_percent": 84,
+  "quota_used_mb": 21831, "quota_soft_mb": 25000, "quota_hard_mb": 27000,
+  "quota_files": 832, "quota_files_soft": 3000, "quota_files_hard": 3200,
+  "checkpoint_tree_kb": 3227, "ril_x2_kb": 8474859, "ril_t3_kb": 472933, "ril_t5_kb": 10695, "ril_n7_kb": 86477
+ }
+}
