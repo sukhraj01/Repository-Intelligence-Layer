@@ -123,3 +123,28 @@ def _split(name: str) -> tuple[str, int]:
     split = split_instance_dir(name)
     assert split is not None
     return split
+
+
+def test_git_snapshot_keeps_files_marked_export_ignore_and_skips_symlinks(tmp_path) -> None:
+    src = str(tmp_path / "src")
+    os.makedirs(os.path.join(src, "tests"))
+    git(src, "init", "-q")
+    git(src, "config", "uploadpack.allowAnySHA1InWant", "true")
+    with open(os.path.join(src, ".gitattributes"), "w") as f:
+        f.write("tests export-ignore\n*.py export-subst\n")
+    with open(os.path.join(src, "tests", "test_a.py"), "w") as f:
+        f.write("def test_a():\n    assert True\n")
+    with open(os.path.join(src, "a.py"), "w") as f:
+        f.write('V = "$Format:%H$"\né = 1\n')
+    os.symlink("a.py", os.path.join(src, "link.py"))
+    git(src, "add", ".")
+    git(src, "commit", "-q", "-m", "one")
+    sha = git(src, "rev-parse", "HEAD")
+    dest = str(tmp_path / "dest")
+    os.makedirs(dest)
+    snaps = GitSnapshots(str(tmp_path / "work"), remote="file://" + src)
+    assert snaps.materialize("acme/widgets", sha, dest) == 2
+    assert sorted(os.listdir(dest)) == ["a.py", "tests"]
+    with open(os.path.join(dest, "a.py"), encoding="utf-8") as f:
+        assert "$Format:%H$" in f.read()  # export-subst is not applied
+    assert os.path.exists(os.path.join(dest, "tests", "test_a.py"))

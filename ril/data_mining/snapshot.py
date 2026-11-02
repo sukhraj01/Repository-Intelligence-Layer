@@ -2,7 +2,7 @@
 
 Implements ``docs/experiments/B.md`` E-MINE-PILOT. The parser needs the ``.py`` files of the base
 commit and nothing else, so only those are written: a shallow fetch of the one commit into a bare
-repository, then ``git archive`` filtered to regular ``*.py`` members. The fetch goes to the git
+repository, then walk of the commit's tree for regular ``*.py`` blobs. The fetch goes to the git
 endpoint, not the REST API, so it does not use the API rate limit. :class:`SnapshotProvider` is the
 seam the miner depends on; tests substitute an in-memory provider.
 
@@ -15,7 +15,6 @@ import os
 import posixpath
 import shutil
 import subprocess
-import tarfile
 import time
 from collections.abc import Mapping
 from typing import Protocol
@@ -95,41 +94,58 @@ class GitSnapshots:
             time.sleep(2 * (attempt + 1))
         else:
             raise SnapshotError(f"fetch of {sha[:12]} failed: {err}")
-        env = dict(os.environ, GIT_TERMINAL_PROMPT="0")
-        proc = subprocess.Popen(
-            ["git", "-C", self._bare(repo), "archive", "--format=tar", sha],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            env=env,
+        return self._write_python_files(repo, sha, dest)
+
+    def _write_python_files(self, repo: str, sha: str, dest: str) -> int:
+        """Write the regular ``*.py`` blobs of the commit's tree under ``dest``.
+
+        The tree is read with ``ls-tree`` and ``cat-file --batch`` rather than ``git archive``,
+        because ``git archive`` honours ``export-ignore`` in the repository's attributes and would
+        silently leave out files (tests, documentation) that the repository has at that commit.
+        """
+        listing = self._git(repo, "ls-tree", "-r", "-z", "--full-tree", sha)
+        if listing.returncode != 0:
+            raise SnapshotError(
+                f"ls-tree failed: {listing.stderr.decode('utf-8', 'replace')[:200]}"
+            )
+        wanted: list[tuple[str, str]] = []  # (blob id, relative path)
+        for entry in listing.stdout.split(b"\0"):
+            if not entry:
+                continue
+            meta, _, raw_name = entry.partition(b"\t")
+            mode, kind, blob = meta.decode("ascii", "replace").split(" ")
+            name = raw_name.decode("utf-8", "surrogateescape")
+            if kind != "blob" or mode not in ("100644", "100755") or not name.endswith(".py"):
+                continue  # symlinks (120000), submodules (commit) and non-Python files
+            rel = safe_member_path(name)
+            if rel is not None:
+                wanted.append((blob, rel))
+        if not wanted:
+            return 0
+        proc = subprocess.run(
+            ["git", "-C", self._bare(repo), "cat-file", "--batch"],
+            input="".join(f"{blob}\n" for blob, _ in wanted).encode("ascii"),
+            capture_output=True,
+            timeout=GIT_TIMEOUT_S,
+            env=dict(os.environ, GIT_TERMINAL_PROMPT="0"),
+            check=False,
         )
-        assert proc.stdout is not None
-        written = 0
-        try:
-            with tarfile.open(fileobj=proc.stdout, mode="r|") as tar:
-                for member in tar:
-                    if not member.isfile() or not member.name.endswith(".py"):
-                        continue
-                    rel = safe_member_path(member.name)
-                    if rel is None:
-                        continue
-                    src = tar.extractfile(member)
-                    if src is None:
-                        continue
-                    target = os.path.join(dest, *rel.split("/"))
-                    os.makedirs(os.path.dirname(target), exist_ok=True)
-                    with open(target, "wb") as out:
-                        shutil.copyfileobj(src, out)
-                    written += 1
-        except tarfile.TarError as exc:
-            raise SnapshotError(f"unreadable archive of {sha[:12]}: {exc}") from exc
-        finally:
-            proc.stdout.close()
-            stderr = proc.stderr.read() if proc.stderr else b""
-            if proc.stderr:
-                proc.stderr.close()
-            code = proc.wait()
-        if code != 0:
-            raise SnapshotError(f"git archive failed: {stderr.decode('utf-8', 'replace')[:200]}")
+        if proc.returncode != 0:
+            raise SnapshotError(f"cat-file failed: {proc.stderr.decode('utf-8', 'replace')[:200]}")
+        data, pos, written = proc.stdout, 0, 0
+        for blob, rel in wanted:
+            end = data.index(b"\n", pos)
+            header = data[pos:end].decode("ascii", "replace").split(" ")
+            if len(header) != 3 or header[0] != blob or header[1] != "blob":
+                raise SnapshotError(f"unexpected cat-file reply for {blob[:12]}: {header}")
+            size = int(header[2])
+            body = data[end + 1 : end + 1 + size]
+            pos = end + 1 + size + 1
+            target = os.path.join(dest, *rel.split("/"))
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            with open(target, "wb") as out:
+                out.write(body)
+            written += 1
         return written
 
     def drop(self, repo: str) -> None:
