@@ -11,14 +11,16 @@ Kept compatible with Python 3.10 (the cluster's compute nodes).
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Mapping, Sequence
+from collections import deque
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
 from ril.data_mining.config import MiningConfig
+from ril.data_mining.diff import Comparison
 from ril.data_mining.github_api import ApiClient, ApiError, NotFound
 from ril.data_mining.links import PR_PAGE_QUERY, PullRequest, parse_pr_page
-from ril.data_mining.miner import STATUS_MINED, Outcome, mine_pr
+from ril.data_mining.miner import STATUS_MINED, Outcome, compare_for, mine_pr, needs_snapshot
 from ril.data_mining.snapshot import SnapshotProvider
 from ril.data_mining.store import MiningStore
 from ril.training import pool_ranks as pr_tools
@@ -145,12 +147,16 @@ def mine_selected(
     config: MiningConfig,
     on_outcome: Callable[[Outcome], None] | None = None,
     stop_after: int | None = None,
+    lookahead: int = 1,
 ) -> RunSummary:
     """Mine the selected pull requests that have no state row; record each right away.
 
     ``stop_after`` ends the session after that many pull requests (a bounded session or a test of
     resumption). A crash between the directory rename and the state row is repaired on the next
-    session by adopting the complete directory.
+    session by adopting the complete directory. With ``lookahead`` above 1 the compare calls of
+    the next pull requests are made ahead and their base commits are fetched in the background
+    while the current one is parsed; pull requests are still mined and recorded in the selected
+    order, so the outputs do not depend on ``lookahead``.
     """
     summary = RunSummary()
     store.clean_partial()
@@ -159,20 +165,52 @@ def mine_selected(
         store.record(adopted)
         state[adopted.key] = adopted.row()
         summary.adopted += 1
-    for pr in selected:
-        if pr.key in state:
-            summary.skipped += 1
-            continue
-        if stop_after is not None and summary.attempted >= stop_after:
-            summary.stopped = True
-            break
-        outcome = mine_pr(pr, client=client, snapshots=snapshots, config=config)
-        if outcome.status == STATUS_MINED and outcome.instance is not None:
-            store.write_instance(outcome.instance)
-        if on_outcome is not None:
-            on_outcome(outcome)  # test hook: may raise to simulate a crash before the row
-        store.record(outcome)
-        state[pr.key] = outcome.row()
-        summary.attempted += 1
-        summary.outcomes[outcome.status] = summary.outcomes.get(outcome.status, 0) + 1
+    pending: Iterator[PullRequest] = iter(selected)
+    window: deque[tuple[PullRequest, Comparison | Outcome]] = deque()
+    exhausted = False
+    planned = 0
+
+    def refill() -> None:
+        nonlocal exhausted, planned
+        while not exhausted and len(window) < max(1, lookahead):
+            if stop_after is not None and planned >= stop_after:
+                return
+            nxt = next(pending, None)
+            if nxt is None:
+                exhausted = True
+                return
+            if nxt.key in state:
+                summary.skipped += 1
+                continue
+            planned += 1
+            fetched = compare_for(nxt, client)
+            if isinstance(fetched, Comparison) and needs_snapshot(fetched):
+                snapshots.prefetch(nxt.repo, fetched.merge_base)
+            window.append((nxt, fetched))
+
+    try:
+        refill()
+        while window:
+            pr, fetched = window.popleft()
+            outcome = mine_pr(
+                pr, client=client, snapshots=snapshots, config=config, comparison=fetched
+            )
+            if outcome.status == STATUS_MINED and outcome.instance is not None:
+                store.write_instance(outcome.instance)
+            if on_outcome is not None:
+                on_outcome(outcome)  # test hook: may raise to simulate a crash before the row
+            store.record(outcome)
+            state[pr.key] = outcome.row()
+            summary.attempted += 1
+            summary.outcomes[outcome.status] = summary.outcomes.get(outcome.status, 0) + 1
+            refill()
+        if not exhausted:  # the session was bounded: count what is already done, note the rest
+            for rest in pending:
+                if rest.key in state:
+                    summary.skipped += 1
+                    continue
+                summary.stopped = True
+                break
+    finally:
+        snapshots.close()
     return summary

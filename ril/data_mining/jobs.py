@@ -105,10 +105,13 @@ def run_pilot(
     code_commit: str,
     stop_after: int | None = None,
     repos: list[str] | None = None,
+    lookahead: int = 1,
 ) -> dict[str, Any]:
     """List, select and mine (resumable), then write the summary and ``provenance.json``.
 
     ``repos`` overrides the population's first ``n_repos`` (stage M1 validates on five).
+    ``lookahead`` is a speed setting only (base commits are fetched ahead); it is not part of the
+    config hash because the outputs do not depend on it.
     """
     store = MiningStore(out_root)
     store.ensure_run(config.config_hash(), created)
@@ -126,6 +129,7 @@ def run_pilot(
         store=store,
         config=config,
         stop_after=stop_after,
+        lookahead=lookahead,
     )
     mining_seconds = time.perf_counter() - t_mine
     budget = store.add_budget(budget_delta(budget_before, client.budget.to_dict()))

@@ -44,6 +44,9 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--work", required=True)
     r.add_argument("--repos", type=int)
     r.add_argument("--stop-after", type=int)
+    r.add_argument(
+        "--lookahead", type=int, default=1, help="base commits fetched ahead (speed only)"
+    )
     r.add_argument("--created", required=True, help="date of the first session, YYYY-MM-DD")
     k = sub.add_parser("pack")
     k.add_argument("out")
@@ -183,7 +186,8 @@ def main(argv: list[str] | None = None) -> int:
         population=population,
         is_held_out=is_held_out,
         client=client,
-        snapshots=GitSnapshots(a.work),
+        snapshots=GitSnapshots(a.work, workers=max(1, a.lookahead)),
+        lookahead=a.lookahead,
         created=a.created,
         code_commit=_commit(),
         stop_after=a.stop_after,

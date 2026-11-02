@@ -448,3 +448,37 @@ def test_published_first_puts_pool_pull_requests_ahead_of_the_seeded_order(tmp_p
         key=lambda p: p.number,
     )
     assert len(linked) >= 3
+
+
+def test_lookahead_prefetches_in_order_and_leaves_the_outputs_unchanged(tmp_path) -> None:
+    digests = []
+    for name, look in (("seq", 1), ("ahead", 3)):
+        client, snaps, _, store = build_run(tmp_path / name)
+        cfg = MiningConfig(max_prs=4)
+        listings, _ = list_population(client, [REPO], store, is_held_out=lambda r: False)
+        selected = select_prs(listings, cfg)
+        res = mine_selected(
+            selected,
+            client=client,
+            snapshots=snaps,
+            store=store,
+            config=cfg,
+            lookahead=look,
+            stop_after=None,
+        )
+        assert res.attempted == 4 and snaps.closed
+        assert len(snaps.prefetched) == 4  # every pull request here changes a Python file
+        digests.append(tree_digest(store.root))
+    assert digests[0] == digests[1]
+
+
+def test_lookahead_respects_stop_after_and_resumes_in_order(tmp_path) -> None:
+    client, snaps, _, store = build_run(tmp_path)
+    cfg = MiningConfig(max_prs=4)
+    listings, _ = list_population(client, [REPO], store, is_held_out=lambda r: False)
+    selected = select_prs(listings, cfg)
+    kw = {"client": client, "snapshots": snaps, "store": store, "config": cfg, "lookahead": 3}
+    first = mine_selected(selected, stop_after=2, **kw)
+    assert first.attempted == 2 and first.stopped and len(snaps.prefetched) == 2
+    second = mine_selected(selected, **kw)
+    assert second.skipped == 2 and second.attempted == 2 and not second.stopped
