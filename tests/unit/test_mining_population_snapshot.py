@@ -106,3 +106,20 @@ def test_git_snapshot_writes_only_python_files_of_the_commit(tmp_path) -> None:
         snaps.materialize("acme/widgets", "0" * 40, str(tmp_path / "dest2"))
     snaps.drop("acme/widgets")
     assert not os.path.exists(os.path.join(str(tmp_path / "work"), "acme__widgets.git"))
+
+
+def test_published_covers_every_pool_directory_of_a_selected_repository() -> None:
+    pop = select_population(NAMES, is_held_out=lambda r: False, seed=0, pool_size=2)
+    assert len(pop.directories) == 2
+    for repo in pop.repos:
+        every = {n for name in NAMES for r, n in [_split(name)] if r == repo}
+        assert set(pop.published[repo]) == every
+    assert set(pop.published) == set(pop.repos)
+
+
+def _split(name: str) -> tuple[str, int]:
+    from ril.training.pool_check import split_instance_dir
+
+    split = split_instance_dir(name)
+    assert split is not None
+    return split

@@ -177,3 +177,19 @@ engineer sign-off — it is a design decision.
 - Impact: the mined sample is a draw across repositories, the share kept by the pool is computed on the full listing and the property comparison (kept against dropped) on the sample; `added_function_defs` is an approximation, stated as such wherever it is reported.
 - Reversible: yes.
 - Related: `docs/experiments/B.md` E-MINE-PILOT
+
+## DEV-019 — "Kept by the published pool" is taken over the whole filtered pool, not the 5,000 selected directories   (2026-11-02 · status: proposed)
+- Master says: the brief (D60): the selection is measurable as "the share of each repository's linked merged PRs that the published pool kept".
+- We do: the repositories are those of the first 5,000 directories (D41); a pull request counts as kept by the pool if it is any directory of the pool left after the held-out filter (20,800 directories), for the repositories of the population. The first build counted only the 5,000 selected directories; in the first live listing of four repositories that gave 11 kept of 2,145 linked pull requests, which understates the pool by construction (the 5,000 are a sample of the pool's directories).
+- Why: the question asks what the published pool kept, not what a 5,000-directory sample of it kept. The repository population stays as D60 states.
+- Impact: `Population.published` is larger; the earlier session counts (smoke run `runs/validation`, 20 pull requests) are not reported. Test: `tests/unit/test_mining_population_snapshot.py`.
+- Reversible: yes (a one-line change, no stored data depends on it).
+- Related: DEV-015 to DEV-018, `ril/data_mining/population.py`
+
+## DEV-020 — Stage M1 mines the pool's pull requests first and a seeded sample of 300 in all, not every linked pull request of five repositories   (2026-11-02 · status: proposed)
+- Master says: the brief (M1): five seeded repositories, all their linked merged pull requests mined.
+- We do: `configs/mining/validation.yaml` sets `published_first: true` and `max_prs: 300`: every linked pull request that the published pool holds is mined first (the agreement is measured on all of them), then the seeded order fills the rest up to 300. The page bound of the listing is raised from 400 to 2,000 pages of 50 pull requests, because one of the five repositories has more merged pull requests than 400 pages hold (the first listing stopped on the bound; the listings of the other four are reused).
+- Why: measured on the live API in the smoke session: a mined pull request writes 2.4 MB (7 directories, 17 MB, median 6,985 corpus functions) and four files; the four listed repositories alone have 2,145 linked pull requests (about 5 GB, 8,600 files) against 3.1 GB to the soft block quota and 3,000 files to the file quota on the account (832 used). Taken at seeded random, the pool's pull requests would be about 1 in 40 of the mined ones and the agreement would rest on a handful.
+- Impact: the yield figures of M1 describe a published-first sample and are not reported as yield (the yield comes from M2, which has `published_first: false`); the agreement rests on all linked pool pull requests of the five repositories.
+- Reversible: yes (rerun with a larger cap once storage allows).
+- Related: DEV-018, `configs/mining/validation.yaml`

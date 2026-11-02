@@ -429,3 +429,22 @@ def test_pool_reader_reads_the_output_unchanged(tmp_path) -> None:
     assert ex.positive_texts[0] == "    def area(self):\n        return 2"
     row = json.loads(open(os.path.join(store.pr_path(ex.instance_id), "queries.jsonl")).readline())
     assert row["metadata"] == {"repo": REPO, "base_commit": MB}
+
+
+def test_published_first_puts_pool_pull_requests_ahead_of_the_seeded_order(tmp_path) -> None:
+    client, _, _, store = build_run(tmp_path)
+    listings, _ = list_population(client, [REPO], store, is_held_out=lambda r: False)
+    linked = sorted(p.number for p in listings[REPO] if p.issues)
+    last_in_seed = [p.number for p in select_prs(listings, MiningConfig(max_prs=99))][-1]
+    pool = {REPO: frozenset({last_in_seed})}
+    off = [p.number for p in select_prs(listings, MiningConfig(max_prs=2), pool)]
+    on_cfg = MiningConfig(max_prs=2, published_first=True)
+    on = [p.number for p in select_prs(listings, on_cfg, pool)]
+    assert last_in_seed not in off and on[0] == last_in_seed
+    assert sorted(
+        select_prs(listings, MiningConfig(max_prs=99), pool), key=lambda p: p.number
+    ) == sorted(
+        select_prs(listings, on_cfg.__class__(max_prs=99, published_first=True), pool),
+        key=lambda p: p.number,
+    )
+    assert len(linked) >= 3

@@ -6,6 +6,10 @@ Subcommands (logic in ``ril/``):
                               list, select, mine (resumable); refuses to start without GITHUB_TOKEN
   pack OUT ZIP                zip + member listing in the layout the pool reader streams
   rank-sample OUT SAMPLE      selection file covering every mined directory (for the rank tooling)
+  agreement OUT JSON --listing L
+                              mined positives against the pool's, for pull requests in both
+  handcheck OUT MD --n N --seed S
+                              markdown for a human to read: issue title, hunks, mined positives
 """
 
 from __future__ import annotations
@@ -44,6 +48,15 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("rank-sample")
     s.add_argument("out")
     s.add_argument("sample")
+    g = sub.add_parser("agreement")
+    g.add_argument("out")
+    g.add_argument("json")
+    g.add_argument("--listing", required=True)
+    h = sub.add_parser("handcheck")
+    h.add_argument("out")
+    h.add_argument("md")
+    h.add_argument("--n", type=int, default=20)
+    h.add_argument("--seed", type=int, default=0)
     a = p.parse_args(argv)
 
     from ril.data_mining import jobs
@@ -64,6 +77,39 @@ def main(argv: list[str] | None = None) -> int:
         doc = rank_sample(a.out)
         Path(a.sample).write_text(json.dumps(doc, sort_keys=True) + "\n", encoding="utf-8")
         sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
+        return 0
+
+    if a.cmd == "agreement":
+        from ril.data_mining import validation
+
+        url, members = validation.pool_members_for(a.listing)
+        validation.write_json(a.json, validation.agreement_job(a.out, url, members))
+        sys.stdout.write(json.dumps({"written": a.json}) + "\n")
+        return 0
+    if a.cmd == "handcheck":
+        from ril.data_mining import validation
+        from ril.data_mining.github_api import (
+            ApiClient,
+            ClientConfig,
+            UrllibTransport,
+            token_from_env,
+        )
+
+        try:
+            jobs.require_token()
+        except jobs.TokenMissing as exc:
+            sys.stderr.write(f"BLOCKED: {exc}\n")
+            return 3
+        client = ApiClient(
+            UrllibTransport(),
+            token=token_from_env(),
+            etags=jobs.etag_store_for(a.out),
+            config=ClientConfig(),
+            sink=jobs.jsonl_sink(str(Path(a.out) / "api_events.jsonl")),
+        )
+        text, chosen = validation.handcheck_file(a.out, client, a.n, a.seed)
+        Path(a.md).write_text(text, encoding="utf-8")
+        sys.stdout.write(json.dumps({"written": a.md, "prs": len(chosen)}) + "\n")
         return 0
 
     import yaml

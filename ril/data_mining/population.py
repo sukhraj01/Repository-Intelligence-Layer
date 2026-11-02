@@ -30,7 +30,8 @@ class Population:
     repos: tuple[str, ...]
     """Their repositories, in the seeded order used to take the first ``n_repos``."""
     published: Mapping[str, frozenset[int]]
-    """Per repository, the pull request numbers the published pool kept in the selection."""
+    """Per repository of the population, the pull request numbers the whole published pool (every
+    directory left after the held-out filter, not only the selected ``pool_size``) holds."""
     counts: Mapping[str, int]
     """Stage counts: listed, held_out_dropped, selected, repos_listed, repos_held_out, repos."""
 
@@ -65,10 +66,12 @@ def select_population(
             continue
         kept.append((name, repo, number))
     chosen = sorted(kept, key=lambda t: pr.seeded_key(seed, t[0]))[:pool_size]
+    chosen_repos = {repo for _, repo, _ in chosen}
     published: dict[str, set[int]] = {}
-    for _, repo, number in chosen:
-        published.setdefault(repo, set()).add(number)
-    repos = sorted(published, key=lambda r: pr.seeded_key(seed, r))
+    for _, repo, number in kept:
+        if repo in chosen_repos:
+            published.setdefault(repo, set()).add(number)
+    repos = sorted(chosen_repos, key=lambda r: pr.seeded_key(seed, r))
     counts = {
         "directories_listed": listed,
         "directories_held_out": dropped,

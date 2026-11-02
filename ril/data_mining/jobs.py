@@ -114,7 +114,7 @@ def run_pilot(
     budget_before = client.budget.to_dict()
     names = repos if repos is not None else first_repos(population, config.n_repos)
     listings, stats = list_population(client, names, store, is_held_out=is_held_out)
-    selected = select_prs(listings, config)
+    selected = select_prs(listings, config, population.published)
     session = mine_selected(
         selected,
         client=client,

@@ -197,3 +197,41 @@ def test_missing_repository_is_recorded_and_not_asked_again(tmp_path) -> None:
     calls = len(tr.calls)
     _, again = list_population(client, [REPO], store, is_held_out=lambda r: False)
     assert again.not_found == [REPO] and len(tr.calls) == calls
+
+
+def test_agreement_job_against_the_run_packed_as_a_pool_and_handcheck_sample(tmp_path) -> None:
+    from ril.data_mining import validation
+    from ril.data_mining.pack import listing_of, local_fetch, pack_zip
+    from ril.training.pool_ranks import group_members
+
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    jobs.run_pilot(
+        config=MiningConfig(n_repos=1, max_prs=3),
+        out_root=root,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="abc1234",
+        repos=[REPO],
+    )
+    zip_path = str(tmp_path / "pool.zip")
+    pack_zip(root, zip_path)
+    doc = listing_of(zip_path, zip_path)
+    members = group_members(doc["members"], "train/python/")
+    out = validation.agreement_job(root, zip_path, members, fetch=local_fetch)
+    assert out["mined_directories"] == 3 and out["also_in_pool"] == 3
+    assert out["pool_fetch_errors"] == []
+    assert out["table"]["prs_compared"] == 3
+    assert (
+        out["table"]["all"]["exact_share"] == 1.0
+        and out["table"]["non_test"]["jaccard_mean"] == 1.0
+    )
+    assert out["rows"][0]["corpus_jaccard"] == 1.0
+    empty = validation.agreement_job(root, zip_path, {}, fetch=local_fetch)
+    assert empty["also_in_pool"] == 0 and empty["table"]["prs_compared"] == 0
+    first = validation.handcheck_sample(root, 2, 0)
+    assert first == validation.handcheck_sample(root, 2, 0) and len(first) == 2

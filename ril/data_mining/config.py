@@ -29,6 +29,9 @@ class MiningConfig:
     """Pull requests mined (compare, snapshot, parse): a seeded sample of the linked ones."""
     pool_size: int = 5000
     """Directories of the published pool whose repositories form the population (D41)."""
+    published_first: bool = False
+    """Validation stage: linked pull requests that the published pool holds are mined first, so
+    the agreement with the pool rests on all of them (DEV-019). Off in the pilot (seeded sample)."""
     corpus_kinds: tuple[str, ...] = CORPUS_KINDS_FUNCTIONS
     """Unit kinds in ``corpus.jsonl`` and ``qrels``; the published pool holds functions only.
     Positives of other kinds go to the side table (``provisional``: open question)."""

@@ -25,7 +25,7 @@ from ril.training import pool_ranks as pr_tools
 from ril.util.log import get_logger
 
 log = get_logger("data_mining.runner")
-MAX_PAGES_PER_REPO = 400
+MAX_PAGES_PER_REPO = 2000
 """Safety bound on listing pages of one repository (50 pull requests each)."""
 
 
@@ -102,16 +102,27 @@ def list_population(
 
 
 def select_prs(
-    listings: Mapping[str, Sequence[PullRequest]], config: MiningConfig
+    listings: Mapping[str, Sequence[PullRequest]],
+    config: MiningConfig,
+    published: Mapping[str, frozenset[int]] | None = None,
 ) -> list[PullRequest]:
     """The linked pull requests to mine: a seeded order, the first ``max_prs``.
+
+    With ``config.published_first`` (validation stage only) the linked pull requests that the
+    published pool holds come first, in the same seeded order, so the agreement with the pool is
+    measured on all of them; the rest of the budget is the seeded sample.
 
     The order key is ``sha256("<seed>:<repo>#<number>")``, stable across machines. A pull request
     appears once however many issues it closes (the pair multiplicity is reported separately).
     """
     linked = [p for repo in sorted(listings) for p in listings[repo] if p.issues]
-    ordered = sorted(linked, key=lambda p: pr_tools.seeded_key(config.seed, p.key))
-    return ordered[: config.max_prs]
+    held = published or {}
+
+    def order(p: PullRequest) -> tuple[int, str]:
+        first = config.published_first and p.number in held.get(p.repo, frozenset())
+        return (0 if first else 1, pr_tools.seeded_key(config.seed, p.key))
+
+    return sorted(linked, key=order)[: config.max_prs]
 
 
 @dataclass
