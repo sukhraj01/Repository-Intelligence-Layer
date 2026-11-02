@@ -145,3 +145,35 @@ engineer sign-off — it is a design decision.
 - Reversible: yes, at about 2.6 GPU-hours per extra seed and 0.4 per extra subsample draw run at 100 updates.
 - Related: ADR-002, ADR-001
 
+
+## DEV-015 — Mined positives are the innermost unit that owns an edited line, not every unit whose span overlaps a hunk   (2026-11-02 · status: proposed)
+- Master says: functions touched by the patch become positives (`docs/04_data_and_ground_truth.md`, "The mining recipe"); the brief of the unfiltered set (D63) words it as every unit of the base commit whose line span overlaps a changed old-side hunk.
+- We do: a removed or rewritten old line belongs to the smallest function, method or class that holds it, else to the file's residual module unit; a pure insertion belongs to the unit that strictly contains the gap, or at a unit's edge to the unit it visibly extends (added decorator lines, deeper-indented lines after its last line); an inserted block that is only complete function or class definitions adds units and edits none (`ril/data_mining/mapping.py`).
+- Why: the module unit's span is the whole file and a class unit's span holds its methods (`ril/parsing/repository_parser.py`), so a literal span overlap makes the module positive for every edit and a class positive for every method edit; no function-level pool positive is a class. The edge rules are needed because a diff gives insertions as gaps, and a decorator added above a function lies outside its old span.
+- Impact: positives per pull request are lower than under literal overlap; class-level and module-level edits appear only when the edit is in the class body or the module residual. The kind and the line counts are stored per positive, so another attribution can be computed later from the same snapshots. Evidence class: reasoned from the parser's span rules, tested on hand-built fixtures (`tests/unit/test_mining_diff_mapping.py`); the agreement with the published pool is the M1 measurement.
+- Reversible: yes (recompute from the stored base commits; no re-fetch of diffs if the patches are kept).
+- Related: ADR-001, `docs/experiments/B.md` E-MINE-PILOT
+
+## DEV-016 — Class and module positives are kept in a side table, not in the qrels, by default   (2026-11-02 · status: proposed)
+- Master says: keep every positive (the brief of the unfiltered set, D63: test units and module-level units kept with a flag).
+- We do: `corpus.jsonl` and the qrels hold the unit kinds in `corpus_kinds` (default function and method, as the published pool); positives of other kinds are stored in `<instance>/pr_meta.json` with `in_corpus: false`; `corpus_kinds: [function, method, class, module]` puts them in the qrels and the corpus.
+- Why: the pool reader requires every positive to be in the corpus, and the published pool's corpus is functions only. A class or module unit added only when it is a positive would leak the label through the candidate set, so the choice is all kinds for every pull request or functions only for every pull request.
+- Impact: pull requests whose only edits are class-body or module-level lines have no positive in the default set and are counted as `no_positive` with `positives_side_only`. Test-file positives stay in the qrels, flagged `is_test`.
+- Reversible: yes (a configuration value; the side table holds the rest).
+- Related: DEV-015, `ril/training/pool_reader.py`
+
+## DEV-017 — One directory per pull request; a pull request that closes several issues is one directory with the primary issue's text   (2026-11-02 · status: proposed)
+- Master says: the brief (D61, D66): the unit is the (issue, PR) pair, and the output is one directory per PR in the pool's format.
+- We do: every pair is stored in `<instance>/pr_meta.json` (`pairs`, with `primary`) and counted in the multiplicity table; the directory `owner__name-<PR>` carries one query, the text of the primary issue (same repository first, then the lowest number).
+- Why: the reader takes the final `-<digits>` of the directory name as the pull request number and a directory holds exactly one query, so two pairs of one pull request cannot be two directories without changing the reader or the name contract. The positives of the pairs of one PR are identical anyway.
+- Impact: the pair count exceeds the directory count by the number of extra issues; a training set that wants every pair as an example needs the other issues' text, which the listing files hold. A change to the name contract is the lead's decision.
+- Reversible: yes.
+- Related: `ril/training/pool_check.py` `split_instance_dir`
+
+## DEV-018 — Pilot size read as a seeded sample of the linked pull requests; added functions counted from the patch text   (2026-11-02 · status: proposed)
+- Master says: the brief (D60, D63): pilot of 200 repositories, up to 2,000 PRs; record the added-function count per PR.
+- We do: all merged pull requests of the 200 repositories are listed with their closing issues (GraphQL, cheap), and `max_prs` = 2,000 of the linked ones are mined, chosen by `sha256("0:<repo>#<number>")` order; the added-function count is the number of function names defined by added lines and not by removed lines of the same file (a multiset difference over the patch text; nested definitions and renamed functions count as added or removed accordingly).
+- Why: the selection analysis needs each repository's full count of linked pull requests, and taking the first 2,000 pull requests repository by repository would fill the pilot with a handful of repositories. The head commit is not fetched, so the count cannot come from parsing it.
+- Impact: the mined sample is a draw across repositories, the share kept by the pool is computed on the full listing and the property comparison (kept against dropped) on the sample; `added_function_defs` is an approximation, stated as such wherever it is reported.
+- Reversible: yes.
+- Related: `docs/experiments/B.md` E-MINE-PILOT

@@ -46,7 +46,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Arms pilot E-PILOT-ARMS, stage 1 (24 runs at 100 updates) and stage 2 (6 runs at 1,000 updates), exploratory (2026-10-31; 11.4 GPU-hours; Block 2 at 33.53 of 36)
 - [x] Training stack (pool reader, multi-positive InfoNCE, pluggable negative policy, the three arm hooks with the identity test, budget accounting, checkpoints, evaluation hook; `ril/training/`, E-TRAIN-STACK, 2026-10-25; every training value `provisional: ADR-001, ADR-002, ADR-006`)
 - [x] Baseline training (multi-positive InfoNCE, repo-local hard negatives): implemented and run at pilot scale as the RAW arm (E-TRAIN-STACK, E-PILOT-CURVE; provisional, not the frozen run)
-- [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list — the SweLoc part is read, filtered and cached (`ril/training/pool_reader.py`, E-POOL-RANKS); the own PR-mined set (Person C) is not merged
+- [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list — the SweLoc part is read, filtered and cached (`ril/training/pool_reader.py`, E-POOL-RANKS); the own PR-mined set: rebuilt by the lead (`ril/data_mining/`, E-MINE-PILOT); code and offline tests done, live stages wait for the token, so this item stays open
 
 ## Weeks 3–6 — Person C: evaluation harness
 

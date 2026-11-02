@@ -94,6 +94,13 @@ implementation and then written here.**
 - **Invariant:** `assemble()` is **byte-identical across RQ2 arms** (reproducibility test).
 - **Governing decisions:** ADR-003, ADR-006 (encoder), ADR-009 (rerank).
 
+## data mining (`ril/data_mining/`)
+
+- **Purpose:** builds the unfiltered PR-mined training set (E-MINE-PILOT, `docs/experiments/B.md`): merged pull requests with their closing issues, the changed units of the base commit as positives, one directory per pull request in the layout `training/pool_reader.py` reads.
+- **Files:** `github_api.py` (client), `links.py`, `diff.py`, `mapping.py`, `snapshot.py`, `miner.py`, `store.py`, `runner.py`, `population.py`, `summary.py`, `pack.py`, `rank_compare.py`, `jobs.py`, `config.py`.
+- **Dependencies:** `parsing/` (parser, CodeUnit, ids), `training/` for the pool's ordering, directory-name and rank helpers (`pool_check.py`, `pool_ranks.py`), `util/`. Nothing imports it except `scripts/`. It computes nothing retriever-dependent; the rank tools of `training/` measure its output.
+- **Assumptions:** the live stages need a read-only token (D2); without it the job stops before any call.
+
 ## training (`ril/training/`)
 
 - **Purpose:** produce the four supervision-arm encoders under matched optimizer updates.

@@ -1,0 +1,111 @@
+"""PR-mined set: thin command line over ``ril.data_mining.jobs`` (E-MINE-PILOT).
+
+Subcommands (logic in ``ril/``):
+  check                       token presence (never the value) and the API rate-limit probe
+  run CONFIG OUT --listing L --held-out H [--rename-cache R] --work W [--repos N] [--stop-after N]
+                              list, select, mine (resumable); refuses to start without GITHUB_TOKEN
+  pack OUT ZIP                zip + member listing in the layout the pool reader streams
+  rank-sample OUT SAMPLE      selection file covering every mined directory (for the rank tooling)
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+
+def _commit() -> str:
+    done = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, check=False)
+    return done.stdout.decode().strip() or "unknown"
+
+
+def main(argv: list[str] | None = None) -> int:
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("check")
+    r = sub.add_parser("run")
+    r.add_argument("config")
+    r.add_argument("out")
+    r.add_argument("--listing", required=True)
+    r.add_argument("--held-out", required=True)
+    r.add_argument("--rename-cache")
+    r.add_argument("--work", required=True)
+    r.add_argument("--repos", type=int)
+    r.add_argument("--stop-after", type=int)
+    r.add_argument("--created", required=True, help="date of the first session, YYYY-MM-DD")
+    k = sub.add_parser("pack")
+    k.add_argument("out")
+    k.add_argument("zip")
+    s = sub.add_parser("rank-sample")
+    s.add_argument("out")
+    s.add_argument("sample")
+    a = p.parse_args(argv)
+
+    from ril.data_mining import jobs
+
+    if a.cmd == "check":
+        sys.stdout.write(json.dumps(jobs.blocker_report(), indent=1, sort_keys=True) + "\n")
+        return 0
+    if a.cmd == "pack":
+        from ril.data_mining.pack import pack_zip, write_listing
+
+        n = pack_zip(a.out, a.zip)
+        write_listing(a.zip, a.zip + ".listing.json")
+        sys.stdout.write(json.dumps({"instances": n, "zip": a.zip}) + "\n")
+        return 0
+    if a.cmd == "rank-sample":
+        from ril.data_mining.rank_compare import rank_sample
+
+        doc = rank_sample(a.out)
+        Path(a.sample).write_text(json.dumps(doc, sort_keys=True) + "\n", encoding="utf-8")
+        sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
+        return 0
+
+    import yaml
+
+    from ril.data_mining.config import MiningConfig
+    from ril.data_mining.github_api import ApiClient, ClientConfig, UrllibTransport, token_from_env
+    from ril.data_mining.snapshot import GitSnapshots
+    from ril.training.pool_rank_jobs import held_out_predicate
+
+    try:
+        jobs.require_token()
+    except jobs.TokenMissing as exc:
+        sys.stderr.write(f"BLOCKED: {exc}\n")
+        return 3
+    config = MiningConfig.from_dict(yaml.safe_load(Path(a.config).read_text(encoding="utf-8")))
+    is_held_out = held_out_predicate(a.held_out, a.rename_cache)
+    population = jobs.population_from_listing(a.listing, is_held_out, config)
+    client = ApiClient(
+        UrllibTransport(),
+        token=token_from_env(),
+        etags=jobs.etag_store_for(a.out),
+        config=ClientConfig(),
+        sink=jobs.jsonl_sink(str(Path(a.out) / "api_events.jsonl")),
+    )
+    repos = None
+    if a.repos is not None:
+        repos = list(population.repos[: a.repos])
+    res = jobs.run_pilot(
+        config=config,
+        out_root=a.out,
+        population=population,
+        is_held_out=is_held_out,
+        client=client,
+        snapshots=GitSnapshots(a.work),
+        created=a.created,
+        code_commit=_commit(),
+        stop_after=a.stop_after,
+        repos=repos,
+    )
+    sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

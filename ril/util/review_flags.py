@@ -42,7 +42,7 @@ RESULT_PATH_RE = re.compile(r"results/[A-Za-z0-9_.*/-]*(?:\{[^{}]*\}[A-Za-z0-9_.
 Claim = tuple[str, int, float, int, str, list[str]]
 LEDGER_RE = re.compile(r"^(RESULTS\.md|results/ledger[^/]*\.md)$")
 REGISTRY_FILES = LOG_FILES
-REGISTRY_CITE = r"(?:docs/EXPERIMENTS\.md|docs/experiments/[AC]\.md)"
+REGISTRY_CITE = r"(?:docs/EXPERIMENTS\.md|docs/experiments/[ABC]\.md)"
 # Paths each workstream branch (``a/...``, ``c/...``) edits; the lead's branches (``b/...``) are not
 # restricted. Taken from the workstream briefs; a path outside the list is flagged, not refused.
 OWNED_PATHS: dict[str, tuple[str, ...]] = {

@@ -22,8 +22,8 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
 
 ## Index of entries
 
-One row per entry in every experiment log (an entry with a section but no registry row is listed too). Entry ids are unique across `docs/EXPERIMENTS.md`, `docs/experiments/A.md`
-and `docs/experiments/C.md`; `python -I scripts/check_docs.py` fails on a duplicate id or on a citation that resolves to nothing.
+One row per entry in every experiment log (an entry with a section but no registry row is listed too). Entry ids are unique across `docs/EXPERIMENTS.md`, `docs/experiments/A.md`,
+`docs/experiments/B.md` and `docs/experiments/C.md`; `python -I scripts/check_docs.py` fails on a duplicate id or on a citation that resolves to nothing.
 The lead adds the row for a new entry at merge time (the pull request text carries the row).
 
 | Entry id | Owner | File | Status | Date |
@@ -58,6 +58,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-PILOT-ARMS2 | lead | `docs/EXPERIMENTS.md` | done | 2026-10-31 |
 | E-PILOT-NOISE | lead | `docs/EXPERIMENTS.md` | gate N0 and stage N1 done (two seeds) | 2026-11-01 |
 | E-PILOT-NOISE-SIB | lead | `docs/EXPERIMENTS.md` | done; sanity (i) not passed, reading not answered | 2026-11-02 |
+| E-MINE-PILOT | lead | `docs/experiments/B.md` | code built and tested offline; live runs blocked (no token) | 2026-11-02 |
 | E-POWER | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-PROBE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-SCAN | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
