@@ -8,6 +8,7 @@ Subcommands (logic in ``ril/``):
   rank-sample OUT SAMPLE      selection file covering every mined directory (for the rank tooling)
   agreement OUT JSON --listing L
                               mined positives against the pool's, for pull requests in both
+  report OUT MD               tables of a finished run (summary.json) and its measured unit costs
   rank-prepare OUT WORK       zip, listing and selection file of the run for the rank tooling
   rank-bm25 WORK RANKS        BM25 ranks (CPU);  rank-dense WORK RANKS LOG --teachers T ...  (GPU)
   rank-tables WORK JSON --ranks R ... --yield-per-pr Y   shares with no positive in the top K
@@ -66,6 +67,9 @@ def main(argv: list[str] | None = None) -> int:
     h.add_argument("md")
     h.add_argument("--n", type=int, default=20)
     h.add_argument("--seed", type=int, default=0)
+    pr_ = sub.add_parser("report")
+    pr_.add_argument("out")
+    pr_.add_argument("md")
     rp = sub.add_parser("rank-prepare")
     rp.add_argument("out")
     rp.add_argument("work")
@@ -107,6 +111,21 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
         return 0
 
+    if a.cmd == "report":
+        from ril.data_mining import report
+
+        doc = json.loads((Path(a.out) / "summary.json").read_text(encoding="utf-8"))
+        costs = {
+            "api": report.api_totals(a.out),
+            "seconds": report.session_seconds(a.out),
+            "disk": report.disk_use(a.out),
+        }
+        Path(a.md).write_text(report.render(doc), encoding="utf-8")
+        Path(a.md).with_suffix(".costs.json").write_text(
+            json.dumps(costs, indent=1, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        sys.stdout.write(json.dumps(costs, sort_keys=True) + "\n")
+        return 0
     if a.cmd.startswith("rank-"):
         from ril.data_mining import rank_jobs
 

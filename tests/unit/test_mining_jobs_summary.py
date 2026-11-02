@@ -328,3 +328,50 @@ def test_command_line_accepts_the_run_options_the_job_script_passes() -> None:
         "--repos",
     ):
         assert flag in out
+
+
+def test_median_difference_interval_is_clustered_deterministic_and_handles_empty_groups() -> None:
+    from ril.data_mining.summary import median_difference_interval
+
+    kept = {f"r{i}": [10.0 + i % 3, 11.0] for i in range(12)}
+    dropped = {f"r{i}": [2.0 + i % 2, 3.0] for i in range(12)}
+    a = median_difference_interval(kept, dropped)
+    assert a == median_difference_interval(kept, dropped)
+    assert a["difference"] > 6 and a["excludes_zero"] is True and a["interval"][0] > 0
+    same = median_difference_interval(kept, kept)
+    assert same["difference"] == 0 and same["excludes_zero"] is False
+    empty = median_difference_interval({}, dropped)
+    assert empty["difference"] is None and empty["excludes_zero"] is None and empty["kept_n"] == 0
+
+
+def test_report_renders_tables_and_measures_unit_costs_of_a_run(tmp_path) -> None:
+    from ril.data_mining import report
+
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    jobs.run_pilot(
+        config=MiningConfig(n_repos=1, max_prs=3),
+        out_root=root,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="abc1234",
+        repos=[REPO],
+    )
+    text = report.render(json.load(open(os.path.join(root, "summary.json"))))
+    for heading in (
+        "### Yield",
+        "### Parse failures",
+        "### Links",
+        "### Selection by the published pool",
+    ):
+        assert heading in text
+    assert "prs_mined | 3" in text.replace("  ", " ")
+    disk = report.disk_use(root)
+    assert disk["mined_dirs"] == 3 and disk["pr_files"] == 12 and disk["bytes_per_mined_pr"] > 0
+    secs = report.session_seconds(root)
+    assert secs["listing"] >= 0 and secs["mining"] >= 0
+    assert report.api_totals(root)["calls"] == 0  # no event sink in this run

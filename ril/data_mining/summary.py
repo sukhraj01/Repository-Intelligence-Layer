@@ -9,6 +9,7 @@ Kept compatible with Python 3.10 (the cluster's compute nodes).
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import statistics
@@ -59,6 +60,84 @@ def group_stats(metas: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     }
 
 
+BOOTSTRAP_DRAWS = 2000
+PROPERTIES: tuple[str, ...] = (
+    "positives",
+    "py_files_changed",
+    "hunk_lines_touched",
+    "corpus_units",
+)
+
+
+def _values(m: Mapping[str, Any]) -> dict[str, float]:
+    c = m["counters"]
+    return {
+        "positives": float(c["positives"]),
+        "py_files_changed": float(c["py_files_changed"]),
+        "hunk_lines_touched": float(sum(p["hunk_lines_touched"] for p in m["positives"])),
+        "corpus_units": float(c["corpus_units"]),
+    }
+
+
+def median_difference_interval(
+    kept: Mapping[str, Sequence[float]], dropped: Mapping[str, Sequence[float]], seed: int = 0
+) -> dict[str, Any]:
+    """Median(kept) minus median(dropped) with a repository-clustered bootstrap interval.
+
+    ``kept`` and ``dropped`` map a repository to the values of its mined pull requests. Each draw
+    resamples the repositories (with replacement, from the SHA-256 stream keyed by ``seed``) and
+    recomputes both medians from the pooled pull requests of the drawn repositories; a draw in
+    which either group is empty is skipped and counted.
+    """
+    repos = sorted(set(kept) | set(dropped))
+    k_all = [v for r in kept for v in kept[r]]
+    d_all = [v for r in dropped for v in dropped[r]]
+    out: dict[str, Any] = {"kept_n": len(k_all), "dropped_n": len(d_all)}
+    if not k_all or not d_all:
+        out.update(difference=None, interval=None, excludes_zero=None, draws_used=0)
+        return out
+    diffs: list[float] = []
+    for b in range(BOOTSTRAP_DRAWS):
+        kv: list[float] = []
+        dv: list[float] = []
+        for i in range(len(repos)):
+            digest = hashlib.sha256(f"{seed}:{b}:{i}".encode()).digest()
+            repo = repos[int.from_bytes(digest[:8], "big") % len(repos)]
+            kv.extend(kept.get(repo, ()))
+            dv.extend(dropped.get(repo, ()))
+        if kv and dv:
+            diffs.append(statistics.median(kv) - statistics.median(dv))
+    diffs.sort()
+    point = statistics.median(k_all) - statistics.median(d_all)
+    out.update(kept_median=statistics.median(k_all), dropped_median=statistics.median(d_all))
+    out["difference"] = point
+    out["draws_used"] = len(diffs)
+    if len(diffs) < 100:
+        out.update(interval=None, excludes_zero=None)
+        return out
+    lo, hi = diffs[int(0.025 * len(diffs))], diffs[int(0.975 * len(diffs)) - 1]
+    out["interval"] = [lo, hi]
+    out["excludes_zero"] = bool(lo > 0 or hi < 0)
+    return out
+
+
+def selection_differences(
+    kept: Sequence[Mapping[str, Any]], dropped: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """Kept against dropped mined pull requests: median difference per property with intervals."""
+
+    def by_repo(metas: Sequence[Mapping[str, Any]], prop: str) -> dict[str, list[float]]:
+        out: dict[str, list[float]] = {}
+        for m in metas:
+            out.setdefault(str(m["repo"]), []).append(_values(m)[prop])
+        return out
+
+    return {
+        prop: median_difference_interval(by_repo(kept, prop), by_repo(dropped, prop))
+        for prop in PROPERTIES
+    }
+
+
 def selection_analysis(
     listings: Mapping[str, Sequence[PullRequest]],
     population: Population,
@@ -91,6 +170,7 @@ def selection_analysis(
         ],
         "kept_by_pool": group_stats(kept),
         "dropped_by_pool": group_stats(dropped),
+        "differences": selection_differences(kept, dropped),
     }
 
 
