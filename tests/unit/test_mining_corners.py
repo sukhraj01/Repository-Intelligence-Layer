@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import gzip
 import json
+import os
 
 from ril.data_mining.config import CORPUS_KINDS_ALL
 from ril.data_mining.github_api import ApiClient, ClientConfig
@@ -90,8 +92,8 @@ def test_instance_files_follow_the_pool_layout() -> None:
         meta={"repo": "acme/widgets", "pr": 3},
     )
     files = instance_files(inst)
-    assert set(files) == {"corpus.jsonl", "queries.jsonl", "qrels/test.tsv", "pr_meta.json"}
-    row = json.loads(files["corpus.jsonl"])
+    assert set(files) == {"corpus.jsonl.gz", "queries.jsonl", "qrels/test.tsv", "pr_meta.json"}
+    row = json.loads(gzip.decompress(files["corpus.jsonl.gz"]))
     assert row == {"_id": "a.py/f", "title": "", "text": "a.py/f\ndef f(): pass", "metadata": {}}
     assert (
         files["qrels/test.tsv"].decode()
@@ -154,3 +156,42 @@ def test_provenance_names_the_source_and_never_a_token(tmp_path) -> None:
         doc["token"]["authenticated"] is True and "value is never recorded" in doc["token"]["scope"]
     )
     assert any("compare" in e for e in doc["endpoints"]) and doc["created"] == "2026-11-02"
+
+
+def test_corpus_is_stored_compressed_deterministically_and_packed_plain(tmp_path) -> None:
+    import zipfile
+
+    from ril.data_mining.files import corpus_size, gzip_bytes, read_corpus
+
+    text = "a.py/f\n" + "def f():\n    return 1\n" * 500
+    assert gzip_bytes(text.encode()) == gzip_bytes(text.encode())
+    store = MiningStore(str(tmp_path / "run"))
+    inst = MinedInstance(
+        "acme/widgets",
+        3,
+        "acme__widgets-3",
+        "q",
+        "m" * 40,
+        [("a.py/f", text)],
+        ["a.py/f"],
+        {"repo": "acme/widgets", "pr": 3, "counters": {"positives": 1}},
+    )
+    store.write_instance(inst)
+    base = store.pr_path("acme__widgets-3")
+    plain = instance_files(inst)
+    assert sorted(os.listdir(base)) == sorted(
+        ["corpus.jsonl.gz", "pr_meta.json", "queries.jsonl", "qrels"]
+    )
+    raw = read_corpus(base)
+    assert json.loads(raw)["text"] == text and corpus_size(base) == len(raw)
+    assert os.path.getsize(os.path.join(base, "corpus.jsonl.gz")) < len(raw) // 5
+    assert len(plain["corpus.jsonl.gz"]) == os.path.getsize(os.path.join(base, "corpus.jsonl.gz"))
+    zpath = str(tmp_path / "z.zip")
+    pack_zip(store.root, zpath)
+    with zipfile.ZipFile(zpath) as zf:
+        assert zf.read("train/python/acme__widgets-3/corpus.jsonl") == raw
+    # a run root from before the compressed layout still reads
+    os.remove(os.path.join(base, "corpus.jsonl.gz"))
+    with open(os.path.join(base, "corpus.jsonl"), "wb") as handle:
+        handle.write(raw)
+    assert read_corpus(base) == raw and corpus_size(base) == len(raw)

@@ -23,6 +23,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
+from ril.data_mining.files import corpus_size
 from ril.data_mining.pack import list_dirs
 from ril.training import pool_ranks as pr
 
@@ -129,7 +130,7 @@ def rank_sample(root: str) -> dict[str, Any]:
         base = os.path.join(root, "pr", name)
         with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:
             meta = json.load(handle)
-        size = os.path.getsize(os.path.join(base, "corpus.jsonl"))
+        size = corpus_size(base)
         insts.append(
             pr.PoolInstance(
                 dir=name,

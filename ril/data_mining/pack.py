@@ -18,6 +18,8 @@ import struct
 import zipfile
 from typing import Any
 
+from ril.data_mining.files import read_corpus
+
 POOL_PREFIX = "train/python/"
 INSTANCE_FILES = ("corpus.jsonl", "queries.jsonl", "qrels/test.tsv")
 FIXED_TIME = (2020, 1, 1, 0, 0, 0)
@@ -47,9 +49,13 @@ def pack_zip(root: str, zip_path: str, *, deflate: bool = True) -> int:
     method = zipfile.ZIP_DEFLATED if deflate else zipfile.ZIP_STORED
     with zipfile.ZipFile(tmp, "w", compression=method) as zf:
         for name in names:
+            base = os.path.join(root, "pr", name)
             for member in INSTANCE_FILES:
-                with open(os.path.join(root, "pr", name, *member.split("/")), "rb") as handle:
-                    data = handle.read()
+                if member == "corpus.jsonl":
+                    data = read_corpus(base)
+                else:
+                    with open(os.path.join(base, *member.split("/")), "rb") as handle:
+                        data = handle.read()
                 info = zipfile.ZipInfo(f"{POOL_PREFIX}{name}/{member}", date_time=FIXED_TIME)
                 info.compress_type = method
                 info.external_attr = 0o644 << 16

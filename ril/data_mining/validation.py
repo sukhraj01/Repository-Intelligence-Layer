@@ -18,6 +18,7 @@ from typing import Any
 
 from ril.data_mining import agreement
 from ril.data_mining.diff import merge_pages
+from ril.data_mining.files import read_corpus
 from ril.data_mining.github_api import ApiClient
 from ril.data_mining.miner import COMPARE_MAX_PAGES, COMPARE_PAGE
 from ril.data_mining.pack import list_dirs
@@ -37,10 +38,9 @@ def _mined_meta(store: MiningStore, name: str) -> dict[str, Any]:
 
 def _mined_corpus_ids(store: MiningStore, name: str) -> frozenset[str]:
     ids = set()
-    with open(os.path.join(store.pr_path(name), "corpus.jsonl"), encoding="utf-8") as handle:
-        for line in handle:
-            if line.strip():
-                ids.add(str(json.loads(line)["_id"]))
+    for line in read_corpus(store.pr_path(name)).decode("utf-8").splitlines():
+        if line.strip():
+            ids.add(str(json.loads(line)["_id"]))
     return frozenset(ids)
 
 
