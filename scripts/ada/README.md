@@ -37,7 +37,7 @@ standard library. Work directory on Ada: `~/ril_s2/` (`scripts/`, `raw/`, `logs/
 |---|---|---|
 | `probe_net.py` | reachability and Range throughput | `python3 ril_s2/scripts/probe_net.py 50000000` (login) or via `srun -p u22 -A research -q low -c 2 --mem=4G` |
 | `hf_list_tree.py` | tree listing with sizes | `python3 hf_list_tree.py zhangfw123/CORE-Bench "" raw/listing_root.json` |
-| `hf_fetch.py` | resumable, size-checked fetch of path prefixes + `provenance.json` | `python3 hf_fetch.py <repo> <listing.json> <dest> <prefix>...` |
+| `hf_fetch.py` | resumable, size-checked fetch of path prefixes + `<run root>/provenance.json` | `python3 hf_fetch.py <repo> <listing.json> <dest> <prefix>...` |
 | `fetch_core_bench_samples.sbatch` | the 9 small Verified sample folders | `cd ~ && sbatch ril_s2/scripts/fetch_core_bench_samples.sbatch` |
 | `analyze_core_bench_sample.py` | field/format statistics (numbers only) | `python3 -I analyze_core_bench_sample.py <data root> out.json` |
 | `zip_remote_listing.py`, `zip_remote_extract.py` | list or extract single members of a remote zip by Range request | `python3 zip_remote_listing.py <url> out.json` |
@@ -242,3 +242,21 @@ Tables: `scripts/t2_tables.py pilots configs/experiments/t2_pilots.yaml ril_t2/r
 ### Graph-role measurement (S1)
 
 `s1_graph_role.sbatch` (CPU, 4 CPUs, about 8 minutes): runs the four `configs/experiments/s1_graph_role_*.yaml` configurations on the D18 cache (`~/ril_t1/work/e3_cache`, override with `CACHE=`) and the X2 dense scores in `~/ril_x2/dense`, then writes `~/ril_x2/results_s1/*_{compare,sizes,reach}.csv`. Submit from `$HOME` after `rsync -a --exclude __pycache__ ril scripts configs ada:ril_x2/`. Code `ril/evaluation/s1_graph_role.py`, `ril/analysis/s1_tables.py`, wrapper `scripts/s1_run.py`; copy the tables with `rsync -a ada:ril_x2/results_s1/ results/tables/s1/`.
+
+## PR-mined set (E-MINE-PILOT, `docs/experiments/B.md`)
+
+Work directory `~/ril_mine/` (`rsync -a --exclude __pycache__ ril scripts configs ada:ril_mine/`, plus `data/held_out/held_out_repos.json`
+and `data/held_out/rename_cache.json` under `~/ril_mine/data/held_out/`); the pool listing is `~/ril_s2/raw/ziplist_train.json`.
+CPU only, `git` on the node, the venv needs numpy and pyyaml (the script builds it on first use). The job **needs `GITHUB_TOKEN`
+(read-only) in its environment**: it tests presence only, never prints the value, and without it exits with code 3 and fetches
+nothing; there is no unauthenticated mode. Base-commit working repositories go to node-local `$TMPDIR` and are deleted at the end;
+the run root `~/ril_mine/runs/<RUN>` holds the instance directories, the stored listings, the state log, `<run root>/budget.json`,
+`<run root>/api_events.jsonl` (every call and sleep) and `<run root>/provenance.json`. Estimate the added size before a run (the instances are
+uncompressed text; see the entry); do not pass the soft quota.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `mine_pilot.sbatch` | list, select, mine; resumable (a rerun skips finished pull requests and makes no call) | `sbatch --export=ALL,CONFIG=configs/mining/pilot.yaml,RUN=pilot,CREATED=<YYYY-MM-DD>,RIL_COMMIT=<hash> ril_mine/scripts/ada/mine_pilot.sbatch` |
+| `mine_pilot.sbatch` (validation M1) | five repositories of the same order, every linked pull request | `sbatch --export=ALL,CONFIG=configs/mining/validation.yaml,RUN=validation,REPOS=5,CREATED=<YYYY-MM-DD> ril_mine/scripts/ada/mine_pilot.sbatch` |
+| `scripts/mine_pilot.py check` | token presence and rate-limit probe (login node) | `python3 -I ril_mine/scripts/mine_pilot.py check` |
+| `scripts/mine_pilot.py pack` | zip and member listing in the layout the pool reader streams | `python3 -I ril_mine/scripts/mine_pilot.py pack ril_mine/runs/pilot ril_mine/runs/pilot.zip` |

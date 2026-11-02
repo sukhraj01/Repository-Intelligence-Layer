@@ -1,0 +1,13 @@
+# E-MINE-PILOT (exploratory, labelled; outside the pre-registered RQ tables). Unfiltered PR-mined set,
+# pilot scale: the first 200 repositories of the seeded order over the repositories of the 5,000-directory pool
+# (D41, after the held-out filter), all of their merged pull requests listed, a seeded sample of up to 2,000
+# of the linked ones mined. Every value is provisional: ADR-001; none of it enters configs/frozen/.
+title: E-MINE-PILOT pilot
+version: pr-mining/v1
+seed: 0
+n_repos: 200
+max_prs: 2000
+pool_size: 5000
+corpus_kinds: [function, method]
+include_loc_bench: true
+provisional: [ADR-001]

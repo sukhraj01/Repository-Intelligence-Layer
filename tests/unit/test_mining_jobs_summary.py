@@ -1,0 +1,199 @@
+"""Job layer, summary tables and the rank comparison (E-MINE-PILOT, M0 gate; synthetic inputs)."""
+
+from __future__ import annotations
+
+import json
+import os
+
+import pytest
+
+from ril.data_mining import jobs
+from ril.data_mining.config import MiningConfig
+from ril.data_mining.github_api import ApiClient, ClientConfig
+from ril.data_mining.pack import list_dirs
+from ril.data_mining.population import select_population
+from ril.data_mining.rank_compare import (
+    MIN_DIRECTORIES,
+    min_ranks,
+    rank_sample,
+    reading_rule,
+    share_row,
+    wilson,
+)
+from ril.data_mining.snapshot import MemorySnapshots
+from tests.unit._mining_fixtures import (
+    FakeClock,
+    FakeTransport,
+    compare_doc,
+    graphql_page,
+    issue_node,
+    json_response,
+    pr_node,
+)
+from tests.unit.test_mining_pipeline import MB, MODIFY, OLD, OTHER, REPO, tree_digest
+
+POOL_NAMES = [f"acme__widgets-{n}" for n in (1, 2)] + ["zeta__other-3"]
+
+
+def synthetic_client(prs: int = 4) -> tuple[ApiClient, MemorySnapshots, FakeTransport]:
+    nodes = [pr_node(n, [issue_node(100 + n)]) for n in range(1, prs + 1)]
+    tr = FakeTransport()
+    tr.add("POST", "/graphql", lambda u, b: json_response(graphql_page(REPO, nodes)))
+    tr.add(
+        "GET",
+        f"/repos/{REPO}/compare/",
+        lambda u, b: json_response(compare_doc(MB, "h" * 40, MODIFY)),
+    )
+    client = ApiClient(tr, clock=FakeClock(), config=ClientConfig(retries=1, min_interval=0.0))
+    return client, MemorySnapshots({(REPO, MB): {"m.py": OLD, "o.py": OTHER}}), tr
+
+
+def test_token_gate_refuses_without_a_token_and_never_prints_one(monkeypatch) -> None:
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    with pytest.raises(jobs.TokenMissing) as err:
+        jobs.require_token()
+    assert "GITHUB_TOKEN" in str(err.value)
+    monkeypatch.setenv("GITHUB_TOKEN", "sentinel-token-value")
+    assert jobs.require_token() == "sentinel-token-value"
+
+
+def test_blocker_report_has_presence_but_no_value(monkeypatch) -> None:
+    monkeypatch.setenv("GITHUB_TOKEN", "sentinel-token-value")
+    tr = FakeTransport()
+    tr.add(
+        "GET",
+        "/rate_limit",
+        lambda u, b: json_response({"resources": {"core": {"limit": 5000, "remaining": 4999}}}),
+    )
+    report = jobs.blocker_report(tr)
+    assert report == {
+        "token_present": True,
+        "api_reachable": True,
+        "core_limit": 5000,
+        "core_remaining": 4999,
+    }
+    assert "sentinel-token-value" not in json.dumps(report)
+    down = jobs.blocker_report(FakeTransport())  # 404 on /rate_limit
+    assert down["api_reachable"] is False
+
+
+def test_pilot_run_writes_provenance_summary_and_is_idempotent(tmp_path) -> None:
+    client, snaps, tr = synthetic_client()
+    cfg = MiningConfig(n_repos=1, max_prs=3)
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    kw = {
+        "config": cfg,
+        "out_root": str(tmp_path / "run"),
+        "population": pop,
+        "is_held_out": lambda r: False,
+        "client": client,
+        "snapshots": snaps,
+        "created": "2026-11-02",
+        "code_commit": "abc1234",
+        "repos": [REPO],
+    }
+    first = jobs.run_pilot(**kw)
+    assert first["attempted"] == 3 and first["outcomes"] == {"mined": 3}
+    prov = json.load(open(tmp_path / "run" / "provenance.json"))
+    assert prov["token"]["authenticated"] is False and "never recorded" in prov["token"]["scope"]
+    assert prov["counts"]["prs_mined"] == 3 and prov["config_hash"] == cfg.config_hash()
+    assert prov["api_budget"]["graphql_calls"] >= 1 and prov["created"] == "2026-11-02"
+    summary = json.load(open(tmp_path / "run" / "summary.json"))
+    assert summary["yield"]["merged_prs"] == 4 and summary["yield"]["positives_total"] == 3
+    assert summary["mined"]["positives_per_pr"]["median"] == 1.0
+    assert summary["links"]["multiplicity"]["pairs"] == 4
+    before, calls = tree_digest(str(tmp_path / "run")), len(tr.calls)
+    again = jobs.run_pilot(**kw)
+    assert again["attempted"] == 0 and again["skipped"] == 3
+    assert len(tr.calls) == calls and tree_digest(str(tmp_path / "run")) == before
+    assert len(list_dirs(str(tmp_path / "run"))) == 3
+
+
+def test_selection_analysis_splits_kept_and_dropped(tmp_path) -> None:
+    client, snaps, _ = synthetic_client()
+    cfg = MiningConfig(n_repos=1, max_prs=4)
+    names = ["acme__widgets-1", "acme__widgets-2"]
+    pop = select_population(names, is_held_out=lambda r: False, seed=0, pool_size=10)
+    jobs.run_pilot(
+        config=cfg,
+        out_root=str(tmp_path / "run"),
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="x",
+        repos=[REPO],
+    )
+    sel = json.load(open(tmp_path / "run" / "summary.json"))["selection"]
+    assert sel["summary"] == {
+        "repos": 1,
+        "linked_prs": 4,
+        "kept_by_pool": 2,
+        "kept_share": 0.5,
+        "published_not_linked": 0,
+    }
+    assert sel["kept_by_pool"]["prs"] == 2 and sel["dropped_by_pool"]["prs"] == 2
+
+
+def test_wilson_and_share_rows() -> None:
+    lo, hi = wilson(15, 100)
+    assert 0.09 < lo < 0.15 < hi < 0.24
+    assert wilson(0, 0) == (0.0, 0.0)
+    ranks = {f"a__b-{i}": (11 if i < 3 else 2) for i in range(10)}
+    repo_of = {d: "a/b" if int(d.split("-")[1]) < 5 else "c/d" for d in ranks}
+    row = share_row("bm25", 10, ranks, repo_of, seed=0)
+    assert (row.directories, row.no_positive_in_top_k, row.share) == (10, 3, 0.3)
+    assert row.wilson_low < 0.3 < row.wilson_high and row.cluster_low <= row.cluster_high
+    assert share_row("bm25", 10, ranks, repo_of, seed=0) == row  # deterministic
+
+
+def test_min_ranks_takes_the_best_positive() -> None:
+    rows = [{"dir": "a__b-1", "ranks": [{"rank": 40}, {"rank": 7}]}, {"dir": "a__b-2", "ranks": []}]
+    assert min_ranks(rows) == {"a__b-1": 7}
+
+
+def test_reading_rule_below_and_above_the_minimum() -> None:
+    small = reading_rule(40, 0.2)
+    assert (
+        small["reading"] == "too small to compare" and small["prs_needed_at_measured_yield"] == 500
+    )
+    assert reading_rule(MIN_DIRECTORIES, 0.5)["counts"] is True
+    assert reading_rule(0, 0.0)["prs_needed_at_measured_yield"] is None
+
+
+def test_rank_sample_covers_every_directory(tmp_path) -> None:
+    client, snaps, _ = synthetic_client()
+    cfg = MiningConfig(n_repos=1, max_prs=2)
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    jobs.run_pilot(
+        config=cfg,
+        out_root=root,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="x",
+        repos=[REPO],
+    )
+    doc = rank_sample(root)
+    assert len(doc["sample"]) == 2 and doc["listing_prefix"] == "train/python/"
+    assert all(os.path.exists(os.path.join(root, "pr", r["dir"])) for r in doc["sample"])
+
+
+def test_missing_repository_is_recorded_and_not_asked_again(tmp_path) -> None:
+    from ril.data_mining.runner import list_population
+    from ril.data_mining.store import MiningStore
+
+    tr = FakeTransport()
+    errors = {"errors": [{"type": "NOT_FOUND", "message": "Could not resolve to a Repository"}]}
+    tr.add("POST", "/graphql", lambda u, b: json_response({"data": None, **errors}))
+    client = ApiClient(tr, clock=FakeClock(), config=ClientConfig(retries=1, min_interval=0.0))
+    store = MiningStore(str(tmp_path / "run"))
+    listings, stats = list_population(client, [REPO], store, is_held_out=lambda r: False)
+    assert listings == {} and stats.not_found == [REPO]
+    calls = len(tr.calls)
+    _, again = list_population(client, [REPO], store, is_held_out=lambda r: False)
+    assert again.not_found == [REPO] and len(tr.calls) == calls
