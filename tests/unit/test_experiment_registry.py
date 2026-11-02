@@ -120,3 +120,14 @@ def test_check_tree_reports_registry_findings(tmp_path: Path) -> None:
     files = {"docs/EXPERIMENTS.md", "docs/experiments/A.md"}
     found = check_tree(tmp_path, files)
     assert {f.target for f in found} == {"E-ONE"}
+
+
+def test_the_lead_data_mining_log_is_registered() -> None:
+    logs = {"docs/EXPERIMENTS.md": _log("E-ONE"), "docs/experiments/B.md": _log("E-TWO")}
+    assert check_registry(logs, {"x.md": "`docs/experiments/B.md` section E-TWO"}) == []
+    wrong = check_registry(logs, {"x.md": "`docs/EXPERIMENTS.md` section E-TWO"})
+    assert [f.message for f in wrong] == [
+        "cited in docs/EXPERIMENTS.md, entry is in docs/experiments/B.md"
+    ]
+    both = {**logs, "docs/experiments/A.md": _log("E-TWO")}
+    assert any("also defined" in f.message for f in check_registry(both, {}))
