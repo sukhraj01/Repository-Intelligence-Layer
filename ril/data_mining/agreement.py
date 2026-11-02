@@ -44,6 +44,47 @@ def _reading(ids: frozenset[str], reading: str) -> frozenset[str]:
     return ids if reading == "all" else frozenset(i for i in ids if not is_test_id(i))
 
 
+VARIANTS: tuple[str, ...] = (
+    "non_test",
+    "non_test_no_pure_insertion",
+    "non_test_no_whole_function_removal",
+    "non_test_no_insertion_no_removal",
+    "non_test_no_insertion_no_removal_in_pool_corpus",
+)
+"""Readings of the mined positives against the pool's (all outside test files, where the pool has
+none): each drops one more kind of positive the pool does not carry, to show which differences
+explain the disagreement. Computed from the stored positives; nothing is fetched again."""
+
+
+def _pure_insertion(p: Mapping[str, Any]) -> bool:
+    return int(p["removed_lines"]) == 0
+
+
+def _whole_removal(p: Mapping[str, Any]) -> bool:
+    return int(p["removed_lines"]) >= int(p["unit_lines"]) and int(p["inserted_lines"]) == 0
+
+
+def variant_sets(
+    positives: Sequence[Mapping[str, Any]], pool_corpus_ids: frozenset[str]
+) -> dict[str, frozenset[str]]:
+    """Mined positive sets (corpus functions outside test files) under each of ``VARIANTS``."""
+    base = [p for p in positives if p["in_corpus"] and not is_test_id(str(p["pool_id"]))]
+    no_ins = [p for p in base if not _pure_insertion(p)]
+    no_rem = [p for p in base if not _whole_removal(p)]
+    both = [p for p in no_ins if not _whole_removal(p)]
+
+    def ids(rows: Sequence[Mapping[str, Any]]) -> frozenset[str]:
+        return frozenset(str(p["pool_id"]) for p in rows)
+
+    return {
+        "non_test": ids(base),
+        "non_test_no_pure_insertion": ids(no_ins),
+        "non_test_no_whole_function_removal": ids(no_rem),
+        "non_test_no_insertion_no_removal": ids(both),
+        "non_test_no_insertion_no_removal_in_pool_corpus": ids(both) & pool_corpus_ids,
+    }
+
+
 def compare_pr(
     meta: Mapping[str, Any],
     mined_corpus_ids: frozenset[str],
@@ -86,6 +127,16 @@ def compare_pr(
         i: ("test_file" if is_test_id(i) else "non_test_file")
         for i in sorted(mined - pool_positives)
     }
+    pool_non_test = _reading(pool_positives, "non_test")
+    out["variants"] = {
+        name: {
+            "exact": ids == pool_non_test,
+            "jaccard": round(jaccard(ids, pool_non_test), 6),
+            "extra": len(ids - pool_non_test),
+            "missing": len(pool_non_test - ids),
+        }
+        for name, ids in variant_sets(positives, pool_corpus_ids).items()
+    }
     out["matched"] = sorted(mined & pool_positives)
     out["extra_in_pool_corpus"] = sorted(i for i in mined - pool_positives if i in pool_corpus_ids)
     union = mined_corpus_ids | pool_corpus_ids
@@ -110,6 +161,19 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "prs_with_extra": sum(1 for c in cells if c["extra"]),
             "prs_with_missing": sum(1 for c in cells if c["missing"]),
         }
+    out["variants"] = {
+        name: {
+            "exact_share": sum(1 for r in rows if r["variants"][name]["exact"]) / len(rows)
+            if rows
+            else 0.0,
+            "jaccard_mean": round(statistics.fmean(r["variants"][name]["jaccard"] for r in rows), 4)
+            if rows
+            else 0.0,
+            "extra_total": sum(int(r["variants"][name]["extra"]) for r in rows),
+            "missing_total": sum(int(r["variants"][name]["missing"]) for r in rows),
+        }
+        for name in VARIANTS
+    }
     why: dict[str, int] = {}
     for r in rows:
         for v in r["missing_why"].values():

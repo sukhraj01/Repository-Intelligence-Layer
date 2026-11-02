@@ -26,8 +26,10 @@ from ril.data_mining.store import MiningStore, dumps
 from ril.training import pool_ranks as pr
 
 Fetch = Callable[[str, int, int], bytes]
-MAX_PATCH_LINES = 60
+MAX_PATCH_LINES = 30
 """Lines of one file's patch printed in the hand-check file (the rest is marked as cut)."""
+MAX_FILES = 6
+"""Python files printed per pull request (the others are named, not shown)."""
 
 
 def _mined_meta(store: MiningStore, name: str) -> dict[str, Any]:
@@ -119,12 +121,16 @@ def render_entry(
     out.append(f"Merge base used: `{meta['base_commit']}`; head: `{meta['head_commit']}`")
     out.append("")
     out.append("### Changed hunks (Python files)")
-    for path, patch in sorted(patches.items()):
+    shown = sorted(patches.items())
+    for path, patch in shown[:MAX_FILES]:
         lines = patch.splitlines()
         out += ["", f"`{path}`", "", "```diff", *lines[:MAX_PATCH_LINES]]
         if len(lines) > MAX_PATCH_LINES:
             out.append(f"... ({len(lines) - MAX_PATCH_LINES} more lines cut)")
         out.append("```")
+    if len(shown) > MAX_FILES:
+        rest = ", ".join(f"`{p}`" for p, _ in shown[MAX_FILES:])
+        out += ["", f"{len(shown) - MAX_FILES} more Python files, not shown: {rest}"]
     out += ["", "### Mined positives", ""]
     for p in meta["positives"]:
         place = "corpus" if p["in_corpus"] else "side table"

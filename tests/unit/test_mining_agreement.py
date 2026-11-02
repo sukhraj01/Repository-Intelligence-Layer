@@ -101,3 +101,23 @@ def test_hand_check_entry_shows_title_hunks_and_positives() -> None:
     assert "`pkg/a.py/f`: function, corpus" in text and "side table" in text
     assert "more lines cut" in text
     json.dumps(text)
+
+
+def test_variants_drop_insertions_removals_and_functions_the_pool_corpus_lacks() -> None:
+    keep = _pos("pkg/a.py/keep")
+    ins = dict(_pos("pkg/a.py/ins"), removed_lines=0, inserted_lines=3)
+    gone = dict(_pos("pkg/a.py/gone"), removed_lines=5, inserted_lines=0, unit_lines=5)
+    asyn = _pos("pkg/a.py/asyn")
+    test = _pos("tests/test_a.py/t", is_test=True)
+    meta = _meta([keep, ins, gone, asyn, test])
+    corpus = frozenset({"pkg/a.py/keep", "pkg/a.py/ins", "pkg/a.py/gone"})
+    row = agreement.compare_pr(meta, frozenset(), frozenset({"pkg/a.py/keep"}), corpus)
+    v = row["variants"]
+    assert v["non_test"]["extra"] == 3 and not v["non_test"]["exact"]
+    assert v["non_test_no_pure_insertion"]["extra"] == 2
+    assert v["non_test_no_whole_function_removal"]["extra"] == 2
+    assert v["non_test_no_insertion_no_removal"]["extra"] == 1
+    assert v["non_test_no_insertion_no_removal_in_pool_corpus"]["exact"]
+    table = agreement.summarize([row])
+    name = "non_test_no_insertion_no_removal_in_pool_corpus"
+    assert table["variants"][name]["exact_share"] == 1.0
