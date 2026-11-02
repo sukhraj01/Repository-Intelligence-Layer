@@ -213,11 +213,13 @@ def noise_tables(
     methods: Sequence[str] = METHODS,
     stem_name: str = "n1",
     label: str = "E-PILOT-NOISE",
+    mdd_seeds: Mapping[int, int] | None = None,
 ) -> Record:
     """All tables of the pilot; returns the log record (the D47 reading, unique-example table).
 
     ``cells`` and ``methods`` select the cells a run set contains (E-PILOT-NOISE-SIB drops WEIGHT);
-    ``stem_name`` names the output tables; ``label`` is written into the effect rows.
+    ``stem_name`` names the output tables; ``label`` is written into the effect rows;
+    ``mdd_seeds`` gives the seeds per arm at a rate where it is not the default of two.
     """
     anchor_runs = tt.load_condition(results_root, anchor)
     effects: list[Record] = []
@@ -242,7 +244,9 @@ def noise_tables(
         )
         effects += e
         spread += [x for x in s if x["condition"] != anchor or rate == rates[0]]
-        mdd += minimum_detectable(s, e, prefix, rate, cells=cells, methods=methods)
+        mdd += minimum_detectable(
+            s, e, prefix, rate, (mdd_seeds or {}).get(rate, 2), cells=cells, methods=methods
+        )
         unique += unique_rows({k: v for k, v in conds.items() if v})
     os.makedirs(out_dir, exist_ok=True)
     stem = os.path.join(out_dir, stem_name)
