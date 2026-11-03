@@ -31,6 +31,7 @@ from ril.data_mining.github_api import (
     token_present,
 )
 from ril.data_mining.population import Population, first_repos, select_population
+from ril.data_mining.report import api_totals
 from ril.data_mining.runner import list_population, mine_selected, select_prs
 from ril.data_mining.snapshot import SnapshotProvider
 from ril.data_mining.store import MiningStore, dumps, write_provenance
@@ -164,6 +165,7 @@ def run_pilot(
         budget=budget,
         population=population.counts,
         code_commit=code_commit,
+        api_logged=api_totals(out_root),
     )
     store.log_session(
         {

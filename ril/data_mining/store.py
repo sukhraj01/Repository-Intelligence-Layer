@@ -320,8 +320,13 @@ def write_provenance(
     budget: Mapping[str, Any],
     population: Mapping[str, Any],
     code_commit: str,
+    api_logged: Mapping[str, Any] | None = None,
 ) -> None:
-    """Write ``provenance.json`` (source, endpoints, token description, counts per stage)."""
+    """Write ``provenance.json`` (source, endpoints, token description, counts per stage).
+
+    ``api_budget`` is the cumulative counter of the sessions that ran mining; ``api_calls_logged``
+    is the count of every call in the event logs of the run root (listing shards included).
+    """
     doc = {
         "source": SOURCE,
         "endpoints": list(ENDPOINTS),
@@ -333,5 +338,6 @@ def write_provenance(
         "population": dict(population),
         "counts": dict(counts),
         "api_budget": dict(budget),
+        "api_calls_logged": dict(api_logged or {}),
     }
     _write_atomic(os.path.join(store.root, "provenance.json"), (dumps(doc) + "\n").encode("utf-8"))

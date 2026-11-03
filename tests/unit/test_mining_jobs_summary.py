@@ -98,6 +98,7 @@ def test_pilot_run_writes_provenance_summary_and_is_idempotent(tmp_path) -> None
     assert prov["token"]["authenticated"] is False and "never recorded" in prov["token"]["scope"]
     assert prov["counts"]["prs_mined"] == 3 and prov["config_hash"] == cfg.config_hash()
     assert prov["api_budget"]["graphql_calls"] >= 1 and prov["created"] == "2026-11-02"
+    assert prov["api_calls_logged"]["calls"] == 0  # this run has no event sink
     summary = json.load(open(tmp_path / "run" / "summary.json"))
     assert summary["yield"]["merged_prs"] == 4 and summary["yield"]["positives_total"] == 3
     assert summary["mined"]["positives_per_pr"]["median"] == 1.0
