@@ -37,6 +37,8 @@ mkdir -p "$W" logs
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "$W/nvidia_${SLURM_JOB_ID}.txt" || true
 df -h "$HOME" | tail -1 > "$W/disk_${SLURM_JOB_ID}.txt"
 PY=$GV/bin/python
+# a node whose file system client hangs would hold the GPU idle: stop at once if torch does not start
+timeout 300 "$PY" -c "import torch; torch.zeros(1).cuda()" || { echo "torch/CUDA did not start in 5 min" >&2; exit 4; }
 # The archive, selection file and BM25 ranks come from mine_ranks_cpu.sbatch (CPU), so that the GPU is
 # held only while the dense passes run.
 D="$W/full"
