@@ -4,7 +4,7 @@
 # complete after budget.stop_after = 100 updates) and evaluation as the matched-pool arms pilot
 # (configs/experiments/t5/): only the training pool changes (the PR-mined pilot set in the pool-like reading,
 # after the held-out filter) and, for FILTER, the teacher table (BM25 only). Cells differ only in exp_id,
-# label, seed and arm. RAW_SUBSAMPLE is the size-matched control of FILTER K = 20 (SIZE examples, one draw per seed).
+# label, seed and arm. RAW_SUBSAMPLE is the size-matched control of FILTER K = 20 (765 examples, one draw per seed).
 exp_id: mp_raw
 rq: rq2
 label: "E-MINED-PILOT: RAW on the mined set; N = 100 updates of a 3,000-update schedule"
