@@ -229,3 +229,12 @@ Account A, `~/ril_mine`. GPU: 1.99 GPU-hours of the M3 stage limit 2.0 (ledger r
 | 2026-11-03 | Processes on gnode004 and gnode044 sat in uninterruptible file-system waits (`rpc_wait_bit_killable`, state D) for tens of minutes while the same files read fast from the login node; jobs excluded these nodes afterwards (`--exclude`) | `ps` on the nodes |
 | 2026-11-03 | The mining session peaked at 10,001,100 KB of 10 GB requested (all listings of 200 repositories in memory); the listing of a very large repository needs about 1,000 pages at 4 to 5 s | `sacct` job 54612 |
 | 2026-11-03 | Disk added on A by this work: run roots `m1`, `m1b`, `validation`, `pilot` (2.56 GB of directories and 0.12 GB of listings in `pilot`) and `ranks/` (archives of the rank measurement); deleted by this work: three things it had just made (a 50 MB write-test file, an empty `ranks/` directory, a Python 3.9 venv of the login node); everything else stays | measured, `du`, `df` |
+
+### Mined-set integration pilot (E-MINED-PILOT, D88, 2026-11-03 and 2026-11-04)
+
+D88: the Block 2 cap is raised from 66 to 70 GPU-hours for this pilot (64.80 used before it). Account A, `~/ril_mp`. CPU job 55970 (51 min: pool-like archive packed in node-local space, BM25 of 1,286 directories, feature table, selection, cache of 1.25 GB written to `$HOME`); GPU jobs 56441 (seed 0, 1.30 GPU-hours) and 56571 (seed 1, 1.24) with three runs each, and two jobs that stopped within two minutes (56056, unreadable configuration file; 56565, CUDA gate failed on gnode069), 0.06 together. Stage 2.60 of the limit 3.2; ledger sum 67.41 of the cap 70 (A 65.17, C 2.24; B 0). `$HOME` on A: 2.9 GB free before, 288 MB after (cache 1.25 GB; other jobs of the account also write there); nothing was deleted. The archive of the reading is built in node-local space (1.3 GB) because `$HOME` cannot hold it next to the cache. The account's CPU limit (QOS) and the research account's GPU limit (`AssocGrpGRES`) held the first GPU job in the queue for 3 h 56 min (submitted 17:13, started 21:09); lowering its CPU request with `scontrol update` did not change that.
+
+| Date | Finding | Evidence |
+|---|---|---|
+| 2026-11-03 | Building the example cache for 1,286 mined directories from the local archive took 756 s and 1.25 GB gzip (0.97 MB per directory); a pool-like archive of the same directories is about the size of the cache | job 55970 |
+| 2026-11-04 | gnode069 has no CUDA (the gate stopped the job in 98 s); gnode004 and gnode044 stay excluded | job 56565 |

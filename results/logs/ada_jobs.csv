@@ -91,3 +91,8 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-03,A,54936,L3,M3 GPU job: node file-system client hung before the model loaded (cancelled),u22,4,1,00:25:38,0.43,CANCELLED
 2026-11-03,A,55027,L3,M3 dense ranks SweRankEmbed-Small (300 directories) and CodeRankEmbed (254) pool-like reading; time limit,u22,4,1,01:18:24,1.31,TIMEOUT
 2026-11-03,A,54921,L3,M3 BM25 as-mined reading on 300 directories (CPU),u22,4,0,01:07:23,0.0,COMPLETED
+2026-11-03,A,55970,P1,E-MINED-PILOT preparation: pool-like reading packed node-local; BM25 of 1286 directories; exact comparison with M3 (300 of 300); feature table; selection; cache (CPU),u22,1,0,00:51:46,0.0,COMPLETED
+2026-11-03,A,56056,P1,E-MINED-PILOT seed 0: stopped at the first training start (unreadable configuration file),u22,4,1,00:01:48,0.03,FAILED
+2026-11-03,A,56441,P1,E-MINED-PILOT seed 0: RAW FILTER K=20 BM25 and size-matched subsample at 100 updates each with dev evaluation; gnode063,u22,4,1,01:18:11,1.30,COMPLETED
+2026-11-03,A,56565,P1,E-MINED-PILOT seed 1: CUDA gate failed on gnode069 (no CUDA),u22,4,1,00:01:38,0.03,FAILED
+2026-11-04,A,56571,P1,E-MINED-PILOT seed 1: RAW FILTER K=20 BM25 and size-matched subsample; gnode060,u22,4,1,01:14:18,1.24,COMPLETED
