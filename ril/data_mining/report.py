@@ -205,3 +205,34 @@ def render(summary: Mapping[str, Any]) -> str:
             )
         )
     return "\n".join(out) + "\n"
+
+
+def scale_inputs(
+    summary: Mapping[str, Any],
+    costs: Mapping[str, Any],
+    listing_seconds: float,
+    shell_free_bytes: float | None = None,
+) -> dict[str, float]:
+    """Measured per-unit quantities for :func:`ril.data_mining.scale.extrapolate`.
+
+    ``costs`` is the ``report.costs.json`` of a run root (API totals, session seconds, disk use);
+    ``listing_seconds`` is the summed seconds of every listing job (shards included), the pages
+    are the GraphQL calls in the event logs.
+    """
+    y = summary["yield"]
+    api = costs["api"]["calls_by_endpoint"]
+    attempted = float(y["prs_mined_attempted"])
+    pages = float(api.get("graphql", 0))
+    disk = costs["disk"]
+    return {
+        "merged_prs_per_repo": float(y["merged_prs"]) / float(y["repositories_listed"]),
+        "pr_per_listing_page": 50.0,
+        "graphql_cost_per_listing_page": 1.0,
+        "listing_seconds_per_page": listing_seconds / pages,
+        "rest_calls_per_attempted_pr": float(api.get("repos/compare", 0)) / attempted,
+        "graphql_cost_per_attempted_pr": 0.0,
+        "mining_seconds_per_attempted_pr": float(costs["seconds"]["mining"]) / attempted,
+        "mined_share": float(y["prs_mined"]) / attempted,
+        "bytes_per_mined_pr": float(disk["bytes_per_mined_pr"]),
+        "files_per_mined_pr": float(disk["files_per_mined_pr"]),
+    }

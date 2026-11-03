@@ -8,6 +8,8 @@ Subcommands (logic in ``ril/``):
   rank-sample OUT SAMPLE      selection file covering every mined directory (for the rank tooling)
   agreement OUT JSON --listing L
                               mined positives against the pool's, for pull requests in both
+  scale SUMMARY COSTS --listing-seconds S --free-bytes B --targets REPOS:PRS ...
+                              extrapolated API calls, wall time and disk from a measured pilot
   report OUT MD               tables of a finished run (summary.json) and its measured unit costs
   rank-prepare OUT WORK       zip, listing and selection file of the run for the rank tooling
   rank-bm25 WORK RANKS        BM25 ranks (CPU);  rank-dense WORK RANKS LOG --teachers T ...  (GPU)
@@ -74,6 +76,12 @@ def main(argv: list[str] | None = None) -> int:
     pr_ = sub.add_parser("report")
     pr_.add_argument("out")
     pr_.add_argument("md")
+    sc = sub.add_parser("scale")
+    sc.add_argument("summary")
+    sc.add_argument("costs")
+    sc.add_argument("--listing-seconds", type=float, required=True)
+    sc.add_argument("--free-bytes", type=float, required=True)
+    sc.add_argument("--targets", nargs="+", required=True, help="REPOS:LINKED_PRS pairs")
     rp = sub.add_parser("rank-prepare")
     rp.add_argument("out")
     rp.add_argument("work")
@@ -123,6 +131,27 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
         return 0
 
+    if a.cmd == "scale":
+        from ril.data_mining import report
+        from ril.data_mining.scale import extrapolate
+
+        summary = json.loads(Path(a.summary).read_text(encoding="utf-8"))
+        costs = json.loads(Path(a.costs).read_text(encoding="utf-8"))
+        unit = report.scale_inputs(summary, costs, a.listing_seconds)
+        rows = []
+        for target in a.targets:
+            repos, _, prs = target.partition(":")
+            rows.append(
+                extrapolate(
+                    unit,
+                    repos=int(repos),
+                    linked_prs=int(prs),
+                    quota_bytes=a.free_bytes,
+                    quota_files=1e12,
+                )
+            )
+        sys.stdout.write(json.dumps({"unit": unit, "rows": rows}, indent=1, sort_keys=True) + "\n")
+        return 0
     if a.cmd == "report":
         from ril.data_mining import report
 
