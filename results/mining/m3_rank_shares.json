@@ -1,0 +1,164 @@
+{
+ "reading": {
+  "counts": true,
+  "directories_with_positive": 300,
+  "minimum": 100,
+  "prs_needed_at_measured_yield": 156,
+  "reading": "comparable"
+ },
+ "rows": [
+  {
+   "cluster_bootstrap": [
+    0.4087,
+    0.6062
+   ],
+   "directories": 300,
+   "form": "code",
+   "k": 10,
+   "no_positive_in_top_k": 160,
+   "repositories": 89,
+   "share": 0.5333,
+   "teacher": "bm25",
+   "wilson": [
+    0.4768,
+    0.589
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.3041,
+    0.5481
+   ],
+   "directories": 300,
+   "form": "code",
+   "k": 20,
+   "no_positive_in_top_k": 136,
+   "repositories": 89,
+   "share": 0.4533,
+   "teacher": "bm25",
+   "wilson": [
+    0.3979,
+    0.5099
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.2061,
+    0.4704
+   ],
+   "directories": 300,
+   "form": "code",
+   "k": 40,
+   "no_positive_in_top_k": 109,
+   "repositories": 89,
+   "share": 0.3633,
+   "teacher": "bm25",
+   "wilson": [
+    0.311,
+    0.4192
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.3026,
+    0.4571
+   ],
+   "directories": 254,
+   "form": "code",
+   "k": 10,
+   "no_positive_in_top_k": 102,
+   "repositories": 72,
+   "share": 0.4016,
+   "teacher": "coderankembed",
+   "wilson": [
+    0.3432,
+    0.4629
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.226,
+    0.3787
+   ],
+   "directories": 254,
+   "form": "code",
+   "k": 20,
+   "no_positive_in_top_k": 82,
+   "repositories": 72,
+   "share": 0.3228,
+   "teacher": "coderankembed",
+   "wilson": [
+    0.2683,
+    0.3826
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.1778,
+    0.2946
+   ],
+   "directories": 254,
+   "form": "code",
+   "k": 40,
+   "no_positive_in_top_k": 64,
+   "repositories": 72,
+   "share": 0.252,
+   "teacher": "coderankembed",
+   "wilson": [
+    0.2025,
+    0.3088
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.2576,
+    0.3653
+   ],
+   "directories": 300,
+   "form": "code",
+   "k": 10,
+   "no_positive_in_top_k": 94,
+   "repositories": 89,
+   "share": 0.3133,
+   "teacher": "swerankembed-small",
+   "wilson": [
+    0.2635,
+    0.3679
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.2122,
+    0.3107
+   ],
+   "directories": 300,
+   "form": "code",
+   "k": 20,
+   "no_positive_in_top_k": 79,
+   "repositories": 89,
+   "share": 0.2633,
+   "teacher": "swerankembed-small",
+   "wilson": [
+    0.2167,
+    0.3159
+   ]
+  },
+  {
+   "cluster_bootstrap": [
+    0.1613,
+    0.25
+   ],
+   "directories": 300,
+   "form": "code",
+   "k": 40,
+   "no_positive_in_top_k": 64,
+   "repositories": 89,
+   "share": 0.2133,
+   "teacher": "swerankembed-small",
+   "wilson": [
+    0.1708,
+    0.2632
+   ]
+  }
+ ]
+}

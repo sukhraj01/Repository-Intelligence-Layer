@@ -202,13 +202,13 @@ engineer sign-off — it is a design decision.
 - Reversible: (2) to (5) yes (flags); (1) no, and should not be.
 - Related: DEV-015 to DEV-025, `ril/data_mining/snapshot.py`, `ril/data_mining/files.py`
 
-## DEV-027 — Stage M3 runs the dense teachers on a seeded prefix of the directories and reads two corpora   (2026-11-03 · status: proposed)
+## DEV-027 — Stage M3 reads the pool-like corpora, on a seeded prefix of 300 directories, and two dense passes were not completed   (2026-11-03 · status: proposed)
 - Master says: the brief (M3): ranks under BM25, CodeRankEmbed and SweRankEmbed-Small for the pilot directories, stage limit 2 GPU-hours.
-- We do: BM25 (CPU) on every mined directory; the dense teachers on the first N directories of the seeded order (`sha256("0:<directory>")`) that the reading keeps, N set from the measured cost so that three dense passes (the two teachers on the code text, SweRankEmbed-Small also on the stored text, the form of the Verified row) stay under 2 GPU-hours. Two readings: as mined, and pool-like (no test-file function in the corpora, no test positive; the pool has neither, `results/mining/m1_agreement.md`).
-- Why: `rank-estimate` on the first 252 mined directories counted 1,268,309 distinct function texts (542,660 outside tests), which is 3.3 and 1.4 GPU-hours for three passes at 320 texts per second (rate from ledger job 38202: 188,566 functions, two teachers, 19.6 min), before the other 450 directories; the whole pilot does not fit 2 GPU-hours as mined.
-- Impact: the dense shares rest on N directories, a seeded prefix, not on every directory; intervals are directory-level Wilson and repository-clustered bootstrap as stated; the comparison is read only if the set has at least 100 directories with a positive (README of `results/mining/`). The as-mined reading is not comparable with the pool's shares.
-- Reversible: yes (raise the limit, rerun; ranks are resumable per directory and teacher).
-- Related: DEV-024 to DEV-026, `docs/COMPUTE.md` (cap)
+- We do: the pool-like reading (no test-file function in the corpora, no test positive; the pool has neither, `results/mining/m1_agreement.md`) on the first 300 directories of the seeded order `sha256("0:<directory>")` that keep a positive; BM25 and SweRankEmbed-Small on all 300, CodeRankEmbed on 254 (the job reached its time limit; directories run repository by repository); SweRankEmbed-Small on the stored text and the dense teachers in the as-mined reading were not run (BM25 only, on 300 directories, in the as-mined reading).
+- Why: `rank-estimate` on the first 252 mined directories counted 1,268,309 distinct function texts (542,660 outside tests), i.e. 3.3 and 1.4 GPU-hours for three passes at 320 texts per second (rate of ledger job 38202); the measured rate in this run was 178 texts per second (423,981 texts in 2,378.5 s), so even the pool-like pass needed more than estimated. 0.7 GPU-hours were spent by jobs that produced no ranks (a command-line error, CPU preparation inside a GPU job, and a node whose file-system client hung before the model loaded). Total 1.99 of 2.0.
+- Impact: the dense shares rest on 300 and 254 directories (89 and 72 repositories), above the 100-directory minimum of the reading rule; the CodeRankEmbed set is whole repositories, not a random part; no stored-text comparison with the 19.3% Verified row.
+- Reversible: yes (rerun the remaining passes with `mine_ranks.sbatch`; ranks are resumable per directory and teacher; needs about 1 more GPU-hour for the missing 46 directories and 2 for the stored-text pass).
+- Related: DEV-024 to DEV-026, `docs/COMPUTE.md`
 
 ## DEV-019 — The base encoder is CodeRankEmbed, not Qwen3-Embedding-0.6B   (2026-11-03 · status: accepted by the lead, ADR-006)
 - Master says: open decision 6 recommends Qwen3-0.6B ("CORE-Bench reports strong post-SFT results at CPU-feasible size").

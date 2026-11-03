@@ -215,3 +215,17 @@ D58: the Block 2 cap is raised from 62 to 66 GPU-hours (60.41 used before this r
 ### Block 3: cap for the final RQ2 stage (D79, 2026-11-03)
 
 The GPU budget is a project ledger, not a cluster limit; the cluster limits are per user (one GPU job at a time per account, up to four days of wall time on accounts A and C). The final RQ2 stage has its own block, **Block 3, capped at 46.7 GPU-hours**: the design of record (option E of `docs/RQ2_PROTOCOL.md`, 38.9 GPU-hours, 12 cells x 3 seeds with 8 extra evaluation repositories) plus 20%. Raised by the engineer (the lead) on 2026-11-03; nothing is used yet. Teacher scoring of the mined set and the M3 rank measurement are not in the 38.9 and are charged to this block's margin. Authorised totals by cap: Block 1 8, Block 2 66 (62.81 used, 3.19 left), Block 3 46.7; **120.7 GPU-hours** in all. Block 2 stays closed to the final stage. Final checkpoints that feed RQ3 and the report are archived to account B's storage (D76).
+
+### PR-mined set live stages (E-MINE-PILOT, 2026-11-02 and 2026-11-03)
+
+Account A, `~/ril_mine`. GPU: 1.99 GPU-hours of the M3 stage limit 2.0 (ledger rows L3; jobs 54914, 54915, 54936, 55027); Block 2 ledger total 64.80 of the cap 66 (D58). Two GPU jobs produced no ranks (a command-line error; CPU preparation inside the GPU job), one was held idle for 25 minutes by a node whose file-system client hung before the model loaded, so the CPU parts now run in separate jobs and the GPU job tests that torch starts within 5 minutes.
+
+| Date | Finding | Evidence |
+|---|---|---|
+| 2026-11-02 | `GITHUB_TOKEN` is set in a non-interactive `ssh` command and in a submitted job; the API root answers 200 from a compute node; compute nodes run Python 3.10, the login node 3.9 (the package cannot be imported there) | job 53623 |
+| 2026-11-02 | `quota -s` reports the mount `192.168.10.1:/share1` (25 GB, 3,000 files), not `$HOME` (`ada5:/home2`, shared 50 GB file system, 320,183 files in `$HOME`); the figure that binds is `df` of `$HOME` (7.7 GB free at the start, 2.9 GB at the end of M3) | `find`, `df` |
+| 2026-11-02 | A shallow fetch of one commit of a large repository takes 100 to 300 s alone; the sequential run did about 1 pull request per minute at best; background fetches of the next 4 to 6 commits gave 5 to 6 pull requests per minute | jobs 54059, 54085, 54612 |
+| 2026-11-02 | A write of a 33 MB corpus to `$HOME` stalled for more than 20 minutes at one point (`dd` of 50 MB with `fsync` on the login node: 1.1 MB/s); the corpus is stored gzip-compressed (1.84 MB per mined directory on average) | `dd`, job logs |
+| 2026-11-03 | Processes on gnode004 and gnode044 sat in uninterruptible file-system waits (`rpc_wait_bit_killable`, state D) for tens of minutes while the same files read fast from the login node; jobs excluded these nodes afterwards (`--exclude`) | `ps` on the nodes |
+| 2026-11-03 | The mining session peaked at 10,001,100 KB of 10 GB requested (all listings of 200 repositories in memory); the listing of a very large repository needs about 1,000 pages at 4 to 5 s | `sacct` job 54612 |
+| 2026-11-03 | Disk added on A by this work: run roots `m1`, `m1b`, `validation`, `pilot` (2.56 GB of directories and 0.12 GB of listings in `pilot`), `ranks/` (archives of the rank measurement) and a Python 3.9 venv; nothing was deleted beyond two files made by this work (an empty directory and a 50 MB write test) |

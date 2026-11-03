@@ -4,8 +4,8 @@ Tables and logs of E-MINE-PILOT (`docs/experiments/B.md`). Evidence class of eve
 outside the pre-registered RQ tables. A table here comes from a run on the live API; nothing in this folder is produced
 from recorded or synthetic responses (those exist only in the test suite).
 
-**Status 2026-11-03:** M1 done (`m1_agreement.md`, `m1_agreement.json`, hand-check file `handcheck_20.md`, untracked). M2 to M4 tables are
-added below as they finish, each with the command that produced it. The token and the API were available (checked 2026-11-02).
+**Status 2026-11-03:** M1 to M4 done: `m1_agreement.md` (hand-check file `handcheck_20.md`, untracked), `m2_report.md`, `m2_summary.json`,
+`m3_ranks.md`, `m4_scale.md`, each with the command that produced it. The token and the API were available (checked 2026-11-02).
 
 ## Reading rule for the rank comparison (written before it runs)
 

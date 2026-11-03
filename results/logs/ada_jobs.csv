@@ -73,3 +73,21 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-02,A,52622,S1,sibling-noise pilot seed 0 five cells (E-PILOT-NOISE-SIB),u22,4,1,01:51:49,1.86,COMPLETED
 2026-11-02,A,52685,S1,sibling-noise pilot seed 1 five cells (E-PILOT-NOISE-SIB),u22,4,1,01:51:49,1.86,COMPLETED
 2026-11-02,A,53271,N1,noise pilot seed 2 r=0.4 six cells (third seed; E-PILOT-NOISE),u22,4,1,02:23:53,2.40,COMPLETED
+2026-11-02,A,53623,L0,live-stage check of GITHUB_TOKEN and API egress from a compute node (E-MINE-PILOT; CPU),u22,2,0,00:00:01,0.0,COMPLETED
+2026-11-02,A,53630,L1,live smoke session of the mined set (20 pull requests; superseded snapshot reader; CPU),u22,4,0,00:52:32,0.0,COMPLETED
+2026-11-02,A,53819,L1,M1 run with the superseded snapshot reader (cancelled; CPU),u22,4,0,01:52:09,0.0,CANCELLED
+2026-11-02,A,53988,L1,M1 rerun (cancelled for speed changes; CPU),u22,4,0,01:08:30,0.0,CANCELLED
+2026-11-02,A,54093,L1,M1 rerun with background fetches (cancelled for compressed corpus; CPU),u22,4,0,00:42:58,0.0,CANCELLED
+2026-11-02,A,54148,L1,M1 stage run (cancelled after all pool pull requests were mined; CPU),u22,4,0,00:47:33,0.0,CANCELLED
+2026-11-02,A,54212,L1,M1 closing session (one pull request; summary; CPU),u22,4,0,00:19:18,0.0,COMPLETED
+2026-11-02,A,54256,L1,M1 agreement with the pool and hand-check file (CPU),u22,2,0,00:07:04,0.0,COMPLETED
+2026-11-02,A,54265,L2,M2 listing shard 0 (CPU),u22,4,0,01:27:47,0.0,COMPLETED
+2026-11-02,A,54266,L2,M2 listing shard 1 (CPU),u22,4,0,02:34:26,0.0,COMPLETED
+2026-11-02,A,54268,L2,M2 listing shard 2 (CPU),u22,2,0,00:52:17,0.0,COMPLETED
+2026-11-03,A,54612,L2,M2 mining session 2000 pull requests (CPU),u22,4,0,06:01:32,0.0,COMPLETED
+2026-11-03,A,54887,L3,rank cost estimates (CPU),u22,4,0,00:30:27,0.0,COMPLETED
+2026-11-03,A,54914,L3,M3 GPU job: failed at the command line,u22,6,1,00:04:11,0.07,FAILED
+2026-11-03,A,54915,L3,M3 GPU job: cancelled while doing CPU preparation inside it,u22,6,1,00:11:24,0.19,CANCELLED
+2026-11-03,A,54936,L3,M3 GPU job: node file-system client hung before the model loaded (cancelled),u22,4,1,00:25:38,0.43,CANCELLED
+2026-11-03,A,55027,L3,M3 dense ranks SweRankEmbed-Small (300 directories) and CodeRankEmbed (254) pool-like reading; time limit,u22,4,1,01:18:24,1.31,TIMEOUT
+2026-11-03,A,54921,L3,M3 BM25 as-mined reading on 300 directories (CPU),u22,4,0,01:07:23,0.0,COMPLETED
