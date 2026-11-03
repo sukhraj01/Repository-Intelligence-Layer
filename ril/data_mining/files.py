@@ -15,6 +15,7 @@ from __future__ import annotations
 import gzip
 import io
 import os
+from collections.abc import Iterable
 
 CORPUS_PLAIN = "corpus.jsonl"
 CORPUS_GZ = "corpus.jsonl.gz"
@@ -49,3 +50,22 @@ def corpus_size(directory: str) -> int:
             handle.seek(-4, os.SEEK_END)
             return int.from_bytes(handle.read(4), "little")  # size modulo 2**32: below 4 GB here
     return os.path.getsize(os.path.join(directory, CORPUS_PLAIN))
+
+
+def write_gzip_lines(path: str, lines: Iterable[bytes]) -> None:
+    """Write ``lines`` to ``path`` as one gzip stream without building the whole text in memory.
+
+    Same bytes as :func:`gzip_bytes` of their concatenation (fixed header, level and no
+    timestamp); the file is written to a temporary name, synced and renamed.
+    """
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = f"{path}.tmp"
+    with open(tmp, "wb") as raw:
+        with gzip.GzipFile(
+            filename="", fileobj=raw, mode="wb", compresslevel=COMPRESSLEVEL, mtime=0
+        ) as handle:
+            for line in lines:
+                handle.write(line)
+        raw.flush()
+        os.fsync(raw.fileno())
+    os.replace(tmp, path)

@@ -3,9 +3,9 @@
 Implements ``docs/experiments/B.md`` E-MINE-PILOT (scale-up preparation). Directories of one
 repository are snapshots of the same code at different commits, so most function rows repeat. This
 module measures, on an existing run root, how many bytes a store would need that keeps every
-distinct row once per repository (as one compressed stream) plus, per directory, the list of row indices
-(a compressed manifest), against the bytes the run root uses now. It reads the run root and writes
-nothing; the output format, ``ril/training/pool_reader.py`` and the rank tooling are not touched.
+distinct row once per repository (as one compressed stream) plus, per directory, the list of row
+indices (a compressed manifest), against the bytes the run root uses now. It reads the run root
+and writes nothing; the output format, ``ril/training/pool_reader.py`` and the rank tooling are not touched.
 
 Kept compatible with Python 3.10 (the cluster's compute nodes).
 """
