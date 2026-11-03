@@ -216,24 +216,46 @@ def _units_by_file(parsed: ParsedRepository) -> dict[str, list[CodeUnit]]:
     return out
 
 
+def compare_for(pr: PullRequest, client: ApiClient) -> Comparison | Outcome:
+    """The compare response of a pull request, or the quarantine outcome that ends it early."""
+    if not pr.base_oid or not pr.head_oid:
+        return _quarantine(pr, "missing_commit_id")
+    try:
+        return fetch_comparison(client, pr)
+    except NotFound:
+        return _quarantine(pr, "compare_not_found")
+    except (ApiError, PatchError, ValueError, KeyError) as exc:
+        return _quarantine(pr, f"compare_failed:{type(exc).__name__}")
+
+
+def needs_snapshot(comparison: Comparison) -> bool:
+    """Whether mining this comparison reads the base-commit snapshot (so it can be prefetched)."""
+    return (
+        not comparison.truncated
+        and not any(f.patch_missing for f in comparison.python_files())
+        and bool(comparison.python_files())
+    )
+
+
 def mine_pr(
     pr: PullRequest,
     *,
     client: ApiClient,
     snapshots: SnapshotProvider,
     config: MiningConfig,
+    comparison: Comparison | Outcome | None = None,
 ) -> Outcome:
-    """Mine one pull request that closes at least one issue; see the module docstring."""
+    """Mine one pull request that closes at least one issue; see the module docstring.
+
+    ``comparison`` is the result of :func:`compare_for` when the caller fetched it ahead of time
+    (the snapshot fetch overlaps); the outcome is the same either way.
+    """
     if not pr.issues:
         raise ValueError(f"{pr.key}: no linked issue; select before mining")
-    if not pr.base_oid or not pr.head_oid:
-        return _quarantine(pr, "missing_commit_id")
-    try:
-        comparison = fetch_comparison(client, pr)
-    except NotFound:
-        return _quarantine(pr, "compare_not_found")
-    except (ApiError, PatchError, ValueError, KeyError) as exc:
-        return _quarantine(pr, f"compare_failed:{type(exc).__name__}")
+    if comparison is None:
+        comparison = compare_for(pr, client)
+    if isinstance(comparison, Outcome):
+        return comparison
     py_files = comparison.python_files()
     counters: dict[str, int] = {
         "files_listed": comparison.files_listed,

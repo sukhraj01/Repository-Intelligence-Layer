@@ -72,3 +72,6 @@ reports/**/*.synctex.gz
 
 # Review sheets for a second reader (labels and fetched sources; not tracked)
 data/review/
+
+# Hand-check sheets of mined pull requests (third-party issue text and diffs; for the engineer to read)
+results/mining/handcheck_*.md

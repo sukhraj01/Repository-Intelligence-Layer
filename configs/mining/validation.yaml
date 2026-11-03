@@ -1,11 +1,14 @@
-# E-MINE-PILOT stage M1 (validation before scale): five repositories of the same seeded order, every linked
-# merged pull request of them mined (no sample cap beyond max_prs), compared with the published pool where a
-# pull request is in both. Exploratory, provisional: ADR-001.
+# E-MINE-PILOT stage M1 (validation before scale): five repositories of the same seeded order. Every
+# linked merged pull request that the published pool holds is mined first (published_first), then the
+# seeded sample up to max_prs (DEV-024: mining all linked pull requests of five repositories does not
+# fit the account's quota). Compared with the published pool where a pull request is in both.
+# Exploratory, provisional: ADR-001.
 title: E-MINE-PILOT validation (M1)
 version: pr-mining/v1
 seed: 0
 n_repos: 5
-max_prs: 100000
+max_prs: 300
+published_first: true
 pool_size: 5000
 corpus_kinds: [function, method]
 include_loc_bench: true

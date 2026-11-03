@@ -1,0 +1,70 @@
+{
+ "date": "2026-11-03",
+ "dense_log_swerankembed_small": {
+  "gate": {
+   "capability": [
+    7,
+    5
+   ],
+   "cuda": "12.1",
+   "device": "NVIDIA GeForce RTX 2080 Ti",
+   "matmul_max_abs_error": 0.0001220703125,
+   "torch": "2.4.1+cu121"
+  },
+  "hardware": {
+   "cpus_visible": 40,
+   "host": "gnode049",
+   "mem_total_kb": 131860676,
+   "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+   "python": "3.10.12"
+  },
+  "teachers": [
+   {
+    "batch_size": 64,
+    "cache_hits": 1458672,
+    "cache_misses": 423981,
+    "done_before": 0,
+    "dtype": "float16",
+    "form": "code",
+    "load_seconds": 32.9,
+    "max_tokens": 1024,
+    "model_id": "Salesforce/SweRankEmbed-Small",
+    "peak_gpu_mem_mb": 4121.8,
+    "revision_cache": null,
+    "revision_pinned": "745d2a06103a66d3cfa600aa52fc0d3523010daa",
+    "selected": 300,
+    "teacher": "swerankembed-small",
+    "wall_seconds": 2378.5,
+    "written": 300
+   }
+  ]
+ },
+ "directories": {
+  "bm25": 300,
+  "coderankembed": 254,
+  "swerankembed-small": 300
+ },
+ "gpu_hours_total": 1.99,
+ "gpu_seconds": {
+  "54914": 251,
+  "54915": 684,
+  "54936": 1538,
+  "55027": 4704
+ },
+ "jobs": {
+  "bm25_as_mined": [
+   54921,
+   55243
+  ],
+  "bm25_pool_like_and_prepare": 54935,
+  "dense": 55027,
+  "gpu_jobs_that_did_not_produce_ranks": [
+   54914,
+   54915,
+   54936
+  ]
+ },
+ "measured_encode_rate_texts_per_second_swerankembed_small": 178.3,
+ "note": "54914 failed at the command line, 54915 was cancelled while it still did CPU preparation inside the GPU job, 54936 hung in a file-system read on gnode044 before the model loaded (cancelled); 55027 ended at its 1 h 18 min limit during the second teacher",
+ "what": "E-MINE-PILOT stage M3: ranks of the mined positives, pool-like reading (no test-file functions or positives), first 300 directories of the seeded order; as-mined BM25 on the same-size set"
+}

@@ -2,15 +2,16 @@
 
 Implements ``docs/experiments/B.md`` E-MINE-PILOT. Layout under the run root::
 
-    pr/<owner>__<name>-<PR>/{corpus.jsonl, queries.jsonl, qrels/test.tsv, pr_meta.json}
+    pr/<owner>__<name>-<PR>/{corpus.jsonl.gz, queries.jsonl, qrels/test.tsv, pr_meta.json}
     listing/<owner>__<name>.json    merged pull requests and closing issues of one repository
     state.jsonl                     one row per finished pull request (append-only)
     run.json                        first-creation record (date, config hash), never rewritten
     provenance.json                 source, endpoints, token description, counts per stage
 
-The first three files of a ``pr/`` directory are exactly what ``ril.training.pool_reader`` reads
-(the pool's layout, BEIR style). A directory is written under a temporary name and renamed, so a
-crash leaves either no directory or a complete one; the state row follows the rename, and a
+The first three files of a ``pr/`` directory are what ``ril.training.pool_reader`` reads (the
+pool's layout, BEIR style); the corpus is stored compressed (``files.py``) and ``pack`` writes it
+into the archive as the plain member. A directory is written under a temporary name and renamed,
+so a crash leaves either no directory or a complete one; the state row follows the rename, and a
 directory without a row is adopted on resume. Every file is written with sorted keys and fixed
 separators, so a rerun from the same state produces the same bytes.
 
@@ -26,6 +27,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import asdict
 from typing import Any
 
+from ril.data_mining.files import CORPUS_GZ, gzip_bytes
 from ril.data_mining.links import LinkedIssue, PullRequest
 from ril.data_mining.miner import STATUS_MINED, MinedInstance, Outcome
 
@@ -72,7 +74,7 @@ def instance_files(inst: MinedInstance) -> dict[str, bytes]:
     )
     qrels = QRELS_HEADER + "\n" + "".join(f"{inst.dir_name}\t{pid}\t1\n" for pid in inst.qrels)
     return {
-        "corpus.jsonl": corpus.encode("utf-8"),
+        CORPUS_GZ: gzip_bytes(corpus.encode("utf-8")),
         "queries.jsonl": query.encode("utf-8"),
         "qrels/test.tsv": qrels.encode("utf-8"),
         "pr_meta.json": (dumps(inst.meta) + "\n").encode("utf-8"),
@@ -138,7 +140,7 @@ class MiningStore:
         tmp = final + ".tmp"
         shutil.rmtree(tmp, ignore_errors=True)
         files = instance_files(inst)
-        order = ["corpus.jsonl", "queries.jsonl", "qrels/test.tsv", "pr_meta.json"]
+        order = [CORPUS_GZ, "queries.jsonl", "qrels/test.tsv", "pr_meta.json"]
         for name in order:
             _write_atomic(os.path.join(tmp, *name.split("/")), files[name])
         if os.path.isdir(final):
@@ -318,8 +320,13 @@ def write_provenance(
     budget: Mapping[str, Any],
     population: Mapping[str, Any],
     code_commit: str,
+    api_logged: Mapping[str, Any] | None = None,
 ) -> None:
-    """Write ``provenance.json`` (source, endpoints, token description, counts per stage)."""
+    """Write ``provenance.json`` (source, endpoints, token description, counts per stage).
+
+    ``api_budget`` is the cumulative counter of the sessions that ran mining; ``api_calls_logged``
+    is the count of every call in the event logs of the run root (listing shards included).
+    """
     doc = {
         "source": SOURCE,
         "endpoints": list(ENDPOINTS),
@@ -331,5 +338,6 @@ def write_provenance(
         "population": dict(population),
         "counts": dict(counts),
         "api_budget": dict(budget),
+        "api_calls_logged": dict(api_logged or {}),
     }
     _write_atomic(os.path.join(store.root, "provenance.json"), (dumps(doc) + "\n").encode("utf-8"))
