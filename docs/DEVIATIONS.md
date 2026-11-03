@@ -218,6 +218,14 @@ engineer sign-off — it is a design decision.
 - Reversible: yes, if a card of about 24 GB becomes reachable and an adapter recipe is tested on RAW (one day of cluster time, D34).
 - Related: ADR-006, E-ENCODER-NUMBERS
 
+## DEV-028 — The memory fix streams the corpus file; listings are not streamed   (2026-11-03 · status: proposed)
+- Master says: the brief of the scale-up preparation (prompt 27, item 3): implement streamed listings so a run over all 1,473 repositories fits in the memory limit.
+- We do: the corpus of a mined directory is streamed into its compressed file (`write_gzip_lines`, `ril/data_mining/store.py`) instead of being built as one string; listings stay in memory.
+- Why: measured, not assumed: the 200 pilot listings take 265 MB in memory (job 55965), about 2 GB by the same ratio for 1,473 repositories, whereas the 10.0 GB peak of the pilot came from the largest snapshot (630,017 functions): 3.8 GB after mining it and 7.8 GB after building the file bytes. With the streamed writer the same pull request peaks at 3.8 GB (4.0 GB in `sacct`), and a repeat of the 462 mined pull requests of the first 20 repositories peaks at 3.16 GB with all directories byte-identical.
+- Impact: none on outputs (462 of 462 directories and the largest one identical to the pilot's). Whether a full-population run fits 10 GB is an estimate (about 4 GB snapshot + 2 GB listings + fetches), not a measurement at that scale.
+- Reversible: yes. Streamed listings remain an option if the estimate is wrong.
+- Related: DEV-026, `results/mining/full_run_plan.md`
+
 ## DEV-020 — Primary update count is 100, not 20,000   (2026-11-03 · status: accepted by the lead, D68)
 - Master says: `docs/08_experimental_design.md`: optimizer updates, target 20,000, identical across arms.
 - We do: every arm trains for 100 updates of a 3,000-update schedule (warm-up 7, linear decay), matched across arms; 1,000 updates is a sensitivity check on a subset of cells.

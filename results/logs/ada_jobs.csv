@@ -91,3 +91,8 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-03,A,54936,L3,M3 GPU job: node file-system client hung before the model loaded (cancelled),u22,4,1,00:25:38,0.43,CANCELLED
 2026-11-03,A,55027,L3,M3 dense ranks SweRankEmbed-Small (300 directories) and CodeRankEmbed (254) pool-like reading; time limit,u22,4,1,01:18:24,1.31,TIMEOUT
 2026-11-03,A,54921,L3,M3 BM25 as-mined reading on 300 directories (CPU),u22,4,0,01:07:23,0.0,COMPLETED
+2026-11-03,A,55961,P1,storage probe on a compute node (E-MINE-PILOT scale-up; CPU),u22,2,0,00:00:00,0.0,COMPLETED
+2026-11-03,A,55964,P1,de-duplication measurement over the pilot corpora (CPU),u22,1,0,00:04:18,0.0,COMPLETED
+2026-11-03,A,55965,P1,listings in memory (CPU),u22,1,0,00:00:06,0.0,COMPLETED
+2026-11-03,A,56200,P1,largest snapshot with the streamed writer (CPU),u22,1,0,00:08:58,0.0,COMPLETED
+2026-11-03,A,55976,P1,repeat of the first 20 repositories of the pilot: 462 directories identical (CPU),u22,2,0,02:18:29,0.0,COMPLETED

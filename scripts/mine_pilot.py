@@ -76,6 +76,19 @@ def main(argv: list[str] | None = None) -> int:
     pr_ = sub.add_parser("report")
     pr_.add_argument("out")
     pr_.add_argument("md")
+    rpt = sub.add_parser("repeat")
+    rpt.add_argument("reference")
+    rpt.add_argument("out")
+    rpt.add_argument("config")
+    rpt.add_argument("--listing", required=True)
+    rpt.add_argument("--held-out", required=True)
+    rpt.add_argument("--rename-cache")
+    rpt.add_argument("--work", required=True)
+    rpt.add_argument("--repos", type=int, required=True, help="the first N repositories")
+    rpt.add_argument("--lookahead", type=int, default=1)
+    dd = sub.add_parser("dedup-measure")
+    dd.add_argument("out")
+    dd.add_argument("json")
     sc = sub.add_parser("scale")
     sc.add_argument("summary")
     sc.add_argument("costs")
@@ -131,6 +144,53 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
         return 0
 
+    if a.cmd == "repeat":
+        import yaml
+
+        from ril.data_mining.config import MiningConfig
+        from ril.data_mining.github_api import (
+            ApiClient,
+            ClientConfig,
+            UrllibTransport,
+            token_from_env,
+        )
+        from ril.data_mining.repeat import repeat
+        from ril.data_mining.snapshot import GitSnapshots
+        from ril.training.pool_rank_jobs import held_out_predicate
+
+        try:
+            jobs.require_token()
+        except jobs.TokenMissing as exc:
+            sys.stderr.write(f"BLOCKED: {exc}\n")
+            return 3
+        cfg = MiningConfig.from_dict(yaml.safe_load(Path(a.config).read_text(encoding="utf-8")))
+        pop = jobs.population_from_listing(
+            a.listing, held_out_predicate(a.held_out, a.rename_cache), cfg
+        )
+        client = ApiClient(
+            UrllibTransport(),
+            token=token_from_env(),
+            etags=jobs.etag_store_for(a.out, enabled=False),
+            config=ClientConfig(),
+        )
+        res = repeat(
+            a.reference,
+            a.out,
+            repos=list(pop.repos[: a.repos]),
+            config=cfg,
+            client=client,
+            snapshots=GitSnapshots(a.work, workers=max(1, a.lookahead)),
+            lookahead=a.lookahead,
+        )
+        sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
+        return 0
+    if a.cmd == "dedup-measure":
+        from ril.data_mining import dedup
+
+        doc = dedup.measure(a.out)
+        Path(a.json).write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        sys.stdout.write(json.dumps({k: v for k, v in doc.items() if k != "per_repository"}) + "\n")
+        return 0
     if a.cmd == "scale":
         from ril.data_mining import report
         from ril.data_mining.scale import extrapolate

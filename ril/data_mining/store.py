@@ -23,11 +23,11 @@ from __future__ import annotations
 import json
 import os
 import shutil
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import asdict
 from typing import Any
 
-from ril.data_mining.files import CORPUS_GZ, gzip_bytes
+from ril.data_mining.files import CORPUS_GZ, gzip_bytes, write_gzip_lines
 from ril.data_mining.links import LinkedIssue, PullRequest
 from ril.data_mining.miner import STATUS_MINED, MinedInstance, Outcome
 
@@ -56,12 +56,16 @@ def _write_atomic(path: str, data: bytes) -> None:
     os.replace(tmp, path)
 
 
-def instance_files(inst: MinedInstance) -> dict[str, bytes]:
-    """The four files of one instance directory, as bytes."""
-    corpus = "".join(
-        dumps({"_id": pid, "title": "", "text": text, "metadata": {}}) + "\n"
-        for pid, text in inst.corpus
-    )
+def corpus_lines(inst: MinedInstance) -> Iterator[bytes]:
+    """The corpus rows of an instance, one JSON line at a time (the pool's ``corpus.jsonl``)."""
+    for pid, text in inst.corpus:
+        yield (dumps({"_id": pid, "title": "", "text": text, "metadata": {}}) + "\n").encode(
+            "utf-8"
+        )
+
+
+def small_files(inst: MinedInstance) -> dict[str, bytes]:
+    """The three small files of one instance directory, as bytes."""
     query = (
         dumps(
             {
@@ -74,11 +78,16 @@ def instance_files(inst: MinedInstance) -> dict[str, bytes]:
     )
     qrels = QRELS_HEADER + "\n" + "".join(f"{inst.dir_name}\t{pid}\t1\n" for pid in inst.qrels)
     return {
-        CORPUS_GZ: gzip_bytes(corpus.encode("utf-8")),
         "queries.jsonl": query.encode("utf-8"),
         "qrels/test.tsv": qrels.encode("utf-8"),
         "pr_meta.json": (dumps(inst.meta) + "\n").encode("utf-8"),
     }
+
+
+def instance_files(inst: MinedInstance) -> dict[str, bytes]:
+    """The four files of one instance directory, as bytes (small instances and tests; the run
+    writes the corpus through :func:`write_gzip_lines` instead, with the same bytes)."""
+    return {CORPUS_GZ: gzip_bytes(b"".join(corpus_lines(inst))), **small_files(inst)}
 
 
 def _pr_to_dict(pr: PullRequest) -> dict[str, Any]:
@@ -139,9 +148,9 @@ class MiningStore:
         final = self.pr_path(inst.dir_name)
         tmp = final + ".tmp"
         shutil.rmtree(tmp, ignore_errors=True)
-        files = instance_files(inst)
-        order = [CORPUS_GZ, "queries.jsonl", "qrels/test.tsv", "pr_meta.json"]
-        for name in order:
+        write_gzip_lines(os.path.join(tmp, CORPUS_GZ), corpus_lines(inst))
+        files = small_files(inst)
+        for name in ("queries.jsonl", "qrels/test.tsv", "pr_meta.json"):
             _write_atomic(os.path.join(tmp, *name.split("/")), files[name])
         if os.path.isdir(final):
             shutil.rmtree(final)

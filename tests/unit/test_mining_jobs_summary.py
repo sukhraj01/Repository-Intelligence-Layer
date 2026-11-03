@@ -417,6 +417,8 @@ def test_every_subcommand_the_job_scripts_call_accepts_its_flags() -> None:
         "agreement": ("--listing",),
         "handcheck": ("--n", "--seed"),
         "report": (),
+        "dedup-measure": (),
+        "repeat": ("--repos", "--lookahead"),
         "pack": (),
     }
     for cmd, flags in wanted.items():
@@ -427,3 +429,29 @@ def test_every_subcommand_the_job_scripts_call_accepts_its_flags() -> None:
         ).stdout.decode()
         for flag in flags:
             assert flag in out, (cmd, flag)
+
+
+def test_repeat_mines_again_into_a_new_root_with_identical_bytes(tmp_path) -> None:
+    from ril.data_mining.repeat import repeat
+
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    cfg = MiningConfig(n_repos=1, max_prs=3)
+    ref = str(tmp_path / "ref")
+    jobs.run_pilot(
+        config=cfg,
+        out_root=ref,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="abc1234",
+        repos=[REPO],
+    )
+    out = repeat(
+        ref, str(tmp_path / "again"), repos=[REPO], config=cfg, client=client, snapshots=snaps
+    )
+    assert out["selected"] == 3 and out["directories_identical"] == 3
+    assert out["directories_different"] == 0 and out["directories_missing"] == 0
+    assert out["peak_rss_mb"] > 0
