@@ -73,6 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     rp = sub.add_parser("rank-prepare")
     rp.add_argument("out")
     rp.add_argument("work")
+    rp.add_argument("--limit", type=int, help="first N directories of the seeded order")
     rp.add_argument(
         "--drop-tests", action="store_true", help="pool-like reading (no test functions)"
     )

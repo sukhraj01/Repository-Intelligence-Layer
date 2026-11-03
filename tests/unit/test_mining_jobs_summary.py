@@ -401,3 +401,28 @@ def test_rank_estimate_counts_distinct_texts_per_repository_and_outside_tests(tm
     assert est["distinct_texts"]["non_test"] <= est["distinct_texts"]["all"]
     expect = round(2 * est["distinct_texts"]["all"] / 100.0 / 3600, 3)
     assert est["gpu_hours"]["all"] == expect
+
+
+def test_every_subcommand_the_job_scripts_call_accepts_its_flags() -> None:
+    import subprocess
+    import sys
+
+    wanted = {
+        "rank-prepare": ("--drop-tests", "--limit"),
+        "rank-estimate": ("--limit", "--texts-per-second"),
+        "rank-dense": ("--teachers", "--cut", "--form"),
+        "rank-bm25": ("--form",),
+        "rank-tables": ("--ranks", "--yield-per-pr"),
+        "agreement": ("--listing",),
+        "handcheck": ("--n", "--seed"),
+        "report": (),
+        "pack": (),
+    }
+    for cmd, flags in wanted.items():
+        out = subprocess.run(
+            [sys.executable, "scripts/mine_pilot.py", cmd, "--help"],
+            capture_output=True,
+            check=True,
+        ).stdout.decode()
+        for flag in flags:
+            assert flag in out, (cmd, flag)
