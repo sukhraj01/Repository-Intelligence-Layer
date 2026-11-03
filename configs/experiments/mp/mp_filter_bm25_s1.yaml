@@ -11,14 +11,14 @@ label: "E-MINED-PILOT: FILTER K=20, teacher BM25, on the mined set; N = 100 upda
 provisional: [ADR-001, ADR-002, ADR-006]
 seed: 1
 pool:
-  source: PR-mined pilot run (E-MINE-PILOT M2: 200 repositories, 2,000 attempted pull requests), pool-like reading (no test-file function in the corpora, no test positive; async def functions stay as in M3)
+  source: "PR-mined pilot run (E-MINE-PILOT M2: 200 repositories, 2,000 attempted pull requests), pool-like reading (no test-file function in the corpora, no test positive; async def functions stay as in M3)"
   held_out: data/held_out/held_out_repos.json (v2, core plus Loc-Bench tier) with data/held_out/rename_cache.json
   selection: every directory of the reading that survives the held-out filter and has BM25 ranks (select_job, seed 0, no maximum)
   include_held_out: false
   max_instances: null
   selection_seed: 0
   text_form: code
-  feature_table: features_mined.csv (BM25 K-ranks of the mined directories under the published rank definition, 1,024 tokens; scripts/ada/mp_prep.sbatch)
+  feature_table: "features_mined.csv (BM25 K-ranks of the mined directories under the published rank definition, 1,024 tokens; scripts/ada/mp_prep.sbatch)"
 model: {kind: sentence_transformers, encoder: coderankembed, max_tokens: 512, gradient_checkpointing: true}
 batch: {batch_size: 32, negatives_per_example: 1, max_positives: 1}
 negatives: {name: random_repo}
