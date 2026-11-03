@@ -1,0 +1,14 @@
+# E-MINE-PILOT, full-run configuration (NOT started; stated for the scale-cost table of M4). The whole
+# repository population of the 5,000-directory pool (D41, after the held-out filter: 1,473 repositories),
+# a seeded sample of the linked merged pull requests. Raise max_prs to 100000 for the larger target.
+# The disk and memory needs in results/mining/m4_scale.md must be met first. Exploratory, provisional: ADR-001.
+title: E-MINE-PILOT full run (not started)
+version: pr-mining/v1
+seed: 0
+n_repos: 1473
+max_prs: 20000
+published_first: false
+pool_size: 5000
+corpus_kinds: [function, method]
+include_loc_bench: true
+provisional: [ADR-001]

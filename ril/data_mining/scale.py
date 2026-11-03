@@ -3,7 +3,7 @@
 Implements ``docs/experiments/B.md`` E-MINE-PILOT question 5. Every output is a product of a
 measured per-unit quantity and a target count; nothing is fitted. The constraints compared are
 the ones that can bind: the REST and GraphQL hourly limits, the wall time of one process (the
-walls of the job queue are applied by the caller), and the account's disk and file quota. The
+walls of the job queue are applied by the caller), and the disk space and file count available. The
 binding constraint is the one with the largest ratio of required to available hours or bytes.
 
 Kept compatible with Python 3.10 (the cluster's compute nodes).
@@ -25,8 +25,8 @@ def extrapolate(
     *,
     repos: int,
     linked_prs: int,
-    quota_bytes: float,
-    quota_files: float,
+    available_bytes: float,
+    available_files: float,
 ) -> dict[str, Any]:
     """Cost of listing ``repos`` repositories and mining ``linked_prs`` linked pull requests.
 
@@ -48,8 +48,8 @@ def extrapolate(
     wall_hours = (list_seconds + mine_seconds) / 3600
     ratios = {
         "api_limit": api_hours / max(wall_hours, 1e-9),
-        "disk_quota": disk / quota_bytes,
-        "file_quota": files / quota_files,
+        "disk_space": disk / available_bytes,
+        "file_count": files / available_files,
     }
     out: dict[str, Any] = {
         "repos": repos,
@@ -63,8 +63,8 @@ def extrapolate(
         "mined_prs": round(mined),
         "disk_gb": round(disk / 1e9, 2),
         "files": round(files),
-        "disk_share_of_quota": round(ratios["disk_quota"], 3),
-        "files_share_of_quota": round(ratios["file_quota"], 3),
+        "disk_vs_available": round(ratios["disk_space"], 3),
+        "files_vs_available": round(ratios["file_count"], 3),
     }
     out["binding"] = _binding(wall_hours, api_hours, ratios)
     return out
@@ -72,9 +72,9 @@ def extrapolate(
 
 def _binding(wall_hours: float, api_hours: float, ratios: Mapping[str, float]) -> str:
     """Name of the constraint that is exceeded most (or comes closest), with its reading."""
-    if ratios["disk_quota"] >= 1 or ratios["file_quota"] >= 1:
-        worst = max(("disk_quota", "file_quota"), key=lambda k: ratios[k])
-        return f"{worst} (required {ratios[worst]:.2f} of the account quota)"
+    if ratios["disk_space"] >= 1 or ratios["file_count"] >= 1:
+        worst = max(("disk_space", "file_count"), key=lambda k: ratios[k])
+        return f"{worst} (required {ratios[worst]:.2f} times what is available)"
     if api_hours > wall_hours:
         return (
             f"api_limit ({api_hours:.1f} h at the hourly limit against {wall_hours:.1f} h measured)"

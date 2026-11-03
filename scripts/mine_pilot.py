@@ -146,8 +146,8 @@ def main(argv: list[str] | None = None) -> int:
                     unit,
                     repos=int(repos),
                     linked_prs=int(prs),
-                    quota_bytes=a.free_bytes,
-                    quota_files=1e12,
+                    available_bytes=a.free_bytes,
+                    available_files=1e12,
                 )
             )
         sys.stdout.write(json.dumps({"unit": unit, "rows": rows}, indent=1, sort_keys=True) + "\n")
