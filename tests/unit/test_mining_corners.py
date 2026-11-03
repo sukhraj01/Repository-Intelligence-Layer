@@ -267,3 +267,65 @@ def test_select_dirs_takes_the_seeded_prefix_that_the_reading_keeps(tmp_path) ->
     assert out["directories"] == 2
     est = estimate(store.root, 100.0, limit=2)
     assert est["directories"] == 2 and est["distinct_texts"]["non_test"] == 1
+
+
+def test_dedup_measure_counts_each_distinct_row_once_per_repository(tmp_path) -> None:
+    from ril.data_mining.dedup import measure
+
+    store = MiningStore(str(tmp_path / "run"))
+    base = [(f"a.py/f{i}", f"a.py/f{i}\ndef f{i}(): return {i}\n" * 3) for i in range(200)]
+    for n in range(1, 4):
+        corpus = base + [(f"b.py/g{n}", f"b.py/g{n}\ndef g(): pass")]
+        store.write_instance(
+            MinedInstance(
+                "acme/widgets",
+                n,
+                f"acme__widgets-{n}",
+                "q",
+                "m" * 40,
+                corpus,
+                ["a.py/f0"],
+                {"repo": "acme/widgets", "pr": n, "counters": {"positives": 1}},
+            )
+        )
+    other = MinedInstance(
+        "zeta/other",
+        1,
+        "zeta__other-1",
+        "q",
+        "m" * 40,
+        base,
+        ["a.py/f0"],
+        {"repo": "zeta/other", "pr": 1, "counters": {"positives": 1}},
+    )
+    store.write_instance(other)
+    out = measure(store.root)
+    assert out["directories"] == 4 and out["repositories"] == 2
+    assert out["rows"]["total"] == 3 * 201 + 200
+    assert out["rows"]["distinct_per_repository"] == 203 + 200  # the repository key is not shared
+    assert out["saving_share"] > 0.3
+    assert (
+        out["bytes_store"]["total"] == out["bytes_store"]["blobs"] + out["bytes_store"]["manifests"]
+    )
+
+
+def test_streamed_corpus_file_has_the_bytes_of_the_in_memory_form(tmp_path) -> None:
+    store = MiningStore(str(tmp_path / "run"))
+    corpus = [(f"a.py/f{i}", f"a.py/f{i}\ndef f{i}():\n    return {i}\n" * 20) for i in range(500)]
+    inst = MinedInstance(
+        "acme/widgets",
+        1,
+        "acme__widgets-1",
+        "q",
+        "m" * 40,
+        corpus,
+        ["a.py/f0"],
+        {"repo": "acme/widgets", "pr": 1, "counters": {"positives": 1}},
+    )
+    store.write_instance(inst)
+    base = store.pr_path("acme__widgets-1")
+    mem = instance_files(inst)
+    for name, data in mem.items():
+        with open(os.path.join(base, *name.split("/")), "rb") as handle:
+            assert handle.read() == data, name
+    assert not any(n.endswith(".tmp") for n in os.listdir(base))

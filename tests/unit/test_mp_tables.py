@@ -11,8 +11,6 @@ import csv
 import glob
 import os
 
-import pytest
-
 from ril.analysis import mp_tables as mp
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..", "results", "rq2")
@@ -25,11 +23,8 @@ STAND_IN = {
 STEP0 = sorted(glob.glob(os.path.join(ROOT, "t3_curve_raw", "*", "step_00000", "query_rows.csv")))
 
 
-@pytest.mark.skipif(
-    not STEP0 or not all(os.path.isdir(os.path.join(ROOT, v)) for v in STAND_IN.values()),
-    reason="stored Wave 6 runs not present",
-)
 def test_tables_are_built_with_the_rows_the_entry_reads(tmp_path) -> None:
+    assert STEP0, "the stored learning-curve rows are tracked in results/rq2"
     root = tmp_path / "res"
     (root / "rq2").mkdir(parents=True)
     for cell, src in STAND_IN.items():

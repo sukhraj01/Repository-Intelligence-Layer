@@ -22,7 +22,7 @@
   "directories_selected": 1286,
   "feature_table_sha256": "bfc0f631095db7ddb3bb030f71afd66a606d831e2e110d3a562282add8c344ca",
   "held_out_directories_in_listing": 0,
-  "mined_run": "E-MINE-PILOT M2 pilot run, pool-like reading (no test-file function, no test positive; async def kept, DEV-029)",
+  "mined_run": "E-MINE-PILOT M2 pilot run, pool-like reading (no test-file function, no test positive; async def kept, DEV-030)",
   "positive_rows_in_feature_table": 7081,
   "select_stats": {
    "errors": [],

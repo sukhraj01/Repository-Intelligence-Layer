@@ -23,7 +23,7 @@ parse; that is a 3 of 45 yield loss on the pool's own pull requests). The yield 
 | outside test files | 20 of 42 (47.6%) | 0.823 | 0.985 | 148 in 22 PRs | 0 |
 
 Every pool positive of these pull requests is a mined positive (0 missing in both readings). The pool's positives total
-708; none lies in a test file (the dataset card's statement holds on these 42 pull requests, D85). Of the 320 extras,
+708; none lies in a test file (the statement of the project's own dataset card, `knowledge/datasets/sweloc.md`, holds on these 42 pull requests, D85; the publisher provides no card, `docs/POOL_CONSTRUCTION.md`). Of the 320 extras,
 172 (53.8%) are in test files (D9 path rule). Over all 54 mined directories, 194 of 1,065 mined positives (18.2%) are in
 test files; this is a published-first sample, so the share is not an estimate for the whole set.
 
