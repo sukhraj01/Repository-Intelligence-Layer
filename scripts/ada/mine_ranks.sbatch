@@ -9,7 +9,7 @@
 #SBATCH --mem=12G
 #SBATCH --time=02:00:00
 #SBATCH --output=ril_mine/logs/ranks_%j.out
-# GPU. Stage M3 (E-MINE-PILOT): ranks of the mined positives under BM25, CodeRankEmbed and
+# GPU. Stage M3 (E-MINE-PILOT), dense passes: ranks of the mined positives under CodeRankEmbed and
 # SweRankEmbed-Small with the published definition of the rank (code text, cut 1,024 tokens, float16;
 # SweRankEmbed-Small also on the stored text, the form of the Verified reference), through the pool
 # rank tooling over a local archive of the run. The CUDA matrix-product gate runs inside the dense
@@ -19,6 +19,7 @@
 # READING=non_test: the pool-like reading, no test-file function in the corpora, no test positive,
 # directories left without a positive dropped (the pool has none of either).
 # LIMIT=N: dense passes on the first N directories of the seeded order only (BM25 runs on both sets).
+# Submit mine_ranks_cpu.sbatch first (archive, selection, BM25); same RUN, READING and LIMIT here.
 #   sbatch --export=ALL,RUN=pilot,READING=non_test,LIMIT=<N>,RIL_COMMIT=<hash> ril_mine/scripts/ada/mine_ranks.sbatch
 set -euo pipefail
 M=$HOME/ril_mine
@@ -36,18 +37,11 @@ mkdir -p "$W" logs
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "$W/nvidia_${SLURM_JOB_ID}.txt" || true
 df -h "$HOME" | tail -1 > "$W/disk_${SLURM_JOB_ID}.txt"
 PY=$GV/bin/python
-DROP=""; [ "$READING" = non_test ] && DROP="--drop-tests"
-# BM25 (CPU) on every directory of the reading
-$PY scripts/mine_pilot.py rank-prepare "runs/$R" "$W/full" $DROP
-$PY scripts/mine_pilot.py rank-bm25 "$W/full" "$W/full/ranks_bm25.jsonl"
-# dense passes on the first LIMIT directories of the seeded order (stage limit of 2 GPU-hours); all
-# directories if LIMIT is unset
+# The archive, selection file and BM25 ranks come from mine_ranks_cpu.sbatch (CPU), so that the GPU is
+# held only while the dense passes run.
 D="$W/full"
-if [ -n "${LIMIT:-}" ]; then
-  D="$W/limit${LIMIT}"
-  $PY scripts/mine_pilot.py rank-prepare "runs/$R" "$D" $DROP --limit "$LIMIT"
-  $PY scripts/mine_pilot.py rank-bm25 "$D" "$D/ranks_bm25.jsonl"
-fi
+[ -n "${LIMIT:-}" ] && D="$W/limit${LIMIT}"
+[ -f "$D/mined.listing.json" ] || { echo "run mine_ranks_cpu.sbatch first" >&2; exit 2; }
 $PY scripts/mine_pilot.py rank-dense "$D" "$D/ranks_dense.jsonl" "$D/dense_${SLURM_JOB_ID}.json" \
   --teachers swerankembed-small coderankembed --cut 1024 --form code
 $PY scripts/mine_pilot.py rank-dense "$D" "$D/ranks_dense_stored.jsonl" "$D/dense_stored_${SLURM_JOB_ID}.json" \
