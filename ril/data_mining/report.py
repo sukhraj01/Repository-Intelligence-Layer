@@ -133,7 +133,18 @@ def render(summary: Mapping[str, Any]) -> str:
         f"({_pct(pf['share_of_attempted'])}); by cause: "
         + json.dumps(pf["by_cause_changed_file"], sort_keys=True)
         + ". Unparsed files of mined corpora, by cause: "
-        + json.dumps(pf["unparsed_corpus_files_by_cause_in_mined"], sort_keys=True),
+        + json.dumps(pf["unparsed_corpus_files_by_cause_in_mined"], sort_keys=True)
+        + f". Mined pull requests with at least one unparsed corpus file: "
+        f"{pf['mined_prs_with_unparsed_corpus_file']} of {pf['mined_prs']}.",
+    ]
+    tp = summary["test_positives"]
+    out += [
+        "",
+        "### Test-file positives (the pool has none)",
+        "",
+        f"{tp['in_test_files']} of {tp['mined_positives']} corpus positives ({_pct(tp['share'])}) "
+        f"are in test files; {tp['prs_with_test_positive']} of {tp['prs']} mined pull requests "
+        f"have a test positive and {tp['prs_only_test_positives']} have only test positives.",
     ]
     lq = summary["links"]
     mult = lq["multiplicity"]

@@ -193,6 +193,10 @@ def parse_failures(
         "share_of_attempted": round(sum(changed.values()) / attempted, 4) if attempted else 0.0,
         "by_cause_changed_file": dict(sorted(changed.items())),
         "unparsed_corpus_files_by_cause_in_mined": dict(sorted(corpus.items())),
+        "mined_prs_with_unparsed_corpus_file": sum(
+            1 for m in metas if m.get("parse_failure_causes")
+        ),
+        "mined_prs": len(metas),
     }
 
 
@@ -233,6 +237,26 @@ def yield_table(store: MiningStore, listings: Mapping[str, list[PullRequest]]) -
     return counts
 
 
+def test_positive_share(metas: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Share of corpus positives in test files (the pool has none, D69) and of pull requests that
+    have a test positive, or only test positives."""
+    total = in_test = with_test = only_test = 0
+    for m in metas:
+        flags = [bool(p["is_test"]) for p in m["positives"] if p["in_corpus"]]
+        total += len(flags)
+        in_test += sum(flags)
+        with_test += 1 if any(flags) else 0
+        only_test += 1 if flags and all(flags) else 0
+    return {
+        "mined_positives": total,
+        "in_test_files": in_test,
+        "share": round(in_test / total, 4) if total else 0.0,
+        "prs": len(metas),
+        "prs_with_test_positive": with_test,
+        "prs_only_test_positives": only_test,
+    }
+
+
 def build_summary(
     store: MiningStore,
     listings: Mapping[str, list[PullRequest]],
@@ -248,4 +272,5 @@ def build_summary(
         "parse_failures": parse_failures(state, metas),
         "links": link_quality(listings, metas),
         "mined": group_stats(metas),
+        "test_positives": test_positive_share(metas),
     }

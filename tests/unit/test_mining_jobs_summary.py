@@ -367,6 +367,7 @@ def test_report_renders_tables_and_measures_unit_costs_of_a_run(tmp_path) -> Non
         "### Parse failures",
         "### Links",
         "### Selection by the published pool",
+        "### Test-file positives",
     ):
         assert heading in text
     assert "prs_mined | 3" in text.replace("  ", " ")
