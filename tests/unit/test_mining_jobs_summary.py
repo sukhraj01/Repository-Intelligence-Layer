@@ -417,6 +417,7 @@ def test_every_subcommand_the_job_scripts_call_accepts_its_flags() -> None:
         "agreement": ("--listing",),
         "handcheck": ("--n", "--seed"),
         "report": (),
+        "dedup-measure": (),
         "pack": (),
     }
     for cmd, flags in wanted.items():

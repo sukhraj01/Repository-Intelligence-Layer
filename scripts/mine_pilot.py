@@ -76,6 +76,9 @@ def main(argv: list[str] | None = None) -> int:
     pr_ = sub.add_parser("report")
     pr_.add_argument("out")
     pr_.add_argument("md")
+    dd = sub.add_parser("dedup-measure")
+    dd.add_argument("out")
+    dd.add_argument("json")
     sc = sub.add_parser("scale")
     sc.add_argument("summary")
     sc.add_argument("costs")
@@ -131,6 +134,13 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.write(json.dumps({"directories": len(doc["sample"])}) + "\n")
         return 0
 
+    if a.cmd == "dedup-measure":
+        from ril.data_mining import dedup
+
+        doc = dedup.measure(a.out)
+        Path(a.json).write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        sys.stdout.write(json.dumps({k: v for k, v in doc.items() if k != "per_repository"}) + "\n")
+        return 0
     if a.cmd == "scale":
         from ril.data_mining import report
         from ril.data_mining.scale import extrapolate
