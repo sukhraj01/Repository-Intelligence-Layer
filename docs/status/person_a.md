@@ -3,7 +3,7 @@
 > Current truth only, replaced at the end of each block (at most 150 lines). Result rows are in
 > `results/ledger_a.md`; protocols and full tables in `docs/EXPERIMENTS.md` (sections A1-PILOT, A2a).
 
-**Last updated:** 2026-10-31 · branch `a/rq1` from `foundation-v0` · block 1 partly done (A1 code and a local pilot; A2 parts a and c; A2 part b prepared).
+**Last updated:** 2026-11-03 · branch `a/rq1` from `foundation-v0` · block 1 partly done (A1 code and a local pilot; A2 parts a and c; A2 part b static reading).
 
 ## Done
 
@@ -13,6 +13,7 @@
 | A2 (a) | Resolver cache made order-independent (cycle-cut results no longer cached; `ril/parsing/call_graph.py`) | done; full-build effect 2 of 4,163 edges on requests, 0 on flask and django | A2a; regression test in `tests/unit/test_incremental_graph.py` |
 | A2 (c) | Stored graph as a versioned, hashed edge-list directory (`ril/parsing/edge_store.py`, format v1): byte-identical writes, load refuses unknown versions and damaged files | **done**: round trip exact on 5 repositories; 16-20x smaller than raw JSONL; django loads in 2.3 s with hash checks | A2c, `results/tables/a2c_edge_store.csv` |
 | A2 (b) prep | Static breakdown of failed call sites by rule (no oracle needed) | done: 80% of ambiguous or unresolved sites are calls on a receiver of unknown type | A2b (preparation) |
+| A2 (b) static | Three resolver typing options (`ResolverOptions`: return inference, merged locals, parameter defaults), off by default; stored resolver byte-identical | done (static): combined +1,133 resolved sites over 5 repositories (+1.2%), unknown-receiver sites -4.3%, build +9%; untyped receivers are mostly attribute chains and parameters (inter-procedural typing needed) | A2b, `results/tables/a2b_resolver_pilot_static.csv` |
 | A1 (code) | Identifier splitting (`split_identifier`, `tokenize_code`, option to keep the whole identifier) and integer field weights (`field_tokens`) in `ril/retrieval/bm25_index.py`; the reference form is unchanged | done, tested | `tests/unit/test_bm25_index.py` |
 | A1 (pilot) | Docstring-to-function retrieval on 5 local checkouts, docstrings removed from the index (exploratory) | done: splitting +8.9 MRR [+6.9, +10.5] clustered, name weight +13.1 [+10.3, +15.9]; query latency unchanged | A1-PILOT, `results/tables/a1_bm25_docstring_pilot.csv` |
 
@@ -20,9 +21,9 @@
 
 1. A1 on the development repositories (cluster): one-factor runs (splitting, keep-original, fields, k1/b), E1 reproduction
    as regression control, unit vs chunk granularity under both gold readings; Verified-six once with the chosen setting.
-2. A2 (b) resolver-recall pilots with dynamic-oracle recall before and after, receiver typing first (the largest failure
-   class). Blocked locally: the oracle runs the repository's own test suite, which is not run on this machine; it runs on
-   the cluster (`scripts/ada/trace_flask_suite.sbatch`) or by the engineer.
+2. A2 (b) dynamic reading: recall and precision of each pilot against the flask suite trace (needs the trace from the
+   engineer's terminal or the cluster, `scripts/ada/trace_flask_suite.sbatch`); then, if worth it, inter-procedural
+   argument typing for parameters and `self` attributes (the largest share of untyped receivers).
 3. A3 structural signals against the same-file control (needs the dense scores of the dev caches on the cluster).
 4. A4 RQ1 ablation table with latency columns; A5 rerank; A6 end-to-end latency profile.
 

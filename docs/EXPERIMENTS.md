@@ -1526,6 +1526,48 @@ definitions of one name (1,174) and attributes of a class with an unresolved bas
 annotations, local assignments) targets the largest failure class; import-aware resolution and decorated or property calls
 target classes of a few hundred to a few thousand sites. Order for the pilots once the oracle can run: typing first.
 
+## A2b: resolver typing pilots, static reading, 2026-11-03 (dynamic reading pending)
+
+**Question.** Unknown-receiver calls are 80% of the ambiguous or unresolved sites (A2b preparation). Do three typing
+extensions of the resolver move them to `resolved`, and at what build cost?
+
+**Pilots** (`ril.parsing.call_graph.ResolverOptions`, one factor each, then all three; all off is the stored resolver and
+is byte-identical to it on all five checkouts, checked against the A2c graph digests): `infer_returns` (a call of an
+in-repository function without a return annotation takes the value all its `return` statements agree on, `None` ignored,
+generators and disagreeing returns left unknown; also for properties and `self.x = make()` attributes); `merge_locals` (a
+local bound several times takes its one typed binding when the others are untyped or literals such as `None`);
+`param_defaults` (an unannotated parameter takes the type of its default). Tests: `tests/unit/test_resolver_options.py`.
+
+**Result, static** (the five A1-PILOT checkouts, one build per pilot; `results/tables/a2b_resolver_pilot_static.csv`):
+
+| pilot | resolved sites, django | change | unknown-receiver sites, django | change | resolved, all five | build time, django |
+|---|---|---|---|---|---|---|
+| stored | 73,847 | - | 42,231 | - | 92,071 | 15.6 s |
+| infer_returns | 74,286 | +439 | 41,604 | -627 | 92,566 | 16.9 s |
+| merge_locals | 74,302 | +455 | 41,004 | -1,227 | 92,589 | 16.6 s |
+| param_defaults | 73,867 | +20 | 42,216 | -15 | 92,091 | 16.8 s |
+| all three | 74,837 | +990 | 40,270 | -1,961 | 93,204 | 17.0 s |
+
+Across the five repositories the combined options resolve 1,133 more sites (+1.2% of resolved sites, 0.5% of all
+invoke sites) and remove 4.3% of the unknown-receiver sites, for about 9% more build time.
+
+**Why the gain is small: what the untyped receivers are** (combined options, 46,620 untyped receivers of attribute calls,
+`untyped_receivers_combined_options` in the log): attribute chains on another object (`obj.a.b()`) 34.3%; attribute
+chains on `self` (`self.x.y()`, the attribute's type unknown) 17.2%; locals assigned from an untyped value 14.7%; call
+results 12.0%; unannotated parameters 9.2%; other locals 6.8%; subscripts 1.6%. Return inference reaches only the
+call-result share, and only where the callee is in the repository. Most untyped receivers come from parameters and
+attributes whose type is set by a caller elsewhere, so the next step that would reach them is propagating argument
+types from call sites into parameters and `self` attributes (inter-procedural), not more local rules.
+
+**Dynamic reading: pending.** Recall and precision against the flask test-suite trace (D15) are not measured yet; the
+trace needs the suite run, which is not done on this machine by the tooling. With the trace at
+`data/processed/flask_trace.json`, `scripts/a_resolver_pilot.py --trace pallets/flask=<checkout at 7ee9ceb>=<trace>` adds
+recall and the precision lower bound per pilot. A moved site is not a correct site until then.
+
+**Reading.** Evidence class: measured (static only). The three local typing extensions are cheap, and each resolves
+sites the stored resolver leaves to name matching, but together they reach a few percent of the failure class. Nothing is
+adopted: the stored resolver stays as it is until the dynamic reading shows the moved sites are right.
+
 ## Pre-registered interpretation rules
 
 Fixed in advance so results cannot be re-read after the fact:
