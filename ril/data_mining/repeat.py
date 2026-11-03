@@ -3,8 +3,8 @@
 Implements ``docs/experiments/B.md`` E-MINE-PILOT (scale-up preparation). The pull requests that a
 reference run root mined, for its first ``n_repos`` repositories, are mined again by the current
 code into a new run root (listings copied from the reference, so no listing call is made), and
-every file of every directory is compared with the reference. The peak resident memory of the process is
-reported, so a change meant to lower it is measured on the same pull requests.
+every file of every directory is compared with the reference. The peak resident memory of the
+process is reported, so a change meant to lower it is measured on the same pull requests.
 
 Kept compatible with Python 3.10 (the cluster's compute nodes).
 """

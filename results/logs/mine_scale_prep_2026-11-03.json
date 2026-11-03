@@ -1,0 +1,68 @@
+{
+ "dedup_measure": {
+  "bytes_now_compressed_corpora": 2547895175,
+  "bytes_store": {
+   "blobs": 311643699,
+   "manifests": 32627356,
+   "total": 344271055
+  },
+  "directories": 1391,
+  "plain_bytes": {
+   "distinct": 3040264822,
+   "total": 22735061061
+  },
+  "repositories": 156,
+  "rows": {
+   "distinct_per_repository": 1985700,
+   "total": 18998175
+  },
+  "saving_share": 0.8649
+ },
+ "dedup_measure_job": 55964,
+ "largest_snapshot": {
+  "after": {
+   "identical_to_pilot_directory": true,
+   "job": 56200,
+   "python_peak_mb_after_mine_pr": 3823,
+   "python_peak_mb_after_write_instance": 3823,
+   "sacct_maxrss_kb": 4009728
+  },
+  "before": {
+   "after_instance_files": 7784,
+   "after_mine_pr": 3822,
+   "job": 55967,
+   "python_peak_mb_after_parse": 2825
+  },
+  "pull_request": "largest corpus of the pilot (630,017 functions)"
+ },
+ "listings_in_memory": {
+  "job": 55965,
+  "pilot_200_repositories_mb": 265,
+  "pull_requests": 190197
+ },
+ "repeat_first_20_repositories": {
+  "elapsed": "02:18:29",
+  "job": 55976,
+  "reference_peak_before_change": {
+   "job": 54612,
+   "sacct_maxrss_kb": 10001100
+  },
+  "result": {
+   "attempted": 462,
+   "different": [],
+   "directories_different": 0,
+   "directories_identical": 462,
+   "directories_in_new_root": 462,
+   "directories_missing": 0,
+   "outcomes": {
+    "mined": 462
+   },
+   "peak_rss_mb": 578.2,
+   "repositories": 20,
+   "selected": 462
+  },
+  "sacct_maxrss_kb": 3316516
+ },
+ "storage_probe_job": 55961,
+ "what": "scale-up preparation of E-MINE-PILOT (prompt 27), 2026-11-03"
+}
