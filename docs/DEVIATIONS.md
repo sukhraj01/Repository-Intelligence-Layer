@@ -146,7 +146,7 @@ engineer sign-off — it is a design decision.
 - Related: ADR-002, ADR-001
 
 
-## DEV-015 — Mined positives are the innermost unit that owns an edited line, not every unit whose span overlaps a hunk   (2026-11-02 · status: accepted (D67))
+## DEV-015 — Mined positives are the innermost unit that owns an edited line, not every unit whose span overlaps a hunk   (2026-11-02 · status: accepted (D83))
 - Master says: functions touched by the patch become positives (`docs/04_data_and_ground_truth.md`, "The mining recipe"); the brief of the unfiltered set (D63) words it as every unit of the base commit whose line span overlaps a changed old-side hunk.
 - We do: a removed or rewritten old line belongs to the smallest function, method or class that holds it, else to the file's residual module unit; a pure insertion belongs to the unit that strictly contains the gap, or at a unit's edge to the unit it visibly extends (added decorator lines, deeper-indented lines after its last line); an inserted block that is only complete function or class definitions adds units and edits none (`ril/data_mining/mapping.py`).
 - Why: the module unit's span is the whole file and a class unit's span holds its methods (`ril/parsing/repository_parser.py`), so a literal span overlap makes the module positive for every edit and a class positive for every method edit; no function-level pool positive is a class. The edge rules are needed because a diff gives insertions as gaps, and a decorator added above a function lies outside its old span.
@@ -154,7 +154,7 @@ engineer sign-off — it is a design decision.
 - Reversible: yes (recompute from the stored base commits; no re-fetch of diffs if the patches are kept).
 - Related: ADR-001, `docs/experiments/B.md` E-MINE-PILOT
 
-## DEV-016 — Class and module positives are kept in a side table, not in the qrels, by default   (2026-11-02 · status: accepted (D67))
+## DEV-016 — Class and module positives are kept in a side table, not in the qrels, by default   (2026-11-02 · status: accepted (D83))
 - Master says: keep every positive (the brief of the unfiltered set, D63: test units and module-level units kept with a flag).
 - We do: `corpus.jsonl` and the qrels hold the unit kinds in `corpus_kinds` (default function and method, as the published pool); positives of other kinds are stored in `<instance>/pr_meta.json` with `in_corpus: false`; `corpus_kinds: [function, method, class, module]` puts them in the qrels and the corpus.
 - Why: the pool reader requires every positive to be in the corpus, and the published pool's corpus is functions only. A class or module unit added only when it is a positive would leak the label through the candidate set, so the choice is all kinds for every pull request or functions only for every pull request.
@@ -162,7 +162,7 @@ engineer sign-off — it is a design decision.
 - Reversible: yes (a configuration value; the side table holds the rest).
 - Related: DEV-015, `ril/training/pool_reader.py`
 
-## DEV-017 — One directory per pull request; a pull request that closes several issues is one directory with the primary issue's text   (2026-11-02 · status: accepted (D67))
+## DEV-017 — One directory per pull request; a pull request that closes several issues is one directory with the primary issue's text   (2026-11-02 · status: accepted (D83))
 - Master says: the brief (D61, D66): the unit is the (issue, PR) pair, and the output is one directory per PR in the pool's format.
 - We do: every pair is stored in `<instance>/pr_meta.json` (`pairs`, with `primary`) and counted in the multiplicity table; the directory `owner__name-<PR>` carries one query, the text of the primary issue (same repository first, then the lowest number).
 - Why: the reader takes the final `-<digits>` of the directory name as the pull request number and a directory holds exactly one query, so two pairs of one pull request cannot be two directories without changing the reader or the name contract. The positives of the pairs of one PR are identical anyway.
@@ -170,7 +170,7 @@ engineer sign-off — it is a design decision.
 - Reversible: yes.
 - Related: `ril/training/pool_check.py` `split_instance_dir`
 
-## DEV-018 — Pilot size read as a seeded sample of the linked pull requests; added functions counted from the patch text   (2026-11-02 · status: accepted (D67))
+## DEV-018 — Pilot size read as a seeded sample of the linked pull requests; added functions counted from the patch text   (2026-11-02 · status: accepted (D83))
 - Master says: the brief (D60, D63): pilot of 200 repositories, up to 2,000 PRs; record the added-function count per PR.
 - We do: all merged pull requests of the 200 repositories are listed with their closing issues (GraphQL, cheap), and `max_prs` = 2,000 of the linked ones are mined, chosen by `sha256("0:<repo>#<number>")` order; the added-function count is the number of function names defined by added lines and not by removed lines of the same file (a multiset difference over the patch text; nested definitions and renamed functions count as added or removed accordingly).
 - Why: the selection analysis needs each repository's full count of linked pull requests, and taking the first 2,000 pull requests repository by repository would fill the pilot with a handful of repositories. The head commit is not fetched, so the count cannot come from parsing it.
@@ -178,7 +178,7 @@ engineer sign-off — it is a design decision.
 - Reversible: yes.
 - Related: `docs/experiments/B.md` E-MINE-PILOT
 
-## DEV-019 — "Kept by the published pool" is taken over the whole filtered pool, not the 5,000 selected directories   (2026-11-02 · status: proposed)
+## DEV-024 — "Kept by the published pool" is taken over the whole filtered pool, not the 5,000 selected directories   (2026-11-02 · status: proposed)
 - Master says: the brief (D60): the selection is measurable as "the share of each repository's linked merged PRs that the published pool kept".
 - We do: the repositories are those of the first 5,000 directories (D41); a pull request counts as kept by the pool if it is any directory of the pool left after the held-out filter (20,800 directories), for the repositories of the population. The first build counted only the 5,000 selected directories; in the first live listing of four repositories that gave 11 kept of 2,145 linked pull requests, which understates the pool by construction (the 5,000 are a sample of the pool's directories).
 - Why: the question asks what the published pool kept, not what a 5,000-directory sample of it kept. The repository population stays as D60 states.
@@ -186,26 +186,66 @@ engineer sign-off — it is a design decision.
 - Reversible: yes (a one-line change, no stored data depends on it).
 - Related: DEV-015 to DEV-018, `ril/data_mining/population.py`
 
-## DEV-020 — Stage M1 mines the pool's pull requests first and stops after 62 attempts, not every linked pull request of five repositories   (2026-11-02 · status: proposed)
+## DEV-025 — Stage M1 mines the pool's pull requests first and stops after 62 attempts, not every linked pull request of five repositories   (2026-11-02 · status: proposed)
 - Master says: the brief (M1): five seeded repositories, all their linked merged pull requests mined.
 - We do: `configs/mining/validation.yaml` sets `published_first: true` and `max_prs: 300`: every linked pull request that the published pool holds is mined first (45 of them in these repositories), then the seeded order fills the rest. The stage was stopped after 62 attempts (45 pool pull requests and 17 of the seeded order), because the pool's pull requests are all that the agreement is measured on, and the rest would only have added hours. The listing bound of 400 pages was raised to 2,000 pages of 50 pull requests: one of the five repositories (airflow) has more merged pull requests than 400 pages hold (the first listing stopped on the bound; the other four listings were reused).
 - Why: the four listed repositories alone have 2,145 linked pull requests, and the base commit of each must be fetched (a shallow fetch of the airflow base commit took 100 to 300 s in the measurements of 2026-11-02, `results/mining/m1_agreement.md`); taken at seeded random, the pool's pull requests would be about 1 in 40 of the mined ones and the agreement would rest on a handful.
 - Impact: the yield figures of M1 describe a published-first sample and are not reported as yield (the yield comes from M2, which has `published_first: false`); the agreement rests on all 42 mined linked pool pull requests of the five repositories (3 of the 45 are quarantined as unparseable).
 - Reversible: yes (rerun with a larger cap).
-- Related: DEV-018, DEV-019, `configs/mining/validation.yaml`
+- Related: DEV-018, DEV-024, `configs/mining/validation.yaml`
 
-## DEV-021 — Speed and storage changes found necessary on the live run; one of them corrects an output   (2026-11-02 · status: proposed)
+## DEV-026 — Speed and storage changes found necessary on the live run; one of them corrects an output   (2026-11-02 · status: proposed)
 - Master says: the brief (D63, D66): the base-commit snapshot is a sparse checkout of Python files; the output directory is the pool's format; an API client with conditional requests.
 - We do: (1) **Correction.** The first snapshot reader used `git archive`, which honours `export-ignore` in a repository's attributes and silently left out whole directories (airflow's `providers/tests`): 19 of the first 51 airflow pull requests were quarantined as `old_file_missing_at_base`, and corpora lacked those files. The reader now walks the commit's tree (`ls-tree`, `cat-file --batch`); the output of the first runs (`runs/validation`, `runs/m1`) was discarded and is not used anywhere. (2) The shallow fetch of the next pull requests' base commits runs in background threads (`--lookahead`, 4 for M1; one bare repository per commit, removed after use), with the compare calls made ahead; pull requests are still mined and recorded in the selected order, so the outputs do not depend on it (tested byte for byte). (3) The run root stores `corpus.jsonl.gz` (fixed header, bytes repeat); `pack` writes the plain `corpus.jsonl` member, so the archive and the reader are unchanged. (4) The ETag cache is off in the pilot (`--etag-cache` turns it on): every URL is requested once, so no stored response is reused, and each costs a file and its compressed body. (5) The listing stage can be split over jobs (`--list-only --shard i n`), writing listing files only.
 - Why: measured on the live service (job logs of 2026-11-02): a shallow fetch of a large repository's base commit takes 100 to 300 s, a sequential run did about 6 pull requests per hour in its worst stretch, a write of a 33 MB corpus to the home file system stalled for more than 20 minutes (`dd` of 50 MB with `fsync` gave 1.1 MB/s on the login node), and one repository's merged pull requests need about 1,000 listing pages at 3 to 5 s each.
 - Impact: (1) is a bug fix: corpora now contain every Python file of the commit; the test-function share of the corpus is large (see `results/mining/m1_agreement.md`). (2) to (5) change speed and bytes only.
 - Reversible: (2) to (5) yes (flags); (1) no, and should not be.
-- Related: DEV-015 to DEV-020, `ril/data_mining/snapshot.py`, `ril/data_mining/files.py`
+- Related: DEV-015 to DEV-025, `ril/data_mining/snapshot.py`, `ril/data_mining/files.py`
 
-## DEV-022 — Stage M3 runs the dense teachers on a seeded prefix of the directories and reads two corpora   (2026-11-03 · status: proposed)
+## DEV-027 — Stage M3 runs the dense teachers on a seeded prefix of the directories and reads two corpora   (2026-11-03 · status: proposed)
 - Master says: the brief (M3): ranks under BM25, CodeRankEmbed and SweRankEmbed-Small for the pilot directories, stage limit 2 GPU-hours.
 - We do: BM25 (CPU) on every mined directory; the dense teachers on the first N directories of the seeded order (`sha256("0:<directory>")`) that the reading keeps, N set from the measured cost so that three dense passes (the two teachers on the code text, SweRankEmbed-Small also on the stored text, the form of the Verified row) stay under 2 GPU-hours. Two readings: as mined, and pool-like (no test-file function in the corpora, no test positive; the pool has neither, `results/mining/m1_agreement.md`).
 - Why: `rank-estimate` on the first 252 mined directories counted 1,268,309 distinct function texts (542,660 outside tests), which is 3.3 and 1.4 GPU-hours for three passes at 320 texts per second (rate from ledger job 38202: 188,566 functions, two teachers, 19.6 min), before the other 450 directories; the whole pilot does not fit 2 GPU-hours as mined.
 - Impact: the dense shares rest on N directories, a seeded prefix, not on every directory; intervals are directory-level Wilson and repository-clustered bootstrap as stated; the comparison is read only if the set has at least 100 directories with a positive (README of `results/mining/`). The as-mined reading is not comparable with the pool's shares.
 - Reversible: yes (raise the limit, rerun; ranks are resumable per directory and teacher).
-- Related: DEV-019 to DEV-021, `docs/COMPUTE.md` (cap)
+- Related: DEV-024 to DEV-026, `docs/COMPUTE.md` (cap)
+
+## DEV-019 — The base encoder is CodeRankEmbed, not Qwen3-Embedding-0.6B   (2026-11-03 · status: accepted by the lead, ADR-006)
+- Master says: open decision 6 recommends Qwen3-0.6B ("CORE-Bench reports strong post-SFT results at CPU-feasible size").
+- We do: CodeRankEmbed is trained in RQ2; Qwen3-Embedding-0.6B is used zero-shot only.
+- Why (measured, E-ENCODER-NUMBERS): Qwen3 runs out of memory at every batch shape from 32 to 1 on 10.57 GiB usable, and no card above 11 GB is reachable; CodeRankEmbed trains at 12.2 to 12.4 examples/s with a peak of 6,880 MiB. Zero-shot, RRF(BM25, Qwen3) is ahead of RRF(BM25, CodeRankEmbed) by about 4 points on dev, but three of four Verified-six intervals include 0.
+- Impact: RQ2 and RQ3 claims are scoped to the CodeRankEmbed base; nothing is said about Qwen3 after fine-tuning. The retrieval stack is unchanged.
+- Reversible: yes, if a card of about 24 GB becomes reachable and an adapter recipe is tested on RAW (one day of cluster time, D34).
+- Related: ADR-006, E-ENCODER-NUMBERS
+
+## DEV-020 — Primary update count is 100, not 20,000   (2026-11-03 · status: accepted by the lead, D68)
+- Master says: `docs/08_experimental_design.md`: optimizer updates, target 20,000, identical across arms.
+- We do: every arm trains for 100 updates of a 3,000-update schedule (warm-up 7, linear decay), matched across arms; 1,000 updates is a sensitivity check on a subset of cells.
+- Why (measured, E-PILOT-CURVE): the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (increments within 1.0 point). A 20,000-update run costs about 15 GPU-hours for training alone (reasoned, E-TRAIN-STACK); a 100-update run with its dev evaluation costs 0.37 to 0.45.
+- Impact: a supervision effect that appears only after the curve is flat would not be seen; the claim is scoped to short fine-tuning (protocol threat 6). Matched optimization budgets is unchanged: updates and distinct examples are matched.
+- Reversible: yes, at the cost of the longer runs and a larger mined pool (32 x N distinct pairs for N updates).
+- Related: ADR-002, `docs/RQ2_PROTOCOL.md` O1, DEV-013, DEV-014
+
+## DEV-021 — FILTER and WEIGHT act at the positive level with a BM25 or SweRankEmbed-Small teacher; no self-teacher cells   (2026-11-03 · status: accepted by the lead, D70)
+- Master says: `docs/08_experimental_design.md`: FILTER and WEIGHT use SweRank's K-rank; the arm table gives mined hard negatives to FILTER, WEIGHT and CURRICULUM.
+- We do: K = 20 at the positive level; BM25 is the primary teacher and SweRankEmbed-Small is reported with the caveat that it shaped the public pool; the base encoder is never its own teacher. The negative policy is identical across arms (DEV-012).
+- Why: K = 20 is SweRank's published reference point (one run per point, no seeds), not a tuned value; the master's rule is a separately pretrained encoder, and a self-teacher is the self-confirming case.
+- Impact: the K-rank of the arms is a published signal applied at one level; K and weight-form sweeps are exploratory.
+- Reversible: yes (configuration).
+- Related: ADR-002, DEV-012, `docs/RQ2_PROTOCOL.md` O3
+
+## DEV-022 — If the arms do not separate, RQ3 contrasts RAW with the untrained encoder   (2026-11-03 · status: accepted by the lead, D80)
+- Master says: RQ3 uses the retrievers from RQ2; the fallback for fewer than two distinguishable retrievers is to cut RQ3 (`docs/10_timeline_and_fallback.md`).
+- We do: declared before any final run, if no pair of arms is distinguishable by the rule of `docs/RQ2_PROTOCOL.md` section 6, RQ3 contrasts RAW with the untrained encoder. This measures "does training help" (measured retrieval difference about +9.6 L2 and +11.1 L3 at 100 updates, E-PILOT-ARMS2), not "does supervision quality help", and is labelled so wherever it appears.
+- Why: it needs no arm to separate and tests whether a retrieval gain of that size reaches the resolved rate.
+- Impact: it redefines what RQ3 measures in that branch; it never replaces the four-arm contrast when the arms separate.
+- Reversible: yes; it is declared in advance so it cannot be chosen after seeing results.
+- Related: `docs/RQ2_PROTOCOL.md` O13
+
+## DEV-023 — A pull-request label sheet is added for the noise audit   (2026-11-03 · status: accepted by the lead, D78)
+- Master says: no noise audit of mined labels is specified.
+- We do: a new sheet (relevance of each edited function to its issue, three-way verdict, reason) for the audit of the mined set. The existing second-reader sheet is for call-edge labels (ADR-012) and stays separate.
+- Why: the audit estimates the share of harmful pairs and what a K-rank filter can find (protocol section 7); the call-edge sheet does not apply.
+- Impact: adds person-time (about 8 hours per reader for 400 pairs); no effect on what is held identical.
+- Reversible: yes.
+- Related: ADR-002, `docs/RQ2_PROTOCOL.md` O11

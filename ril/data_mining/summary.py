@@ -238,7 +238,7 @@ def yield_table(store: MiningStore, listings: Mapping[str, list[PullRequest]]) -
 
 
 def test_positive_share(metas: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    """Share of corpus positives in test files (the pool has none, D69) and of pull requests that
+    """Share of corpus positives in test files (the pool has none, D85) and of pull requests that
     have a test positive, or only test positives."""
     total = in_test = with_test = only_test = 0
     for m in metas:

@@ -18,6 +18,8 @@ the task at hand needs**. This page says what each file is and when to read it.
 | `11_references.md` | Corrected citations and links | writing the report |
 | `12_open_decisions.md` | The 10 open decisions + week-1 deliverables, as written in the master | closing decisions |
 | `ARCHITECTURE.md` | **Live** component design: interfaces, assumptions, limitations, changelog | changing any component boundary |
+| `RQ2_PROTOCOL.md` | Final RQ2 experiment: hypotheses, data, power, decision rules, noise audit, threats, budget; section 11 holds the settled decisions O1 to O15 | before planning or running the final RQ2 experiment |
+| `ADR_DECISION_BRIEF.md` | One entry per open decision (ADR-001 to ADR-010): question, evidence, recommendation | closing or reopening an ADR |
 | `ROADMAP.md` | **Live** checkbox plan by week and owner (owners are named at the top) | planning; tick as work lands |
 | `EXPERIMENTS.md` | **Live** experiment registry: rules, index of all entries, the lead's entries | planning or running an experiment |
 | `experiments/A.md`, `experiments/C.md` | experiment logs of workstreams A and C (append-only, one writer each) | reading or adding an entry of that workstream |

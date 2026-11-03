@@ -1,9 +1,9 @@
 # ADR-002: Quality signal for FILTER and WEIGHT
 
-- **Status:** Proposed — **not decided**
+- **Status:** Accepted (2026-11-03)
 - **Date opened:** 2026-10-12
 - **Decide by:** end of week 2 (all ten decisions)
-- **Decided by:** _pending — team_
+- **Decided by:** the lead, 2026-11-03
 - **Master doc:** open decision #2 (`docs/12_open_decisions.md`)
 - **Affects:** RQ2 FILTER and WEIGHT arms; `ril/training/supervision.py`
 
@@ -19,14 +19,15 @@ We cannot label examples "noisy" without evidence. SweRank filters by K = minimu
 K-rank — published, continuous, makes FILTER and WEIGHT the same signal applied as a hard threshold vs a soft weight.
 
 ## Decision
-_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
-`provisional: ADR-002` (never in `configs/frozen/`) until the decision is made.
+K-rank (SweRank's minimum rank of the positive under a base retriever) is the quality signal for FILTER and WEIGHT. It is reported per teacher; BM25, which the pool's construction does not favour, carries the primary claim, and SweRankEmbed-Small is reported with the caveat that it shaped the public pool. No positive claim is made on the public pool. The teacher is never the encoder being trained.
+
+Recorded 2026-11-03; see the addendum of that date for the evidence and the conditions that reopen it.
 
 ## Rationale
-_Pending._
+See the addendum of 2026-11-03 (evidence it rests on).
 
 ## Trade-offs
-_Pending._
+See the brief (`docs/ADR_DECISION_BRIEF.md`, "Not settled") and the conditions that reopen the decision in the addendum of 2026-11-03.
 
 ## Evidence to gather
 - [ ] Distribution of K-rank over a sample of the chosen pool under the candidate base retriever.
@@ -204,3 +205,17 @@ Evidence class: measured, exploratory, two seeds (D49). With known same-reposito
 ## Addendum 2026-11-02 — sibling noise (E-PILOT-NOISE-SIB), engineer defaults D54 to D57 (evidence only; this ADR stays Proposed)
 
 The noise of E-PILOT-NOISE was uniform over the repository and a teacher's rank separated it from clean pairs (AUC 0.83 BM25, 0.97 SweRankEmbed-Small). D54 to D57 ask whether FILTER still recovers quality when the noised positive is a neighbour (same file, then class, directory, snapshot) of the true one. Measured at two seeds (r = 0.4, five cells, 3.73 GPU-hours; `docs/EXPERIMENTS.md` E-PILOT-NOISE-SIB): the teachers separate sibling noise less well (AUC 0.77 to 0.79 for BM25, 0.94 for SweRankEmbed-Small; a FILTER drops 50 to 53% and 43% of noised pairs against 62 to 65% and about 70% under uniform noise), but the pre-registered sanity check failed: RAW loses only -1.01 [-1.77, 0.06] (L2) and -0.52 [-1.14, 0.12] (L3) against the clean pool, against -3.67 and -2.32 under uniform noise, and the intervals include 0. By the rule of D56 the reading stops there. So Waves 5 to 8 together support: correct supervision matters (NOISE control); under uniform known noise FILTER on a rank signal recovers most of the loss (Wave 7); under sibling noise of the same rate the loss to RAW is small and not separable from seed noise at two seeds, so the question whether Wave 7 transfers to plausible noise is not answered, neither extended nor limited. The minimum detectable difference at two seeds is 2.00 (L2) and 1.93 (L3). Options to make it answerable are listed in the experiment entry and are the engineer's to choose. Conditions to revisit: a stronger sibling noise or more seeds at r = 0.4.
+
+## Addendum 2026-11-02 — third seed at r = 0.4 (E-PILOT-NOISE; evidence only; this ADR stays Proposed)
+
+Evidence class: measured, exploratory, three seeds at r = 0.4 (D58, D59; r = 0.2 stays at two). No method changes sign against RAW and every method-against-RAW interval still excludes 0 on both levels: FILTER K=20 BM25 +1.82 / +1.19 (share of the ORACLE-CLEAN recovery 0.68 / 0.40), FILTER K=20 SweRankEmbed-Small +3.01 / +2.57, WEIGHT +1.87 / +1.14 (L2 / L3 nDCG@10 points). Two comparisons change status: the size-matched subsample is now below RAW at L3 (-1.02 [-2.17, -0.13]) and WEIGHT now beats it at L3. The minimum detectable difference at three seeds with the repository term is 2.16 (L2) and 4.88 (L3), so the L3 gains of FILTER-BM25 and WEIGHT are not separable from seed and repository variation. Details: `docs/EXPERIMENTS.md` E-PILOT-NOISE.
+
+## Addendum 2026-11-03 — decision recorded (status: Accepted)
+
+**Decision.** K-rank (SweRank's minimum rank of the positive under a base retriever) is the quality signal for FILTER and WEIGHT. It is reported per teacher; BM25, which the pool's construction does not favour, carries the primary claim, and SweRankEmbed-Small is reported with the caveat that it shaped the public pool. No positive claim is made on the public pool. The teacher is never the encoder being trained.
+
+**Decided by** the lead on 2026-11-03, on academic advice; recorded with the evidence ids it rests on. The brief (`docs/ADR_DECISION_BRIEF.md`) recommended this option and it was accepted as recommended.
+
+**Evidence it rests on** (all exploratory or measured in this project unless stated; the Wave 5 to 8 results are dev repositories, one encoder, 100 updates): E-POOL-RANKS (Spearman 0.855 [0.791, 0.896] between the dense teachers, kappa 0.64 at K = 20), E-PILOT-ARMS and E-PILOT-ARMS2 (no cell above RAW or the size-matched subsample beyond seed noise), E-PILOT-NOISE (AUC 0.83 BM25, 0.97 SweRankEmbed-Small; three seeds at r = 0.4), E-PILOT-NOISE-SIB (transfer to sibling noise unanswered), E-STORED-ANALYSIS.
+
+**What would reopen it:** the noise audit of the mined set finds that harmful pairs are not findable by K-rank (AUC near 0.5); a heuristic or a judge is measured and beats K-rank on the audited sample; the hand-read of 50 high-K positives shows that K-rank mostly removes correct pairs.

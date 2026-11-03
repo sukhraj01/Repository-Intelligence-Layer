@@ -1,0 +1,33 @@
+{
+ "all_rows_have_eval_outputs": 99,
+ "by_storage": {
+  "node-local, gone": 98,
+  "none written": 1,
+  "shared storage (account A)": 1
+ },
+ "disk": {
+  "checkpoint_tree_kb": 3227,
+  "df_available_kb": 8538112,
+  "df_total_kb": 52428800,
+  "df_use_percent": 84,
+  "df_used_kb": 43890688,
+  "quota_files": 832,
+  "quota_files_hard": 3200,
+  "quota_files_soft": 3000,
+  "quota_hard_mb": 27000,
+  "quota_soft_mb": 25000,
+  "quota_used_mb": 21831,
+  "ril_n7_kb": 86477,
+  "ril_t3_kb": 472933,
+  "ril_t5_kb": 10695,
+  "ril_x2_kb": 8474859
+ },
+ "listing_retained_bytes": 3728245,
+ "listing_retained_dirs": 3,
+ "retained_bytes": 3728245,
+ "retained_runs": [
+  "t1_validate_tiny"
+ ],
+ "rows": 100,
+ "version": "checkpoint-inventory/v1"
+}

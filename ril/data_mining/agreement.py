@@ -233,7 +233,7 @@ def summarize(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
 
 
 def mined_test_share(metas: Sequence[Mapping[str, Any]]) -> dict[str, float | int]:
-    """Share of mined positives (corpus functions) in test files over mined directories (D69)."""
+    """Share of mined positives (corpus functions) in test files over mined directories (D85)."""
     total = 0
     in_test = 0
     for m in metas:

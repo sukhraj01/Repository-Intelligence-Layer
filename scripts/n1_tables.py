@@ -26,6 +26,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     p.add_argument("--stem", default="n1", help="output table name prefix")
     p.add_argument("--label", default="E-PILOT-NOISE")
+    p.add_argument(
+        "--mdd-seeds",
+        nargs="+",
+        default=[],
+        metavar="RATE=K",
+        help="seeds per arm at a rate for the minimum detectable difference (default 2)",
+    )
     a = p.parse_args(argv)
     from ril.analysis import n1_tables as n1
     from ril.analysis import t4_tables as t4
@@ -43,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
         methods=methods,
         stem_name=a.stem,
         label=a.label,
+        mdd_seeds={int(x.split("=")[0]): int(x.split("=")[1]) for x in a.mdd_seeds},
     )
     t4.dump(out, a.log)
     json.dump(

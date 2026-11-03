@@ -1,0 +1,25 @@
+level,queries,oracle_label,row,arm,value,lo,hi
+L2,351,"upper bound, not a method",wins,RAW,21,,
+L2,351,"upper bound, not a method",wins,SUBSAMPLE,37,,
+L2,351,"upper bound, not a method",wins,FILTER-BM25,50,,
+L2,351,"upper bound, not a method",wins,FILTER-SRS,27,,
+L2,351,"upper bound, not a method",wins,FILTER-CRE,42,,
+L2,351,"upper bound, not a method",wins,WEIGHT,14,,
+L2,351,"upper bound, not a method",wins,CURRICULUM,28,,
+L2,351,"upper bound, not a method",ties,,132,,
+L2,351,"upper bound, not a method",share_best_other_beats_RAW_by_>0,best non-RAW arm,0.618,0.497,0.736
+L2,351,"upper bound, not a method",share_best_other_beats_RAW_by_>0.01,best non-RAW arm,0.55,0.439,0.661
+L2,351,"upper bound, not a method",share_best_other_beats_RAW_by_>0.05,best non-RAW arm,0.325,0.23,0.411
+L2,351,"upper bound, not a method",share_best_other_beats_RAW_by_>0.1,best non-RAW arm,0.131,0.089,0.182
+L3,155,"upper bound, not a method",wins,RAW,2,,
+L3,155,"upper bound, not a method",wins,SUBSAMPLE,22,,
+L3,155,"upper bound, not a method",wins,FILTER-BM25,13,,
+L3,155,"upper bound, not a method",wins,FILTER-SRS,8,,
+L3,155,"upper bound, not a method",wins,FILTER-CRE,11,,
+L3,155,"upper bound, not a method",wins,WEIGHT,2,,
+L3,155,"upper bound, not a method",wins,CURRICULUM,17,,
+L3,155,"upper bound, not a method",ties,,80,,
+L3,155,"upper bound, not a method",share_best_other_beats_RAW_by_>0,best non-RAW arm,0.684,0.613,0.755
+L3,155,"upper bound, not a method",share_best_other_beats_RAW_by_>0.01,best non-RAW arm,0.658,0.581,0.729
+L3,155,"upper bound, not a method",share_best_other_beats_RAW_by_>0.05,best non-RAW arm,0.245,0.181,0.316
+L3,155,"upper bound, not a method",share_best_other_beats_RAW_by_>0.1,best non-RAW arm,0.077,0.039,0.123

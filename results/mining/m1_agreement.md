@@ -6,7 +6,7 @@ pull request: ids only, no text). Command that produced it:
 
     python3 -I scripts/mine_pilot.py agreement runs/m1b runs/m1b/agreement.json --listing ~/ril_s2/raw/ziplist_train.json
 
-**Sample (DEV-020).** Five repositories of the seeded order of the 5,000-directory population (libsast, esphome,
+**Sample (DEV-025).** Five repositories of the seeded order of the 5,000-directory population (libsast, esphome,
 py-evm, airflow, pyapacheatlas; their linked merged pull requests number 4 + 2,000 + 121 + 5,544 + 20). Pull requests
 that the published pool holds and that have a closing reference are mined first: 45 of them (libsast 1, esphome 0,
 py-evm 28, airflow 8, pyapacheatlas 8). 17 further pull requests of the seeded order were mined before the stage was
@@ -23,7 +23,7 @@ parse; that is a 3 of 45 yield loss on the pool's own pull requests). The yield 
 | outside test files | 20 of 42 (47.6%) | 0.823 | 0.985 | 148 in 22 PRs | 0 |
 
 Every pool positive of these pull requests is a mined positive (0 missing in both readings). The pool's positives total
-708; none lies in a test file (the dataset card's statement holds on these 42 pull requests, D69). Of the 320 extras,
+708; none lies in a test file (the dataset card's statement holds on these 42 pull requests, D85). Of the 320 extras,
 172 (53.8%) are in test files (D9 path rule). Over all 54 mined directories, 194 of 1,065 mined positives (18.2%) are in
 test files; this is a published-first sample, so the share is not an estimate for the whole set.
 

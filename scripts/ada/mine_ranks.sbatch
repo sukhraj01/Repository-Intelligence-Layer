@@ -15,7 +15,7 @@
 # rank tooling over a local archive of the run. The CUDA matrix-product gate runs inside the dense
 # job before any model loads. Resumable per directory and teacher. Stage limit 2 GPU-hours (the
 # --time above). Needs the environment of ~/ril_x2 (models in the offline cache).
-# READING=all (default): the corpora as mined, test-file functions and test positives included (D69).
+# READING=all (default): the corpora as mined, test-file functions and test positives included (D85).
 # READING=non_test: the pool-like reading, no test-file function in the corpora, no test positive,
 # directories left without a positive dropped (the pool has none of either).
 # LIMIT=N: dense passes on the first N directories of the seeded order only (BM25 runs on both sets).

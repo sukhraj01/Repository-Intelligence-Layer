@@ -1,9 +1,9 @@
 # ADR-004: Retrieval granularity
 
-- **Status:** Proposed — **not decided**
+- **Status:** Accepted (2026-11-03)
 - **Date opened:** 2026-10-12
 - **Decide by:** end of week 2 (all ten decisions)
-- **Decided by:** _pending — team_
+- **Decided by:** the lead, 2026-11-03
 - **Master doc:** open decision #4 (`docs/12_open_decisions.md`)
 - **Affects:** `CodeUnit`, evaluation, metrics comparability
 
@@ -19,14 +19,15 @@ L2 retrieves files or chunks (≈15,000 chunks per repository on average); our C
 Both — CORE-Bench chunking for reported metrics so numbers are comparable; function-level units internally for the graph.
 
 ## Decision
-_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
-`provisional: ADR-004` (never in `configs/frozen/`) until the decision is made.
+Both. Unit level is primary on Verified (D12, D18, reading `units_all_nomod`); chunk-level folder means are reported beside it and are the reading that reproduces the published BM25 rows. The averaging convention is printed next to every number.
+
+Recorded 2026-11-03; see the addendum of that date for the evidence and the conditions that reopen it.
 
 ## Rationale
-_Pending._
+See the addendum of 2026-11-03 (evidence it rests on).
 
 ## Trade-offs
-_Pending._
+See the brief (`docs/ADR_DECISION_BRIEF.md`, "Not settled") and the conditions that reopen the decision in the addendum of 2026-11-03.
 
 ## Evidence to gather
 - [ ] CORE-Bench's chunking procedure and chunk-size distribution from `corpus.jsonl` on a sample repository.
@@ -139,3 +140,13 @@ whether any ranking of conditions flips between the two readings.
   [+10.3, +15.9]); query latency unchanged, index build throughput roughly halved. Recomputed from the stored log.
 - Evidence class: measured (exploratory, local, not benchmark repositories). The gain is an upper bound for issue-style queries.
   Experiment that could flip it: the development-repository runs with the reference tokenisation as the regression control.
+
+## Addendum 2026-11-03 — decision recorded (status: Accepted)
+
+**Decision.** Both. Unit level is primary on Verified (D12, D18, reading `units_all_nomod`); chunk-level folder means are reported beside it and are the reading that reproduces the published BM25 rows. The averaging convention is printed next to every number.
+
+**Decided by** the lead on 2026-11-03, on academic advice; recorded with the evidence ids it rests on. The brief (`docs/ADR_DECISION_BRIEF.md`) recommended this option and it was accepted as recommended.
+
+**Evidence it rests on** (all exploratory or measured in this project unless stated; the Wave 5 to 8 results are dev repositories, one encoder, 100 updates): E-GRAPH-REACH (160 of 160 positives found by exact text; 16 map only to residual lines), E-BM25-REPRO (published rows reproduced only with the folder mean: Verified L2 11.94 / 46.74, L3 22.19 / 33.89), E-LABEL-NOISE (import-only positives 12.7% dev L2, 6.2% Verified-six), the D18 check in the ADR-004 addenda, A1-PILOT (identifier splitting +8.9 MRR [+6.9, +10.5], an upper bound).
+
+**What would reopen it:** a reading that counts a class only through lines outside its methods flips an ordering that a decision rests on; A's development runs (Q59) show the tuned index changes a unit-level ordering; documentation or configuration positives prove larger than the 2.1% bound.

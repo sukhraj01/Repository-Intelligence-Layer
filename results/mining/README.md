@@ -27,7 +27,7 @@ M1 showed that the pool's corpora hold no test-file function and none of its pos
 (`m1_agreement.md`). The shares are therefore measured in two readings, both stated here before any rank exists:
 
 - **as mined** (`READING=all`): the corpora and positives as the miner wrote them (test-file functions in the candidate set,
-  test positives kept, D69);
+  test positives kept, D85);
 - **pool-like** (`READING=non_test`): no test-file function in the corpora, no test positive, directories without a positive
   outside tests dropped. This is the reading whose construction is closest to the pool's; it is the one a comparison with the
   published shares is read from. The as-mined reading is reported beside it and is not compared with the pool's shares.
@@ -35,7 +35,7 @@ M1 showed that the pool's corpora hold no test-file function and none of its pos
 The stage limit is 2 GPU-hours. The measured cost (`rank-estimate`, at the rate named in the table) decides how many directories
 the dense passes can take: BM25 (CPU) runs on every directory of a reading, the dense teachers on the first N directories of
 the seeded order `sha256("0:<directory>")` that the reading keeps, N chosen from the estimate so that three dense passes fit
-under the limit (DEV-022). The reading rule below applies to the number of directories **with a positive in the set a share is
+under the limit (DEV-027). The reading rule below applies to the number of directories **with a positive in the set a share is
 measured on** (all for BM25, N for the dense teachers). Two shares are compared only if both sets have at least 100 such
 directories; the mined repositories are those of the published pool (so not a different repository mix from the pool), the
 Verified export is a different repository set (stated beside the table).

@@ -72,3 +72,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-02,A,52619,S0,sibling-noise separation gate (E-PILOT-NOISE-SIB; CPU),u22,2,0,00:01:08,0.0,COMPLETED
 2026-11-02,A,52622,S1,sibling-noise pilot seed 0 five cells (E-PILOT-NOISE-SIB),u22,4,1,01:51:49,1.86,COMPLETED
 2026-11-02,A,52685,S1,sibling-noise pilot seed 1 five cells (E-PILOT-NOISE-SIB),u22,4,1,01:51:49,1.86,COMPLETED
+2026-11-02,A,53271,N1,noise pilot seed 2 r=0.4 six cells (third seed; E-PILOT-NOISE),u22,4,1,02:23:53,2.40,COMPLETED
