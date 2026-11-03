@@ -177,3 +177,35 @@ def estimate(
             "non_test": round(hours(distinct_nt, texts_per_second, encoders=teachers), 3),
         },
     }
+
+
+def reproduces(new_paths: Sequence[str], old_path: str) -> dict[str, Any]:
+    """Compare rank rows with an earlier rank file, directory by directory (exact equality).
+
+    Implements ``docs/experiments/B.md`` E-MINED-PILOT (teacher ranks, D90): the BM25 ranks of the
+    directories that an earlier stage already measured must come out identical. A row is
+    identical when the teacher, the number of functions and every positive's ``rank`` and
+    ``rank_all`` are equal. ``missing`` are directories of the old file that no new file has.
+    """
+    new: dict[str, Mapping[str, Any]] = {}
+    for path in new_paths:
+        for row in pr.read_jsonl(path):
+            new[str(row["dir"])] = row
+    old = {str(r["dir"]): r for r in pr.read_jsonl(old_path)}
+
+    def key(row: Mapping[str, Any]) -> Any:
+        ranks = sorted(
+            (str(x["positive"]), int(x["rank"]), int(x["rank_all"])) for x in row["ranks"]
+        )
+        return (str(row["teacher"]), int(row["functions"]), ranks)
+
+    missing = sorted(d for d in old if d not in new)
+    differing = sorted(d for d in old if d in new and key(old[d]) != key(new[d]))
+    return {
+        "old_directories": len(old),
+        "compared": len(old) - len(missing),
+        "identical": len(old) - len(missing) - len(differing),
+        "missing": missing,
+        "differing": differing,
+        "exact": not missing and not differing and bool(old),
+    }
