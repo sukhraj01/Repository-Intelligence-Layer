@@ -1,6 +1,6 @@
 # RQ2 final-experiment protocol (draft for the lead's approval)
 
-Drafted 2026-11-02. **Status: proposal.** Nothing here is decided and nothing has been run for it. Where the protocol needs a
+Drafted 2026-11-02. **Status: decisions O1 to O15 recorded 2026-11-03 (section 11); sections 1 to 10 are the draft text and where they disagree with section 11, section 11 wins.** Nothing has been run for the final experiment. Where the protocol needs a
 choice, the options and their evidence are given and the item is marked **OPEN FOR THE LEAD**; a recommendation is marked
 *recommendation* and is never a decision. The collected list is section 10. Python only.
 
@@ -52,7 +52,7 @@ that were not injected; defined only where the injection ledger exists); NOISE (
 repository; Wave 5: stays at the untrained encoder, so correct positives matter, but it carries no consistent signal and says nothing
 about partly-correct labels). The reversed-order CURRICULUM from Wave 5 is a control for order, not an arm.
 
-**Confirmatory and exploratory, proposed.**
+**Confirmatory and exploratory, proposed (superseded by O2, section 11).**
 
 | Part | Status | Why |
 |---|---|---|
@@ -78,7 +78,7 @@ whether the protocol below can be run on it. The decision rules for scaling afte
 | Gate | What the pilot must show before the full mining run | Source | Threshold |
 |---|---|---|---|
 | G1 agreement (M1) | for pull requests in both the pilot and the published pool: positive-set agreement (exact share, mean Jaccard) in both readings, every disagreement outside the two expected kinds (extras in test files, class and module positives in the side table) listed with examples, 20 pull requests hand-checked | `B`, question 1 | no unexplained class of disagreement; a low agreement is reported as a difference of constructions, not as an error of either |
-| G2 yield (M2) | quarantined share by reason, pull requests with at least one positive, positives per pull request, parse-failure share by cause | `B`, question 2 | **OPEN (O10):** numerical limits are not set in `B` (it is descriptive); *recommendation* in section 10 |
+| G2 yield (M2) | quarantined share by reason, pull requests with at least one positive, positives per pull request, parse-failure share by cause | `B`, question 2 | **at least 100 pilot directories with a positive and at least 10,000 positives at full scale** (O10, section 11); the pilot decides whether that is realistic |
 | G3 selection (M2) | what the published pool kept versus dropped among the same linked pull requests, with repository-clustered intervals | `B`, question 3 | the pool "selected for" a property only if the interval of the difference excludes 0 |
 | G4 rank comparison (M3, GPU, limit 2 GPU-hours) | share of directories with no top-10 positive under BM25, CodeRankEmbed and SweRankEmbed-Small next to the pool's (23.2%, 15.3%, 1.7%) and the never-filtered Verified export's (SweRankEmbed-Small 19.3%, CodeRankEmbed 35.7%); counts only with at least 100 pilot directories that have a positive, else "too small to compare" with the pull requests needed at the measured yield | `B`, question 4; E-POOL-RANKS | the rule of `B` (intervals of both sets exclude each other's point estimate); if the mined set's share matches the pool's, the pool is not pre-selected and the published pool alone suffices (BRIEF, ADR-001, item 5) |
 | G5 scale cost (M4) | linear extrapolation of API calls, wall time and bytes to 2,000 repositories and to 20,000 and 100,000 pull requests against the rate and disk limits | `B`, question 5 | the pairs obtainable must cover the final update count: **32 x N distinct pairs** for N updates at batch 32 to avoid repeats (3,232 at N = 100, about 32,000 at N = 1,000), divided by the share FILTER keeps (BM25 keeps about 83% of clean pairs at K = 20: E-PILOT-NOISE, N0) |
@@ -309,7 +309,7 @@ Further rules, fixed now:
 6. **Nothing is reframed.** A null stays a null (`docs/EXPERIMENTS.md`, interpretation rules): if arms differ in retrieval but not in
    resolved rate, RQ3 reports the retrieval-versus-reasoning failure breakdown; a retrieval null at RQ2 is reported with its bound, never as an absence.
 7. **RQ3 gate.** "Fewer than two distinguishable retrievers" (risk table in `PROJECT_STATE.md`, week-12 go/no-go) means: no pair of arms
-   whose paired difference is positive by the rule above on both levels. What RQ3 uses in that case is O13.
+   whose paired difference is positive by the rule above on both levels. What RQ3 uses in that case is the declared fallback of section 11 (O13): RAW against the untrained encoder, labelled as measuring "does training help".
 8. Every number carries its label: `measured` with the run log, config hash, seed and hardware; `paper_reported` for literature values.
    Absolute levels are not capability claims; contamination inflates arms identically (ADR-005).
 
@@ -398,7 +398,7 @@ not run, the retention of four retrievers is not needed, and the final look on V
 unchanged (retrieval supervision effect under matched budgets, with the noise calibration); only the downstream-agent statement is
 lost. The RQ1 ladder and the latency harness are outside this experiment's GPU budget.
 
-## 10. OPEN FOR THE LEAD
+## 10. OPEN FOR THE LEAD (settled 2026-11-03; see section 11)
 
 Each item: options, evidence, recommendation (*recommendation*, never a decision). Items touching the master document are also to be
 recorded in `docs/DEVIATIONS.md` when settled.
@@ -420,6 +420,40 @@ recorded in `docs/DEVIATIONS.md` when settled.
 | O13 | RQ3 retrievers if the arms do not separate | (a) cut RQ3 (the master's fallback); (b) run RQ3 on the arms with the largest gap although inside noise (a null by construction); (c) contrast RAW with the untrained encoder, a retrieval difference of about +9.6 (L2) and +11.1 (L3) that is measured (E-PILOT-ARMS2), which tests whether a retrieval gain of that size reaches the resolved rate and needs no arm to separate. This redefines RQ3's "four retrievers from RQ2" | (c) as the minimum RQ3, in addition to the four arms when they separate; needs the lead's approval because it changes what RQ3 measures |
 | O14 | Departures from the master document that this protocol would carry | update count (O1); CodeRankEmbed instead of the master's encoder (no DEV entry, BRIEF ADR-006); one negative policy for all arms against the master's arm table (DEV-012); FILTER at the positive level; the second-reader sheet is not a label audit. `docs/08_experimental_design.md` "held identical" block untouched | record each in `docs/DEVIATIONS.md` when settled |
 | O15 | Realisations of injected noise | reuse the Wave 7 realisations (comparable with the pilots) or draw new ones with the same rule (confirmatory runs share nothing with exploratory ones) | new draws, same rule |
+
+## 11. Decisions recorded 2026-11-03
+
+Settled by the lead (D68 to D82), on academic advice, each with its reason. Nothing has been run for any of them. Where this section differs from sections 1 to 10, this section is the protocol. The "held identical" block of `docs/08_experimental_design.md` is not edited; departures are in `docs/DEVIATIONS.md`.
+
+| # | D | Decision | Reason | Record |
+|---|---|---|---|---|
+| O1 | D68 | Primary update count **100** (3,000-update schedule); **1,000** updates as a sensitivity check on a subset of cells | pilots saturate by 100 and stay flat to 2,000 (E-PILOT-CURVE) | DEV-020 |
+| O2 | D69 | Confirmatory comparisons are **exactly two**, both on the unfiltered mined set: FILTER (BM25 teacher) against RAW, and FILTER (BM25 teacher) against the size-matched random subsample. Everything else (SweRankEmbed-Small, WEIGHT, CURRICULUM, injected-noise calibration, H1a, H1b) is exploratory and labelled so | one pre-registered family keeps the claim small and carries it on the teacher the pool's construction does not favour | section 1 table superseded |
+| O3 | D70 | BM25 primary teacher; SweRankEmbed-Small reported with the caveat that it shaped the public pool; no teacher-equals-base cells; K = 20, positive level | as recommended | DEV-021 |
+| O4 | D71 | The L3 metric is Recall@100 (nDCG@10 beside it); addendum appended to the E-PILOT-NOISE entry | the stored tables say `recall100` | `docs/EXPERIMENTS.md` |
+| O5 | D72 | Holm within each family of contrasts; uncorrected intervals shown beside | several pilot "excludes 0" readings came from one low subsample draw | section 4 |
+| O6 | D73 | Smallest difference worth reporting, **delta = 1.5 nDCG points** at L2 and L3. Smaller differences are reported as estimates with bounds, never as effects | matches the design's minimum detectable difference (1.54 at L2, reasoned) | section 6 |
+| O7 | D74 | Repositories over seeds: three seeds and as many evaluation repositories as the budget allows | seeds cannot buy the repository term (section 5) | design of record below |
+| O8 | D75 | Requirement: at least **eight** repositories at L2 and as many with L3 labels as obtainable. Task added to the roadmap with the protocol's cost per repository (about 0.06 GPU-hours per repository per checkpoint, reasoned from 0.30 for five); the choice of repositories is a later task | L3 on dev rests on two repositories | `docs/ROADMAP.md` |
+| O9 | D76 | Retain final checkpoints for runs that feed RQ3 and the report (half-precision, about 274 MB each); archive them to account B's storage; the training job scripts need a retention switch (task on the roadmap) | RQ3 needs the models; none is retained today | `docs/ROADMAP.md` |
+| O10 | D77 | Gate G2 for the mined set: **at least 100 pilot directories with a positive, and at least 10,000 positives at full scale**; the pilot decides whether that is realistic | thresholds fixed before M2 is read | section 2, G2 |
+| O11 | D78 | Build a label sheet for pull-request labels (relevance of each edited function to its issue) for the noise audit; the call-edge sheet stays separate | section 7 | DEV-023, `docs/ROADMAP.md` |
+| O12 | D79 | GPU budget is a project ledger, not a cluster limit (cluster limits are per user: one GPU job at a time per account, up to four days of wall time on accounts A and C). Design of record: **option E**; stage cap below | rule below | `docs/COMPUTE.md` |
+| O13 | D80 | Declared before any final run: if the arms do not separate, RQ3 contrasts RAW with the untrained encoder, labelled as measuring "does training help", not "does supervision quality help" | a fallback must be declared in advance | DEV-022, `docs/ROADMAP.md` |
+| O14 | D81 | DEV entries for every departure listed at O14 | | DEV-019 to DEV-023 (DEV-012 and DEV-013 already exist) |
+| O15 | D82 | Confirmatory runs use **fresh noise realisations** (same rule, new draws); the Wave 7 and 8 realisations are not reused | confirmatory runs share nothing with exploratory ones | section 2 |
+
+**Design of record (O12), with the derivation.** Rule: among the designs of section 5, take the one with the most evaluation repositories whose total is at most 60 GPU-hours; if two tie, the one with fewer GPU-hours.
+
+| Option | Total GPU-hours | At most 60? | Evaluation repositories |
+|---|---|---|---|
+| A | 21.6 | yes | dev set (5 L2, 2 L3) |
+| B | 36.0 | yes | dev set |
+| C | 60.0 | yes (equal to the limit) | dev set |
+| D | 36.0 | yes | dev set |
+| E | 38.9 | yes | dev set **plus 8 extra** |
+
+A to D evaluate the same dev set and differ in cells and seeds, not in repositories. Only E adds repositories (36 runs x (0.40 + 8 x 0.06) = 31.7, plus 7.2 for the Verified look = 38.9). E has strictly the most, so there is no tie and the rule picks exactly one: **option E, 38.9 GPU-hours**: 12 cells (6 on the mined set, 6 injected at r = 0.4) x 3 seeds = 36 runs, each evaluated on the dev repositories and 8 more. Under O2 the confirmatory cells are the mined-set RAW, subsample and FILTER-BM25; the other cells are exploratory. The cap for the final RQ2 stage is **38.9 x 1.2 = 46.7 GPU-hours** (`docs/COMPUTE.md`). Not inside the 38.9: teacher scoring of the mined set (about 2.2 per 5,000 directories for a dense teacher; BM25 is CPU) and the M3 rank measurement (limit 2); these must fit in the 20% margin (7.8), or the cap must be raised again. The inputs 0.4 per Verified look and 0.06 per extra repository are placeholders; the first measured value replaces them and is reported.
 
 ---
 

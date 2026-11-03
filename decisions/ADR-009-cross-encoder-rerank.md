@@ -42,3 +42,7 @@ _Pending._
 
 ## Addenda
 _None._
+
+## Addendum 2026-11-03 — stays open; input it is waiting for
+
+Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** a real cross-encoder stage and its depth ladder (0, 20, 50, 100 candidates) on the dev queries, with latency rows from the harness, from workstream A; the 20 existing `cross_encoder_rerank` rows come from a stub and are not measurements.

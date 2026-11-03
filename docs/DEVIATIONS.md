@@ -177,3 +177,43 @@ engineer sign-off — it is a design decision.
 - Impact: the mined sample is a draw across repositories, the share kept by the pool is computed on the full listing and the property comparison (kept against dropped) on the sample; `added_function_defs` is an approximation, stated as such wherever it is reported.
 - Reversible: yes.
 - Related: `docs/experiments/B.md` E-MINE-PILOT
+
+## DEV-019 — The base encoder is CodeRankEmbed, not Qwen3-Embedding-0.6B   (2026-11-03 · status: accepted by the lead, ADR-006)
+- Master says: open decision 6 recommends Qwen3-0.6B ("CORE-Bench reports strong post-SFT results at CPU-feasible size").
+- We do: CodeRankEmbed is trained in RQ2; Qwen3-Embedding-0.6B is used zero-shot only.
+- Why (measured, E-ENCODER-NUMBERS): Qwen3 runs out of memory at every batch shape from 32 to 1 on 10.57 GiB usable, and no card above 11 GB is reachable; CodeRankEmbed trains at 12.2 to 12.4 examples/s with a peak of 6,880 MiB. Zero-shot, RRF(BM25, Qwen3) is ahead of RRF(BM25, CodeRankEmbed) by about 4 points on dev, but three of four Verified-six intervals include 0.
+- Impact: RQ2 and RQ3 claims are scoped to the CodeRankEmbed base; nothing is said about Qwen3 after fine-tuning. The retrieval stack is unchanged.
+- Reversible: yes, if a card of about 24 GB becomes reachable and an adapter recipe is tested on RAW (one day of cluster time, D34).
+- Related: ADR-006, E-ENCODER-NUMBERS
+
+## DEV-020 — Primary update count is 100, not 20,000   (2026-11-03 · status: accepted by the lead, D68)
+- Master says: `docs/08_experimental_design.md`: optimizer updates, target 20,000, identical across arms.
+- We do: every arm trains for 100 updates of a 3,000-update schedule (warm-up 7, linear decay), matched across arms; 1,000 updates is a sensitivity check on a subset of cells.
+- Why (measured, E-PILOT-CURVE): the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (increments within 1.0 point). A 20,000-update run costs about 15 GPU-hours for training alone (reasoned, E-TRAIN-STACK); a 100-update run with its dev evaluation costs 0.37 to 0.45.
+- Impact: a supervision effect that appears only after the curve is flat would not be seen; the claim is scoped to short fine-tuning (protocol threat 6). Matched optimization budgets is unchanged: updates and distinct examples are matched.
+- Reversible: yes, at the cost of the longer runs and a larger mined pool (32 x N distinct pairs for N updates).
+- Related: ADR-002, `docs/RQ2_PROTOCOL.md` O1, DEV-013, DEV-014
+
+## DEV-021 — FILTER and WEIGHT act at the positive level with a BM25 or SweRankEmbed-Small teacher; no self-teacher cells   (2026-11-03 · status: accepted by the lead, D70)
+- Master says: `docs/08_experimental_design.md`: FILTER and WEIGHT use SweRank's K-rank; the arm table gives mined hard negatives to FILTER, WEIGHT and CURRICULUM.
+- We do: K = 20 at the positive level; BM25 is the primary teacher and SweRankEmbed-Small is reported with the caveat that it shaped the public pool; the base encoder is never its own teacher. The negative policy is identical across arms (DEV-012).
+- Why: K = 20 is SweRank's published reference point (one run per point, no seeds), not a tuned value; the master's rule is a separately pretrained encoder, and a self-teacher is the self-confirming case.
+- Impact: the K-rank of the arms is a published signal applied at one level; K and weight-form sweeps are exploratory.
+- Reversible: yes (configuration).
+- Related: ADR-002, DEV-012, `docs/RQ2_PROTOCOL.md` O3
+
+## DEV-022 — If the arms do not separate, RQ3 contrasts RAW with the untrained encoder   (2026-11-03 · status: accepted by the lead, D80)
+- Master says: RQ3 uses the retrievers from RQ2; the fallback for fewer than two distinguishable retrievers is to cut RQ3 (`docs/10_timeline_and_fallback.md`).
+- We do: declared before any final run, if no pair of arms is distinguishable by the rule of `docs/RQ2_PROTOCOL.md` section 6, RQ3 contrasts RAW with the untrained encoder. This measures "does training help" (measured retrieval difference about +9.6 L2 and +11.1 L3 at 100 updates, E-PILOT-ARMS2), not "does supervision quality help", and is labelled so wherever it appears.
+- Why: it needs no arm to separate and tests whether a retrieval gain of that size reaches the resolved rate.
+- Impact: it redefines what RQ3 measures in that branch; it never replaces the four-arm contrast when the arms separate.
+- Reversible: yes; it is declared in advance so it cannot be chosen after seeing results.
+- Related: `docs/RQ2_PROTOCOL.md` O13
+
+## DEV-023 — A pull-request label sheet is added for the noise audit   (2026-11-03 · status: accepted by the lead, D78)
+- Master says: no noise audit of mined labels is specified.
+- We do: a new sheet (relevance of each edited function to its issue, three-way verdict, reason) for the audit of the mined set. The existing second-reader sheet is for call-edge labels (ADR-012) and stays separate.
+- Why: the audit estimates the share of harmful pairs and what a K-rank filter can find (protocol section 7); the call-edge sheet does not apply.
+- Impact: adds person-time (about 8 hours per reader for 400 pairs); no effect on what is held identical.
+- Reversible: yes.
+- Related: ADR-002, `docs/RQ2_PROTOCOL.md` O11
