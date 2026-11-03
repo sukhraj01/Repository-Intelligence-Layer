@@ -1,9 +1,9 @@
 # ADR-003: Graph role: retrieval signal vs agent tool
 
-- **Status:** Proposed — **not decided**
+- **Status:** Accepted (2026-11-03)
 - **Date opened:** 2026-10-12
 - **Decide by:** end of week 2 (all ten decisions)
-- **Decided by:** _pending — team_
+- **Decided by:** the lead, 2026-11-03
 - **Master doc:** open decision #3 (`docs/12_open_decisions.md`)
 - **Affects:** the fusion step of the retrieval stack (not written yet), RQ1, the graph extension, agent integration
 
@@ -18,14 +18,15 @@ LocAgent uses the graph as a tool the agent calls; RIL's design uses it as a sig
 Signal — matches RIL's architecture and keeps latency predictable.
 
 ## Decision
-_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
-`provisional: ADR-003` (never in `configs/frozen/`) until the decision is made.
+The graph is a retrieval signal, specified as same-file expansion ordered by first-stage score. Typed edges enter the frozen configuration only if the stacked test (same-file by score, the lowest 10 and 25 replaced by the best non-contain neighbours, same budget) shows a gain. The agent-tool role is out of RQ3's scope (the agent is held fixed); training-time structure is unmeasured and not part of the configuration.
+
+Recorded 2026-11-03; see the addendum of that date for the evidence and the conditions that reopen it.
 
 ## Rationale
-_Pending._
+See the addendum of 2026-11-03 (evidence it rests on).
 
 ## Trade-offs
-_Pending._
+See the brief (`docs/ADR_DECISION_BRIEF.md`, "Not settled") and the conditions that reopen the decision in the addendum of 2026-11-03.
 
 ## Evidence to gather
 - [ ] Measured latency of graph expansion (2 hops) on a real repository.
@@ -179,3 +180,13 @@ expansion. **Conditions to revisit:** a better receiver rule for call sites (Q35
 
 This addendum decides nothing: the role (Q30) stays with the engineer. Prior statements in this ADR that the graph "helps a lexical first stage at L3" stand for the BM25 seeds and are read together with this one:
 the help is the help of file-level expansion.
+
+## Addendum 2026-11-03 — decision recorded (status: Accepted)
+
+**Decision.** The graph is a retrieval signal, specified as same-file expansion ordered by first-stage score. Typed edges enter the frozen configuration only if the stacked test (same-file by score, the lowest 10 and 25 replaced by the best non-contain neighbours, same budget) shows a gain. The agent-tool role is out of RQ3's scope (the agent is held fixed); training-time structure is unmeasured and not part of the configuration.
+
+**Decided by** the lead on 2026-11-03, on academic advice; recorded with the evidence ids it rests on. The brief (`docs/ADR_DECISION_BRIEF.md`) recommended this option and it was accepted as recommended.
+
+**Evidence it rests on** (all exploratory or measured in this project unless stated; the Wave 5 to 8 results are dev repositories, one encoder, 100 updates): E-DENSE-FUSION (+4.4 [+0.5, +8.8] L3 Recall@100 over the first stage, +1.4 [-2.3, +5.1] over the same-file control), E-GRAPH-ROLE (same-file expansion +6.5 [3.3, 10.1] and +7.7 [4.0, 12.2]; stored graph minus it -2.7 [-6.0, 0.8] and -2.0 [-5.2, 0.8]; non-contain edges reach 8% of missed L3 gold units in two hops), E-GRAPH-REACH.
+
+**What would reopen it:** the stacked test shows typed edges add at equal budget (about 300 L3 queries would be needed to see 2 points, reasoned); the resolver-recall work changes the edge set materially; an agent-tool role is wanted for RQ3.

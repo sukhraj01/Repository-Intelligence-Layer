@@ -41,3 +41,7 @@ _Pending._
 
 ## Addenda
 _None._
+
+## Addendum 2026-11-03 — stays open; input it is waiting for
+
+Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** the engineer's dollar budget for agent runs. Without that figure the choice between a pinned hosted model and a local quantised model cannot be made (no card above 11 GB is reachable, which bounds any local model).

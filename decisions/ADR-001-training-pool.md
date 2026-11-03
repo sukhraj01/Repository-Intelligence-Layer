@@ -1,9 +1,9 @@
 # ADR-001: Training pool
 
-- **Status:** Proposed — **not decided**
+- **Status:** Accepted (2026-11-03)
 - **Date opened:** 2026-10-12
 - **Decide by:** end of week 2 (all ten decisions)
-- **Decided by:** _pending — team_
+- **Decided by:** the lead, 2026-11-03
 - **Master doc:** open decision #1 (`docs/12_open_decisions.md`)
 - **Affects:** RQ2 (all arms), leakage tests, `ril/training/data_loader.py`
 
@@ -19,14 +19,15 @@ CORE-Bench releases evaluation data only; its 53,301-PR SFT set was not released
 Both — SweLoc to avoid being blocked, own set for contamination safety.
 
 ## Decision
-_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
-`provisional: ADR-001` (never in `configs/frozen/`) until the decision is made.
+Both. The published pool (`gangiswag/train_data` Python minus the held-out list) is the comparison population, so the selection stays measurable. The unfiltered PR-mined set (no retriever in its selection) is the pool on which RAW is defined and on which the confirmatory comparisons run.
+
+Recorded 2026-11-03; see the addendum of that date for the evidence and the conditions that reopen it.
 
 ## Rationale
-_Pending._
+See the addendum of 2026-11-03 (evidence it rests on).
 
 ## Trade-offs
-_Pending._
+See the brief (`docs/ADR_DECISION_BRIEF.md`, "Not settled") and the conditions that reopen the decision in the addendum of 2026-11-03.
 
 ## Evidence to gather
 - [ ] Size, licence and access path of SweLoc; whether it can be fetched on Ada (docs/COMPUTE.md).
@@ -180,3 +181,13 @@ development repositories over-represented (all 249), evaluated on dev, about 2 G
 - **Evidence class.** Measured (E-POOL-RANKS, 160 stratified directories, 1,522 positives); the cause of the selection (a pull-request filter versus the checkpoint's fit) is reasoned only.
 - **Cheapest experiment that could flip it.** E-POOL-DATES: pull-request creation date against the checkpoint release date for the 160 sampled directories. It needs a read-only `GITHUB_TOKEN` on the cluster (D2). It was not run on 2026-10-29 because the token is absent (recorded in `docs/COMPUTE.md`).
 - **Condition to revisit.** The dates show most sampled pull requests post-date the checkpoint, or a raw pull-request set becomes available.
+
+## Addendum 2026-11-03 — decision recorded (status: Accepted)
+
+**Decision.** Both. The published pool (`gangiswag/train_data` Python minus the held-out list) is the comparison population, so the selection stays measurable. The unfiltered PR-mined set (no retriever in its selection) is the pool on which RAW is defined and on which the confirmatory comparisons run.
+
+**Decided by** the lead on 2026-11-03, on academic advice; recorded with the evidence ids it rests on. The brief (`docs/ADR_DECISION_BRIEF.md`) recommended this option and it was accepted as recommended.
+
+**Evidence it rests on** (all exploratory or measured in this project unless stated; the Wave 5 to 8 results are dev repositories, one encoder, 100 updates): E-POOL-CHECK, E-POOL-RANKS (39.4% [24.1, 48.0] of positives outside SweRankEmbed-Small's top 40; 0 of 160 directories without a top-10 positive against 19.3% on never-filtered data), E-PILOT-ARMS2 (5,000 directories, 62,238 positives, 0 held-out), E-PILOT-LEAK (+0.18 [-0.25, 0.57]). E-MINE-PILOT has no measured number yet (code and offline tests only).
+
+**What would reopen it:** M3 shows the mined set's share of directories with no top-10 positive matches the published pool's (then the pool is not pre-selected and the published pool alone suffices); gate G1 fails with an unexplained class of disagreement, or G4 shows the mined set as pre-selected as the pool (the unfiltered-set arm is then dropped, `docs/RQ2_PROTOCOL.md` section 2); Q7 resolves against the published pool; the read-only token never becomes available.

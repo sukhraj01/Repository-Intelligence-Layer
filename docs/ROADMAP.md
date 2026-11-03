@@ -28,7 +28,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Read the candidate encoder's report, the remaining negative-policy and graph scan entries in full, refresh the literature scan and update the per-RQ summary (`knowledge/papers/`: Qwen3 Embedding, NV-Retriever, MAP4CS, hard-negative transfer, LogicLoc, RepoNavigator, NoCFG; `LANDSCAPE.md`, scan of 2026-10-23)
 - [x] Design the knowledge graph as a separately versioned artifact: node kinds, edge families, edge record with status, three roles, storage options (`specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made)
 - [ ] Gather evidence for decisions 1–10 (`decisions/`) — pool check, power table and contamination slice measured 2026-10-18 the full documents-only scan and its edited-function follow-up 2026-10-29 (`docs/EXPERIMENTS.md`); engineer decisions D14-D24 of 2026-10-18 recorded in the owning ADRs and specs, references audited (DEV-011), second-reader spot-check sheet prepared; class-unit source forms, ambiguous-site policies and the L3 positive census measured 2026-10-23 (Q28, Q35, Q36; ADR-013, ADR-011 addenda); dense and fusion numbers 2026-10-25 (ADR-006, ADR-003 addenda); pool filter state and K-rank under three teachers 2026-10-25 (E-POOL-RANKS; ADR-001, ADR-002 addenda); ADR-001 to ADR-010 still open
-- [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
+- [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision) — 2026-11-03: ADR-001 to ADR-006 and ADR-010 accepted; ADR-007 (needs the agent pilot and ADR-008), ADR-008 (needs the engineer's dollar budget) and ADR-009 (needs a real rerank stage) stay open
 
 ## Weeks 1–4 — Person A: parsing, call graph, BM25
 
@@ -62,6 +62,18 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 - [ ] All latency optimisation landed
 - [ ] Retrieval stack frozen; `configs/frozen/` written, hashed, benchmark snapshot recorded
+
+## RQ2 final-experiment tasks (added 2026-11-03; decisions O1 to O15 in `docs/RQ2_PROTOCOL.md` section 11)
+
+Design of record: option E, 12 cells x 3 seeds, 8 extra evaluation repositories, 38.9 GPU-hours; Block 3 cap 46.7 (`docs/COMPUTE.md`). Primary update count 100, with a 1,000-update sensitivity check on a subset of cells. Confirmatory: FILTER (BM25 teacher) against RAW and against the size-matched subsample, on the unfiltered mined set; everything else exploratory.
+
+- [ ] Enlarge the evaluation set (O8): at least eight repositories at L2 and as many with L3 labels as obtainable; unit records and dense stores must be built for each; cost per repository about 0.06 GPU-hours per checkpoint (placeholder, to be measured on the first one). The choice of repositories is a later task
+- [ ] Retention switch in the training job scripts (O9): keep the half-precision final model of runs that feed RQ3 and the report (about 274 MB each) and archive it to account B's storage (needs an alias for account B and a staged copy)
+- [ ] Label sheet for pull-request labels (O11): relevance of each edited function to its issue, three-way verdict and reason, for the noise audit (400 stratified pairs, two readers on a 100-pair overlap); the call-edge sheet stays separate
+- [ ] Mined-set gates: token on the cluster (D2), M1 to M4, G2 at 100 pilot directories with a positive and 10,000 positives at full scale (O10), content-overlap audit of the mined corpora (not built)
+- [ ] Draw fresh noise realisations for the confirmatory and calibration cells (O15); the Wave 7 and 8 realisations are not reused
+- [ ] Register the cell list, Holm families (O5) and delta = 1.5 points (O6) before any final run
+- [ ] **Declared fallback (O13), stated before any final run:** if the arms do not separate by the rule of protocol section 6, RQ3 contrasts RAW with the untrained encoder. This measures "does training help", not "does supervision quality help", and is labelled so (DEV-022)
 
 ## Weeks 6–12 — Person B: RQ2
 
