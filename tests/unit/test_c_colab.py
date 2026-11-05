@@ -210,7 +210,17 @@ def test_package_is_deterministic_and_contains_only_committed_source(
     )
     subprocess.run(["git", "init", "--quiet", str(repo)], check=True)
     subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
-    subprocess.run(["git", "-C", str(repo), "commit", "--quiet", "-m", "fixture"], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "commit", "--quiet", "-m", "fixture"],
+        check=True,
+        env={
+            **os.environ,
+            "GIT_AUTHOR_NAME": "t",
+            "GIT_AUTHOR_EMAIL": "t@example.invalid",
+            "GIT_COMMITTER_NAME": "t",
+            "GIT_COMMITTER_EMAIL": "t@example.invalid",
+        },
+    )
     (repo / "scratch").mkdir()
     (repo / "scratch/not-in-source.txt").write_text("ignored\n")
     monkeypatch.setattr(kit, "__file__", str(repo / "scripts/c_colab.py"))

@@ -4,8 +4,9 @@ Updated 2026-11-05. Branch `c/eval-rq3`, based on `foundation-v0`.
 
 ## Cuts, blockers and deviations
 
-- Push and lead notification require the engineer's terminal under the repository publishing rule.
-  Corrections are prepared locally; re-review cannot begin until the engineer pushes.
+- Round-one corrections pushed at379e0c1; CI failed in two temporary Git commit fixtures.
+  Follow-up supplies anonymous identity only to fixture subprocesses; engineer pushes the fix.
+  No real repository identity, assertion, workflow or gate was changed.
 - 2026-11-05: own Ada account/alias unavailable; no cluster job or allocation check performed.
   Colab remains the selected compute environment. No local scientific run substitutes for a cluster run.
 - 2026-11-05: read-only GITHUB_TOKEN absent from this environment. No secret value is requested.
@@ -36,7 +37,10 @@ updates are requested below. Private files, hooks, exclusions, remotes and ident
 Boot identity reads use a common patchable function and explicitly reject unavailable identity;
 Colab admission remains fail-closed. Generated kit metadata is documented as output.
 Linux unit: 973 passed, 4 skipped in 170.74s (0:02:50); additional CPU: 62 passed, 5 skipped in 3.50s.
-Lint/format/strict typing pass. Exact commands and source hashes:
+CI repair: 973 unit passes/4 existing skips with global/system Git
+configuration disabled; lint/format/strict typing pass. Source and outputs:
+`results/logs/c_ci_fixture_identity_validation_2026-11-05.json`.
+Earlier round-one exact commands and source hashes:
 `results/logs/c_rulings_validation_2026-11-05.json`. Native macOS execution is unavailable.
 
 ## C1 evidence: operator_reported
