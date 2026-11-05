@@ -1,0 +1,50 @@
+experiment_id: E-C1-EVAL
+split: core-bench-dev3-original-rewrite-v1
+role: dev
+seed: 0
+data_root: data/raw/core_bench
+folders:
+- repo: internetarchive/openlibrary
+  dataset: SWE-bench_Pro
+  folder: instance_internetarchive__openlibrary
+  levels:
+  - L2
+  - L3
+- repo: qutebrowser/qutebrowser
+  dataset: SWE-bench_Pro
+  folder: instance_qutebrowser__qutebrowser
+  levels:
+  - L2
+  - L3
+- repo: conan-io/conan
+  dataset: SWE-bench-Live
+  folder: conan
+  levels:
+  - L2
+- repo: deepset-ai/haystack
+  dataset: SWE-bench-Live
+  folder: deepset
+  levels:
+  - L2
+- repo: streamlink/streamlink
+  dataset: SWE-bench-Live
+  folder: streamlink__streamlink
+  levels:
+  - L2
+- repo: ansible/ansible
+  dataset: SWE-bench_Pro
+  folder: instance_ansible__ansible
+  levels:
+  - L2
+  - L3
+retriever:
+  kind: bm25
+  k1: 1.5
+  b: 0.75
+rewrite: true
+bootstrap_draws: 2000
+prefilter_k: 10000
+warmup_n: 1
+repeats: 3
+output: data/processed/c_rewrite_bm25_dev
+log_path: results/logs/c1_rewrite_bm25_dev.json

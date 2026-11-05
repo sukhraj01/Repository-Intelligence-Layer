@@ -1,0 +1,3 @@
+retriever_id,requested,completed,missing,resolved,not_retrieved,retrieved_not_used,used_wrong
+bm25,10,10,0,6,2,2,0
+oracle,10,10,0,8,0,2,0

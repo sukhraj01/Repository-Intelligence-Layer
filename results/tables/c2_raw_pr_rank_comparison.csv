@@ -1,0 +1,7 @@
+dataset,teacher,text_form,evidence,n,share,low,high,interval
+raw pilot,bm25,code,synthetic_recorded_responses,1379,0.8571428571428571,0.8571428571428571,0.8571428571428571,repository-clustered bootstrap; 2000 draws; seed 0
+raw pilot,coderankembed,code,blocked: pinned dense scores absent,0,,,,unavailable
+published pool,coderankembed,code,archived E-POOL-RANKS; not rerun,160,0.153,0.088,0.222,stratified bootstrap; weighted pool estimate
+published pool,bm25,code,archived E-POOL-RANKS; not rerun,160,0.232,0.164,0.31,stratified bootstrap; weighted pool estimate
+never-filtered Verified,swerankembed-small,pool,archived E-POOL-RANKS; not rerun,457,0.193,0.157,0.232,exact binomial
+never-filtered Verified,coderankembed,code,archived E-POOL-RANKS; not rerun,457,0.357,0.313,0.403,exact binomial

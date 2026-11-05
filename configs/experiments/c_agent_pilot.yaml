@@ -1,0 +1,17 @@
+experiment_id: E-C3-AGENT-PILOT
+mode: fixture
+provisional: [ADR-007, ADR-008]
+seed: 0
+temperature: 0
+instances: 20
+conditions: [none, bm25, oracle]
+retriever:
+  top_k: 1
+  k1: 1.5
+  b: 0.75
+bootstrap_draws: 2000
+synthetic_pricing:
+  input_per_million: 1.0
+  output_per_million: 2.0
+output: results/rq3/c3_fixture_pilot_guarded
+log_path: results/logs/c3_fixture_pilot_guarded_2026-10-30.json

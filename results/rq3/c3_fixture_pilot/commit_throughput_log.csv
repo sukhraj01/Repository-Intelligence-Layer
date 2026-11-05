@@ -1,0 +1,5 @@
+timestamp_utc,commit,dirty,branch,host,cpu_model,cpu_cores,ram_gb,gpu_name,gpu_driver,cuda_version,python,torch,config_hash,workload_id,stage,units,seconds,units_per_s
+2026-10-30T20:51:28Z,645925b,1,c/eval-rq3,local-cpu,aarch64,8,11.7,none,,,3.11.18,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,parse,840,0.007934,105877.35
+2026-10-30T20:51:28Z,645925b,1,c/eval-rq3,local-cpu,aarch64,8,11.7,none,,,3.11.18,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,graph_build,40000,0.009526,4199206.14
+2026-10-30T20:51:28Z,645925b,1,c/eval-rq3,local-cpu,aarch64,8,11.7,none,,,3.11.18,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,dense_encode,120,0.002264,53015.17
+2026-10-30T20:51:28Z,645925b,1,c/eval-rq3,local-cpu,aarch64,8,11.7,none,,,3.11.18,none,1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4,synthetic-v1,train_step,120,0.000243,493624.02

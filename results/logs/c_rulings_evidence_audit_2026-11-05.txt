@@ -1,0 +1,8 @@
+operator_reported: 12 aggregate rows and 13 ledger records agree with stored stdout
+Query-level pairing, bootstrap intervals and timing: NOT independently recomputed
+| Level | Metric | Difference (pp) | Reported 95% interval (pp) | n / repos |
+|---|---|---:|---|---|
+| L2 | ndcg10 | +1.9258 | [-2.4594, +8.7810] | 442 / 6 |
+| L2 | recall100 | +2.4049 | [-1.3140, +8.0869] | 442 / 6 |
+| L3 | ndcg10 | -2.0436 | [-2.6646, -0.9102] | 238 / 3 |
+| L3 | recall100 | -1.6005 | [-1.7655, -1.3556] | 238 / 3 |

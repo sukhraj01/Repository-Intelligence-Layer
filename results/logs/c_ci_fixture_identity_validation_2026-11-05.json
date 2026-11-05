@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-05",
+  "kind": "test_fixture_correctness",
+  "execution_base_commit": "379e0c14935ed8f6928d875a5e10911f51eb44a8",
+  "source_state": "The two test fixture fixes were uncommitted when validation ran; checksums identify those exact files.",
+  "failure": "Temporary fixture git commits inherited global identity; clean CI runner had none.",
+  "failure_confirmation": "Operator-supplied Actions summaries identify the same two failures reproduced locally without global/system Git config.",
+  "pre_fix_failed_tests": [
+    "tests/unit/test_c_colab.py::test_package_is_deterministic_and_contains_only_committed_source",
+    "tests/unit/test_c_raw_mining.py::test_historical_base_excludes_target_updates_after_upstream_sync"
+  ],
+  "targeted_after_fix_output": "..                                                                       [100%]\n2 passed in 0.84s",
+  "checks": {
+    "unit": {
+      "command": "GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 PATH=\"$PWD/.venv/bin:$PATH\" make test RUN=",
+      "exit_code": 0,
+      "passed": 973,
+      "skipped": 4,
+      "seconds": 137.26,
+      "output": "results/logs/c_ci_fixture_identity_unit_2026-11-05.txt",
+      "sha256": "908c74c2ef843c896cca2e47dcd5587079fd0fe832658accd2dfcedad70c1ba7"
+    },
+    "lint": {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make lint RUN=",
+      "exit_code": 0,
+      "output": "results/logs/c_ci_fixture_identity_lint_2026-11-05.txt",
+      "sha256": "9fe922508e8c4605c9b23a58cb91ea11e9650c7602f22cd94d59fcd65de847f9"
+    }
+  },
+  "implementation_sha256": {
+    "tests/unit/test_c_colab.py": "838945e3ccf0b6989821d90bd1b69e70c157c57d01a491de9b2e4b3506ff3e35",
+    "tests/unit/test_c_raw_mining.py": "26a7992145a4b506e042e8d00f7308cb08ef7c4f82f19e2f7307352dce6bdf04"
+  },
+  "limits": [
+    "Hosted CI after the fix has not run yet; engineer pushes.",
+    "Existing optional Torch tests remain skipped.",
+    "Actual repository Git configuration, workflows, assertions and scientific results unchanged."
+  ]
+}

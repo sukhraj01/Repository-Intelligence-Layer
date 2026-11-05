@@ -22,8 +22,9 @@ from __future__ import annotations
 
 import json
 import os
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -75,26 +76,58 @@ def read_qrels(path: str) -> dict[str, set[str]]:
     return out
 
 
-def read_folder(path: str) -> CoreBenchFolder:
-    """Load ``corpus.jsonl``, ``queries.jsonl`` and ``qrels.jsonl`` of a folder."""
+def read_folder(path: str, *, rewrite_path: str | None = None) -> CoreBenchFolder:
+    """Load an original folder, optionally substituting Rewrite query text only (D13).
+
+    Qrels, corpus order and candidate lists always come from the original. Rewrite qrels may be
+    missing or defective. Require identical query ids, so pairing never silently loses queries.
+    """
     ids: list[str] = []
     texts: list[str] = []
     for row in _jsonl(os.path.join(path, "corpus.jsonl")):
         ids.append(str(row["_id"]))
         texts.append(str(row["text"]))
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate corpus ids")
     qrels = read_qrels(os.path.join(path, "qrels.jsonl"))
     queries: list[CoreBenchQuery] = []
     dropped = 0
-    for row in _jsonl(os.path.join(path, "queries.jsonl")):
+    original_rows = list(_jsonl(os.path.join(path, "queries.jsonl")))
+    original_ids = [str(row["_id"]) for row in original_rows]
+    if len(original_ids) != len(set(original_ids)):
+        raise ValueError("duplicate query ids")
+    rewritten: dict[str, str] | None = None
+    if rewrite_path is not None:
+        rewrite_rows = list(_jsonl(os.path.join(rewrite_path, "queries.jsonl")))
+        rewritten = {str(row["_id"]): str(row["text"]) for row in rewrite_rows}
+        if len(rewritten) != len(rewrite_rows) or set(rewritten) != set(original_ids):
+            raise ValueError("original and Rewrite query ids must match exactly without duplicates")
+    for row in original_rows:
         qid = str(row["_id"])
         if qid not in qrels:
             dropped += 1
             continue
         cand = row.get("filtered_corpus_id")
         queries.append(
-            CoreBenchQuery(qid, str(row["text"]), None if cand is None else tuple(map(str, cand)))
+            CoreBenchQuery(
+                qid,
+                str(row["text"]) if rewritten is None else rewritten[qid],
+                None if cand is None else tuple(map(str, cand)),
+            )
         )
     return CoreBenchFolder(path, ids, texts, queries, qrels, dropped)
+
+
+def read_split(
+    root: str, level: str, dataset: str, folder: str, *, rewrite: bool = False
+) -> CoreBenchFolder:
+    """Read L2/L3 from the released ``data/[Rewrite-]LEVEL-N`` layout beneath root."""
+    if level not in {"L2", "L3"}:
+        raise ValueError("level must be L2 or L3")
+    base = Path(root) / "data"
+    original = base / f"LEVEL-{level[-1]}" / dataset / folder
+    rewritten = base / f"Rewrite-LEVEL-{level[-1]}" / dataset / folder
+    return read_folder(str(original), rewrite_path=str(rewritten) if rewrite else None)
 
 
 def build_index(folder: CoreBenchFolder, params: BM25Params | None = None) -> BM25Index:
@@ -115,6 +148,8 @@ def rank_positives(
     and worst rank a tie with equal scores could take (filter-first).
     """
     n = len(scores)
+    if prefilter_k < 1 or scores.ndim != 1 or not np.isfinite(scores).all():
+        raise ValueError("scores must be a finite vector and prefilter_k positive")
     k = min(prefilter_k, n)
     cand_scores = scores if candidates is None else scores[candidates]
     all_idx = np.arange(n, dtype=np.int64)
@@ -148,11 +183,25 @@ def evaluate_folder(
 ) -> list[Record]:
     """Per-query records: the rank of every positive under both readings (no text)."""
     index = build_index(folder, params)
+    return evaluate_scores(
+        folder, lambda q: index.scores(tokenize(q.text)), prefilter_k=prefilter_k
+    )
+
+
+def evaluate_scores(
+    folder: CoreBenchFolder,
+    scorer: Callable[[CoreBenchQuery], np.ndarray[Any, np.dtype[np.float64]]],
+    *,
+    prefilter_k: int = PROTOCOL_PREFILTER_K,
+) -> list[Record]:
+    """Shared binary-qrel evaluation for BM25 or cached dense scores in corpus order."""
     pos_of = {cid: i for i, cid in enumerate(folder.corpus_ids)}
     out: list[Record] = []
     for q in folder.queries:
         q_tokens = tokenize(q.text)
-        scores = index.scores(q_tokens)
+        scores = scorer(q)
+        if scores.shape != (len(folder.corpus_ids),):
+            raise ValueError("scorer must return one score per corpus document")
         cand = (
             None
             if q.candidates is None

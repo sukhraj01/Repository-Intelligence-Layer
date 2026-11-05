@@ -1,0 +1,6 @@
+ruff check ril tests scripts
+All checks passed!
+ruff format --check ril tests scripts
+367 files already formatted
+mypy
+Success: no issues found in 163 source files

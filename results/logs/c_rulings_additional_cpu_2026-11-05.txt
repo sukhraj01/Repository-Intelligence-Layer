@@ -1,0 +1,8 @@
+............s..................................................          [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/integration/test_curve_hook.py:11: could not import 'torch': No module named 'torch'
+SKIPPED [1] tests/integration/test_run_batch.py:9: could not import 'torch': No module named 'torch'
+SKIPPED [1] tests/integration/test_training_end_to_end.py:13: could not import 'torch': No module named 'torch'
+SKIPPED [1] tests/reproducibility/test_training_repro.py:7: could not import 'torch': No module named 'torch'
+SKIPPED [1] tests/integration/test_parse_graph.py:65: flask checkout absent
+62 passed, 5 skipped in 3.50s

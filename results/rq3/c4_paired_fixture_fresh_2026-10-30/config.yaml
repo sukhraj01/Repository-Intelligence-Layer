@@ -1,0 +1,26 @@
+experiment_id: E-C4-RQ3
+mode: fixture
+provisional:
+- ADR-007
+- ADR-008
+seed: 0
+temperature: 0
+instances: 10
+retrievers:
+- id: bm25
+  kind: bm25
+  top_k: 1
+  k1: 1.5
+  b: 0.75
+- id: oracle
+  kind: oracle
+  top_k: 1
+  k1: 1.5
+  b: 0.75
+bootstrap_draws: 2000
+synthetic_pricing:
+  input_per_million: 1.0
+  output_per_million: 2.0
+synthetic_cap_usd: 1.0
+max_output_tokens: 4096
+output: results/rq3/c4_paired_fixture_fresh_2026-10-30

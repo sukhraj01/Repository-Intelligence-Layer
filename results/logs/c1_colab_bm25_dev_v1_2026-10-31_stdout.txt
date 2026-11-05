@@ -1,0 +1,129 @@
+Starting paired BM25; this may take several minutes...
+Rechecking all staged checksums...
+Reverified files: 36
+fatal: not a git repository (or any of the parent directories): .git
+{"config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452", "git_hash": "dcc19574386fc66c578bb42c872e38f9e95d0201", "metrics": [{"condition": "original", "high": 0.260939236732899, "level": "L2", "low": 0.13496123876103078, "mean": 0.1977405161049095, "metric": "ndcg10", "n": 442, "repositories": 6}, {"condition": "original", "high": 0.4807263855273917, "level": "L2", "low": 0.32107756369302537, "mean": 0.3956677242451303, "metric": "recall100", "n": 442, "repositories": 6}, {"condition": "rewrite", "high": 0.2737296145771141, "level": "L2", "low": 0.1701175435916194, "mean": 0.21699874298067928, "metric": "ndcg10", "n": 442, "repositories": 6}, {"condition": "rewrite", "high": 0.5194746871512866, "level": "L2", "low": 0.3428012511499857, "mean": 0.41971669204071504, "metric": "recall100", "n": 442, "repositories": 6}, {"condition": "rewrite_minus_original", "high": 0.08781015946421965, "level": "L2", "low": -0.0245936420916281, "mean": 0.019258226875769814, "metric": "ndcg10", "n": 442, "repositories": 6}, {"condition": "rewrite_minus_original", "high": 0.08086945251267617, "level": "L2", "low": -0.013139851104577693, "mean": 0.02404896779558476, "metric": "recall100", "n": 442, "repositories": 6}, {"condition": "original", "high": 0.38490448981905434, "level": "L3", "low": 0.26828369563812565, "mean": 0.3168749864231047, "metric": "ndcg10", "n": 238, "repositories": 3}, {"condition": "original", "high": 0.5175417940749051, "level": "L3", "low": 0.295087452946582, "mean": 0.3746817746763577, "metric": "recall100", "n": 238, "repositories": 3}, {"condition": "rewrite", "high": 0.37580215959966196, "level": "L3", "low": 0.24380237510522798, "mean": 0.2964386942395671, "metric": "ndcg10", "n": 238, "repositories": 3}, {"condition": "rewrite", "high": 0.5039859754041888, "level": "L3", "low": 0.27851036548494, "mean": 0.35867723479978414, "metric": "recall100", "n": 238, "repositories": 3}, {"condition": "rewrite_minus_original", "high": -0.009102330219392298, "level": "L3", "low": -0.026645870360696523, "mean": -0.020436292183537617, "metric": "ndcg10", "n": 238, "repositories": 3}, {"condition": "rewrite_minus_original", "high": -0.013555818670716377, "level": "L3", "low": -0.017654958637965592, "mean": -0.016004539876573565, "metric": "recall100", "n": 238, "repositories": 3}], "split": "core-bench-dev3-original-rewrite-v1"}
+{"status": "complete"}
+Waited-child peak RSS KiB: 2914944
+[
+  {
+    "condition": "original",
+    "high": 0.260939236732899,
+    "level": "L2",
+    "low": 0.13496123876103078,
+    "mean": 0.1977405161049095,
+    "metric": "ndcg10",
+    "n": 442,
+    "repositories": 6
+  },
+  {
+    "condition": "original",
+    "high": 0.4807263855273917,
+    "level": "L2",
+    "low": 0.32107756369302537,
+    "mean": 0.3956677242451303,
+    "metric": "recall100",
+    "n": 442,
+    "repositories": 6
+  },
+  {
+    "condition": "rewrite",
+    "high": 0.2737296145771141,
+    "level": "L2",
+    "low": 0.1701175435916194,
+    "mean": 0.21699874298067928,
+    "metric": "ndcg10",
+    "n": 442,
+    "repositories": 6
+  },
+  {
+    "condition": "rewrite",
+    "high": 0.5194746871512866,
+    "level": "L2",
+    "low": 0.3428012511499857,
+    "mean": 0.41971669204071504,
+    "metric": "recall100",
+    "n": 442,
+    "repositories": 6
+  },
+  {
+    "condition": "rewrite_minus_original",
+    "high": 0.08781015946421965,
+    "level": "L2",
+    "low": -0.0245936420916281,
+    "mean": 0.019258226875769814,
+    "metric": "ndcg10",
+    "n": 442,
+    "repositories": 6
+  },
+  {
+    "condition": "rewrite_minus_original",
+    "high": 0.08086945251267617,
+    "level": "L2",
+    "low": -0.013139851104577693,
+    "mean": 0.02404896779558476,
+    "metric": "recall100",
+    "n": 442,
+    "repositories": 6
+  },
+  {
+    "condition": "original",
+    "high": 0.38490448981905434,
+    "level": "L3",
+    "low": 0.26828369563812565,
+    "mean": 0.3168749864231047,
+    "metric": "ndcg10",
+    "n": 238,
+    "repositories": 3
+  },
+  {
+    "condition": "original",
+    "high": 0.5175417940749051,
+    "level": "L3",
+    "low": 0.295087452946582,
+    "mean": 0.3746817746763577,
+    "metric": "recall100",
+    "n": 238,
+    "repositories": 3
+  },
+  {
+    "condition": "rewrite",
+    "high": 0.37580215959966196,
+    "level": "L3",
+    "low": 0.24380237510522798,
+    "mean": 0.2964386942395671,
+    "metric": "ndcg10",
+    "n": 238,
+    "repositories": 3
+  },
+  {
+    "condition": "rewrite",
+    "high": 0.5039859754041888,
+    "level": "L3",
+    "low": 0.27851036548494,
+    "mean": 0.35867723479978414,
+    "metric": "recall100",
+    "n": 238,
+    "repositories": 3
+  },
+  {
+    "condition": "rewrite_minus_original",
+    "high": -0.009102330219392298,
+    "level": "L3",
+    "low": -0.026645870360696523,
+    "mean": -0.020436292183537617,
+    "metric": "ndcg10",
+    "n": 238,
+    "repositories": 3
+  },
+  {
+    "condition": "rewrite_minus_original",
+    "high": -0.013555818670716377,
+    "level": "L3",
+    "low": -0.017654958637965592,
+    "mean": -0.016004539876573565,
+    "metric": "recall100",
+    "n": 238,
+    "repositories": 3
+  }
+]

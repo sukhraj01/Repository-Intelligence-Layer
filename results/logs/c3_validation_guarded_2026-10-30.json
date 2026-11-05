@@ -1,0 +1,60 @@
+{
+  "actual_model_calls": 0,
+  "actual_usd": 0,
+  "benchmark_scope": "synthetic fixture path and synthetic CPU stubs only",
+  "config_hash": "4cf5f835395a8d01ba137a7a09e7c7e0d4bc29fecbf34314da750c062b764cb1",
+  "dirty": 1,
+  "environment": {
+    "branch": "c/eval-rq3",
+    "commit": "645925b8b21f31ca78401d59c30b044bb5380b4e",
+    "config_hash": "4cf5f835395a8d01ba137a7a09e7c7e0d4bc29fecbf34314da750c062b764cb1",
+    "cpu_cores": 8,
+    "cpu_model": "aarch64",
+    "cuda_version": "",
+    "dirty": 1,
+    "gpu_driver": "",
+    "gpu_name": "none",
+    "host": "local-cpu",
+    "python": "3.11.18",
+    "ram_gb": 11.7,
+    "timestamp_utc": "2026-10-30T20:55:42Z",
+    "torch": "not imported"
+  },
+  "evidence_class": "measured_validation",
+  "focused_tests": 16,
+  "git_hash": "645925b8b21f31ca78401d59c30b044bb5380b4e",
+  "gpu_hours": 0,
+  "lint": {
+    "format_files": 282,
+    "mypy_modules": 121,
+    "ruff": "pass",
+    "strict_mypy": "pass"
+  },
+  "paper_coverage": {
+    "page_numeric_checks": "pass",
+    "pages": 216,
+    "qualified_notes": 5
+  },
+  "seed": 0,
+  "source_manifest": {
+    "files": {
+      "ril/agent/__init__.py": "2bf4a2120bbb88fe7b5bb6a46b7e56cc5525b0a1a9838bc28de6a16a1f47504c",
+      "ril/agent/contracts.py": "c49ed70e33fc7e9605ba2775e33c664f33d56b3f33fa5b599daf4d983b56825e",
+      "ril/agent/fixtures.py": "d9310b2ef6c06cb73e6693da47b19a0ea5d21a5ad4ed4bdf03abc242df08b418",
+      "ril/agent/grading.py": "8ac81c411d2fdc05ba2bd7d739ca3b0b38dc0fa9743e9831935ba5b16eb38e3b",
+      "ril/agent/pilot.py": "bcba3f0b9968c029a4fb5f55b73ffa8dbe34ac1fc7a8e8dece78c9cb2414a519",
+      "ril/agent/scripted.py": "6797aa6f145cab92be088db68c4d6ee1978056a6ea9d8f6ea83f590ed6e0727f",
+      "ril/agent/tools.py": "19def831f5fcfdd3ed442ffdbcb509543552707876e891a3bb7b928b1deadb22",
+      "ril/evaluation/run.py": "070be658e1998e0341cb25f8c480cef94235b4abb4210a73cdaa95cc9618d654",
+      "ril/evaluation/stats.py": "e69c8329d1abe09406be3c630eb8b7c0d2bada70f6af680f1b851a8051697685",
+      "ril/retrieval/bm25_index.py": "2f75a11dfb7093068d7997e205b5157ea2a30b8987404b29052e3270dd45c662"
+    },
+    "sha256": "6503d2e1c30663ed7f7afb0b79f1bd892edffd431b4c7a544e57cb9b3a074de6"
+  },
+  "trace_check": "pass",
+  "unit_tests": {
+    "passed": 538,
+    "skipped_optional_torch": 3,
+    "wall_seconds": 46.31
+  }
+}

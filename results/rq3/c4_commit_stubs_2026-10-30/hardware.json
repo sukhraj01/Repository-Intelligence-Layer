@@ -1,0 +1,1 @@
+{"branch":"c/eval-rq3","commit":"af41eb10efffd40e9d87de73e681e424bc99d28a","config_hash":"1da58eeae06a963c983d3b28cf9eff852e6397b9a9e14a9c5c5e8ff18ba02db4","cpu_cores":8,"cpu_model":"aarch64","cuda_version":"","dirty":1,"gpu_driver":"","gpu_name":"none","host":"local-cpu","python":"3.11.18","ram_gb":11.7,"timestamp_utc":"2026-10-30T21:11:44Z","torch":"not imported"}
