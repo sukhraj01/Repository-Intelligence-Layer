@@ -18,6 +18,7 @@ import gzip
 import json
 import os
 import shutil
+import subprocess
 import tempfile
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
@@ -163,7 +164,14 @@ def extract_pr(
             units_by_file = _by_file(parse_repository(work, repo).units)
         finally:
             shutil.rmtree(work, ignore_errors=True)
-    except (ApiError, SnapshotError, ValueError, KeyError, OSError) as exc:
+    except (
+        ApiError,
+        SnapshotError,
+        subprocess.SubprocessError,
+        ValueError,
+        KeyError,
+        OSError,
+    ) as exc:
         error = f"{type(exc).__name__}: {str(exc)[:120]}"
         log(f"{directory}: {error}")
     out: list[Record] = []
