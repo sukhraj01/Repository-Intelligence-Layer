@@ -1,0 +1,120 @@
+{
+ "calibration_points": {
+  "ansible/ansible": {
+   "chunks": 131385.0,
+   "texts": 274336.0,
+   "units": 12278.0
+  },
+  "astropy/astropy": {
+   "chunks": 66203.0,
+   "texts": 184774.0,
+   "units": 17463.5
+  },
+  "conan-io/conan": {
+   "chunks": 13445.0,
+   "texts": 74617.0,
+   "units": 7816.0
+  },
+  "deepset-ai/haystack": {
+   "chunks": 13486.0,
+   "texts": 63059.0,
+   "units": 3955.0
+  },
+  "internetarchive/openlibrary": {
+   "chunks": 17934.0,
+   "texts": 57828.0,
+   "units": 4725.0
+  },
+  "matplotlib/matplotlib": {
+   "chunks": 42522.0,
+   "texts": 110159.0,
+   "units": 10984.0
+  },
+  "mwaskom/seaborn": {
+   "chunks": 2515.0,
+   "texts": 6191.0,
+   "units": 2672.5
+  },
+  "pallets/flask": {
+   "chunks": 1000.0,
+   "texts": 1091.0,
+   "units": 974.0
+  },
+  "psf/requests": {
+   "chunks": 2356.0,
+   "texts": 6013.0,
+   "units": 743.0
+  },
+  "pydata/xarray": {
+   "chunks": 18007.0,
+   "texts": 55778.0,
+   "units": 5534.0
+  },
+  "qutebrowser/qutebrowser": {
+   "chunks": 20001.0,
+   "texts": 85490.0,
+   "units": 7570.0
+  },
+  "streamlink/streamlink": {
+   "chunks": 6345.0,
+   "texts": 34591.0,
+   "units": 3918.0
+  }
+ },
+ "commit": "d9c62c5+wip",
+ "config": {
+  "dev_config_sha256": "f3e849e3c68caff54c9aea8a89c5420e604da65449e141a8f0a269ca49932004",
+  "encode_rate_assumed": 178.0,
+  "encode_rate_measured": 229.0,
+  "input_sha256": {
+   "corpus_stats_all": "ce71049df10306adfcd8d591c4cf04717a31fbb56df9814393cfe696300baba3",
+   "held_out": "ba463ded28b7b46a5dcd30240d02168490b84b395778931ee6f6962466dcbfb7",
+   "ids_all": "fe1aeb107c8eb56d2356dcd14ded0714d3da810a99052d4467c35d0e40b45fe2",
+   "rename_cache": "84e48adc75717ad5b42dd94258d0123c257df6d86acca7c1cee6c160a6e2a85e",
+   "survey": "7c78deff61abe966ca79d222e2c59033e4ac8af546232365c64c6df88ac69a0d"
+  },
+  "stored_gpu_hours_per_repo": 0.06,
+  "survey_version": "eval-repo-survey/v2",
+  "thresholds": {
+   "min_sampled_code_chunks": 20,
+   "python_share_mixed": 0.1,
+   "python_share_python": 0.5
+  }
+ },
+ "config_hash": "856c99ff00b55a67260493341bf777d44960257f2644f6eb68744b1ed0e198c7",
+ "experiment": "E-EVAL-REPOS",
+ "hardware_of_survey_job": "Ada gnode007 (40 CPUs, 128.6 GB), jobs 60214 (survey v1) and 60260 (survey v2, used); CPU only",
+ "leave_one_out_relative_error": {
+  "ansible/ansible": 0.48348977317496783,
+  "astropy/astropy": 0.10983491350570103,
+  "conan-io/conan": -0.4970946995212283,
+  "deepset-ai/haystack": -0.4031031781414865,
+  "internetarchive/openlibrary": -0.13443002410881608,
+  "matplotlib/matplotlib": 0.19568084463611174,
+  "mwaskom/seaborn": 0.2583421922899973,
+  "pallets/flask": 1.839205468369389,
+  "psf/requests": 0.2136840810036261,
+  "pydata/xarray": -0.09896509126637497,
+  "qutebrowser/qutebrowser": -0.3470204454340448,
+  "streamlink/streamlink": -0.48804510520273897
+ },
+ "output_sha256": "4b69835eea2e5336c0e7674765143059e8c723d6779c2f8f398df6356e2c39a4",
+ "seed": 0,
+ "summary": {
+  "held_out_listed": 605,
+  "language_class": {
+   "mixed": 21,
+   "non_python": 297,
+   "python": 286,
+   "unknown": 1
+  },
+  "leaking": 0,
+  "repositories": 605,
+  "set_group": {
+   "dev": 6,
+   "other": 587,
+   "verified": 12
+  },
+  "with_l3": 92
+ }
+}
