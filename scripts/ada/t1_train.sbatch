@@ -36,6 +36,7 @@ mkdir -p "$W/logs" "$W/out" "$CKPT"
 cd "$W"
 export HF_HOME=$E/hf_cache HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 export PYTHONPATH="$X2/overlay_cre:$W"
+[ -z "${RETAIN_DIR:-}" ] || { mkdir -p "$RETAIN_DIR"; export RETAIN_DIR; }  # final-model retention: checkpoint.retain_final (D76)
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "$W/out/nvidia_${SLURM_JOB_ID}.txt" || true
 MARG=(); [ -n "${MINED:-}" ] && MARG=(--mined "$MINED")
 "$PY" scripts/train.py train "$CONFIG" "$CACHE" --results-root "$W/results" --work-root "$CKPT" \

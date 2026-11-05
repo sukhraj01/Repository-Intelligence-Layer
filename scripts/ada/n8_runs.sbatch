@@ -37,6 +37,7 @@ mkdir -p "$W/logs" "$W/out" "$CK/ckpt" "$CK/eval"
 cd "$W"
 export HF_HOME=$E/hf_cache HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 export PYTHONPATH="$X2/overlay_cre:$W"
+[ -z "${RETAIN_DIR:-}" ] || { mkdir -p "$RETAIN_DIR"; export RETAIN_DIR; }  # final-model retention: checkpoint.retain_final (D76)
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "out/nvidia_${SLURM_JOB_ID}.txt" || true
 { echo "host=$(hostname)"; echo "ril_commit=${RIL_COMMIT:-none}"; df -h /tmp "$HOME" | tail -2; } \
   > "out/env_runs_${SLURM_JOB_ID}.txt"
