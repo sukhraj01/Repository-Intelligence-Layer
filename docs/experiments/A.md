@@ -11,7 +11,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | A2a | RQ1 ext. (apparatus) | graph build: incremental update vs full rebuild | repositories, commits, resolver | 0 | equality of graph digests; seconds per commit p50/p95/p99 | done 2026-10-31 (section A2a) |
 | A2c | RQ1 ext. (apparatus) | stored graph: versioned, hashed edge store vs raw JSONL; load check level | repositories, resolver, graph | 0 | round-trip equality; bytes; write and load seconds p50 | done 2026-10-31 (section A2c) |
 | A2b-PREP | RQ1 ext. (apparatus) | none (census of invoke sites by status and resolver rule) | repositories, resolver | 0 | site counts per rule | done 2026-10-31 (section A2b-PREP) |
-| A2b | RQ1 ext. (apparatus) | resolver typing options (return inference, merged locals, parameter defaults, all three) | repositories, parse, stored resolver rules | 0 | invoke sites by status; unknown-receiver sites; build seconds; trace recall and precision (pending) | static reading done 2026-11-03; dynamic pending (section A2b) |
+| A2b | RQ1 ext. (apparatus) | resolver typing options (return inference, merged locals, parameter defaults, all three) | repositories, parse, stored resolver rules | 0 | invoke sites by status; unknown-receiver sites; build seconds; trace recall and precision on flask | done 2026-11-05 (section A2b) |
 
 ## A1-PILOT: identifier splitting and field weights for BM25 on docstring-to-function retrieval, exploratory, done 2026-10-31
 
@@ -143,7 +143,7 @@ definitions of one name (1,174) and attributes of a class with an unresolved bas
 annotations, local assignments) targets the largest failure class; import-aware resolution and decorated or property calls
 target classes of a few hundred to a few thousand sites. Order for the pilots once the oracle can run: typing first.
 
-## A2b: resolver typing pilots, static reading, 2026-11-03 (dynamic reading pending)
+## A2b: resolver typing pilots, static and dynamic readings, done 2026-11-05
 
 **Question.** Unknown-receiver calls are 80% of the ambiguous or unresolved sites (A2b-PREP). Do three typing
 extensions of the resolver move them to `resolved`, and at what build cost?
@@ -155,18 +155,22 @@ generators and disagreeing returns left unknown; also for properties and `self.x
 local bound several times takes its one typed binding when the others are untyped or literals such as `None`);
 `param_defaults` (an unannotated parameter takes the type of its default). Tests: `tests/unit/test_resolver_options.py`.
 
-**Result, static** (the five A1-PILOT checkouts, one build per pilot; `results/tables/a2b_resolver_pilot_static.csv`):
+**Result, static** (the five A1-PILOT checkouts, one build per pilot, 2026-11-03; `results/tables/a2b_resolver_pilot_static.csv`,
+totals in `results/tables/a2b_summary.json`):
 
 | pilot | resolved sites, django | change | unknown-receiver sites, django | change | resolved, all five | build time, django |
 |---|---|---|---|---|---|---|
-| stored | 73,847 | - | 42,231 | - | 92,071 | 15.6 s |
-| infer_returns | 74,286 | +439 | 41,604 | -627 | 92,566 | 16.9 s |
-| merge_locals | 74,302 | +455 | 41,004 | -1,227 | 92,589 | 16.6 s |
-| param_defaults | 73,867 | +20 | 42,216 | -15 | 92,091 | 16.8 s |
-| all three | 74,837 | +990 | 40,270 | -1,961 | 93,204 | 17.0 s |
+| stored | 73,847 | - | 42,231 | - | 92,071 | 15.9 s |
+| infer_returns | 74,286 | +439 | 41,604 | -627 | 92,566 | 16.4 s |
+| merge_locals | 74,302 | +455 | 41,004 | -1,227 | 92,589 | 16.3 s |
+| param_defaults | 73,867 | +20 | 42,216 | -15 | 92,091 | 17.0 s |
+| all three | 74,837 | +990 | 40,270 | -1,961 | 93,204 | 16.9 s |
 
 Across the five repositories the combined options resolve 1,133 more sites (+1.2% of resolved sites, 0.5% of all
-invoke sites) and remove 4.3% of the unknown-receiver sites, for about 9% more build time.
+invoke sites) and remove 4.3% of the unknown-receiver sites. Graph build time over the five repositories rises 7.1%
+(19.3 s to 20.7 s), but with one build per pilot this is not separable from timing noise: `param_defaults`, which moves
+20 sites, cost 7.5%. Correction (2026-11-05): the build-time column first written here (15.6 s to 17.0 s, "about 9%") came
+from an earlier run, not the stored log; it now quotes the log.
 
 **Why the gain is small: what the untyped receivers are** (combined options, 46,620 untyped receivers of attribute calls,
 `untyped_receivers_combined_options` in the log): attribute chains on another object (`obj.a.b()`) 34.3%; attribute
@@ -176,11 +180,38 @@ call-result share, and only where the callee is in the repository. Most untyped 
 attributes whose type is set by a caller elsewhere, so the next step that would reach them is propagating argument
 types from call sites into parameters and `self` attributes (inter-procedural), not more local rules.
 
-**Dynamic reading: pending.** Recall and precision against the flask test-suite trace (D15) are not measured yet; the
-trace needs the suite run, which is not done on this machine by the tooling. With the trace at
-`data/processed/flask_trace.json`, `scripts/a_resolver_pilot.py --trace pallets/flask=<checkout at 7ee9ceb>=<trace>` adds
-recall and the precision lower bound per pilot. A moved site is not a correct site until then.
+**Result, dynamic** (2026-11-05; `results/logs/a2b_resolver_pilot_dynamic_2026-11-05.json`, summary in
+`results/tables/a2b_summary.json`). The flask test suite at 7ee9ceb (the pallets__flask-5014 base commit) run under
+`scripts/ada/trace_pytest.py` on the local machine (Python 3.11, the repository's test pins plus werkzeug 2.2.3, jinja2
+3.1.2, click 8.1.3, itsdangerous 2.1.2, markupsafe 2.1.2): 482 passed, 2 skipped, exit 0. Recall and precision from
+`recovery_report`; 1,049 executed in-repository caller-to-callee pairs. The stored resolver reproduces the lead's reading
+of 2026-10-17 on the cluster (`results/logs/p_flask_recovery_2026-10-17.json`: 1,057 pairs, Python 3.10, one more test
+run) within a few pairs.
 
-**Reading.** Evidence class: measured (static only). The three local typing extensions are cheap, and each resolves
-sites the stored resolver leaves to name matching, but together they reach a few percent of the failure class. Nothing is
-adopted: the stored resolver stays as it is until the dynamic reading shows the moved sites are right.
+| pilot | resolved pairs | recovered (of 1,049) | recall, resolved | recall, resolved or ambiguous | precision lower bound (caller executed) | pairs added to stored |
+|---|---|---|---|---|---|---|
+| stored | 935 | 507 | 48.3% | 66.1% | 61.8% (of 820) | - |
+| infer_returns | 936 | 507 | 48.3% | 66.1% | 61.8% (of 820) | 1 |
+| merge_locals | 947 | 516 | 49.2% | 66.3% | 62.0% (of 832) | 12 |
+| param_defaults | 935 | 507 | 48.3% | 66.1% | 61.8% (of 820) | 0 |
+| all three | 948 | 516 | 49.2% | 66.3% | 62.0% (of 832) | 13 |
+
+No option removes a resolved pair. The 13 pairs the combined options add, each read against the trace (`added_pairs` in the
+log): 9 executed; 2 are instantiations whose target is the class (`Flask.test_client` to `FlaskClient`,
+`Flask.test_cli_runner` to `FlaskCliRunner`), which the tracer records as the `__init__` call, and both `__init__` pairs are
+among the 9; 1 has a caller the suite did not run (`examples/tutorial/tests/conftest.py::app` to `Flask.app_context`,
+from return inference); 1 has an executed caller but no traced pair (`test_open_session_with_endpoint` to
+`Scaffold.get`, from `@app.get("/")`): `Scaffold.get` is wrapped by the `setupmethod` decorator, so the trace sees the
+call from the wrapper, and the source shows the call is real. By reading, none of the 13 is wrong. The misses are
+unchanged by any option except instantiation without a site (17 to 15): implicit protocol dunders 199, no call site for
+the callee's name 75, property access 40; only 25 misses have a call site present, which bounds what typing can add on
+flask.
+
+**Reading.** Evidence class: measured; the dynamic reading is one repository and one suite, so it checks correctness of
+what moves rather than the size of the gain. What the options move is right: every added pair on flask is supported by the
+trace or, read against the source, real, and precision does not fall. But the gain is small (recall +0.9 points on flask,
++1.2% resolved sites over five repositories), because the failures that dominate are not local typing failures: on flask
+they are dunder, property and no-site calls, and over the five repositories most untyped receivers are attribute chains
+and parameters set by callers. `merge_locals` carries almost all of the measured effect, `param_defaults` almost none.
+Adopting the options changes resolver output, so it is a resolver-version decision for the lead (request RA-4 in
+`docs/status/person_a.md`); the stored resolver stays the default meanwhile.

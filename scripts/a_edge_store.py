@@ -16,9 +16,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ril.bench.edge_store_measure import measure_repository  # noqa: E402
-from ril.util.log import get_logger  # noqa: E402
-from ril.util.machine import hardware  # noqa: E402
+from ril.bench.edge_store_measure import measure_repository  # noqa: E402 (path set above)
+from ril.util.log import get_logger  # noqa: E402 (path set above)
+from ril.util.machine import hardware  # noqa: E402 (path set above)
 
 
 def main() -> int:

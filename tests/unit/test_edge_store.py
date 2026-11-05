@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from ril.bench.edge_store_measure import measure_repository
 from ril.parsing.build import BuildConfig, build_repository
 from ril.parsing.edge_store import EdgeStoreError, load_store, read_manifest, write_store
 from ril.parsing.repo_graph import RepoGraph
@@ -59,3 +60,11 @@ def test_an_unknown_version_or_a_foreign_directory_is_refused(
         load_store(str(store))
     with pytest.raises(EdgeStoreError, match="manifest"):
         load_store(str(tmp_path / "missing"))
+
+
+def test_measure_repository_reports_an_exact_round_trip(mini_repo: Path, tmp_path: Path) -> None:
+    row = measure_repository(str(mini_repo), "acme/mini", str(tmp_path), repeats=2)
+    assert row["round_trip_equal"] is True
+    assert row["n_edges"] == len(_graph(mini_repo).edges)
+    assert 0 < row["store_bytes"] < row["raw_jsonl_bytes"]
+    assert set(row["load_verify_seconds"]) == {"p50", "p95", "p99"}

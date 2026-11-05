@@ -9,7 +9,10 @@ Three readings per option set (``ril.parsing.call_graph.ResolverOptions``):
   a subscript), under the combined options; this says which typing work would reach the most sites.
 * **dynamic**, where a test-suite trace exists (decision D15): recall of the in-repository caller to
   callee pairs the suite executed, and the lower bound on precision among resolved pairs whose
-  caller executed, both from ``ril.evaluation.edge_recovery.recovery_report``.
+  caller executed, both from ``ril.evaluation.edge_recovery.recovery_report``; and every resolved
+  pair an option adds to the stored resolver, with what the trace says about it.
+
+``summary`` reduces the stored logs to the totals and shares quoted in the ledger and the log.
 
 The repository is parsed once; every option set builds its graph from the same parse.
 
@@ -23,7 +26,13 @@ import time
 from collections import Counter
 from typing import Any
 
-from ril.evaluation.edge_recovery import recovery_report
+from ril.evaluation.edge_recovery import (
+    DynamicPairs,
+    UnitIndex,
+    map_trace,
+    recovery_report,
+    static_pairs,
+)
 from ril.parsing.call_graph import Ctx, GraphBuilder, ResolverOptions
 from ril.parsing.repo_graph import Edge
 from ril.parsing.repository_parser import parse_repository
@@ -117,13 +126,23 @@ def receiver_census(root: str, repo_id: str, options: ResolverOptions) -> dict[s
 def dynamic_rows(root: str, repo_id: str, trace: dict[str, Any]) -> list[dict[str, Any]]:
     """Recall and precision against the test-suite trace for every pilot on one checkout."""
     parsed = parse_repository(root, repo_id)
+    dp = map_trace(trace, UnitIndex.build(parsed.units))
+    units = parsed.unit_by_id()
+    stored: set[tuple[str, str]] = set()
     rows = []
     for options in PILOTS:
         builder = GraphBuilder(parsed, options=options)
         graph = builder.build()
         report = recovery_report(parsed, graph, builder, trace)
+        resolved = static_pairs(parsed, graph, builder).resolved
+        if not stored:
+            stored = resolved
         view = report["recall_in_repo_callees"][0]
         prec = report["precision_among_edges_whose_caller_executed"]
+        added = [
+            {"caller": c, "callee": e, "trace": _trace_reading(c, e, dp, units[e].unit_type)}
+            for c, e in sorted(resolved - stored)
+        ]
         rows.append(
             {
                 "repo_id": repo_id,
@@ -136,6 +155,98 @@ def dynamic_rows(root: str, repo_id: str, trace: dict[str, Any]) -> list[dict[st
                 "precision_lower_bound": prec["precision"],
                 "precision_caller_executed_n": prec["caller_executed"],
                 "missed_by_category": view["missed_by_category"],
+                "removed_vs_stored": len(stored - resolved),
+                "added_vs_stored": len(added),
+                "added_by_trace_reading": dict(Counter(a["trace"] for a in added)),
+                "added_pairs": added,
             }
         )
     return rows
+
+
+def _trace_reading(caller: str, callee: str, dp: DynamicPairs, callee_type: str) -> str:
+    """What the trace says about one resolved pair."""
+    if (caller, callee) in dp.pairs:
+        return "executed"
+    if caller not in dp.executed:
+        return "caller not executed"
+    if callee_type == "class":
+        return "class target (the trace records its __init__)"
+    return "caller executed, pair not seen"
+
+
+def _pct(part: float, whole: float) -> float | None:
+    return round(100 * part / whole, 1) if whole else None
+
+
+def summary(
+    breakdown: dict[str, Any] | None, static: dict[str, Any] | None, dynamic: dict[str, Any] | None
+) -> dict[str, Any]:
+    """Totals and shares over the stored logs (invoke breakdown, static pilot, dynamic pilot)."""
+    out: dict[str, Any] = {}
+    if breakdown is not None:
+        sites = failed = unknown = 0
+        for repo in breakdown["repositories"]:
+            for key, n in repo["invoke_by_status_and_rule"].items():
+                status, _, rule = key.partition("|")
+                sites += n
+                if status in ("ambiguous", "unresolved"):
+                    failed += n
+                    unknown += n if rule.startswith("unknown-receiver") else 0
+        out["invoke_breakdown"] = {
+            "invoke_sites": sites,
+            "ambiguous_or_unresolved": failed,
+            "unknown_receiver_among_them": unknown,
+            "unknown_receiver_share_pct": _pct(unknown, failed),
+        }
+    if static is not None:
+        totals: dict[str, Counter[str]] = {}
+        for row in static["static"]:
+            c = totals.setdefault(row["options"], Counter())
+            for k in ("invoke_sites", "invoke_resolved", "unknown_receiver_sites"):
+                c[k] += row[k]
+            c["graph_build_ms"] += round(1000 * row["graph_build_seconds"])
+        base = totals["stored"]
+        out["static_totals_over_repositories"] = {
+            label: {
+                **c,
+                "resolved_gain": c["invoke_resolved"] - base["invoke_resolved"],
+                "resolved_gain_pct": _pct(
+                    c["invoke_resolved"] - base["invoke_resolved"], base["invoke_resolved"]
+                ),
+                "resolved_gain_pct_of_all_sites": _pct(
+                    c["invoke_resolved"] - base["invoke_resolved"], c["invoke_sites"]
+                ),
+                "unknown_receiver_change_pct": _pct(
+                    c["unknown_receiver_sites"] - base["unknown_receiver_sites"],
+                    base["unknown_receiver_sites"],
+                ),
+                "graph_build_change_pct": _pct(
+                    c["graph_build_ms"] - base["graph_build_ms"], base["graph_build_ms"]
+                ),
+            }
+            for label, c in totals.items()
+        }
+        kinds: Counter[str] = Counter()
+        for per_repo in static["untyped_receivers_combined_options"].values():
+            kinds.update(per_repo)
+        n = sum(kinds.values())
+        chains = kinds["attribute chain on self"] + kinds["attribute chain on another object"]
+        out["untyped_receivers_combined_options"] = {
+            "receivers": n,
+            "attribute_chain_pct": _pct(chains, n),
+            "share_pct": {k: _pct(v, n) for k, v in kinds.most_common()},
+        }
+    if dynamic is not None:
+        out["dynamic"] = {
+            f"{row['repo_id']} {row['options']}": {
+                "recall_resolved_pct": _pct(row["recovered_resolved"], row["dynamic_pairs"]),
+                "precision_lower_bound_pct": _pct(row["precision_lower_bound"], 1),
+                "added_vs_stored": row["added_vs_stored"],
+                "added_executed_pct": _pct(
+                    row["added_by_trace_reading"].get("executed", 0), row["added_vs_stored"]
+                ),
+            }
+            for row in dynamic["dynamic"]
+        }
+    return out

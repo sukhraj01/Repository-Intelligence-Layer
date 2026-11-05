@@ -3,7 +3,7 @@
 > Current truth only, replaced at the end of each block (at most 150 lines). Result rows are in
 > `results/ledger_a.md`; protocols and full tables in `docs/experiments/A.md` (sections A1-PILOT, A2a, A2c, A2b-PREP, A2b).
 
-**Last updated:** 2026-11-03 · branch `a/rq1-2` from `main` (A1-PILOT and A2a merged; A2c and A2b carried over from `a/rq1`) · block 1 partly done (A1 code and a local pilot; A2 parts a and c; A2 part b static reading).
+**Last updated:** 2026-11-05 · branch `a/rq1-2` from `main` (A1-PILOT and A2a merged; A2c and A2b carried over from `a/rq1`) · block 1 partly done (A1 code and a local pilot; A2 done: parts a, b and c).
 
 ## Done
 
@@ -13,7 +13,7 @@
 | A2 (a) | Resolver cache made order-independent (cycle-cut results no longer cached; `ril/parsing/call_graph.py`) | done; full-build effect 2 of 4,163 edges on requests, 0 on flask and django | A2a; regression test in `tests/unit/test_incremental_graph.py` |
 | A2 (c) | Stored graph as a versioned, hashed edge-list directory (`ril/parsing/edge_store.py`, format v1): byte-identical writes, load refuses unknown versions and damaged files | **done**: round trip exact on 5 repositories; 16-20x smaller than raw JSONL; django loads in 2.3 s with hash checks | A2c, `results/tables/a2c_edge_store.csv` |
 | A2 (b) prep | Static breakdown of failed call sites by rule (no oracle needed) | done: 80% of ambiguous or unresolved sites are calls on a receiver of unknown type | A2b-PREP |
-| A2 (b) static | Three resolver typing options (`ResolverOptions`: return inference, merged locals, parameter defaults), off by default; stored resolver byte-identical | done (static): combined +1,133 resolved sites over 5 repositories (+1.2%), unknown-receiver sites -4.3%, build +9%; untyped receivers are mostly attribute chains and parameters (inter-procedural typing needed) | A2b, `results/tables/a2b_resolver_pilot_static.csv` |
+| A2 (b) | Three resolver typing options (`ResolverOptions`: return inference, merged locals, parameter defaults), off by default; stored resolver byte-identical | **done**: static, combined +1,133 resolved sites over 5 repositories (+1.2%), unknown-receiver sites -4.3%, build +7.1% (within timing noise); dynamic on the flask suite trace, recall 48.3% to 49.2%, precision lower bound 61.8% to 62.0%, all 13 added pairs right by trace or source; the remaining failures are mostly attribute chains and parameters (inter-procedural typing) | A2b, `results/tables/a2b_summary.json` |
 | A1 (code) | Identifier splitting (`split_identifier`, `tokenize_code`, option to keep the whole identifier) and integer field weights (`field_tokens`) in `ril/retrieval/bm25_index.py`; the reference form is unchanged | done, tested | `tests/unit/test_bm25_index.py` |
 | A1 (pilot) | Docstring-to-function retrieval on 5 local checkouts, docstrings removed from the index (exploratory) | done: splitting +8.9 MRR [+6.9, +10.5] clustered, name weight +13.1 [+10.3, +15.9]; query latency unchanged | A1-PILOT, `results/tables/a1_bm25_docstring_pilot.csv` |
 
@@ -21,11 +21,10 @@
 
 1. A1 on the development repositories (cluster): one-factor runs (splitting, keep-original, fields, k1/b), E1 reproduction
    as regression control, unit vs chunk granularity under both gold readings; Verified-six once with the chosen setting.
-2. A2 (b) dynamic reading: recall and precision of each pilot against the flask suite trace (needs the trace from the
-   engineer's terminal or the cluster, `scripts/ada/trace_flask_suite.sbatch`); then, if worth it, inter-procedural
-   argument typing for parameters and `self` attributes (the largest share of untyped receivers).
-3. A3 structural signals against the same-file control (needs the dense scores of the dev caches on the cluster).
-4. A4 RQ1 ablation table with latency columns; A5 rerank; A6 end-to-end latency profile.
+2. A3 structural signals against the same-file control (needs the dense scores of the dev caches on the cluster).
+3. A4 RQ1 ablation table with latency columns; A5 rerank; A6 end-to-end latency profile.
+4. Optional, after A3 shows whether call edges matter for retrieval: inter-procedural argument typing for parameters and
+   `self` attributes (the largest share of untyped receivers in A2b).
 
 ## Requests for the lead
 
@@ -34,6 +33,7 @@
 | RA-1 | The resolver cache fix changes resolver output (2 edges on requests). Bump `RESOLVER_VERSION`? | (a) bump to v0.1 at the next cache rebuild; (b) keep v0 (two outputs under one name); (c) revert the fix and drop incremental updates | measured (A2a) | none needed: the edge diff is listed in A2a | (a): the evaluation caches keyed on the resolver string rebuild once | v0 kept, fix in place |
 | RA-2 | Adopt the incremental updater as the per-commit graph build (agent setting, freshness)? | adopt / keep full rebuilds only | measured (A2a) | none | adopt; it is equal by test and never slower in the runs | full build stays the default of `build_repository` |
 | RA-3 | A1 tuned index: which variants go into the dev sweep? | the four of A1-PILOT plus k1/b | measured locally only (A1-PILOT, exploratory) | the A1 dev runs on the cluster | run all four; the pilot's gain is an upper bound (docstrings share the function's vocabulary) | reference form (`provisional: ADR-004`) |
+| RA-4 | Adopt the A2b typing options (`merge_locals`, `infer_returns`; `param_defaults` adds almost nothing) in the stored resolver? | (a) adopt with the RA-1 version bump, one cache rebuild for both; (b) adopt with a bump of its own; (c) keep them off | measured (A2b; dynamic on one repository) | none needed for correctness (13 of 13 added pairs right on flask); a second traced suite would size the gain | (a): the moved pairs are right and nothing is removed, but the gain (+0.9 recall points on flask) does not justify a rebuild of its own | options off (stored resolver) |
 
 ## Requests for workstream C
 
