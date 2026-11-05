@@ -25,6 +25,8 @@ PY=$E/venv_ril$PYV/bin/python
 CFG=configs/experiments/eval_repos_v1_build.yaml
 FREE=$(df -Pm "$HOME" | awk 'NR==2{print $4}')
 [ "$FREE" -gt 2000 ] || { echo "only $FREE MB free in HOME"; exit 3; }
+NODE_FREE=$(df -Pm /tmp | awk 'NR==2{print $4}')
+[ "$NODE_FREE" -gt 15000 ] || { echo "node-local /tmp on $(hostname) has only $NODE_FREE MB free"; exit 4; }
 TMPW=$(mktemp -d /tmp/ril_eval.XXXXXX)
 trap 'rm -rf "$TMPW"' EXIT
 { echo "host=$(hostname)"; echo "python=$($PY -V)"; echo "cpus=$(nproc)"; \
