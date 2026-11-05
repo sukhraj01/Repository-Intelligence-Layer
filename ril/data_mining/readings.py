@@ -17,8 +17,9 @@ without touching the run root:
                   left is dropped. Rows are not added, so the nested functions and vendored
                   directories the released code keeps are not reproduced (they are not mined).
 
-``DEFAULT_READING`` is the primary reading of the mined set for RQ2, the reading of the M3 measurement (D96);
-``pool_aligned`` is a sensitivity reading and the unrestricted reading stays available, each under its own label. Kept compatible with Python 3.10.
+``DEFAULT_READING`` is the primary reading of the mined set for RQ2, the reading of the M3
+measurement (D96); ``pool_aligned`` is a sensitivity reading and the unrestricted reading stays
+available, each under its own label. Kept compatible with Python 3.10.
 """
 
 from __future__ import annotations
