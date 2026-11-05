@@ -361,7 +361,7 @@ def main() -> None:
     parser.add_argument("--config", required=True)
     args = parser.parse_args()
     result = run_config(args.config)
-    print(json.dumps({"config_hash": result["config_hash"], "real_instances": 0}))  # noqa: T201
+    print(json.dumps({"config_hash": result["config_hash"], "real_instances": 0}))  # noqa: T201  # CLI emits machine-readable summary JSON.
 
 
 if __name__ == "__main__":

@@ -1107,7 +1107,7 @@ def main() -> None:
         result = {"status": "complete"}
     else:
         result = report()
-    print(json.dumps(result, sort_keys=True))  # noqa: T201
+    print(json.dumps(result, sort_keys=True))  # noqa: T201  # CLI emits machine-readable stage result JSON.
 
 
 if __name__ == "__main__":

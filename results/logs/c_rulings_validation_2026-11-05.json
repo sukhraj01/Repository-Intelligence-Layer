@@ -41,5 +41,27 @@
     "tests/unit/test_c_colab.py": "fc90f5cda1a4faa514b7353c2a33dcb2cc4cda34baa0619c40bb07f23192dae6",
     "tests/unit/test_c_colab_runtime.py": "01c4a3f5d3bca6fdf3c86263cee4d26382cfa63a752da5dfca34bea013b2f8e7",
     "tests/unit/test_c_raw_mining.py": "ab0c78c8d5232f9005fb52f44d1a92d8fa84350eb95b62727788f27d793df0cf"
+  },
+  "post_validation_edits": {
+    "kind": "comment-only suppression explanations plus ledger source citations/qualification",
+    "non_comment_tokens_unchanged": true,
+    "comment_only_files": [
+      "ril/agent/paired.py",
+      "ril/agent/pilot.py",
+      "ril/evaluation/staging.py",
+      "scripts/c_colab.py",
+      "scripts/c_mine_prs.py",
+      "tests/unit/test_agent_pilot.py"
+    ],
+    "tests_repeated": false,
+    "reason": "No executable tokens or test expectations changed after the recorded successful full checks."
+  },
+  "post_validation_source_sha256": {
+    "ril/agent/paired.py": "37d62b7d5032237625490ce2a804c2e394ad0816fb7d173f4d9ff8fe2d948c18",
+    "ril/agent/pilot.py": "e7a5c68c556b4c9aa8b990dcd5ce7e13a923351d4f0773c6fccb311dbb04400b",
+    "ril/evaluation/staging.py": "4c675d529b640ae6ab9f5ed233b3258e9705269063875af4cbb2a664593acd70",
+    "scripts/c_colab.py": "a8c9090a389f952c7193a3d3fb49df9137ba00c87b0bdc2a0e3e85d8eab3aee4",
+    "scripts/c_mine_prs.py": "d2f7e875c6ca1bfd8a6c161b0705f731eb8cace5e1c6bf7f55b2022c99c7132c",
+    "tests/unit/test_agent_pilot.py": "12c35c3894946613f2c0c8945460534d5f7d6b6e47c7ac35e6ae85127ea65191"
   }
 }

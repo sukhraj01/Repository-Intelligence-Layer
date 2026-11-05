@@ -12,17 +12,17 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ril.data_mining.c_miner import GitSnapshots, RecordedSnapshots, mine  # noqa: E402
-from ril.data_mining.github import (  # noqa: E402
+from ril.data_mining.c_miner import GitSnapshots, RecordedSnapshots, mine  # noqa: E402  # Direct-script invocation needs the repository path inserted first.
+from ril.data_mining.github import (  # noqa: E402  # Direct-script invocation needs the repository path inserted first.
     Client,
     GitHubTransport,
     RecordedTransport,
     atomic_json,
     digest,
 )
-from ril.data_mining.ranks import dense_audit_scores, rank_audit  # noqa: E402
-from ril.data_mining.recording import synthetic_recording  # noqa: E402
-from ril.evaluation.runtime import require_runtime  # noqa: E402
+from ril.data_mining.ranks import dense_audit_scores, rank_audit  # noqa: E402  # Direct-script invocation needs the repository path inserted first.
+from ril.data_mining.recording import synthetic_recording  # noqa: E402  # Direct-script invocation needs the repository path inserted first.
+from ril.evaluation.runtime import require_runtime  # noqa: E402  # Direct-script invocation needs the repository path inserted first.
 
 
 def main() -> None:

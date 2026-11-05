@@ -563,7 +563,7 @@ def main() -> None:
     }
     if args.audit_output:
         atomic_write(Path(args.audit_output), canonical(audit) + "\n")
-    print(canonical(audit))  # noqa: T201
+    print(canonical(audit))  # noqa: T201  # CLI emits machine-readable audit JSON.
     if audit["statistics_status"] != "complete":
         raise SystemExit(2)
 

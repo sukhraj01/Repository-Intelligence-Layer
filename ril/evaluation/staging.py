@@ -418,7 +418,7 @@ def main() -> None:
         acquire(config, plan)
     elif args.mode == "verify":
         verify_staged(config, plan)
-    print(canonical(plan))  # noqa: T201
+    print(canonical(plan))  # noqa: T201  # CLI emits machine-readable staging plan JSON.
 
 
 if __name__ == "__main__":

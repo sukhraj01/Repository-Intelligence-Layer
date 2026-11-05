@@ -92,7 +92,7 @@ def test_model_receives_no_reference_labels_or_hidden_checks() -> None:
     assert result["usage"]["synthetic_usd"] == 0.25
     assert result["usage"]["actual_usd"] == 0
     with pytest.raises(TypeError):
-        ModelResponse((), Usage(0, 0, 0), resolved=True)  # type: ignore[call-arg]
+        ModelResponse((), Usage(0, 0, 0), resolved=True)  # type: ignore[call-arg]  # Invalid model field must raise at runtime.
 
 
 def test_retriever_cannot_forge_snapshot_content() -> None:
@@ -108,7 +108,7 @@ def test_retriever_cannot_forge_snapshot_content() -> None:
         run_instance(
             fixture.task,
             retriever_id="bm25",
-            tool=Forged(),  # type: ignore[arg-type]
+            tool=Forged(),  # type: ignore[arg-type]  # Malformed retrieval protocol must reach runtime snapshot validation.
             model=ScriptedRepair(),
             grader=FixtureTestGrader(fixture.test_source),
             seed=0,
