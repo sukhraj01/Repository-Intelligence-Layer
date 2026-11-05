@@ -3,7 +3,7 @@
 > Current truth only, replaced at the end of each block (at most 150 lines). Result rows are in
 > `results/ledger_a.md`; protocols and full tables in `docs/experiments/A.md` (sections A1-PILOT, A2a, A2c, A2b-PREP, A2b).
 
-**Last updated:** 2026-11-05 · branch `a/rq1-2` from `main` (A1-PILOT and A2a merged; A2c and A2b carried over from `a/rq1`) · block 1 partly done (A1 code and a local pilot; A2 done: parts a, b and c).
+**Last updated:** 2026-11-05 · branch `a/rq1-2` from `main` (A1-PILOT and A2a merged; A2c and A2b carried over from `a/rq1`) · block 1 nearly done (A2 done: parts a, b and c; A1 chunk-level dev selection done, fields and granularity open).
 
 ## Done
 
@@ -15,12 +15,14 @@
 | A2 (b) prep | Static breakdown of failed call sites by rule (no oracle needed) | done: 80% of ambiguous or unresolved sites are calls on a receiver of unknown type | A2b-PREP |
 | A2 (b) | Three resolver typing options (`ResolverOptions`: return inference, merged locals, parameter defaults), off by default; stored resolver byte-identical | **done**: static, combined +1,133 resolved sites over 5 repositories (+1.2%), unknown-receiver sites -4.3%, build +7.1% (within timing noise); dynamic on the flask suite trace, recall 48.3% to 49.2%, precision lower bound 61.8% to 62.0%, all 13 added pairs right by trace or source; the remaining failures are mostly attribute chains and parameters (inter-procedural typing) | A2b, `results/tables/a2b_summary.json` |
 | A1 (code) | Identifier splitting (`split_identifier`, `tokenize_code`, option to keep the whole identifier) and integer field weights (`field_tokens`) in `ril/retrieval/bm25_index.py`; the reference form is unchanged | done, tested | `tests/unit/test_bm25_index.py` |
+| A1 (dev, chunk level) | BM25 tokenizer then k1/b on the CORE-Bench dev folders (6 repositories, 680 queries), rule fixed before the run; own cluster account | **done**: regression control exact (E1 dev default, 23.8244); `split` +5.9 nDCG@10 over `ref`, clustered [+3.3, +8.2], every repository; k1 2.0 / b 0.75 +0.6 [+0.1, +1.0] (edge of grid); candidate `configs/candidates/bm25_A.yaml` | A1-DEV, `results/tables/a1_bm25_dev.csv` |
 | A1 (pilot) | Docstring-to-function retrieval on 5 local checkouts, docstrings removed from the index (exploratory) | done: splitting +8.9 MRR [+6.9, +10.5] clustered, name weight +13.1 [+10.3, +15.9]; query latency unchanged | A1-PILOT, `results/tables/a1_bm25_docstring_pilot.csv` |
 
 ## Not done yet (in order)
 
-1. A1 on the development repositories (cluster): one-factor runs (splitting, keep-original, fields, k1/b), E1 reproduction
-   as regression control, unit vs chunk granularity under both gold readings; Verified-six once with the chosen setting.
+1. A1 rest (cluster): field weights and unit vs chunk granularity under both gold readings (needs unit texts at each
+   instance's base commit: the lead's E3 dev cache, or clones and a cache built in A's account); then the Verified six
+   once with the single final setting.
 2. A3 structural signals against the same-file control (needs the dense scores of the dev caches on the cluster).
 3. A4 RQ1 ablation table with latency columns; A5 rerank; A6 end-to-end latency profile.
 4. Optional, after A3 shows whether call edges matter for retrieval: inter-procedural argument typing for parameters and
@@ -32,7 +34,7 @@
 |---|---|---|---|---|---|---|
 | RA-1 | The resolver cache fix changes resolver output (2 edges on requests). Bump `RESOLVER_VERSION`? | (a) bump to v0.1 at the next cache rebuild; (b) keep v0 (two outputs under one name); (c) revert the fix and drop incremental updates | measured (A2a) | none needed: the edge diff is listed in A2a | (a): the evaluation caches keyed on the resolver string rebuild once | v0 kept, fix in place |
 | RA-2 | Adopt the incremental updater as the per-commit graph build (agent setting, freshness)? | adopt / keep full rebuilds only | measured (A2a) | none | adopt; it is equal by test and never slower in the runs | full build stays the default of `build_repository` |
-| RA-3 | A1 tuned index: which variants go into the dev sweep? | the four of A1-PILOT plus k1/b | measured locally only (A1-PILOT, exploratory) | the A1 dev runs on the cluster | run all four; the pilot's gain is an upper bound (docstrings share the function's vocabulary) | reference form (`provisional: ADR-004`) |
+| RA-3 | A1 tuned index (ADR-004 evidence): take the dev-selected BM25 `split`, k1 2.0, b 0.75 (`configs/candidates/bm25_A.yaml`) as the lexical stage? | adopt the candidate / keep the reference form / wait for the field and granularity stage | measured on dev (A1-DEV: +5.9 then +0.6 nDCG@10, clustered intervals above 0; regression control exact) | the field and granularity stage; one Verified-six reading after the final setting | adopt the tokenizer now (large, consistent gain); treat k1 2.0 as provisional until fields are measured | reference form (`provisional: ADR-004`) |
 | RA-4 | Adopt the A2b typing options (`merge_locals`, `infer_returns`; `param_defaults` adds almost nothing) in the stored resolver? | (a) adopt with the RA-1 version bump, one cache rebuild for both; (b) adopt with a bump of its own; (c) keep them off | measured (A2b; dynamic on one repository) | none needed for correctness (13 of 13 added pairs right on flask); a second traced suite would size the gain | (a): the moved pairs are right and nothing is removed, but the gain (+0.9 recall points on flask) does not justify a rebuild of its own | options off (stored resolver) |
 
 ## Requests for workstream C
@@ -41,5 +43,5 @@ None yet.
 
 ## Compute
 
-Local only so far (no cluster job, 0 GPU-hours of the 16). Cluster access for the A1 dev runs: account login supplied by
-the engineer; not yet configured on this machine.
+Own cluster account (course allocation: 1 job, 6 h, 10 CPU, 1 GPU, 25 GB) configured 2026-11-05; three CPU jobs so far
+(`results/logs/ada_jobs_a.csv`), 0 GPU-hours of the 16. Dev folders under the account's `ril_a/raw` (0.8 GB).

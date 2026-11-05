@@ -12,6 +12,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | A2c | RQ1 ext. (apparatus) | stored graph: versioned, hashed edge store vs raw JSONL; load check level | repositories, resolver, graph | 0 | round-trip equality; bytes; write and load seconds p50 | done 2026-10-31 (section A2c) |
 | A2b-PREP | RQ1 ext. (apparatus) | none (census of invoke sites by status and resolver rule) | repositories, resolver | 0 | site counts per rule | done 2026-10-31 (section A2b-PREP) |
 | A2b | RQ1 ext. (apparatus) | resolver typing options (return inference, merged locals, parameter defaults, all three) | repositories, parse, stored resolver rules | 0 | invoke sites by status; unknown-receiver sites; build seconds; trace recall and precision on flask | done 2026-11-05 (section A2b) |
+| A1-DEV | RQ1 ext. (apparatus) | BM25 tokenizer (ref, split, split_noorig), then k1 x b on the chosen tokenizer; chunk level | dev folders of `configs/experiments/e1_bm25_dev3.yaml`, prefilter, metrics, stop list, stemmer | 0 | pooled nDCG@10 (protocol) with paired and clustered intervals; Recall@100; tokenise and build throughput; query p50/p95/p99 | chunk-level selection done 2026-11-05; fields and granularity open (section A1-DEV) |
 
 ## A1-PILOT: identifier splitting and field weights for BM25 on docstring-to-function retrieval, exploratory, done 2026-10-31
 
@@ -215,3 +216,64 @@ they are dunder, property and no-site calls, and over the five repositories most
 and parameters set by callers. `merge_locals` carries almost all of the measured effect, `param_defaults` almost none.
 Adopting the options changes resolver output, so it is a resolver-version decision for the lead (request RA-4 in
 `docs/status/person_a.md`); the stored resolver stays the default meanwhile.
+
+## A1-DEV: BM25 tokenisation and k1/b on the development folders, chunk level, done 2026-11-05
+
+**Question.** Which BM25 setting does the development set choose for the tuned index: does identifier splitting (with or
+without the whole identifier) beat the reference tokenisation of E1 on the benchmark's own task, and does k1 or b move
+once the tokenizer is fixed? A1-PILOT showed both matter on a label-free local task; this is the selection on dev.
+
+**Protocol, fixed before any run** (`configs/experiments/a_bm25_dev.yaml`; code `ril/analysis/rq1_bm25_dev.py`, tests
+`tests/unit/test_rq1_bm25_dev.py`; cluster stage `scripts/ada/a_bm25_dev.sbatch`). Data: the development folders of
+`configs/experiments/e1_bm25_dev3.yaml` (SWE-bench Pro openlibrary, qutebrowser, ansible at L2 and L3; SWE-bench-Live
+conan, deepset, streamlink at L2), fetched into workstream A's own cluster account by `scripts/ada/a_fetch_dev.sbatch`.
+Test folders are never read. Chunk level, whole-folder BM25 with the protocol reading of E1 (first 10,000 of the folder
+ranking, then the query's candidates); documents and queries use the same tokenizer. Criterion: nDCG@10 pooled over all
+dev queries, L2 and L3 together (as the E1 sweep). Stage 1: `ref`, `split`, `split_noorig` at k1 1.5 / b 0.75; the best
+by the criterion is chosen only if its repository-clustered paired 95% interval against `ref` lies above 0, otherwise
+`ref` stays. Stage 2: k1 in {0.9, 1.2, 1.5, 2.0} x b in {0.4, 0.6, 0.75, 0.9} on the chosen tokenizer; the best cell
+replaces k1 1.5 / b 0.75 only under the same rule. Regression control: `ref` at k1 1.5 / b 0.75 on the five dev folders
+of `configs/experiments/e1_bm25_reproduction.yaml` must reproduce the default row of `results/tables/e1_dev_sweep.csv`
+exactly (510 queries, pooled nDCG@10 23.8244). Field weights and unit-versus-chunk granularity need unit texts at each
+instance's base commit and are a later stage.
+
+**Result** (`results/logs/a1_bm25_dev_2026-11-05.json`, `results/tables/a1_bm25_dev.csv`; cluster jobs 60143 and
+60164, one u22 node, 2 CPUs, Python 3.10, 5.5 and 7.7 minutes). 680 dev queries (L2 and L3 pooled) over six repositories.
+
+Regression control: `ref` at k1 1.5 / b 0.75 on the five E1 dev folders gives 510 queries and pooled nDCG@10 23.8244, the
+E1 dev sweep's default row exactly.
+
+Stage 1 (k1 1.5, b 0.75; differences against `ref` with query-level and repository-clustered intervals):
+
+| tokenizer | nDCG@10 | L2 | L3 | Recall@100 | diff (queries) | diff (clustered) | tokenise chunks/s | query ms p50 / p95 / p99 |
+|---|---|---|---|---|---|---|---|---|
+| ref | 23.9 [22.2, 25.8] | 19.8 | 31.7 | 38.8 | - | - | 9,890 | 0.75 / 5.4 / 6.9 |
+| split | 29.9 [27.9, 31.9] | 24.1 | 40.6 | 48.3 | +5.9 [+4.9, +7.0] | +5.9 [+3.3, +8.2] | 3,359 | 0.89 / 8.0 / 10.2 |
+| split_noorig | 28.2 | 22.6 | 38.6 | 47.5 | +4.3 [+3.2, +5.3] | +4.3 [+2.1, +6.2] | 3,402 | 0.85 / 7.7 / 10.0 |
+
+`split` is chosen by the rule. Every repository moves the same way (nDCG@10 `ref` to `split`: conan 9.9 to 10.8, deepset
+19.1 to 27.2, ansible 24.3 to 29.4, openlibrary 26.8 to 35.8, qutebrowser 35.5 to 41.9, streamlink 7.0 to 9.4). Keeping the
+whole identifier is better than dropping it (29.9 against 28.2), as in A1-PILOT.
+
+Stage 2 (k1 x b on `split`; difference against k1 1.5 / b 0.75, clustered interval):
+
+| k1 \ b | 0.4 | 0.6 | 0.75 | 0.9 |
+|---|---|---|---|---|
+| 0.9 | 26.5 (-3.4) | 27.8 (-2.1) | 28.7 (-1.1) | 29.5 (-0.3) |
+| 1.2 | 27.2 (-2.6) | 28.5 (-1.3) | 29.5 (-0.4) | 30.2 (+0.3) |
+| 1.5 | 27.8 (-2.1) | 29.1 (-0.8) | 29.9 (0) | 30.2 (+0.3) |
+| 2.0 | 28.3 (-1.6) | 29.7 (-0.2) | **30.5 (+0.6)** | 30.3 (+0.5) |
+
+The best cell, k1 2.0 / b 0.75, gains +0.6 [+0.3, +0.9] over queries and +0.6 [+0.1, +1.0] clustered, so the rule adopts
+it. It lies on the edge of the grid (k1 2.0 is the largest value swept), so a larger k1 may do slightly better; extending
+the grid now would be a second look chosen after seeing the first and is not done.
+
+**Reading.** Evidence class: measured on dev. Identifier splitting is the one large lever for BM25 on CORE-Bench code
+chunks (+5.9 nDCG@10, every repository, clustered interval well above 0), consistent with A1-PILOT; k1 and b are a small
+second-order adjustment. Cost: tokenising with splitting is about 3x slower (3,359 against 9,890 chunks per second),
+index build is nearly unchanged, and query p95 rises from 5.4 to 8.0 ms in stage 1 (longer token lists); the stage 2
+cells, run in a different job, give a p95 of about 6.7 to 7.0 ms for the same tokenizer, so differences of this size
+between jobs are within node-to-node variation. Candidate setting: `configs/candidates/bm25_A.yaml` (`split`, k1 2.0,
+b 0.75), to the lead as a request (ADR-004). Open: field weights and unit-versus-chunk granularity (unit texts needed),
+then one reading of the Verified six with the single final setting.
+
