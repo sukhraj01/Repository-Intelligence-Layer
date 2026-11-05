@@ -33,6 +33,8 @@ are outside C ownership; the lead must migrate them to the shared statistics aft
 
 ## E-C2-RAW-PR: raw PR miner and recorded-response pilot, apparatus, 2026-10-30
 
+Synthetic-only harness, superseded by the lead's miner (decision D97); not a route to the mined set.
+
 Evidence class: measured **synthetic plumbing only**. Configuration
 `configs/experiments/c_raw_pr_pilot.yaml`, hash
 `7bd4a210bfc82de113b99d5549c60b27911d2dadfe8767687c1edf996dec9280`, seed 0.
