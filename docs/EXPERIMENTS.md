@@ -63,6 +63,13 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-MINE-STORE | lead | `docs/experiments/B.md` | done (pilot; the full run is not started) | 2026-11-05 |
 | E-MINE-FULL | lead | `docs/experiments/B.md` | running (launched 2026-11-05, account C) | 2026-11-05 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
+| E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
+| E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |
+| E-C3-AGENT-PILOT | C | `docs/experiments/C.md` | done (apparatus; synthetic execution) | 2026-10-30 |
+| E-C4-RQ3 | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures) | 2026-10-30 |
+| E-C1-LAUNCH | C | `docs/experiments/C.md` | done (offline preparation) | 2026-10-31 |
+| E-COLAB-SETUP | C | `docs/experiments/C.md` | done (offline preparation) | 2026-10-31 |
+| E-C1-COLAB-DEV | C | `docs/experiments/C.md` | done (operator_reported; not independently rerun) | 2026-10-31 |
 | E-POWER | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-PROBE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-SCAN | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
