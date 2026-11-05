@@ -1,0 +1,78 @@
+{
+ "api_budget": {
+  "by_endpoint": {
+   "repos/compare": 108,
+   "repos/pulls": 107
+  },
+  "calls": 215,
+  "graphql_calls": 0,
+  "graphql_cost": 0,
+  "not_modified": 0,
+  "rest_calls": 215,
+  "retries": 0,
+  "sleeps": 108,
+  "slept_seconds": 5.34
+ },
+ "dense_ranks_exist_for_directories": 300,
+ "dense_ranks_exist_for_population_pairs": 1830,
+ "dense_ranks_exist_for_sampled_pairs": {
+  "bm25_dropped": 54,
+  "bm25_kept": 57
+ },
+ "extraction": {
+  "materialise": {
+   "largest_repository_rows": 48733,
+   "materialised": 107,
+   "repositories": 42,
+   "seconds": 30.3,
+   "skipped": 0
+  },
+  "pairs_with_error": 1,
+  "pull_requests_extracted": 107
+ },
+ "k": 20,
+ "overlap": 100,
+ "own": {
+  "reader_1": 150,
+  "reader_2": 150
+ },
+ "population_by_stratum": {
+  "bm25_dropped": 5223,
+  "bm25_kept": 1858
+ },
+ "population_directories": 1286,
+ "population_pairs": 7081,
+ "ranks_bm25_sha256": "da16350a75929b2478dc3e1804b7390547dc20bbe4f167e04581a7c59c4f9f7c",
+ "ranks_dense_sha256": "54f781034cebf6ac05f50f6c5a5e467207831ba9ebfbd7fb6207fa282469e5d0",
+ "requested_per_stratum": 200,
+ "sample_by_stratum": {
+  "bm25_dropped": 200,
+  "bm25_kept": 200
+ },
+ "sample_directories": 247,
+ "sample_repositories": 91,
+ "seed": 0,
+ "sheets": {
+  "bytes": {
+   "reader_1.csv": 1246935,
+   "reader_2.csv": 1248103,
+   "reader_overlap.csv": 496239
+  },
+  "function_text_missing": 0,
+  "hunk_reproduced": 399,
+  "pairs_with_error": 1,
+  "sha256": {
+   "key.csv": "c47191895a778c4110098bad2b94d747077d25b341cab874eaa69ba34213e31b",
+   "reader_1.csv": "4757c564dfe8dbfffb2b52f9d0bceab98682325cc2caf28fc4bfdc379694d4a5",
+   "reader_2.csv": "1e3e95b3e013501c9e83248cc6b177aa0a3585c799fb6bb17a2c23397a1fd0d8",
+   "reader_overlap.csv": "6bc40b8707a762aa063d207302da0b3021643c62a7cfbe3640bc7561c9d8c71b"
+  }
+ },
+ "truncation_rules": {
+  "diff_hunk_chars": 4000,
+  "function_text_chars": 4000,
+  "issue_body_chars": 3000,
+  "other_functions_max": 30,
+  "pull_request_title_chars": 300
+ }
+}

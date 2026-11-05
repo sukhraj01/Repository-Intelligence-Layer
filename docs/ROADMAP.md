@@ -69,7 +69,8 @@ Design of record: option E, 12 cells x 3 seeds, 8 extra evaluation repositories,
 
 - [ ] Enlarge the evaluation set (O8): at least eight repositories at L2 and as many with L3 labels as obtainable; unit records and dense stores must be built for each; cost per repository about 0.06 GPU-hours per checkpoint (placeholder, to be measured on the first one). The choice of repositories is a later task
 - [ ] Retention switch in the training job scripts (O9): keep the half-precision final model of runs that feed RQ3 and the report (about 274 MB each) and archive it to account B's storage (needs an alias for account B and a staged copy)
-- [ ] Label sheet for pull-request labels (O11): relevance of each edited function to its issue, three-way verdict and reason, for the noise audit (400 stratified pairs, two readers on a 100-pair overlap); the call-edge sheet stays separate
+- [x] Label sheet for pull-request labels (O11): relevance of each edited function to its issue, three-way verdict and reason, for the noise audit (400 stratified pairs, two readers on a 100-pair overlap); the call-edge sheet stays separate — sheets and scorer built 2026-11-05 (E-LABEL-AUDIT-SHEET, `docs/LABEL_AUDIT.md`); **nobody has read any pair yet**; reading the sheets and scoring them is a separate, open item below
+- [ ] Read the pilot label sheets (two readers, about 5 hours each) and score them with `scripts/label_audit_score.py` (E-LABEL-AUDIT-SHEET); then decide whether the full mined set needs a second, larger audit
 - [ ] Mined-set gates: token on the cluster (D2), M1 to M4, G2 at 100 pilot directories with a positive and 10,000 positives at full scale (O10), content-overlap audit of the mined corpora (not built)
 - [ ] Draw fresh noise realisations for the confirmatory and calibration cells (O15); the Wave 7 and 8 realisations are not reused
 - [ ] Register the cell list, Holm families (O5) and delta = 1.5 points (O6) before any final run

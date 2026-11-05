@@ -45,3 +45,7 @@ _None._
 ## Addendum 2026-11-03 — stays open; input it is waiting for
 
 Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** the engineer's dollar budget for agent runs. Without that figure the choice between a pinned hosted model and a local quantised model cannot be made (no card above 11 GB is reachable, which bounds any local model).
+
+## Addendum 2026-11-05 — the label sheet is the human sample any model judge would be checked against
+
+Status unchanged (Proposed). Protocol section 7, method (2), allows a model judge on a larger sample of mined pull-request pairs, to be checked against human labels. The label sheet built for the noise audit (`docs/LABEL_AUDIT.md`, entry E-LABEL-AUDIT-SHEET) is that human sample: 400 pairs, 100 read by both readers, with the three-way verdict and the second question defined there, and the same text a judge would be shown (the readers are told to decide from the sheet alone). **No judge has been chosen, run or priced**; the choice of a hosted or local judge stays inside the open question of this ADR, and a judge's agreement with these labels (percent, kappa) is the measure the scorer already reports for two readers. Evidence class: reasoned only (design); nothing has been read by anyone yet.
