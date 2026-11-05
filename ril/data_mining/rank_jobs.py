@@ -18,16 +18,17 @@ from typing import Any
 
 from ril.data_mining.pack import instance_bytes, list_dirs, local_fetch, pack_zip, write_listing
 from ril.data_mining.rank_compare import min_ranks, rank_sample, reading_rule, share_row
+from ril.data_mining.readings import NON_TEST, UNRESTRICTED, check_reading
 from ril.training import pool_ranks as pr
 
 TOP_KS: tuple[int, ...] = (10, 20, 40)
 
 
-def select_dirs(run_root: str, drop_tests: bool, limit: int | None) -> list[str] | None:
+def select_dirs(run_root: str, reading: str, limit: int | None) -> list[str] | None:
     """The first ``limit`` directories of the seeded order that the reading keeps (``None``: all).
 
-    The order is ``sha256("0:<directory>")``, the rule of the population; with ``drop_tests`` a
-    directory with no positive outside test files is not kept. Used to bound the dense passes by
+    The order is ``sha256("0:<directory>")``, the rule of the population; under a reading
+    a directory with no positive left is not kept. Used to bound the dense passes by
     the stage's GPU limit; BM25 runs on every directory.
     """
     if limit is None:
@@ -35,28 +36,35 @@ def select_dirs(run_root: str, drop_tests: bool, limit: int | None) -> list[str]
     kept = [
         d
         for d in list_dirs(run_root)
-        if instance_bytes(os.path.join(run_root, "pr", d), drop_tests) is not None
+        if instance_bytes(os.path.join(run_root, "pr", d), reading) is not None
     ]
     return sorted(kept, key=lambda d: pr.seeded_key(0, d))[:limit]
 
 
 def prepare(
-    run_root: str, work: str, drop_tests: bool = False, limit: int | None = None
+    run_root: str,
+    work: str,
+    reading: str = UNRESTRICTED,
+    limit: int | None = None,
+    only: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """Zip, listing and selection file of a run root under ``work`` (idempotent, same bytes).
 
-    ``drop_tests`` prepares the pool-like reading (no test-file functions in the corpora, no test
-    positives, directories left without a positive dropped).
+    ``reading`` is one of ``readings.READINGS``. ``only`` names the directories to prepare (for a
+    second reading of the directories another reading selected); it replaces ``limit``.
     """
+    check_reading(reading)
+    if only is not None and limit is not None:
+        raise ValueError("give either only or limit, not both")
     os.makedirs(work, exist_ok=True)
     zip_path = os.path.join(work, "mined.zip")
-    only = select_dirs(run_root, drop_tests, limit)
-    n = pack_zip(run_root, zip_path, drop_tests=drop_tests, only=only)
+    chosen = list(only) if only is not None else select_dirs(run_root, reading, limit)
+    n = pack_zip(run_root, zip_path, reading=reading, only=chosen)
     write_listing(zip_path, os.path.join(work, "mined.listing.json"))
-    sample = rank_sample(run_root, drop_tests, only)
+    sample = rank_sample(run_root, reading, chosen)
     with open(os.path.join(work, "sample.json"), "w", encoding="utf-8") as handle:
         handle.write(json.dumps(sample, sort_keys=True) + "\n")
-    return {"directories": n, "zip": zip_path, "drop_tests": drop_tests, "limit": limit}
+    return {"directories": n, "zip": zip_path, "reading": reading, "limit": limit}
 
 
 def bm25(work: str, out: str, *, form: str = "code") -> dict[str, Any]:
@@ -144,7 +152,7 @@ def estimate(
     seen_all: dict[str, set[str]] = {}
     seen_non_test: dict[str, set[str]] = {}
     rows_all = rows_non_test = 0
-    dirs = select_dirs(run_root, True, limit) or list_dirs(run_root)
+    dirs = select_dirs(run_root, NON_TEST, limit) or list_dirs(run_root)
     for name in dirs:
         base = os.path.join(run_root, "pr", name)
         with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:

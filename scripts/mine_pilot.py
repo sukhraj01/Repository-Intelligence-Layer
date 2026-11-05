@@ -30,6 +30,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from ril.data_mining.readings import NON_TEST, READINGS, UNRESTRICTED  # noqa: E402
+
 
 def _commit() -> str:
     given = os.environ.get("RIL_COMMIT", "").strip()
@@ -59,9 +61,19 @@ def main(argv: list[str] | None = None) -> int:
         "--lookahead", type=int, default=1, help="base commits fetched ahead (speed only)"
     )
     r.add_argument("--created", required=True, help="date of the first session, YYYY-MM-DD")
+    r.add_argument(
+        "--store-layout",
+        choices=("directories", "dedup"),
+        default="directories",
+        help="dedup: rows once per repository plus a manifest per pull request (D93)",
+    )
+    r.add_argument("--durable", help="durable copy of the run root (restored from, pushed to)")
+    r.add_argument("--sync-every", type=int, default=25, help="outcomes between pushes")
+    r.add_argument("--sync-seconds", type=float, default=600.0, help="seconds between pushes")
     k = sub.add_parser("pack")
     k.add_argument("out")
     k.add_argument("zip")
+    k.add_argument("--reading", choices=READINGS, default=UNRESTRICTED)
     s = sub.add_parser("rank-sample")
     s.add_argument("out")
     s.add_argument("sample")
@@ -87,6 +99,17 @@ def main(argv: list[str] | None = None) -> int:
     rpt.add_argument("--work", required=True)
     rpt.add_argument("--repos", type=int, required=True, help="the first N repositories")
     rpt.add_argument("--lookahead", type=int, default=1)
+    sc2 = sub.add_parser("store-convert", help="build a de-duplicated store from a run root")
+    sc2.add_argument("src")
+    sc2.add_argument("dst")
+    mt = sub.add_parser("materialise", help="rebuild the directory layout from a store")
+    mt.add_argument("store")
+    mt.add_argument("out")
+    mt.add_argument("--names", help="file with one directory name per line (default: all)")
+    cp = sub.add_parser("compare-roots", help="checksum comparison of two run roots")
+    cp.add_argument("a")
+    cp.add_argument("b")
+    cp.add_argument("json")
     dd = sub.add_parser("dedup-measure")
     dd.add_argument("out")
     dd.add_argument("json")
@@ -100,8 +123,12 @@ def main(argv: list[str] | None = None) -> int:
     rp.add_argument("out")
     rp.add_argument("work")
     rp.add_argument("--limit", type=int, help="first N directories of the seeded order")
+    rp.add_argument("--drop-tests", action="store_true", help="alias of --reading non_test")
     rp.add_argument(
-        "--drop-tests", action="store_true", help="pool-like reading (no test functions)"
+        "--reading", choices=READINGS, help="view over the run root (default: unrestricted)"
+    )
+    rp.add_argument(
+        "--only-from", help="selection file (sample.json): prepare exactly its directories"
     )
     rb = sub.add_parser("rank-bm25")
     rb.add_argument("work")
@@ -136,7 +163,7 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "pack":
         from ril.data_mining.pack import pack_zip, write_listing
 
-        n = pack_zip(a.out, a.zip)
+        n = pack_zip(a.out, a.zip, reading=a.reading)
         write_listing(a.zip, a.zip + ".listing.json")
         sys.stdout.write(json.dumps({"instances": n, "zip": a.zip}) + "\n")
         return 0
@@ -188,6 +215,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
         return 0
+    if a.cmd in ("store-convert", "materialise", "compare-roots"):
+        from ril.data_mining import cas
+
+        if a.cmd == "store-convert":
+            doc = cas.convert(a.src, a.dst)
+            doc["bytes"] = cas.store_bytes(a.dst)
+        elif a.cmd == "materialise":
+            names = Path(a.names).read_text(encoding="utf-8").split() if a.names else None
+            doc = cas.materialise(a.store, a.out, names)
+        else:
+            doc = cas.compare_roots(a.a, a.b)
+            Path(a.json).write_text(
+                json.dumps(doc, indent=1, sort_keys=True) + "\n", encoding="utf-8"
+            )
+        import resource
+
+        doc["peak_rss_mb"] = round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
+        sys.stdout.write(json.dumps(doc, sort_keys=True) + "\n")
+        return 0 if doc.get("all_identical", True) else 1
     if a.cmd == "dedup-measure":
         from ril.data_mining import dedup
 
@@ -235,7 +281,13 @@ def main(argv: list[str] | None = None) -> int:
         from ril.data_mining import rank_jobs
 
         if a.cmd == "rank-prepare":
-            res = rank_jobs.prepare(a.out, a.work, a.drop_tests, a.limit)
+            if a.drop_tests and a.reading not in (None, NON_TEST):
+                raise SystemExit("--drop-tests means --reading non_test; give only one")
+            only = None
+            if a.only_from:
+                only = [r["dir"] for r in json.loads(Path(a.only_from).read_text())["sample"]]
+            reading = NON_TEST if a.drop_tests else (a.reading or UNRESTRICTED)
+            res = rank_jobs.prepare(a.out, a.work, reading, a.limit, only)
         elif a.cmd == "rank-bm25":
             res = rank_jobs.bm25(a.work, a.ranks, form=a.form)
         elif a.cmd == "rank-dense":
@@ -328,6 +380,10 @@ def main(argv: list[str] | None = None) -> int:
         code_commit=_commit(),
         stop_after=a.stop_after,
         repos=repos,
+        store_layout=a.store_layout,
+        durable_root=a.durable,
+        sync_every=a.sync_every,
+        sync_seconds=a.sync_seconds,
     )
     sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
     return 0

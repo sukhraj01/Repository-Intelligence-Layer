@@ -19,7 +19,7 @@ import zipfile
 from collections.abc import Sequence
 from typing import Any
 
-from ril.data_mining.agreement import is_test_id
+from ril.data_mining import readings
 from ril.data_mining.files import read_corpus
 
 POOL_PREFIX = "train/python/"
@@ -40,31 +40,21 @@ def list_dirs(root: str) -> list[str]:
     )
 
 
-def instance_bytes(base: str, drop_tests: bool) -> tuple[bytes, bytes] | None:
-    """``(corpus, qrels)`` bytes of one instance directory, or ``None`` if nothing is left.
+def instance_bytes(base: str, reading: str) -> tuple[bytes, bytes] | None:
+    """``(corpus, qrels)`` bytes of one instance directory under ``reading``, or ``None``.
 
-    With ``drop_tests`` the corpus loses the functions of test files (D9 path rule) and the qrels
-    lose their positives; a directory with no positive left is dropped. This is the pool-like
-    reading: the published pool's corpora hold no test-file functions and none of its positives is
-    in a test file (``results/mining/m1_agreement.md``).
+    ``None`` means the reading leaves the directory without a positive. The readings are defined
+    in :mod:`ril.data_mining.readings` (``non_test`` is the pool-like reading of M3: no
+    test-file functions, no test positives; ``pool_aligned`` follows the published pool's code).
     """
     corpus = read_corpus(base)
     with open(os.path.join(base, "qrels", "test.tsv"), "rb") as handle:
         qrels = handle.read()
-    if not drop_tests:
-        return corpus, qrels
-    keep_rows = [
-        line
-        for line in corpus.decode("utf-8").splitlines(keepends=True)
-        if line.strip() and not is_test_id(str(json.loads(line)["_id"]))
-    ]
-    lines = qrels.decode("utf-8").splitlines(keepends=True)
-    kept_qrels = [lines[0]] + [
-        line for line in lines[1:] if line.strip() and not is_test_id(line.split("\t")[1])
-    ]
-    if len(kept_qrels) < 2:
-        return None
-    return "".join(keep_rows).encode("utf-8"), "".join(kept_qrels).encode("utf-8")
+    meta: dict[str, object] = {}
+    if reading == readings.POOL_ALIGNED:
+        with open(os.path.join(base, "pr_meta.json"), encoding="utf-8") as handle:
+            meta = json.load(handle)
+    return readings.apply(reading, corpus, qrels, meta)
 
 
 def pack_zip(
@@ -72,13 +62,13 @@ def pack_zip(
     zip_path: str,
     *,
     deflate: bool = True,
-    drop_tests: bool = False,
+    reading: str = readings.UNRESTRICTED,
     only: Sequence[str] | None = None,
 ) -> int:
     """Write ``zip_path`` with ``train/python/<dir>/{corpus.jsonl, queries.jsonl, qrels/test.tsv}``.
 
     Returns the number of instances packed. ``pr_meta.json`` stays out (the pool has no such
-    member). ``drop_tests`` writes the pool-like reading (see :func:`instance_bytes`); ``only``
+    member). ``reading`` selects the view (:func:`instance_bytes`); ``only``
     restricts the archive to the named directories.
     """
     names = list_dirs(root) if only is None else sorted(set(only))
@@ -88,7 +78,7 @@ def pack_zip(
     with zipfile.ZipFile(tmp, "w", compression=method) as zf:
         for name in names:
             base = os.path.join(root, "pr", name)
-            kept = instance_bytes(base, drop_tests)
+            kept = instance_bytes(base, reading)
             if kept is None:
                 packed -= 1
                 continue

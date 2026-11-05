@@ -148,6 +148,7 @@ def mine_selected(
     on_outcome: Callable[[Outcome], None] | None = None,
     stop_after: int | None = None,
     lookahead: int = 1,
+    after_record: Callable[[], None] | None = None,
 ) -> RunSummary:
     """Mine the selected pull requests that have no state row; record each right away.
 
@@ -156,7 +157,8 @@ def mine_selected(
     session by adopting the complete directory. With ``lookahead`` above 1 the compare calls of
     the next pull requests are made ahead and their base commits are fetched in the background
     while the current one is parsed; pull requests are still mined and recorded in the selected
-    order, so the outputs do not depend on ``lookahead``.
+    order, so the outputs do not depend on ``lookahead``. ``after_record`` is called after each
+    state row (the copy of the run root to a durable area, ``durable.Syncer.tick``).
     """
     summary = RunSummary()
     store.clean_partial()
@@ -201,6 +203,8 @@ def mine_selected(
                 on_outcome(outcome)  # test hook: may raise to simulate a crash before the row
             store.record(outcome)
             state[pr.key] = outcome.row()
+            if after_record is not None:
+                after_record()
             summary.attempted += 1
             summary.outcomes[outcome.status] = summary.outcomes.get(outcome.status, 0) + 1
             refill()
