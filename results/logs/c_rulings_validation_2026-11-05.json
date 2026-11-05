@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-05",
+  "evidence_class": "measured_correctness_checks",
+  "source_commit": "2b2b683b9d366996458b4ef6ea3bf593a7788c49",
+  "source_state": "Code committed; evidence/documentation corrections not yet committed when checks ran.",
+  "python": "Python 3.11.18",
+  "platform": "Linux",
+  "architecture": "aarch64",
+  "checks": {
+    "unit": {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make test RUN=",
+      "exit_code": 0,
+      "output": "results/logs/c_rulings_unit_2026-11-05.txt",
+      "sha256": "ad37781c2e51c6b7d577d735868b8b4b764b3fb2d3b93078f5154093e49e41ab"
+    },
+    "lint": {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" make lint RUN=",
+      "exit_code": 0,
+      "output": "results/logs/c_rulings_lint_2026-11-05.txt",
+      "sha256": "9fe922508e8c4605c9b23a58cb91ea11e9650c7602f22cd94d59fcd65de847f9"
+    },
+    "additional_cpu": {
+      "command": "PATH=\"$PWD/.venv/bin:$PATH\" pytest tests/integration tests/leakage tests/reproducibility -q -p no:xdist -m 'not torch and not slow'",
+      "exit_code": 0,
+      "output": "results/logs/c_rulings_additional_cpu_2026-11-05.txt",
+      "sha256": "82569b4bb894bd68d8e622ec449f38c84987e94620d10ecd75e5643885683bba"
+    }
+  },
+  "limits": [
+    "Native macOS unavailable; missing boot-file behavior tested with patched path.",
+    "Existing optional Torch tests and absent Flask integration fixture remain skipped; no new skips.",
+    "No actual data run, query-level bootstrap recomputation, fixture scientific row or model call.",
+    "No new synthetic latency rows in scientific ledgers under round-one fixture restriction."
+  ],
+  "implementation_sha256": {
+    "ril/evaluation/runtime.py": "8a72f326c894535d6797381f5baabc9d6615a3410bc70d92d8ad668c235f128b",
+    "ril/data_mining/c_miner.py": "a350928bc621514ad233e6e5152011b164df3b04a2f924afd14d99cd7fb9fb7b",
+    "scripts/c_colab.py": "f60e1c89794749bc6f93263adb0c9fe46754bae83702f6cb13744e558a0161d0",
+    "scripts/c_mine_prs.py": "5adcaa7119f28734d928d07e5c16ecc818bad4ca324494eb48152c60df54d341",
+    "scripts/c_review_evidence.py": "7d6709149d5ffba07869f0a0bdfd9348a07782744504b1cdaf970aecb2428c69",
+    "tests/unit/test_c_colab.py": "fc90f5cda1a4faa514b7353c2a33dcb2cc4cda34baa0619c40bb07f23192dae6",
+    "tests/unit/test_c_colab_runtime.py": "01c4a3f5d3bca6fdf3c86263cee4d26382cfa63a752da5dfca34bea013b2f8e7",
+    "tests/unit/test_c_raw_mining.py": "ab0c78c8d5232f9005fb52f44d1a92d8fa84350eb95b62727788f27d793df0cf"
+  }
+}

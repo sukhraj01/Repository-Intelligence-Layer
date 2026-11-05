@@ -2,7 +2,7 @@
   "date_received": "2026-10-31",
   "run_id": "dev-v1",
   "registration": "E-C1-COLAB-DEV",
-  "evidence_class": "operator_supplied_actual_dev_evaluation_summary",
+  "evidence_class": "operator_reported",
   "independent_remote_execution": false,
   "reported_cli_summary": {
     "config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452",
@@ -170,5 +170,10 @@
   "compute_usd": null,
   "model_api_usd": 0,
   "operator_input_sha256": "2d3add97831ac56a9fa3ae8ef832cc5bfde3d2e912dd0b448c2a79e3aef41121",
-  "stdout_line_endings": "LF normalized from supplied CRLF; metric values unchanged"
+  "stdout_line_endings": "LF normalized from supplied CRLF; metric values unchanged",
+  "evidence_class_review": {
+    "date": "2026-11-05",
+    "reason": "No query-level output, timing artifacts or native run directory stored; summaries cannot independently reproduce intervals.",
+    "upgrade_requires": "Store native run under results/ and recompute intervals from stored query-level rows."
+  }
 }

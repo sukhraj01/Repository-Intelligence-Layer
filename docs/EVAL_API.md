@@ -289,30 +289,26 @@ fixture discordance. These are arithmetic smoke checks. `real_instances=0` and
 `scientific_cost_discordance_mde=null` prevent their promotion to RQ3 empirical power evidence.
 C4 owns the full paired/resumable/idempotent/spend-capped orchestration and failure reports.
 
-## Scaffold options: historical source evidence, no selection
+## Scaffold options: unverified reading, no selection
 
-Five versioned papers were read in full, including appendices, result tables and numerical
-figures (216 PDF pages total); all five notes pass numeric/page checks. The table below separates
-paper-supported extensibility from an unimplemented controlled retrieval intervention. Costs
-are **paper_reported historical** values with their stated scope, not current prices or limits.
-No current release, dependency installation, hosted availability or local memory feasibility was
-verified. Paper-version evidence does not establish present software behavior.
+The earlier claim of five full-paper readings and its page total is **unverified**. The
+complete set of corresponding versioned notes is absent from the tracked tree. No paper was
+read in full during this correction; historical validation records do not establish that it was.
+The candidates below are reading leads. No historical price, numerical result, page-specific
+claim or current software guarantee is established here.
 
-| Candidate | One replaceable RIL retrieval tool | Seed/temperature and reproducibility | Cost and logs; hosted/local scope |
-|---|---|---|---|
-| SWE-agent | Configurable Bash/Python command files make integration plausible; several native searches and shell access can bypass the added retriever. Exclusive boundary needs a pinned-source test (Appendix A.2–A.3, pp.21–24). | Temperature zero was selected, yet repeated outcomes vary; decoding seed contract absent (Appendix B.1 p.25; Table 10 p.35). | Episode trajectories/patches and a historical $4 cutoff are described; full failure/token/retry schema needs audit. Table 1 p.6 cost averages are **success-only**, not all-attempt budgets. API/local adapters claimed, local replication unestablished ([v3](https://arxiv.org/pdf/2405.15793v3), pp.5,21,37–38). |
-| OpenHands / fixed CodeActAgent | Python AgentSkills extension is explicit; ordinary shell/search paths remain. Platform must be reduced to one pinned agent/configuration and tested at the chosen boundary (pp.3–5). | Exact-input mocked tests are deterministic; no live seed/temperature/repeatability guarantee (Appendix E p.19). | Ordered actions/observations and cumulative cost state are documented; raw retry/usage/termination completeness and hard caps are unverified. Hosted historical averages $1.72/$1.10 per issue are not ceilings; no controlled local replica ([v3](https://arxiv.org/pdf/2407.16741v3), Table 4 p.8, pp.3,19–22). |
-| Agentless | Staged tree localization, folder filtering, embedding retrieval and fusion; no native single retrieval tool. Choose and audit a stage adapter before a causal swap (pp.6–7). | Some greedy stages plus stochastic edit sets, patches and tests; temperature .8, no seed/replay guarantee (p.9). | Historical $0.70 and 78,166 tokens per issue average; no cap/full failure log contract. Dated hosted generator and separate embedding service, no demonstrated local equivalent ([v2](https://arxiv.org/pdf/2407.01489v2), Table 1 p.10, pp.9,18). |
-| LocAgent + fixed repair | Three localization tools; SearchEntity alone leaves traversal and direct code reads. Downstream repair uses Agentless; not itself a patch scaffold (Table 2 p.5; p.11). | Temperature 1.0, two interactions and reciprocal-rank aggregation; no seed guarantee (Appendix A.2 p.14). | Localizer averages $0.05/$0.09 with fine-tuned open models and $0.66 with a closed-source model; excludes fixed repair and is based on service prices. Event log diagram, full audit schema/cap absent; native/text tool modes differ ([v2](https://arxiv.org/pdf/2503.09089v2), Table 5 p.9, pp.14–15). |
-| CoSIL + Agentless-1.5 repair | Multi-stage graph localizer with pruner/reflection; its reported repair agent is Agentless. A fixed repair-stage adapter is plausible; one native interchangeable retrieval tool is not shown (pp.4–6). | Greedy localization; repair uses one greedy plus nine sampled patches at .8. No seed guarantee; published/reproduced repair totals differ (pp.6,10). | Localization mini-sample service costs $0.022/$0.341 are not whole-repair budgets; message history exists, full trace/cap unestablished. Local vLLM and hosted supplementary modes are described, equivalence untested ([v3](https://arxiv.org/pdf/2503.22424v3), Table VII p.9, pp.5–6). |
+| Candidate / version to verify | Controlled intervention to check | Reproducibility and accounting to check |
+|---|---|---|
+| SWE-agent v3 | One replaceable retrieval tool; audit alternative shell/search paths | Fixed source, seed/temperature support, complete trajectories, failures and spend caps |
+| OpenHands v3 | Pin one agent and test its retrieval extension and bypass policy | Same repair settings and context; retry, usage and termination records |
+| Agentless v2 | Specify and test the localization or repair-stage adapter | Fixed sampling/selection policy; all-attempt cost and complete failure logs |
+| LocAgent v2 | Separate localization tools from a fixed downstream repair scaffold | Count localization and repair together; repeat matched dev pairs |
+| CoSIL v3 | Specify graph/localization intervention and fixed downstream repair | Verify decoding, retry and usage contracts; distinguish partial and whole-repair costs |
 
-Reasoned recommendation pending the lead: retain Agentless as the existing provisional ADR-007
-candidate, and compare a narrowly specified stage adapter with an extensible SWE-agent or
-OpenHands adapter. First inspect a pinned revision and prove the same tool signature, alternative
-search policy, context assembly and repair/grading settings remain fixed in an offline fixture.
-Then repeat an authorized paired dev subset to measure real cost, discordance and run noise.
-Local or hosted model selection and spend remain ADR-008 questions. The scripted pilot clears
-apparatus checks only and cannot select any candidate or supply those real measurements.
+Reasoned recommendation pending the lead: retain the existing provisional ADR-007 candidate
+until full-paper notes and a pinned-source boundary audit exist. Then repeat an authorized
+paired dev subset to measure cost, discordance and run noise. Model selection and spend remain
+ADR-008 questions. Scripted fixtures establish apparatus behavior only.
 
 ## Durable paired runner (C4 apparatus)
 
@@ -390,7 +386,8 @@ cells top to bottom. Mount Google Drive through its consent dialog and choose th
 `ril-colab-source.zip` when prompted. No GitHub push/read credentials are needed for this source
 transfer. The notebooks verify the whole ZIP plus every committed source file and manifest before
 execution. Existing modified local source is refused. Private or untracked files are excluded
-by packaging the committed tree only. `kit.json` identifies the original commit and ZIP SHA-256.
+by packaging the committed tree only. The generated output
+`data/processed/c_colab_kit/kit.json` identifies the original commit and ZIP SHA-256.
 Source archives contain no Git repository; evaluation logs retain the original commit fallback
 and explicit unknown/dirty Git status. Mining explicitly reports `archive_without_git`, requires
 a full pinned source commit and records actual implementation checksums before dispatch.
