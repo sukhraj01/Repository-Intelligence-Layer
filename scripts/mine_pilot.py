@@ -14,6 +14,7 @@ Subcommands (logic in ``ril/``):
   rank-prepare OUT WORK       zip, listing and selection file of the run for the rank tooling
   rank-bm25 WORK RANKS        BM25 ranks (CPU);  rank-dense WORK RANKS LOG --teachers T ...  (GPU)
   rank-tables WORK JSON --ranks R ... --yield-per-pr Y   shares with no positive in the top K
+  rank-reproduce OLD --new R ...   exact comparison of rank rows with an earlier rank file
   handcheck OUT MD --n N --seed S
                               markdown for a human to read: issue title, hunks, mined positives
 """
@@ -122,6 +123,9 @@ def main(argv: list[str] | None = None) -> int:
     rt.add_argument("json")
     rt.add_argument("--ranks", nargs="+", required=True)
     rt.add_argument("--yield-per-pr", type=float, required=True)
+    rr = sub.add_parser("rank-reproduce")
+    rr.add_argument("old")
+    rr.add_argument("--new", nargs="+", required=True)
     a = p.parse_args(argv)
 
     from ril.data_mining import jobs
@@ -240,6 +244,10 @@ def main(argv: list[str] | None = None) -> int:
             )
         elif a.cmd == "rank-estimate":
             res = rank_jobs.estimate(a.out, a.texts_per_second, limit=a.limit)
+        elif a.cmd == "rank-reproduce":
+            res = rank_jobs.reproduces(a.new, a.old)
+            sys.stdout.write(json.dumps(res, sort_keys=True) + "\n")
+            return 0 if res["exact"] else 4
         else:
             res = rank_jobs.tables(f"{a.work}/sample.json", a.ranks, yield_per_pr=a.yield_per_pr)
             Path(a.json).write_text(

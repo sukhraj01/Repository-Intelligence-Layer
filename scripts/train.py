@@ -220,6 +220,15 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--feature-table")
     c.add_argument("--form", default="code")
     c.add_argument("--ahead", type=int, default=4)
+    c.add_argument(
+        "--local", action="store_true", help="the listing's archive is a local file (mined set)"
+    )
+    fs = sub.add_parser("filter-size")
+    fs.add_argument("cache")
+    fs.add_argument("feature_table")
+    fs.add_argument("--teacher", required=True)
+    fs.add_argument("--k", type=int, required=True)
+    fs.add_argument("--level", default="positive")
     m = sub.add_parser("mine")
     m.add_argument("cache")
     m.add_argument("out")
@@ -306,6 +315,8 @@ def main(argv: list[str] | None = None) -> int:
     ft.add_argument("--rename-cache")
     a = p.parse_args(argv)
 
+    from ril.data_mining.pack import local_fetch
+    from ril.training import pool_ranks as pr
     from ril.training import train_jobs as tj
 
     if a.cmd == "select":
@@ -328,7 +339,10 @@ def main(argv: list[str] | None = None) -> int:
             feature_table=a.feature_table,
             form=a.form,
             ahead=a.ahead,
+            fetch=local_fetch if a.local else pr.http_fetch,
         )
+    elif a.cmd == "filter-size":
+        out = tj.filter_size_job(a.cache, a.feature_table, a.teacher, a.k, a.level)
     elif a.cmd == "mine":
         out = tj.mine_job(
             a.cache,

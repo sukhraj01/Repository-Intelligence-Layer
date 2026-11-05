@@ -165,6 +165,34 @@ def cache_job(
     return rec
 
 
+def filter_size_job(
+    cache_path: str, feature_table: str, teacher: str, k: int, level: str = "positive"
+) -> Record:
+    """Examples and positives a FILTER cell keeps from a cache (the size its control is matched to).
+
+    Implements ``docs/experiments/B.md`` E-MINED-PILOT: the size-matched subsample (D43) takes the
+    number of examples FILTER leaves. The count comes from the arm's own filter class, so it is
+    the number the FILTER cell will train on.
+    """
+    from ril.training.supervision import KRankThreshold
+
+    examples = read_cache(cache_path)
+    signals = signals_from_table(feature_table)
+    if teacher not in signals:
+        raise ValueError(f"teacher {teacher!r} is not a column of the feature table")
+    kept, report = KRankThreshold(signals[teacher], k, level).apply(examples)
+    return {
+        "teacher": teacher,
+        "k": k,
+        "level": level,
+        "examples_in": len(examples),
+        "examples_kept": len(kept),
+        "positives_in": sum(len(e.positive_ids) for e in examples),
+        "positives_kept": sum(len(e.positive_ids) for e in kept),
+        "report": report.to_dict(),
+    }
+
+
 def teacher_score_fn(
     teacher: str, *, cut: int, device: str, batch_size: int
 ) -> tuple[ScoreFn, Record | None]:

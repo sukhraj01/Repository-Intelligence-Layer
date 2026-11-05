@@ -1,0 +1,9 @@
+level,contrast,seeds_per_arm,variant,mdd_points,lo,hi,queries,repos,seed_pairs,exploratory
+L2,mp_filter_bm25 - mp_raw,2,with_repo_term,1.44,0.92,4.39,351,5,2,True
+L2,mp_filter_bm25 - mp_raw,2,query_level,1.44,0.92,4.39,351,5,2,True
+L2,mp_filter_bm25 - mp_sub,2,with_repo_term,1.46,1.08,3.22,351,5,2,True
+L2,mp_filter_bm25 - mp_sub,2,query_level,1.46,1.02,2.73,351,5,2,True
+L3,mp_filter_bm25 - mp_raw,2,with_repo_term,2.36,1.18,4.44,155,2,2,True
+L3,mp_filter_bm25 - mp_raw,2,query_level,2.36,1.18,4.44,155,2,2,True
+L3,mp_filter_bm25 - mp_sub,2,with_repo_term,1.57,1.37,3.17,155,2,2,True
+L3,mp_filter_bm25 - mp_sub,2,query_level,1.16,1.16,3.17,155,2,2,True

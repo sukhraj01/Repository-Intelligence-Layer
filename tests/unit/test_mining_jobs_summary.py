@@ -414,6 +414,7 @@ def test_every_subcommand_the_job_scripts_call_accepts_its_flags() -> None:
         "rank-dense": ("--teachers", "--cut", "--form"),
         "rank-bm25": ("--form",),
         "rank-tables": ("--ranks", "--yield-per-pr"),
+        "rank-reproduce": ("--new",),
         "agreement": ("--listing",),
         "handcheck": ("--n", "--seed"),
         "report": (),
@@ -455,3 +456,63 @@ def test_repeat_mines_again_into_a_new_root_with_identical_bytes(tmp_path) -> No
     assert out["selected"] == 3 and out["directories_identical"] == 3
     assert out["directories_different"] == 0 and out["directories_missing"] == 0
     assert out["peak_rss_mb"] > 0
+
+
+def test_mined_run_flows_from_ranks_to_a_cache_and_a_filter_size_and_ranks_reproduce(
+    tmp_path,
+) -> None:
+    """Prepare, BM25, feature table, local cache, FILTER size: the chain the pilot job runs."""
+    from ril.data_mining import rank_jobs
+    from ril.data_mining.pack import local_fetch
+    from ril.training import pool_ranks as pr
+    from ril.training.train_jobs import cache_job, feature_table_job, filter_size_job, select_job
+
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    jobs.run_pilot(
+        config=MiningConfig(n_repos=1, max_prs=3),
+        out_root=root,
+        population=pop,
+        is_held_out=lambda r: False,
+        client=client,
+        snapshots=snaps,
+        created="2026-11-02",
+        code_commit="abc1234",
+        repos=[REPO],
+    )
+    work = str(tmp_path / "work")
+    rank_jobs.prepare(root, work)
+    ranks = str(tmp_path / "ranks_bm25.jsonl")
+    rank_jobs.bm25(work, ranks)
+    again = str(tmp_path / "again.jsonl")
+    rank_jobs.bm25(work, again)
+    assert rank_jobs.reproduces([again], ranks)["exact"] is True
+    rows = pr.read_jsonl(ranks)
+    rows[0]["ranks"][0]["rank"] += 1
+    changed = str(tmp_path / "changed.jsonl")
+    with open(changed, "w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row) + "\n")
+    res = rank_jobs.reproduces([changed], ranks)
+    assert res["exact"] is False and res["differing"] == [rows[0]["dir"]]
+    assert rank_jobs.reproduces([], ranks)["missing"] != []
+
+    held = "data/held_out/held_out_repos.json"
+    table = str(tmp_path / "features.csv")
+    feat = feature_table_job(
+        [ranks], table, teachers=["bm25"], held_out_path=held, rename_cache_path=None
+    )
+    assert feat["directories_complete"] == 3
+    listing = os.path.join(work, "mined.listing.json")
+    sel = str(tmp_path / "selection.json")
+    select_job(listing, held, None, sel, feature_table=table, max_instances=None, seed=0)
+    cache = str(tmp_path / "mined.jsonl.gz")
+    rec = cache_job(listing, sel, cache, feature_table=table, form="code", fetch=local_fetch)
+    assert rec["written"] == 3
+    big = filter_size_job(cache, table, "bm25", 10_000)
+    assert big["examples_kept"] == big["examples_in"] == 3
+    none = filter_size_job(cache, table, "bm25", 1)
+    assert none["examples_kept"] <= none["examples_in"]
+    with pytest.raises(ValueError):
+        filter_size_job(cache, table, "nope", 20)

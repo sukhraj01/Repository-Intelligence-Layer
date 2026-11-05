@@ -1,0 +1,111 @@
+{
+ "bm25_pass": {
+  "done_before": 0,
+  "seconds": 1036.5,
+  "selected": 1286,
+  "stage": "bm25",
+  "written": 1286
+ },
+ "bm25_reproduction_of_M3": {
+  "compared": 300,
+  "differing": [],
+  "exact": true,
+  "identical": 300,
+  "missing": [],
+  "old_directories": 300
+ },
+ "code_commit_label": "c026722 (cluster copy; configs of the subsample cells added at b8e8109, the quoting fix at a later commit; no code differs)",
+ "data": {
+  "cache_bytes": 1249159767,
+  "cache_sha256": "222ab096e4259d86516d4fb729a7d4760e2f57db10fd9c467e32ab158d34b50e",
+  "directories_in_reading": 1286,
+  "directories_selected": 1286,
+  "feature_table_sha256": "bfc0f631095db7ddb3bb030f71afd66a606d831e2e110d3a562282add8c344ca",
+  "held_out_directories_in_listing": 0,
+  "mined_run": "E-MINE-PILOT M2 pilot run, pool-like reading (no test-file function, no test positive; async def kept, DEV-030)",
+  "positive_rows_in_feature_table": 7081,
+  "select_stats": {
+   "errors": [],
+   "fetch_errors": 0,
+   "held_out_dropped": 0,
+   "listed": 1286,
+   "no_positive": 0,
+   "not_in_table_dropped": 0,
+   "positives_not_in_table": 0,
+   "selected": 1286,
+   "yielded": 0
+  }
+ },
+ "date": "2026-11-03",
+ "filter_k20_bm25": {
+  "examples_in": 1286,
+  "examples_kept": 765,
+  "k": 20,
+  "level": "positive",
+  "positives_in": 7081,
+  "positives_kept": 1858,
+  "report": {
+   "examples_in": 1286,
+   "examples_kept_share": 0.5948678071539658,
+   "examples_out": 765,
+   "positives_in": 7081,
+   "positives_kept_share": 0.262392317469284,
+   "positives_out": 1858
+  },
+  "teacher": "bm25"
+ },
+ "gpu_hours_stage": 2.6,
+ "hardware": "NVIDIA GeForce RTX 2080 Ti 11264 MiB, driver 570.211.01 (nodes of the three GPU jobs: see ledger)",
+ "jobs": [
+  {
+   "elapsed": "00:51:46",
+   "gpu_hours": 0.0,
+   "job": 55970,
+   "purpose": "CPU preparation",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:01:48",
+   "gpu_hours": 0.03,
+   "job": 56056,
+   "purpose": "seed 0, stopped at the first training start: configuration file unreadable (unquoted colon)",
+   "state": "FAILED"
+  },
+  {
+   "elapsed": "01:18:11",
+   "gpu_hours": 1.3,
+   "job": 56441,
+   "purpose": "seed 0: RAW, FILTER, subsample",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:01:38",
+   "gpu_hours": 0.03,
+   "job": 56565,
+   "purpose": "seed 1, stopped by the CUDA gate on a node without CUDA",
+   "state": "FAILED"
+  },
+  {
+   "elapsed": "01:14:18",
+   "gpu_hours": 1.24,
+   "job": 56571,
+   "purpose": "seed 1: RAW, FILTER, subsample",
+   "state": "COMPLETED"
+  }
+ ],
+ "run_directories": {
+  "mp_filter_bm25": [
+   "2026-11-03_2f95c9bc",
+   "2026-11-03_f46dfd1c"
+  ],
+  "mp_raw": [
+   "2026-11-03_5aa72933",
+   "2026-11-03_af209308"
+  ],
+  "mp_sub": [
+   "2026-11-03_2e804cf1",
+   "2026-11-03_e7a6939e"
+  ]
+ },
+ "stage": "E-MINED-PILOT (exploratory)"
+}

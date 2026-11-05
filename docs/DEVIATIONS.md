@@ -257,3 +257,19 @@ engineer sign-off — it is a design decision.
 - Impact: adds person-time (about 8 hours per reader for 400 pairs); no effect on what is held identical.
 - Reversible: yes.
 - Related: ADR-002, `docs/RQ2_PROTOCOL.md` O11
+
+## DEV-029 — The mined-set pilot is evaluated on the five dev repositories without ansible, not on six   (2026-11-03 · status: proposed)
+- Master says: the brief of the mined-set integration pilot (D91): evaluation "on the six dev repositories for L2 and every dev repository with L3 labels as in Waves 6 and 7", at the measured 0.45 GPU-hours per run, with the stage aborted above 3.2 GPU-hours.
+- We do: the evaluation set of Waves 5 to 8: openlibrary and qutebrowser at L2 and L3, conan, haystack and streamlink at L2 (five repositories, 351 L2 and 155 L3 queries), the same configuration file and query set as E-PILOT-ARMS2 (`configs/experiments/e1_bm25_reproduction.yaml`). Pro ansible is not evaluated.
+- Why: the brief's own anchors disagree. Waves 6 and 7 did not evaluate ansible (E-STORED-ANALYSIS lists the set as five L2 and two L3 repositories), the 0.45 GPU-hours per run was measured on that set, and reading (ii) needs "same code, same evaluation" against the stored Wave 6 RAW rows, which exist for these five repositories only (no checkpoint is retained, so ansible could not be added to them without a retrain). An evaluation with ansible costs about 0.33 GPU-hours more per run (`docs/experiments/B.md`, checkpoint inventory), i.e. about 0.78 per run and 4.7 for six runs, above the 3.2 abort limit. The two readings of "six" cannot both hold; the one that keeps the comparison and the cost is used.
+- Impact: five L2 and two L3 repositories, so the repository-clustered intervals rest on two L3 repositories (stated beside every L3 number); no ansible column. The number of dev repositories in the brief (six) is not met.
+- Reversible: yes. An ansible evaluation needs a retrain of every cell it covers (about 0.78 GPU-hours per run) and the Wave 6 RAW cells retrained as well for reading (ii).
+- Related: `docs/experiments/B.md` E-MINED-PILOT, `docs/COMPUTE.md`
+
+## DEV-030 — The pool-like reading of the mined pilot keeps `async def` functions, as the BM25 numbers of the earlier stage did   (2026-11-03 · status: proposed)
+- Master says: the brief (D89): the mined pilot directories "in the pool-like reading (no test functions or test positives, no async def; the reading used in M3)"; D90: the first 300 directories must reproduce the M3 BM25 numbers exactly.
+- We do: the reading that M3 actually used, `READING=non_test` (`rank-prepare --drop-tests`): no test-file function in the corpora, no test positive, directories left without a positive dropped. Functions defined with `async def` stay in the corpora and as positives.
+- Why: the M3 reading did not remove `async def` functions (`ril/data_mining/pack.py` `instance_bytes` drops test-file functions only; `results/mining/m3_ranks.md` lists the reading as "no test-file functions, no test positives"); "no async def" describes the published pool's corpora (M1: 43 of the mined extras are absent from the pool for that reason), not a filter of M3. Removing them would change every candidate set and the reproduction of the M3 ranks to the last digit (D90) would fail by construction.
+- Impact: the mined training set contains async functions and positives that the published pool never has (4,637 mined-only `async def` functions outside tests in the M1 sample); stated beside every comparison with the pool.
+- Reversible: yes (a corpus filter in `instance_bytes`); a different reading needs new ranks and new runs.
+- Related: `results/mining/m3_ranks.md`, DEV-027, DEV-029
