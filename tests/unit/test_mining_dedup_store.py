@@ -306,3 +306,77 @@ def test_reading_a_manifest_directory_without_materialising_says_so(tmp_path) ->
         read_corpus(dedup.pr_path("acme__widgets-1"))
     with pytest.raises(FileNotFoundError, match="materialise"):
         corpus_size(dedup.pr_path("acme__widgets-1"))
+
+
+def test_pilot_job_in_the_dedup_layout_with_a_durable_copy_and_a_restore(tmp_path) -> None:
+    import json
+
+    from ril.data_mining import jobs
+    from ril.data_mining.config import MiningConfig
+    from ril.data_mining.population import select_population
+    from tests.unit.test_mining_jobs_summary import POOL_NAMES, REPO, synthetic_client
+
+    cfg = MiningConfig(n_repos=1, max_prs=3)
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    dur = str(tmp_path / "durable")
+
+    def run(root: str, **extra):
+        client, snaps, _ = synthetic_client()
+        return jobs.run_pilot(
+            config=cfg,
+            out_root=root,
+            population=pop,
+            is_held_out=lambda r: False,
+            client=client,
+            snapshots=snaps,
+            created="2026-11-05",
+            code_commit="x",
+            repos=[REPO],
+            store_layout=LAYOUT_DEDUP,
+            durable_root=dur,
+            sync_every=1,
+            **extra,
+        )
+
+    first = run(str(tmp_path / "node1"), stop_after=2)
+    assert first["attempted"] == 2 and first["sync_passes"] >= 3  # two outcomes and the last push
+    # the node is lost; the next job starts on an empty disk and finishes the run
+    second = run(str(tmp_path / "node2"))
+    assert second["restored"] is not None and second["restored"]["directories"] == 2
+    assert second["attempted"] == 1 and second["skipped"] == 2
+    final = json.load(open(os.path.join(dur, "run.json")))
+    assert final["layout"] == LAYOUT_DEDUP
+    assert len(cas.instance_names(dur)) == 3
+    assert len(MiningStore(dur, LAYOUT_DEDUP).load_state()) == 3
+    assert os.path.exists(os.path.join(dur, "summary.json"))
+    # the same run in the plain layout gives the same materialised directories
+    plain_client, plain_snaps, _ = synthetic_client()
+    jobs.run_pilot(
+        config=cfg,
+        out_root=str(tmp_path / "plain"),
+        population=pop,
+        is_held_out=lambda r: False,
+        client=plain_client,
+        snapshots=plain_snaps,
+        created="2026-11-05",
+        code_commit="x",
+        repos=[REPO],
+    )
+    out = str(tmp_path / "view")
+    cas.materialise(dur, out)
+    assert cas.compare_roots(str(tmp_path / "plain"), out)["all_identical"]
+
+
+def test_manifest_roundtrip_row_block_and_store_bytes(tmp_path) -> None:
+    slots = cas.array.array("I", [3, 0, 3, 7, 4_000_000_000])
+    assert list(cas.decode_manifest(cas.encode_manifest(slots))) == list(slots)
+    dedup = _write(str(tmp_path / "dedup"), LAYOUT_DEDUP)
+    names = cas.instance_names(dedup.root)
+    assert list(cas.read_manifest(dedup.pr_path(names[0]))) == list(range(40))
+    block = cas.RepoRows(dedup.root, "acme/widgets").load()
+    assert len(block) == 42 and block.line(0).endswith(b"\n")
+    sizes = cas.store_bytes(dedup.root)
+    assert sizes["total"] == sum(v for k, v in sizes.items() if k != "total") > 0
+    assert sizes["rows"] > 0 and sizes["digests"] == (42 + 5) * 20
+    stats = durable.copy_run(dedup.root, str(tmp_path / "d"))
+    assert stats.to_dict()["directories"] == 5

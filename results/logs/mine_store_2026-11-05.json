@@ -1,0 +1,71 @@
+{
+ "code_commit": "3622e713fcf2a1113fb98765bd84ad1568a038f8",
+ "config_hash": "none (no mining configuration is read; the inputs are the finished pilot run root and the M3 selection file)",
+ "experiment": "E-MINE-STORE",
+ "first_runs_equal": "the store bytes, the comparison result and every share of jobs 58605/58608 equal those of 58615/58616; timings differ (convert 575.4 s, materialise 726.2 s, first runs)",
+ "hardware": {
+  "account": "A",
+  "cpus_requested": 2,
+  "gpu": "none",
+  "memory_requested_gb": 12,
+  "node": "gnode006",
+  "node_local_disk": "ext4, 1.8 TB (about 0.8 TB used before the job)",
+  "partition": "u22",
+  "python": "3.10 (cluster venvs)"
+ },
+ "id": "mine_store_2026-11-05",
+ "jobs": [
+  {
+   "elapsed": "00:22:04",
+   "identical": "1391 of 1391",
+   "job": 58605,
+   "what": "store proof (first run, code of the working tree before commit 3622e71)"
+  },
+  {
+   "elapsed": "00:21:44",
+   "job": 58608,
+   "what": "BM25 shares under three readings (first run, same code state)"
+  },
+  {
+   "compare": {
+    "compared": 1391,
+    "different": [],
+    "identical": 1391,
+    "peak_rss_mb": 78
+   },
+   "convert": {
+    "peak_rss_mb": 2161,
+    "seconds": 527.4
+   },
+   "elapsed": "00:20:44",
+   "job": 58615,
+   "materialise": {
+    "largest_repository_rows": 946825,
+    "peak_rss_mb": 3435,
+    "repositories": 156,
+    "seconds": 695.5
+   },
+   "sacct_maxrss_kb": 4325532,
+   "what": "store proof at commit 3622e71"
+  },
+  {
+   "elapsed": "00:21:42",
+   "job": 58616,
+   "sacct_maxrss_kb": 5818256,
+   "what": "BM25 shares under three readings at commit 3622e71"
+  }
+ ],
+ "label": "measured, exploratory",
+ "seed": "none (no randomness; the 300 directories are the seeded prefix of M3)",
+ "store_bytes_pilot": {
+  "corpora_stored_before": 2547895175,
+  "digests": 39714000,
+  "directories": 1391,
+  "directories_small_files_and_manifests": 44798796,
+  "repositories": 156,
+  "rows": 312192836,
+  "segments": 40563,
+  "total": 396746195
+ },
+ "tables": "results/mining/m5_reading_shares.json"
+}

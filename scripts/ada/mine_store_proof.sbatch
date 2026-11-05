@@ -12,6 +12,8 @@
 # directory from it, and compare the rebuilt directories with the originals byte by byte (SHA-256 of
 # the relative paths and bytes of every file). Everything is written to node-local $TMPDIR and removed
 # at exit; nothing is written to $HOME except the three small JSON results next to the logs.
+# Optional STORE_OUT=<dir>: after the comparison succeeds, copy the store there (needs its size free on
+# the target file system: about 0.4 GB for the pilot); the original run root is never touched.
 #   sbatch --export=ALL,RUN=pilot ril_mine/scripts/ada/mine_store_proof.sbatch
 set -euo pipefail
 cd "$HOME/ril_mine"
@@ -25,4 +27,8 @@ hostname; df -h "$WORK" | tail -1
 du -sb "$WORK/store" | cut -f1
 "$V/bin/python" -I scripts/mine_pilot.py materialise "$WORK/store" "$WORK/view" | tee "$OUT.materialise.json"
 "$V/bin/python" -I scripts/mine_pilot.py compare-roots "runs/$RUN" "$WORK/view" "$OUT.compare.json" | tee "$OUT.compare.stdout.json"
+if [ -n "${STORE_OUT:-}" ]; then
+  mkdir -p "$STORE_OUT" && cp -a "$WORK/store/." "$STORE_OUT/"
+  du -sb "$STORE_OUT" | cut -f1
+fi
 echo done

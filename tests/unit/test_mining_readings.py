@@ -117,18 +117,24 @@ def _write(tmp_path) -> MiningStore:
     return store
 
 
+def _kept(base: str, reading: str) -> tuple[bytes, bytes]:
+    kept = instance_bytes(base, reading)
+    assert kept is not None
+    return kept
+
+
 def _ids(blob: bytes) -> list[str]:
     return [json.loads(line)["_id"] for line in blob.splitlines() if line.strip()]
 
 
 def test_the_three_readings_of_one_directory(tmp_path) -> None:
     base = _write(tmp_path).pr_path("acme__widgets-1")
-    corpus, qrels = instance_bytes(base, UNRESTRICTED)  # type: ignore[misc]
+    corpus, qrels = _kept(base, UNRESTRICTED)
     assert len(_ids(corpus)) == 6 and qrels.decode().count("\t1\n") == 5
-    corpus, qrels = instance_bytes(base, NON_TEST)  # type: ignore[misc]
+    corpus, qrels = _kept(base, NON_TEST)
     assert "pkg/tests/t.py/test_x" not in _ids(corpus) and "pkg/core.py/coro" in _ids(corpus)
     assert "test_x" not in qrels.decode() and "coro" in qrels.decode()
-    corpus, qrels = instance_bytes(base, POOL_ALIGNED)  # type: ignore[misc]
+    corpus, qrels = _kept(base, POOL_ALIGNED)
     assert _ids(corpus) == ["pkg/core.py/edited", "pkg/core.py/grown", "pkg/core.py/other"]
     lines = qrels.decode().splitlines()
     assert lines[0] == "query-id\tcorpus-id\tscore"

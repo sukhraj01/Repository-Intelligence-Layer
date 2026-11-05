@@ -49,6 +49,18 @@ Three logins, all with SSH key authentication (no password prompt once the key i
 - Optional convenience: one `~/.ssh/config` host entry per account (e.g. `ada2` for B, `ada3` for C, with the user and
   identity file set locally) so scripts can say `ssh ada2` / `ssh ada3`.
 
+### Space by account (measured 2026-11-05, read-only; `df`, `du`, `quota -s`)
+
+| Account | `$HOME` | Free | What occupies it (this project) | Token |
+|---|---|---|---|---|
+| A | 50 GB dataset, 100% used | **288 MB** | the project's `ril_*` directories 28.1 GB: `ril_x2` 8.3 GB (environment 4.4, encoder outputs 2.3, prepared texts 1.2), `ril_mine` 6.8 (pilot run root 2.6, a repeat check 1.4, validation runs 0.3, rank archives and ranks 2.4), `ril_e` 6.2 (model and dataset downloads, repository caches, work), `ril_x1` 1.5, `ril_mp` 1.2 (mined-pilot cache), `ril_c` 1.1, the rest 3.0; `.cache` and `.local` 0.6 GB; other directories of the account that are not part of this project: 22.1 GB | present |
+| B | 25 GB | 22 GB (survey of 2026-11-03; not re-measured) | not inspected | absent |
+| C | 50 GB dataset, 45% used | **28 GB** | the project's `ril_e`, `ril_n7`, `ril_t1`, `ril_x2` (environment 4.4 GB, prepared texts 1.2 GB) and files of other work in the account | **absent** (presence tested 2026-11-05, value never printed) |
+
+The per-user area on the first shared mount (`share1`, 25 GB soft quota, 3,000 files) is a different file system and is nearly full for account A (21.8 GB used by older files, 832 of 3,000 files).
+Node-local `/tmp` of a compute node (1.7 TB free on the node probed) is the place for anything large and regenerable; the mining run and the materialised directories of a job live there
+(`results/mining/full_run_plan.md`). Nothing was deleted by the survey: the commands that free space on account A were handed to the engineer.
+
 ## Data acquisition rule
 
 The engineer does **not** download datasets by hand. Data arrives on Ada via scripts in

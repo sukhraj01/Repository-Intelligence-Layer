@@ -101,3 +101,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-03,A,56441,P1,E-MINED-PILOT seed 0: RAW FILTER K=20 BM25 and size-matched subsample at 100 updates each with dev evaluation; gnode063,u22,4,1,01:18:11,1.30,COMPLETED
 2026-11-03,A,56565,P1,E-MINED-PILOT seed 1: CUDA gate failed on gnode069 (no CUDA),u22,4,1,00:01:38,0.03,FAILED
 2026-11-04,A,56571,P1,E-MINED-PILOT seed 1: RAW FILTER K=20 BM25 and size-matched subsample; gnode060,u22,4,1,01:14:18,1.24,COMPLETED
+2026-11-05,A,58605,S2,E-MINE-STORE store conversion rebuild and byte comparison of the mining pilot (CPU first run; gnode006),u22,2,0,00:22:04,0.0,COMPLETED
+2026-11-05,A,58608,S3,E-MINE-STORE BM25 shares under three readings on the 300 directories of M3 (CPU first run; gnode006),u22,1,0,00:21:44,0.0,COMPLETED
+2026-11-05,A,58615,S2,E-MINE-STORE store conversion rebuild and byte comparison of the mining pilot at commit 3622e71 (CPU; gnode006),u22,2,0,00:20:44,0.0,COMPLETED
+2026-11-05,A,58616,S3,E-MINE-STORE BM25 shares under three readings at commit 3622e71 (CPU; gnode006),u22,1,0,00:21:42,0.0,COMPLETED
