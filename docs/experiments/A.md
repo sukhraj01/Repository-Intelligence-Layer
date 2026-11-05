@@ -9,6 +9,9 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 |---|---|---|---|---|---|---|
 | A1-PILOT | RQ1 ext. (apparatus) | BM25 identifier splitting and field weights (docstring-to-function task) | k1, b, stop list, stemmer, five local checkouts | 0 | MRR, Recall@10, nDCG@10 with clustered intervals; build and query latency | done 2026-10-31 (exploratory; section A1-PILOT) |
 | A2a | RQ1 ext. (apparatus) | graph build: incremental update vs full rebuild | repositories, commits, resolver | 0 | equality of graph digests; seconds per commit p50/p95/p99 | done 2026-10-31 (section A2a) |
+| A2c | RQ1 ext. (apparatus) | stored graph: versioned, hashed edge store vs raw JSONL; load check level | repositories, resolver, graph | 0 | round-trip equality; bytes; write and load seconds p50 | done 2026-10-31 (section A2c) |
+| A2b-PREP | RQ1 ext. (apparatus) | none (census of invoke sites by status and resolver rule) | repositories, resolver | 0 | site counts per rule | done 2026-10-31 (section A2b-PREP) |
+| A2b | RQ1 ext. (apparatus) | resolver typing options (return inference, merged locals, parameter defaults, all three) | repositories, parse, stored resolver rules | 0 | invoke sites by status; unknown-receiver sites; build seconds; trace recall and precision (pending) | static reading done 2026-11-03; dynamic pending (section A2b) |
 
 ## A1-PILOT: identifier splitting and field weights for BM25 on docstring-to-function retrieval, exploratory, done 2026-10-31
 
@@ -92,3 +95,92 @@ each) holds on every update measured. The speedup depends on what a commit touch
 re-resolves one file, while a change to the symbols of a module that a package re-exports reaches every importer, which is
 most of a small repository (requests, click). Finer dependencies (per imported name instead of per module) would cut that
 further; not attempted. Times are wall clock, one process, warm file cache, local CPU, history read included.
+
+## A2c: the stored graph as a versioned, hashed edge-list directory, done 2026-10-31
+
+**Question.** Decision D16 fixes the read structure of the first stored graph (a typed edge-list file read into an
+in-memory adjacency). What does a versioned, deterministic and verified version of that file cost to write and load?
+
+**Format** (`ril/parsing/edge_store.py`, `EDGE_STORE_VERSION = 1`): a manifest, manifest.json (format and version, graph metadata
+with schema, resolver and unit-set hash, node and edge counts, counts per family and status, graph digest, SHA-256 and size
+of each data file) plus `nodes.jsonl.gz` and `edges.jsonl.gz` (the canonical graph bytes, gzip with a fixed header). The
+same graph always writes the same bytes, whatever order its edges were built in. A load always checks format version and
+counts; by default it also checks the file hashes; `deep` also recomputes the graph digest. A failed check raises
+instead of returning a graph. Tests: `tests/unit/test_edge_store.py` (round trip, byte identity, tampered file, unknown
+version).
+
+**Result** (history off, seven loads per check level, nearest-rank p50, local CPU, warm file cache; every round trip
+reproduced the graph digest):
+
+| repository | edges | raw JSONL | store | write | load, counts only | load, hashes (default) | load, deep | adjacency |
+|---|---|---|---|---|---|---|---|---|
+| requests | 4,163 | 1.1 MB | 68 KB | 0.19 s | 0.04 s | 0.04 s | 0.13 s | 0.004 s |
+| flask | 5,892 | 1.5 MB | 90 KB | 0.17 s | 0.03 s | 0.03 s | 0.09 s | 0.002 s |
+| click | 9,654 | 2.6 MB | 146 KB | 0.23 s | 0.05 s | 0.05 s | 0.16 s | 0.005 s |
+| pytest | 39,145 | 11.2 MB | 627 KB | 0.93 s | 0.25 s | 0.24 s | 0.65 s | 0.02 s |
+| django | 262,361 | 90.8 MB | 4.5 MB | 6.84 s | 1.98 s | 2.26 s | 5.31 s | 0.53 s |
+
+Table `results/tables/a2c_edge_store.csv`, log `results/logs/a2c_edge_store_2026-10-31.json`.
+
+**Reading.** Evidence class: measured. The store is 16 to 20 times smaller than the raw canonical JSONL, and hash checking
+costs almost nothing over an unchecked load (django 2.26 s against 1.98 s); recomputing the digest costs about 2.4 times a
+load, so it is opt-in. Load time is JSON parsing of the edge records; a reader that needs only the adjacency of resolved
+edges could store that projection separately (not done: D16 reads the typed edge list).
+
+## A2b-PREP: where the resolver fails, by call-site rule, done 2026-10-31
+
+The resolver-recall pilots of A2b need the dynamic oracle (D15), which runs a repository's own test suite under the call
+tracer. That suite was not run on this machine (running a checked-out project's code locally is not permitted here), so
+no recall number is reported. What can be measured statically is where the resolver fails today. Over the 232,474
+`invoke` sites of the five checkouts of A1-PILOT (default-branch heads): 92,071 resolved, 89,168 external, 38,420
+ambiguous, 12,815 unresolved. Of the 51,235 ambiguous or unresolved sites, **41,147 (80%)** are calls on a receiver of
+unknown type (`unknown-receiver:name-match` 36,743 ambiguous, `unknown-receiver:too-many-name-matches` 4,404 unresolved);
+next are attributes missing from a known class's MRO (3,934), calls through a local name (1,622), several module-level
+definitions of one name (1,174) and attributes of a class with an unresolved base (1,113). Log
+`results/logs/a2b_invoke_breakdown_2026-10-31.json`.
+
+**Reading.** Of the three pilots the brief names, attribute and variable typing (constructor assignments, parameter
+annotations, local assignments) targets the largest failure class; import-aware resolution and decorated or property calls
+target classes of a few hundred to a few thousand sites. Order for the pilots once the oracle can run: typing first.
+
+## A2b: resolver typing pilots, static reading, 2026-11-03 (dynamic reading pending)
+
+**Question.** Unknown-receiver calls are 80% of the ambiguous or unresolved sites (A2b-PREP). Do three typing
+extensions of the resolver move them to `resolved`, and at what build cost?
+
+**Pilots** (`ril.parsing.call_graph.ResolverOptions`, one factor each, then all three; all off is the stored resolver and
+is byte-identical to it on all five checkouts, checked against the A2c graph digests): `infer_returns` (a call of an
+in-repository function without a return annotation takes the value all its `return` statements agree on, `None` ignored,
+generators and disagreeing returns left unknown; also for properties and `self.x = make()` attributes); `merge_locals` (a
+local bound several times takes its one typed binding when the others are untyped or literals such as `None`);
+`param_defaults` (an unannotated parameter takes the type of its default). Tests: `tests/unit/test_resolver_options.py`.
+
+**Result, static** (the five A1-PILOT checkouts, one build per pilot; `results/tables/a2b_resolver_pilot_static.csv`):
+
+| pilot | resolved sites, django | change | unknown-receiver sites, django | change | resolved, all five | build time, django |
+|---|---|---|---|---|---|---|
+| stored | 73,847 | - | 42,231 | - | 92,071 | 15.6 s |
+| infer_returns | 74,286 | +439 | 41,604 | -627 | 92,566 | 16.9 s |
+| merge_locals | 74,302 | +455 | 41,004 | -1,227 | 92,589 | 16.6 s |
+| param_defaults | 73,867 | +20 | 42,216 | -15 | 92,091 | 16.8 s |
+| all three | 74,837 | +990 | 40,270 | -1,961 | 93,204 | 17.0 s |
+
+Across the five repositories the combined options resolve 1,133 more sites (+1.2% of resolved sites, 0.5% of all
+invoke sites) and remove 4.3% of the unknown-receiver sites, for about 9% more build time.
+
+**Why the gain is small: what the untyped receivers are** (combined options, 46,620 untyped receivers of attribute calls,
+`untyped_receivers_combined_options` in the log): attribute chains on another object (`obj.a.b()`) 34.3%; attribute
+chains on `self` (`self.x.y()`, the attribute's type unknown) 17.2%; locals assigned from an untyped value 14.7%; call
+results 12.0%; unannotated parameters 9.2%; other locals 6.8%; subscripts 1.6%. Return inference reaches only the
+call-result share, and only where the callee is in the repository. Most untyped receivers come from parameters and
+attributes whose type is set by a caller elsewhere, so the next step that would reach them is propagating argument
+types from call sites into parameters and `self` attributes (inter-procedural), not more local rules.
+
+**Dynamic reading: pending.** Recall and precision against the flask test-suite trace (D15) are not measured yet; the
+trace needs the suite run, which is not done on this machine by the tooling. With the trace at
+`data/processed/flask_trace.json`, `scripts/a_resolver_pilot.py --trace pallets/flask=<checkout at 7ee9ceb>=<trace>` adds
+recall and the precision lower bound per pilot. A moved site is not a correct site until then.
+
+**Reading.** Evidence class: measured (static only). The three local typing extensions are cheap, and each resolves
+sites the stored resolver leaves to name matching, but together they reach a few percent of the failure class. Nothing is
+adopted: the stored resolver stays as it is until the dynamic reading shows the moved sites are right.

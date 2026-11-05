@@ -31,6 +31,7 @@ import ast
 import builtins
 import os
 import platform
+import textwrap
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -91,6 +92,35 @@ class Val:
 
 UNKNOWN = Val("unknown")
 _NOT_FOUND = Val("not_found")
+_TYPED_KINDS = ("inst", "class", "func", "module")
+_LITERAL = Val("builtin", "literal")
+
+
+@dataclass(frozen=True)
+class ResolverOptions:
+    """Typing extensions measured one factor at a time (session A2b); all off = the stored resolver.
+
+    * ``infer_returns``   a call of an in-repository function without a return annotation takes the
+                          value every ``return`` of that function agrees on (``return Foo(...)``,
+                          ``return self``, ``return rv`` with ``rv = Foo()``); ``None`` returns are
+                          ignored, generators and disagreeing returns stay unknown. Also applies to
+                          properties without an annotation and to ``self.x = make()`` attributes.
+    * ``merge_locals``    a local name bound several times takes the one typed value among its
+                          bindings when every other binding is untyped or a literal such as
+                          ``None`` (instead of becoming unknown).
+    * ``param_defaults``  a parameter without an annotation takes the type of its default value.
+
+    The options are passed to :class:`GraphBuilder` directly; they are not part of ``BuildConfig``
+    and the incremental updater always uses the stored resolver.
+    """
+
+    infer_returns: bool = False
+    merge_locals: bool = False
+    param_defaults: bool = False
+
+    def label(self) -> str:
+        on = [k for k in ("infer_returns", "merge_locals", "param_defaults") if getattr(self, k)]
+        return "+".join(on) or "stored"
 
 
 @dataclass
@@ -176,10 +206,24 @@ def collect_local_scope(
 
     def add_args(args: ast.arguments, own: bool) -> None:
         allargs = [*args.posonlyargs, *args.args, *args.kwonlyargs]
+        positional = [*args.posonlyargs, *args.args]
+        defaults: dict[int, ast.expr] = {
+            id(a): d
+            for a, d in zip(
+                positional[len(positional) - len(args.defaults) :], args.defaults, strict=True
+            )
+        }
+        defaults.update(
+            {
+                id(a): d
+                for a, d in zip(args.kwonlyargs, args.kw_defaults, strict=True)
+                if d is not None
+            }
+        )
         for i, a in enumerate(allargs):
             role = first_param_role if own and i == 0 and own_args and a is own_args[0] else ""
             ann = _unparse(a.annotation) if a.annotation is not None else ""
-            sources[a.arg].append(_Source("param", text=ann, role=role))
+            sources[a.arg].append(_Source("param", node=defaults.get(id(a)), text=ann, role=role))
         if args.vararg:
             sources[args.vararg.arg].append(_Source("param", role="varargs"))
         if args.kwarg:
@@ -251,9 +295,17 @@ def collect_local_scope(
 class GraphBuilder:
     """Resolves names and call sites over a :class:`ParsedRepository`."""
 
-    def __init__(self, parsed: ParsedRepository, max_candidates: int = MAX_CANDIDATES) -> None:
+    def __init__(
+        self,
+        parsed: ParsedRepository,
+        max_candidates: int = MAX_CANDIDATES,
+        options: ResolverOptions | None = None,
+    ) -> None:
         self.parsed = parsed
         self.max_candidates = max_candidates
+        self.options = options or ResolverOptions()
+        self._return_cache: dict[str, Val] = {}
+        self._return_in_progress: set[str] = set()
         self.units: dict[str, CodeUnit] = {u.id: u for u in parsed.units}
         self.module_files = parsed.module_files
         self.module_prefixes: set[str] = set()
@@ -482,7 +534,68 @@ class GraphBuilder:
     def _instance_of_call(self, f: Val) -> Val:
         if f.kind == "class":
             return Val("inst", f.ref)
+        if f.kind == "func" and not f.cands and self.options.infer_returns:
+            return self._call_result(f.ref)
         return UNKNOWN
+
+    def _call_result(self, uid: str) -> Val:
+        """Value of calling in-repository function ``uid``: annotation, else (option) inferred."""
+        ret = self._return_annotation(uid)
+        if ret:
+            owner_fs = self.parsed.files[self.units[uid].file]
+            return self.annotation_val(ret, Ctx(owner_fs, uid, "", None))
+        if self.options.infer_returns:
+            return self.inferred_return(uid)
+        return UNKNOWN
+
+    def inferred_return(self, uid: str) -> Val:
+        """The value every ``return`` of ``uid`` agrees on (``infer_returns``), else unknown."""
+        hit = self._return_cache.get(uid)
+        if hit is not None:
+            return hit
+        if uid in self._return_in_progress:
+            self._cycle_cuts += 1
+            return UNKNOWN
+        cuts = self._cycle_cuts
+        self._return_in_progress.add(uid)
+        try:
+            val = self._inferred_return_uncached(uid)
+        finally:
+            self._return_in_progress.discard(uid)
+        if self._cycle_cuts == cuts:
+            self._return_cache[uid] = val
+        return val
+
+    def _inferred_return_uncached(self, uid: str) -> Val:
+        unit = self.units[uid]
+        try:
+            tree = ast.parse(textwrap.dedent(unit.source))
+        except (SyntaxError, ValueError, RecursionError):
+            return UNKNOWN
+        node = tree.body[0] if tree.body else None
+        if not isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef):
+            return UNKNOWN
+        returns: list[ast.expr] = []
+        stack: list[ast.AST] = list(node.body)
+        while stack:
+            sub = stack.pop()
+            if isinstance(sub, ast.Yield | ast.YieldFrom):
+                return UNKNOWN  # a generator: the call returns an iterator, not the values
+            if isinstance(sub, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef | ast.Lambda):
+                continue
+            if isinstance(sub, ast.Return) and sub.value is not None:
+                if not (isinstance(sub.value, ast.Constant) and sub.value.value is None):
+                    returns.append(sub.value)
+            stack.extend(ast.iter_child_nodes(sub))
+        if not returns:
+            return UNKNOWN
+        fs = self.parsed.files[unit.file]
+        cls = self.method_class.get(uid, "")
+        role = _decorator_roles(fs.decorators.get(uid, [])) if cls else ""
+        ctx = Ctx(fs, uid, cls, collect_local_scope(node, role))
+        vals = {self.eval_expr(r, ctx) for r in returns}
+        only = next(iter(vals))
+        return only if len(vals) == 1 and only.kind in _TYPED_KINDS and not only.cands else UNKNOWN
 
     def lookup_name(self, name: str, ctx: Ctx) -> Val:
         sc = ctx.locals
@@ -514,11 +627,15 @@ class GraphBuilder:
             result = first
         else:
             informative = {v for v in vals if v.kind not in ("unknown", "local")}
-            result = (
-                next(iter(informative))
-                if len(informative) == 1 and len(vals) == 1
-                else Val("local", name)
-            )
+            typed = {v for v in informative if v.kind in _TYPED_KINDS}
+            if len(informative) == 1 and len(vals) == 1:
+                result = next(iter(informative))
+            elif (
+                self.options.merge_locals and len(typed) == 1 and informative - typed <= {_LITERAL}
+            ):
+                result = next(iter(typed))
+            else:
+                result = Val("local", name)
         sc.cache[name] = result
         return result
 
@@ -535,6 +652,10 @@ class GraphBuilder:
             if src.text:
                 v = self.annotation_val(src.text, ctx)
                 if v.kind != "unknown":
+                    return v
+            elif self.options.param_defaults and src.node is not None:
+                v = self.eval_expr(src.node, ctx)
+                if v.kind in _TYPED_KINDS and not v.cands:
                     return v
             return Val("local", name)
         if src.kind == "ann":
@@ -570,11 +691,7 @@ class GraphBuilder:
             if fv.kind == "class":
                 return Val("inst", fv.ref)
             if fv.kind == "func" and not fv.cands:
-                ret = self._return_annotation(fv.ref)
-                if ret:
-                    owner_fs = self.parsed.files[self.units[fv.ref].file]
-                    return self.annotation_val(ret, Ctx(owner_fs, fv.ref, "", None))
-                return UNKNOWN
+                return self._call_result(fv.ref)
             if fv.kind in ("ext", "builtin"):
                 return Val("ext", fv.ref + "()")
             return UNKNOWN
@@ -691,6 +808,10 @@ class GraphBuilder:
                     if ret:
                         fs = self.class_file[k]
                         return self.annotation_val(ret, Ctx(fs, ids[0], k, None))
+                    if self.options.infer_returns:
+                        v = self.inferred_return(ids[0])
+                        if v.kind != "unknown":
+                            return v
                     return Val("unknown_attr", name)
                 return Val("func", ids[0], tuple(ids) if len(ids) > 1 else ())
             text = cs.attr_types.get(name)
@@ -1286,6 +1407,7 @@ __all__ = [
     "RESOLVER_NAME",
     "RESOLVER_VERSION",
     "GraphBuilder",
+    "ResolverOptions",
     "Val",
     "apply_projections",
     "build_graph",
