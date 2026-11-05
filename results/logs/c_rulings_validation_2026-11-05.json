@@ -1,8 +1,7 @@
 {
   "date": "2026-11-05",
   "evidence_class": "measured_correctness_checks",
-  "source_commit": "2b2b683b9d366996458b4ef6ea3bf593a7788c49",
-  "source_state": "Code committed; evidence/documentation corrections not yet committed when checks ran.",
+  "source_state": "Tests ran with code fixes uncommitted atop execution_base_commit; those exact fixes were subsequently committed as validated_code_commit. Implementation checksums identify the tested files. Later review edits change comments and evidence citations only, with non-comment token equality verified.",
   "python": "Python 3.11.18",
   "platform": "Linux",
   "architecture": "aarch64",
@@ -63,5 +62,7 @@
     "scripts/c_colab.py": "a8c9090a389f952c7193a3d3fb49df9137ba00c87b0bdc2a0e3e85d8eab3aee4",
     "scripts/c_mine_prs.py": "d2f7e875c6ca1bfd8a6c161b0705f731eb8cace5e1c6bf7f55b2022c99c7132c",
     "tests/unit/test_agent_pilot.py": "12c35c3894946613f2c0c8945460534d5f7d6b6e47c7ac35e6ae85127ea65191"
-  }
+  },
+  "validated_code_commit": "2b2b683b9d366996458b4ef6ea3bf593a7788c49",
+  "execution_base_commit": "c1c9cac3855c04345f0ae3e26c65d2626636b6c5"
 }
