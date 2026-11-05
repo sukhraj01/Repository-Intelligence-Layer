@@ -57,6 +57,10 @@ The scorer reports every rate three ways, and you do not need to do anything for
 
 A pair is *unresolved* if its answer is `cannot tell`, or if it was read by both readers and they gave different answers. Nobody adjudicates disagreements in the score; they are reported as disagreements.
 
+## Who reads
+
+Reader 1 and reader 2 are two team members who are not the lead. The lead reads no pair, so that the lead's knowledge of how the arms are built cannot influence the sample. The 100 pairs both of you read are used for the agreement between readers (kappa).
+
 ## What you are given
 
 Each reader has a file with 250 rows: 100 pairs that both readers read (in a different order for each reader) and 150 pairs that only you read. You are not told which are which, and the order is shuffled. Do not discuss rows with the other reader until both of you have finished: the agreement between you is one of the numbers the audit measures.

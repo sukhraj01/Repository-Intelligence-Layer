@@ -1,0 +1,97 @@
+experiment_id: E-EVAL-REPOS-BUILD
+status: build only (no retrieval result is read)
+date: '2026-10-29'
+seed: 0
+bm25:
+  k1: 1.5
+  b: 0.75
+  stopwords: en (33 words)
+  stemmer: snowball english
+  token_pattern: (?u)\b\w\w+\b
+  provisional: ADR-004
+prefilter_k: 10000
+metrics:
+  ndcg_at: 10
+  recall_at: 100
+  gain: binary
+  aggregation: mean over queries
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  unit: queries
+note: 'Unit records and dense stores for the evaluation repositories of D100; BM25
+  parameters copied unchanged from the dev configuration. Role test: no tuning on
+  these repositories.'
+folders:
+- role: test
+  dataset: SWE-bench-Live
+  folder: pdm
+  repo: pdm-project/pdm
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: psf__black
+  repo: psf/black
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: python
+  repo: python-control/python-control
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: jupyterlab__jupyter
+  repo: jupyterlab/jupyter-ai
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: aws
+  repo: aws-cloudformation/cfn-lint
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-Bench-plus-plus
+  folder: IBM__mcp
+  repo: ibm/mcp-context-forge
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: IBM__mcp
+  repo: ibm/mcp-context-forge
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: jlowin__fastmcp
+  repo: jlowin/fastmcp
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
+- role: test
+  dataset: SWE-bench-Live
+  folder: Pyomo__pyomo
+  repo: pyomo/pyomo
+  levels:
+  - L2
+  units: true
+  instances_of_repo: true
