@@ -52,6 +52,7 @@ from ril.training.pool_reader import (
     select_instances,
     write_cache,
 )
+from ril.training.retention import retain_dir_from_env
 from ril.training.supervision import QualitySignal, TableKRank
 
 Record = dict[str, Any]
@@ -560,6 +561,10 @@ def train_job(
 
     ``inputs`` (from :func:`load_inputs`) replaces reading the cache, table and mined file again;
     it must have been loaded from the same paths.
+
+    ``checkpoint.retain_final`` in the configuration turns on retention of the final model; the
+    target folder is the job environment's ``RETAIN_DIR`` (``ril.training.retention``) and the
+    manifest records ``RIL_COMMIT`` if the job sets it.
     """
     import torch
 
@@ -604,4 +609,6 @@ def train_job(
         extra_log=extra,
         hook=hook,
         ledger=ledger,
+        retain_dir=retain_dir_from_env(),
+        commit=os.environ.get("RIL_COMMIT") or None,
     )
