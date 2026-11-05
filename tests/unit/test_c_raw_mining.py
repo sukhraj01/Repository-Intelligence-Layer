@@ -8,14 +8,6 @@ from pathlib import Path
 
 import pytest
 
-from ril.data_mining.github import (
-    ISSUE_QUERY,
-    Client,
-    RecordedTransport,
-    Response,
-    digest,
-    linked_issues,
-)
 from ril.data_mining.c_miner import (
     GitSnapshots,
     RecordedSnapshots,
@@ -23,6 +15,14 @@ from ril.data_mining.c_miner import (
     extract_example,
     historical_base,
     mine,
+)
+from ril.data_mining.github import (
+    ISSUE_QUERY,
+    Client,
+    RecordedTransport,
+    Response,
+    digest,
+    linked_issues,
 )
 from ril.data_mining.ranks import ENCODER, dense_audit_scores, rank_audit
 from ril.data_mining.recording import synthetic_recording

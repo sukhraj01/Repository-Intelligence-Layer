@@ -258,7 +258,7 @@ def configure_environment(source: Path, store: Path) -> dict[str, str]:
 
 def host_setup(source: Path, store: Path, phase: str) -> dict[str, Any]:
     """Called by the actual Colab kernel; bootstrap installs no global package overrides."""
-    from ril.evaluation.runtime import issue_colab_receipt, runtime_record
+    from ril.evaluation.runtime import issue_colab_receipt, read_boot_id, runtime_record
 
     configure_environment(source, store)
     issue_colab_receipt("/content/ril-runtime.json")
@@ -270,7 +270,7 @@ def host_setup(source: Path, store: Path, phase: str) -> dict[str, Any]:
     old_state = (
         json.loads((BASE / "state.json").read_text()) if (BASE / "state.json").exists() else {}
     )
-    boot_id = Path("/proc/sys/kernel/random/boot_id").read_text().strip()
+    boot_id = read_boot_id()
     data = {"source": str(source), "store": str(store), "phase": phase, "boot_id": boot_id}
     write_json(store / "attempts" / (uuid.uuid4().hex + ".json"), runtime_record())
     if phase == "gpu":

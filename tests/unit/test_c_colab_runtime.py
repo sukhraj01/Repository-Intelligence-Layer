@@ -71,6 +71,29 @@ def test_runtime_restart_refuses_old_receipt(admitted: dict[str, Any]) -> None:
         runtime.require_runtime()
 
 
+@pytest.mark.parametrize("boot_contents", [None, "", " \n"])
+def test_unavailable_boot_id_refuses_saved_receipt_and_issuance(
+    admitted: dict[str, Any], monkeypatch: pytest.MonkeyPatch, boot_contents: str | None
+) -> None:
+    boot = admitted["boot"]
+    if boot_contents is None:
+        boot.unlink()
+    else:
+        boot.write_text(boot_contents)
+
+    def forbidden_probe(_: str) -> dict[str, Any]:
+        raise AssertionError("missing VM identity must fail before host probing")
+
+    monkeypatch.setattr(runtime, "_probe_colab", forbidden_probe)
+    # A previously valid receipt cannot supply the missing current host identity.
+    with pytest.raises(RuntimeError, match="boot id unavailable"):
+        runtime.require_runtime()
+    fresh_receipt = admitted["root"] / "fresh.json"
+    with pytest.raises(RuntimeError, match="boot id unavailable"):
+        runtime.issue_colab_receipt(fresh_receipt)
+    assert not fresh_receipt.exists()
+
+
 def test_visible_gpu_refuses_cpu_work_even_when_cuda_is_masked(
     admitted: dict[str, Any], monkeypatch: pytest.MonkeyPatch
 ) -> None:

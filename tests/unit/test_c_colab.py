@@ -419,6 +419,7 @@ def test_setup_retries_restore_after_interruption(
     monkeypatch.setattr(kit.platform, "machine", lambda: "x86_64")
     monkeypatch.setattr(kit, "run", lambda *_, **__: None)
     monkeypatch.setattr(runtime, "issue_colab_receipt", lambda *_: {})
+    monkeypatch.setattr(runtime, "read_boot_id", lambda: "boot-current")
     monkeypatch.setattr(runtime, "runtime_record", lambda: {"runtime": "mock_colab"})
     calls = []
 

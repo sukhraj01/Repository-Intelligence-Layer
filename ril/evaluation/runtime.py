@@ -22,6 +22,18 @@ CONTENT_ROOT = Path("/content")
 BOOT_ID = Path("/proc/sys/kernel/random/boot_id")
 Record = dict[str, Any]
 
+
+def read_boot_id() -> str:
+    """Read the current Linux VM identity, refusing hosts where it is unavailable."""
+    try:
+        value = BOOT_ID.read_text().strip()
+    except (OSError, UnicodeError) as exc:
+        raise RuntimeError("boot id unavailable; a Linux Colab VM is required") from exc
+    if not value:
+        raise RuntimeError("boot id unavailable; a Linux Colab VM is required")
+    return value
+
+
 # Runs in Colab's original interpreter, never the project's isolated Python environment.
 _PROBE = r"""
 import importlib, json, pathlib, subprocess, sys
@@ -94,8 +106,9 @@ def issue_colab_receipt(path: str | Path) -> Record:
     target = Path(path)
     if not target.is_absolute() or not target.resolve().is_relative_to(CONTENT_ROOT.resolve()):
         raise ValueError("Colab runtime receipts must be stored beneath /content")
+    boot_id = read_boot_id()
     proof = _probe_colab(str(Path(sys.executable).resolve()))
-    if proof["boot_id"] != BOOT_ID.read_text().strip():
+    if proof["boot_id"] != boot_id:
         raise RuntimeError("Colab host and project VM identities differ")
     value = {"version": VERSION, "runtime": "colab", "proof": proof}
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -160,7 +173,7 @@ def require_runtime(
     ):
         raise RuntimeError("invalid Colab runtime receipt identity")
     proof = value["proof"]
-    if proof.get("boot_id") != BOOT_ID.read_text().strip():
+    if proof.get("boot_id") != read_boot_id():
         raise RuntimeError("Colab VM changed; rerun the notebook setup cell")
     host = proof.get("host_python")
     if not isinstance(host, str) or _probe_colab(host) != proof:
