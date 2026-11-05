@@ -64,6 +64,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-MINE-FULL | lead | `docs/experiments/B.md` | running (launched 2026-11-05, account C) | 2026-11-05 |
 | E-RETAIN-FINAL | lead | `docs/experiments/B.md` | done (switch built and tested; no GPU run yet) | 2026-11-05 |
 | E-EVAL-REPOS | lead | `docs/experiments/B.md` | done (inventory; nothing chosen) | 2026-11-05 |
+| E-LABEL-AUDIT-SHEET | lead | `docs/experiments/B.md` | sheets built, nobody has read any pair | 2026-11-05 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
 | E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |
