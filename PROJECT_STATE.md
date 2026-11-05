@@ -4,7 +4,7 @@
 > **Hard cap: 200 lines.** If this file exceeds it, the fix is to *delete resolved content*,
 > not to add a summary. See the maintenance rule at the bottom.
 
-**Last updated:** 2026-11-05 (workstream C branch merged after round-2 review, D97 on the C miner; earlier the same day: full mining run launched on account C, E-MINE-FULL, D96: `non_test` stays the primary reading; earlier the same day the de-duplicated store, materialise step and pool-aligned reading, E-MINE-STORE) · earlier 2026-11-04 (E-MINED-PILOT done; Block 2 at 67.41 of 70) · 2026-11-03 (decisions recorded: ADR-001 to ADR-006 and ADR-010 accepted, ADR-007 to ADR-009 open, RQ2 protocol O1 to O15 settled, DEV-019 to DEV-023) · earlier: the stored-output analysis, the PR-mined set and the noise pilots (see `RESULTS.md`) · **Milestone:** M0 (parser, first graph, BM25, loader and metrics) plus the RQ2 apparatus.
+**Last updated:** 2026-11-05 (pilot label sheets for the noise audit built, E-LABEL-AUDIT-SHEET, D98; earlier the same day: workstream C branch merged after round-2 review, D97 on the C miner; earlier the same day: full mining run launched on account C, E-MINE-FULL, D96: `non_test` stays the primary reading; earlier the same day the de-duplicated store, materialise step and pool-aligned reading, E-MINE-STORE) · earlier 2026-11-04 (E-MINED-PILOT done; Block 2 at 67.41 of 70) · 2026-11-03 (decisions recorded: ADR-001 to ADR-006 and ADR-010 accepted, ADR-007 to ADR-009 open, RQ2 protocol O1 to O15 settled, DEV-019 to DEV-023) · earlier: the stored-output analysis, the PR-mined set and the noise pilots (see `RESULTS.md`) · **Milestone:** M0 (parser, first graph, BM25, loader and metrics) plus the RQ2 apparatus.
 
 ---
 
@@ -93,6 +93,8 @@ storage stages and now `bm25`, `graph_expand_1hop/2hop` and `graph_expansion` wi
 
 Order: (1) what the engineer decides, (2) Person A, (3) Person C, (4) what the engineer does outside the repository. `origin/main` equals local `main`; workstream A must merge `main` into `a/rq1` before its next block.
 
+**000b. Noise audit sheets (E-LABEL-AUDIT-SHEET, D98), engineer's step.** Built; nobody has read a pair. Two readers each read 250 rows (about 5 hours, 100 shared). Sheets `reader_1.csv`, `reader_2.csv` and the key are untracked in `data/review/label_audit_pilot_v1/` (third-party text fails the provenance check, so they are not published). Send each reader their file with `docs/LABEL_AUDIT.md`; never the key. Score the filled files with `scripts/label_audit_score.py --key key.csv --sheet ... --sheet ...`. Dense ranks exist for 300 directories only, so the sample is stratified by BM25 K = 20 alone.
+
 **00. RQ2 final experiment (protocol settled 2026-11-03, `docs/RQ2_PROTOCOL.md` section 11):** design of record option E (38.9 GPU-hours), Block 3 cap 46.7 (`docs/COMPUTE.md`); confirmatory: FILTER-BM25 against RAW and against the size-matched subsample on the mined set. Tasks in `docs/ROADMAP.md` (more evaluation repositories, checkpoint retention, PR label sheet, fresh noise draws, registration). Declared fallback for RQ3: RAW against the untrained encoder ("does training help"). Needs the token (below) first.
 
 **000a. Workstream C merged (2026-11-05, D97).** Decide Q63 to Q67 when convenient; none blocks the lead's work. Hosted CI runs on `main` after the push; check the mark next to the commit.
@@ -124,8 +126,6 @@ Also yours: Q3 and Q33 (latency hook setting, thresholds) before the freeze; Q57
 **3. Person C (branch merged 2026-11-05; status page `docs/status/person_c.md`; requests are Q63 to Q67, the lead settles them).** Next for C, in order: (a) an alias and a read-only token on his own cluster account; (b) the real dev BM25 run with stored per-query output, so `operator_reported` can be upgraded; (c) the C2 pilot as a rerun on the lead's miner and store, never on `c_miner.py` (D97); ask before adding mining code. Rulings: `prompts/team/rulings/C_rulings_2.md`. Hand-back rule T10 applies. Teammate branches must merge `main` before their next block.
 
 **4. The engineer outside the repository.** (a) The token now exists on Ada (D2 done): the rename cache and E-POOL-DATES (D29 flip experiment) can now be run. (b) Give the second-reader spot-check sheet to the second reader (`data/review/`, untracked; built by `scripts/build_spot_check.py`, scored by `scripts/spot_check_agree.py`; context in ADR-012). (c) Apply the master-document corrections listed in DEV-011 and the derived-copy rule in DEV-010. (d) The run logs under `results/logs/t5*` and `results/rq2/t5*` hold a cluster home path with the account's login name (34 lines); remove or replace it before the first push (`make review-flags` lists them). (e) Add the SSH aliases for accounts B and C so jobs can use them (Block 2 is at 67.41 of 70; A 65.17).
-
-**Local machine: editing, `make lint`, `make test` (one worker) and git only**; torch tests run on Ada (`scripts/ada/t1_tests.sbatch`).
 
 ## Blockers
 
