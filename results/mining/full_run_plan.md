@@ -86,8 +86,9 @@ Prerequisites (**engineer**): `GITHUB_TOKEN` set on account C; an SSH alias `<C>
     # 6. report, once a stage is finished (reads the durable directory; JSON files only)
     python3 -I ril_mine/scripts/mine_pilot.py report ril_mine/store/full ril_mine/store/full/report.md
     # 7. a job that needs the directory layout (ranks, training) rebuilds it on its own node-local disk, then reads it in the reading it needs
-    #    (the default for RQ2 comparisons with the published pool is pool_aligned, DEV-031)
+    #    (the primary reading for RQ2 is non_test, the reading of M3 (D96, evidence: measured on 300 directories, exploratory);
+    #    pool_aligned is a sensitivity reading, reported on the pilot and not recomputed for the full set unless a later result needs it)
     python3 -I ril_mine/scripts/mine_pilot.py materialise ril_mine/store/full "$TMPDIR/view" \
-      && python3 -I ril_mine/scripts/mine_pilot.py rank-prepare "$TMPDIR/view" "$TMPDIR/work" --reading pool_aligned
+      && python3 -I ril_mine/scripts/mine_pilot.py rank-prepare "$TMPDIR/view" "$TMPDIR/work" --reading non_test
 
 The pool-like rank measurement (M3) is a separate GPU stage with its own limit and is not part of this plan; its cost at 178 texts per second is in `m3_ranks.md`.

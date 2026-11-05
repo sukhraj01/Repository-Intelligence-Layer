@@ -166,4 +166,4 @@ def test_an_unknown_reading_and_a_positive_without_a_meta_row_are_errors(tmp_pat
     qrels = b"query-id\tcorpus-id\tscore\nq\ta.py/f\t1\n"
     with pytest.raises(ValueError):
         readings.apply(POOL_ALIGNED, corpus, qrels, {"positives": []})
-    assert readings.DEFAULT_READING == POOL_ALIGNED
+    assert readings.DEFAULT_READING == readings.NON_TEST

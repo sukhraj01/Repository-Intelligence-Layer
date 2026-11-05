@@ -61,6 +61,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-MINE-PILOT | lead | `docs/experiments/B.md` | code built and tested offline; live runs blocked (no token) | 2026-11-02 |
 | E-MINED-PILOT | lead | `docs/experiments/B.md` | done (six runs, two seeds; exploratory) | 2026-11-03 |
 | E-MINE-STORE | lead | `docs/experiments/B.md` | done (pilot; the full run is not started) | 2026-11-05 |
+| E-MINE-FULL | lead | `docs/experiments/B.md` | running (launched 2026-11-05, account C) | 2026-11-05 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-POWER | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-PROBE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |

@@ -17,8 +17,8 @@ without touching the run root:
                   left is dropped. Rows are not added, so the nested functions and vendored
                   directories the released code keeps are not reproduced (they are not mined).
 
-``DEFAULT_READING`` is the reading RQ2 comparisons with the published pool use; the unrestricted
-reading stays available under its own label. Kept compatible with Python 3.10.
+``DEFAULT_READING`` is the primary reading of the mined set for RQ2, the reading of the M3 measurement (D96);
+``pool_aligned`` is a sensitivity reading and the unrestricted reading stays available, each under its own label. Kept compatible with Python 3.10.
 """
 
 from __future__ import annotations
@@ -34,8 +34,8 @@ UNRESTRICTED = "unrestricted"
 NON_TEST = "non_test"
 POOL_ALIGNED = "pool_aligned"
 READINGS: tuple[str, ...] = (UNRESTRICTED, NON_TEST, POOL_ALIGNED)
-DEFAULT_READING = POOL_ALIGNED
-"""The reading RQ2 comparisons with the published pool use (D95); it is not the library default of
+DEFAULT_READING = NON_TEST
+"""The primary reading of the mined set for RQ2 (D96, DEV-031); it is not the library default of
 :func:`apply`, which is unrestricted so that no caller changes meaning without naming a reading."""
 
 _DEF_LINE = re.compile(r"^[ \t]*(async[ \t]+)?def[ \t]", re.MULTILINE)

@@ -105,3 +105,9 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-05,A,58608,S3,E-MINE-STORE BM25 shares under three readings on the 300 directories of M3 (CPU first run; gnode006),u22,1,0,00:21:44,0.0,COMPLETED
 2026-11-05,A,58615,S2,E-MINE-STORE store conversion rebuild and byte comparison of the mining pilot at commit 3622e71 (CPU; gnode006),u22,2,0,00:20:44,0.0,COMPLETED
 2026-11-05,A,58616,S3,E-MINE-STORE BM25 shares under three readings at commit 3622e71 (CPU; gnode006),u22,1,0,00:21:42,0.0,COMPLETED
+2026-11-05,C,60032,S4,E-MINE-FULL listing shard 0 of 3; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
+2026-11-05,C,60033,S4,E-MINE-FULL listing shard 1 of 3 (failed at start: three jobs created the shared virtual environment at once; resubmitted as 60041); scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,FAILED (venv creation race)
+2026-11-05,C,60034,S4,E-MINE-FULL listing shard 2 of 3; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
+2026-11-05,C,60041,S4,E-MINE-FULL listing shard 1 of 3 (resubmission of 60033); scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
+2026-11-05,C,60042,S4,E-MINE-FULL mining session 1; STOP_AFTER=5000; 12G; 4 days; dependency afterok on listing jobs 60032 60041 60034; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,2,0,,0.0,SUBMITTED
+2026-11-05,C,60043,S4,E-MINE-FULL mining session 2; STOP_AFTER=5000; dependency afterany on 60042; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,2,0,,0.0,SUBMITTED
