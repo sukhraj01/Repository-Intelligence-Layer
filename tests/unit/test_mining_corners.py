@@ -19,6 +19,7 @@ from ril.data_mining.miner import (
 from ril.data_mining.pack import listing_of, pack_zip
 from ril.data_mining.population import rename_report
 from ril.data_mining.rank_compare import cluster_bootstrap
+from ril.data_mining.readings import NON_TEST, UNRESTRICTED
 from ril.data_mining.store import MiningStore, instance_files, write_provenance
 from tests.unit._mining_fixtures import (
     FakeClock,
@@ -227,7 +228,7 @@ def test_pool_like_reading_drops_test_functions_positives_and_empty_directories(
     store.write_instance(both)
     store.write_instance(only_test)
     zpath = str(tmp_path / "pool_like.zip")
-    assert pack_zip(store.root, zpath, drop_tests=True) == 1
+    assert pack_zip(store.root, zpath, reading=NON_TEST) == 1
     with zipfile.ZipFile(zpath) as zf:
         assert [n for n in zf.namelist() if n.endswith("corpus.jsonl")] == [
             "train/python/acme__widgets-1/corpus.jsonl"
@@ -235,7 +236,7 @@ def test_pool_like_reading_drops_test_functions_positives_and_empty_directories(
         rows = zf.read("train/python/acme__widgets-1/corpus.jsonl").decode().splitlines()
         assert [json.loads(r)["_id"] for r in rows] == ["a.py/f"]
         assert zf.read("train/python/acme__widgets-1/qrels/test.tsv").decode().count("\n") == 2
-    sample = rank_sample(store.root, drop_tests=True)["sample"]
+    sample = rank_sample(store.root, reading=NON_TEST)["sample"]
     assert [r["dir"] for r in sample] == ["acme__widgets-1"] and sample[0]["positives"] == 1
     assert len(rank_sample(store.root)["sample"]) == 2
 
@@ -258,12 +259,12 @@ def test_select_dirs_takes_the_seeded_prefix_that_the_reading_keeps(tmp_path) ->
             {"repo": "acme/widgets", "pr": n, "counters": {"positives": 1}},
         )
         store.write_instance(inst)
-    assert select_dirs(store.root, False, None) is None
-    kept = select_dirs(store.root, True, 99)
+    assert select_dirs(store.root, UNRESTRICTED, None) is None
+    kept = select_dirs(store.root, NON_TEST, 99)
     assert kept is not None and sorted(kept) == [f"acme__widgets-{n}" for n in (1, 3, 5)]
-    two = select_dirs(store.root, True, 2)
+    two = select_dirs(store.root, NON_TEST, 2)
     assert two == kept[:2]
-    out = prepare(store.root, str(tmp_path / "work"), drop_tests=True, limit=2)
+    out = prepare(store.root, str(tmp_path / "work"), reading=NON_TEST, limit=2)
     assert out["directories"] == 2
     est = estimate(store.root, 100.0, limit=2)
     assert est["directories"] == 2 and est["distinct_texts"]["non_test"] == 1

@@ -19,6 +19,7 @@ import time
 from collections.abc import Callable, Mapping
 from typing import Any
 
+from ril.data_mining import durable
 from ril.data_mining.config import MiningConfig
 from ril.data_mining.github_api import (
     ApiClient,
@@ -34,7 +35,7 @@ from ril.data_mining.population import Population, first_repos, select_populatio
 from ril.data_mining.report import api_totals
 from ril.data_mining.runner import list_population, mine_selected, select_prs
 from ril.data_mining.snapshot import SnapshotProvider
-from ril.data_mining.store import MiningStore, dumps, write_provenance
+from ril.data_mining.store import LAYOUT_DIRECTORIES, MiningStore, dumps, write_provenance
 from ril.data_mining.summary import build_summary, yield_table
 from ril.training import pool_ranks as pr_tools
 
@@ -109,6 +110,10 @@ def run_pilot(
     lookahead: int = 1,
     list_only: bool = False,
     shard: tuple[int, int] | None = None,
+    store_layout: str = LAYOUT_DIRECTORIES,
+    durable_root: str | None = None,
+    sync_every: int = 25,
+    sync_seconds: float = 600.0,
 ) -> dict[str, Any]:
     """List, select and mine (resumable), then write the summary and ``provenance.json``.
 
@@ -116,9 +121,13 @@ def run_pilot(
     ``list_only`` and ``shard`` (``(i, n)``: every n-th repository from i) split the long listing
     stage over several jobs; they write listing files only. ``lookahead`` is a speed setting only
     (base commits are fetched ahead); it is not part of the config hash because the outputs do
-    not depend on it.
+    not depend on it. ``store_layout`` is likewise not hashed (the materialised directories are
+    byte-identical). With ``durable_root`` the run root is restored from it when this node has
+    none, and pushed back every ``sync_every`` outcomes or ``sync_seconds`` and at the end
+    (``durable.py``; the root must be used by one job at a time).
     """
-    store = MiningStore(out_root)
+    store = MiningStore(out_root, store_layout)
+    restored = durable.restore(durable_root, out_root) if durable_root else None
     store.ensure_run(config.config_hash(), created)
     budget_before = client.budget.to_dict()
     names = repos if repos is not None else first_repos(population, config.n_repos)
@@ -128,6 +137,8 @@ def run_pilot(
     listings, stats = list_population(client, names, store, is_held_out=is_held_out)
     listing_seconds = time.perf_counter() - t_list
     if list_only:  # listing shards: only the per-repository listing files are written
+        if durable_root:
+            durable.copy_run(out_root, durable_root)
         return {
             "listed": stats.listed,
             "reused": stats.reused,
@@ -137,6 +148,11 @@ def run_pilot(
         }
     selected = select_prs(listings, config, population.published)
     t_mine = time.perf_counter()
+    syncer = (
+        durable.Syncer(out_root, durable_root, every=sync_every, seconds=sync_seconds)
+        if durable_root
+        else None
+    )
     session = mine_selected(
         selected,
         client=client,
@@ -145,6 +161,7 @@ def run_pilot(
         config=config,
         stop_after=stop_after,
         lookahead=lookahead,
+        after_record=syncer.tick if syncer else None,
     )
     mining_seconds = time.perf_counter() - t_mine
     budget = store.add_budget(budget_delta(budget_before, client.budget.to_dict()))
@@ -186,7 +203,11 @@ def run_pilot(
     with open(tmp, "w", encoding="utf-8") as handle:
         handle.write(dumps(summary) + "\n")
     os.replace(tmp, path)
+    if syncer is not None:
+        syncer.flush()
     return {
+        "restored": restored.to_dict() if restored else None,
+        "sync_passes": len(syncer.passes) if syncer else 0,
         "attempted": session.attempted,
         "skipped": session.skipped,
         "adopted": session.adopted,

@@ -19,6 +19,8 @@ from collections.abc import Iterable
 
 CORPUS_PLAIN = "corpus.jsonl"
 CORPUS_GZ = "corpus.jsonl.gz"
+MANIFEST = "corpus.manifest"
+"""Corpus of a directory in the de-duplicated layout (``cas.py``): materialise it before reading."""
 COMPRESSLEVEL = 6
 
 
@@ -32,12 +34,21 @@ def gzip_bytes(data: bytes) -> bytes:
     return buf.getvalue()
 
 
+def _refuse_manifest(directory: str) -> None:
+    if os.path.exists(os.path.join(directory, MANIFEST)):
+        raise FileNotFoundError(
+            f"{directory} holds a manifest, not a corpus file: rebuild the directories first "
+            "(ril.data_mining.cas.materialise)"
+        )
+
+
 def read_corpus(directory: str) -> bytes:
     """The uncompressed corpus of one instance directory (compressed or plain file)."""
     gz = os.path.join(directory, CORPUS_GZ)
     if os.path.exists(gz):
         with open(gz, "rb") as handle:
             return gzip.decompress(handle.read())
+    _refuse_manifest(directory)
     with open(os.path.join(directory, CORPUS_PLAIN), "rb") as handle:
         return handle.read()
 
@@ -49,6 +60,7 @@ def corpus_size(directory: str) -> int:
         with open(gz, "rb") as handle:
             handle.seek(-4, os.SEEK_END)
             return int.from_bytes(handle.read(4), "little")  # size modulo 2**32: below 4 GB here
+    _refuse_manifest(directory)
     return os.path.getsize(os.path.join(directory, CORPUS_PLAIN))
 
 

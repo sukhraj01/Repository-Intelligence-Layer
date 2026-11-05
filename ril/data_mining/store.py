@@ -3,6 +3,7 @@
 Implements ``docs/experiments/B.md`` E-MINE-PILOT. Layout under the run root::
 
     pr/<owner>__<name>-<PR>/{corpus.jsonl.gz, queries.jsonl, qrels/test.tsv, pr_meta.json}
+    cas/<owner>__<name>/            (layout "dedup") distinct rows; pr/ holds corpus.manifest
     listing/<owner>__<name>.json    merged pull requests and closing issues of one repository
     state.jsonl                     one row per finished pull request (append-only)
     run.json                        first-creation record (date, config hash), never rewritten
@@ -27,10 +28,16 @@ from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import asdict
 from typing import Any
 
+from ril.data_mining import cas
 from ril.data_mining.files import CORPUS_GZ, gzip_bytes, write_gzip_lines
 from ril.data_mining.links import LinkedIssue, PullRequest
 from ril.data_mining.miner import STATUS_MINED, MinedInstance, Outcome
 
+LAYOUT_DIRECTORIES = "directories"
+LAYOUT_DEDUP = "dedup"
+LAYOUTS = (LAYOUT_DIRECTORIES, LAYOUT_DEDUP)
+"""``directories``: one ``corpus.jsonl.gz`` per pull request. ``dedup``: rows once per repository
+plus a manifest per pull request (``ril/data_mining/cas.py``, D93)."""
 QRELS_HEADER = "query-id\tcorpus-id\tscore"
 SOURCE = "GitHub GraphQL and REST API (api.github.com), git objects from github.com"
 ENDPOINTS = (
@@ -114,8 +121,11 @@ def _pr_from_dict(raw: Mapping[str, Any]) -> PullRequest:
 class MiningStore:
     """Files of one run root."""
 
-    def __init__(self, root: str) -> None:
+    def __init__(self, root: str, layout: str = LAYOUT_DIRECTORIES) -> None:
+        if layout not in LAYOUTS:
+            raise ValueError(f"unknown store layout {layout!r}; use one of {LAYOUTS}")
         self.root = root
+        self.layout = layout
 
     # ---- paths
 
@@ -148,7 +158,11 @@ class MiningStore:
         final = self.pr_path(inst.dir_name)
         tmp = final + ".tmp"
         shutil.rmtree(tmp, ignore_errors=True)
-        write_gzip_lines(os.path.join(tmp, CORPUS_GZ), corpus_lines(inst))
+        if self.layout == LAYOUT_DEDUP:  # rows first: a crash before the rename leaves only rows
+            manifest = cas.write_corpus(self.root, inst.repo, corpus_lines(inst))
+            _write_atomic(os.path.join(tmp, cas.MANIFEST), manifest)
+        else:
+            write_gzip_lines(os.path.join(tmp, CORPUS_GZ), corpus_lines(inst))
         files = small_files(inst)
         for name in ("queries.jsonl", "qrels/test.tsv", "pr_meta.json"):
             _write_atomic(os.path.join(tmp, *name.split("/")), files[name])
@@ -258,6 +272,11 @@ class MiningStore:
         if os.path.exists(self.run_path):
             with open(self.run_path, encoding="utf-8") as handle:
                 doc: dict[str, Any] = json.load(handle)
+            if doc.get("layout", LAYOUT_DIRECTORIES) != self.layout:
+                raise ValueError(
+                    f"run root holds layout {doc.get('layout', LAYOUT_DIRECTORIES)!r}, "
+                    f"not {self.layout!r}; use a new root"
+                )
             if doc.get("config_hash") != config_hash:
                 raise ValueError(
                     "run root was created with a different config hash; use a new root "
@@ -265,6 +284,8 @@ class MiningStore:
                 )
             return doc
         doc = {"created": created, "config_hash": config_hash}
+        if self.layout != LAYOUT_DIRECTORIES:
+            doc["layout"] = self.layout
         _write_atomic(self.run_path, (dumps(doc) + "\n").encode("utf-8"))
         return doc
 
