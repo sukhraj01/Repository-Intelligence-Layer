@@ -36,7 +36,10 @@ sha256sum "$CFG" > out/config_hashes.txt
 $PY scripts/assembly_run.py measure "$CFG" "$CACHE" "$DENSE" "$REPOS" "$LOCAL/work" "$W/out/run"
 $PY scripts/assembly_run.py tables "$W/out/run" "$W/out/assembly_gold"
 if [ -n "${TOKENIZER_JSON:-}" ]; then
+  # the `tokenizers` wheel goes to its own directory; no existing environment is changed
+  "$(dirname "$PY")/pip" install --quiet --target "$W/pylib_tok" tokenizers
   git clone -q "$REPOS/pallets__flask.git" "$LOCAL/flask_ratio"
-  $PY scripts/assembly_run.py ratio "$LOCAL/flask_ratio" pallets/flask "$TOKENIZER_JSON" "$W/out/token_ratio.json"
+  PYTHONPATH="$W:$W/pylib_tok" $PY scripts/assembly_run.py ratio "$LOCAL/flask_ratio" pallets/flask \
+    "$TOKENIZER_JSON" "$W/out/token_ratio.json" --name "${TOKENIZER_NAME:-real}"
 fi
 echo done

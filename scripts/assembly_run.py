@@ -3,7 +3,7 @@
 Usage:
   assembly_run.py measure CONFIG E3_CACHE DENSE_ROOT REPO_CACHE WORK_DIR OUT_DIR [--seed N]
   assembly_run.py tables  OUT_DIR TABLE_PREFIX [--seed N]
-  assembly_run.py ratio   REPO_DIR REPO_ID TOKENIZER_JSON OUT_JSON [--seed N]
+  assembly_run.py ratio   REPO_DIR REPO_ID TOKENIZER_JSON OUT_JSON [--name NAME] [--seed N]
 """
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ def main() -> int:
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--only")
+    ap.add_argument("--name", help="name recorded for the real tokenizer (ratio)")
     ap.add_argument("--limit", type=int)
     args = ap.parse_args()
     set_seed(args.seed)
@@ -56,7 +57,7 @@ def main() -> int:
 
     repo_dir, repo_id, tok_json, out_json = args.paths[:4]
     texts = [u.source for u in snapshot_units(repo_dir, repo_id)]
-    real = HFTokenizer(tok_json, Path(tok_json).parent.name)
+    real = HFTokenizer(tok_json, args.name or Path(tok_json).parent.name)
     result = ratio_against(ApproxTokenizer(), real, texts, seed=args.seed)
     Path(out_json).write_text(json.dumps(result, sort_keys=True, indent=1), encoding="utf-8")
     log.info("%s", result)
