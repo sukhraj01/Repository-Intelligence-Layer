@@ -1,0 +1,196 @@
+{
+ "config_hash_12": {
+  "assembly-django-b8000-v1": "92148a25f79a",
+  "assembly-flask-b8000-v1": "b9155b6e1d77",
+  "assembly-requests-b8000-v1": "458084096ccc"
+ },
+ "date": "2026-11-06",
+ "environment": {
+  "commit": "527c625",
+  "cpu_cores": "8",
+  "cpu_model": "Apple M3",
+  "gpu_name": "none",
+  "host": "Sukhraj.local",
+  "python": "3.11.14",
+  "ram_gb": "8.0"
+ },
+ "experiment": "E-ASSEMBLY latency",
+ "note": "rows for requests and django carry dirty=1 only because the new query-set files were untracked when they ran; unit cap 1000 tokens, budget 8000, 200 candidates, approximate tokenizer",
+ "seed": 0,
+ "summaries": {
+  "django": {
+   "budget": 8000,
+   "example_tokens": 7978,
+   "example_units": 45,
+   "label": "django",
+   "query_set_sha256": "85019def02070ea8ea87b47549d13b4f52fd64e44cb3f568155f08f7a20a97f0",
+   "rows": [
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 0.2052,
+     "p95_ms": 0.265,
+     "p99_ms": 0.3152,
+     "stage": "bm25"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 0.2032,
+     "p95_ms": 0.2664,
+     "p99_ms": 0.302,
+     "stage": "bm25"
+    },
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 11.0503,
+     "p95_ms": 16.8188,
+     "p99_ms": 21.4835,
+     "stage": "assemble"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 10.9763,
+     "p95_ms": 17.0085,
+     "p99_ms": 23.0422,
+     "stage": "assemble"
+    },
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 11.4396,
+     "p95_ms": 17.3099,
+     "p99_ms": 22.1976,
+     "stage": "end_to_end"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 11.4419,
+     "p95_ms": 17.2814,
+     "p99_ms": 23.6517,
+     "stage": "end_to_end"
+    }
+   ],
+   "units": 35860
+  },
+  "flask": {
+   "budget": 8000,
+   "example_tokens": 7990,
+   "example_units": 38,
+   "label": "flask",
+   "query_set_sha256": "fc92a228602724e5d1b78878d261f8f018f3ea9322a551f403549cfd5097c333",
+   "rows": [
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 0.0533,
+     "p95_ms": 0.0619,
+     "p99_ms": 0.0735,
+     "stage": "bm25"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 0.0509,
+     "p95_ms": 0.0582,
+     "p99_ms": 0.0611,
+     "stage": "bm25"
+    },
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 14.2297,
+     "p95_ms": 18.4628,
+     "p99_ms": 19.5926,
+     "stage": "assemble"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 14.4239,
+     "p95_ms": 18.8378,
+     "p99_ms": 20.0265,
+     "stage": "assemble"
+    },
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 14.6758,
+     "p95_ms": 19.233,
+     "p99_ms": 21.1026,
+     "stage": "end_to_end"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 14.1404,
+     "p95_ms": 18.977,
+     "p99_ms": 20.3026,
+     "stage": "end_to_end"
+    }
+   ],
+   "units": 974
+  },
+  "requests": {
+   "budget": 8000,
+   "example_tokens": 7969,
+   "example_units": 48,
+   "label": "requests",
+   "query_set_sha256": "badc6abaceab680aa9416ae0b26a0f97725f46adbf8da715fe53416f32c3b154",
+   "rows": [
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 0.0498,
+     "p95_ms": 0.06,
+     "p99_ms": 0.0737,
+     "stage": "bm25"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 0.0478,
+     "p95_ms": 0.0555,
+     "p99_ms": 0.0599,
+     "stage": "bm25"
+    },
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 13.2438,
+     "p95_ms": 16.2044,
+     "p99_ms": 17.29,
+     "stage": "assemble"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 13.4245,
+     "p95_ms": 16.8852,
+     "p99_ms": 19.4264,
+     "stage": "assemble"
+    },
+    {
+     "cache_state": "cold",
+     "n": 200,
+     "p50_ms": 13.2671,
+     "p95_ms": 16.1868,
+     "p99_ms": 17.2806,
+     "stage": "end_to_end"
+    },
+    {
+     "cache_state": "warm",
+     "n": 595,
+     "p50_ms": 13.4282,
+     "p95_ms": 16.4638,
+     "p99_ms": 17.6193,
+     "stage": "end_to_end"
+    }
+   ],
+   "units": 678
+  }
+ }
+}
