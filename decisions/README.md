@@ -22,6 +22,7 @@ that cannot wait proceeds behind `provisional: ADR-0NN` flags; no ADR is filled 
 | [ADR-011](ADR-011-repo-graph-schema.md) | RepoGraph schema, edge taxonomy, storage | — (options and evidence only) | Proposed | _pending_ |
 | [ADR-012](ADR-012-edge-recovery-definitions.md) | Edge-recovery definitions | — (four definitions measured, none chosen) | Proposed | _pending_ |
 | [ADR-013](ADR-013-codeunit-v1-frozen.md) | CodeUnit v1 frozen (decisions D4-D11) | — (engineer's decisions, 2026-10-17) | Proposed (schema frozen; Q28 open) | engineer |
+| [ADR-014](ADR-014-context-assembly.md) | Context assembly policy (D102) | — (policy stated in the brief of 2026-11-06) | Proposed (`provisional: D102`) | _pending_ |
 
 ## Adding a new ADR
 

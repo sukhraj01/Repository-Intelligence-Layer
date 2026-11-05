@@ -290,3 +290,12 @@ engineer sign-off — it is a design decision.
 - Impact: none on outputs where the check ran (`docs/experiments/B.md` E-MINE-STORE); a run root has one layout (recorded in the run record; a mismatch is refused). Work done since the last push is lost on a node failure; the bound is the sync interval.
 - Reversible: yes; a store converts back to directories with `materialise`.
 - Related: DEV-026, DEV-028, `results/mining/dedup_measure.md`
+
+## DEV-033 — Context assembly takes units in rank order and does not attach callee signatures   (2026-11-06 · status: proposed (D102))
+- Master says: `assemble()` dedupes overlapping units, orders them for truncation survival, attaches callee signatures and applies a hard token budget (`docs/09_architecture.md`, `ril/retrieval/README.md`).
+- We do: first-fit in rank order under a per-unit cap and a hard budget, blocks ordered by file and line for the reader, class units in header form; no callee signatures, no overlap deduplication beyond repeated unit ids (`specs/assembly.md`, ADR-014).
+- Why: callee signatures are a graph-derived addition whose value is unmeasured (E-GRAPH-ROLE found no benefit of typed edges over the same-file control); a policy that reads only the ranked list, the unit text and the budget keeps assembly identical across arms by construction.
+- Impact: the agent sees less context per unit than the master document describes; the budget is spent only on units the ranker chose.
+- Reversible: yes (assembly is the last stage; an option can be added behind a flag and reported separately).
+- Related: ADR-014, `specs/assembly.md`, `docs/experiments/B.md` E-ASSEMBLY
+
