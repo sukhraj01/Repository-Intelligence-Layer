@@ -111,3 +111,9 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-05,C,60041,S4,E-MINE-FULL listing shard 1 of 3 (resubmission of 60033); scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
 2026-11-05,C,60042,S4,E-MINE-FULL mining session 1; STOP_AFTER=5000; 12G; 4 days; dependency afterok on listing jobs 60032 60041 60034; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,2,0,,0.0,SUBMITTED
 2026-11-05,C,60043,S4,E-MINE-FULL mining session 2; STOP_AFTER=5000; dependency afterany on 60042; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,2,0,,0.0,SUBMITTED
+2026-11-06,A,60670,S37,E-EVAL-REPOS-BUILD CPU build; failed at start (node-local disk full on one node); scripts/ada/eval_build_cpu.sbatch,u22,4,0,00:00:00,0.0,FAILED (node /tmp full)
+2026-11-06,A,60671,S37,E-EVAL-REPOS-BUILD CPU build of the eight evaluation repositories (D100); resubmission with a node excluded; scripts/ada/eval_build_cpu.sbatch; commit b4aa33f,u22,4,0,00:23:42,0.0,FAILED (last step only; outputs complete)
+2026-11-06,A,60677,S37,E-EVAL-REPOS-BUILD GPU encoding of the eight repositories; 2080ti; scripts/ada/eval_encode.sbatch; commit bcb57ef,u22,4,1,00:14:45,0.2458,COMPLETED
+2026-11-06,A,60678,S37,E-EVAL-REPOS-BUILD cache statistics (interactive step),u22,1,0,00:00:01,0.0,COMPLETED
+2026-11-06,A,60692,S37,E-EVAL-REPOS-BUILD store check (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
+2026-11-06,A,60693,S37,E-EVAL-REPOS-BUILD store check repeated to save the output (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
