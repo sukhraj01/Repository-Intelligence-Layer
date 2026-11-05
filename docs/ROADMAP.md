@@ -50,7 +50,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 3–6 — Person C: evaluation harness
 
-- [ ] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite splits not yet run
+- [ ] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite pairing and staging code merged after review (E-C1-EVAL); the one real dev BM25 run is operator_reported (E-C1-COLAB-DEV), so the item stays open until a run with stored query-level output exists
 - [x] Metrics at chunk granularity; reproduces a published CORE-Bench number as a sanity check (BM25 rows reproduced to the printed decimal, pilot E1)
 
 ## Weeks 5–8 — Person A: RQ1
