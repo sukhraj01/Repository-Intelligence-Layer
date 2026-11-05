@@ -1,0 +1,15 @@
+{
+ "cpus_visible": 40,
+ "cuda": "12.1",
+ "device": "cuda",
+ "gpu": "NVIDIA GeForce RTX 2080 Ti",
+ "gpu_capability": [
+  7,
+  5
+ ],
+ "host": "gnode067",
+ "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+ "python": "3.10.12",
+ "slurm_job_id": "53271",
+ "torch": "2.4.1+cu121"
+}

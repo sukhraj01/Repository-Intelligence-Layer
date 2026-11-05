@@ -1,0 +1,35 @@
+level,queries,oracle_label,oracle,mean_points,lo,hi,minus_RAW_mean_points
+L2,351,"upper bound, not a method",RAW (mean of seeds),26.76,19.84,32.09,0.0
+L2,351,"upper bound, not a method",O2: best of the two RAW seeds,29.36,22.56,34.56,2.6
+L2,351,"upper bound, not a method","O4: best of RAW and subsample, 2 seeds each",31.2,24.0,36.86,4.45
+L2,351,"upper bound, not a method",O7: best of 7 arms (seed-averaged),30.7,23.46,36.51,3.94
+L2,351,"upper bound, not a method",O14: best of 14 runs (7 arms x 2 seeds),33.65,26.48,39.35,6.89
+L2,351,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0,0.256,0.199,0.302,
+L2,351,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0,0.319,0.238,0.388,
+L2,351,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0,0.575,,,
+L2,351,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0.01,0.219,0.17,0.256,
+L2,351,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0.01,0.293,0.217,0.369,
+L2,351,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0.01,0.444,,,
+L2,351,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0.05,0.142,0.115,0.165,
+L2,351,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0.05,0.197,0.168,0.221,
+L2,351,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0.05,0.202,,,
+L2,351,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0.1,0.091,0.072,0.119,
+L2,351,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0.1,0.111,0.1,0.123,
+L2,351,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0.1,0.066,,,
+L3,155,"upper bound, not a method",RAW (mean of seeds),45.1,41.59,48.74,0.0
+L3,155,"upper bound, not a method",O2: best of the two RAW seeds,46.98,43.47,50.65,1.88
+L3,155,"upper bound, not a method","O4: best of RAW and subsample, 2 seeds each",49.14,45.54,52.74,4.05
+L3,155,"upper bound, not a method",O7: best of 7 arms (seed-averaged),48.69,45.21,52.25,3.6
+L3,155,"upper bound, not a method",O14: best of 14 runs (7 arms x 2 seeds),50.88,47.39,54.51,5.78
+L3,155,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0,0.219,0.155,0.29,
+L3,155,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0,0.381,0.303,0.458,
+L3,155,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0,0.6,,,
+L3,155,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0.01,0.219,0.155,0.29,
+L3,155,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0.01,0.374,0.297,0.452,
+L3,155,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0.01,0.548,,,
+L3,155,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0.05,0.09,0.052,0.135,
+L3,155,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0.05,0.2,0.142,0.265,
+L3,155,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0.05,0.116,,,
+L3,155,"upper bound, not a method",control: share where RAW seed1 beats seed0 by >0.1,0.026,0.006,0.052,
+L3,155,"upper bound, not a method",control: share where RAW seed0 beats seed1 by >0.1,0.09,0.052,0.135,
+L3,155,"upper bound, not a method",control: share where best of 2 RAW seeds beats RAW mean by >0.1,0.006,,,

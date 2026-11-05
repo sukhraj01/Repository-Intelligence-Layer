@@ -24,7 +24,7 @@ from __future__ import annotations
 import re
 from array import array
 from collections import Counter
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 
 import numpy as np
@@ -70,6 +70,70 @@ def _stem(token: str) -> str:
 def tokenize(text: str) -> list[str]:
     """Stemmed tokens of ``text`` (see the module docstring for the exact rule)."""
     return [_stem(t) for t in _TOKEN.findall(text.lower()) if t not in STOPWORDS_EN]
+
+
+# --------------------------------------------------------------------------- code-aware variants
+# Candidates for the tuned index (session A1), measured against the reference form above; none of
+# them is a default. ``provisional: ADR-004`` until a development-set selection is made.
+
+_IDENT_PART = re.compile(r"[A-Z]+(?=[A-Z][a-z])|[A-Z]?[a-z]+|[A-Z]+|\d+")
+
+
+def split_identifier(token: str) -> list[str]:
+    """Parts of an identifier at snake_case, camelCase, acronym and digit boundaries.
+
+    ``parseHTTPResponse2`` -> ``parse``, ``HTTP``, ``Response``, ``2``; ``max_retries`` -> ``max``,
+    ``retries``. Case is kept (the caller lower-cases).
+    """
+    parts: list[str] = []
+    for piece in token.split("_"):
+        parts.extend(_IDENT_PART.findall(piece))
+    return parts
+
+
+def tokenize_code(text: str, *, keep_original: bool = True) -> list[str]:
+    """Reference tokens with identifiers split into their parts.
+
+    Every ``\\w\\w+`` token is lower-cased, stop-listed and stemmed as in :func:`tokenize`; a
+    compound identifier (more than one part) also contributes each part of at least two
+    characters, and the whole identifier is kept as well when ``keep_original`` is true.
+    """
+    out: list[str] = []
+    for raw in _TOKEN.findall(text):
+        low = raw.lower()
+        parts = [p.lower() for p in split_identifier(raw)]
+        compound = len(parts) > 1
+        if (keep_original or not compound) and low not in STOPWORDS_EN:
+            out.append(_stem(low))
+        if compound:
+            out.extend(_stem(p) for p in parts if len(p) > 1 and p not in STOPWORDS_EN)
+    return out
+
+
+UNIT_FIELDS: tuple[str, ...] = ("name", "signature", "docstring", "path", "body")
+"""Fields of a code unit that a fielded index can weight separately."""
+
+
+def field_tokens(
+    fields: dict[str, str],
+    weights: dict[str, int],
+    tokenizer: Callable[[str], list[str]],
+) -> list[str]:
+    """One document's tokens with each field repeated ``weights[field]`` times.
+
+    Integer repetition is the simplest way to weight fields in a single BM25 index (the term
+    frequency of a field's tokens is multiplied; document length grows with it); a per-field
+    length normalisation (BM25F) is not implemented here. A field with weight 0 is left out.
+    """
+    out: list[str] = []
+    for name in UNIT_FIELDS:
+        w = weights.get(name, 0)
+        if w < 0:
+            raise ValueError(f"negative weight for field {name!r}")
+        text = fields.get(name, "")
+        if w and text:
+            out.extend(tokenizer(text) * w)
+    return out
 
 
 class BM25Index:

@@ -1,0 +1,248 @@
+{
+ "links": {
+  "issue_edited_after_pr_created": 63,
+  "issue_edited_share": 0.0421,
+  "mined_pairs": 1497,
+  "multiplicity": {
+   "issues": 24849,
+   "issues_with_several_prs": 519,
+   "pairs": 25422,
+   "prs_with_issue": 23670,
+   "prs_with_several_issues": 1163
+  },
+  "prs_with_closing_refs_cut_at_limit": 5,
+  "prs_with_regex_ref_not_in_closing_refs": 5518
+ },
+ "listing": {
+  "not_found": [],
+  "renamed": {
+   "jazzband/pip-tools": "pypa/pip-tools",
+   "jcrist/msgspec": "msgspec/msgspec",
+   "mendableai/firecrawl": "firecrawl/firecrawl",
+   "wpilibsuite/sphinxext-opengraph": "sphinx-doc/sphinxext-opengraph"
+  },
+  "renamed_into_held_out": []
+ },
+ "mined": {
+  "corpus_units": {
+   "max": 630017.0,
+   "mean": 13657.926,
+   "median": 2685.0,
+   "n": 1391,
+   "p90": 34027.0
+  },
+  "hunk_lines_touched": {
+   "max": 6433.0,
+   "mean": 84.715,
+   "median": 17.0,
+   "n": 1391,
+   "p90": 148.0
+  },
+  "positives_per_pr": {
+   "max": 324.0,
+   "mean": 7.942,
+   "median": 2.0,
+   "n": 1391,
+   "p90": 17.0
+  },
+  "prs": 1391,
+  "py_files_changed": {
+   "max": 103.0,
+   "mean": 4.584,
+   "median": 2.0,
+   "n": 1391,
+   "p90": 9.0
+  }
+ },
+ "parse_failures": {
+  "attempted": 2000,
+  "by_cause_changed_file": {
+   "mixed-tabs-spaces": 1,
+   "python2-except": 3,
+   "python2-long-literal": 2,
+   "syntax-other": 1
+  },
+  "mined_prs": 1391,
+  "mined_prs_with_unparsed_corpus_file": 133,
+  "quarantined_unparseable_changed_file": 7,
+  "share_of_attempted": 0.0035,
+  "unparsed_corpus_files_by_cause_in_mined": {
+   "mixed-tabs-spaces": 1,
+   "python2-except": 208,
+   "python2-exec": 2,
+   "python2-long-literal": 6,
+   "python2-octal": 29,
+   "python2-print": 893,
+   "syntax-other": 363
+  }
+ },
+ "population": {
+  "directories_after_filter": 20800,
+  "directories_held_out": 3485,
+  "directories_listed": 24285,
+  "directories_selected": 5000,
+  "repos_held_out": 92,
+  "repos_listed": 2448,
+  "repos_selected": 1473
+ },
+ "selected_prs": 2000,
+ "selection": {
+  "differences": {
+   "corpus_units": {
+    "difference": -2381.5,
+    "draws_used": 2000,
+    "dropped_median": 3182.0,
+    "dropped_n": 1233,
+    "excludes_zero": true,
+    "interval": [
+     -15849.0,
+     -466.5
+    ],
+    "kept_median": 800.5,
+    "kept_n": 158
+   },
+   "hunk_lines_touched": {
+    "difference": 24.0,
+    "draws_used": 2000,
+    "dropped_median": 15.0,
+    "dropped_n": 1233,
+    "excludes_zero": true,
+    "interval": [
+     16.0,
+     38.5
+    ],
+    "kept_median": 39.0,
+    "kept_n": 158
+   },
+   "positives": {
+    "difference": 4.0,
+    "draws_used": 2000,
+    "dropped_median": 2.0,
+    "dropped_n": 1233,
+    "excludes_zero": true,
+    "interval": [
+     3.0,
+     7.0
+    ],
+    "kept_median": 6.0,
+    "kept_n": 158
+   },
+   "py_files_changed": {
+    "difference": 2.0,
+    "draws_used": 2000,
+    "dropped_median": 2.0,
+    "dropped_n": 1233,
+    "excludes_zero": true,
+    "interval": [
+     1.0,
+     3.0
+    ],
+    "kept_median": 4.0,
+    "kept_n": 158
+   }
+  },
+  "dropped_by_pool": {
+   "corpus_units": {
+    "max": 630017.0,
+    "mean": 15048.932,
+    "median": 3182.0,
+    "n": 1233,
+    "p90": 34628.0
+   },
+   "hunk_lines_touched": {
+    "max": 6433.0,
+    "mean": 78.379,
+    "median": 15.0,
+    "n": 1233,
+    "p90": 127.0
+   },
+   "positives_per_pr": {
+    "max": 324.0,
+    "mean": 7.005,
+    "median": 2.0,
+    "n": 1233,
+    "p90": 14.0
+   },
+   "prs": 1233,
+   "py_files_changed": {
+    "max": 103.0,
+    "mean": 4.29,
+    "median": 2.0,
+    "n": 1233,
+    "p90": 8.0
+   }
+  },
+  "kept_by_pool": {
+   "corpus_units": {
+    "max": 33940.0,
+    "mean": 2802.797,
+    "median": 800.5,
+    "n": 158,
+    "p90": 9760.0
+   },
+   "hunk_lines_touched": {
+    "max": 2514.0,
+    "mean": 134.158,
+    "median": 39.0,
+    "n": 158,
+    "p90": 291.0
+   },
+   "positives_per_pr": {
+    "max": 220.0,
+    "mean": 15.253,
+    "median": 6.0,
+    "n": 158,
+    "p90": 35.0
+   },
+   "prs": 158,
+   "py_files_changed": {
+    "max": 66.0,
+    "mean": 6.88,
+    "median": 4.0,
+    "n": 158,
+    "p90": 15.0
+   }
+  },
+  "per_repo_omitted": 200,
+  "summary": {
+   "kept_by_pool": 1844,
+   "kept_share": 0.07790452049007182,
+   "linked_prs": 23670,
+   "published_not_linked": 661,
+   "repos": 200
+  }
+ },
+ "test_positives": {
+  "in_test_files": 3966,
+  "mined_positives": 11047,
+  "prs": 1391,
+  "prs_only_test_positives": 105,
+  "prs_with_test_positive": 656,
+  "share": 0.359
+ },
+ "yield": {
+  "added_function_defs_total": 8695,
+  "merged_prs": 190197,
+  "pairs": 25422,
+  "positives_total": 11047,
+  "prs_mined": 1391,
+  "prs_mined_attempted": 2000,
+  "prs_with_closing_issue": 23670,
+  "quarantine_reasons": {
+   "changed_file_unparseable:mixed-tabs-spaces": 1,
+   "changed_file_unparseable:python2-except": 3,
+   "changed_file_unparseable:python2-long-literal": 2,
+   "changed_file_unparseable:syntax-other": 1,
+   "diff_truncated": 3,
+   "old_file_missing_at_base": 4,
+   "patch_missing": 3
+  },
+  "repositories_listed": 200,
+  "status": {
+   "mined": 1391,
+   "no_positive": 206,
+   "no_python_change": 386,
+   "quarantined": 17
+  }
+ }
+}

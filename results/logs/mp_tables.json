@@ -1,0 +1,112 @@
+{
+ "effects": 312,
+ "mdd": [
+  {
+   "contrast": "mp_filter_bm25 - mp_raw",
+   "exploratory": true,
+   "hi": 4.39,
+   "level": "L2",
+   "lo": 0.92,
+   "mdd_points": 1.44,
+   "queries": 351,
+   "repos": 5,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "with_repo_term"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_raw",
+   "exploratory": true,
+   "hi": 4.39,
+   "level": "L2",
+   "lo": 0.92,
+   "mdd_points": 1.44,
+   "queries": 351,
+   "repos": 5,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "query_level"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_sub",
+   "exploratory": true,
+   "hi": 3.22,
+   "level": "L2",
+   "lo": 1.08,
+   "mdd_points": 1.46,
+   "queries": 351,
+   "repos": 5,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "with_repo_term"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_sub",
+   "exploratory": true,
+   "hi": 2.73,
+   "level": "L2",
+   "lo": 1.02,
+   "mdd_points": 1.46,
+   "queries": 351,
+   "repos": 5,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "query_level"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_raw",
+   "exploratory": true,
+   "hi": 4.44,
+   "level": "L3",
+   "lo": 1.18,
+   "mdd_points": 2.36,
+   "queries": 155,
+   "repos": 2,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "with_repo_term"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_raw",
+   "exploratory": true,
+   "hi": 4.44,
+   "level": "L3",
+   "lo": 1.18,
+   "mdd_points": 2.36,
+   "queries": 155,
+   "repos": 2,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "query_level"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_sub",
+   "exploratory": true,
+   "hi": 3.17,
+   "level": "L3",
+   "lo": 1.37,
+   "mdd_points": 1.57,
+   "queries": 155,
+   "repos": 2,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "with_repo_term"
+  },
+  {
+   "contrast": "mp_filter_bm25 - mp_sub",
+   "exploratory": true,
+   "hi": 3.17,
+   "level": "L3",
+   "lo": 1.16,
+   "mdd_points": 1.16,
+   "queries": 155,
+   "repos": 2,
+   "seed_pairs": 2,
+   "seeds_per_arm": 2,
+   "variant": "query_level"
+  }
+ ],
+ "seeds": 32,
+ "unique": 8,
+ "version": "mp-tables/v1"
+}

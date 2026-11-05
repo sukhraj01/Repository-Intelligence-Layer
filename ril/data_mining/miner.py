@@ -1,526 +1,369 @@
-"""Resumable raw PR pilot: base snapshots, complete diffs and all edited functions."""
+"""One merged pull request to one training instance (designs D61 to D64).
+
+Implements ``docs/experiments/B.md`` E-MINE-PILOT. Steps: compare the pull request's base and head
+(merge-base of the two, so the merge style does not matter), unpack the Python files of that base
+commit, parse them with the project parser, map the old-side changes to units, and emit the
+instance in the layout ``ril.training.pool_reader`` reads. A pull request that cannot be fetched or
+parsed completely is *quarantined with its reason*, never dropped and never repaired.
+
+Nothing retriever-dependent is computed here: the output holds the issue text, the corpus, the
+positives and what a later filter would need (kind, test flag, hunk lines touched, unit size).
+
+Kept compatible with Python 3.10 (the cluster's compute nodes).
+"""
 
 from __future__ import annotations
 
-import hashlib
-import io
-import json
-import os
-import platform
 import re
-import resource
-import subprocess
-import tarfile
+import shutil
 import tempfile
-import time
 from collections import Counter
-from dataclasses import asdict
-from datetime import UTC, datetime
-from pathlib import Path, PurePosixPath
-from typing import Any, Protocol
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, field
+from typing import Any
 
-from ril.data_mining.github import Client, atomic_json, digest, linked_issues, search_path
-from ril.parsing.repository_parser import parse_repository
-from ril.training.content_overlap import audit_pool
-from ril.training.held_out import canonical_repo, is_held_out, load_held_out_lists, rule_counts
-from ril.training.pool_reader import PoolExample, read_cache, write_cache
+from ril.data_mining.config import MiningConfig
+from ril.data_mining.diff import (
+    Comparison,
+    PatchError,
+    merge_pages,
+    parse_comparison,
+)
+from ril.data_mining.github_api import ApiClient, ApiError, NotFound
+from ril.data_mining.links import LinkedIssue, PullRequest, issue_edited_after
+from ril.data_mining.mapping import FileMapping, UnitHit, map_change
+from ril.data_mining.snapshot import SnapshotError, SnapshotProvider
+from ril.parsing.code_unit import CodeUnit
+from ril.parsing.repository_parser import ParsedRepository, parse_repository
+from ril.parsing.unit_id import id_to_pool
 
-Record = dict[str, Any]
-VERSION = "raw-pr-miner/v1"
-_SHA = re.compile(r"^[a-fA-F0-9]{40}$")
-_REPO = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
-_HUNK = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+\d+(?:,\d+)? @@")
+COMPARE_PAGE = 100
+COMPARE_MAX_PAGES = 3
+"""The endpoint lists at most 300 files: three pages of 100."""
 
-
-def historical_base(
-    client: Client, repo: str, number: int, detail: Record
-) -> tuple[str | None, Record]:
-    """Use a standard merge's immutable parents, quarantining unsupported histories.
-
-    The first parent fixes the target immediately before merge. Comparing it to the
-    recorded head finds the last shared target update even after upstream sync merges.
-    Single-parent squash/rebase and merge queues need separate validation before admission.
-    """
-    head, merged = detail["head"]["sha"], detail.get("merge_commit_sha", "")
-    if not all(_SHA.fullmatch(x) for x in (head, merged)):
-        return None, {"base_selection": "quarantined_missing_merge_identity"}
-    commit = client.request(f"/repos/{repo}/git/commits/{merged}")["data"]
-    parents = commit.get("parents", [])
-    metadata: Record = {"merge_commit": merged, "base_selection": "standard_merge_parents"}
-    if len(parents) != 2 or parents[1]["sha"] != head:
-        return None, {**metadata, "base_selection": "quarantined_unsupported_merge_history"}
-    target = parents[0]["sha"]
-    if not _SHA.fullmatch(target):
-        raise ValueError("immutable target parent required")
-    compare = client.request(f"/repos/{repo}/compare/{target}...{head}")["data"]
-    base = str(compare["merge_base_commit"]["sha"])
-    metadata["target_before_merge"] = target
-    if not _SHA.fullmatch(base) or base == head:
-        return None, {**metadata, "base_selection": "quarantined_unverifiable_merge_base"}
-    return base, metadata
+STATUS_MINED = "mined"
+STATUS_NO_PYTHON = "no_python_change"
+STATUS_NO_POSITIVE = "no_positive"
+STATUS_QUARANTINED = "quarantined"
 
 
-def safe_path(value: str) -> str:
-    """Reject archive/diff paths that escape a scratch snapshot."""
-    path = PurePosixPath(value)
-    if path.is_absolute() or ".." in path.parts or not path.parts:
-        raise ValueError("unsafe snapshot path")
-    return str(path)
+@dataclass(frozen=True)
+class PositiveRow:
+    """One positive with what a later filter would need (D63)."""
+
+    unit_id: str
+    pool_id: str
+    path: str
+    unit_kind: str
+    name: str
+    qualified_name: str
+    is_test: bool
+    removed_lines: int
+    inserted_lines: int
+    hunk_lines_touched: int
+    unit_loc: int
+    unit_lines: int
+    in_corpus: bool
+    whole_file_deleted: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        """JSON form."""
+        return dict(self.__dict__)
 
 
-def changed_lines(diff: str) -> dict[str, set[int]]:
-    """Old-file removed lines and insertion anchors from a complete unified diff.
+@dataclass
+class MinedInstance:
+    """A pull request in the layout of the pool: query, corpus, qrels, plus the side record."""
 
-    An insertion touches its two adjoining old lines (0 is omitted). Added files have no
-    base-commit target. Renames use the old path; deletions keep all removed old lines.
-    Quoted Git paths are decoded as JSON-compatible quoted strings.
-    """
-    result: dict[str, set[int]] = {}
-    path: str | None = None
-    old_line = 0
-    in_hunk = False
-    insertion = False
-    for line in diff.splitlines():
-        if line.startswith("diff --git "):
-            path, in_hunk = None, False
-        elif line.startswith("--- ") and not in_hunk:
-            raw = line[4:]
-            raw = json.loads(raw) if raw.startswith('"') else raw
-            path = None if raw == "/dev/null" else safe_path(raw.removeprefix("a/"))
-        elif match := _HUNK.match(line):
-            insertion = match[2] == "0"
-            old_line = int(match[1]) + (1 if insertion else 0)
-            in_hunk = True
-        elif in_hunk and path is not None:
-            touched = result.setdefault(path, set())
-            if line.startswith("-"):
-                touched.add(old_line)
-                old_line += 1
-            elif line.startswith("+") and insertion:
-                touched.update(x for x in (old_line - 1, old_line) if x > 0)
-            elif line.startswith(" "):
-                old_line += 1
-    return result
+    repo: str
+    pr: int
+    dir_name: str
+    query: str
+    base_commit: str
+    corpus: list[tuple[str, str]]
+    qrels: list[str]
+    meta: dict[str, Any]
 
 
-class Snapshots(Protocol):
-    def materialize(self, repo: str, base: str, head: str, root: Path) -> str:
-        """Populate root at base and return the complete base-to-head diff."""
-        ...
+@dataclass
+class Outcome:
+    """Result of mining one pull request."""
 
+    key: str
+    status: str
+    reason: str = ""
+    instance: MinedInstance | None = None
+    counters: dict[str, int] = field(default_factory=dict)
 
-class GitSnapshots:
-    """Fetch immutable commits into isolated bare caches, with no credentialed Git URL."""
-
-    def __init__(self, root: Path):
-        self.root = root
-
-    def materialize(self, repo: str, base: str, head: str, root: Path) -> str:
-        if not _REPO.fullmatch(repo) or not all(_SHA.fullmatch(x) for x in (base, head)):
-            raise ValueError("invalid repository or immutable commit")
-        cache = self.root / repo.replace("/", "__")
-        cache.parent.mkdir(parents=True, exist_ok=True)
-        if not cache.exists():
-            subprocess.run(["git", "init", "--bare", "--quiet", str(cache)], check=True)
-
-        def git(*args: str) -> bytes:
-            return subprocess.run(
-                ["git", "--git-dir", str(cache), *args],
-                check=True,
-                capture_output=True,
-            ).stdout
-
-        for commit in (base, head):
-            exists = (
-                subprocess.run(
-                    ["git", "--git-dir", str(cache), "cat-file", "-e", f"{commit}^{{commit}}"],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                ).returncode
-                == 0
-            )
-            if not exists:
-                git(
-                    "fetch",
-                    "--quiet",
-                    "--no-tags",
-                    "--depth=1",
-                    f"https://github.com/{repo}.git",
-                    commit,
-                )
-        archive = git("archive", "--format=tar", base)
-        with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
-            for member in tar:
-                # Parse Python only, never execute source or traverse symlinks.
-                if not member.isfile() or not member.name.endswith(".py"):
-                    continue
-                path = root / safe_path(member.name)
-                path.parent.mkdir(parents=True, exist_ok=True)
-                handle = tar.extractfile(member)
-                if handle is None:
-                    raise ValueError("archive regular file has no content")
-                path.write_bytes(handle.read())
-        return git(
-            "-c",
-            "core.quotePath=false",
-            "diff",
-            "--no-ext-diff",
-            "--no-textconv",
-            "--find-renames",
-            "--unified=0",
-            base,
-            head,
-            "--",
-        ).decode("utf-8")
-
-
-class RecordedSnapshots:
-    """Synthetic base sources and complete diff bytes keyed by immutable identity."""
-
-    def __init__(self, document: Record):
-        self.rows = document["snapshots"]
-
-    def materialize(self, repo: str, base: str, head: str, root: Path) -> str:
-        row = self.rows[digest([repo, base, head])]
-        for name, text in row["files"].items():
-            path = root / safe_path(name)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(text)
-        return str(row["diff"])
-
-
-def extract_example(
-    repo: str,
-    number: int,
-    issues: list[Record],
-    root: Path,
-    diff: str,
-) -> tuple[PoolExample | None, Record]:
-    """Call the shared parser and preserve every overlapping function or method.
-
-    Classes and residual module units remain outside this function-level pool. Partial
-    parses are quarantined in their entirety: unknown functions never become negatives.
-    This is a mechanical completeness check, independent of every retriever.
-    """
-    parsed = parse_repository(str(root), repo)
-    metadata: Record = {"parse_errors": parsed.unparseable, "skipped_files": parsed.skipped_files}
-    if parsed.unparseable or parsed.skipped_files:
-        metadata["outcome"] = "parse_incomplete"
-        return None, metadata
-    touched = changed_lines(diff)
-    functions = [u for u in parsed.units if u.unit_type in ("function", "method")]
-    # Preserve collision ordinals; the reader and rank tools accept arbitrary unique strings.
-    pool_id = {
-        u.id: (
-            f"{u.file}/{u.qualified_name.replace('.', '/')}"
-            + u.id[len(u.file) + 2 + len(u.qualified_name) :]
-        )
-        for u in functions
-    }
-    positives = [
-        u
-        for u in functions
-        if any(u.start_line <= line <= u.end_line for line in touched.get(u.file, set()))
-    ]
-    metadata["functions"] = len(functions)
-    metadata["positives"] = [
-        {
-            "id": pool_id[u.id],
-            "codeunit_id": u.id,
-            "file": u.file,
-            "start_line": u.start_line,
-            "end_line": u.end_line,
-            "touched_old_lines": sorted(touched[u.file] & set(range(u.start_line, u.end_line + 1))),
-            "source_sha256": digest(u.source),
-        }
-        for u in positives
-    ]
-    metadata["diff_sha256"] = digest(diff)
-    if not positives:
-        metadata["outcome"] = "no_overlapping_function"
-        return None, metadata
-    pos_ids = {u.id for u in positives}
-    candidates = [u for u in functions if u.id not in pos_ids]
-    instance = f"train/python/{repo.replace('/', '__')}-{number}"
-    query = "\n\n".join(f"{issue['title']}\n\n{issue.get('body') or ''}" for issue in issues)
-    metadata["outcome"] = "kept"
-    return PoolExample(
-        instance,
-        repo,
-        number,
-        query,
-        tuple(pool_id[u.id] for u in positives),
-        tuple(u.source for u in positives),
-        tuple(pool_id[u.id] for u in candidates),
-        tuple(u.source for u in candidates),
-    ), metadata
-
-
-def source_checkout(repository_root: Path) -> Record:
-    """Describe Git or a verified archive, never label an archive as a clean checkout."""
-    try:
-        top = subprocess.run(
-            ["git", "rev-parse", "--show-toplevel"],
-            cwd=repository_root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        if Path(top).resolve() != repository_root.resolve():
-            raise ValueError("source archive is nested beneath an unrelated checkout")
-        commit = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=repository_root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        dirty = bool(
-            subprocess.run(
-                ["git", "status", "--porcelain"],
-                cwd=repository_root,
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
-        )
+    def row(self) -> dict[str, Any]:
+        """The state-log row (no text)."""
         return {
-            "git_hash": commit,
-            "git_dirty": dirty,
-            "source_control": "git",
-            "git_status": "dirty" if dirty else "clean",
-        }
-    except (OSError, subprocess.SubprocessError, ValueError):
-        commit = os.environ.get("RIL_COMMIT", "")
-        if not _SHA.fullmatch(commit):
-            raise ValueError(
-                "source archive requires the verified package's full RIL_COMMIT"
-            ) from None
-        return {
-            "git_hash": commit.lower(),
-            "git_dirty": True,
-            "source_control": "archive_without_git",
-            "git_status": "unavailable",
+            "key": self.key,
+            "status": self.status,
+            "reason": self.reason,
+            "counters": dict(sorted(self.counters.items())),
         }
 
 
-def mine(
-    config: Record,
-    out: Path,
-    client: Client,
-    snapshots: Snapshots,
-    held_out_doc: Record,
-    *,
-    source_kind: str,
-    source_identity: str = "unspecified",
-    overlap_index: set[int] | None = None,
-    overlap_identity: str | None = None,
-) -> Record:
-    """Pilot only, resumable per request and PR, rejecting changed run identities."""
-    if not 1 <= int(config["repositories"]) <= 200 or not 1 <= int(config["pull_requests"]) <= 2000:
-        raise ValueError("pilot limits are 200 repositories and 2000 PRs; full scale needs review")
-    repository_root = Path(__file__).resolve().parents[2]
-    checkout = source_checkout(repository_root)
-    source_paths = [
-        *Path(__file__).parent.glob("*.py"),
-        repository_root / "scripts/c_mine_prs.py",
-        repository_root / "ril/evaluation/runtime.py",
-        repository_root / "ril/parsing/repository_parser.py",
-        repository_root / "ril/training/pool_reader.py",
-        repository_root / "ril/training/pool_ranks.py",
-    ]
-    implementation_sources = {
-        str(p.relative_to(repository_root)): hashlib.sha256(p.read_bytes()).hexdigest()
-        for p in sorted(source_paths)
-    }
-    identity = {
-        "version": VERSION,
-        "config": config,
-        "held_out_sha256": digest(held_out_doc),
-        "source_kind": source_kind,
-        "source_identity": source_identity,
-        "overlap_identity": overlap_identity,
-        "implementation_sources": implementation_sources,
-    }
-    identity_path = out / "identity.json"
-    if identity_path.exists() and json.loads(identity_path.read_text()) != identity:
-        raise ValueError("resume identity/configuration mismatch; choose a new output directory")
-    atomic_json(identity_path, identity)
-    started = time.monotonic()
-    lists = load_held_out_lists(held_out_doc)
-    repos: list[str] = []
-    for row in client.pages(search_path(config["repository_query"]), "items"):
-        repo = canonical_repo(row["full_name"])
-        if repo not in repos:
-            repos.append(repo)
-        if len(repos) == int(config["repositories"]):
+def dir_name(repo: str, pr: int) -> str:
+    """Directory name in the pool's form: ``owner__name-<PR>`` (repository lower-cased)."""
+    owner, _, name = repo.partition("/")
+    return f"{owner}__{name}-{pr}"
+
+
+# --------------------------------------------------------------------------- parse failures
+
+_SYNTAX_CAUSES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("python2-print", re.compile(r"Missing parentheses in call to 'print'", re.I)),
+    ("python2-exec", re.compile(r"Missing parentheses in call to 'exec'", re.I)),
+    ("python2-except", re.compile(r"multiple exception types must be parenthesized", re.I)),
+    ("python2-octal", re.compile(r"leading zeros in decimal integer literals", re.I)),
+    ("python2-long-literal", re.compile(r"invalid decimal literal", re.I)),
+    ("mixed-tabs-spaces", re.compile(r"inconsistent use of tabs and spaces", re.I)),
+)
+
+
+def classify_parse_failure(reason: str) -> str:
+    """Language-version cause of an unparseable file (a heuristic on the error text).
+
+    The parser records ``"<ErrorType>: <message>"``. Messages naming Python 2 constructs map to
+    ``python2-*`` (``python2-long-literal`` also catches other malformed number literals, so it
+    is an upper bound); mixed tabs and spaces, which Python 2 allowed, is its own label; other
+    syntax errors stay ``syntax-other`` (this includes syntax newer than the interpreter running
+    the parser, which the message text does not identify); non-syntax failures keep their error
+    type. The split is a reading of message text, reported with its remainder.
+    """
+    kind, _, message = reason.partition(": ")
+    if kind not in ("SyntaxError", "IndentationError", "TabError"):
+        return kind or "unknown"
+    for label, pattern in _SYNTAX_CAUSES:
+        if pattern.search(message):
+            return label
+    return "syntax-other"
+
+
+# --------------------------------------------------------------------------- compare
+
+
+def fetch_comparison(client: ApiClient, pr: PullRequest) -> Comparison:
+    """The compare response of ``base...head`` for one pull request, all pages."""
+    owner, _, name = pr.repo.partition("/")
+    path = f"/repos/{owner}/{name}/compare/{pr.base_oid}...{pr.head_oid}"
+    pages: list[Mapping[str, Any]] = []
+    for page in range(1, COMPARE_MAX_PAGES + 1):
+        doc = client.get_json(path, {"per_page": COMPARE_PAGE, "page": page})
+        pages.append(doc)
+        if len(doc.get("files") or []) < COMPARE_PAGE:
             break
-    aliases = dict(lists.aliases)
-    resolved = []
-    unresolved = []
-    repository_metadata = {}
-    forks: dict[str, tuple[str, ...]] = {}
-    # Resolve both sides. Otherwise a held-out rename could evade candidate-only resolution.
-    for repo in sorted(set(repos) | set(lists.blocked())):
-        try:
-            data = client.request(f"/repos/{repo}")["data"]
-        except RuntimeError as exc:
-            if str(exc) != "GitHub HTTP 404":
-                raise
-            unresolved.append(repo)
-            continue
-        current = canonical_repo(data["full_name"])
-        aliases[repo] = current
-        if repo in repos:
-            repository_metadata[repo] = {
-                k: data.get(k)
-                for k in (
-                    "full_name",
-                    "language",
-                    "stargazers_count",
-                    "license",
-                    "pushed_at",
-                    "archived",
-                    "fork",
-                )
-            }
-        resolved.append(repo)
-        forks[repo] = tuple(
-            canonical_repo(data[k]["full_name"]) for k in ("parent", "source") if k in data
-        )
-    blocked = set(lists.blocked()) | {aliases.get(r, r) for r in lists.blocked()}
-    rule_rows = [asdict(r) for r in rule_counts(dict.fromkeys(repos, 1), lists, aliases, forks)]
-    kept_repos = [r for r in repos if not is_held_out(r, blocked, aliases)]
-    counters: Counter[str] = Counter()
-    examples: list[PoolExample] = []
-    metadata_rows: list[Record] = []
-    by_repo: dict[str, list[str]] = {}
-    seen_prs: set[tuple[str, int]] = set()
-    for repo in kept_repos:
-        if counters["merged_prs"] >= config["pull_requests"]:
-            break
-        for row in client.pages(
-            f"/repos/{repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100"
-        ):
-            if not row.get("merged_at"):
-                counters["unmerged_prs"] += 1
-                continue
-            number = int(row["number"])
-            if (repo, number) in seen_prs:
-                continue
-            seen_prs.add((repo, number))
-            counters["merged_prs"] += 1
-            checkpoint = out / "instances" / f"{digest([repo, number])}.json"
-            if checkpoint.exists():
-                record = json.loads(checkpoint.read_text())
-                cache = out / "instances" / record["cache"] if record.get("cache") else None
-                example = read_cache(str(cache))[0] if cache else None
-            else:
-                issues = linked_issues(client, repo, number)
-                record = {
-                    "repo": repo,
-                    "pr": number,
-                    "issues": issues,
-                    "linked_issue_count": len(issues),
-                    "source_kind": source_kind,
-                }
-                example = None
-                if not issues:
-                    record["outcome"] = "no_linked_issue"
-                else:
-                    detail = client.request(f"/repos/{repo}/pulls/{number}")["data"]
-                    head = detail["head"]["sha"]
-                    base, selection = historical_base(client, repo, number, detail)
-                    record.update(
-                        selection,
-                        head_commit=head,
-                        merged_at=detail["merged_at"],
-                        pr_url=detail["html_url"],
-                    )
-                    if base is None:
-                        record["outcome"] = "history_unverifiable"
-                    else:
-                        record["base_commit"] = base
-                        with tempfile.TemporaryDirectory(prefix="ril-miner-") as scratch:
-                            diff = snapshots.materialize(repo, base, head, Path(scratch))
-                            example, extracted = extract_example(
-                                repo, number, issues, Path(scratch), diff
-                            )
-                        record.update(extracted)
-                if example is not None:
-                    record["cache"] = checkpoint.stem + ".jsonl.gz"
-                    write_cache(str(checkpoint.parent / record["cache"]), [example])
-                atomic_json(checkpoint, record)
-            metadata_rows.append(record)
-            counters[record["outcome"]] += 1
-            counters["linked_issues"] += record["linked_issue_count"]
-            counters["linked_prs"] += bool(record["linked_issue_count"])
-            if example is not None:
-                examples.append(example)
-                counters["positives"] += len(example.positive_ids)
-                by_repo.setdefault(repo, []).extend(
-                    example.positive_texts + example.candidate_texts
-                )
-            if counters["merged_prs"] >= config["pull_requests"]:
-                break
-    write_cache(str(out / "pool.jsonl.gz"), examples)
-    atomic_json(out / "metadata.json", metadata_rows)
-    overlap: Record = {
-        "status": "blocked: held-out content index absent",
-        "applied_as_filter": False,
-    }
-    if overlap_index is not None:
-        overlap = {
-            "status": "computed",
-            "index_identity": overlap_identity,
-            "applied_as_filter": False,
-            "rows": [asdict(r) | {"share": r.share} for r in audit_pool(by_repo, overlap_index)],
-        }
-    previous = (
-        json.loads((out / "provenance.json").read_text())
-        if (out / "provenance.json").exists()
-        else {}
+    return parse_comparison(merge_pages(pages))
+
+
+# --------------------------------------------------------------------------- mining
+
+
+def _quarantine(pr: PullRequest, reason: str, **counters: int) -> Outcome:
+    return Outcome(pr.key, STATUS_QUARANTINED, reason, None, dict(counters))
+
+
+def primary_issue(pr: PullRequest) -> LinkedIssue:
+    """The issue whose text is the query: same repository first, then the lowest number."""
+    return sorted(pr.issues, key=lambda i: (i.repo != pr.repo, i.number))[0]
+
+
+def _positive_row(hit: UnitHit, in_corpus: bool) -> PositiveRow:
+    u = hit.unit
+    return PositiveRow(
+        unit_id=u.id,
+        pool_id=id_to_pool(u.id),
+        path=u.file,
+        unit_kind=u.unit_type,
+        name=u.name,
+        qualified_name=u.qualified_name,
+        is_test=u.is_test,
+        removed_lines=hit.removed_lines,
+        inserted_lines=hit.inserted_lines,
+        hunk_lines_touched=hit.hunk_lines_touched,
+        unit_loc=u.loc,
+        unit_lines=u.end_line - u.start_line + 1,
+        in_corpus=in_corpus,
+        whole_file_deleted=hit.whole_file_deleted,
     )
-    provenance = {
-        "source": "https://api.github.com",
-        "source_kind": source_kind,
-        "date": datetime.now(UTC).isoformat(),
-        "config_hash": digest(config),
-        "run_identity": digest(identity),
-        "version": VERSION,
-        **checkout,
-        "implementation_sources": implementation_sources,
-        "hardware": {
-            "platform": platform.system(),
-            "processor": platform.machine(),
-            "python": platform.python_version(),
-            "peak_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-        },
-        "repository_metadata": repository_metadata,
-        "counts": dict(counters),
-        "repositories_selected": len(repos),
-        "repositories_after_held_out": len(kept_repos),
-        "held_out_rule_counts": rule_rows,
-        "rename_resolution": {
-            "requested": len(set(repos) | set(lists.blocked())),
-            "resolved": len(resolved),
-            "unresolved": unresolved,
-            "complete": not unresolved,
-        },
-        "content_overlap": overlap,
-        "api": client.counts,
-        "elapsed_seconds_cumulative": previous.get("elapsed_seconds_cumulative", 0)
-        + time.monotonic()
-        - started,
-        "parse_failure_denominator": counters["linked_prs"],
-        "parse_failure_share": counters["parse_incomplete"] / counters["linked_prs"]
-        if counters["linked_prs"]
-        else None,
-        "positives_per_kept_pr": counters["positives"] / len(examples) if examples else None,
-        "pool_sha256": hashlib.sha256((out / "pool.jsonl.gz").read_bytes()).hexdigest(),
-        "positive_policy": "every overlapping base-commit function/method; no retriever filter",
-        "full_scale_authorized": False,
-        "supported_history": "two-parent merge; second parent equals recorded PR head",
+
+
+def build_corpus(
+    units: Sequence[CodeUnit], kinds: Sequence[str]
+) -> tuple[list[tuple[str, str]], dict[str, CodeUnit], int]:
+    """``(corpus rows, pool id -> unit, collisions)``; a repeated pool id keeps the first unit."""
+    rows: list[tuple[str, str]] = []
+    first: dict[str, CodeUnit] = {}
+    collisions = 0
+    for u in units:
+        if u.unit_type not in kinds:
+            continue
+        pid = id_to_pool(u.id)
+        if pid in first:
+            collisions += 1
+            continue
+        first[pid] = u
+        rows.append((pid, f"{pid}\n{u.source}"))
+    return rows, first, collisions
+
+
+def _units_by_file(parsed: ParsedRepository) -> dict[str, list[CodeUnit]]:
+    out: dict[str, list[CodeUnit]] = {}
+    for u in parsed.units:
+        out.setdefault(u.file, []).append(u)
+    return out
+
+
+def compare_for(pr: PullRequest, client: ApiClient) -> Comparison | Outcome:
+    """The compare response of a pull request, or the quarantine outcome that ends it early."""
+    if not pr.base_oid or not pr.head_oid:
+        return _quarantine(pr, "missing_commit_id")
+    try:
+        return fetch_comparison(client, pr)
+    except NotFound:
+        return _quarantine(pr, "compare_not_found")
+    except (ApiError, PatchError, ValueError, KeyError) as exc:
+        return _quarantine(pr, f"compare_failed:{type(exc).__name__}")
+
+
+def needs_snapshot(comparison: Comparison) -> bool:
+    """Whether mining this comparison reads the base-commit snapshot (so it can be prefetched)."""
+    return (
+        not comparison.truncated
+        and not any(f.patch_missing for f in comparison.python_files())
+        and bool(comparison.python_files())
+    )
+
+
+def mine_pr(
+    pr: PullRequest,
+    *,
+    client: ApiClient,
+    snapshots: SnapshotProvider,
+    config: MiningConfig,
+    comparison: Comparison | Outcome | None = None,
+) -> Outcome:
+    """Mine one pull request that closes at least one issue; see the module docstring.
+
+    ``comparison`` is the result of :func:`compare_for` when the caller fetched it ahead of time
+    (the snapshot fetch overlaps); the outcome is the same either way.
+    """
+    if not pr.issues:
+        raise ValueError(f"{pr.key}: no linked issue; select before mining")
+    if comparison is None:
+        comparison = compare_for(pr, client)
+    if isinstance(comparison, Outcome):
+        return comparison
+    py_files = comparison.python_files()
+    counters: dict[str, int] = {
+        "files_listed": comparison.files_listed,
+        "py_files_changed": len(py_files),
     }
-    atomic_json(out / "provenance.json", provenance)
-    return provenance
+    if comparison.truncated:
+        return _quarantine(pr, "diff_truncated", **counters)
+    if any(f.patch_missing for f in py_files):
+        return _quarantine(pr, "patch_missing", **counters)
+    if not py_files:
+        return Outcome(pr.key, STATUS_NO_PYTHON, "", None, counters)
+
+    work = tempfile.mkdtemp(prefix="ril_snap_")
+    try:
+        try:
+            snapshots.materialize(pr.repo, comparison.merge_base, work)
+        except SnapshotError:
+            return _quarantine(pr, "snapshot_unavailable", **counters)
+        parsed = parse_repository(work, pr.repo)
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+    unparseable = {path: reason for path, reason in parsed.unparseable}
+    skipped = {path: reason for path, reason in parsed.skipped_files}
+    by_file = _units_by_file(parsed)
+    causes = Counter(classify_parse_failure(r) for r in unparseable.values())
+    counters["corpus_unparsed_files"] = len(unparseable)
+    counters["corpus_skipped_files"] = len(skipped)
+
+    mappings: list[FileMapping] = []
+    status_counts: Counter[str] = Counter()
+    for change in py_files:
+        status_counts[change.status] += 1
+        if change.status == "added":
+            mappings.append(map_change((), change))
+            continue
+        old = change.old_path
+        if old in unparseable:
+            cause = classify_parse_failure(unparseable[old])
+            return _quarantine(pr, f"changed_file_unparseable:{cause}", **counters)
+        if old in skipped:
+            counters["changed_files_skipped"] = counters.get("changed_files_skipped", 0) + 1
+            continue
+        if old not in by_file:
+            return _quarantine(pr, "old_file_missing_at_base", **counters)
+        mappings.append(map_change(by_file[old], change))
+
+    corpus, first, collisions = build_corpus(parsed.units, config.corpus_kinds)
+    positives: list[PositiveRow] = []
+    seen: set[str] = set()
+    for fm in mappings:
+        for hit in fm.hits:
+            pid = id_to_pool(hit.unit.id)
+            if pid in seen:
+                continue
+            seen.add(pid)
+            in_corpus = hit.unit.unit_type in config.corpus_kinds and first.get(pid) is not None
+            positives.append(_positive_row(hit, in_corpus))
+    qrels = sorted({p.pool_id for p in positives if p.in_corpus})
+    added_defs = sum(len(fm.added_defs) for fm in mappings)
+    removed_defs = sum(len(fm.removed_defs) for fm in mappings)
+    counters.update(
+        corpus_units=len(corpus),
+        pool_id_collisions=collisions,
+        positives=len(qrels),
+        positives_side_only=sum(1 for p in positives if not p.in_corpus),
+        added_function_defs=added_defs,
+        removed_function_defs=removed_defs,
+    )
+    if not qrels:
+        return Outcome(pr.key, STATUS_NO_POSITIVE, "", None, counters)
+
+    issue = primary_issue(pr)
+    pairs = [
+        {
+            "issue_repo": i.repo,
+            "issue": i.number,
+            "primary": i is issue,
+            "edited_after_pr_created": issue_edited_after(i, pr.created_at),
+        }
+        for i in pr.issues
+    ]
+    meta: dict[str, Any] = {
+        "repo": pr.repo,
+        "pr": pr.number,
+        "base_commit": comparison.merge_base,
+        "base_ref_oid": pr.base_oid,
+        "head_commit": pr.head_oid,
+        "pr_created_at": pr.created_at,
+        "pairs": pairs,
+        "closing_total": pr.closing_total,
+        "regex_refs": list(pr.regex_refs),
+        "regex_only_refs": sorted(
+            set(pr.regex_refs) - {i.number for i in pr.issues if i.repo == pr.repo}
+        ),
+        "file_status": dict(sorted(status_counts.items())),
+        "counters": dict(sorted(counters.items())),
+        "parse_failure_causes": dict(sorted(causes.items())),
+        "positives": [p.to_dict() for p in sorted(positives, key=lambda p: p.pool_id)],
+    }
+    inst = MinedInstance(
+        repo=pr.repo,
+        pr=pr.number,
+        dir_name=dir_name(pr.repo, pr.number),
+        query=issue.query_text(),
+        base_commit=comparison.merge_base,
+        corpus=corpus,
+        qrels=qrels,
+        meta=meta,
+    )
+    return Outcome(pr.key, STATUS_MINED, "", inst, counters)

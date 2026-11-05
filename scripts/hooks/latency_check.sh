@@ -6,6 +6,7 @@
 #   relaxed  commits that stage nothing under ril/, scripts/ or configs/ skip the run
 #   off      skip entirely
 # Which of these the project uses is an open question (Q3); the default is the strict reading.
+# RIL_LATENCY_DIR (default results/latency) names the directory of the two CSVs; workstreams A and C use their own.
 # The appended rows are staged so they travel with the commit they describe.
 set -e
 mode="${RIL_LATENCY_HOOK:-strict}"
@@ -23,4 +24,5 @@ case "$mode" in
   *) echo "latency hook: unknown RIL_LATENCY_HOOK=$mode (strict|relaxed|off)" >&2; exit 1 ;;
 esac
 make --no-print-directory bench-check
-git add results/latency/latency_log.csv results/latency/throughput_log.csv
+dir="${RIL_LATENCY_DIR:-results/latency}"
+git add "$dir/latency_log.csv" "$dir/throughput_log.csv"

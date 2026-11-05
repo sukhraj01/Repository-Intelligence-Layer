@@ -4,10 +4,34 @@ A repository-level code retrieval layer for LLM coding agents, **plus** a contro
 whether the retriever's *training supervision* affects whether the agent actually resolves the
 issue.
 
-Lead: Sukhraj Singh (IIIT Hyderabad) · Team of 3 · NLP semester project · 16 weeks · Python only.
 
-> **Status: design locked, implementation not started.** Nothing in this repository runs yet.
-> See `PROJECT_STATE.md` for the current truth.
+## Status
+
+The design is fixed (Master Project Document rev 16, 2026-10-11) and the apparatus runs. Current
+state, blockers and the next task are in `PROJECT_STATE.md`; every measured number is a row of
+`RESULTS.md` or `results/ledger_a.md` with its run log in `results/logs/`.
+
+**Exists and runs** (all of it exploratory or measured on development repositories; nothing is frozen):
+
+- Repository parser and a typed graph (contain, import, invoke, inherit, override; tests and
+  configures built but off by default) with a per-edge status, plus an incremental updater that
+  matches the full rebuild on 100 of 100 commits tested (`ril/parsing/`, `docs/ARCHITECTURE.md`).
+- BM25 (reference form, with identifier splitting and field weights as options) and a dense
+  encoder with a flat exact index; graph expansion, rank fusion and a recency prior as measurement
+  code (`ril/retrieval/`).
+- CORE-Bench loaders and metrics that reproduce the published BM25 rows (`ril/evaluation/`,
+  `RESULTS.md` rows `e1-*`).
+- The RQ2 training stack: pool reader, negative policies, the three arm hooks, budget accounting,
+  checkpoint evaluation (`ril/training/`).
+- Measured pilots, each registered in `docs/EXPERIMENTS.md`: graph signal and graph role, pool
+  filter state, contamination scan, encoder numbers, RQ3 power, and two arms pilots
+  (E-PILOT-ARMS, E-PILOT-ARMS2).
+- A latency and throughput harness with per-stage rows (`ril/bench/`, `results/latency/`).
+
+**Does not exist yet:** the frozen configuration (`configs/frozen/`), the four-arm RQ2 runs at
+three seeds, context assembly, and the agent runs for RQ3.
+
+**Ownership.** Person A / B / C are named in `docs/ROADMAP.md`.
 
 ---
 
@@ -36,12 +60,19 @@ signal** over a code graph extended with test and configuration edges, evaluated
 
 ```
 PROJECT_STATE.md  what is true right now           RESULTS.md        every benchmark, append-only
-docs/             design docs + live documents     decisions/        ADRs (10 open decisions)
-specs/            week-1 acceptance contracts      knowledge/        papers, datasets
-configs/          frozen / demo / experiments      data/             raw, processed, index, held_out
-results/          latency, rq1, rq2, rq3, logs     scripts/          thin CLIs; scripts/ada/ = Slurm jobs
-ril/              the package                      tests/            unit, integration, leakage, repro
+docs/             design docs + live documents     decisions/        ADRs (ADR-001..013)
+docs/status/      one status page per workstream   specs/            acceptance contracts
+knowledge/        paper notes, dataset cards       configs/          frozen / demo / experiments / bench
+data/             held_out (tracked); the rest     results/          latency, rq1, rq2, rq3, logs, tables,
+                  is rebuilt on the cluster                          figures, ledger_* (per-workstream rows)
+scripts/          thin CLIs; scripts/ada/ = Slurm  tests/            unit, integration, leakage, reproducibility
 reports/          proposal + final (LaTeX)
+
+ril/
+  config/ util/   parameters, paths; seed, logger, checks      parsing/    CodeUnit, parser, typed graph, updater
+  retrieval/      BM25, dense encoder, graph expansion, recency   training/   pool, negatives, arm hooks, loss, runs
+  evaluation/     loaders, metrics, chunk mapping, power          bench/      latency and throughput harness
+  analysis/       tables from results/ (reads results/ only)
 ```
 
 ## Where to start
@@ -49,7 +80,7 @@ reports/          proposal + final (LaTeX)
 - **Current state and next task:** `PROJECT_STATE.md`, then `docs/ROADMAP.md`.
 - **Understanding the research:** `docs/README.md` has the reading order. The full design lives in
   `docs/source/MASTER_PROJECT_DOCUMENT.md`.
-- **Deciding things:** `decisions/README.md` — ten decisions must close by end of week 2.
+- **Deciding things:** `decisions/README.md` — ADR-001 to ADR-010 are the open decisions and are all `Proposed`; the evidence gathered so far is in their addenda.
 
 ## Getting started
 

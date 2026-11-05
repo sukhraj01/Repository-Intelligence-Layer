@@ -5,7 +5,7 @@
 - **Decide by:** end of week 2 (all ten decisions)
 - **Decided by:** _pending — team_
 - **Master doc:** open decision #9 (`docs/12_open_decisions.md`)
-- **Affects:** Latency Pareto, RQ1, `ril/retrieval/ranking.py`
+- **Affects:** Latency Pareto, RQ1, the rerank step of the retrieval stack (not written yet)
 
 ## Context
 Hypothesis from the master doc: reranking 100 candidates costs ~500–1000 ms while every other stage is a few ms, so ranking dominates sourcing by ~two orders of magnitude. Optimisation axes: rerank 20 instead of 100, distil the cross-encoder, or drop it and measure the nDCG cost.
@@ -42,3 +42,7 @@ _Pending._
 
 ## Addenda
 _None._
+
+## Addendum 2026-11-03 — stays open; input it is waiting for
+
+Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** a real cross-encoder stage and its depth ladder (0, 20, 50, 100 candidates) on the dev queries, with latency rows from the harness, from workstream A; the 20 existing `cross_encoder_rerank` rows come from a stub and are not measurements.

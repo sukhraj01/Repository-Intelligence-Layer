@@ -20,6 +20,66 @@ and bookkeeping. Nothing here changes what is controlled — that is a design de
   without module-residual positives is primary for design decisions about the graph, the CORE-Bench-faithful reading (with
   them) is reported beside it (ADR-004).
 
+## Index of entries
+
+One row per entry in every experiment log (an entry with a section but no registry row is listed too). Entry ids are unique across `docs/EXPERIMENTS.md`, `docs/experiments/A.md`,
+`docs/experiments/B.md` and `docs/experiments/C.md`; `python -I scripts/check_docs.py` fails on a duplicate id or on a citation that resolves to nothing.
+The lead adds the row for a new entry at merge time (the pull request text carries the row).
+
+| Entry id | Owner | File | Status | Date |
+|---|---|---|---|---|
+| E-LAT-HARNESS | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-LAT-STAGES | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ1-DENSE | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ1-DENSE-BM25 | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ1-DENSE-STRUCT | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ1-ALL | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-GRAPH-BUILD | lead | `docs/EXPERIMENTS.md` | done | 2026-10-17 |
+| E-GRAPH-REACH | lead | `docs/EXPERIMENTS.md` | done | 2026-10-17 |
+| E-BM25-REPRO | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-LABEL-NOISE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-PILOT-LEAK | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-PILOT-K | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-PILOT-NEG | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-PILOT-L3POS | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-PILOT-POOL | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-GRAPH-SIGNAL | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-GRAPH-WEIGHTS | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-RECENCY | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-CLASS-SOURCE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-23 |
+| E-AMBIG-POLICY | lead | `docs/EXPERIMENTS.md` | done | 2026-10-23 |
+| E-L3-CENSUS | lead | `docs/EXPERIMENTS.md` | done | 2026-10-23 |
+| E-POOL-CHECK | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-POOL-RANKS | lead | `docs/EXPERIMENTS.md` | done | 2026-10-25 |
+| E-TRAIN-STACK | lead | `docs/EXPERIMENTS.md` | done | 2026-10-25 |
+| E-GRAPH-ROLE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-PILOT-CURVE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-PILOT-ARMS | lead | `docs/EXPERIMENTS.md` | done | 2026-10-31 |
+| E-PILOT-ARMS2 | lead | `docs/EXPERIMENTS.md` | done | 2026-10-31 |
+| E-PILOT-NOISE | lead | `docs/EXPERIMENTS.md` | gate N0 and stage N1 done (two seeds; third seed at r = 0.4 added) | 2026-11-01 |
+| E-PILOT-NOISE-SIB | lead | `docs/EXPERIMENTS.md` | done; sanity (i) not passed, reading not answered | 2026-11-02 |
+| E-MINE-PILOT | lead | `docs/experiments/B.md` | code built and tested offline; live runs blocked (no token) | 2026-11-02 |
+| E-MINED-PILOT | lead | `docs/experiments/B.md` | done (six runs, two seeds; exploratory) | 2026-11-03 |
+| E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
+| E-POWER | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-CONTAM-PROBE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
+| E-CONTAM-SCAN | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-CONTAM-EDITED | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-DEV-ANSIBLE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-DENSE-FUSION (was E-GRAPH-FUSION) | lead | `docs/EXPERIMENTS.md` | done | 2026-10-23 |
+| E-ENCODER-NUMBERS | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
+| E-GRAPH-L3 | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-RAW | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-FILTER | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-WEIGHT | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-CURRICULUM | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-CTRL-SUBRAW | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-SEC-QQ | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ2-SEC-POSNEG | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ3-AGENT | lead | `docs/EXPERIMENTS.md` | planned |  |
+| A1-PILOT | A | `docs/experiments/A.md` | done | 2026-10-31 |
+| A2a | A | `docs/experiments/A.md` | done | 2026-10-31 |
+
 ## Registry
 
 | ID | RQ | What varies | Held fixed | Seeds | Primary outputs | Status |
@@ -1062,7 +1122,7 @@ examples at batch 32: 2,016 visits); the final model in half precision; evaluati
 repositories, units only (decision D12's level; chunks skipped for budget), RRF k = 60 with BM25 beside the dense column.
 Seeds 0 and 1 per condition (training seed; the selection is fixed). Teacher ranks: one pass over the example cache per teacher
 (CodeRankEmbed, SweRankEmbed-Small at 1,024 tokens, float16; BM25), with E-POOL-RANKS's rank definition; feature table
-`t2_features_A.csv` (untracked; ids hashed as in E-POOL-RANKS).
+the feature table of selection A (untracked; ids hashed as in E-POOL-RANKS).
 
 **Pool.** Selection A: the first 2,000 directories outside the held-out list (v2 with the rename cache) by sha256("0:<directory>");
 cached with 0 fetch errors, 2,000 examples. Selection L (E-PILOT-LEAK only): the first 2,000 directories of the whole listing by
@@ -1366,6 +1426,8 @@ L3 Recall@100, rrf column, units_all_nomod; 155 queries, 2 repositories; step 0 
 | 1000 | 47.7 | +5.1 [+3.7, +6.5] | +5.1 [+4.4, +5.7] | +5.5 / +4.6 | +0.9 [+0.2, +1.7] | +0.3 [-0.3, +0.8] | +0.3 [-0.2, +0.8] |
 | 2000 | 47.6 | +5.0 [+3.7, +6.5] | +5.0 [+4.9, +5.1] | +5.0 / +5.0 | -0.1 [-0.9, +0.7] | -0.1 [-0.5, +0.4] | -0.1 [-0.6, +0.5] |
 
+Entries A1-PILOT and A2a are kept in `docs/experiments/A.md` (registry rows and sections).
+
 **Result.**
 - *Moved beyond seed noise*: yes at every checkpoint, both levels, both columns. At 100 updates (the first checkpoint) the
   dense column is +10.5 [+8.3, +12.7] nDCG@10 (L2, queries only; clustered [+4.9, +12.6]) and +11.1 [+9.1, +13.2] Recall@100
@@ -1395,6 +1457,8 @@ show, and its size N is the engineer's decision between 100 (these sensitivity r
 Budget note: block 2 has 24 - 17.00 - 5.14 = 1.86 GPU-hours left, so ten 2,000-update runs do not fit; at N = 100 a run costs about 0.05
 GPU-hours of training plus a 10-minute evaluation (about 0.2 GPU-hours).
 
+
+Sections A1-PILOT and A2a: see `docs/experiments/A.md`.
 
 ## Pre-registered interpretation rules
 
@@ -1776,3 +1840,152 @@ recomputation remain pending. No timing rows or elapsed runtime inferred from ca
 Reported waited-child peak RSS2914944KiB(2.779907GiB). The archive Git warning was handled
 through the existing pinned-source fallback. No dense/model/agent execution or paid call;
 compute billing unknown. Preserve this completed run and collect artifacts rather than rerunning.
+
+## E-PILOT-ARMS: can a different supervision change anything at all? Exploratory, done 2026-10-31
+
+Status: exploratory pilot, outside the pre-registered RQ tables. Configurations `configs/experiments/t4/t4a_*` (stage 1, 24 runs) and `t4b_*` (stage 2, 6 runs), each with its hash in `results/tables/t4/t4{a,b}_runs.csv`. Evaluation set and metrics as in E-PILOT-CURVE (`configs/experiments/e1_bm25_dev3_curve.yaml`); the untrained encoder's values are the step-0 rows of the learning curve. Account A, RTX 2080 Ti, jobs in `docs/COMPUTE.md`. Code: `ril/analysis/t4_tables.py`, `scripts/t4_tables.py`, `scripts/ada/t4_runs.sbatch`.
+
+**Question.** After the RAW learning curve (about +10 L2 nDCG@10 and +11 L3 Recall@100 by 100 updates, flat to 2,000), does a different supervision change the level or the speed of reaching it, and how much of the gain is supervision at all?
+
+**Fixed before any result (stage 1).** N = 100 updates on the schedule of 3,000 (warm-up 7, linear decay), which is the schedule the 100-update point of the curve had (`budget.stop_after`); D28 primary negatives; CodeRankEmbed base; seeds 0, 1, 2. Cells: RAW; NOISE (positives replaced by random functions of the same repository); FILTER K = 20 (positive level) under BM25, SweRankEmbed-Small and CodeRankEmbed (teacher equals base); WEIGHT (power, K = 20, p = 1, floor 0.1, CodeRankEmbed); CURRICULUM (4 quantile buckets, CodeRankEmbed) forward and reversed. The self-teacher with a warm-up is not run: ADR-002 names it as a candidate experiment, not as a specification. Pool: selection A (2,000 directories) because the K-rank rows of all three teachers exist for it; the curve used 5,000 directories. Stage 2 trigger: a non-RAW, non-NOISE cell with a paired-difference interval that excludes 0 at either level, or a RAW seed gap above 1.0 point. Intervals: repository-clustered where the level has at least three repositories (L2), query-level otherwise (L3, two repositories). Ansible L3 is left out: its 274k unit texts take about 20 minutes to encode per run, 24 runs would cost about 8 GPU-hours.
+
+**Stage 1 (measured).** Table in `RESULTS.md` row `t4a-arms-stage1`. RAW gains +10.7 (L2) and +11.9 (L3) over the untrained encoder. No cell is above RAW at either level; the cells sit 0.1 to 1.4 points below it (several intervals exclude 0, all on the negative side); the reversed curriculum is level with RAW. NOISE stays at the untrained encoder, so its share of the RAW gain is about 0 (-2.4% and +2.9%, wide intervals): in this design the gain is not adaptation to the data format. NOISE is a weak control (random same-repository positives carry no consistent signal in either direction) and says nothing about a partly-correct signal. Trigger (i) met, (ii) not met (RAW seed gap 0.62 and 0.91).
+
+**Stage 2 (measured).** Cells chosen by the largest absolute paired difference over the two levels, rule fixed before stage 2: FILTER (CodeRankEmbed teacher) and CURRICULUM (a near tie with FILTER under BM25 at L3: 1.01 against 1.05); RAW, N = 1,000 on the same schedule, seeds 0 and 1. At 1,000 updates the differences to RAW are +0.3 and +0.6 (L2), +0.2 and +0.4 (L3), intervals include 0 except one clustered L2 interval ([+0.02, +2.61], three repositories) and a degenerate two-repository L3 interval. The differences seen at 100 updates (all below RAW) do not persist; they also do not turn into gains.
+
+**Limits (stated, not repaired).** (1) Pool of 2,000 examples: 1,000 updates is 16 passes, and RAW itself falls 3.0 (L2) and 2.4 (L3) points from 100 to 1,000 updates here, where the curve on 5,000 directories stayed flat; stage 2 mixes supervision with repeated passes. (2) Three L2 repositories, two L3 repositories: the clustered intervals are not reliable and the query-level ones carry query sampling only. (3) Two seeds in stage 2. (4) Dev subset, one encoder, one K, one weight form, one bucket count: "different supervision" is the five settings tried, not the space. (5) Teacher equals base for WEIGHT, CURRICULUM and one FILTER cell. (6) RAW at 100 updates here is not the curve's RAW (other pool, 1.6 passes against 0.64). Nothing here is a decision; the answer to "can supervision change anything" is, for these settings and this data, "not upward at 100 or 1,000 updates, and not detectably at either".
+
+
+## E-PILOT-ARMS2: do the supervision arms differ from RAW at a matched pool and at matched unique examples? Exploratory, done 2026-10-31
+
+Status: exploratory pilot, outside the pre-registered RQ tables. Configurations `configs/experiments/t5/t5a_*` (stage 1) and `t5b_*` (stage 2), hashes in `results/tables/t5/t5a_unique.csv` and `t5b_unique.csv`; tables `results/tables/t5/t5a_{effects,seeds,unique}.csv`, `t5b_{effects,unique}.csv`; logs `results/logs/t5a_tables.json`, `t5b_tables.json`. Account A, RTX 2080 Ti, jobs 50335, 50356 (stage 1, seeds 0 and 1) and 50942 (stage 2, seed 0); code `ril/analysis/t5_tables.py`, `scripts/t5_tables.py`, `scripts/ada/t5_runs.sbatch`.
+
+**Question.** In E-PILOT-ARMS a smaller pool (2,000 examples, 1.6 passes in 100 updates, FILTER about 3) confounded passes with quality. On the 5,000-directory pool (62,238 positives, 0 held-out), does any supervision signal change the result at 100 updates, against RAW on the full pool and against RAW on a random subset of the size of the filtered pool (D43)?
+
+**Set-up.** CodeRankEmbed base, 100 updates of the 3,000-update schedule (warm-up 7, linear), batch 32, random repository-local negatives, loss and optimizer as in E-PILOT-CURVE. Cells: RAW; RAW on a random subset of 4,592 examples (draw 0; the median of the three FILTER K=20 pool sizes, BM25 4,169, CodeRankEmbed 4,592, SweRankEmbed-Small 4,924 of 5,000); FILTER K=20 (positive level) with each teacher; WEIGHT (power, k=20, floor 0.1) and CURRICULUM (4 buckets), both with CodeRankEmbed as teacher (teacher equals base for these and for FILTER CodeRankEmbed). Seeds 0 and 1. Evaluation: dense column, gold reading `units_all_nomod`, five dev repositories without ansible (L2: openlibrary, qutebrowser, conan, haystack, streamlink, 351 queries; L3: openlibrary and qutebrowser, 155 queries). Ansible was not evaluated in any cell: its 274k unit texts serve L2 and L3 alike and cost 20 minutes a run, which did not fit the budget. Untrained base from the learning curve's step-0 rows (job 46827, same code and queries; ansible dropped). Percentage points; L2 interval repository-clustered over 5 repositories, L3 query-level over 2.
+
+**Unique examples (D42).** Every cell trained on 3,200 example visits (the planner counts the 101st batch it builds, 3,232) and saw 3,232 distinct examples: no cell repeats an example and none falls below the common count. Pool drawn from / effective epochs: RAW, WEIGHT, CURRICULUM 5,000 / 0.646; subsample and FILTER CodeRankEmbed 4,592 / 0.704; FILTER BM25 4,169 / 0.775; FILTER SweRankEmbed-Small 4,924 / 0.656. Data order is the same for RAW and WEIGHT (same pool, same seeded permutation); the other cells differ in pool or ordering by construction.
+
+**Stage 1 (means over seeds 0 and 1; per-seed values in `t5a_seeds.csv`).** Untrained base to RAW: +9.59 (L2), +11.13 (L3).
+
+| cell | L2 nDCG@10 (seeds) | L3 Recall@100 (seeds) | d to RAW L2 / L3 | d to subsample L2 / L3 |
+|---|---|---|---|---|
+| RAW | 26.76 (27.18, 26.34) | 45.10 (45.82, 44.38) | | +0.33 [-0.90,+1.62] / -1.31 [-2.02,-0.60] |
+| subsample (draw 0) | 26.43 (27.04, 25.82) | 46.41 (46.92, 45.89) | -0.33 [-1.62,+0.90] / +1.31 [+0.60,+2.02] | |
+| FILTER BM25 | 26.23 (26.38, 26.08) | 45.71 (45.96, 45.46) | -0.53 [-2.30,+1.23] / +0.61 [-0.19,+1.42] | -0.20 [-0.89,+0.45] / -0.70 [-1.45,+0.05] |
+| FILTER SweRankEmbed-Small | 26.20 (25.95, 26.45) | 45.31 (45.87, 44.75) | -0.56 [-1.36,+0.36] / +0.21 [-0.27,+0.67] | -0.23 [-1.20,+0.66] / -1.10 [-1.88,-0.32] |
+| FILTER CodeRankEmbed | 26.15 (25.87, 26.44) | 45.33 (45.31, 45.36) | -0.60 [-1.59,+0.52] / +0.24 [-0.50,+1.01] | -0.28 [-1.38,+0.66] / -1.07 [-1.76,-0.35] |
+| WEIGHT | 26.47 (26.89, 26.04) | 44.82 (45.52, 44.12) | -0.29 [-0.58,-0.01] / -0.28 [-0.54,-0.02] | +0.04 [-1.34,+1.31] / -1.59 [-2.40,-0.78] |
+| CURRICULUM | 26.53 (26.77, 26.29) | 45.97 (46.43, 45.51) | -0.23 [-1.27,+0.59] / +0.87 [+0.20,+1.56] | +0.10 [-0.35,+0.67] / -0.44 [-1.02,+0.21] |
+
+RAW seed gap 0.84 (L2), 1.45 (L3). Intervals carry query sampling only; with two seeds and one subsample draw they are descriptive. No cell is above RAW at both levels. The subsample is above RAW at L3 and level at L2, which one draw and two seeds cannot separate from seed noise (RAW's own gap is 1.45); the FILTER cells with the two stronger teachers are below the subsample at L3. Quality beyond quantity (beating the subsample) is not seen. Minimum detectable difference at three seeds from the observed variance (80% power, 5%): L2 1.4 (query sampling binds; seed SD 0.52), L3 1.7 (seed SD 0.73 binds); the differences observed here are smaller than both.
+
+**Stage-2 trigger (fixed in the brief, read literally; `results/logs/t5a_tables.json`).** (i) met: WEIGHT against RAW has intervals excluding 0 at L2 and L3 in the same direction (below RAW); FILTER SweRankEmbed-Small and CodeRankEmbed against the subsample exclude 0 at L3 with the same sign at L2. (ii) met: RAW seed gap 1.45 at L3. The third seed of stage 1 was not run, because 2.64 GPU-hours more would have left no budget for stage 2.
+
+**Stage 2 (1,000 updates, seed 0 only; partial by budget).** The brief's plan (RAW, subsample and the two cells with the largest absolute difference, WEIGHT and FILTER SweRankEmbed-Small, two seeds) costs about 8.5 GPU-hours at 1.06 per run; 4.03 were left, so RAW, the subsample and WEIGHT ran at seed 0 (3.18 GPU-hours). RAW L2 28.36, L3 46.65 (base +11.20 / +12.69). WEIGHT 28.14 / 46.62: -0.22 [-0.47,-0.01] / -0.03 [-0.37,+0.33] against RAW. Subsample 25.23 / 44.95: -3.13 [-4.29,-1.98] / -1.70 [-2.71,-0.71] against RAW; WEIGHT against the subsample +2.91 [+1.79,+3.98] / +1.67 [+0.74,+2.65]. At 1,000 updates RAW sees 5,000 distinct examples (6.4 passes) and the subsample 4,592 (7.0 passes), so the subsample is flagged as below the common unique count. One seed and one draw: the sign of the subsample gap here is the opposite of stage 1 at L3, which shows how little one draw settles.
+
+**Reading.** At matched updates on the 5,000-directory pool, no K-rank signal (filter, weight, order) moves the result beyond what RAW's own seed gap covers; WEIGHT is a fraction of a point below RAW at both levels and equal at 1,000 updates. No evidence that quality beats quantity, with the bound stated above. Limits: two seeds (one in stage 2), one subsample draw (three were configured, `t5a_sub_d{1,2}_*`, not run), ansible not evaluated, dev repositories only, one encoder, one K, one weight form, three of four cells with teacher equal to base. Nothing here is a decision.
+
+## E-PILOT-NOISE: when label noise is present at a known rate, do FILTER and WEIGHT recover what RAW loses? Exploratory, stated 2026-11-01 (before any run)
+
+Status: exploratory pilot, outside the pre-registered RQ tables. Code `ril/training/noise.py` (injection, ledger, ranks of noised positives), `score_job` in `ril/training/train_jobs.py` (per-function teacher scores), arm `ORACLE_CLEAN` and the `match_clean` subsample in `ril/training/supervision.py`; unit tests `tests/unit/test_noise_injection.py`. Decisions D44 to D48 (engineer, 2026-11-01).
+
+**Question.** The 5,000-directory pool looks pre-selected by a retriever (0 of 160 sampled directories lack a positive in SweRankEmbed-Small's top 10, against 19.3% on never-filtered data), and no supervision cell was above RAW or the size-matched subsample on it (E-PILOT-ARMS, E-PILOT-ARMS2). Here the pool's cleanliness is made a controlled variable: noise is injected at a known rate and the question is whether FILTER and WEIGHT recover quality that RAW loses, and what share of the best possible recovery (ORACLE-CLEAN) they reach. A method that fails here has no case anywhere; a method that works here and not on the public pool says the public pool is the reason.
+
+**Design (fixed before any run).** Pool: the 5,000 directories of D41. For each training pair independently with probability r, the positive set is replaced by the same number of functions drawn uniformly from the other (non-positive) functions of the same snapshot, which is one repository (D45). One uniform draw per pair, keyed by the seed and the instance id, decides noising, so the realisation is the same for every cell of a seed, independent of pool order, and nested across rates; the true positives are masked (neither positive nor negative), as in the NOISE control (D38). The indicator is stored per pair in a ledger outside the examples and is read only by ORACLE-CLEAN and by the size-matched subsample's size. Rates r in {0, 0.2, 0.4}; r = 0 reuses the E-PILOT-ARMS2 RAW cells (not rerun). Cells at each r > 0 (D46): RAW; FILTER K = 20 with BM25 and with SweRankEmbed-Small as teacher; WEIGHT (power form, k = 20, floor 0.1, as E-PILOT-ARMS2) with the SweRankEmbed-Small K-rank; ORACLE-CLEAN (RAW on the pairs with the indicator off); RAW-subsampled to ORACLE-CLEAN's size. N = 100 updates of the 3,000-update schedule, D31 shape, D28 negatives, CodeRankEmbed base, seeds 0, 1, 2. Evaluation as in E-PILOT-ARMS2 stage 1 (five dev repositories, L2 and L3, ansible excluded). CURRICULUM is not run. Teacher ranks (D48): the stored rank files hold only the ranks of the true positives and the top 64 mined scores, so a rank of a replacement cannot be read from them; every function of every snapshot is scored once per teacher (`scripts/train.py score`) and ranks are computed from those scores with the published definition (1 + non-positive functions scored strictly higher, non-positive taken as of the pair as the arm sees it).
+
+**Pre-registered reading (D47).** (i) Noise sanity: RAW degrades with r; if not, the noise is too weak to test anything: report and stop. (ii) ORACLE-CLEAN recovers RAW's loss; if not, the unrecoverable part is not noise. (iii) A method "works" when its paired difference to RAW has an interval excluding 0 in the positive direction on both levels (L2 repository-clustered, L3 query level), and it is reported as a fraction of the ORACLE-CLEAN recovery (its difference to RAW divided by ORACLE-CLEAN's). A method that does not beat RAW at r = 0.4 is reported as failing, with the minimum detectable difference at three seeds from the observed variance. (iv) The size-matched subsample is the control for FILTER: FILTER must beat it to claim quality beyond quantity. Gate N0: if the K-rank signal separates injected from clean pairs with AUC below 0.6, stop and report: the filter has nothing to find.
+
+**Result of N0 (measured, exploratory; `results/logs/n0_separation_51459.json`, RESULTS rows `n0-separation-bm25`, `n0-separation-srs`).** Per-function scores exist for all 5,000 directories (4,905,357 functions) under BM25 and SweRankEmbed-Small; the earlier rank files could not give the rank of a replacement positive (D48 answered: not stored, scored again, 2.17 GPU-hours, inside the 3.5 allowed). Reproduction: the ranks of the true positives recomputed from the stored scores equal the feature table's in 62,237 of 62,238 cases for BM25 and in 59,255 (95.2%, largest difference 13 ranks) for SweRankEmbed-Small; the difference is float16 batch composition in the dense encoder, not a definition change. Separation, three seeds (noise realisations) at each of r = 0.2 and 0.4, K = 20, pair-level rank = minimum over the pair's positives:
+
+| teacher | AUC injected vs clean (pair) | AUC (positive) | injected pairs a FILTER drops | clean pairs a FILTER drops |
+|---|---|---|---|---|
+| BM25 | 0.827 to 0.843 | 0.68 to 0.73 | 62 to 65% | 16.6 to 17.0% |
+| SweRankEmbed-Small | 0.973 to 0.977 | 0.80 to 0.84 | 69.5 to 71.2% | 1.4 to 1.6% |
+
+The gate (AUC below 0.6 means stop) is passed by a wide margin: the signal has something to find. Two cautions that bear on how N1 will read. (1) The public pool was built with SweRankEmbed-Small in the loop (0 of 160 sampled directories lack a positive in its top 10), so on clean pairs its median pair-rank is 1; the teacher is well placed to filter this pool, and a large FILTER effect at N1 would be partly that. (2) BM25 drops 17% of clean pairs at K = 20, so its FILTER shrinks the pool even without noise. Both are visible in the table above and in the unique-example table N1 would produce. Evidence class: measured.
+
+**Stage N1 was not run (budget rule of the brief).** Cost per 100-update run is 0.377 GPU-hours (E-PILOT-ARMS2: 2.64 for 7 cells). Thirty-six runs (2 rates x 6 cells x 3 seeds) cost 13.6; the brief aborts the stage above 11, and 12.68 remain under the raised cap of 60 (47.32 used). The configurations (`configs/experiments/n1/`), the job (`scripts/ada/n1_runs.sbatch`, one job per seed and rate, 2.3 GPU-hours), the tables (`scripts/n1_tables.py`) and the noise arms are built, unit-tested locally and the torch tests pass on the cluster (36 passed); nothing was trained. **Open question for the engineer (design: it changes the seed count or the cap):** (a) run seeds 0 and 1 for both rates, 24 runs, 9.05 GPU-hours (fits both limits; the interval at two seeds is descriptive and the third seed, 4.5 more, needs the cap or limit raised); (b) raise the stage limit to 14 and run all 36 (13.6 of the 12.68 left: also needs the cap raised to about 62); (c) run r = 0.4 only, three seeds, 18 runs, 6.8, and decide r = 0.2 afterwards. Recommendation: (a), because the pre-registered decision (a method works at r = 0.4) is visible at two seeds with the minimum detectable difference reported, and the third seed then buys power only where a method is near the edge. Cheapest check that could change this: none needed; the run costs are measured. Not decided by a session.
+
+**Engineer decisions after N0 (2026-11-01).** D49: N1 runs seeds 0 and 1 at both rates (r = 0.2 and 0.4), 24 runs, 9.05 GPU-hours. The design is reduced from three seeds to two because the full 36 runs (13.6 GPU-hours) exceed the 11 GPU-hour stage limit and the 12.68 left under the cap, and because the r = 0 anchor (E-PILOT-ARMS2 RAW cells) exists only for seeds 0 and 1, so these are the two seeds that pair with it. The minimum detectable difference at two seeds, from the observed variance, is reported next to every comparison; intervals at two seeds are descriptive. D50: the N0 choices stand (true positives masked in noised pairs, WEIGHT uses the SweRankEmbed-Small signal, one subsample draw). SweRankEmbed-Small shaped the public pool, so the SweRankEmbed-Small FILTER and WEIGHT cells are favoured by the separation gate; the BM25 FILTER cell is the one not favoured, and every conclusion below states which teacher it rests on. D51 (fixed before results): after the 24 runs, if at r = 0.4 any method's paired difference to RAW has the positive sign on both levels but an interval including 0 on either, run seed 2 at r = 0.4 for RAW, ORACLE-CLEAN and that method's cell(s) only (at most 2.3 GPU-hours); otherwise do not run it. The N2 trigger (D47 iii, a method works at r = 0.4) stands.
+
+**N1 cost check (measured, 2026-11-01; job 51971, seed 0, r = 0.4, one GPU on one node).** The first cell (RAW) took 27.7 minutes from job start including setup, the second (ORACLE-CLEAN) 26.9 minutes, so about 0.45 GPU-hours per run against the 0.377 of E-PILOT-ARMS2 (different node, so the figure is not transferable). A job of six cells is about 2.7 GPU-hours and the 24 runs of D49 about 10.8, above the 9.5 GPU-hour abort limit of the brief. Rule followed literally (R6): the other three jobs (seed 0 r = 0.2, seed 1 r = 0.4, seed 1 r = 0.2) were NOT submitted. Job 51971 was left running because its cells are needed under every option. **Open question for the engineer (design: it changes the stage limit or the cells):** (a) raise the stage limit to 11 and run the three remaining jobs (total 10.8; cap 60 holds, 47.32 + 10.8 = 58.1); (b) keep 9.5 and drop one job, for example seed 1 at r = 0.2 (8.1 GPU-hours), so r = 0.2 has one seed only; (c) drop the two cells of least interest per job (for example BM25 FILTER, which drops 17% of clean pairs). Recommendation: (a), a 1.3-hour overrun of a limit that was set from an estimate now known to be low. Cheapest check: none; the cost is measured.
+
+**Decisions D52, D53 (engineer, 2026-11-01).** Option (a): the N1 stage limit is raised from 9.5 to 11 GPU-hours and the Block 2 cap from 60 to 62 so that the D51 third seed still fits. Job 51971 completed (2.71 GPU-hours); the other three jobs were submitted.
+
+**Result of N1 (measured, exploratory; two seeds, not three, D49).** Jobs 51971, 52143, 52144 (account A) and 52385 (account C): seeds 0 and 1 at r = 0.2 and 0.4, six cells each, 24 runs of 100 updates, 9.43 GPU-hours (0.45 per run on the first node, 0.37 on the others; the stage limit was raised to 11 by D52). Tables `results/tables/n1/n1_{effects,seeds,unique}.csv`, log `results/logs/n1_tables.json`, per-run config hashes in `n1_unique.csv`; command `python scripts/n1_tables.py results results/rq2/t3_curve_raw/2026-10-29_3909db9c/step_00000/query_rows.csv results/tables/n1 results/logs/n1_tables.json`. Values are L2 nDCG@10 points (repository-clustered 95% interval) and L3 nDCG@10 points (query-level interval), dense reading `units_all_nomod`, paired against the same seed. The r = 0 anchor is the E-PILOT-ARMS2 RAW cells, reused. With two seeds the intervals describe the dev repositories and queries, not seed-to-seed replication.
+
+D47 (i), noise sanity: RAW degrades against the clean anchor at both rates and both levels: r = 0.2: -1.72 [-2.35, -0.89] L2, -1.11 [-1.59, -0.62] L3; r = 0.4: -3.67 [-4.85, -1.97] L2, -2.32 [-3.21, -1.42] L3. Passed. D47 (ii): ORACLE-CLEAN against RAW is positive at both rates and levels (r = 0.2: +0.92 [0.42, 1.62] L2, +2.24 [1.45, 3.01] L3; r = 0.4: +2.87 [1.66, 4.24] L2, +3.33 [2.22, 4.45] L3), i.e. 53% and 78% of RAW's L2 loss and above the loss at L3 (202% and 144%). Passed. Caution: at r = 0.4 ORACLE-CLEAN and the size-matched subsample have only 3,054 and 3,017 distinct examples for 3,232 draws (repeats, flagged in `n1_unique.csv`), as does FILTER-BM25 on seed 1; the other cells see 3,232 distinct examples.
+
+D47 (iii), difference to RAW, with its share of the ORACLE-CLEAN recovery (L2 / L3), and (iv) whether the interval against the size-matched subsample also excludes 0 on both levels:
+
+| rate | method (teacher) | vs RAW L2 | vs RAW L3 | share of oracle recovery L2 / L3 | works (iii) | beats subsample (iv) |
+|---|---|---|---|---|---|---|
+| 0.4 | FILTER K=20 (BM25) | +2.23 [1.01, 3.38] | +1.74 [0.75, 2.80] | 0.78 / 0.52 | yes | yes |
+| 0.4 | FILTER K=20 (SweRankEmbed-Small) | +3.04 [1.49, 4.74] | +2.96 [1.88, 4.02] | 1.06 / 0.89 | yes | yes |
+| 0.4 | WEIGHT (SweRankEmbed-Small) | +1.76 [0.86, 2.51] | +0.71 [0.20, 1.22] | 0.61 / 0.21 | yes | no (L3 vs subsample +0.68 [-0.18, 1.68]) |
+| 0.2 | FILTER K=20 (BM25) | +1.00 [-0.74, 2.88] | +2.08 [1.08, 3.10] | 1.09 / 0.93 | no (L2 includes 0) | no |
+| 0.2 | FILTER K=20 (SweRankEmbed-Small) | +1.55 [0.67, 2.65] | +1.67 [0.87, 2.51] | 1.68 / 0.75 | yes | yes |
+| 0.2 | WEIGHT (SweRankEmbed-Small) | +0.78 [0.29, 1.24] | +0.69 [0.34, 1.04] | 0.85 / 0.31 | yes | no (L3 vs subsample +0.06 [-0.51, 0.66]) |
+
+The size-matched subsample against RAW: r = 0.2 -0.18 [-0.83, 0.60] L2, +0.64 [0.05, 1.23] L3; r = 0.4 +0.12 [-0.25, 0.45] L2, +0.03 [-0.90, 0.83] L3. Minimum detectable difference at two seeds from the observed variance (the larger of the seed bound and the query bound; nDCG points): r = 0.2 1.56 L2, 2.77 L3; r = 0.4 2.15 L2, 1.86 L3 (pooled seed SD 0.51, 0.99, 0.77, 0.66; 6 degrees of freedom each). Differences below these values (WEIGHT at both rates, FILTER-BM25 at r = 0.2 L2, FILTER at L3 r = 0.2) have intervals that exclude 0 or not by the query bootstrap alone and are not separable from seed noise at this sample size.
+
+**Reading, by teacher.** (1) Rests on the BM25 teacher (the one the separation gate does not favour): FILTER K=20 beats RAW and the size-matched subsample at r = 0.4 on both levels, with about 78% (L2) and 52% (L3) of the oracle recovery; at r = 0.2 it does not clear the bar on L2. (2) Rests on the SweRankEmbed-Small teacher, which shaped the public pool and is therefore favoured: FILTER beats RAW and the subsample at both rates and recovers about all (r = 0.4: 106% L2, 89% L3) of the oracle's gain; WEIGHT improves on RAW but not beyond the subsample at L3, with 21 to 31% of the L3 oracle recovery, and its differences at L3 are below the minimum detectable difference. (3) Known same-repository noise at 40% costs RAW about 3.7 (L2) and 2.3 (L3) nDCG points and a filter on a rank signal recovers most of it; this is a statement about injected noise of this kind with a teacher separating it at AUC 0.83 to 0.97, not about the public pool, which on the evidence of Waves 5 and 6 carries no recoverable noise of that kind for these cells. Python only; two seeds; one noise realisation per seed; one subsample draw.
+
+**Triggers.** D51 (third seed at r = 0.4): not fired, since every paired difference to RAW at r = 0.4 has an interval excluding 0 on both levels. N2 (add r = 0.1 for a method that works at r = 0.4): fired, since three methods work at r = 0.4; NOT run. Open question for the engineer (design: scope and cost): the brief's "that method" is ambiguous with three working methods and its "about 2 GPU-hours" matches none of them. (a) FILTER-BM25 (the teacher not favoured by the gate) + RAW + ORACLE-CLEAN, seeds 0 and 1: 6 runs, 2.7 GPU-hours; (b) all three methods + RAW + ORACLE-CLEAN, seeds 0 and 1: 10 runs, 4.5 GPU-hours (ledger 56.69 of the cap 62; 61.2 after); (c) as (a) with seed 0 only, 1.35. Recommendation: (a). The r = 0.1 configurations do not exist yet (`configs/experiments/n1/` holds r = 0.2 and 0.4).
+
+**Addendum 2026-11-02: third seed at r = 0.4 (measured, exploratory; D58).** Not the sibling-noise option of the Wave 8 list: a third seed of the uniform-noise headline. D58: Block 2 cap raised from 62 to 66 GPU-hours (60.41 used). D59: seed 2, r = 0.4 only, all six cells, configurations `configs/experiments/n1/n1_r40_*_s2.yaml`, one job (53271, account A, 2.40 GPU-hours, same command as the other N1 jobs). r = 0.2 stays at two seeds. The r = 0 anchor still has seeds 0 and 1 only, so the comparison with the clean anchor (D47 i) pairs those two seeds; all contrasts with RAW and with the subsample use three seeds. Tables `results/tables/n1/` and `results/logs/n1_tables.json` were rebuilt with `python scripts/n1_tables.py results results/rq2/t3_curve_raw/2026-10-29_3909db9c/step_00000/query_rows.csv results/tables/n1 results/logs/n1_tables.json --mdd-seeds 40=3` (the `--mdd-seeds` option is new; before it the minimum detectable difference assumed two seeds). The r = 0.2 reading is identical to the two-seed one.
+
+**What changed (said first).** No method changes sign against RAW and no method-against-RAW interval changes whether it excludes 0. Two comparisons do change status: (1) the size-matched subsample against RAW at L3 was +0.03 [-0.90, 0.83] (interval includes 0) and is now -1.02 [-2.17, -0.13] (excludes 0, negative; L2 -0.23 [-0.56, 0.03]); (2) WEIGHT against the subsample at L3 was +0.68 [-0.18, 1.68] (includes 0) and is now +2.17 [1.15, 3.44] (excludes 0), so WEIGHT now also meets D47 (iv) at both levels. Both come from the seed-2 subsample run being low (one subsample draw per seed); read them as the subsample's seed variance, not as a property of WEIGHT. Shares of the ORACLE-CLEAN recovery fall for every method because the oracle's own gain over RAW falls less than the methods' (oracle +2.87 / +3.33 to +2.67 [1.28, 3.91] / +2.97 [1.92, 4.00]).
+
+Difference to RAW at r = 0.4, nDCG@10 points, L2 (repository-clustered interval) / L3 (query-level interval), share of the ORACLE-CLEAN recovery L2 / L3, two seeds beside three seeds:
+
+| method (teacher) | two seeds L2 | two seeds L3 | share (2 seeds) | three seeds L2 | three seeds L3 | share (3 seeds) | beats subsample (3 seeds) |
+|---|---|---|---|---|---|---|---|
+| ORACLE-CLEAN | +2.87 [1.66, 4.24] | +3.33 [2.22, 4.45] | n/a | +2.67 [1.28, 3.91] | +2.97 [1.92, 4.00] | n/a | n/a |
+| FILTER K=20 (BM25) | +2.23 [1.01, 3.38] | +1.74 [0.75, 2.80] | 0.78 / 0.52 | +1.82 [0.36, 2.86] | +1.19 [0.25, 2.12] | 0.68 / 0.40 | yes (+2.05 / +2.22) |
+| FILTER K=20 (SweRankEmbed-Small) | +3.04 [1.49, 4.74] | +2.96 [1.88, 4.02] | 1.06 / 0.89 | +3.01 [1.13, 4.26] | +2.57 [1.59, 3.56] | 1.13 / 0.87 | yes (+3.24 / +3.60) |
+| WEIGHT (SweRankEmbed-Small) | +1.76 [0.86, 2.51] | +0.71 [0.20, 1.22] | 0.61 / 0.21 | +1.87 [0.81, 2.67] | +1.14 [0.57, 1.67] | 0.70 / 0.38 | yes (+2.10 / +2.17), was no at L3 |
+| size-matched subsample | +0.12 [-0.25, 0.45] | +0.03 [-0.90, 0.83] | n/a | -0.23 [-0.56, 0.03] | -1.02 [-2.17, -0.13] | n/a | n/a |
+
+D47 (i) and (ii) still pass: RAW against the clean anchor (seeds 0 and 1 only) -3.52 [-4.90, -1.55] L2, -1.86 [-2.71, -0.97] L3 (two-seed values -3.67 / -2.32); ORACLE-CLEAN recovers 76% of that L2 loss. Teacher caveat unchanged: the SweRankEmbed-Small cells are favoured; the BM25 FILTER cell is the one not favoured, and its share falls to 0.68 (L2) and 0.40 (L3), with its lower interval limits at 0.36 and 0.25.
+
+Minimum detectable difference at three seeds, r = 0.4, nDCG points. (a) Table method of the two-seed entry (larger of the seed bound and the query bound; observed pooled seed SD 0.63 L2, 0.96 L3, 12 degrees of freedom): 1.78 (L2), 2.18 (L3), against 2.15 and 1.86 at two seeds. (b) Variance components as in E-STORED-ANALYSIS (code of branch `b/stored-analysis`, not merged here; `results/tables/n1/n1_r40_mdd_three_seeds.csv`, intervals from 300 repository resamples): query level 1.40 [1.20, 2.53] (L2) and 2.20 [1.70, 2.93] (L3); with the repository term 2.16 [1.64, 2.98] (L2) and 4.88 [3.34, 6.97] (L3). At two seeds the same method gives 1.65 / 2.59 and 2.34 / 5.06. Reading: FILTER-BM25 against RAW at L3 (+1.19) is below the L3 minimum detectable difference both ways and WEIGHT's L3 gain (+1.14) likewise; their intervals exclude 0 by the query bootstrap alone, which does not cover seed or repository variation. FILTER-SweRankEmbed-Small (+3.01 L2, +2.57 L3) and the oracle exceed the query-level values; only at L2 do they exceed the with-repository value for FILTER-SweRankEmbed-Small. The repository term rests on five dev repositories.
+
+**Addendum 2026-11-03 (append-only correction, decision O4 / D71).** Wherever the entry above says "L3 nDCG@10" it means L3 **Recall@100**: the `metric` column of every stored Wave 6 and Wave 7 table is `recall100` for L3, and the tables are the source. L2 is nDCG@10. Numbers are unchanged.
+
+## E-PILOT-NOISE-SIB: does the noise result survive when the noise is a neighbour of the true positive? Exploratory, stated 2026-11-02 (before any run)
+
+Status: exploratory pilot, outside the pre-registered RQ tables; continues E-PILOT-NOISE. Code: kind `sibling` in `ril/training/noise.py`, configurations `configs/experiments/n8/`, jobs `scripts/ada/n8_separation.sbatch` and `n8_runs.sbatch`, tables `scripts/n1_tables.py` with `--prefix n8`. Decisions D54 to D57 (engineer, 2026-11-02).
+
+**Question.** E-PILOT-NOISE injected noise by replacing a pair's positives with random functions of the same repository; a teacher's rank separates that noise from clean pairs with AUC 0.83 (BM25) and 0.97 (SweRankEmbed-Small). Noise in real pull-request labels is different: the edited function is a neighbour (same file, same class) of the one the issue is about, and neighbours score high under any retriever, so a rank-based filter may not find them. E-PILOT-NOISE says FILTER works when noise is findable; this entry asks whether it still works when the noise is the plausible kind, and so how far that result transfers.
+
+**Design (fixed before any run).** D54: same pool, same seeds, same noised pairs as E-PILOT-NOISE at r = 0.4 (the uniform draw that decides whether a pair is noised is the same), but the replacement is the same number of non-positive functions of the same file(s) as the true positives; if those files hold fewer than that many, the same class, then the same directory, then the uniform draw of E-PILOT-NOISE. A level is used only when it holds at least as many non-positives as the pair has positives. The class level is a subset of the file level, so it can only be reached when the file level is empty and its share is zero by construction; it is reported anyway. The share of noised pairs per level is recorded in the noise summary of every run. The indicator is stored in the ledger and never visible to any arm; the true positives of a noised pair are masked, as in E-PILOT-NOISE. r = 0.2 and r = 0.1 are not run. D55: cells RAW; FILTER K = 20 with BM25; FILTER K = 20 with SweRankEmbed-Small; ORACLE-CLEAN; RAW subsampled to ORACLE-CLEAN's size. WEIGHT is not run (weaker in E-PILOT-NOISE). N = 100 updates of the 3,000-update schedule, D31 shape, D28 negatives, CodeRankEmbed base, seeds 0 and 1, the same noise realisation for every cell of a seed: 10 runs. The uniform-noise r = 0.4 cells of E-PILOT-NOISE (seeds 0 and 1) are the comparison anchor and are not rerun; the r = 0 anchor is again the E-PILOT-ARMS2 RAW cells. D57: ranks of the replacement positives are computed from the per-function scores stored for E-PILOT-NOISE (no GPU cost); if a replacement lacks a stored score the run stops (the code raises) and nothing is rescored.
+
+**Pre-registered reading (D56).** (i) Sanity: RAW degrades under sibling noise against the r = 0 anchor, else stop. (ii) ORACLE-CLEAN recovers the loss, else stop. (iii) First, the separation: AUC of each teacher's K-rank for noised against clean pairs (pair level, minimum over the pair's positives), and the share of noised pairs a FILTER at K = 20 drops. Expectation stated now: both lower than under uniform noise (0.83 and 0.97; 62 to 65% and 69.5 to 71.2% dropped). If the AUC is below 0.6 for both teachers the runs still go ahead; that is the finding. (iv) A method "works" when its paired difference to RAW has an interval excluding 0 in the positive direction on both levels (L2 repository-clustered, L3 query level), reported as a fraction of the ORACLE-CLEAN recovery and compared with its fraction in E-PILOT-NOISE at r = 0.4 (FILTER-BM25 0.78 / 0.52, FILTER-SweRankEmbed-Small 1.06 / 0.89, L2 / L3). (v) The minimum detectable difference at two seeds is reported. Reading rule for the write-up: if FILTER's share of recovery falls clearly below its E-PILOT-NOISE share, the E-PILOT-NOISE result is an upper bound that holds for findable noise only, and the unfiltered-set design must include a noise audit; if it stays, the claim extends to plausible noise. "Clearly below" is not defined further here; the numbers and intervals are reported and the reading is the engineer's. Teacher caveat of E-PILOT-NOISE stands: SweRankEmbed-Small shaped the public pool, so its cells are favoured; the BM25 cells are the ones not favoured.
+
+**Result of S0 (measured, exploratory; `results/logs/n8_separation_52619.json`, job 52619, CPU; RESULTS rows `n8-separation-bm25`, `n8-separation-srs`).** Same 5,000 directories, seeds 0 and 1, r = 0.4, K = 20, pair-level rank = minimum over the pair's positives. Noised pairs per seed: 1,946 and 1,983 (the pairs of E-PILOT-NOISE). Replacement level (share of noised pairs): file 0.915 / 0.910, class 0 (by construction), directory 0.065 / 0.070, uniform 0.020 / 0.020 (seeds 0 / 1). Every replacement had a stored score (D57 holds; nothing rescored).
+
+| teacher | AUC noised vs clean, sibling | AUC, uniform (E-PILOT-NOISE) | noised pairs a FILTER drops, sibling | uniform | clean pairs dropped, sibling |
+|---|---|---|---|---|---|
+| BM25 | 0.773 / 0.788 | 0.827 to 0.843 | 50.4 / 52.8% | 62 to 65% | 17.0% |
+| SweRankEmbed-Small | 0.941 / 0.940 | 0.973 to 0.977 | 43.4 / 43.7% | 69.5 to 71.2% | 1.4 to 1.6% |
+
+D56 (iii) expectation (both lower than under uniform noise) holds for both teachers; the largest change is the share of noised pairs a FILTER drops with the SweRankEmbed-Small teacher (about 70% to 43%), while the AUC stays high (0.94). Median pair rank of noised pairs: 21 / 23 (BM25), 16 (SweRankEmbed-Small), against 3 and 1 for clean pairs. The AUC gate of 0.6 is passed by both teachers. Evidence class: measured.
+
+**Result of S1 (measured, exploratory; two seeds).** Jobs 52622 (seed 0) and 52685 (seed 1), account A, five cells each, 10 runs of 100 updates, 3.73 GPU-hours (0.37 per run; the first run's cost was checked before seed 1 was submitted, limit 5.0). Tables `results/tables/n8/n8_{effects,seeds,unique}.csv`, log `results/logs/n8_tables.json`, per-run config hashes in `n8_unique.csv`; command `python scripts/n1_tables.py results results/rq2/t3_curve_raw/2026-10-29_3909db9c/step_00000/query_rows.csv results/tables/n8 results/logs/n8_tables.json --rates 40 --prefix n8 --cells raw filter_bm25 filter_srs oracle sub --stem n8 --label E-PILOT-NOISE-SIB`. Values are nDCG@10 points (L2 repository-clustered 95% interval, L3 query-level interval), dense reading `units_all_nomod`, paired against the same seed; the r = 0 anchor is the E-PILOT-ARMS2 RAW cells.
+
+**D56 (i), sanity: NOT passed.** RAW under sibling noise against the clean anchor: -1.01 [-1.77, 0.06] L2 and -0.52 [-1.14, 0.12] L3; both intervals include 0. Under uniform noise at r = 0.4 the same contrast is -3.67 [-4.85, -1.97] and -2.32 [-3.21, -1.42]. The pre-registered rule is "else stop": no further runs were made (none were pending; all ten had run). **D56 (ii), partly not passed:** ORACLE-CLEAN against RAW is +0.22 [-0.82, 1.41] L2 and +1.54 [0.74, 2.27] L3, so it recovers only at L3; its share of RAW's loss is 0.22 (L2) and 2.96 (L3), and with a loss that is not distinguishable from 0 these shares are not interpretable.
+
+Because (i) failed, the statements below are descriptive and do not carry the reading of D56 (iv); they are reported so that nothing is hidden, not as a finding that FILTER works or fails under sibling noise. Difference to RAW, L2 / L3, with the share of the ORACLE-CLEAN recovery and the E-PILOT-NOISE share at r = 0.4 (uniform):
+
+| method (teacher) | vs RAW L2 | vs RAW L3 | share of oracle recovery L2 / L3 | E-PILOT-NOISE share L2 / L3 | works (D56 iv) |
+|---|---|---|---|---|---|
+| FILTER K=20 (BM25) | -0.31 [-2.14, 1.56] | +0.87 [0.16, 1.56] | -1.41 / 0.56 | 0.78 / 0.52 | no (L2 includes 0) |
+| FILTER K=20 (SweRankEmbed-Small) | +0.79 [-0.17, 1.74] | +1.12 [0.36, 1.86] | 3.59 / 0.73 | 1.06 / 0.89 | no (L2 includes 0) |
+
+The size-matched subsample against RAW: -0.28 [-1.42, 0.62] L2, +0.50 [-0.01, 1.01] L3. FILTER against the subsample: BM25 -0.04 [-1.28, 1.54] / +0.36 [-0.42, 1.18]; SweRankEmbed-Small +1.06 [-0.48, 2.28] / +0.62 [-0.23, 1.45]. All FILTER and subsample cells see 3,232 distinct examples except ORACLE-CLEAN and the subsample (3,054 and 3,017 distinct for 3,232 draws, seed 0 / 1; repeats flagged in `n8_unique.csv`). Minimum detectable difference at two seeds from the observed variance: 2.00 (L2) and 1.93 (L3) points (seed bound 1.18 / 1.93, query bound 2.00 / 1.04; pooled seed SD 0.42 / 0.69, 5 degrees of freedom each) (D56 v). Every L2 difference to RAW above is below that value, and the L3 differences of FILTER are below 1.93 as well, so none is separable from seed noise at this sample size.
+
+**Reading (evidence class: measured, two seeds, one noise realisation per seed, one subsample draw).** (1) Under this construction of sibling noise at r = 0.4, RAW loses about 1.0 (L2) and 0.5 (L3) nDCG points against the clean pool, about a quarter of the 3.7 and 2.3 it loses under uniform noise, and the loss is not distinguishable from 0 at two seeds. The plausible explanation is that a neighbour of the edited function is often itself a relevant document (the loss function sees a near-miss as positive); this is inference, not tested here. (2) Because the noise this cheaply replaced does little harm to RAW, the comparison that D56 was built to make (does FILTER's share of the recovery fall below its E-PILOT-NOISE share) has no usable denominator: ORACLE-CLEAN's recovery at L2 is +0.22. The shares in the table are therefore printed but not interpreted. (3) What can be said: the separation is weaker for sibling noise (the share of noised pairs a FILTER drops falls from 62 to 65% to 50 to 53% for BM25 and from about 70% to 43% for SweRankEmbed-Small) but the SweRankEmbed-Small AUC stays at 0.94, which is a statement about the teacher's rank, not about training. (4) The D56 reading rule (is the E-PILOT-NOISE result an upper bound for findable noise only) is NOT answered by this run: its premise, that RAW degrades, did not hold at this noise and sample size. The E-PILOT-NOISE claim is neither extended nor limited by it. Python only.
+
+**Not decided here; open for the engineer (design).** Options that would make the question answerable, none run: (a) a stronger sibling noise (r = 0.8, or replacement restricted to non-positive functions that do not co-occur with the positives in any pull request), so that RAW degrades; (b) a third and fourth seed at r = 0.4 (about 3.7 more GPU-hours for two) to narrow RAW's loss, whose point estimate is -1.0 / -0.5 and whose lower bound is within 0.1 of 0; (c) keep it as a finding: at the plausible-noise level tested, the label noise does not hurt RAW measurably, which would itself bear on whether the unfiltered set needs a noise audit. Not decided by a session. Cheapest check that could change this: (b) with two more seeds on RAW and ORACLE-CLEAN only (4 runs, about 1.5 GPU-hours); the ledger is 60.41 of 62.

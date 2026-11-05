@@ -16,7 +16,7 @@ from ril.data_mining.github import (
     digest,
     linked_issues,
 )
-from ril.data_mining.miner import (
+from ril.data_mining.c_miner import (
     GitSnapshots,
     RecordedSnapshots,
     changed_lines,

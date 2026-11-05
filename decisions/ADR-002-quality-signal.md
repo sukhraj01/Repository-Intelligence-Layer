@@ -1,9 +1,9 @@
 # ADR-002: Quality signal for FILTER and WEIGHT
 
-- **Status:** Proposed — **not decided**
+- **Status:** Accepted (2026-11-03)
 - **Date opened:** 2026-10-12
 - **Decide by:** end of week 2 (all ten decisions)
-- **Decided by:** _pending — team_
+- **Decided by:** the lead, 2026-11-03
 - **Master doc:** open decision #2 (`docs/12_open_decisions.md`)
 - **Affects:** RQ2 FILTER and WEIGHT arms; `ril/training/supervision.py`
 
@@ -19,14 +19,15 @@ We cannot label examples "noisy" without evidence. SweRank filters by K = minimu
 K-rank — published, continuous, makes FILTER and WEIGHT the same signal applied as a hard threshold vs a soft weight.
 
 ## Decision
-_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
-`provisional: ADR-002` (never in `configs/frozen/`) until the decision is made.
+K-rank (SweRank's minimum rank of the positive under a base retriever) is the quality signal for FILTER and WEIGHT. It is reported per teacher; BM25, which the pool's construction does not favour, carries the primary claim, and SweRankEmbed-Small is reported with the caveat that it shaped the public pool. No positive claim is made on the public pool. The teacher is never the encoder being trained.
+
+Recorded 2026-11-03; see the addendum of that date for the evidence and the conditions that reopen it.
 
 ## Rationale
-_Pending._
+See the addendum of 2026-11-03 (evidence it rests on).
 
 ## Trade-offs
-_Pending._
+See the brief (`docs/ADR_DECISION_BRIEF.md`, "Not settled") and the conditions that reopen the decision in the addendum of 2026-11-03.
 
 ## Evidence to gather
 - [ ] Distribution of K-rank over a sample of the chosen pool under the candidate base retriever.
@@ -173,3 +174,48 @@ Cheapest experiments that could change a reading above (time-box in brackets, no
 - **Consequence for the 63-update pilots (E-PILOT-K/NEG/LEAK).** They stopped at about the point where RAW itself has already moved nearly all it moves. Differences between arms were not detectable at 63 updates, and this curve says the lack of a visible arm difference there cannot be read as a lack of an effect later: what the pilots could not see is how supervision changes the later part of training, which this RAW-only curve does not cover either.
 - **Reasoned, not measured.** If the encoder settles near 100 updates under RAW on this pool and recipe, an RQ2 update count of 20,000 (the target in `docs/08_experimental_design.md`) may be far longer than needed, and matched optimization budgets could be set much shorter. Caveats: the checkpoints sit on a 3,000-update learning-rate schedule, the pool is revisited about 12.8 times by 2,000 updates, the 3,000 point is unmeasured, and a supervision arm may keep moving where RAW stops. Whether an arm difference appears at N = 100 or at a longer N is the open question of the arms pilot (T4, not run).
 - Cheapest experiment that could flip this reading: the arms pilot at N = 100 and at one longer N (cost options in the project state).
+
+## Addendum 2026-10-31 — arms pilot (E-PILOT-ARMS), engineer defaults D37 and D38 (evidence only; this ADR stays Proposed)
+
+Recorded as engineer defaults: **D37** adds a reversed-order CURRICULUM cell and a warm-up before the self-teacher cell; **D38** adds a negative control, NOISE (positives replaced by random functions of the same repository, everything else as RAW); **D39** prefers more seeds at short N to fewer seeds at long N once the encoder has plateaued. Evidence class: measured (exploratory, 3 seeds at 100 updates, 2 seeds at 1,000, dev subset, `docs/EXPERIMENTS.md` E-PILOT-ARMS). Cheapest experiment that could flip each: D37 and D38 are controls, nothing to flip; D39 flips if a cell separates from RAW only at long N (stage 2 saw none).
+
+- The self-teacher with a warm-up is not specified in this ADR (it appears only as a candidate experiment) and was not run; the FILTER cell with the CodeRankEmbed teacher is the self-teacher without a warm-up (teacher equals base).
+- At 100 updates RAW gains +10.7 (L2) and +11.9 (L3); FILTER (three teachers), WEIGHT and CURRICULUM are 0.1 to 1.4 points below RAW, the reversed curriculum is level with it, NOISE stays at the untrained encoder (share of the RAW gain about 0). At 1,000 updates the two cells re-run (FILTER with the CodeRankEmbed teacher, CURRICULUM) are +0.2 to +0.6 against RAW with intervals that include 0 in all but one clustered case.
+- Reading: on this pool, recipe and subset no supervision setting tried raises the plateau or the speed of reaching it; the order of the cells at 100 updates (strict filters lowest) is in the direction of the smoke pilots' finding, and NOISE shows the gain needs real positives. Reading is limited by a 2,000-example pool (RAW falls 2 to 3 points between 100 and 1,000 updates here), three L2 repositories and the choice of settings.
+- Open for the engineer: whether RQ2 continues with a larger pool (teacher ranks for the 5,000-directory pool cost about 3 GPU-hours), a different K or weight form, or is reported as a null result with the retrieval-versus-reasoning breakdown at RQ3.
+
+## Addendum 2026-10-31 — matched-pool arms pilot (E-PILOT-ARMS2), engineer defaults D40 to D43 (evidence only; this ADR stays Proposed)
+
+Recorded as engineer defaults: **D40** the self-teacher warm-up cell is dropped from the core RQ2 and kept as a limitation; **D41** RQ2 continues on the 5,000-directory pool (after the held-out filter) and the 2,000-example pool is retired for arm comparisons; **D42** matched budgets mean matched optimizer updates and a stated unique-example count, with every cell reporting unique examples seen, effective epochs and the pool it drew from, and a cell that cannot reach the common count without repeating examples flagged; **D43** a size-matched random subsample of RAW accompanies every FILTER comparison, and "quality beyond quantity" means beating that subsample. Evidence class: measured (exploratory, `docs/EXPERIMENTS.md` E-PILOT-ARMS2). The cheapest experiment that could flip each: D41 and D43 are design choices of the pilot, nothing to flip; D42 flips if a cell cannot reach the common count (none did at 100 updates; the subsample at 1,000 updates did not, flagged).
+
+- **D40 as a limitation.** The FILTER cell with CodeRankEmbed as teacher is the self-teacher without a warm-up (teacher equals base); a self-teacher that is first warmed up on RAW is not specified here and was not run. Specification, to be written and run only if a static-teacher arm (a teacher that is not the model being trained) separates from RAW: the warm-up length in updates, the checkpoint that computes the K-ranks, whether ranks are recomputed once or each epoch, and the same matched updates and unique-example count as the other cells. Flip experiment: one such cell at 100 updates, 3 seeds, about 1.2 GPU-hours. Until a static-teacher arm separates from RAW the warm-up cell has nothing to explain, so it is not run.
+- **Result at 100 updates, 5,000-directory pool, 2 seeds (not 3), five dev repositories without ansible.** Every cell saw 3,232 distinct examples, none repeated (effective epochs 0.65 to 0.78). RAW is 9.6 (L2 nDCG@10) and 11.1 (L3 Recall@100) above the untrained encoder. No cell is above RAW at both levels: FILTER (three teachers) -0.53 to -0.60 at L2 and +0.21 to +0.61 at L3, all six intervals include 0; WEIGHT -0.29 / -0.28 (both intervals exclude 0, below RAW); CURRICULUM -0.23 [-1.27, +0.59] / +0.87 [+0.20, +1.56] (L3 excludes 0, L2 does not, opposite signs). Against the size-matched subsample (4,592 of 5,000, one draw) the FILTER cells are -0.70 to -1.10 at L3, two of three excluding 0 (below). The subsample is +1.31 [+0.60, +2.02] above RAW at L3 and -0.33 at L2.
+- **Stage 2 (1,000 updates, seed 0 only, partial by budget).** RAW 28.36 / 46.65; WEIGHT -0.22 / -0.03 against RAW; subsample -3.13 [-4.29, -1.98] / -1.70 [-2.71, -0.71] against RAW (and it repeats examples: 4,592 distinct against RAW's 5,000). The sign of the subsample gap at L3 is opposite to stage 1; this inconsistency is unresolved (seed noise, a single subsample draw, or a confound not identified) and is not explained away here.
+- **Reading.** No K-rank signal here beats RAW or the size-matched subsample beyond RAW's own seed gap (0.84 L2, 1.45 L3). The minimum detectable difference at three seeds from the observed variance is 1.4 (L2) and 1.7 (L3), larger than every observed gap, so the pilot bounds the effect of FILTER, WEIGHT and CURRICULUM at this scale to about that size at best and cannot detect smaller ones. Intervals with two seeds and two to five clusters carry query sampling only and are descriptive. A null here is a null at this scale: one encoder, one K, one weight form, three cells with teacher equal to base, dev repositories only.
+- Trigger rule: the stage-2 trigger of the brief is direction-blind (WEIGHT below RAW by 0.3 fired it). Whether it should fire only on an excess above RAW is the engineer's to change; not changed by a session.
+
+## Addendum 2026-11-01 — noise dose-response pilot (E-PILOT-NOISE), engineer defaults D44 to D48 (evidence only; this ADR stays Proposed)
+
+D45 (known noise at rates 0.2 and 0.4 on the 5,000-directory pool), D46 (cells), D47 (pre-registered reading, written into `docs/EXPERIMENTS.md` before any run) and D48 (ranks of the replacement positives) are implemented (`ril/training/noise.py`, arm ORACLE_CLEAN, scoring job). Evidence so far, class measured, exploratory: the K-rank separates injected from clean pairs (AUC 0.83 BM25, 0.97 SweRankEmbed-Small at K = 20; a FILTER drops about 70% of injected and 1.5% of clean pairs with the dense teacher, 63% and 17% with BM25), so the filter has something to find; the dense teacher shaped the public pool, which favours it. The training stage was not run because 36 runs cost 13.6 GPU-hours against the brief's 11 and the 12.68 left under the cap of 60; the options are in `docs/EXPERIMENTS.md` E-PILOT-NOISE. Nothing here changes the quality-signal decision. Condition to revisit: the N1 reading (does FILTER or WEIGHT recover a share of the ORACLE-CLEAN gain at r = 0.4).
+
+## Addendum 2026-11-02 — noise dose-response results (E-PILOT-NOISE, N1; evidence only; this ADR stays Proposed)
+
+Evidence class: measured, exploratory, two seeds (D49). With known same-repository noise on the 5,000-directory pool, RAW degrades (r = 0.4: -3.7 L2, -2.3 L3 nDCG@10 points) and FILTER K=20 on the K-rank recovers it: with BM25 as teacher (not favoured by the pool's construction) about 78% (L2) and 52% (L3) of the ORACLE-CLEAN recovery at r = 0.4 and beyond the size-matched subsample; with SweRankEmbed-Small (favoured) about 106% and 89%. WEIGHT beats RAW but not the subsample at L3. At r = 0.2 only the SweRankEmbed-Small FILTER and WEIGHT clear D47 (iii). The K-rank signal therefore has something to find when noise exists; whether the public pool contains such noise is a separate question (Waves 5 and 6: no cell above RAW). Details, intervals and the minimum detectable differences: `docs/EXPERIMENTS.md` E-PILOT-NOISE. Conditions to revisit: the unfiltered set (workstream C) and an r = 0.1 point (N2, open question).
+
+## Addendum 2026-11-02 — sibling noise (E-PILOT-NOISE-SIB), engineer defaults D54 to D57 (evidence only; this ADR stays Proposed)
+
+The noise of E-PILOT-NOISE was uniform over the repository and a teacher's rank separated it from clean pairs (AUC 0.83 BM25, 0.97 SweRankEmbed-Small). D54 to D57 ask whether FILTER still recovers quality when the noised positive is a neighbour (same file, then class, directory, snapshot) of the true one. Measured at two seeds (r = 0.4, five cells, 3.73 GPU-hours; `docs/EXPERIMENTS.md` E-PILOT-NOISE-SIB): the teachers separate sibling noise less well (AUC 0.77 to 0.79 for BM25, 0.94 for SweRankEmbed-Small; a FILTER drops 50 to 53% and 43% of noised pairs against 62 to 65% and about 70% under uniform noise), but the pre-registered sanity check failed: RAW loses only -1.01 [-1.77, 0.06] (L2) and -0.52 [-1.14, 0.12] (L3) against the clean pool, against -3.67 and -2.32 under uniform noise, and the intervals include 0. By the rule of D56 the reading stops there. So Waves 5 to 8 together support: correct supervision matters (NOISE control); under uniform known noise FILTER on a rank signal recovers most of the loss (Wave 7); under sibling noise of the same rate the loss to RAW is small and not separable from seed noise at two seeds, so the question whether Wave 7 transfers to plausible noise is not answered, neither extended nor limited. The minimum detectable difference at two seeds is 2.00 (L2) and 1.93 (L3). Options to make it answerable are listed in the experiment entry and are the engineer's to choose. Conditions to revisit: a stronger sibling noise or more seeds at r = 0.4.
+
+## Addendum 2026-11-02 — third seed at r = 0.4 (E-PILOT-NOISE; evidence only; this ADR stays Proposed)
+
+Evidence class: measured, exploratory, three seeds at r = 0.4 (D58, D59; r = 0.2 stays at two). No method changes sign against RAW and every method-against-RAW interval still excludes 0 on both levels: FILTER K=20 BM25 +1.82 / +1.19 (share of the ORACLE-CLEAN recovery 0.68 / 0.40), FILTER K=20 SweRankEmbed-Small +3.01 / +2.57, WEIGHT +1.87 / +1.14 (L2 / L3 nDCG@10 points). Two comparisons change status: the size-matched subsample is now below RAW at L3 (-1.02 [-2.17, -0.13]) and WEIGHT now beats it at L3. The minimum detectable difference at three seeds with the repository term is 2.16 (L2) and 4.88 (L3), so the L3 gains of FILTER-BM25 and WEIGHT are not separable from seed and repository variation. Details: `docs/EXPERIMENTS.md` E-PILOT-NOISE.
+
+## Addendum 2026-11-03 — decision recorded (status: Accepted)
+
+**Decision.** K-rank (SweRank's minimum rank of the positive under a base retriever) is the quality signal for FILTER and WEIGHT. It is reported per teacher; BM25, which the pool's construction does not favour, carries the primary claim, and SweRankEmbed-Small is reported with the caveat that it shaped the public pool. No positive claim is made on the public pool. The teacher is never the encoder being trained.
+
+**Decided by** the lead on 2026-11-03, on academic advice; recorded with the evidence ids it rests on. The brief (`docs/ADR_DECISION_BRIEF.md`) recommended this option and it was accepted as recommended.
+
+**Evidence it rests on** (all exploratory or measured in this project unless stated; the Wave 5 to 8 results are dev repositories, one encoder, 100 updates): E-POOL-RANKS (Spearman 0.855 [0.791, 0.896] between the dense teachers, kappa 0.64 at K = 20), E-PILOT-ARMS and E-PILOT-ARMS2 (no cell above RAW or the size-matched subsample beyond seed noise), E-PILOT-NOISE (AUC 0.83 BM25, 0.97 SweRankEmbed-Small; three seeds at r = 0.4), E-PILOT-NOISE-SIB (transfer to sibling noise unanswered), E-STORED-ANALYSIS.
+
+**What would reopen it:** the noise audit of the mined set finds that harmful pairs are not findable by K-rank (AUC near 0.5); a heuristic or a judge is measured and beats K-rank on the audited sample; the hand-read of 50 high-K positives shows that K-rank mostly removes correct pairs.

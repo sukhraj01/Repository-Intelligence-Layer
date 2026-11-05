@@ -237,7 +237,7 @@ def test_probe_validates_schema_and_hides_host_error(
 def test_archive_provenance_requires_pinned_original_commit(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    from ril.data_mining.miner import source_checkout
+    from ril.data_mining.c_miner import source_checkout
 
     monkeypatch.delenv("RIL_COMMIT", raising=False)
     with pytest.raises(ValueError, match="full RIL_COMMIT"):

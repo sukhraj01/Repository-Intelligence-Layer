@@ -1,0 +1,220 @@
+{
+ "cells": [
+  "raw",
+  "filter_bm25",
+  "filter_srs",
+  "oracle",
+  "sub"
+ ],
+ "minimum_detectable": [
+  {
+   "binding": 2.0,
+   "level": "L2",
+   "pooled_seed_sd": 0.419,
+   "query_mdd": 2.0,
+   "rate": 0.4,
+   "seed_df": 5,
+   "seed_mdd": 1.18,
+   "seeds": 2
+  },
+  {
+   "binding": 1.93,
+   "level": "L3",
+   "pooled_seed_sd": 0.69,
+   "query_mdd": 1.04,
+   "rate": 0.4,
+   "seed_df": 5,
+   "seed_mdd": 1.93,
+   "seeds": 2
+  }
+ ],
+ "reading": {
+  "rates": {
+   "40": {
+    "i_degrades": false,
+    "i_raw_vs_clean": {
+     "L2": {
+      "d": -1.01,
+      "hi": 0.06,
+      "interval": "repository-clustered",
+      "lo": -1.77,
+      "negative": false,
+      "positive": false
+     },
+     "L3": {
+      "d": -0.52,
+      "hi": 0.12,
+      "interval": "query-level",
+      "lo": -1.14,
+      "negative": false,
+      "positive": false
+     }
+    },
+    "ii_oracle_recovers": false,
+    "ii_oracle_vs_raw": {
+     "L2": {
+      "d": 0.22,
+      "hi": 1.41,
+      "interval": "repository-clustered",
+      "lo": -0.82,
+      "negative": false,
+      "positive": false
+     },
+     "L3": {
+      "d": 1.54,
+      "hi": 2.27,
+      "interval": "query-level",
+      "lo": 0.74,
+      "negative": false,
+      "positive": true
+     }
+    },
+    "ii_share_of_loss_recovered": {
+     "L2": 0.21782178217821782,
+     "L3": 2.9615384615384617
+    },
+    "iii_methods": {
+     "filter_bm25": {
+      "beats_subsample": false,
+      "share_of_oracle_recovery": {
+       "L2": -1.4090909090909092,
+       "L3": 0.564935064935065
+      },
+      "vs_raw": {
+       "L2": {
+        "d": -0.31,
+        "hi": 1.56,
+        "interval": "repository-clustered",
+        "lo": -2.14,
+        "negative": false,
+        "positive": false
+       },
+       "L3": {
+        "d": 0.87,
+        "hi": 1.56,
+        "interval": "query-level",
+        "lo": 0.16,
+        "negative": false,
+        "positive": true
+       }
+      },
+      "vs_subsample": {
+       "L2": {
+        "d": -0.04,
+        "hi": 1.54,
+        "interval": "repository-clustered",
+        "lo": -1.28,
+        "negative": false,
+        "positive": false
+       },
+       "L3": {
+        "d": 0.36,
+        "hi": 1.18,
+        "interval": "query-level",
+        "lo": -0.42,
+        "negative": false,
+        "positive": false
+       }
+      },
+      "works": false
+     },
+     "filter_srs": {
+      "beats_subsample": false,
+      "share_of_oracle_recovery": {
+       "L2": 3.5909090909090913,
+       "L3": 0.7272727272727273
+      },
+      "vs_raw": {
+       "L2": {
+        "d": 0.79,
+        "hi": 1.74,
+        "interval": "repository-clustered",
+        "lo": -0.17,
+        "negative": false,
+        "positive": false
+       },
+       "L3": {
+        "d": 1.12,
+        "hi": 1.86,
+        "interval": "query-level",
+        "lo": 0.36,
+        "negative": false,
+        "positive": true
+       }
+      },
+      "vs_subsample": {
+       "L2": {
+        "d": 1.06,
+        "hi": 2.28,
+        "interval": "repository-clustered",
+        "lo": -0.48,
+        "negative": false,
+        "positive": false
+       },
+       "L3": {
+        "d": 0.62,
+        "hi": 1.45,
+        "interval": "query-level",
+        "lo": -0.23,
+        "negative": false,
+        "positive": false
+       }
+      },
+      "works": false
+     }
+    },
+    "subsample_vs_raw": {
+     "L2": {
+      "d": -0.28,
+      "hi": 0.62,
+      "interval": "repository-clustered",
+      "lo": -1.42,
+      "negative": false,
+      "positive": false
+     },
+     "L3": {
+      "d": 0.5,
+      "hi": 1.01,
+      "interval": "query-level",
+      "lo": -0.01,
+      "negative": false,
+      "positive": false
+     }
+    }
+   }
+  },
+  "reading": "units_all_nomod"
+ },
+ "runs": {
+  "n8_r40_filter_bm25": [
+   0,
+   1
+  ],
+  "n8_r40_filter_srs": [
+   0,
+   1
+  ],
+  "n8_r40_oracle": [
+   0,
+   1
+  ],
+  "n8_r40_raw": [
+   0,
+   1
+  ],
+  "n8_r40_sub": [
+   0,
+   1
+  ],
+  "t5a_raw": [
+   0,
+   1
+  ]
+ },
+ "tables": [
+  "results/tables/n8/n8_effects.csv",
+  "results/tables/n8/n8_seeds.csv",
+  "results/tables/n8/n8_unique.csv"
+ ],
+ "version": "n1-tables/v1"
+}

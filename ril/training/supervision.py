@@ -38,7 +38,7 @@ import numpy as np
 from ril.training.pool_reader import FeatureTable, PoolExample
 
 PROVISIONAL = "provisional: ADR-002"
-ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM")
+ARM_NAMES = ("RAW", "FILTER", "WEIGHT", "CURRICULUM", "NOISE", "RAW_SUBSAMPLE", "ORACLE_CLEAN")
 Record = dict[str, Any]
 
 
@@ -199,6 +199,107 @@ class KRankThreshold:
         return out, _report(examples, out)
 
 
+class NoisePositives:
+    """Negative control (D38): each example's positives are replaced by random functions of the
+    same repository; query, count of positives, negatives and everything else stay as in RAW.
+
+    The replacement is drawn from the example's non-positive functions (the snapshot is one
+    repository) with a generator keyed by the seed and the instance id, so it does not depend on
+    the order of examples. The true positives become masked: they are neither positive nor
+    negative for this example. The question it answers is how much of a gain is adaptation to the
+    format of the data (issue-style queries, function text, prefix, length) and not supervision.
+    """
+
+    name = "noise_positives"
+
+    def __init__(self, seed: int) -> None:
+        self.seed = seed
+
+    def apply(self, examples: Sequence[PoolExample]) -> tuple[list[PoolExample], FilterReport]:
+        out: list[PoolExample] = []
+        for ex in examples:
+            n = len(ex.positive_ids)
+            if len(ex.candidate_ids) <= n:
+                continue  # too small a snapshot to draw a replacement without exhausting it
+            pick = sorted(
+                int(i)
+                for i in rng_for(self.seed, "noise", ex.instance_id).choice(
+                    len(ex.candidate_ids), size=n, replace=False
+                )
+            )
+            chosen = set(pick)
+            out.append(
+                replace(
+                    ex,
+                    positive_ids=tuple(ex.candidate_ids[i] for i in pick),
+                    positive_texts=tuple(ex.candidate_texts[i] for i in pick),
+                    candidate_ids=tuple(
+                        c for i, c in enumerate(ex.candidate_ids) if i not in chosen
+                    ),
+                    candidate_texts=tuple(
+                        t for i, t in enumerate(ex.candidate_texts) if i not in chosen
+                    ),
+                    masked_ids=ex.masked_ids + ex.positive_ids,
+                )
+            )
+        return out, _report(examples, out)
+
+
+class RandomSubset:
+    """Size-matched control for FILTER (D43): a random subset of ``size`` examples.
+
+    The draw is keyed by the seed and ``draw`` (a purpose path, so independent draws of one seed
+    are independent of each other and of the batch plan) and made over the examples sorted by
+    instance id, so it does not depend on the order the pool was read in. The kept examples keep
+    their pool order. Positives, negatives and every other property of an example are untouched.
+    """
+
+    name = "random_subset"
+
+    def __init__(self, size: int, seed: int, draw: int = 0) -> None:
+        if size < 1:
+            raise ValueError("size must be at least 1")
+        if draw < 0:
+            raise ValueError("draw must be non-negative")
+        self.size, self.seed, self.draw = size, seed, draw
+
+    def apply(self, examples: Sequence[PoolExample]) -> tuple[list[PoolExample], FilterReport]:
+        if self.size > len(examples):
+            raise ValueError(f"subset of {self.size} asked from a pool of {len(examples)}")
+        by_id = sorted(range(len(examples)), key=lambda i: examples[i].instance_id)
+        pick = rng_for(self.seed, "subsample", self.draw).choice(
+            len(examples), size=self.size, replace=False
+        )
+        keep = sorted(by_id[int(i)] for i in pick)
+        out = [examples[i] for i in keep]
+        return out, _report(examples, out)
+
+
+class NoiseKnowledge(Protocol):
+    """What the oracle control may know about injected noise (``noise.NoiseLedger``)."""
+
+    def is_injected(self, instance_id: str) -> bool: ...
+
+    def clean_count(self) -> int: ...
+
+
+class OracleClean:
+    """ORACLE-CLEAN (D46): RAW on the pairs whose positives were not noised.
+
+    The best any filter can do against injected noise. It is the only arm that reads the
+    injected-noise indicator; every other arm is built without it.
+    """
+
+    name = "oracle_clean"
+
+    def __init__(self, ledger: NoiseKnowledge) -> None:
+        self.ledger = ledger
+
+    def apply(self, examples: Sequence[PoolExample]) -> tuple[list[PoolExample], FilterReport]:
+        out = [e for e in examples if not self.ledger.is_injected(e.instance_id)]
+        return out, _report(examples, out)
+
+
 # --------------------------------------------------------------------------- hook 2: weights
 
 
@@ -282,10 +383,13 @@ class Curriculum:
         self,
         difficulty: Callable[[PoolExample], float],
         buckets: int = 0,
+        reverse: bool = False,
     ) -> None:
         if buckets < 0:
             raise ValueError("buckets must be non-negative")
-        self.difficulty, self.buckets = difficulty, buckets
+        self.difficulty, self.buckets, self.reverse = difficulty, buckets, reverse
+        if reverse:
+            self.name = "curriculum_reversed"
 
     def order(self, examples: Sequence[PoolExample], seed: int, epoch: int) -> list[int]:
         base = RandomOrder().order(examples, seed, epoch)
@@ -293,6 +397,8 @@ class Curriculum:
         if self.buckets > 0 and len(d):
             ranks = np.argsort(np.argsort(d, kind="stable"), kind="stable")
             d = np.floor(ranks * self.buckets / len(d))
+        if self.reverse:
+            d = -d  # hard to easy (the reversed-order control, D37)
         perm = np.argsort(d, kind="stable")
         return [base[int(i)] for i in perm]
 
@@ -353,11 +459,21 @@ def _signal(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> Qua
     raise KeyError(f"no quality signal for teacher {t!r}")
 
 
-def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]) -> Arm:
+def arm_from_config(
+    cfg: Mapping[str, Any],
+    signals: Mapping[str, QualitySignal],
+    seed: int = 0,
+    ledger: NoiseKnowledge | None = None,
+) -> Arm:
     """Build an arm from the configuration's ``arm`` section.
 
     ``{name, filter: {...}|null, weight: {...}|null, ordering: {...}|null}``; a missing or null
-    hook is the identity. ``signals`` maps teacher names to quality signals.
+    hook is the identity. ``signals`` maps teacher names to quality signals. ``seed`` keys the
+    NOISE control's and the subsample's draw (``RAW_SUBSAMPLE``: ``subsample: {size, draw}``).
+    NOISE takes no hook section; ``ordering.reverse: true`` reverses the
+    CURRICULUM order. ``ledger`` (the injected-noise indicator) is read by ORACLE_CLEAN and by a
+    ``RAW_SUBSAMPLE`` whose ``subsample.size`` is ``match_clean`` (the number of clean pairs); no
+    other arm is given it.
     """
     name = str(cfg["name"])
     if name not in ARM_NAMES:
@@ -366,6 +482,29 @@ def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]
     w: ExampleWeigher = UnitWeight()
     o: Ordering = RandomOrder()
     fc, wc, oc = cfg.get("filter"), cfg.get("weight"), cfg.get("ordering")
+    if name == "NOISE":
+        if fc or wc or oc:
+            raise ValueError("the NOISE control takes no filter, weight or ordering section")
+        f = NoisePositives(seed)
+    if name == "ORACLE_CLEAN":
+        if fc or wc or oc:
+            raise ValueError("ORACLE_CLEAN takes no filter, weight or ordering section")
+        if ledger is None:
+            raise ValueError("ORACLE_CLEAN needs the injected-noise indicator")
+        f = OracleClean(ledger)
+    sc = cfg.get("subsample")
+    if name == "RAW_SUBSAMPLE":
+        if fc or wc or oc or not sc:
+            raise ValueError("RAW_SUBSAMPLE takes a 'subsample' section and no other hook")
+        if sc["size"] == "match_clean":
+            if ledger is None:
+                raise ValueError("a match_clean subsample needs the injected-noise indicator")
+            size = ledger.clean_count()
+        else:
+            size = int(sc["size"])
+        f = RandomSubset(size, seed, int(sc.get("draw", 0)))
+    elif sc:
+        raise ValueError("a 'subsample' section belongs to the RAW_SUBSAMPLE arm")
     if fc:
         k = fc.get("k")
         f = KRankThreshold(_signal(fc, signals), None if k is None else int(k), str(fc["level"]))
@@ -379,5 +518,9 @@ def arm_from_config(cfg: Mapping[str, Any], signals: Mapping[str, QualitySignal]
         )
     if oc:
         sig = _signal(oc, signals)
-        o = Curriculum(lambda ex: float(sig.example_rank(ex)), int(oc.get("buckets", 0)))
+        o = Curriculum(
+            lambda ex: float(sig.example_rank(ex)),
+            int(oc.get("buckets", 0)),
+            bool(oc.get("reverse", False)),
+        )
     return Arm(name=name, filter=f, weigher=w, ordering=o)

@@ -18,11 +18,31 @@ the task at hand needs**. This page says what each file is and when to read it.
 | `11_references.md` | Corrected citations and links | writing the report |
 | `12_open_decisions.md` | The 10 open decisions + week-1 deliverables, as written in the master | closing decisions |
 | `ARCHITECTURE.md` | **Live** component design: interfaces, assumptions, limitations, changelog | changing any component boundary |
-| `ROADMAP.md` | **Live** checkbox plan by week and owner | planning; tick as work lands |
-| `EXPERIMENTS.md` | **Live** experiment registry: IDs, protocol, status | planning or running an experiment |
-| `DEVIATIONS.md` | **Live** departures from the master doc, with rationale | before departing from the design |
-| `COMPUTE.md` | Local box and Ada: environment, quotas, inherited lessons | before any cluster or data work |
+| `RQ2_PROTOCOL.md` | Final RQ2 experiment: hypotheses, data, power, decision rules, noise audit, threats, budget; section 11 holds the settled decisions O1 to O15 | before planning or running the final RQ2 experiment |
+| `ADR_DECISION_BRIEF.md` | One entry per open decision (ADR-001 to ADR-010): question, evidence, recommendation | closing or reopening an ADR |
+| `ROADMAP.md` | **Live** checkbox plan by week and owner (owners are named at the top) | planning; tick as work lands |
+| `EXPERIMENTS.md` | **Live** experiment registry: rules, index of all entries, the lead's entries | planning or running an experiment |
+| `experiments/A.md`, `experiments/C.md` | experiment logs of workstreams A and C (append-only, one writer each) | reading or adding an entry of that workstream |
+| `DEVIATIONS.md` | **Live** departures from the master doc, DEV-001 onward, with rationale | before departing from the design |
+| `REVIEW.md` | **Live** review standard: checks on every branch, the flag rules and their limits, re-deriving a number, proxies, hand-back and verdict | reviewing or handing back a branch |
+| `GRAPH_DESIGN.md` | **Live** options, evidence and costs for the knowledge graph (does not choose) | graph schema, storage, roles |
+| `COMPUTE.md` | Local box and Ada: environment, quotas, inherited lessons, job log | before any cluster or data work |
+| `status/` | **Live** one status page per workstream (`status/person_a.md`), replaced at the end of each block | picking up or reviewing a workstream |
 | `source/MASTER_PROJECT_DOCUMENT.md` | Verbatim copy of the whole master doc | only if a topic file is ambiguous |
+
+## Documents outside `docs/`
+
+| Where | What it holds |
+|---|---|
+| `../PROJECT_STATE.md` | what is true now, the next task, open questions |
+| `../RESULTS.md` | every benchmark, one line each, append-only |
+| `../results/ledger_a.md` | workstream A's result rows in the `RESULTS.md` format (one `ledger_*` file per workstream); merged into `RESULTS.md` by the maintainer |
+| `../results/README.md` | what each directory under `results/` holds |
+| `../decisions/` | ADR-001 to ADR-013 with their addenda; index in `decisions/README.md` |
+| `../specs/` | acceptance contracts (`code_unit.md`, `held_out_repos.md`, `latency_harness.md`, `parse_one_repo.md`, `repo_graph.md`); index in `specs/README.md` |
+| `../knowledge/` | paper notes (`knowledge/papers/`, with `LANDSCAPE.md`) and dataset cards (`knowledge/datasets/`) |
+| `../configs/` | frozen, demo, bench and per-experiment configurations; `configs/README.md` |
+| `../data/README.md` | what is tracked (`data/held_out/`) and what is rebuilt on the cluster |
 
 ## Two kinds of document
 
@@ -33,8 +53,9 @@ the task at hand needs**. This page says what each file is and when to read it.
   identifier or a figure, the copy is corrected in place with the inline marker "(corrected, see
   DEV-0nn)", and `DEVIATIONS.md` keeps the evidence. A re-sync must keep those corrections until the
   master carries them.
-- **Live documents (`ARCHITECTURE`, `ROADMAP`, `EXPERIMENTS`, `DEVIATIONS`, `COMPUTE`)** are
-  owned by this repo and updated as work happens.
+- **Live documents (`ARCHITECTURE`, `ROADMAP`, `EXPERIMENTS`, `DEVIATIONS`, `GRAPH_DESIGN`, `COMPUTE`,
+  `status/`)** are owned by this repo and updated as work happens. They may depart from the master
+  where measurement or a decision requires it; every departure is a `DEVIATIONS.md` entry.
 
 ## Re-syncing from the master
 

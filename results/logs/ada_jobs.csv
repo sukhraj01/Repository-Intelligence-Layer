@@ -44,3 +44,60 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-10-29,A,46875,T3,learning curve relaunch (subset helper key error),u22,4,1,00:00:04,0.0,FAILED (script)
 2026-10-29,A,46876,T3,learning curve seed 0: RAW 2000 updates of a 3000 schedule + 4 dev-subset evaluations,u22,4,1,02:11:27,2.19,COMPLETED (11.1 GB peak)
 2026-10-29,A,46879,T3,learning curve seed 1,u22,4,1,02:09:04,2.15,COMPLETED (11.8 GB peak)
+2026-10-30,A,48674,T4a,torch tests of the training stack on CPU (planned stop, noise control, reversed order),u22,2,0,00:01:00,0.0,COMPLETED (37 passed)
+2026-10-30,A,48679,T4a,arms pilot stage 1 seed 0: 8 cells x 100 updates of a 3000 schedule + dev-subset evaluation,u22,4,1,02:00:06,2.00,COMPLETED
+2026-10-30,A,48747,T4a,arms pilot stage 1 seed 1,u22,4,1,01:59:33,1.99,COMPLETED
+2026-10-30,A,48748,T4a,arms pilot stage 1 seed 2 (CUDA gate: no CUDA on the allocated node),u22,4,1,00:00:24,0.01,FAILED (gate)
+2026-10-31,A,49430,T4a,arms pilot stage 1 seed 2 (resubmission),u22,4,1,01:52:38,1.88,COMPLETED
+2026-10-31,A,49624,T4b,arms pilot stage 2 seed 0: RAW + FILTER(coderankembed) + CURRICULUM x 1000 updates,u22,4,1,02:45:25,2.76,COMPLETED
+2026-10-31,A,49625,T4b,arms pilot stage 2 seed 1,u22,4,1,02:44:48,2.75,COMPLETED
+2026-10-31,A,50090,P0,pool ranks: BM25 teacher over 3000 new pool directories (CPU),u22,2,0,00:03:56,0.0,COMPLETED
+2026-10-31,A,50091,P0,pool ranks: CodeRankEmbed teacher over 3000 new pool directories,u22,4,1,01:35:08,1.59,COMPLETED
+2026-10-31,A,50092,P0,pool ranks: SweRankEmbed-Small teacher over 3000 new pool directories,u22,4,1,01:34:09,1.57,COMPLETED
+2026-10-31,A,50313,P0,pool ranks: 5000-directory feature table and loader check (CPU),u22,2,0,00:06:23,0.0,COMPLETED
+2026-10-31,A,50335,T5a,matched-pool arms pilot stage 1 seed 0: 7 cells at 100 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,02:38:17,2.64,COMPLETED
+2026-10-31,A,50356,T5a,matched-pool arms pilot stage 1 seed 1: 7 cells at 100 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,02:38:22,2.64,COMPLETED
+2026-10-31,A,50942,T5b,matched-pool arms pilot stage 2 seed 0: RAW / subsample / WEIGHT at 1000 updates plus dev evaluation (E-PILOT-ARMS2),u22,4,1,03:10:37,3.18,COMPLETED
+2026-11-01,A,51409,N0,per-function BM25 scores for the 5000-directory pool (CPU; E-PILOT-NOISE),u22,4,0,00:05:40,0.0,COMPLETED
+2026-11-01,A,51410,N0,per-function SweRankEmbed-Small scores for the 5000-directory pool (E-PILOT-NOISE),u22,4,1,02:09:56,2.17,COMPLETED
+2026-11-01,A,51459,N0,separation gate: AUC of the K-rank for injected vs clean pairs (CPU),u22,2,0,00:01:14,0.0,COMPLETED
+2026-11-01,A,51412,N0,torch tests of the noise arms (first run: leakage tests lacked the held-out list on the cluster copy),u22,2,0,00:00:22,0.0,FAILED (setup)
+2026-11-01,A,51460,N0,torch tests of the noise arms (36 passed),u22,2,0,00:00:09,0.0,COMPLETED
+2026-11-01,A,51971,N1,noise pilot seed 0 r=0.4 six cells (E-PILOT-NOISE),u22,4,1,02:42:19,2.71,COMPLETED
+2026-11-01,A,52143,N1,noise pilot seed 0 r=0.2 six cells (E-PILOT-NOISE),u22,4,1,02:14:02,2.23,COMPLETED
+2026-11-01,C,52384,N1,CUDA gate of the staged copy on account C (matmul),u22,4,1,00:00:09,0.0,COMPLETED
+2026-11-01,A,52145,N1,seed 1 r=0.2 six cells: cancelled while pending and moved to account C (never ran),u22,4,1,00:00:00,0.0,CANCELLED
+2026-11-01,A,52144,N1,noise pilot seed 1 r=0.4 six cells (E-PILOT-NOISE),u22,4,1,02:14:46,2.25,COMPLETED
+2026-11-01,C,52385,N1,noise pilot seed 1 r=0.2 six cells (E-PILOT-NOISE; moved from A's queue),u22,4,1,02:14:17,2.24,COMPLETED
+2026-11-02,A,52619,S0,sibling-noise separation gate (E-PILOT-NOISE-SIB; CPU),u22,2,0,00:01:08,0.0,COMPLETED
+2026-11-02,A,52622,S1,sibling-noise pilot seed 0 five cells (E-PILOT-NOISE-SIB),u22,4,1,01:51:49,1.86,COMPLETED
+2026-11-02,A,52685,S1,sibling-noise pilot seed 1 five cells (E-PILOT-NOISE-SIB),u22,4,1,01:51:49,1.86,COMPLETED
+2026-11-02,A,53271,N1,noise pilot seed 2 r=0.4 six cells (third seed; E-PILOT-NOISE),u22,4,1,02:23:53,2.40,COMPLETED
+2026-11-02,A,53623,L0,live-stage check of GITHUB_TOKEN and API egress from a compute node (E-MINE-PILOT; CPU),u22,2,0,00:00:01,0.0,COMPLETED
+2026-11-02,A,53630,L1,live smoke session of the mined set (20 pull requests; superseded snapshot reader; CPU),u22,4,0,00:52:32,0.0,COMPLETED
+2026-11-02,A,53819,L1,M1 run with the superseded snapshot reader (cancelled; CPU),u22,4,0,01:52:09,0.0,CANCELLED
+2026-11-02,A,53988,L1,M1 rerun (cancelled for speed changes; CPU),u22,4,0,01:08:30,0.0,CANCELLED
+2026-11-02,A,54093,L1,M1 rerun with background fetches (cancelled for compressed corpus; CPU),u22,4,0,00:42:58,0.0,CANCELLED
+2026-11-02,A,54148,L1,M1 stage run (cancelled after all pool pull requests were mined; CPU),u22,4,0,00:47:33,0.0,CANCELLED
+2026-11-02,A,54212,L1,M1 closing session (one pull request; summary; CPU),u22,4,0,00:19:18,0.0,COMPLETED
+2026-11-02,A,54256,L1,M1 agreement with the pool and hand-check file (CPU),u22,2,0,00:07:04,0.0,COMPLETED
+2026-11-02,A,54265,L2,M2 listing shard 0 (CPU),u22,4,0,01:27:47,0.0,COMPLETED
+2026-11-02,A,54266,L2,M2 listing shard 1 (CPU),u22,4,0,02:34:26,0.0,COMPLETED
+2026-11-02,A,54268,L2,M2 listing shard 2 (CPU),u22,2,0,00:52:17,0.0,COMPLETED
+2026-11-03,A,54612,L2,M2 mining session 2000 pull requests (CPU),u22,4,0,06:01:32,0.0,COMPLETED
+2026-11-03,A,54887,L3,rank cost estimates (CPU),u22,4,0,00:30:27,0.0,COMPLETED
+2026-11-03,A,54914,L3,M3 GPU job: failed at the command line,u22,6,1,00:04:11,0.07,FAILED
+2026-11-03,A,54915,L3,M3 GPU job: cancelled while doing CPU preparation inside it,u22,6,1,00:11:24,0.19,CANCELLED
+2026-11-03,A,54936,L3,M3 GPU job: node file-system client hung before the model loaded (cancelled),u22,4,1,00:25:38,0.43,CANCELLED
+2026-11-03,A,55027,L3,M3 dense ranks SweRankEmbed-Small (300 directories) and CodeRankEmbed (254) pool-like reading; time limit,u22,4,1,01:18:24,1.31,TIMEOUT
+2026-11-03,A,54921,L3,M3 BM25 as-mined reading on 300 directories (CPU),u22,4,0,01:07:23,0.0,COMPLETED
+2026-11-03,A,55961,P1,storage probe on a compute node (E-MINE-PILOT scale-up; CPU),u22,2,0,00:00:00,0.0,COMPLETED
+2026-11-03,A,55964,P1,de-duplication measurement over the pilot corpora (CPU),u22,1,0,00:04:18,0.0,COMPLETED
+2026-11-03,A,55965,P1,listings in memory (CPU),u22,1,0,00:00:06,0.0,COMPLETED
+2026-11-03,A,56200,P1,largest snapshot with the streamed writer (CPU),u22,1,0,00:08:58,0.0,COMPLETED
+2026-11-03,A,55976,P1,repeat of the first 20 repositories of the pilot: 462 directories identical (CPU),u22,2,0,02:18:29,0.0,COMPLETED
+2026-11-03,A,55970,P1,E-MINED-PILOT preparation: pool-like reading packed node-local; BM25 of 1286 directories; exact comparison with M3 (300 of 300); feature table; selection; cache (CPU),u22,1,0,00:51:46,0.0,COMPLETED
+2026-11-03,A,56056,P1,E-MINED-PILOT seed 0: stopped at the first training start (unreadable configuration file),u22,4,1,00:01:48,0.03,FAILED
+2026-11-03,A,56441,P1,E-MINED-PILOT seed 0: RAW FILTER K=20 BM25 and size-matched subsample at 100 updates each with dev evaluation; gnode063,u22,4,1,01:18:11,1.30,COMPLETED
+2026-11-03,A,56565,P1,E-MINED-PILOT seed 1: CUDA gate failed on gnode069 (no CUDA),u22,4,1,00:01:38,0.03,FAILED
+2026-11-04,A,56571,P1,E-MINED-PILOT seed 1: RAW FILTER K=20 BM25 and size-matched subsample; gnode060,u22,4,1,01:14:18,1.24,COMPLETED

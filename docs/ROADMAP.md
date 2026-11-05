@@ -1,8 +1,12 @@
 # Roadmap
 
 Live plan. Tick boxes as work lands. Source: `10_timeline_and_fallback.md` and
-`12_open_decisions.md` (master doc rev 16). Owners are Person A / B / C — mapping is Open question Q1
-in `PROJECT_STATE.md`.
+`12_open_decisions.md` (master doc rev 16).
+
+**Owners.** Person A = Neill Rawani (retrieval stack, RQ1; status page `status/person_a.md`).
+Person B = Sukhraj Singh (decisions, RQ2, integration). Person C = Chaitanya Shah (evaluation, raw
+PR set, RQ3). An item is ticked only once its work is merged into `main` and has a commit and
+evidence (a `RESULTS.md` row, a ledger row or a registry entry in `EXPERIMENTS.md`).
 
 Dependency structure matters more than dates: **RQ2 cannot start until the training pipeline works;
 RQ3 cannot start until RQ2 has produced at least two distinguishable checkpoints.**
@@ -24,13 +28,13 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Read the candidate encoder's report, the remaining negative-policy and graph scan entries in full, refresh the literature scan and update the per-RQ summary (`knowledge/papers/`: Qwen3 Embedding, NV-Retriever, MAP4CS, hard-negative transfer, LogicLoc, RepoNavigator, NoCFG; `LANDSCAPE.md`, scan of 2026-10-23)
 - [x] Design the knowledge graph as a separately versioned artifact: node kinds, edge families, edge record with status, three roles, storage options (`specs/repo_graph.md` DRAFT v0, `docs/GRAPH_DESIGN.md`, ADR-011 Proposed; no choice made)
 - [ ] Gather evidence for decisions 1–10 (`decisions/`) — pool check, power table and contamination slice measured 2026-10-18 the full documents-only scan and its edited-function follow-up 2026-10-29 (`docs/EXPERIMENTS.md`); engineer decisions D14-D24 of 2026-10-18 recorded in the owning ADRs and specs, references audited (DEV-011), second-reader spot-check sheet prepared; class-unit source forms, ambiguous-site policies and the L3 positive census measured 2026-10-23 (Q28, Q35, Q36; ADR-013, ADR-011 addenda); dense and fusion numbers 2026-10-25 (ADR-006, ADR-003 addenda); pool filter state and K-rank under three teachers 2026-10-25 (E-POOL-RANKS; ADR-001, ADR-002 addenda); ADR-001 to ADR-010 still open
-- [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision)
+- [ ] **Close ADR-001 … ADR-010 by end of week 2** (team decision) — 2026-11-03: ADR-001 to ADR-006 and ADR-010 accepted; ADR-007 (needs the agent pilot and ADR-008), ADR-008 (needs the engineer's dollar budget) and ADR-009 (needs a real rerank stage) stay open
 
 ## Weeks 1–4 — Person A: parsing, call graph, BM25
 
 - [x] Repository parser + CodeUnit emission (`ril/parsing/repository_parser.py`; first build of 2026-10-17)
 - [x] Call / import / inherit graph with edge-recovery coverage (`ril/parsing/call_graph.py`; the coverage is reported under several definitions, ADR-012)
-- [ ] BM25 index (identifier splitting, field weights, tune b) — reference-tokenisation index built (`ril/retrieval/bm25_index.py`); identifier splitting, fields and b tuning open
+- [ ] BM25 index (identifier splitting, field weights, tune b) — reference form built (`ril/retrieval/bm25_index.py`, `RESULTS.md` rows `e1-*`); identifier splitting and field weights added as options and piloted locally (A1-PILOT, `results/ledger_a.md`, merged 2026-10-31); the development-set runs and the b tuning are open
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
@@ -38,10 +42,11 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [x] Smoke pilots E-PILOT-K, E-PILOT-NEG, E-PILOT-LEAK at 63 updates, 2 seeds (exploratory, 2026-10-29; evidence for ADR-001/ADR-002, nothing decided)
 - [x] Block 1 of the supervision pilots (2026-10-29, evidence only): graph-role measurement against score-ordered same-file expansion (E-GRAPH-ROLE, ADR-003); twelve supervision-quality papers read in full (ADR-002 addendum); edited-function contamination follow-up and Pro ansible as a third dev L3 repository (E-CONTAM-EDITED, E-DEV-ANSIBLE); paired encoder numbers and Qwen3 training-memory check (E-ENCODER-NUMBERS, ADR-006); RQ3 power table (E-POWER update)
 - [x] Block 2, T3: learning curve of RAW (E-PILOT-CURVE, 2026-10-29; reduced design, 5.14 GPU-hours; Block 2 at 22.14 of 24)
-- [ ] Block 2, T4: arms pilot (not run; update count and budget are for the engineer to decide)
+- [x] Block 2, Wave 6: teacher ranks for the 5,000-directory pool (3.16 GPU-hours) and the matched-pool arms pilot E-PILOT-ARMS2 (2026-10-31, exploratory; stage 1 two seeds, stage 2 one seed on three cells; Block 2 at 45.15 of 46)
+- [x] Arms pilot E-PILOT-ARMS, stage 1 (24 runs at 100 updates) and stage 2 (6 runs at 1,000 updates), exploratory (2026-10-31; 11.4 GPU-hours; Block 2 at 33.53 of 36)
 - [x] Training stack (pool reader, multi-positive InfoNCE, pluggable negative policy, the three arm hooks with the identity test, budget accounting, checkpoints, evaluation hook; `ril/training/`, E-TRAIN-STACK, 2026-10-25; every training value `provisional: ADR-001, ADR-002, ADR-006`)
-- [ ] Baseline training (multi-positive InfoNCE, repo-local hard negatives)
-- [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list
+- [x] Baseline training (multi-positive InfoNCE, repo-local hard negatives): implemented and run at pilot scale as the RAW arm (E-TRAIN-STACK, E-PILOT-CURVE; provisional, not the frozen run)
+- [ ] Training data pipeline: SweLoc + own PR-mined set, filtered by held-out list — the SweLoc part is read, filtered and cached (`ril/training/pool_reader.py`, E-POOL-RANKS); the own PR-mined set: rebuilt by the lead (`ril/data_mining/`, E-MINE-PILOT); pilot built and measured on the live API (E-MINE-PILOT M1 to M4); the full run is not started (disk binds first, `results/mining/m4_scale.md`), so this item stays open; integration pilot done (E-MINED-PILOT: the pilot set is read, ranked, filtered and trained on; exploratory)
 
 ## Weeks 3–6 — Person C: evaluation harness
 
@@ -58,6 +63,18 @@ Week-1 deliverables, in order (contracts in `specs/`):
 - [ ] All latency optimisation landed
 - [ ] Retrieval stack frozen; `configs/frozen/` written, hashed, benchmark snapshot recorded
 
+## RQ2 final-experiment tasks (added 2026-11-03; decisions O1 to O15 in `docs/RQ2_PROTOCOL.md` section 11)
+
+Design of record: option E, 12 cells x 3 seeds, 8 extra evaluation repositories, 38.9 GPU-hours; Block 3 cap 46.7 (`docs/COMPUTE.md`). Primary update count 100, with a 1,000-update sensitivity check on a subset of cells. Confirmatory: FILTER (BM25 teacher) against RAW and against the size-matched subsample, on the unfiltered mined set; everything else exploratory.
+
+- [ ] Enlarge the evaluation set (O8): at least eight repositories at L2 and as many with L3 labels as obtainable; unit records and dense stores must be built for each; cost per repository about 0.06 GPU-hours per checkpoint (placeholder, to be measured on the first one). The choice of repositories is a later task
+- [ ] Retention switch in the training job scripts (O9): keep the half-precision final model of runs that feed RQ3 and the report (about 274 MB each) and archive it to account B's storage (needs an alias for account B and a staged copy)
+- [ ] Label sheet for pull-request labels (O11): relevance of each edited function to its issue, three-way verdict and reason, for the noise audit (400 stratified pairs, two readers on a 100-pair overlap); the call-edge sheet stays separate
+- [ ] Mined-set gates: token on the cluster (D2), M1 to M4, G2 at 100 pilot directories with a positive and 10,000 positives at full scale (O10), content-overlap audit of the mined corpora (not built)
+- [ ] Draw fresh noise realisations for the confirmatory and calibration cells (O15); the Wave 7 and 8 realisations are not reused
+- [ ] Register the cell list, Holm families (O5) and delta = 1.5 points (O6) before any final run
+- [ ] **Declared fallback (O13), stated before any final run:** if the arms do not separate by the rule of protocol section 6, RQ3 contrasts RAW with the untrained encoder. This measures "does training help", not "does supervision quality help", and is labelled so (DEV-022)
+
 ## Weeks 6–12 — Person B: RQ2
 
 - [ ] Four arms × three seeds at matched optimizer updates
@@ -66,7 +83,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 7–10 — Person A: graph extension
 
-- [ ] Test and configuration node types, `tests` / `configures` edges (census of 2026-10-23 over 540 Python L3 instances: test units are 20.5% of L3 positives and 44% of those outside the L2 files; non-Python positives 1.7%)
+- [x] Test and configuration node types, `tests` / `configures` edges (built and off by default; precision sampled, `ril/parsing/exploratory_edges.py`, `RESULTS.md` rows `p-*`; census of 2026-10-23 over 540 Python L3 instances: test units are 20.5% of L3 positives and 44% of those outside the L2 files; non-Python positives 1.7%)
 - [ ] CORE-Bench L3 evaluation
 
 ## Week 12 — go / no-go
@@ -95,3 +112,5 @@ still complete and defensible.
 | 9 | RQ1 ablation table with the latency column | [ ] |
 | 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [ ] |
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
+
+> Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).

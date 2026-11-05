@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-02",
+ "host": "u22 gnode002",
+ "shards": [
+  {
+   "graphql_calls": 1108,
+   "graphql_cost": 1089,
+   "job": 54265,
+   "listed": 66,
+   "listing_failed": 1,
+   "listing_seconds": 5249.8
+  },
+  {
+   "graphql_calls": 2083,
+   "graphql_cost": 2079,
+   "job": 54266,
+   "listed": 67,
+   "listing_failed": 0,
+   "listing_seconds": 9248.5
+  },
+  {
+   "graphql_calls": 713,
+   "graphql_cost": 711,
+   "job": 54268,
+   "listed": 66,
+   "listing_failed": 0,
+   "listing_seconds": 3121.7
+  }
+ ],
+ "total_listing_seconds": 17620.0,
+ "what": "listing shards of E-MINE-PILOT (3 jobs, every third repository of the 200; 1 listing failed with HTTP 502 and was listed again by the mining session)"
+}

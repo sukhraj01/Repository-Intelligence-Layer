@@ -1,0 +1,4 @@
+condition,seed,config_hash,arm,teacher_equals_base,pool_before_arm,pool_examples,optimizer_updates,examples_seen,unique_examples_seen,effective_epochs,positives_seen,negative_shortfall_visits,gpu_hours_train_loop,repeats_examples,below_common_unique_count
+t5b_raw,0,ece19717623d,RAW,False,5000,5000,1000,32032,5000,6.406,32032,0,0.7463,True,False
+t5b_sub_d0,0,c5436f15c8d5,RAW_SUBSAMPLE,False,5000,4592,1000,32032,4592,6.976,32032,0,0.7474,True,True
+t5b_weight_cre,0,6337b842c906,WEIGHT,True,5000,5000,1000,32032,5000,6.406,32032,0,0.7467,True,False

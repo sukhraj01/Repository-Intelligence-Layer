@@ -1,0 +1,192 @@
+{
+ "config": {
+  "corpus_kinds": [
+   "function",
+   "method"
+  ],
+  "include_loc_bench": true,
+  "max_prs": 2000,
+  "n_repos": 200,
+  "pool_size": 5000,
+  "provisional": [
+   "ADR-001"
+  ],
+  "published_first": false,
+  "seed": 0,
+  "version": "pr-mining/v1"
+ },
+ "config_hash": "b529fdba94008462300ef8d3a13551e04eedea2d7e7070ca9d0347203c401d9b",
+ "costs": {
+  "api": {
+   "calls": 6136,
+   "calls_by_endpoint": {
+    "graphql": 4122,
+    "repos/compare": 2014
+   },
+   "sleeps_by_reason": {
+    "http-502": 37,
+    "network:TransportError": 1,
+    "pace": 2820
+   },
+   "slept_seconds": 250.8
+  },
+  "disk": {
+   "bytes_per_mined_pr": 1840450.4780733285,
+   "files_per_mined_pr": 4.0,
+   "listing_bytes": 120808663,
+   "listing_files": 200,
+   "mined_dirs": 1391,
+   "pr_bytes": 2560066615,
+   "pr_files": 5564
+  },
+  "seconds": {
+   "listing": 1144.1,
+   "mining": 20550.6
+  }
+ },
+ "counts": {
+  "added_function_defs_total": 8695,
+  "merged_prs": 190197,
+  "pairs": 25422,
+  "positives_total": 11047,
+  "prs_mined": 1391,
+  "prs_mined_attempted": 2000,
+  "prs_with_closing_issue": 23670,
+  "quarantine_reasons": {
+   "changed_file_unparseable:mixed-tabs-spaces": 1,
+   "changed_file_unparseable:python2-except": 3,
+   "changed_file_unparseable:python2-long-literal": 2,
+   "changed_file_unparseable:syntax-other": 1,
+   "diff_truncated": 3,
+   "old_file_missing_at_base": 4,
+   "patch_missing": 3
+  },
+  "repositories_listed": 200,
+  "status": {
+   "mined": 1391,
+   "no_positive": 206,
+   "no_python_change": 386,
+   "quarantined": 17
+  }
+ },
+ "dates": "2026-11-02 to 2026-11-03",
+ "hardware": "u22 compute nodes, 4 CPUs allocated, 10 GB requested (MaxRSS 10,001,100 KB of the mining session 54612); home file system ada5:/home2",
+ "jobs": {
+  "mining_session": 54612,
+  "no_op_sessions": [
+   54613,
+   54614
+  ]
+ },
+ "sessions": [
+  {
+   "adopted": 0,
+   "api": {
+    "by_endpoint": {
+     "graphql": 218,
+     "repos/compare": 2014
+    },
+    "calls": 2232,
+    "graphql_calls": 218,
+    "graphql_cost": 205,
+    "not_modified": 0,
+    "rest_calls": 2014,
+    "retries": 13,
+    "sleeps": 493,
+    "slept_seconds": 64.801
+   },
+   "attempted": 2000,
+   "listed_now": 1,
+   "listing_failed": {},
+   "listings_reused": 199,
+   "outcomes": {
+    "mined": 1391,
+    "no_positive": 206,
+    "no_python_change": 386,
+    "quarantined": 17
+   },
+   "seconds": {
+    "listing": 1127.6,
+    "mining": 20541.3
+   },
+   "skipped": 0,
+   "stopped": false
+  },
+  {
+   "adopted": 0,
+   "api": {
+    "by_endpoint": {},
+    "calls": 0,
+    "graphql_calls": 0,
+    "graphql_cost": 0,
+    "not_modified": 0,
+    "rest_calls": 0,
+    "retries": 0,
+    "sleeps": 0,
+    "slept_seconds": 0.0
+   },
+   "attempted": 0,
+   "listed_now": 0,
+   "listing_failed": {},
+   "listings_reused": 200,
+   "outcomes": {},
+   "seconds": {
+    "listing": 6.4,
+    "mining": 0.8
+   },
+   "skipped": 2000,
+   "stopped": false
+  },
+  {
+   "adopted": 0,
+   "api": {
+    "by_endpoint": {},
+    "calls": 0,
+    "graphql_calls": 0,
+    "graphql_cost": 0,
+    "not_modified": 0,
+    "rest_calls": 0,
+    "retries": 0,
+    "sleeps": 0,
+    "slept_seconds": 0.0
+   },
+   "attempted": 0,
+   "listed_now": 0,
+   "listing_failed": {},
+   "listings_reused": 200,
+   "outcomes": {},
+   "seconds": {
+    "listing": 4.5,
+    "mining": 0.2
+   },
+   "skipped": 2000,
+   "stopped": false
+  },
+  {
+   "adopted": 0,
+   "api": {
+    "by_endpoint": {},
+    "calls": 0,
+    "graphql_calls": 0,
+    "graphql_cost": 0,
+    "not_modified": 0,
+    "rest_calls": 0,
+    "retries": 0,
+    "sleeps": 0,
+    "slept_seconds": 0.0
+   },
+   "attempted": 0,
+   "listed_now": 0,
+   "listing_failed": {},
+   "listings_reused": 200,
+   "outcomes": {},
+   "seconds": {
+    "listing": 5.6,
+    "mining": 8.3
+   },
+   "skipped": 2000,
+   "stopped": false
+  }
+ ],
+ "what": "E-MINE-PILOT pilot run root ~/ril_mine/runs/pilot (200 repositories, 2000 pull requests)"
+}

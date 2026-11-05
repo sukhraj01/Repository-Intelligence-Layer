@@ -37,7 +37,7 @@ standard library. Work directory on Ada: `~/ril_s2/` (`scripts/`, `raw/`, `logs/
 |---|---|---|
 | `probe_net.py` | reachability and Range throughput | `python3 ril_s2/scripts/probe_net.py 50000000` (login) or via `srun -p u22 -A research -q low -c 2 --mem=4G` |
 | `hf_list_tree.py` | tree listing with sizes | `python3 hf_list_tree.py zhangfw123/CORE-Bench "" raw/listing_root.json` |
-| `hf_fetch.py` | resumable, size-checked fetch of path prefixes + `provenance.json` | `python3 hf_fetch.py <repo> <listing.json> <dest> <prefix>...` |
+| `hf_fetch.py` | resumable, size-checked fetch of path prefixes + `<run root>/provenance.json` | `python3 hf_fetch.py <repo> <listing.json> <dest> <prefix>...` |
 | `fetch_core_bench_samples.sbatch` | the 9 small Verified sample folders | `cd ~ && sbatch ril_s2/scripts/fetch_core_bench_samples.sbatch` |
 | `analyze_core_bench_sample.py` | field/format statistics (numbers only) | `python3 -I analyze_core_bench_sample.py <data root> out.json` |
 | `zip_remote_listing.py`, `zip_remote_extract.py` | list or extract single members of a remote zip by Range request | `python3 zip_remote_listing.py <url> out.json` |
@@ -242,3 +242,30 @@ Tables: `scripts/t2_tables.py pilots configs/experiments/t2_pilots.yaml ril_t2/r
 ### Graph-role measurement (S1)
 
 `s1_graph_role.sbatch` (CPU, 4 CPUs, about 8 minutes): runs the four `configs/experiments/s1_graph_role_*.yaml` configurations on the D18 cache (`~/ril_t1/work/e3_cache`, override with `CACHE=`) and the X2 dense scores in `~/ril_x2/dense`, then writes `~/ril_x2/results_s1/*_{compare,sizes,reach}.csv`. Submit from `$HOME` after `rsync -a --exclude __pycache__ ril scripts configs ada:ril_x2/`. Code `ril/evaluation/s1_graph_role.py`, `ril/analysis/s1_tables.py`, wrapper `scripts/s1_run.py`; copy the tables with `rsync -a ada:ril_x2/results_s1/ results/tables/s1/`.
+
+## PR-mined set (E-MINE-PILOT, `docs/experiments/B.md`)
+
+Work directory `~/ril_mine/` (`rsync -a --exclude __pycache__ ril scripts configs ada:ril_mine/`, plus `data/held_out/held_out_repos.json`
+and `data/held_out/rename_cache.json` under `~/ril_mine/data/held_out/`); the pool listing is `~/ril_s2/raw/ziplist_train.json`.
+CPU only for mining, `git` on the node; the job builds its venv (numpy, pyyaml) on first use. **Compute nodes run Python 3.10; the login
+node's `python3` is 3.9 and cannot import the package**, so every command below runs inside a job. The job **needs `GITHUB_TOKEN`
+(read-only) in its environment**: it tests presence only, never prints the value, and without it exits with code 3 and fetches nothing;
+there is no unauthenticated mode (checked 2026-11-02: set in a non-interactive `ssh` command and in a submitted job; the API root answers
+200 from a compute node). Base commits are fetched from github.com into node-local `$TMPDIR` (one bare repository per commit, removed after
+use; `LOOKAHEAD` commits are fetched ahead in background threads, which changes speed and not the outputs). The run root
+`~/ril_mine/runs/<RUN>` holds `pr/<dir>/{corpus.jsonl.gz, queries.jsonl, qrels/test.tsv, pr_meta.json}`, the stored listings (`listing/`),
+`state.jsonl`, `budget.json`, `api_events*.jsonl` (every call and sleep), `sessions.jsonl` (per-session counts and seconds) and
+`provenance.json`. Disk: the binding figure is `df` of `$HOME` (`ada5:/home2`, shared); `quota -s` reports a different mount
+(`192.168.10.1:/share1`) and its file count (3,000) is not a limit on `$HOME`. Measured: a mined directory is 1.5 MB on average
+compressed (max 6.3 MB over 41), the listing of 200 repositories 59 MB.
+
+| Script | What | Exact command (from `$HOME`) |
+|---|---|---|
+| `mine_pilot.sbatch` | list, select, mine; resumable (a rerun skips finished pull requests and makes no call); chain sessions with `--dependency=afterany:<job>` | `sbatch --mem=10G --export=ALL,CONFIG=configs/mining/pilot.yaml,RUN=pilot,CREATED=<YYYY-MM-DD>,LOOKAHEAD=6,RIL_COMMIT=<hash> ril_mine/scripts/ada/mine_pilot.sbatch` |
+| `mine_pilot.sbatch` (listing shards) | the listing stage only, every third repository per job (3 jobs, `--cpus-per-task=1 --mem=3G` so all three start) | `sbatch --export=ALL,CONFIG=configs/mining/pilot.yaml,RUN=pilot,CREATED=<YYYY-MM-DD>,LIST_ONLY=1,SHARD="<i> 3" ril_mine/scripts/ada/mine_pilot.sbatch` |
+| `mine_pilot.sbatch` (validation M1) | five repositories, the pool's pull requests first (`published_first`), bounded session | `sbatch --export=ALL,CONFIG=configs/mining/validation.yaml,RUN=m1b,REPOS=5,CREATED=<YYYY-MM-DD>,LOOKAHEAD=4 ril_mine/scripts/ada/mine_pilot.sbatch` |
+| `mine_validate.sbatch` | M1: agreement with the pool (`agreement.json`) and the hand-check file for 20 seeded pull requests (token: 20 compare calls) | `sbatch --export=ALL,RUN=m1b ril_mine/scripts/ada/mine_validate.sbatch` |
+| `mine_ranks.sbatch` | M3, GPU (2080ti, 2 h limit, CUDA gate inside): ranks under BM25, CodeRankEmbed, SweRankEmbed-Small (code text and stored text); `READING=all` or `READING=non_test` | `sbatch --export=ALL,RUN=pilot,READING=non_test,RIL_COMMIT=<hash> ril_mine/scripts/ada/mine_ranks.sbatch` |
+| `scripts/mine_pilot.py report` | the M2 tables from `summary.json` and the measured unit costs (calls, seconds, bytes) | `ril_mine/venv_310/bin/python -I ril_mine/scripts/mine_pilot.py report ril_mine/runs/pilot ril_mine/runs/pilot/report.md` |
+| `scripts/mine_pilot.py rank-estimate` | distinct function texts and GPU-hours at a named rate, before M3 | `... rank-estimate ril_mine/runs/pilot --texts-per-second <rate>` |
+| `scripts/mine_pilot.py pack` | zip and member listing in the layout the pool reader streams | `... pack ril_mine/runs/pilot ril_mine/runs/pilot.zip` |

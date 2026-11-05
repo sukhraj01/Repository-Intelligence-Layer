@@ -15,8 +15,11 @@ Subcommands (logic in ``ril/``):
   teacher CACHE RANKS_OUT MINED_OUT --teacher bm25|<encoder> --keep N [--cut C] [--device D]
          (one pass: K-ranks of every positive and mined candidates)
   features RANKS [RANKS ...] --out CSV --teachers T [T ...] --held-out H --rename-cache R
-  run-batch CONFIG [CONFIG ...] --cache C [--feature-table T] [--mined M] --results-root R
+  score  CACHE OUT --teacher bm25|<encoder> [--cut C] [--device D]  (per-function scores)
+  run-batch CONFIG [CONFIG ...] --cache C [--feature-table T] [--mined M]
+         [--noise-scores T=PATH ...] --results-root R
          --work-root W --date D --device D <eval options> [--extra-eval O.yaml ...] [--keep-models]
+         [--drop-eval-stores]
          (train then evaluate each configuration; the cache is read once; finished runs skipped)
   curve  CONFIG CACHE --results-root R --work-root W --date D --device D [--feature-table T]
          [--mined M] <eval options>   (one training run with the evaluation of the configuration's
@@ -94,7 +97,8 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
     from ril.training import train_jobs as tj
     from ril.training.training import RunPaths, load_train_config
 
-    inputs = tj.load_inputs(a.cache, a.feature_table, a.mined)
+    noise_scores = dict(x.split("=", 1) for x in a.noise_scores)
+    inputs = tj.load_inputs(a.cache, a.feature_table, a.mined, noise_scores)
     done: list[str] = []
     skipped: list[str] = []
     for config in a.configs:
@@ -118,6 +122,7 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
             feature_table=a.feature_table,
             mined_path=a.mined,
             inputs=inputs,
+            noise_scores=noise_scores,
         )
         sys.stdout.write(_json.dumps({"trained": config, "result_dir": rec["result_dir"]}) + "\n")
         sys.stdout.flush()
@@ -127,6 +132,10 @@ def _run_batch(a: argparse.Namespace) -> dict[str, object]:
             _evaluate(a, config, final, str(rec["result_dir"]), override=o)
         if not a.keep_models:
             shutil.rmtree(paths.ckpt_root, ignore_errors=True)
+        if a.drop_eval_stores:
+            variant = f"{cfg['exp_id']}__{os.path.basename(str(rec['result_dir']))}"
+            for part in ("enc", "eval", "dense"):
+                shutil.rmtree(os.path.join(a.work, part, variant), ignore_errors=True)
         done.append(config)
     return {"done": done, "skipped": skipped, "inputs": inputs.hashes}
 
@@ -211,6 +220,15 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--feature-table")
     c.add_argument("--form", default="code")
     c.add_argument("--ahead", type=int, default=4)
+    c.add_argument(
+        "--local", action="store_true", help="the listing's archive is a local file (mined set)"
+    )
+    fs = sub.add_parser("filter-size")
+    fs.add_argument("cache")
+    fs.add_argument("feature_table")
+    fs.add_argument("--teacher", required=True)
+    fs.add_argument("--k", type=int, required=True)
+    fs.add_argument("--level", default="positive")
     m = sub.add_parser("mine")
     m.add_argument("cache")
     m.add_argument("out")
@@ -246,11 +264,17 @@ def main(argv: list[str] | None = None) -> int:
     rb.add_argument("--cache", required=True)
     rb.add_argument("--feature-table")
     rb.add_argument("--mined")
+    rb.add_argument("--noise-scores", nargs="*", default=[], help="teacher=score store path pairs")
     rb.add_argument("--results-root", required=True)
     rb.add_argument("--work-root", required=True)
     rb.add_argument("--date", required=True)
     rb.add_argument("--extra-eval", nargs="*", default=[])
     rb.add_argument("--keep-models", action="store_true")
+    rb.add_argument(
+        "--drop-eval-stores",
+        action="store_true",
+        help="delete the encoded stores and scores of a run after its evaluation (node-local disk)",
+    )
     for q in (e, rb):
         for a in ("--e1-config", "--prep", "--e3-cache", "--data-root", "--work"):
             q.add_argument(a, required=True)
@@ -276,6 +300,13 @@ def main(argv: list[str] | None = None) -> int:
     th.add_argument("--cut", type=int, default=1024)
     th.add_argument("--device", default="cpu")
     th.add_argument("--batch-size", type=int, default=64)
+    sc = sub.add_parser("score")
+    sc.add_argument("cache")
+    sc.add_argument("out")
+    sc.add_argument("--teacher", required=True)
+    sc.add_argument("--cut", type=int, default=1024)
+    sc.add_argument("--device", default="cpu")
+    sc.add_argument("--batch-size", type=int, default=64)
     ft = sub.add_parser("features")
     ft.add_argument("ranks", nargs="+")
     ft.add_argument("--out", required=True)
@@ -284,6 +315,8 @@ def main(argv: list[str] | None = None) -> int:
     ft.add_argument("--rename-cache")
     a = p.parse_args(argv)
 
+    from ril.data_mining.pack import local_fetch
+    from ril.training import pool_ranks as pr
     from ril.training import train_jobs as tj
 
     if a.cmd == "select":
@@ -306,7 +339,10 @@ def main(argv: list[str] | None = None) -> int:
             feature_table=a.feature_table,
             form=a.form,
             ahead=a.ahead,
+            fetch=local_fetch if a.local else pr.http_fetch,
         )
+    elif a.cmd == "filter-size":
+        out = tj.filter_size_job(a.cache, a.feature_table, a.teacher, a.k, a.level)
     elif a.cmd == "mine":
         out = tj.mine_job(
             a.cache,
@@ -355,6 +391,10 @@ def main(argv: list[str] | None = None) -> int:
             cut=a.cut,
             device=a.device,
             batch_size=a.batch_size,
+        )
+    elif a.cmd == "score":
+        out = tj.score_job(
+            a.cache, a.out, teacher=a.teacher, cut=a.cut, device=a.device, batch_size=a.batch_size
         )
     elif a.cmd == "features":
         out = tj.feature_table_job(

@@ -13,10 +13,11 @@
 # torch ones included) is for Ada only.
 
 PYTHON ?= python3.11
+BASE ?= main
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks eval
+.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks review review-flags eval
 
 setup:
 	poetry env use $(PYTHON)
@@ -49,11 +50,15 @@ format:
 	$(RUN) ruff check --fix ril tests scripts
 	$(RUN) ruff format ril tests scripts
 
+# Latency and throughput rows go to RIL_LATENCY_DIR (default results/latency, the lead's log). Each
+# workstream sets its own directory (results/latency/a, results/latency/c) so the CSVs never conflict.
+RIL_LATENCY_DIR ?= results/latency
+
 bench:
-	$(RUN) python scripts/bench.py run
+	$(RUN) python scripts/bench.py run --log-dir $(RIL_LATENCY_DIR)
 
 bench-check:
-	$(RUN) python scripts/bench.py check
+	$(RUN) python scripts/bench.py check --log-dir $(RIL_LATENCY_DIR)
 
 # Real parse and graph_build throughput and graph expansion latency (all storage options) for the
 # checkouts under data/raw/repos (flask, requests and, if present, django); appends to results/latency.
@@ -65,3 +70,12 @@ bench-graph:
 
 hooks:
 	@sh scripts/hooks/install.sh
+
+# Flags on the added lines of this branch against BASE, and a trace of ledger numbers to results/
+# (docs/REVIEW.md). Exits non-zero on a blocking finding.
+review-flags:
+	$(RUN) python scripts/review_flags.py --base $(BASE)
+	$(RUN) python scripts/review_flags.py --tree
+
+# What a pull request must show: lint, the fast tests and the flags.
+review: lint test review-flags

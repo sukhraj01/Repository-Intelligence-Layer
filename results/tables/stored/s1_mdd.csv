@@ -1,0 +1,41 @@
+set,level,seeds_per_arm,variant,mdd_points,lo,hi,repos,queries,interval,stored_value,stored_in,ratio,disagrees,seeds_of_cells
+w6,L2,2,with_repo_term,1.99,1.14,2.99,5,351,repository-cluster,,,,,
+w6,L2,2,query_level,1.32,0.95,2.71,5,351,repository-cluster,,,,,
+w6,L2,3,with_repo_term,1.85,1.01,2.56,5,351,repository-cluster,1.4,E-PILOT-ARMS2,1.32,False,
+w6,L2,3,query_level,1.1,0.81,2.23,5,351,repository-cluster,1.4,E-PILOT-ARMS2,0.78,False,
+w6,L2,2,pooled_seed_sd_all_cells,0.521,,,5,351,,0.52,seed SD quoted in the entry,,,"{""t5a_curr_cre"": 2, ""t5a_filter_bm25"": 2, ""t5a_filter_cre"": 2, ""t5a_filter_srs"": 2, ""t5a_raw"": 2, ""t5a_sub_d0"": 2, ""t5a_weight_cre"": 2}"
+w6,L3,2,with_repo_term,3.15,2.21,4.73,2,155,queries within repository,,,,,
+w6,L3,2,query_level,1.23,0.9,2.39,2,155,queries within repository,,,,,
+w6,L3,3,with_repo_term,3.08,2.12,4.59,2,155,queries within repository,1.7,E-PILOT-ARMS2,1.81,True,
+w6,L3,3,query_level,1.02,0.75,1.96,2,155,queries within repository,1.7,E-PILOT-ARMS2,0.6,False,
+w6,L3,2,pooled_seed_sd_all_cells,0.73,,,2,155,,0.73,seed SD quoted in the entry,,,"{""t5a_curr_cre"": 2, ""t5a_filter_bm25"": 2, ""t5a_filter_cre"": 2, ""t5a_filter_srs"": 2, ""t5a_raw"": 2, ""t5a_sub_d0"": 2, ""t5a_weight_cre"": 2}"
+n1_r20,L2,2,with_repo_term,2.19,1.15,3.94,5,351,repository-cluster,1.56,E-PILOT-NOISE,1.41,False,
+n1_r20,L2,2,query_level,1.66,0.87,3.6,5,351,repository-cluster,1.56,E-PILOT-NOISE,1.06,False,
+n1_r20,L2,3,with_repo_term,2.0,1.01,3.34,5,351,repository-cluster,,,,,
+n1_r20,L2,3,query_level,1.38,0.74,2.96,5,351,repository-cluster,,,,,
+n1_r20,L2,2,pooled_seed_sd_all_cells,0.507,,,5,351,,0.51,seed SD quoted in the entry,,,"{""n1_r20_filter_bm25"": 2, ""n1_r20_filter_srs"": 2, ""n1_r20_oracle"": 2, ""n1_r20_raw"": 2, ""n1_r20_sub"": 2, ""n1_r20_weight_srs"": 2}"
+n1_r20,L3,2,with_repo_term,5.65,4.03,7.76,2,155,queries within repository,2.77,E-PILOT-NOISE,2.04,True,
+n1_r20,L3,2,query_level,3.59,2.42,5.11,2,155,queries within repository,2.77,E-PILOT-NOISE,1.3,False,
+n1_r20,L3,3,with_repo_term,5.27,3.69,7.25,2,155,queries within repository,,,,,
+n1_r20,L3,3,query_level,2.95,1.99,4.18,2,155,queries within repository,,,,,
+n1_r20,L3,2,pooled_seed_sd_all_cells,0.988,,,2,155,,0.99,seed SD quoted in the entry,,,"{""n1_r20_filter_bm25"": 2, ""n1_r20_filter_srs"": 2, ""n1_r20_oracle"": 2, ""n1_r20_raw"": 2, ""n1_r20_sub"": 2, ""n1_r20_weight_srs"": 2}"
+n1_r40,L2,2,with_repo_term,2.48,1.83,2.84,5,351,repository-cluster,2.15,E-PILOT-NOISE,1.15,False,
+n1_r40,L2,2,query_level,1.89,1.45,2.62,5,351,repository-cluster,2.15,E-PILOT-NOISE,0.88,False,
+n1_r40,L2,3,with_repo_term,2.25,1.6,2.57,5,351,repository-cluster,,,,,
+n1_r40,L2,3,query_level,1.58,1.23,2.18,5,351,repository-cluster,,,,,
+n1_r40,L2,2,pooled_seed_sd_all_cells,0.77,,,5,351,,0.77,seed SD quoted in the entry,,,"{""n1_r40_filter_bm25"": 2, ""n1_r40_filter_srs"": 2, ""n1_r40_oracle"": 2, ""n1_r40_raw"": 2, ""n1_r40_sub"": 2, ""n1_r40_weight_srs"": 2}"
+n1_r40,L3,2,with_repo_term,4.85,3.15,7.26,2,155,queries within repository,1.86,E-PILOT-NOISE,2.61,True,
+n1_r40,L3,2,query_level,1.83,1.34,3.09,2,155,queries within repository,1.86,E-PILOT-NOISE,0.98,False,
+n1_r40,L3,3,with_repo_term,4.77,3.02,7.11,2,155,queries within repository,,,,,
+n1_r40,L3,3,query_level,1.59,1.19,2.59,2,155,queries within repository,,,,,
+n1_r40,L3,2,pooled_seed_sd_all_cells,0.662,,,2,155,,0.66,seed SD quoted in the entry,,,"{""n1_r40_filter_bm25"": 2, ""n1_r40_filter_srs"": 2, ""n1_r40_oracle"": 2, ""n1_r40_raw"": 2, ""n1_r40_sub"": 2, ""n1_r40_weight_srs"": 2}"
+n8_r40,L2,2,with_repo_term,2.16,1.24,3.38,5,351,repository-cluster,2.0,E-PILOT-NOISE-SIB,1.08,False,
+n8_r40,L2,2,query_level,1.19,1.0,2.68,5,351,repository-cluster,2.0,E-PILOT-NOISE-SIB,0.6,False,
+n8_r40,L2,3,with_repo_term,2.08,1.15,2.93,5,351,repository-cluster,,,,,
+n8_r40,L2,3,query_level,1.05,0.9,2.22,5,351,repository-cluster,,,,,
+n8_r40,L2,2,pooled_seed_sd_all_cells,0.419,,,5,351,,0.42,seed SD quoted in the entry,,,"{""n8_r40_filter_bm25"": 2, ""n8_r40_filter_srs"": 2, ""n8_r40_oracle"": 2, ""n8_r40_raw"": 2, ""n8_r40_sub"": 2}"
+n8_r40,L3,2,with_repo_term,2.42,1.57,4.02,2,155,queries within repository,1.93,E-PILOT-NOISE-SIB,1.25,False,
+n8_r40,L3,2,query_level,1.69,1.06,2.77,2,155,queries within repository,1.93,E-PILOT-NOISE-SIB,0.88,False,
+n8_r40,L3,3,with_repo_term,2.24,1.42,3.77,2,155,queries within repository,,,,,
+n8_r40,L3,3,query_level,1.42,0.92,2.28,2,155,queries within repository,,,,,
+n8_r40,L3,2,pooled_seed_sd_all_cells,0.69,,,2,155,,0.69,seed SD quoted in the entry,,,"{""n8_r40_filter_bm25"": 2, ""n8_r40_filter_srs"": 2, ""n8_r40_oracle"": 2, ""n8_r40_raw"": 2, ""n8_r40_sub"": 2}"

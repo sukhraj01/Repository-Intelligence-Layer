@@ -1,0 +1,228 @@
+{
+ "noise_share": [
+  {
+   "level": "L2",
+   "noise_gain": -0.25,
+   "noise_share": -0.024,
+   "q_hi": 0.194,
+   "q_lo": -0.309,
+   "queries": 192,
+   "raw_gain": 10.73,
+   "reading": "units_all_nomod"
+  },
+  {
+   "level": "L2",
+   "noise_gain": -1.71,
+   "noise_share": -0.192,
+   "q_hi": 0.088,
+   "q_lo": -0.602,
+   "queries": 192,
+   "raw_gain": 8.88,
+   "reading": "units_all"
+  },
+  {
+   "level": "L3",
+   "noise_gain": 0.35,
+   "noise_share": 0.029,
+   "q_hi": 0.239,
+   "q_lo": -0.245,
+   "queries": 155,
+   "raw_gain": 11.87,
+   "reading": "units_all_nomod"
+  },
+  {
+   "level": "L3",
+   "noise_gain": -0.87,
+   "noise_share": -0.089,
+   "q_hi": 0.154,
+   "q_lo": -0.394,
+   "queries": 155,
+   "raw_gain": 9.79,
+   "reading": "units_all"
+  }
+ ],
+ "runs": {
+  "t4a_curr_cre": [
+   0,
+   1,
+   2
+  ],
+  "t4a_currrev_cre": [
+   0,
+   1,
+   2
+  ],
+  "t4a_filter_bm25": [
+   0,
+   1,
+   2
+  ],
+  "t4a_filter_cre": [
+   0,
+   1,
+   2
+  ],
+  "t4a_filter_srs": [
+   0,
+   1,
+   2
+  ],
+  "t4a_noise": [
+   0,
+   1,
+   2
+  ],
+  "t4a_raw": [
+   0,
+   1,
+   2
+  ],
+  "t4a_weight_cre": [
+   0,
+   1,
+   2
+  ]
+ },
+ "tables": [
+  "results/tables/t4/t4a_effects.csv",
+  "results/tables/t4/t4a_seeds.csv",
+  "results/tables/t4/t4a_runs.csv",
+  "results/tables/t4/t4a_noise_share.csv"
+ ],
+ "trigger": {
+  "cells": [
+   {
+    "condition": "t4a_filter_bm25",
+    "d": -0.97,
+    "excludes_zero": true,
+    "hi": -0.12,
+    "interval": "repository-clustered",
+    "level": "L2",
+    "lo": -3.95
+   },
+   {
+    "condition": "t4a_filter_srs",
+    "d": -0.7,
+    "excludes_zero": true,
+    "hi": -0.35,
+    "interval": "repository-clustered",
+    "level": "L2",
+    "lo": -1.93
+   },
+   {
+    "condition": "t4a_filter_cre",
+    "d": -1.37,
+    "excludes_zero": true,
+    "hi": -1.02,
+    "interval": "repository-clustered",
+    "level": "L2",
+    "lo": -2.14
+   },
+   {
+    "condition": "t4a_weight_cre",
+    "d": -0.51,
+    "excludes_zero": true,
+    "hi": -0.19,
+    "interval": "repository-clustered",
+    "level": "L2",
+    "lo": -1.8
+   },
+   {
+    "condition": "t4a_curr_cre",
+    "d": -0.54,
+    "excludes_zero": false,
+    "hi": 0.16,
+    "interval": "repository-clustered",
+    "level": "L2",
+    "lo": -1.13
+   },
+   {
+    "condition": "t4a_currrev_cre",
+    "d": -0.48,
+    "excludes_zero": false,
+    "hi": 0.21,
+    "interval": "repository-clustered",
+    "level": "L2",
+    "lo": -1.29
+   },
+   {
+    "condition": "t4a_filter_bm25",
+    "d": -1.01,
+    "excludes_zero": true,
+    "hi": -0.3,
+    "interval": "query-level",
+    "level": "L3",
+    "lo": -1.72
+   },
+   {
+    "condition": "t4a_filter_srs",
+    "d": -0.52,
+    "excludes_zero": false,
+    "hi": 0.2,
+    "interval": "query-level",
+    "level": "L3",
+    "lo": -1.21
+   },
+   {
+    "condition": "t4a_filter_cre",
+    "d": -0.12,
+    "excludes_zero": false,
+    "hi": 0.69,
+    "interval": "query-level",
+    "level": "L3",
+    "lo": -0.95
+   },
+   {
+    "condition": "t4a_weight_cre",
+    "d": -0.36,
+    "excludes_zero": true,
+    "hi": -0.07,
+    "interval": "query-level",
+    "level": "L3",
+    "lo": -0.65
+   },
+   {
+    "condition": "t4a_curr_cre",
+    "d": -1.05,
+    "excludes_zero": true,
+    "hi": -0.54,
+    "interval": "query-level",
+    "level": "L3",
+    "lo": -1.6
+   },
+   {
+    "condition": "t4a_currrev_cre",
+    "d": 0.14,
+    "excludes_zero": false,
+    "hi": 0.81,
+    "interval": "query-level",
+    "level": "L3",
+    "lo": -0.42
+   }
+  ],
+  "i_any_excludes_zero": true,
+  "ii_raw_gap_above_1": false,
+  "raw_seed_gap": [
+   {
+    "level": "L2",
+    "per_seed": [
+     29.7,
+     29.99,
+     29.37
+    ],
+    "range": 0.62
+   },
+   {
+    "level": "L3",
+    "per_seed": [
+     46.12,
+     45.23,
+     46.15
+    ],
+    "range": 0.91
+   }
+  ],
+  "reading": "units_all_nomod"
+ },
+ "version": "t4-tables/v1"
+}
