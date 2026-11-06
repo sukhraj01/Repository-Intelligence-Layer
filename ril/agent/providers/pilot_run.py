@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import time
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
@@ -26,6 +26,7 @@ from ril.agent.providers.patch_format import (
     parse_edits,
     reask_message,
 )
+from ril.agent.providers.screen import screen_text
 
 PREPARED_VERSION = "rq3-pilot-prepared/v1"
 
@@ -33,8 +34,16 @@ PREPARED_VERSION = "rq3-pilot-prepared/v1"
 # ---------------------------------------------------------------------------- prepare
 
 
-def prepare_items(context_rows: Iterable[Mapping[str, Any]], out_dir: str | Path) -> int:
+def prepare_items(
+    context_rows: Iterable[Mapping[str, Any]],
+    out_dir: str | Path,
+    allowed_email_digests: Collection[str] = (),
+    forbidden_emails: Iterable[str] = (),
+) -> int:
     """Write ``items.jsonl`` and ``prompts/<sha>.txt``; return the number of items.
+
+    A prompt that fails ``screen_text`` (home-directory path, credential-shaped string, e-mail
+    address not on the reviewed list) raises before anything is written for it.
 
     A row must carry ``instance_id``, ``arm``, ``issue``, ``context``, ``context_sha256`` and
     ``files`` (the paths the context shows). The context is checked against its hash, so the bytes
@@ -53,6 +62,10 @@ def prepare_items(context_rows: Iterable[Mapping[str, Any]], out_dir: str | Path
         if sha256_text(context) != row["context_sha256"]:
             raise ValueError(f"{key}: context does not match its recorded hash")
         prompt = build_prompt(str(row["issue"]), context)
+        findings = screen_text(prompt, allowed_email_digests, forbidden_emails)
+        if findings:
+            kinds = sorted({f.kind for f in findings})
+            raise ValueError(f"{key}: prompt not sendable ({', '.join(kinds)})")
         digest = sha256_text(prompt)
         (root / "prompts" / f"{digest}.txt").write_text(prompt, encoding="utf-8")
         items.append(

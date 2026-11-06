@@ -27,6 +27,18 @@ from ril.util.log import get_logger  # noqa: E402  (same)
 from ril.util.seed import set_seed  # noqa: E402  (same)
 
 LIMITS_FILE = Path(__file__).resolve().parents[1] / "configs" / "agent" / "gemini_limits.yaml"
+EMAIL_DIGESTS = (
+    Path(__file__).resolve().parents[1] / "configs" / "agent" / "prompt_email_digests.txt"
+)
+
+
+def _operator_emails() -> list[str]:
+    import subprocess
+
+    out = subprocess.run(
+        ["git", "config", "user.email"], capture_output=True, text=True, check=False
+    ).stdout.strip()
+    return [out] if out else []
 
 
 def cmd_prepare(args: argparse.Namespace) -> int:
@@ -65,7 +77,9 @@ def cmd_prepare(args: argparse.Namespace) -> int:
         )
         for f in failures:
             log.warning("skipped %s: %s", f["instance"], f["reason"])
-    n = prepare_items(rows, args.out_dir)
+    from ril.agent.providers.screen import load_allowed_digests
+
+    n = prepare_items(rows, args.out_dir, load_allowed_digests(EMAIL_DIGESTS), _operator_emails())
     log.info("prepared %d items in %s", n, args.out_dir)
     return 0
 
@@ -85,6 +99,13 @@ def cmd_run(args: argparse.Namespace) -> int:
     log = get_logger("rq3_pilot")
     limits = load_limits(args.limits)
     items = load_items(args.prepared_dir)
+    from ril.agent.providers.screen import load_allowed_digests, screen_items
+
+    refused = screen_items(items, load_allowed_digests(EMAIL_DIGESTS), _operator_emails())
+    if refused:
+        for name, found in sorted(refused.items()):
+            log.error("%s not sendable: %s", name, sorted({f.kind for f in found}))
+        return 4
     units = plan_units(items, args.runs)
     done = CallLog(Path(args.log_dir)).by_unit()
     todo = sum(1 for u, _ in units if not any(r["final"] for r in done.get(u, [])))

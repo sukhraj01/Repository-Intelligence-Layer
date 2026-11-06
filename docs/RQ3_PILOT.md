@@ -1,6 +1,6 @@
 # RQ3 pilot: cost, variance and feasibility of measuring resolved rate
 
-**Status: design of the pilot, `provisional: D104`.** The pilot measures what an RQ3 run costs and how
+**Status: design of the pilot, `provisional: D104`. Run started 2026-11-06 14:31 UTC (see "Run in progress").** The pilot measures what an RQ3 run costs and how
 much it varies. It is not the RQ3 result. The language model of the final RQ3 runs is decided after the
 pilot (ADR-008 stays open); the scaffold is ADR-007 (Proposed). Code: `ril/agent/providers/`,
 `scripts/rq3_pilot.py`. Experiment entry: `E-RQ3-PILOT-PREP` in `docs/experiments/B.md`.
@@ -26,9 +26,7 @@ guaranteed, can change; stored with their date in `configs/agent/gemini_limits.y
    no call at all at B = 16,000. They are not excluded by the request limit, only by the token limit;
    they are a different model family, so a pilot on them would measure a different cost. The exact model string and the date go into every call row. Free-tier limits are not guaranteed and
    the model is a moving target, so the pilot measures cost and variance only. Declared fallback: a
-   pinned paid version on Tier 1 billing with a hard spend cap. Free-tier terms on the use of submitted
-   content were not read here; the inputs are public issue texts and public source files, but the terms
-   should be read before the first call.
+   pinned paid version on Tier 1 billing with a hard spend cap. Terms of use: see "Terms of use" below.
 2. **Scaffold.** Agentless-style with retrieval supplied: one prompt per instance holding the issue text
    and the assembled context (`specs/assembly.md`, ADR-014; the same assembly for every arm), one repair
    call at temperature 0 asking for edits in a fixed format (`ril/agent/providers/patch_format.py`),
@@ -44,6 +42,20 @@ instance, the realised prompt tokens against the approximate count, the malforme
 rate of 429 answers. If calls per instance exceed 3, the unusable-reply rate exceeds a third, or the day
 cap is hit before 100 units finish, the free tier is not workable and the paid fallback applies. Time-box:
 one day of calls.
+
+## Terms of use (read on the provider's terms page on 2026-11-06; decision recorded the same day)
+
+For the unpaid API quota the provider's terms say that submitted content and responses may be used to
+improve its products and may be read by human reviewers (disconnected from the account, key and project),
+and they advise against submitting sensitive, confidential or personal information. Decision: the pilot
+submits public repository text only (issues, code at public commits, public patches); nothing from the
+team's own writing, no keys, no personal data. Enforced in code: `ril/agent/providers/screen.py` rejects a
+prompt that holds a path under a home directory, a credential-shaped string, or an e-mail address not on a
+reviewed list, at `prepare` and again at `run` before any call (`tests/unit/test_providers_screen.py`). Public
+source files and issues do carry addresses (project contacts, author lines, placeholders): the 16 found in the
+200 prompts were read where they occur and listed by SHA-256 in `configs/agent/prompt_email_digests.txt`
+(no address is written to a tracked file); the operator's own git address is rejected even if listed. The
+terms are also a reason for the paid fallback declared in ADR-008.
 
 ## Instances
 
@@ -174,6 +186,31 @@ mix (134 of 224).
 
 **Code.** `ril/evaluation/executor/` (`evaluate(spec, patch, config)` serves a gold patch and a model patch alike),
 `scripts/rq3_exec.py`, `scripts/ada/rq3_exec/`; tests `tests/unit/test_executor.py`.
+## Run in progress (started 2026-11-06, 14:31 UTC, engineer's machine)
+
+Model string `gemini-3.5-flash-lite`, temperature 0, seed field 0, 200 prompts (100 dev instances, BM25 and
+RRF first stages, budget 8,000 model tokens), two runs each: 400 units. Daily cap used: 450 of 500 (margin
+0.9), 13 requests a minute. Prepared prompts: `~/ril_rq3_pilot/prepared_dev100_b8000` (copied from the cluster
+with a per-file SHA-256 comparison, 202 of 202 files equal); log directory `~/ril_rq3_pilot/log_dev100_b8000`
+(outside the repository; `calls.jsonl`, `limiter.jsonl`, `run.out`, `pid`). The limiter stops the run at the
+daily cap by design; the same command continues after Pacific midnight (08:00 UTC) without repeating finished
+calls. Expected finish: about 620 calls (1.5 calls per unit in the first 10 minutes), so the first day stops
+near 450 and the second day finishes the rest, on 2026-11-07 after 08:00 UTC.
+
+Resume (run from the repository root; same command every day until `report` shows 400 final units):
+
+```
+cd <repository root> && nohup caffeinate -i poetry run python scripts/rq3_pilot.py run ~/ril_rq3_pilot/prepared_dev100_b8000 ~/ril_rq3_pilot/log_dev100_b8000 >> ~/ril_rq3_pilot/log_dev100_b8000/run.out 2>&1 &
+```
+
+Status: `poetry run python scripts/rq3_pilot.py report ~/ril_rq3_pilot/log_dev100_b8000`.
+
+First ten minutes (133 calls, 85 units started): no 429, no 5xx, no retry, all HTTP 200; latency p50 2.1 s,
+p95 6.1 s; approximate tokens per model token on the first message p50 1.01 (p5 0.96, p95 1.04); first replies
+unusable 35% (BM25) and 24% (RRF), unusable after re-asks 28% and 17% (mostly `no_edit_block`, then
+`path_not_in_context` and `empty_reply`). Of the first 20 calls 10 were unusable, exactly half, so the stop
+rule (more than half) did not fire; the unusable share is near the one-third line of the flip experiment above and is
+read from the full day's rows, not from these. The prompt format was not changed.
 
 ## Smoke test (2026-11-06, three calls, `results/rq3_pilot/smoke_2026-11-06/`)
 

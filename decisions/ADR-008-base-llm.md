@@ -68,3 +68,13 @@ measured); it is a different model family. Adapter, limiter and tests: `ril/agen
 
 **Cheapest flip:** the smoke run of at most three calls and the first day's rows (calls per instance, realised prompt
 tokens, unusable-reply rate, 429 count); time-box one day. Not done: no call has been made.
+
+## Addendum 2026-11-06 (second) — terms of use of the unpaid quota
+
+**Evidence class: read on the provider's terms page on 2026-11-06.** For the unpaid Gemini API quota the terms say
+submitted content and responses may be used to improve the provider's products and may be read by human reviewers
+(disconnected from the account, key and project), and advise not to submit sensitive, confidential or personal
+information. **Decision:** the pilot submits public repository text only; a prompt-preparation test rejects a home
+directory path, an unreviewed e-mail address or a credential-shaped string (`docs/RQ3_PILOT.md`, "Terms of use"). The
+terms are a second reason, beside the limits, for the declared paid fallback (a pinned version on billed use, whose
+terms differ and are to be read before use).
