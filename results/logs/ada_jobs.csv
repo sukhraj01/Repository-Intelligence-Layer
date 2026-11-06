@@ -142,3 +142,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-06,A,61884,RQ3P,prepare prompts at budget 9760 approximate tokens (100 instances; superseded),u22,4,0,00:09:27,0.0,COMPLETED
 2026-11-06,A,61885,RQ3P,part A joint table of Python version by pre-install step,u22,2,0,00:00:02,0.0,COMPLETED
 2026-11-06,A,61889,RQ3P,prepare prompts at budget 8000 model tokens (ratio 1.0; 100 instances; the pilot's prompt set),u22,4,0,00:09:19,0.0,COMPLETED
+2026-11-06,A,61929,RQ3P,reachability of the model API host from a compute node (no key),u22,1,0,00:00:06,0.0,COMPLETED
