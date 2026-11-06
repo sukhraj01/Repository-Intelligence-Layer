@@ -15,6 +15,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | E-EVAL-REPOS | RQ2/RQ3 (evaluation set, inventory) | nothing varies: a table of every CORE-Bench repository as a candidate evaluation repository; no repository is chosen | held-out list v2, the stored unit records and dense stores, the pool listing and the mining population (seed 0, 5,000 directories) | none (no randomness) | `results/tables/eval_repo_inventory.csv`, `results/logs/eval_repo_inventory_2026-11-05.json` | done 2026-11-05 (counts measured; sizes and costs of unbuilt repositories estimated; language class is a screen) |
 | E-EVAL-REPOS-BUILD | RQ2/RQ3 (evaluation set, build) | nothing varies: unit records, instance caches and dense stores of the eight repositories fixed by D100; no retrieval result is computed or read | the dev build pipeline (e1 units, e3 prepare, x2 prepare, base encoder at 512 tokens, float16), BM25 parameters of the dev configuration | none (no randomness; seed 0 recorded) | `configs/experiments/eval_repos_v1_build.yaml`, `results/tables/eval_repo_build_measured.csv`, `results/logs/eval_repos_build_2026-11-06.json` | done 2026-11-06 (build measured; no evaluation) |
 | E-ASSEMBLY | RQ3 (apparatus, evidence) | the token budget B (4,000 / 8,000 / 16,000 / 32,000) and the first stage (BM25; the stored RRF(BM25, CodeRankEmbed t1024, k 100)) | the assembly policy of ADR-014 (unit cap 1,000 tokens, 200 candidates, class units in header form, approximate tokenizer), the E3 cache and D18 readings, the stored dense scores, dev and Verified-six instances; nothing is trained | none (no randomness except the bootstrap, seed 0) | per-query rows of the run, summary tables, latency rows of `assemble` and `end_to_end` (`results/rq3/assembly_gold_2026-11-06/`, `results/tables/assembly/`, `results/latency/latency_log.csv`) | measured, exploratory 2026-11-06 |
+| E-ASSEMBLY-CAP | RQ3 (apparatus, evidence) | the cap on the text of one unit (500 / 1,000 / 2,000 approximate tokens) | the assembly policy of ADR-014 otherwise, the E3 cache and D18 readings, the stored dense scores, budgets 4,000 to 32,000, both first stages, dev instances only (Verified-six not read) | none (bootstrap seed 0) | per-query rows, selection and paired tables (`results/rq3/assembly_cap_2026-11-06/`, `results/tables/assembly_cap/`) | measured, exploratory 2026-11-06 |
 | E-LABEL-AUDIT-SHEET | RQ2 (data, noise audit) | nothing varies: a stratified sample of the pilot mined set is drawn and put on a sheet for human readers; nothing is trained | the pilot mined set (`non_test` reading, 1,286 directories, 7,081 positives), BM25 ranks of E-MINED-PILOT, K = 20 at positive level (O3), the sheet columns and truncation rules of `docs/LABEL_AUDIT.md` | 0 (draw and shuffles) | `results/audit/pilot_v1/sample_meta.json`; sheets and key untracked under `data/review/label_audit_pilot_v1/` | built 2026-11-05; nobody has read any pair |
 | E-STORED-ANALYSIS | RQ2 (evidence) | nothing is trained or re-run: four readings of per-query rows already stored under `results/rq2/` | every stored run, query set, gold reading and metric as in E-PILOT-ARMS2 | none (no randomness except the bootstrap, seed 0) | variance components and minimum detectable differences; per-query gain by slice; per-query winner and best-of-arms oracle; per-query loss under injected noise | done 2026-11-02 (exploratory; Part A tables and checkpoint inventory) |
 
@@ -503,3 +504,43 @@ Reading (inference from the measured counts). (1) Every number rises with B and 
 
 What this does not show: nothing about agent behaviour, nothing about the agent's own tokenizer (budget is in approximate tokens), nothing about expansion (off), nothing about the eight evaluation repositories, nothing about the retrievers of the RQ2 arms. The Verified-six values are the single stated setting, read once.
 
+## E-ASSEMBLY-CAP: which per-unit cap keeps the most gold units intact in the assembled context? Exploratory, rule stated 2026-11-06 (decision D103, before any number of the re-run was computed)
+
+Status: exploratory, outside the pre-registered RQ tables. CPU only; no GPU-hours. Evidence class: measured (counts on stored first-stage scores); the rule is reasoned and is recorded in the ADR-014 addendum of 2026-11-06, committed before the job was submitted. Code: `ril/assembly/measure.py` (cap grid), `ril/analysis/assembly_tables.py` (`cap_selection_rows`, `select_cap`, `paired_rows`), `scripts/assembly_run.py cap_tables`, job `scripts/ada/assembly_cap.sbatch`, configuration `configs/experiments/assembly_cap.yaml`, tests `tests/unit/test_assembly_measure.py`.
+
+**Why.** In E-ASSEMBLY part of the gold that reached the context was cut by the 1,000-token unit cap (Verified-six, L2, B 8,000, BM25: 30.7% of gold units included, 23.2% intact). ADR-014 named a re-run at 500 and 2,000 as the cheapest flip experiment.
+
+**What varies.** The unit cap: 500, 1,000 (the default), 2,000 approximate tokens. **What is fixed.** Everything else of E-ASSEMBLY: 200 candidates in rank order, class units in header form, the approximate tokenizer, the E3 cache with the D18 readings, stored dense scores (CodeRankEmbed t1024, RRF k 100), budgets 4,000 / 8,000 / 16,000 / 32,000, first stages BM25 and RRF. **Instances.** Role `dev` only (437 instances; 354 have both first stages; matched queries 351 at L2 and 155 at L3 under the primary reading). The test role is not in the configuration: Verified-six was read once in E-ASSEMBLY and is not read again.
+
+**Rule (fixed before the run).** Selection metric: share of gold units included intact (`units_all_nomod`), mean over the matched dev queries, averaged without weights over the eight cells {L2, L3} x B {8,000, 16,000} x {BM25, RRF}. Highest value wins; caps within 1.0 point of the best tie and the smaller cap wins. The share of gold files in the context is reported beside it and does not enter the choice; B 4,000 and 32,000 are reported and do not enter.
+
+Results (measured, exploratory; run `assembly_cap_2026-11-06`, ril commit c406c4d, configuration hash 71ecf03b, CPU job 61413 on account A, 1 h 25 min, peak memory 2.6 GB, 438 instances measured, 0 failed; stored dense scores for 354 of the 437 dev instances with rows, so every row below is on matched queries). Files: `results/tables/assembly_cap/` (`selection`, `paired`, `summary`, `coverage`), `results/rq3/assembly_cap_2026-11-06/` (per-query rows, hash, environment).
+
+Selection metric by cap (intact share of gold units, %, mean of the eight cells) and the gold-file share beside it:
+
+| cap | intact share (metric) | gold files in context (beside, not used) |
+|---|---|---|
+| 500 | 25.61 | 76.60 |
+| 1,000 (default) | 28.70 | 74.95 |
+| 2,000 | 29.35 | 74.12 |
+
+The best value is 2,000 (29.35); 1,000 is 0.65 points below it, within the 1.0-point tie, and 500 is 3.74 below. **The rule selects the smaller of the tied caps: 1,000, the current default.** `specs/assembly.md` and the assembly version string are unchanged. Cells (intact %, L2 / L3, B 8,000 and 16,000; BM25 then RRF) are in the selection table; the ordering 500 < 1,000 < 2,000 holds in every one of the eight cells.
+
+Reading (inference from the measured counts). (1) A larger cap raises the intact share and lowers the share of gold files in the context, because longer units use the budget: the first-fit walk includes fewer units (mean units included at B 32,000, L2, BM25: 113 at cap 500, 97 at 1,000, 92 at 2,000). The two measures move in opposite directions, so the choice depends on which one matters for the agent; the rule used only the first. (2) The gain from 1,000 to 2,000 (0.65 points) is smaller than the gain from 500 to 1,000 (3.09 points) and no interval of the difference between caps is computed, so no ordering of 1,000 and 2,000 is claimed beyond the point estimates. (3) The cap stays `provisional: D102`; no agent was run.
+
+Paired difference, RRF minus BM25, dev, at the selected cap 1,000, primary reading, points [query-level 95% interval; repository-clustered 95% interval] (all caps are in the paired table; intervals only, no multiplicity claim; dev L2 has 5 repositories, dev L3 has 2 so its clustered interval is not informative):
+
+| level | B | gold file in context | gold unit intact |
+|---|---|---|---|
+| L2 (351 queries) | 4,000 | +8.29 [4.4, 12.1]; [3.2, 15.9] | +2.98 [1.2, 4.8]; [0.3, 5.5] |
+| L2 | 8,000 | +7.51 [4.0, 11.0]; [3.5, 13.0] | +3.48 [1.8, 5.2]; [2.4, 4.9] |
+| L2 | 16,000 | +8.73 [5.7, 12.0]; [4.6, 12.9] | +3.42 [1.5, 5.4]; [0.6, 6.3] |
+| L2 | 32,000 | +4.80 [2.6, 7.3]; [2.7, 7.3] | +5.29 [3.6, 7.3]; [2.5, 8.0] |
+| L3 (155 queries) | 4,000 | +6.19 [2.0, 10.4]; [1.3, 10.7] | +2.56 [0.9, 4.2]; [0.8, 4.2] |
+| L3 | 8,000 | +6.40 [2.5, 10.2]; [0.8, 11.5] | +3.68 [2.0, 5.4]; [2.1, 5.1] |
+| L3 | 16,000 | +7.95 [4.8, 11.0]; [2.5, 12.9] | +4.72 [3.2, 6.4]; [2.7, 6.6] |
+| L3 | 32,000 | +4.74 [2.5, 7.1]; [1.7, 7.5] | +4.83 [3.2, 6.5]; [4.0, 5.6] |
+
+At cap 1,000 all 16 cells exclude 0 under both intervals. Across the 48 cells of the paired table (three caps), 46 exclude 0 under both intervals; the two that do not are gold-file differences at L3 whose clustered interval includes 0 (cap 500, B 4,000: +5.93 [-0.4, 11.7]; cap 2,000, B 8,000: +4.93 [-0.2, 9.6]), both with only two repositories. The sign is positive (RRF above BM25) in every cell. This is a dev result on 5 repositories (L2) and 2 (L3); it is not a Verified result and says nothing about the agent.
+
+What is not done: Verified-six is not read again (the cap was chosen on dev only; its Verified numbers stay those of E-ASSEMBLY at cap 1,000); no agent-model tokenizer (budgets are approximate tokens); no agent run; no expansion option; no cap other than the three; no per-repository slice of the cap effect.

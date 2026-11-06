@@ -83,3 +83,8 @@ used in the pilot.
 - **Rule.** The selected cap is the one with the highest value of that metric; if two caps are within 1.0 point of each other at the top, the smaller of them.
 - **Nothing else enters the choice.** The share of gold files in the context is reported beside the metric and is not used. B 4,000 and 32,000 are computed (same grid as E-ASSEMBLY) and reported, not used. No confidence interval enters the rule.
 - **Consequence.** The default in `specs/assembly.md` changes only if the rule selects a cap other than 1,000; then the assembly version string is bumped. The setting stays `provisional: D102` either way: this re-run does not turn the cap into a tuned result for the agent.
+
+### 2026-11-06 result of the D103 re-run (E-ASSEMBLY-CAP; measured, exploratory; dev only)
+- Selection metric by cap (intact share of gold units, %): 500: 25.61; 1,000: 28.70; 2,000: 29.35. Gold files in the context beside it: 76.60, 74.95, 74.12. The rule selects 1,000 (0.65 below the best, inside the 1.0-point tie). The default, `specs/assembly.md` and `ASSEMBLY_VERSION` are unchanged; the setting stays `provisional: D102`; no deviation from anything settled.
+- A larger cap raises the intact share and lowers the file share, so the choice between 1,000 and 2,000 depends on which the agent needs; the RQ3 pilot (ADR-007) with the cap varied remains the real test. Verified-six was not read again.
+- RRF minus BM25 on dev at cap 1,000: gold file in context +4.7 to +8.7 points, gold unit intact +2.6 to +5.3 over B 4,000 to 32,000, all 16 cells excluding 0 under query-level and repository-clustered intervals (dev L3: two repositories).
