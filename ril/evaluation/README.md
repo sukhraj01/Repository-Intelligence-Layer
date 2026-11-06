@@ -25,3 +25,7 @@ Design: `docs/06_core_bench.md`, `docs/08_experimental_design.md`.
   outputs in the untracked `data/review/`).
 
 Depends on: `retrieval/`, `parsing/`, `config/`.
+
+- `executor/` — patch evaluation by execution for Verified instances without root or a container (D106,
+  `docs/RQ3_PILOT.md`; `scripts/rq3_exec.py`, `scripts/ada/rq3_exec/`): environment from `uv`, patch, tests, graded outcomes,
+  the sharded gold-patch runs that fix the executable subset and the coverage and cost helpers.

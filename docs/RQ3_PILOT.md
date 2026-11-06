@@ -138,7 +138,7 @@ instance); apply the test patch; run the specification's test command on the tes
 PASSED lines; resolved means all FAIL_TO_PASS and all PASS_TO_PASS pass. Cost per instance in the three
 measured: 1 to 5 minutes on one CPU, under 0.3 GB, dominated by the package download (shared across the
 instances of one environment), and the cluster's per-user limit of 10 CPUs applies. That covers at most
-the 263 instances above (52.6% of Verified); which repositories they fall in is in
+the 263 instances above (52.6% of Verified; superseded by the measurement in "Executable evaluation (D106)" below); which repositories they fall in is in
 `results/rq3_pilot/part_a/a_env_table.csv`.
 
 **If it is judged not enough, the options** (none chosen here): a different executor with a container
@@ -148,6 +148,44 @@ subset of repositories, which changes which claim RQ3 can make); the fallback of
 (`gold_in_context` of the assembly manifest) as a proxy for resolved rate, which measures retrieval and
 not the agent's edit.
 
+## Executable evaluation (D106, measured 2026-11-06 and 2026-11-07, `E-RQ3-EXEC`)
+
+**Decision D106** (evidence class: measured counts; reasoned rule; flip experiment: the subset's difference from the 500,
+reported below and in `results/rq3_exec/subset_vs_500.csv`). RQ3's resolved rate is measured on the **executable subset**:
+the instances of SWE-bench Verified for which, on the cluster without root and without a container, the environment builds
+from the specification (no `apt-get`), the gold patch applied to the base commit makes every FAIL_TO_PASS test pass and every
+PASS_TO_PASS test still pass, in two repeated runs that agree. The subset is fixed by this procedure before any retriever's
+patch is evaluated, is stored with the reason for every exclusion (`results/rq3_exec/executable_instances_v1.json`), and is
+the same for all arms. Instances that need `apt-get` are excluded and counted; instances that need an older Python were tried
+with `uv` and then with an interpreter from conda-forge (micromamba, node-local), and are excluded only where that failed. A
+result on the subset does not carry to the excluded instances.
+
+**Numbers.** 500 instances, 429 built in both runs, **377 executable** (django 228 of 231, sympy 75 of 75, pytest 19 of 19,
+xarray 18 of 22, astropy 15 of 22, sphinx 11 of 44, requests 4 of 8, pylint 4 of 10, seaborn 2 of 2, flask 1 of 1,
+matplotlib 0 of 34, scikit-learn 0 of 32). Main exclusion causes: `apt-get` 38 (matplotlib 34), compiled installs and
+packages without a wheel for the interpreter under pip 39 (scikit-learn 32, astropy 6, pylint 1), sphinx test start 28,
+gold patch failing a test 18. Of the 140 instances that needed Python older than 3.8, 111 are executable (all of django's)
+once micromamba supplies the interpreter. The earlier figure of 263 buildable instances (above) counted only the Python
+version and the pre-install step; this measurement includes the gold run. Differences from the 500 (repository mix: django
+60.5% against 46.2%; the dataset's difficulty field; L2 and L3 label availability 84.9% and 59.4% against 86.4% and
+60.4%) are in `E-RQ3-EXEC`.
+
+**Cost.** Per instance and run: p50 17.8 s, p95 197.6 s, p99 250.8 s; peak resident size of any step p50 124.5 MB, p95 299.3
+MB, p99 443.5 MB. Evaluating one model patch costs one run (3.7 to 4.0 CPU-hours for one pass over the 377). With the
+cluster's per-user limit of 10 CPUs that is under two hours per arm and run when parallelised over four workers per job
+(arithmetic from the measured sum, not a measured wall time).
+
+**What RQ3 still needs on this subset** (reported, not chosen). Retrieval contexts need unit records: 36 of the 377 have
+them (astropy, xarray, requests, seaborn, flask); django, sympy, pytest, sphinx and pylint do not; building them is
+estimated at 3.8 to 9.1 CPU-hours and 0.5 to 10.3 GPU-hours per checkpoint, nearly all django and sympy
+(`results/rq3_exec/unit_build_estimate.csv`; an estimate from the eight-repository build's rates and one measured unit
+count per repository). Power at N = 377 (exact McNemar): minimum detectable difference 4.75 / 5.75 / 6.75 / 8.25 points at
+discordance 10 / 15 / 20 / 30%; the discordance values are placeholders and run-to-run noise is not in the model. L3
+labels exist for 224 of the 377, so the L3 claim rests on fewer instances than the table's n = 302 and on a django-heavy
+mix (134 of 224).
+
+**Code.** `ril/evaluation/executor/` (`evaluate(spec, patch, config)` serves a gold patch and a model patch alike),
+`scripts/rq3_exec.py`, `scripts/ada/rq3_exec/`; tests `tests/unit/test_executor.py`.
 ## Run in progress (started 2026-11-06, 14:31 UTC, engineer's machine)
 
 Model string `gemini-3.5-flash-lite`, temperature 0, seed field 0, 200 prompts (100 dev instances, BM25 and

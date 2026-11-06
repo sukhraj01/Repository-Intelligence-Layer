@@ -1,0 +1,6 @@
+repo,executable_instances,units_per_snapshot_one_commit,cpu_hours_low,cpu_hours_median,cpu_hours_high,gpu_hours_per_checkpoint_low,gpu_hours_per_checkpoint_median,gpu_hours_per_checkpoint_high
+django/django,228,33531,2.68,4.6,6.51,0.39,3.56,7.36
+pylint-dev/pylint,4,8965,0.01,0.02,0.03,0.0,0.02,0.03
+pytest-dev/pytest,19,4452,0.03,0.05,0.07,0.0,0.04,0.08
+sphinx-doc/sphinx,11,7120,0.03,0.05,0.07,0.0,0.04,0.08
+sympy/sympy,75,38280,1.01,1.73,2.44,0.15,1.34,2.76

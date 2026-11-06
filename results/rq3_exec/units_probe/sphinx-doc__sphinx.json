@@ -1,0 +1,227 @@
+{
+ "class_source": "full",
+ "commit": "82ef497a8c88f0f6e50d84520e7276bfbf65025d",
+ "config_hash": "2ee7dc1fe0823af488726577fcf2cca642b2a64909968849fd646c7ab2a8cfe1",
+ "configures_exploratory": {
+  "configures:dotted-name": 8,
+  "configures:entry-point": 7,
+  "configures:file-path": 2
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 7303,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 0,
+   "external": 2425,
+   "resolved": 1806,
+   "unresolved": 6
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 281,
+   "resolved": 530,
+   "unresolved": 2
+  },
+  "invoke": {
+   "ambiguous": 2745,
+   "external": 14270,
+   "resolved": 9458,
+   "unresolved": 1493
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 828,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 533,
+ "files_unparseable": 0,
+ "graph_sha256": "793c0d203a318e7e9dfa3c304b3b24168842006ea50b455913d737b35df30849",
+ "id_collisions": 17,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 1395
+  },
+  "from-import:external": {
+   "external": 1654
+  },
+  "from-import:in-repo-module-missing": {
+   "unresolved": 5
+  },
+  "from-import:module": {
+   "resolved": 84
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 145
+  },
+  "from-import:reexported-external": {
+   "external": 140
+  },
+  "from-import:star": {
+   "resolved": 1
+  },
+  "from-import:submodule": {
+   "resolved": 134
+  },
+  "import:external": {
+   "external": 631
+  },
+  "import:in-repo-module-missing": {
+   "unresolved": 1
+  },
+  "import:module": {
+   "resolved": 47
+  }
+ },
+ "invoke_by_rule": {
+  "class:function": {
+   "resolved": 453
+  },
+  "class:inherited-from-external-base": {
+   "external": 1
+  },
+  "deco:external-receiver:external": {
+   "external": 24
+  },
+  "deco:name:external": {
+   "external": 297
+  },
+  "deco:name:function": {
+   "resolved": 19
+  },
+  "deco:unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 3
+  },
+  "expr:callee-expression": {
+   "unresolved": 14
+  },
+  "expr:dynamic-getattr": {
+   "unresolved": 4
+  },
+  "expr:external": {
+   "external": 9
+  },
+  "external-receiver:external": {
+   "external": 5972
+  },
+  "instance:attribute-not-in-mro": {
+   "unresolved": 4
+  },
+  "instance:function": {
+   "resolved": 1088
+  },
+  "instance:inherited-from-external-base": {
+   "external": 569
+  },
+  "instance:name-match": {
+   "ambiguous": 1
+  },
+  "module:class-instantiation": {
+   "resolved": 200
+  },
+  "module:external": {
+   "external": 3
+  },
+  "module:function": {
+   "resolved": 555
+  },
+  "name:call-through-local-name": {
+   "unresolved": 390
+  },
+  "name:callable-instance": {
+   "resolved": 25
+  },
+  "name:class-instantiation": {
+   "resolved": 1153
+  },
+  "name:external": {
+   "external": 4294
+  },
+  "name:function": {
+   "resolved": 2784
+  },
+  "name:nested-def": {
+   "resolved": 701
+  },
+  "name:undefined-name": {
+   "unresolved": 909
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 31
+  },
+  "self:function": {
+   "resolved": 2368
+  },
+  "self:inherited-from-external-base": {
+   "external": 307
+  },
+  "self:no-in-repo-method-of-that-name": {
+   "external": 4
+  },
+  "super:attribute-not-in-mro": {
+   "unresolved": 14
+  },
+  "super:function": {
+   "resolved": 112
+  },
+  "super:inherited-from-external-base": {
+   "external": 115
+  },
+  "super:object-method": {
+   "external": 8
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 2744
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 2664
+  },
+  "unknown-receiver:too-many-name-matches": {
+   "unresolved": 127
+  }
+ },
+ "module_name_collisions": [
+  "autosummary_dummy_module",
+  "conf",
+  "foo",
+  "setup",
+  "source_parser",
+  "target"
+ ],
+ "nodes": 7304,
+ "repo_id": "sphinx-doc/sphinx",
+ "seconds": {
+  "exploratory": 0.0459,
+  "graph_build": 4.4612,
+  "parse": 1.5608
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1,
+  "file:generated": 1
+ },
+ "skipped_files": [
+  [
+   "sphinx/search/jssplitter.py",
+   "generated"
+  ]
+ ],
+ "tests_exploratory": {
+  "tests:body-invokes": 650,
+  "tests:body-invokes+name": 244,
+  "tests:name-convention": 89
+ },
+ "units": 7120,
+ "units_by_type": {
+  "class": 925,
+  "function": 1832,
+  "method": 3830,
+  "module": 533
+ },
+ "unparseable": []
+}

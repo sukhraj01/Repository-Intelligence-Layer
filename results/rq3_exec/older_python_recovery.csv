@@ -1,0 +1,4 @@
+repo,needed_older_python,now_executable,still_excluded,main_remaining_reasons
+astropy/astropy,4,0,4,not_built:pip_packages_install 4
+django/django,111,111,0,
+scikit-learn/scikit-learn,25,0,25,not_built:install 25

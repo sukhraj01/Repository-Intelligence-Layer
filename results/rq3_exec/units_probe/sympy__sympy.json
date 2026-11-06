@@ -1,0 +1,315 @@
+{
+ "class_source": "full",
+ "commit": "f5e965947af2410ded92cfad987aaf45262ea434",
+ "config_hash": "3e75a177b348643b0da2a423520e6474c3248a12efb88fbe268e7d4d8d8d7b31",
+ "configures_exploratory": {
+  "configures:dotted-name": 143,
+  "configures:file-path": 4
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 38435,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 51,
+   "external": 6350,
+   "resolved": 39913,
+   "unresolved": 66
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 260,
+   "resolved": 1433,
+   "unresolved": 56
+  },
+  "invoke": {
+   "ambiguous": 26411,
+   "external": 72660,
+   "resolved": 380910,
+   "unresolved": 301895
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 3543,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 1330,
+ "files_unparseable": 0,
+ "graph_sha256": "8bbbcb2a844eb79e543cc8ac670b216dba76d6b5f970c1ecbcfbd9cb2e46df6d",
+ "id_collisions": 113,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 35748
+  },
+  "from-import:external": {
+   "external": 1922
+  },
+  "from-import:in-repo-module-missing": {
+   "unresolved": 66
+  },
+  "from-import:module": {
+   "resolved": 95
+  },
+  "from-import:multiple-definitions": {
+   "ambiguous": 51
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 3874
+  },
+  "from-import:reexported-external": {
+   "external": 3864
+  },
+  "from-import:star": {
+   "resolved": 84
+  },
+  "from-import:submodule": {
+   "resolved": 27
+  },
+  "import:external": {
+   "external": 564
+  },
+  "import:module": {
+   "resolved": 85
+  }
+ },
+ "invoke_by_rule": {
+  "class:attribute-not-in-mro": {
+   "unresolved": 2
+  },
+  "class:attribute-with-unresolved-base": {
+   "unresolved": 84
+  },
+  "class:function": {
+   "resolved": 2367
+  },
+  "class:inherited-from-external-base": {
+   "external": 1
+  },
+  "class:name-match": {
+   "ambiguous": 3
+  },
+  "class:no-in-repo-method-of-that-name": {
+   "external": 1
+  },
+  "deco:external-receiver:external": {
+   "external": 3
+  },
+  "deco:module:module-attribute-missing": {
+   "unresolved": 5
+  },
+  "deco:name:external": {
+   "external": 2434
+  },
+  "deco:name:function": {
+   "resolved": 763
+  },
+  "deco:name:multiple-definitions": {
+   "ambiguous": 4
+  },
+  "deco:name:undefined-name": {
+   "unresolved": 193
+  },
+  "deco:unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 30
+  },
+  "expr:callable-instance": {
+   "resolved": 110
+  },
+  "expr:callee-expression": {
+   "unresolved": 384
+  },
+  "expr:dynamic-getattr": {
+   "unresolved": 31
+  },
+  "expr:external": {
+   "external": 92
+  },
+  "expr:instance-call-unknown": {
+   "unresolved": 69
+  },
+  "external-receiver:external": {
+   "external": 7401
+  },
+  "instance:attribute-not-in-mro": {
+   "unresolved": 72
+  },
+  "instance:attribute-with-unresolved-base": {
+   "unresolved": 225
+  },
+  "instance:function": {
+   "resolved": 14299
+  },
+  "instance:inherited-from-external-base": {
+   "external": 49
+  },
+  "instance:name-match": {
+   "ambiguous": 53
+  },
+  "instance:no-in-repo-method-of-that-name": {
+   "external": 5
+  },
+  "module:class-instantiation": {
+   "resolved": 586
+  },
+  "module:external": {
+   "external": 8
+  },
+  "module:function": {
+   "resolved": 388
+  },
+  "module:instance-call-unknown": {
+   "unresolved": 4
+  },
+  "module:module-attribute-missing": {
+   "unresolved": 2
+  },
+  "name:call-through-local-name": {
+   "unresolved": 5720
+  },
+  "name:callable-instance": {
+   "resolved": 1316
+  },
+  "name:class-instantiation": {
+   "resolved": 165967
+  },
+  "name:external": {
+   "external": 59207
+  },
+  "name:function": {
+   "resolved": 186425
+  },
+  "name:instance-call-unknown": {
+   "unresolved": 289995
+  },
+  "name:multiple-definitions": {
+   "ambiguous": 532
+  },
+  "name:nested-def": {
+   "resolved": 2807
+  },
+  "name:no-in-repo-method-of-that-name": {
+   "external": 15
+  },
+  "name:undefined-name": {
+   "unresolved": 3990
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 195
+  },
+  "self:attribute-with-unresolved-base": {
+   "unresolved": 127
+  },
+  "self:function": {
+   "resolved": 5682
+  },
+  "self:inherited-from-external-base": {
+   "external": 57
+  },
+  "self:multiple-definitions": {
+   "ambiguous": 1
+  },
+  "self:name-match": {
+   "ambiguous": 336
+  },
+  "self:no-in-repo-method-of-that-name": {
+   "external": 13
+  },
+  "self:too-many-name-matches": {
+   "unresolved": 2
+  },
+  "super:attribute-not-in-mro": {
+   "unresolved": 1
+  },
+  "super:attribute-with-unresolved-base": {
+   "unresolved": 14
+  },
+  "super:function": {
+   "resolved": 200
+  },
+  "super:inherited-from-external-base": {
+   "external": 19
+  },
+  "super:name-match": {
+   "ambiguous": 1
+  },
+  "super:object-method": {
+   "external": 8
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 25481
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 3317
+  },
+  "unknown-receiver:too-many-name-matches": {
+   "unresolved": 780
+  }
+ },
+ "module_name_collisions": [
+  "conf"
+ ],
+ "nodes": 38436,
+ "repo_id": "sympy/sympy",
+ "seconds": {
+  "exploratory": 0.5326,
+  "graph_build": 76.161,
+  "parse": 21.3792
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1,
+  "file:generated": 8
+ },
+ "skipped_files": [
+  [
+   "sympy/parsing/autolev/_antlr/__init__.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/autolev/_antlr/autolevlexer.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/autolev/_antlr/autolevlistener.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/autolev/_antlr/autolevparser.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/latex/_antlr/__init__.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/latex/_antlr/latexlexer.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/latex/_antlr/latexparser.py",
+   "generated"
+  ],
+  [
+   "sympy/parsing/latex/_build_latex_antlr.py",
+   "generated"
+  ]
+ ],
+ "tests_exploratory": {
+  "tests:body-invokes": 27044,
+  "tests:body-invokes+name": 6338,
+  "tests:name-convention": 2262
+ },
+ "units": 38280,
+ "units_by_type": {
+  "class": 1566,
+  "function": 23497,
+  "method": 11887,
+  "module": 1330
+ },
+ "unparseable": []
+}

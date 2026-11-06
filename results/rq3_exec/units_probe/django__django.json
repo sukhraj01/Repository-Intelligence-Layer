@@ -1,0 +1,278 @@
+{
+ "class_source": "full",
+ "commit": "42e8cf47c7ee2db238bf91197ea398126c546741",
+ "config_hash": "8fa8d5d679f94eecd773a867ff16d0a658933cb801ce2f12336371ecec33578d",
+ "configures_exploratory": {
+  "configures:dotted-name": 1,
+  "configures:entry-point": 1
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 34160,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 0,
+   "external": 3117,
+   "resolved": 12620,
+   "unresolved": 0
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 323,
+   "resolved": 6204,
+   "unresolved": 4
+  },
+  "invoke": {
+   "ambiguous": 29633,
+   "external": 54918,
+   "resolved": 57777,
+   "unresolved": 6047
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 3343,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 2684,
+ "files_unparseable": 0,
+ "graph_sha256": "1da653c229eb44942bcdbd465fe1a3e68227f75d78dc4091f517d65aeb5dd09a",
+ "id_collisions": 41,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 10230
+  },
+  "from-import:external": {
+   "external": 1207
+  },
+  "from-import:module": {
+   "resolved": 25
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 956
+  },
+  "from-import:reexported-external": {
+   "external": 546
+  },
+  "from-import:star": {
+   "resolved": 35
+  },
+  "from-import:submodule": {
+   "resolved": 1335
+  },
+  "import:external": {
+   "external": 1364
+  },
+  "import:module": {
+   "resolved": 39
+  }
+ },
+ "invoke_by_rule": {
+  "class:attribute-not-in-mro": {
+   "unresolved": 7
+  },
+  "class:attribute-with-unresolved-base": {
+   "unresolved": 5
+  },
+  "class:function": {
+   "resolved": 644
+  },
+  "class:inherited-from-external-base": {
+   "external": 11
+  },
+  "deco:class:function": {
+   "resolved": 80
+  },
+  "deco:external-receiver:external": {
+   "external": 8
+  },
+  "deco:instance:function": {
+   "resolved": 54
+  },
+  "deco:module:function": {
+   "resolved": 15
+  },
+  "deco:name:callable-instance": {
+   "resolved": 3
+  },
+  "deco:name:class-instantiation": {
+   "resolved": 198
+  },
+  "deco:name:external": {
+   "external": 1061
+  },
+  "deco:name:function": {
+   "resolved": 136
+  },
+  "deco:name:undefined-name": {
+   "unresolved": 13
+  },
+  "deco:unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 33
+  },
+  "expr:callable-instance": {
+   "resolved": 97
+  },
+  "expr:callee-expression": {
+   "unresolved": 186
+  },
+  "expr:dynamic-getattr": {
+   "unresolved": 33
+  },
+  "expr:external": {
+   "external": 54
+  },
+  "expr:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "external-receiver:external": {
+   "external": 9167
+  },
+  "instance:attribute-not-in-mro": {
+   "unresolved": 1476
+  },
+  "instance:attribute-with-unresolved-base": {
+   "unresolved": 964
+  },
+  "instance:function": {
+   "resolved": 7196
+  },
+  "instance:inherited-from-external-base": {
+   "external": 68
+  },
+  "instance:name-match": {
+   "ambiguous": 62
+  },
+  "instance:no-in-repo-method-of-that-name": {
+   "external": 1
+  },
+  "module:callable-instance": {
+   "resolved": 100
+  },
+  "module:class-instantiation": {
+   "resolved": 7660
+  },
+  "module:external": {
+   "external": 6
+  },
+  "module:function": {
+   "resolved": 1625
+  },
+  "module:module-attribute-missing": {
+   "unresolved": 189
+  },
+  "module:multiple-definitions": {
+   "ambiguous": 15
+  },
+  "name:call-through-local-name": {
+   "unresolved": 962
+  },
+  "name:callable-instance": {
+   "resolved": 66
+  },
+  "name:class-instantiation": {
+   "resolved": 14952
+  },
+  "name:external": {
+   "external": 16959
+  },
+  "name:function": {
+   "resolved": 8802
+  },
+  "name:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "name:multiple-definitions": {
+   "ambiguous": 6
+  },
+  "name:nested-def": {
+   "resolved": 1486
+  },
+  "name:undefined-name": {
+   "unresolved": 531
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 1163
+  },
+  "self:attribute-with-unresolved-base": {
+   "unresolved": 33
+  },
+  "self:callable-instance": {
+   "resolved": 5
+  },
+  "self:function": {
+   "resolved": 13507
+  },
+  "self:inherited-from-external-base": {
+   "external": 23644
+  },
+  "self:name-match": {
+   "ambiguous": 15
+  },
+  "self:no-in-repo-method-of-that-name": {
+   "external": 20
+  },
+  "super:attribute-not-in-mro": {
+   "unresolved": 24
+  },
+  "super:attribute-with-unresolved-base": {
+   "unresolved": 39
+  },
+  "super:function": {
+   "resolved": 1151
+  },
+  "super:inherited-from-external-base": {
+   "external": 175
+  },
+  "super:name-match": {
+   "ambiguous": 1
+  },
+  "super:object-method": {
+   "external": 61
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 29534
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 3650
+  },
+  "unknown-receiver:too-many-name-matches": {
+   "unresolved": 420
+  }
+ },
+ "module_name_collisions": [
+  "0001_initial",
+  "apps"
+ ],
+ "nodes": 34161,
+ "repo_id": "django/django",
+ "seconds": {
+  "exploratory": 0.3422,
+  "graph_build": 19.5694,
+  "parse": 7.5601
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1,
+  "dir:vendored": 3
+ },
+ "skipped_files": [],
+ "tests_exploratory": {
+  "tests:body-invokes": 12807,
+  "tests:body-invokes+name": 1875,
+  "tests:class-name-convention": 1,
+  "tests:name-convention": 936
+ },
+ "units": 33531,
+ "units_by_type": {
+  "class": 6573,
+  "function": 1548,
+  "method": 22726,
+  "module": 2684
+ },
+ "unparseable": []
+}

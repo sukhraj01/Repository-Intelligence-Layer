@@ -1,0 +1,330 @@
+{
+ "class_source": "full",
+ "commit": "273a8b25620467c1e5686aa8d2a1dbb8c02c78d0",
+ "config_hash": "9c80f50501c53cfcbbf82f01efd91cafd7db8a2922422e9cff2e4bc8faca93dd",
+ "configures_exploratory": {
+  "configures:dotted-name": 3,
+  "configures:entry-point": 4,
+  "configures:file-path": 12
+ },
+ "edges_by_type_and_status": {
+  "contain": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 9294,
+   "unresolved": 0
+  },
+  "import": {
+   "ambiguous": 2,
+   "external": 2888,
+   "resolved": 1122,
+   "unresolved": 21
+  },
+  "inherit": {
+   "ambiguous": 0,
+   "external": 860,
+   "resolved": 537,
+   "unresolved": 16
+  },
+  "invoke": {
+   "ambiguous": 891,
+   "external": 11620,
+   "resolved": 5470,
+   "unresolved": 348
+  },
+  "override": {
+   "ambiguous": 0,
+   "external": 0,
+   "resolved": 405,
+   "unresolved": 0
+  }
+ },
+ "files_parsed": 1440,
+ "files_unparseable": 10,
+ "graph_sha256": "20c6b5031a9fe591f0b447de25271987be3e7f5fadf5deed2c361801f2e7386d",
+ "id_collisions": 215,
+ "import_by_rule": {
+  "from-import:definition": {
+   "resolved": 899
+  },
+  "from-import:external": {
+   "external": 1610
+  },
+  "from-import:in-repo-module-missing": {
+   "unresolved": 16
+  },
+  "from-import:in-repo-package-without-init": {
+   "unresolved": 1
+  },
+  "from-import:module": {
+   "resolved": 1
+  },
+  "from-import:multiple-definitions": {
+   "ambiguous": 2
+  },
+  "from-import:name-not-a-definition": {
+   "resolved": 45
+  },
+  "from-import:reexported-external": {
+   "external": 147
+  },
+  "from-import:relative-beyond-top": {
+   "unresolved": 4
+  },
+  "from-import:star": {
+   "resolved": 5
+  },
+  "from-import:submodule": {
+   "resolved": 148
+  },
+  "import:external": {
+   "external": 1131
+  },
+  "import:module": {
+   "resolved": 24
+  }
+ },
+ "invoke_by_rule": {
+  "class:attribute-not-in-mro": {
+   "unresolved": 7
+  },
+  "class:function": {
+   "resolved": 161
+  },
+  "class:multiple-definitions": {
+   "ambiguous": 1
+  },
+  "deco:external-receiver:external": {
+   "external": 139
+  },
+  "deco:name:callable-instance": {
+   "resolved": 1
+  },
+  "deco:name:class-instantiation": {
+   "resolved": 3
+  },
+  "deco:name:external": {
+   "external": 466
+  },
+  "deco:name:function": {
+   "resolved": 24
+  },
+  "deco:name:undefined-name": {
+   "unresolved": 30
+  },
+  "deco:unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 36
+  },
+  "expr:callee-expression": {
+   "unresolved": 28
+  },
+  "expr:external": {
+   "external": 16
+  },
+  "expr:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "external-receiver:external": {
+   "external": 3479
+  },
+  "instance:attribute-not-in-mro": {
+   "unresolved": 20
+  },
+  "instance:attribute-with-unresolved-base": {
+   "unresolved": 5
+  },
+  "instance:function": {
+   "resolved": 564
+  },
+  "instance:inherited-from-external-base": {
+   "external": 14
+  },
+  "instance:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "instance:multiple-definitions": {
+   "ambiguous": 3
+  },
+  "instance:name-match": {
+   "ambiguous": 11
+  },
+  "instance:no-in-repo-method-of-that-name": {
+   "external": 4
+  },
+  "module:class-instantiation": {
+   "resolved": 55
+  },
+  "module:external": {
+   "external": 3
+  },
+  "module:function": {
+   "resolved": 478
+  },
+  "module:module-attribute-missing": {
+   "unresolved": 1
+  },
+  "module:multiple-definitions": {
+   "ambiguous": 6
+  },
+  "name:call-through-local-name": {
+   "unresolved": 107
+  },
+  "name:callable-instance": {
+   "resolved": 2
+  },
+  "name:class-instantiation": {
+   "resolved": 1034
+  },
+  "name:external": {
+   "external": 6039
+  },
+  "name:function": {
+   "resolved": 1245
+  },
+  "name:instance-call-unknown": {
+   "unresolved": 1
+  },
+  "name:multiple-definitions": {
+   "ambiguous": 8
+  },
+  "name:nested-def": {
+   "resolved": 144
+  },
+  "name:undefined-name": {
+   "unresolved": 71
+  },
+  "self:attribute-not-in-mro": {
+   "unresolved": 17
+  },
+  "self:attribute-with-unresolved-base": {
+   "unresolved": 8
+  },
+  "self:function": {
+   "resolved": 1643
+  },
+  "self:inherited-from-external-base": {
+   "external": 35
+  },
+  "self:name-match": {
+   "ambiguous": 1
+  },
+  "self:no-in-repo-method-of-that-name": {
+   "external": 5
+  },
+  "super:attribute-not-in-mro": {
+   "unresolved": 42
+  },
+  "super:attribute-with-unresolved-base": {
+   "unresolved": 6
+  },
+  "super:function": {
+   "resolved": 116
+  },
+  "super:inherited-from-external-base": {
+   "external": 28
+  },
+  "super:multiple-definitions": {
+   "ambiguous": 1
+  },
+  "super:object-method": {
+   "external": 25
+  },
+  "unknown-receiver:name-match": {
+   "ambiguous": 860
+  },
+  "unknown-receiver:no-in-repo-method-of-that-name": {
+   "external": 1331
+  },
+  "unknown-receiver:too-many-name-matches": {
+   "unresolved": 3
+  }
+ },
+ "module_name_collisions": [
+  "bad",
+  "conftest",
+  "good",
+  "missing_param_doc",
+  "module",
+  "package",
+  "package.subpackage",
+  "package.subpackage.module",
+  "syntax_error",
+  "useless_suppression"
+ ],
+ "nodes": 9295,
+ "repo_id": "pylint-dev/pylint",
+ "seconds": {
+  "exploratory": 0.0558,
+  "graph_build": 3.2548,
+  "parse": 1.4759
+ },
+ "seed": 0,
+ "skipped": {
+  "dir:cache-or-build": 1,
+  "file:symlink": 2
+ },
+ "skipped_files": [
+  [
+   "tests/functional/s/symlink/_binding/__init__.py",
+   "symlink"
+  ],
+  [
+   "tests/functional/s/symlink/_binding/symlink_module.py",
+   "symlink"
+  ]
+ ],
+ "tests_exploratory": {
+  "tests:body-invokes": 624,
+  "tests:body-invokes+name": 112,
+  "tests:name-convention": 44
+ },
+ "units": 8965,
+ "units_by_type": {
+  "class": 1895,
+  "function": 2408,
+  "method": 3222,
+  "module": 1440
+ },
+ "unparseable": [
+  [
+   "tests/functional/s/star/star_needs_assignment_target_py37.py",
+   "SyntaxError: cannot use starred expression here (star_needs_assignment_target_py37.py, line 15)"
+  ],
+  [
+   "tests/functional/s/syntax/syntax_error.py",
+   "SyntaxError: invalid syntax (syntax_error.py, line 1)"
+  ],
+  [
+   "tests/functional/s/syntax/syntax_error_jython.py",
+   "SyntaxError: invalid syntax (syntax_error_jython.py, line 1)"
+  ],
+  [
+   "tests/functional/t/tokenize_error.py",
+   "SyntaxError: unexpected EOF while parsing (tokenize_error.py, line 6)"
+  ],
+  [
+   "tests/functional/t/tokenize_error_jython.py",
+   "SyntaxError: unexpected EOF while parsing (tokenize_error_jython.py, line 7)"
+  ],
+  [
+   "tests/functional/u/unknown_encoding_jython.py",
+   "SyntaxError: unknown encoding: IBO-8859-1"
+  ],
+  [
+   "tests/input/func_w0122_py_30.py",
+   "SyntaxError: Missing parentheses in call to 'exec'. Did you mean exec(...)? (func_w0122_py_30.py, line 5)"
+  ],
+  [
+   "tests/regrtest_data/bad_package/__init__.py",
+   "SyntaxError: invalid syntax (__init__.py, line 2)"
+  ],
+  [
+   "tests/regrtest_data/descriptor_crash.py",
+   "SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)? (descriptor_crash.py, line 20)"
+  ],
+  [
+   "tests/regrtest_data/syntax_error.py",
+   "SyntaxError: invalid syntax (syntax_error.py, line 1)"
+  ]
+ ]
+}
