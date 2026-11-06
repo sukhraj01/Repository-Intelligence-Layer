@@ -75,3 +75,11 @@ used in the pilot.
 - Gold units included but cut by the 1,000-token cap (included minus intact, L2, units_all_nomod, matched queries): Verified-six 7.5 points at B 8,000 under BM25 (30.7 included, 23.2 intact) and 8.9 under RRF (33.1, 24.2); 9.4 and 13.6 points at B 32,000. Dev: about 2 points at both budgets. The cap therefore cuts a visible part of the gold on Verified-six (large units), which is the case the revisit condition names; the cap-500 and cap-2,000 re-run named above was not run (the brief fixed the cap as provisional).
 - Verified-six L2 queries with no gold file in the context at B 8,000: 31.3% (BM25), 21.7% (RRF), repository-clustered intervals wide (6 repositories); no budget is chosen.
 
+
+### 2026-11-06 decision D103: the rule for the unit-cap re-run (evidence class: reasoned; fixed before any number of the re-run exists)
+- **Question.** The unit cap cuts gold units that were otherwise included (L2, B 8,000, BM25, Verified-six: 30.7% of gold units included, 23.2% intact). Which of 500, 1,000 (the current default) and 2,000 tokens (the stage's approximate count) keeps the most gold units intact?
+- **Data used for the choice: dev instances only** (437 instances, 354 with both first stages). Verified-six was read once in E-ASSEMBLY and is not read again for this choice (read-once rule).
+- **Metric.** For a cap, the share of gold units included intact (reading `units_all_nomod`), taken as the mean over queries on the dev queries that have both first stages, then averaged without weights over the eight cells {L2, L3} x B {8,000, 16,000} x first stage {BM25, RRF}.
+- **Rule.** The selected cap is the one with the highest value of that metric; if two caps are within 1.0 point of each other at the top, the smaller of them.
+- **Nothing else enters the choice.** The share of gold files in the context is reported beside the metric and is not used. B 4,000 and 32,000 are computed (same grid as E-ASSEMBLY) and reported, not used. No confidence interval enters the rule.
+- **Consequence.** The default in `specs/assembly.md` changes only if the rule selects a cap other than 1,000; then the assembly version string is bumped. The setting stays `provisional: D102` either way: this re-run does not turn the cap into a tuned result for the agent.

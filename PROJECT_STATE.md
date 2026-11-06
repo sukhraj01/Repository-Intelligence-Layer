@@ -89,6 +89,7 @@ storage stages and now `bm25`, `graph_expand_1hop/2hop` and `graph_expansion` wi
 | D32 (Q47) | Pro ansible (83 instances) is a third dev L3 repository; Verified stays final test | ADR-005 addendum |
 | D33 (Q48) | no Qwen3 instruction variants unless Qwen3 would win the choice | ADR-006 addendum |
 | D102 | context assembly policy and defaults (cap 1,000, 200 candidates, header-form class units, approximate tokenizer), `provisional` until the RQ3 pilot; no budget chosen for the agent | ADR-014 (Proposed), E-ASSEMBLY |
+| D103 | unit-cap re-run: dev only, selection metric and tie rule fixed before the job (ADR-014 addendum), Verified-six not read again | ADR-014 (Proposed), E-ASSEMBLY-CAP |
 
 ## Next task
 

@@ -1,0 +1,26 @@
+experiment_id: E-ASSEMBLY-CAP (unit cap of the assembly stage, dev instances only)
+stage: dev only; the test role is not read (read-once rule, decision D103)
+status: exploratory pilot
+date: '2026-11-06'
+seed: 0
+roles:
+- dev
+confirm: false
+tokenizer: approx
+note: >-
+  Stated before any number of this configuration was computed (decision D103, ADR-014 addendum).
+  Same cache, readings, dense scores, first stages, candidate list and budget grid as E-ASSEMBLY;
+  only the cap on the text of one unit varies (500, 1000, 2000 approximate tokens). The cap is
+  selected by one metric on dev instances: the share of gold units included intact (units_all_nomod),
+  averaged over L2 and L3, B 8,000 and 16,000, both first stages, on the dev queries that have both
+  first stages; the highest value wins, and the smaller cap when caps are within 1.0 point of the best.
+  The share of gold files in the context is reported beside it and is not used.
+assembly:
+  first_stages: [bm25, rrf]
+  dense_variant: coderankembed__t1024
+  rrf_k: 100
+  candidates: 200
+  max_unit_tokens: 1000
+  max_unit_tokens_grid: [500, 1000, 2000]
+  budgets: [4000, 8000, 16000, 32000]
+  readings: [units_all_nomod, units_all]

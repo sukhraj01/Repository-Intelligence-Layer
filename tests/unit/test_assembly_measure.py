@@ -10,7 +10,14 @@ from typing import Any
 import numpy as np
 import pytest
 
-from ril.analysis.assembly_tables import coverage_rows, load_rows, summary_rows
+from ril.analysis.assembly_tables import (
+    cap_selection_rows,
+    coverage_rows,
+    load_rows,
+    paired_rows,
+    select_cap,
+    summary_rows,
+)
 from ril.assembly.assemble import UnitText
 from ril.assembly.measure import (
     MeasureSpec,
@@ -313,3 +320,108 @@ def test_run_measure_reports_a_unit_count_mismatch(tmp_path: Path) -> None:
         str(tmp_path / "out"),
     )
     assert counts["failed"] == 1 and "unit_count" in counts["failures"][0]["reason"]
+
+
+# ------------------------------------------------------------------ E-ASSEMBLY-CAP (decision D103)
+
+
+def test_cap_grid_changes_intact_not_inclusion_of_a_long_gold_unit() -> None:
+    body = "\n".join(f"    w{j} = {j}" for j in range(150))  # about 1,270 approximate tokens
+    units = [UnitText("big.py::big", "big.py", 1, 151, "function", "big", f"def big():\n{body}")]
+    arrays: dict[str, Any] = {
+        "scores_L2": np.asarray([1.0]),
+        "gold_L2_units_all_nomod": np.asarray([0], dtype=np.int32),
+        "gold_L2_units_all": np.asarray([0], dtype=np.int32),
+    }
+    meta = {"instance": "i1", "role": "dev", "dataset": "d", "folder": "f", "repo_id": "o/r"}
+    sp = MeasureSpec(
+        budgets=(4000,),
+        max_unit_tokens=1000,
+        candidates=1,
+        first_stages=("bm25",),
+        dense_variant="v",
+        rrf_k=10,
+        readings=("units_all_nomod",),
+        caps=(500, 1000, 2000),
+    )
+    rows = measure_level(meta, "L2", arrays, None, units, sp, TOK)
+    by_cap = {r["max_unit_tokens"]: r for r in rows}
+    assert set(by_cap) == {500, 1000, 2000}
+    assert all(r["units_in"] == 1 for r in rows)
+    assert [by_cap[c]["units_intact"] for c in (500, 1000, 2000)] == [0, 0, 1]
+    assert all(r["tokens"] <= r["budget"] for r in rows)
+
+
+def test_spec_reads_the_cap_grid_and_defaults_to_one_cap() -> None:
+    a: dict[str, Any] = {
+        "budgets": [100],
+        "max_unit_tokens": 700,
+        "candidates": 5,
+        "first_stages": ["bm25"],
+        "dense_variant": "v",
+        "rrf_k": 10,
+        "readings": ["units_all"],
+    }
+    sp, _ = spec_from_config({"roles": ["dev"], "assembly": a})
+    assert sp.unit_caps == (700,)
+    a["max_unit_tokens_grid"] = [500, 1000]
+    sp, _ = spec_from_config({"roles": ["dev"], "assembly": a})
+    assert sp.unit_caps == (500, 1000)
+
+
+def test_select_cap_takes_the_best_and_the_smaller_cap_within_one_point() -> None:
+    assert select_cap({500: 30.0, 1000: 33.0, 2000: 36.0}) == 2000
+    assert select_cap({500: 30.0, 1000: 35.2, 2000: 36.0}) == 1000  # 0.8 below the best
+    assert select_cap({500: 35.5, 1000: 35.2, 2000: 36.0}) == 500  # all three within 1.0
+    assert select_cap({500: 34.9, 1000: 35.0, 2000: 36.0}) == 1000  # exactly 1.0 ties, 500 is 1.1
+    assert select_cap({500: 10.0}) == 500
+
+
+def _cap_rows(delta_rrf: int = 1) -> list[dict[str, Any]]:
+    rows = []
+    for lvl in ("L2", "L3"):
+        for inst, repo in [("a1", "r1"), ("a2", "r1"), ("b1", "r2"), ("b2", "r2")]:
+            for cap in (500, 1000, 2000):
+                for b in (4000, 8000, 16000):
+                    for stage in ("bm25", "rrf"):
+                        intact = (1 if cap == 2000 else 0) + (delta_rrf if stage == "rrf" else 0)
+                        rows.append(
+                            _row(
+                                f"{lvl}{inst}",
+                                repo,
+                                stage,
+                                b,
+                                reading="units_all_nomod",
+                                level=lvl,
+                                max_unit_tokens=cap,
+                                units_intact=min(intact, 2),
+                                files_in=1,
+                            )
+                        )
+    return rows
+
+
+def test_cap_selection_rows_metric_cells_and_flag() -> None:
+    out = cap_selection_rows(_cap_rows())
+    heads = {r["max_unit_tokens"]: r for r in out if "cell" not in r}
+    # intact is 0/2 or 1/2 (bm25) and 1/2 or 2/2 (rrf) of two gold units; cells at 8,000 and 16,000
+    assert heads[500]["intact_share_selection_metric"] == 25.0  # mean of 0 and 50
+    assert heads[2000]["intact_share_selection_metric"] == 75.0  # mean of 50 and 100
+    assert heads[500]["cells"] == 8 and heads[500]["file_share_beside"] == 100.0
+    assert [c for c, r in heads.items() if r["selected"]] == [2000]
+    cells = [r for r in out if r.get("cell") and r["max_unit_tokens"] == 500]
+    assert len(cells) == 8 and not any("B4000" in r["cell"] for r in cells)
+    with pytest.raises(ValueError):
+        cap_selection_rows([r for r in _cap_rows() if r["budget"] != 16000])
+
+
+def test_paired_rows_difference_intervals_and_exclusion_of_zero() -> None:
+    rows = paired_rows(_cap_rows(), seed=0)
+    pick = {(r["level"], r["max_unit_tokens"], r["budget"], r["metric"]): r for r in rows}
+    r = pick[("L2", 500, 4000, "unit_intact_share")]
+    assert r["rrf_minus_bm25"] == 50.0 and r["queries"] == 4 and r["repositories"] == 2
+    assert r["excludes_0_q"] is True and r["excludes_0_cl"] is True
+    f = pick[("L2", 500, 4000, "file_share")]  # identical file counts under both stages
+    assert f["rrf_minus_bm25"] == 0.0 and f["excludes_0_q"] is False
+    assert len(rows) == 2 * 3 * 3 * 2
+    assert rows == paired_rows(_cap_rows(), seed=0)
