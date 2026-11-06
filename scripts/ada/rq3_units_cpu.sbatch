@@ -37,6 +37,13 @@ export PYTHONPATH="$W"
 DEFAULT_REPOS="django/django sympy/sympy pytest-dev/pytest sphinx-doc/sphinx pylint-dev/pylint"
 read -ra REPOS <<< "${REPOS:-$DEFAULT_REPOS}"
 mkdir -p "$TMPW/repo_cache" "$TMPW/work" "$TMPW/prep"
+# members of the selected repositories only
+$PY -I - "$W/meta.json" "$W/meta_run.json" "${REPOS[@]}" <<PY
+import json, sys
+src, dst, repos = sys.argv[1], sys.argv[2], set(sys.argv[3:])
+meta = json.load(open(src))
+json.dump({k: v for k, v in meta.items() if v["repo"] in repos}, open(dst, "w"), sort_keys=True)
+PY
 T_CLONE=$(date +%s)
 for repo in "${REPOS[@]}"; do
   name=${repo/\//__}
@@ -49,7 +56,7 @@ rc=0
 # 1. unit stage and caches, K shards (each shard has its own working clones)
 pids=()
 for i in $(seq 0 $((K-1))); do
-  $PY scripts/rq3_units.py prepare $CFG "$E/raw" meta.json queries.json "$TMPW/repo_cache" "$W/e3_cache" "$W/e1_units" "$TMPW/work" "$W/out" \
+  $PY scripts/rq3_units.py prepare $CFG "$E/raw" meta_run.json queries.json "$TMPW/repo_cache" "$W/e3_cache" "$W/e1_units" "$TMPW/work" "$W/out" \
     --shard $i $K > "$W/logs/rq3_units_prepare_s$i.log" 2>&1 &
   pids+=($!)
 done
@@ -58,7 +65,7 @@ echo "prepare rc=$rc caches=$(ls "$W/e3_cache" | wc -l)"
 # 2. unit-text hashes and text stores (node-local), class form full only
 pids=()
 for i in $(seq 0 $((K-1))); do
-  $PY scripts/rq3_units.py prep-units $CFG meta.json "$TMPW/repo_cache" "$W/e3_cache" "$TMPW/work" "$TMPW/prep" \
+  $PY scripts/rq3_units.py prep-units $CFG meta_run.json "$TMPW/repo_cache" "$W/e3_cache" "$TMPW/work" "$TMPW/prep" \
     --shard $i $K > "$W/logs/rq3_units_prep_units_s$i.log" 2>&1 &
   pids+=($!)
 done
