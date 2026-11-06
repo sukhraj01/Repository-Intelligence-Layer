@@ -1,0 +1,14 @@
+\begin{table*}[t]
+\centering\small
+\caption{BM25 reproduction of the published baseline rows at chunk level, mean over folders (the reading that reproduces them). Evidence class: \emph{measured; the paper columns are paper\_reported}. n is the folder and query count of each row; the query-level mean over the same queries is in the source table and differs. Entry \entry{E-BM25-REPRO}.}
+\label{tab:bm25_repro}
+\begin{tabular}{lrrrrrr}
+\toprule
+Set & Folders & Queries & nDCG@10 & nDCG@10 paper & Recall@100 & Recall@100 paper \\
+\midrule
+Verified L2 & 12 & 432 & 11.94 & 11.9 & 46.74 & 46.7 \\
+Verified L3 & 12 & 302 & 22.19 & 22.2 & 33.89 & 33.9 \\
+All sub-datasets L2 & 632 & 5061 & 13.00 & 13.0 & 38.82 & 38.8 \\
+\bottomrule
+\end{tabular}
+\end{table*}

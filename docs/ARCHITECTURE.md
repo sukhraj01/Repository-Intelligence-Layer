@@ -100,6 +100,7 @@ implementation and then written here.**
 - **Interface:** `assemble(candidates, snapshot, config, tokenizer) -> Assembled(context, manifest)`; `gold_in_context(manifest, gold_units, gold_files)`.
 - **Dependencies:** `parsing/`, `config/`; `measure.py` also reads the evaluation cache (`evaluation/`). Nothing in `retrieval/` is imported by the policy, so the stage cannot depend on how a list was made.
 - **Consumers:** the agent integration (RQ3), `bench/assembly_measure.py` (stages `assemble`, `end_to_end`), `analysis/assembly_tables.py`.
+- **Report tables:** `analysis/report_tables.py` reads `results/` only and writes the LaTeX fragments of `reports/final/generated/` (every number from a stored file, checked by `tests/unit/test_report_tables.py`); `scripts/report_tables.py` is the command line.
 - **Invariant:** **byte-identical for the same ranked list** (same candidates, snapshot, configuration and tokenizer give the same bytes; `tests/unit/test_assembly.py`), which is what makes assembly identical across RQ2 arms. The budget is never exceeded (tested on random inputs).
 - **Assumptions:** class units arrive in header form (`BuildConfig(class_source="header")`); the final agent run supplies the agent model's tokenizer.
 - **Limitations:** no callee signatures (DEV-033); no overlap deduplication beyond repeated ids; token counting dominates the time (about 90% in a profile).

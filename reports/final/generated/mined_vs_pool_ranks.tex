@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering\small
+\caption{Share of directories without a positive in the teacher's top K: pull-request-mined set against the published pool. Evidence class: \emph{measured, exploratory}. Pool-like reading of the mined pilot set: 300 directories with a positive (fewer where a teacher did not finish, see the Mined column); Wilson intervals; the pool column is the pool estimate from a stratified sample of directories; one seed, one pilot. Entry \entry{E-MINE-PILOT}, \entry{E-POOL-RANKS}.}
+\label{tab:mined_vs_pool_ranks}
+\begin{tabular}{lrrrr}
+\toprule
+Teacher & K & Mined directories & Mined set, no positive in top K (\%) & Published pool (\%) \\
+\midrule
+BM25 & 10 & 300 & 53.3 [47.7, 58.9] & 23.2 [16.4, 31.0] \\
+BM25 & 20 & 300 & 45.3 [39.8, 51.0] & 15.1 [9.4, 21.1] \\
+BM25 & 40 & 300 & 36.3 [31.1, 41.9] & 13.4 [8.0, 19.6] \\
+CodeRankEmbed & 10 & 254 & 40.2 [34.3, 46.3] & 15.3 [8.8, 22.2] \\
+CodeRankEmbed & 20 & 254 & 32.3 [26.8, 38.3] & 9.9 [5.2, 15.9] \\
+CodeRankEmbed & 40 & 254 & 25.2 [20.2, 30.9] & 4.3 [1.6, 8.0] \\
+SweRankEmbed-Small & 10 & 300 & 31.3 [26.4, 36.8] & 1.7 [0.2, 3.9] \\
+SweRankEmbed-Small & 20 & 300 & 26.3 [21.7, 31.6] & 1.2 [0.0, 3.5] \\
+SweRankEmbed-Small & 40 & 300 & 21.3 [17.1, 26.3] & 1.2 [0.0, 3.5] \\
+\bottomrule
+\end{tabular}
+\end{table*}
