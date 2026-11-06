@@ -97,6 +97,7 @@ still complete and defensible.
 
 ## Weeks 10–14 — Person C: RQ3
 
+- [x] Context assembly stage (2026-11-06, D102, ADR-014 Proposed; `ril/assembly/`, `assemble` and BM25-only `end_to_end` latency rows, gold-in-context by budget and first stage, E-ASSEMBLY exploratory); the agent-model tokenizer and the budget for the agent are not done
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
 

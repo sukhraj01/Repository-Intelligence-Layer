@@ -69,4 +69,9 @@ a longer unit or a callee signature would have fixed; the share of truncated gol
 used in the pilot.
 
 ## Addenda
-(none yet)
+
+### 2026-11-06 evidence from E-ASSEMBLY (measured, exploratory; does not settle the policy)
+- Approximate tokens are 1.22 times the count of a 0.6B embedding model's tokenizer on 200 sampled units (median 1.26, 5th to 95th percentile 1.05 to 1.59). The agent model's tokenizer is still to be used at integration time.
+- Gold units included but cut by the 1,000-token cap (included minus intact, L2, units_all_nomod, matched queries): Verified-six 7.5 points at B 8,000 under BM25 (30.7 included, 23.2 intact) and 8.9 under RRF (33.1, 24.2); 9.4 and 13.6 points at B 32,000. Dev: about 2 points at both budgets. The cap therefore cuts a visible part of the gold on Verified-six (large units), which is the case the revisit condition names; the cap-500 and cap-2,000 re-run named above was not run (the brief fixed the cap as provisional).
+- Verified-six L2 queries with no gold file in the context at B 8,000: 31.3% (BM25), 21.7% (RRF), repository-clustered intervals wide (6 repositories); no budget is chosen.
+
