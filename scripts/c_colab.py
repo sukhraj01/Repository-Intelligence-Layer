@@ -629,11 +629,22 @@ def _encode(run_id: str) -> None:
         checkpoint()
 
 
-def mining() -> None:
+def mining(overlap_index: Path | None = None) -> None:
     """Interactive public-data pilot; periodic snapshots omit regenerable bare Git caches."""
     import threading
 
     runtime()
+    if overlap_index is None or not overlap_index.is_file():
+        raise ValueError("a complete held-out content index file is required for the C2 pilot")
+    document = json.loads(overlap_index.read_text())
+    if (
+        document.get("complete") is not True
+        or not isinstance(document.get("corpus_sha256"), str)
+        or len(document["corpus_sha256"]) != 64
+        or not isinstance(document.get("hashes"), list)
+        or not document["hashes"]
+    ):
+        raise ValueError("held-out content index identity or completeness is invalid")
     if not os.environ.get("GITHUB_TOKEN"):
         raise RuntimeError("configure GITHUB_TOKEN in Colab Secrets first")
     info = state()
@@ -665,6 +676,8 @@ def mining() -> None:
                 str(source / "configs/experiments/c_raw_pr_pilot.yaml"),
                 "--out",
                 str(BASE / "work/mining"),
+                "--overlap-index",
+                str(overlap_index),
             ],
             cwd=source,
         )
@@ -890,9 +903,14 @@ print('Pinned source and {phase} environment ready')
             cell(
                 "code",
                 (
-                    "RUN_MINING = False\nif RUN_MINING:\n    from google.colab impo"
-                    "rt userdata\n    os.environ['GITHUB_TOKEN'] = userdata.get('G"
-                    "ITHUB_TOKEN')\n    try:\n        run_stage('mining')\n    final"
+                    "RUN_MINING = False\nOVERLAP_INDEX = None\n"
+                    "# Set OVERLAP_INDEX to the complete held-out content index JSON path.\n"
+                    "if RUN_MINING:\n    if OVERLAP_INDEX is None:\n"
+                    "        raise ValueError('Set OVERLAP_INDEX before mining')\n"
+                    "    from google.colab import userdata\n"
+                    "    os.environ['GITHUB_TOKEN'] = userdata.get('GITHUB_TOKEN')\n"
+                    "    try:\n        run_stage('mining', '--overlap-index', OVERLAP_INDEX)\n"
+                    "    final"
                     "ly:\n        os.environ.pop('GITHUB_TOKEN', None)\n"
                 ),
             ),
@@ -1087,6 +1105,7 @@ def main() -> None:
     )
     parser.add_argument("--out", type=Path, default=Path("data/processed/c_colab_kit"))
     parser.add_argument("--run-id", default="dev-v1")
+    parser.add_argument("--overlap-index", type=Path)
     args = parser.parse_args()
     if args.stage == "package":
         result = package(args.out)
@@ -1103,7 +1122,7 @@ def main() -> None:
         encode(args.run_id)
         result = {"status": "complete"}
     elif args.stage == "mining":
-        mining()
+        mining(args.overlap_index)
         result = {"status": "complete"}
     else:
         result = report()
