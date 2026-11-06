@@ -397,7 +397,9 @@ def test_build_subset_counts_and_table(tmp_path: Path, synthetic: dict[str, str]
 
     specs = [_spec(synthetic, instance_id=i) for i in ("a", "b", "c")]
     rows = [_row("a", 1), _row("a", 2), _row("b", 1), _row("b", 2, f2p=[0, 1])]
-    doc = build_subset(specs, rows, run_id="r", config_hash="h", commit="c", spec_digest="s")
+    doc = build_subset(
+        specs, {"latest": rows}, run_id="r", config_hash="h", commit="c", spec_digest="s"
+    )
     assert doc["counts"]["executable"] == 1
     assert doc["counts"]["excluded_by_reason"] == {"incomplete": 1, "runs_disagree": 1}
     assert [m["instance_id"] for m in doc["executable"]] == ["a"]
@@ -466,3 +468,102 @@ def test_uv_builder_drops_packages_missing_from_pypi_and_records_it(tmp_path: Pa
     out = envbuild.UvEnvBuilder().build(spec, tmp_path / "venv", step, 60.0)
     assert out.ok and out.departures == ["dropped cdms2 (not on PyPI)"]
     assert "cdms2" not in calls[-1] and "numpy" in calls[-1] and "scipy" in calls[-1]
+
+
+def test_later_run_directory_replaces_an_instance_wholesale() -> None:
+    from ril.evaluation.executor.subset import merge_runs
+
+    first = [_row("a", 1, built=False), _row("a", 2, built=False), _row("b", 1), _row("b", 2)]
+    later = [_row("a", 1), _row("a", 2)]
+    merged = merge_runs([first, later])
+    assert [(r["instance_id"], r["built"]) for r in merged] == [
+        ("a", True),
+        ("a", True),
+        ("b", True),
+        ("b", True),
+    ]
+
+
+def test_policies_in_priority_order_qualify_an_instance_once() -> None:
+    from ril.evaluation.executor.subset import build_subset
+
+    spec = InstanceSpec(
+        instance_id="a", repo="o/r", version="1", base_commit="x", python="3.9", install="",
+        test_cmd="pytest", test_directives=(), log_parser="pytest", fail_to_pass=(),
+        pass_to_pass=(), test_patch="",
+    )  # fmt: skip
+    bad = [_row("a", 1, f2p=[0, 1]), _row("a", 2, f2p=[0, 1])]
+    good = [_row("a", 1), _row("a", 2)]
+    doc = build_subset(
+        [spec],
+        {"latest": bad, "era": good},
+        run_id="r",
+        config_hash="h",
+        commit="c",
+        spec_digest="s",
+    )
+    assert doc["executable"][0]["env_policy"] == "era"
+    assert doc["counts"]["executable_by_policy"] == {"era": 1}
+    both_bad = build_subset(
+        [spec],
+        {"latest": bad, "era": bad},
+        run_id="r",
+        config_hash="h",
+        commit="c",
+        spec_digest="s",
+    )
+    assert both_bad["excluded"][0]["reasons_by_policy"] == {
+        "latest": "gold_f2p_failed",
+        "era": "gold_f2p_failed",
+    }
+    assert both_bad["excluded"][0]["built"] is True
+
+
+def test_era_policy_sets_date_limits_and_leaves_pins_undated(
+    tmp_path: Path, synthetic: dict[str, str]
+) -> None:
+    cfg = ExecConfig(
+        work_root=tmp_path / "work",
+        cache_root=tmp_path / "cache",
+        repo_source=lambda repo: synthetic["repo"],
+        env_policy="era",
+    )
+    spec = _spec(
+        synthetic, created_at="2021-05-01T00:00:00Z", test_cmd="env | grep -E 'UV_EXCL|PIP_UPL'"
+    )
+    res = evaluate(spec, "", cfg, builder=FakeBuilder())
+    assert "UV_EXCLUDE_NEWER=2021-05-01T00:00:00Z" in res.output_tail
+    assert "PIP_UPLOADED_PRIOR_TO=2021-05-01T00:00:00Z" in res.output_tail
+    assert any("era-dated" in d for d in res.departures)
+    assert (
+        cfg.config_hash()
+        != ExecConfig(
+            work_root=cfg.work_root, cache_root=cfg.cache_root, repo_source=cfg.repo_source
+        ).config_hash()
+    )
+
+
+def test_older_python_comes_from_the_provider_when_uv_has_none(tmp_path: Path) -> None:
+    from ril.evaluation.executor.steps import StepResult
+
+    seen: list[str] = []
+
+    def step(name: str, command: str, timeout: float) -> StepResult:
+        seen.append(name)
+        if name == "venv":
+            return StepResult(2, 0.1, 0.0, False, "error: No interpreter found for Python 3.6")
+        return StepResult(0, 0.1, 0.0, False, "")
+
+    def provider(version: str, _step: Stepper) -> str | None:
+        return "/mm/py3.6/bin/python" if version == "3.6" else None
+
+    spec = InstanceSpec(
+        instance_id="a", repo="r/r", version="1", base_commit="x", python="3.6", install="",
+        test_cmd="pytest", test_directives=(), log_parser="pytest", fail_to_pass=(),
+        pass_to_pass=(), test_patch="",
+    )  # fmt: skip
+    out = envbuild.UvEnvBuilder(provider).build(spec, tmp_path / "v", step, 60.0)
+    assert out.ok and "venv_mamba" in seen
+    assert out.departures == ["python 3.6 from conda-forge (micromamba)"]
+    none = envbuild.UvEnvBuilder(lambda v, s: None).build(spec, tmp_path / "v", step, 60.0)
+    assert not none.ok and none.stage == "python_unavailable"

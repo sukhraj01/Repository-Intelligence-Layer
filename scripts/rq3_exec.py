@@ -6,8 +6,11 @@ Usage:
   rq3_exec.py run-shard SPECS.jsonl GOLD.jsonl RUN_DIR --shard I --count K
                 [--ids IDS.txt] [--runs 2] [--workers 1] --work-root DIR --cache-root DIR
                 [--local-mirrors DIR] [--seed N]
-  rq3_exec.py report SPECS.jsonl --run-dir DIR [--run-dir DIR ...] --out-dir DIR [--seed N]
-  rq3_exec.py summary SPECS.jsonl --subset FILE --inventory FILE --run-dir DIR --out-dir DIR
+  rq3_exec.py report SPECS.jsonl --policy NAME=DIR[,DIR...] [--policy ...] --out-dir DIR [--seed N]
+  rq3_exec.py ids SPECS.jsonl --policy NAME=DIR[,DIR...] [--skip-reason R] [--take-reason R]
+                [--repo R] --out IDS.txt
+  rq3_exec.py summary SPECS.jsonl --subset FILE --inventory FILE --policy NAME=DIR[,DIR...]
+                --out-dir DIR
 
 Implements D106 (docs/RQ3_PILOT.md). Thin wrapper: the logic is in ril/evaluation/executor/.
 """
@@ -114,6 +117,7 @@ def cmd_run_shard(args: argparse.Namespace) -> int:
         work_root=Path(args.work_root),
         cache_root=Path(args.cache_root),
         repo_source=_repo_source(args.local_mirrors),
+        env_policy=args.env_policy,
     )
     mine = jobs.shard_of(specs, args.shard, args.count)
     stats = jobs.run_shard(
@@ -135,16 +139,61 @@ def cmd_run_shard(args: argparse.Namespace) -> int:
     return jobs.EXIT_DISK_FULL if stats.stopped_disk else 0
 
 
+def _rows_of(run_dir: Path) -> list[dict[str, object]]:
+    """All result rows under one run directory (its shards, or itself)."""
+    return subset.read_rows(sorted(run_dir.glob("**/" + jobs.RESULT_FILE)))
+
+
+def _policy_dirs(specs: list[str]) -> list[tuple[str, list[str]]]:
+    """``name=dir1,dir2`` arguments in priority order; a later directory replaces an earlier one
+    for the instances it holds."""
+    out = []
+    for item in specs:
+        name, _, dirs = item.partition("=")
+        out.append((name, [d for d in dirs.split(",") if d]))
+    return out
+
+
+def _policies(specs: list[str]) -> dict[str, list[dict[str, object]]]:
+    return {
+        name: subset.merge_runs([_rows_of(Path(d)) for d in dirs])
+        for name, dirs in _policy_dirs(specs)
+    }
+
+
+def cmd_ids(args: argparse.Namespace) -> int:
+    """Instance ids a re-run should cover: by classification of the given runs, or by repository."""
+    specs = load_specs(Path(args.specs))
+    rows = next(iter(_policies(args.policy).values()), [])
+    by: dict[str, list[dict[str, object]]] = {}
+    for r in rows:
+        by.setdefault(str(r["instance_id"]), []).append(r)
+    skip = set(args.skip_reason)
+    take = set(args.take_reason)
+    picked = []
+    for s in specs:
+        ok, reason, _ = subset.classify(by.get(s.instance_id, []))
+        base = reason.split(":")[0] if reason.startswith("not_built") else reason
+        if ok or reason in skip or (base == "not_built" and reason.split(":")[1] in skip):
+            continue
+        if take and reason not in take and reason.split(":")[-1] not in take:
+            continue
+        picked.append(s.instance_id)
+    picked += [
+        s.instance_id for s in specs if s.repo in set(args.repo) and s.instance_id not in picked
+    ]
+    Path(args.out).write_text("\n".join(sorted(set(picked))) + "\n")
+    log.info("%d instance ids", len(set(picked)))
+    return 0
+
+
 def cmd_report(args: argparse.Namespace) -> int:
     specs = load_specs(Path(args.specs))
-    paths = [p / jobs.RESULT_FILE for d in args.run_dir for p in sorted(Path(d).glob("shard_*"))]
-    paths += [
-        Path(d) / jobs.RESULT_FILE for d in args.run_dir if (Path(d) / jobs.RESULT_FILE).exists()
-    ]
-    rows = subset.read_rows(p for p in paths if p.exists())
+    rows_by_policy = _policies(args.policy)
     metas = [
         json.loads(p.read_text())
-        for d in args.run_dir
+        for _, dirs in _policy_dirs(args.policy)
+        for d in dirs
         for p in Path(d).glob("**/" + jobs.META_FILE)
     ]
     if args.only_ids:
@@ -152,7 +201,7 @@ def cmd_report(args: argparse.Namespace) -> int:
         specs = [s for s in specs if s.instance_id in keep]
     doc = subset.build_subset(
         specs,
-        rows,
+        rows_by_policy,
         run_id=args.run_id,
         config_hash=",".join(sorted({m["config_hash"] for m in metas})),
         commit=",".join(sorted({m["commit"] for m in metas})),
@@ -180,9 +229,13 @@ def cmd_summary(args: argparse.Namespace) -> int:
     out.mkdir(parents=True, exist_ok=True)
     shift = summary.distribution_shift(specs, members, inv["l2"], inv["l3"])
     (out / "subset_vs_500.csv").write_text(subset.table_csv(shift))
-    rows = subset.read_rows(
-        p for d in args.run_dir for p in sorted(Path(d).glob("**/" + jobs.RESULT_FILE))
-    )
+    member_policy = {m["instance_id"]: m["env_policy"] for m in members}
+    rows = [
+        r
+        for name, rs in _policies(args.policy).items()
+        for r in rs
+        if member_policy.get(r["instance_id"]) == name
+    ]
     (out / "cost_per_instance.json").write_text(
         json.dumps(summary.cost_summary(rows, [m["instance_id"] for m in members]), indent=1) + "\n"
     )
@@ -223,18 +276,26 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--local-mirrors")
     c.add_argument("--commit", default="")
     c.add_argument("--clean-cache", action="store_true")
+    c.add_argument("--env-policy", choices=("latest", "era"), default="latest")
     d = sub.add_parser("report")
     d.add_argument("specs")
-    d.add_argument("--run-dir", action="append", required=True)
+    d.add_argument("--policy", action="append", required=True, help="NAME=DIR[,DIR...]")
     d.add_argument("--out-dir", required=True)
     d.add_argument("--run-id", default="")
     d.add_argument("--name", default="executable_instances_v1.json")
     d.add_argument("--only-ids")
+    f = sub.add_parser("ids")
+    f.add_argument("specs")
+    f.add_argument("--policy", action="append", required=True, help="NAME=DIR[,DIR...]")
+    f.add_argument("--skip-reason", action="append", default=[])
+    f.add_argument("--take-reason", action="append", default=[])
+    f.add_argument("--repo", action="append", default=[])
+    f.add_argument("--out", required=True)
     e = sub.add_parser("summary")
     e.add_argument("specs")
     e.add_argument("--subset", required=True)
     e.add_argument("--inventory", required=True)
-    e.add_argument("--run-dir", action="append", required=True)
+    e.add_argument("--policy", action="append", required=True, help="NAME=DIR[,DIR...]")
     e.add_argument("--out-dir", required=True)
     args = p.parse_args(argv)
     set_seed(args.seed)
@@ -244,6 +305,7 @@ def main(argv: list[str] | None = None) -> int:
         "run-shard": cmd_run_shard,
         "report": cmd_report,
         "summary": cmd_summary,
+        "ids": cmd_ids,
     }[args.cmd](args)
 
 

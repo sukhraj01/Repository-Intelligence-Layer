@@ -35,6 +35,18 @@ def read_rows(paths: Iterable[Path]) -> list[dict[str, Any]]:
     return rows
 
 
+def merge_runs(row_sets: Sequence[Sequence[Mapping[str, Any]]]) -> list[dict[str, Any]]:
+    """Rows of several run directories, in the order given; a later set replaces an earlier one
+    for every instance it contains (a re-run after a fix to the executor, never a mix of both)."""
+    chosen: dict[str, list[dict[str, Any]]] = {}
+    for rows in row_sets:
+        fresh: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for r in rows:
+            fresh[r["instance_id"]].append(dict(r))
+        chosen.update(fresh)
+    return [r for iid in sorted(chosen) for r in chosen[iid]]
+
+
 def classify(runs: Sequence[Mapping[str, Any]], expected_runs: int = 2) -> tuple[bool, str, str]:
     """(executable, reason, detail) from one instance's run rows."""
     by_run = {int(r["run"]): r for r in runs}
@@ -75,7 +87,7 @@ def _built_in_all(runs: Sequence[Mapping[str, Any]], expected_runs: int) -> bool
 
 def build_subset(
     specs: Sequence[InstanceSpec],
-    rows: Sequence[Mapping[str, Any]],
+    rows_by_policy: Mapping[str, Sequence[Mapping[str, Any]]],
     *,
     run_id: str,
     config_hash: str,
@@ -83,39 +95,71 @@ def build_subset(
     spec_digest: str,
     expected_runs: int = 2,
 ) -> dict[str, Any]:
-    """The subset document: members with cost, every exclusion with its reason, counts."""
-    by_instance: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
-    for r in rows:
-        by_instance[r["instance_id"]].append(r)
+    """The subset document: members with cost and the policy that qualified them, every
+    exclusion with its reason under each policy tried, counts.
+
+    ``rows_by_policy`` is in priority order: an instance is a member under the first policy whose
+    two runs qualify it (the instance is then evaluated under that policy), and an instance a
+    policy has no rows for is skipped by that policy.
+    """
+    by_policy: dict[str, dict[str, list[Mapping[str, Any]]]] = {}
+    for policy, rows in rows_by_policy.items():
+        grouped: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+        for r in rows:
+            grouped[r["instance_id"]].append(r)
+        by_policy[policy] = grouped
     members: list[dict[str, Any]] = []
     excluded: list[dict[str, Any]] = []
     built = 0
     for s in specs:
-        runs = sorted(by_instance.get(s.instance_id, []), key=lambda r: int(r["run"]))
-        ok, reason, detail = classify(runs, expected_runs)
-        built += 1 if _built_in_all(runs, expected_runs) else 0
+        built_any = False
         head = {
             "instance_id": s.instance_id,
             "repo": s.repo,
             "version": s.version,
             "difficulty": s.difficulty,
         }
-        if ok:
-            secs = [r["seconds"]["total"] for r in runs[:expected_runs]]
-            members.append(
+        tried: dict[str, tuple[str, str]] = {}
+        qualified = False
+        for policy, grouped in by_policy.items():
+            runs = sorted(grouped.get(s.instance_id, []), key=lambda r: int(r["run"]))
+            if not runs:
+                continue
+            ok, reason, detail = classify(runs, expected_runs)
+            built_any = built_any or _built_in_all(runs, expected_runs)
+            tried[policy] = (reason, detail)
+            if ok:
+                secs = [r["seconds"]["total"] for r in runs[:expected_runs]]
+                members.append(
+                    {
+                        **head,
+                        "built": True,
+                        "env_policy": policy,
+                        "seconds_per_run": [round(x, 1) for x in secs],
+                        "peak_rss_mb": max(r["peak_rss_mb"] for r in runs[:expected_runs]),
+                        "departures": sorted({d for r in runs for d in r["departures"]}),
+                    }
+                )
+                qualified = True
+                break
+        built += 1 if built_any else 0
+        if not qualified:
+            first = next(iter(tried), "")
+            reason, detail = tried.get(first, ("incomplete", "no runs recorded"))
+            excluded.append(
                 {
                     **head,
-                    "seconds_per_run": [round(x, 1) for x in secs],
-                    "peak_rss_mb": max(r["peak_rss_mb"] for r in runs[:expected_runs]),
-                    "departures": sorted({d for r in runs for d in r["departures"]}),
+                    "built": built_any,
+                    "reason": reason,
+                    "detail": detail[-200:],
+                    "reasons_by_policy": {p: r for p, (r, _) in tried.items()},
                 }
             )
-        else:
-            excluded.append({**head, "reason": reason, "detail": detail[-200:]})
     reasons = Counter(e["reason"] for e in excluded)
     return {
         "version": SUBSET_VERSION,
         "rule": RULE,
+        "policies_in_priority_order": list(rows_by_policy),
         "run_id": run_id,
         "config_hash": config_hash,
         "commit": commit,
@@ -124,6 +168,7 @@ def build_subset(
             "instances": len(specs),
             "built_in_both_runs": built,
             "executable": len(members),
+            "executable_by_policy": dict(Counter(m["env_policy"] for m in members)),
             "excluded_by_reason": dict(sorted(reasons.items())),
         },
         "executable": members,
@@ -132,24 +177,15 @@ def build_subset(
 
 
 def repo_table(doc: Mapping[str, Any], specs: Sequence[InstanceSpec]) -> list[dict[str, Any]]:
-    """Per repository: instances, built in both runs, executable."""
+    """Per repository: instances, built in both runs (under some policy), executable."""
     total = Counter(s.repo for s in specs)
     execu = Counter(m["repo"] for m in doc["executable"])
-    not_built = Counter(
-        e["repo"] for e in doc["excluded"] if e["reason"].startswith(("not_built", "incomplete"))
-    )
-    out = []
-    for repo in sorted(total):
-        built = total[repo] - not_built[repo]
-        out.append(
-            {
-                "repo": repo,
-                "instances": total[repo],
-                "built": built,
-                "executable": execu[repo],
-            }
-        )
-    return out
+    built = Counter(m["repo"] for m in doc["executable"])
+    built.update(e["repo"] for e in doc["excluded"] if e["built"])
+    return [
+        {"repo": repo, "instances": total[repo], "built": built[repo], "executable": execu[repo]}
+        for repo in sorted(total)
+    ]
 
 
 def table_csv(rows: Sequence[Mapping[str, Any]]) -> str:

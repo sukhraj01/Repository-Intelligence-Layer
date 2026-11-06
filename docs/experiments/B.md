@@ -17,6 +17,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | E-ASSEMBLY | RQ3 (apparatus, evidence) | the token budget B (4,000 / 8,000 / 16,000 / 32,000) and the first stage (BM25; the stored RRF(BM25, CodeRankEmbed t1024, k 100)) | the assembly policy of ADR-014 (unit cap 1,000 tokens, 200 candidates, class units in header form, approximate tokenizer), the E3 cache and D18 readings, the stored dense scores, dev and Verified-six instances; nothing is trained | none (no randomness except the bootstrap, seed 0) | per-query rows of the run, summary tables, latency rows of `assemble` and `end_to_end` (`results/rq3/assembly_gold_2026-11-06/`, `results/tables/assembly/`, `results/latency/latency_log.csv`) | measured, exploratory 2026-11-06 |
 | E-ASSEMBLY-CAP | RQ3 (apparatus, evidence) | the cap on the text of one unit (500 / 1,000 / 2,000 approximate tokens) | the assembly policy of ADR-014 otherwise, the E3 cache and D18 readings, the stored dense scores, budgets 4,000 to 32,000, both first stages, dev instances only (Verified-six not read) | none (bootstrap seed 0) | per-query rows, selection and paired tables (`results/rq3/assembly_cap_2026-11-06/`, `results/tables/assembly_cap/`) | measured, exploratory 2026-11-06 |
 | E-RQ3-PILOT-PREP | RQ3 (apparatus, evidence) | nothing varies in the measurement: what the cluster can execute (part A), a provider adapter with a persistent limiter, the prompts of the pilot, a three-call smoke test | the assembly of ADR-014 (budget 8,000 model tokens, cap 1,000), BM25 and RRF(BM25, dense) first stages, 100 dev instances drawn with seed 0, template `rq3-pilot-prompt/v1` | 0 (draw and seed field) | `results/rq3_pilot/part_a/`, `results/rq3_pilot/smoke_2026-11-06/`, `docs/RQ3_PILOT.md` | part A and adapter done, 3 calls made; the pilot itself not run |
+| E-RQ3-EXEC | RQ3 (apparatus, measurement) | nothing varies in the measurement: which Verified instances can be evaluated by execution on the cluster (gold patch, two runs, no container, no root) | the benchmark's install specifications (4.1.0), the executor `executor/v1` and its recorded departures, two runs per instance, environment policies `latest` then `era` | none (no randomness; seed field 0) | `results/rq3_exec/executable_instances_v1.json`, `repo_table.csv`, `subset_vs_500.csv`, `cost_per_instance.json`, `coverage_table.csv`, `power_at_n.csv`, `unit_build_estimate.csv`, `older_python_recovery.csv`, `docs/RQ3_PILOT.md` | done 2026-11-07 (subset frozen: 377 of 500) |
 | E-LABEL-AUDIT-SHEET | RQ2 (data, noise audit) | nothing varies: a stratified sample of the pilot mined set is drawn and put on a sheet for human readers; nothing is trained | the pilot mined set (`non_test` reading, 1,286 directories, 7,081 positives), BM25 ranks of E-MINED-PILOT, K = 20 at positive level (O3), the sheet columns and truncation rules of `docs/LABEL_AUDIT.md` | 0 (draw and shuffles) | `results/audit/pilot_v1/sample_meta.json`; sheets and key untracked under `data/review/label_audit_pilot_v1/` | built 2026-11-05; nobody has read any pair |
 | E-OVERLAP-AUDIT | RQ2 (data, contamination) | floor (10 / 20 / 50 syntax-tree nodes) and corpus-share threshold sensitivity; positives reading (non_test, all); drop of flagged directories as a sensitivity cell | the matching key (E-CONTAM-PROBE syntax-tree hash), primary floor 20, flag share 5%, held-out index, the pilot store (1,391 directories), `non_test` reading | none (no randomness; seed orders the hand-reading sample) | `results/mining/overlap_audit/` records, summary, drop and flag lists | pilot store audited (job 61808, measured); full set not run |
 | E-STORED-ANALYSIS | RQ2 (evidence) | nothing is trained or re-run: four readings of per-query rows already stored under `results/rq2/` | every stored run, query set, gold reading and metric as in E-PILOT-ARMS2 | none (no randomness except the bootstrap, seed 0) | variance components and minimum detectable differences; per-query gain by slice; per-query winner and best-of-arms oracle; per-query loss under injected noise | done 2026-11-02 (exploratory; Part A tables and checkpoint inventory) |
@@ -640,3 +641,92 @@ not checked. The model's own tokenizer is not used (the ratio is read from logge
 of submitted content were not read. Dev instances were not checked for execution. The decision, flip experiment and
 open points are in `docs/RQ3_PILOT.md` (D104).
 
+## E-RQ3-EXEC: the executable subset of SWE-bench Verified for RQ3. Measured, stated 2026-11-06, frozen 2026-11-07 (decision D106)
+
+Status: measurement of the apparatus, not an RQ3 result; no retriever's patch was evaluated. Evidence class: measured. Code:
+`ril/evaluation/executor/` (new, lead-owned; tests `tests/unit/test_executor.py`), `scripts/rq3_exec.py`,
+`scripts/ada/rq3_exec/`. Outputs: `results/rq3_exec/` (README there). Rule and reading: `docs/RQ3_PILOT.md`, "Executable evaluation (D106)".
+
+**Procedure, fixed before any retriever's patch was evaluated.** An instance is in the subset when, on the cluster
+without root and without a container, (1) its environment builds from the benchmark's specification (version 4.1.0 of the
+install specifications, read from the unpacked sources, parquet SHA-256 `a45b1fe4...`; no `apt-get` step), (2) the gold
+patch applied to the base commit makes every FAIL_TO_PASS test pass and every PASS_TO_PASS test pass, and (3) two
+repeated runs (independent environments from the shared package cache) agree on every named test. Instances needing an
+older Python were tried with `uv` and then with a node-local interpreter from conda-forge (micromamba).
+
+**Result.** 500 instances, 429 built in both runs, **377 executable** (75.4%): 375 under the `latest` policy and 2 under
+the `era` policy. By repository (instances, built, executable): astropy 22, 16, 15; django 231, 229, 228; matplotlib 34,
+0, 0; seaborn 2, 2, 2; flask 1, 1, 1; requests 8, 8, 4; xarray 22, 22, 18; pylint 10, 9, 4; pytest 19, 19, 19;
+scikit-learn 32, 6, 0; sphinx 44, 42, 11; sympy 75, 75, 75. Exclusions (123): 38 need `apt-get` (matplotlib 34,
+django 2, sphinx 2); 28 failed to build the environment on a compiled install (scikit-learn 25, astropy 2, pylint 1);
+11 package installs failed (scikit-learn 7, astropy 4: pins without a wheel for the interpreter under pip); 28 sphinx
+instances produced no test output (the test runner could not import its plugin; not resolved, see "Not done"); 18 gold
+runs failed a test (7 FAIL_TO_PASS, 11 PASS_TO_PASS: pylint 5, requests 4, xarray 4, sphinx 3, astropy 1, django 1);
+no instance was excluded for disagreeing runs. Tests that touch the network (requests) fail as PASS_TO_PASS.
+Table by repository: `results/rq3_exec/repo_table.csv`.
+
+**Older Python (a request of the engineer after the first full run).** `conda.anaconda.org` is reachable from a compute
+node (recorded in `docs/COMPUTE.md`); micromamba (2.10.0) installs Python 3.6 in 51 s and 3.7 in 14 s, node-local, without
+root. Of the 140 instances that needed Python older than 3.8, **111 are now executable** (django 111 of 111; astropy 0 of 4,
+scikit-learn 0 of 25: compiled builds fail), 29 stay excluded with their reasons (`older_python_recovery.csv`).
+
+**Environment departures, recorded per instance in the subset file.** pytest pinned below 8 where unpinned (6 members);
+a build constraint `setuptools<=70.0.0` on every install (current setuptools has no `pkg_resources`); conda package
+strings and conda environment files read as pip requirements (79 and 18 members), conda-only packages dropped when not on PyPI
+(for example `matplotlib-base`, `dask-core`); `tox`, `tox-current-env` and, for sphinx, `roman` installed where the
+specification's environment supplied them another way (10 members); a retry of an editable install without PEP 517 when the
+pinned build backend lacks the hook; Python 3.6 from conda-forge (111 members). The era policy (unpinned packages as of the
+instance's creation date, `uv --exclude-newer`, `pip --uploaded-prior-to`; specification pins undated) was run on the 95
+instances that still failed after the supplements: 2 qualified (sphinx-8120, sphinx-8269), 93 did not. It is recorded as
+a measured lever with small yield.
+
+**Cost.** One instance, one run, one worker, shared nodes (three workers per job), warm shared package cache from the
+second environment onward: run 1 p50 17.8 s, p95 197.6 s, p99 250.8 s (sum 4.04 h for 377); run 2 p50 17.1 s, p95 142.2 s,
+p99 357.0 s (sum 3.66 h); peak resident size of any step p50 124.5 MB, p95 299.3 MB, p99 443.5 MB
+(`cost_per_instance.json`). **Estimated cost of evaluating one model patch: one run**, so about 17 s at the median and 140
+to 200 s at p95, and 3.7 to 4.0 CPU-hours for one pass over all 377 (a model patch skips nothing the gold run does:
+environment, patch, re-install, tests). The first instance of each environment on a node pays the package download.
+Time by phase over all runs (seconds): install 8,514, tests 7,907, re-install 7,113, packages 1,484, checkout 1,106.
+
+**Subset against the 500** (`subset_vs_500.csv`). Django is 60.5% of the subset against 46.2% of the 500; sympy 19.9%
+against 15.0%; matplotlib and scikit-learn are absent; sphinx 2.9% against 8.8%; requests 1.1% against 1.6%. Difficulty
+(the dataset's field): under 15 min 36.9% (38.8% of the 500), 15 min to 1 hour 52.8% (52.2%), 1 to 4 hours 9.8% (8.4%),
+over 4 hours 0.5% (0.6%). L2 labels: 320 of 377 (84.9%; 86.4% of the 500); L3 labels: 224 of 377 (59.4%; 60.4%). A result
+on the subset does not carry to the excluded instances, and two repositories are absent.
+
+**Part 4, reported without choosing.** Executable instances with L2 labels 320, with L3 labels 224; with stored unit
+records 36 (L2 and units 36, L3 and units 22): astropy 15, xarray 14, requests 4, seaborn 2, flask 1. **Repositories with
+executable instances and no stored unit records: django 228, sympy 75, pytest 19, sphinx 11, pylint 4.** Building them at
+the measured rates of the eight-repository build (E-EVAL-REPOS-BUILD: CPU seconds per snapshot per 1,000 units, distinct
+text share, 109 texts/s overall), with units per snapshot measured at one base commit each (django 33,531, sympy 38,280,
+pylint 8,965, sphinx 7,120, pytest 4,452; job 62850): CPU 3.8 to 9.1 hours (median 6.4), GPU 0.5 to 10.3 hours per
+checkpoint (median 5.0), django and sympy making up nearly all of it (`unit_build_estimate.csv`). The range is wide
+because the eight repositories' distinct-text share spans 0.02 to 0.38 and the Verified instances of a repository are
+spread over years; one snapshot per repository is the unit count. Estimate, not measurement: no unit record was built.
+Power at N = 377 (`power_at_n.csv`, `ril/analysis/rq3_power.py`, exact McNemar, power 0.8, alpha 0.05): minimum
+detectable difference 4.75 / 5.75 / 6.75 / 8.25 points at discordance 10 / 15 / 20 / 30%. The discordance values are the
+module's placeholders (no agent pilot has measured one) and run-to-run noise of the agent is not in the model; N is the
+number of instances, not instance-runs.
+
+**Jobs and dead ends** (ledger rows in `results/logs/ada_jobs.csv`, session RQ3X; account A; no GPU). Pilot jobs 61964,
+61978, 61989 (25 instances over all 12 repositories, then two re-checks; the first three submissions 61941, 61944, 61949
+were cancelled or failed on my script errors: a log path, an ids path, no failure logs). Full run 61997 (8 shards of 62 or
+63 instances, 4 array tasks, 2 runs each; the first submission 61991 was cancelled because a 12 GB request occupied 6 of
+the 10 CPUs). Supplements: 62365 (xarray name fix and conda-forge interpreters, 162 instances), 62696 and 62763 (sphinx),
+era pass 62777 (62599 and 62600 were cancelled: a missing policy flag in the job script, then the tox plugin). Dead ends kept
+as rows but not used: run directories `full_y` (sphinx clone failures), `era3` (stopped: `roman` missing); `full_z` is
+superseded by `full_s` for the same instances. Bugs found by the pilot and fixed in the executor (each recorded as a
+departure when it changes the environment): inline comments in requirements (`uv` rejects them), `pkg_resources` missing,
+conda `iris` is a placeholder package on PyPI, `build_editable` hook missing, `tox-current-env` missing, `roman` missing,
+GitHub clone resets (retries over HTTP/1.1). A cancelled job leaves its node-local directory behind: the list is in a numbered
+cleanup script handed to the engineer (not run: deletions on the cluster stay with the engineer). `ssh ada` (gateway 1) refused, then rejected the key,
+during the era pass; the second gateway with the same account worked (`-o HostName=ada-gw2.iiit.ac.in`), nothing was changed.
+
+**Not done / limits.** The code version of the runs is the base commit of this branch plus the uncommitted worktree (the
+meta file of each run says so); the final commit is the merge. The three configuration hashes in the subset file are the
+three executor states of the run directories (`latest` runs before and after the supplements, `era`). Sphinx: 28 instances
+fail at test start and are excluded rather than chased (time-box set by the engineer). The test-output readers follow the
+benchmark's formats and were exercised only on these runs. The two runs of an instance share the shared package cache and
+the repository mirror, so they are not independent of an upstream change between them. Instances evaluated under the `era`
+policy must be evaluated under it for any model patch (the policy is a field of each member). Nothing here says whether
+an agent's patch will behave like the gold patch.

@@ -24,7 +24,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from ril.evaluation.executor import log_parsers
-from ril.evaluation.executor.envbuild import EnvBuilder, EnvOutcome, UvEnvBuilder
+from ril.evaluation.executor.envbuild import (
+    EnvBuilder,
+    EnvOutcome,
+    MicromambaPythons,
+    UvEnvBuilder,
+)
 from ril.evaluation.executor.spec import InstanceSpec, needs_apt, needs_root
 from ril.evaluation.executor.steps import StepResult, run_step
 from ril.util.log import get_logger
@@ -34,6 +39,7 @@ log = get_logger("executor")
 EXECUTOR_VERSION = "executor/v1"
 PYTEST_PIN = "pytest<8"
 FAILURE_DETAIL_CHARS = 8000
+MIRROR_ATTEMPTS = 3
 BUILD_CONSTRAINTS = ("setuptools<=70.0.0",)
 _PYTEST_PINNED = re.compile(r"pytest\s*(==|<=|<|~=)")
 _FILES_OF_PATCH = re.compile(r"^diff --git a/(\S+) b/", re.M)
@@ -53,6 +59,10 @@ class ExecConfig:
     # Applied to every install, including pip's isolated build environments: the specifications
     # were written when setuptools still shipped ``pkg_resources`` (removed in later releases).
     build_constraints: tuple[str, ...] = BUILD_CONSTRAINTS
+    # "era" resolves every dependency the specification does not pin to what existed when the
+    # instance was created (``uv --exclude-newer`` and ``pip --uploaded-prior-to``); pinned
+    # packages are installed without the date. "latest" is the default and resolves as of today.
+    env_policy: str = "latest"
 
     def config_hash(self) -> str:
         payload = {
@@ -62,6 +72,8 @@ class ExecConfig:
             "test_timeout": self.test_timeout,
             "pytest_pin": self.pytest_pin,
             "build_constraints": list(self.build_constraints),
+            "env_policy": self.env_policy,
+            "older_python": "micromamba/conda-forge",
         }
         text = json.dumps(payload, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(text.encode()).hexdigest()[:16]
@@ -131,6 +143,9 @@ class _Ctx:
             "GIT_CONFIG_GLOBAL": "/dev/null",
             "GIT_TERMINAL_PROMPT": "0",
             "LANG": os.environ.get("LANG", "C.UTF-8"),
+            # workers share the interpreter download and the package cache; a slow first download
+            # must not make the others give up
+            "UV_LOCK_TIMEOUT": "3600",
         }
         if config.build_constraints:
             constraints = scratch / "constraints.txt"
@@ -169,13 +184,17 @@ def ensure_mirror(ctx: _Ctx, spec: InstanceSpec) -> StepResult:
     with (cache / (_mirror_name(spec.repo) + ".lock")).open("w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         if not mirror.exists():
-            res = ctx.step(
-                "mirror",
-                f"git clone -q --bare {shlex.quote(source)} {shlex.quote(str(mirror))}",
-                ctx.config.build_timeout,
-            )
-            if not res.ok:
-                shutil.rmtree(mirror, ignore_errors=True)
+            for _ in range(MIRROR_ATTEMPTS):
+                res = ctx.step(
+                    "mirror",
+                    f"git -c http.version=HTTP/1.1 clone -q --bare {shlex.quote(source)}"
+                    f" {shlex.quote(str(mirror))}",
+                    ctx.config.build_timeout,
+                )
+                if res.ok:
+                    break
+                shutil.rmtree(mirror, ignore_errors=True)  # a partial clone of this job's own cache
+            else:
                 return res
         have = ctx.step(
             "mirror_has",
@@ -185,7 +204,7 @@ def ensure_mirror(ctx: _Ctx, spec: InstanceSpec) -> StepResult:
         if not have.ok:
             return ctx.step(
                 "mirror_fetch",
-                f"git -C {shlex.quote(str(mirror))} fetch -q"
+                f"git -c http.version=HTTP/1.1 -C {shlex.quote(str(mirror))} fetch -q"
                 f" {shlex.quote(source)} {spec.base_commit}",
                 ctx.config.build_timeout,
             )
@@ -286,7 +305,13 @@ def evaluate(
     scratch = Path(tempfile.mkdtemp(prefix="rilx_", dir=config.work_root))
     ctx = _Ctx(config, scratch)
     try:
-        return _evaluate(spec, patch, ctx, result, builder or UvEnvBuilder())
+        return _evaluate(
+            spec,
+            patch,
+            ctx,
+            result,
+            builder or UvEnvBuilder(MicromambaPythons(config.cache_root / "mm").get),
+        )
     finally:
         result.seconds = {**ctx.result_seconds, "total": round(sum(ctx.result_seconds.values()), 3)}
         result.peak_rss_mb = ctx.peak
@@ -297,6 +322,14 @@ def _evaluate(
     spec: InstanceSpec, patch: str, ctx: _Ctx, result: ExecResult, builder: EnvBuilder
 ) -> ExecResult:
     cfg = ctx.config
+    if cfg.env_policy == "era" and spec.created_at:
+        ctx.env["UV_EXCLUDE_NEWER"] = spec.created_at
+        ctx.env["PIP_UPLOADED_PRIOR_TO"] = spec.created_at
+        result.departures.append(
+            f"era-dated resolution: unpinned packages uploaded before {spec.created_at}"
+        )
+    elif cfg.env_policy not in ("latest", "era"):
+        raise ValueError(f"unknown env_policy {cfg.env_policy!r}")
     if needs_apt(spec):
         return _fail(
             result, ctx, "needs_apt", "; ".join(c for c in spec.pre_install if "apt" in c)[:300]
@@ -412,10 +445,18 @@ def _ensure_runner(spec: InstanceSpec, ctx: _Ctx, result: ExecResult) -> bool:
     """
     py = shlex.quote(str(ctx.venv / "bin" / "python"))
     if spec.test_cmd.lstrip().startswith("tox"):
-        if not ctx.step("tox_check", f"{py} -m tox --version", 120, cwd=ctx.repo).ok:
-            result.departures.append("tox installed (not in the specification)")
+        wanted = ["tox"] + (["tox-current-env"] if "--current-env" in spec.test_cmd else [])
+        if spec.repo == "sphinx-doc/sphinx":
+            # sphinx imports the top-level ``roman`` module, which the specification's environment
+            # got from an older docutils; current docutils no longer ships it
+            wanted.append("roman")
+        probe_cmd = " && ".join(
+            f"{py} -c 'import importlib.metadata as m; m.version(\"{w}\")'" for w in wanted
+        )
+        if not ctx.step("tox_check", probe_cmd, 120, cwd=ctx.repo).ok:
+            result.departures.append(f"{' '.join(wanted)} installed (not in the specification)")
             return ctx.step(
-                "tox_install", f"uv pip install --python {py} tox", 900, cwd=ctx.repo
+                "tox_install", f"uv pip install --python {py} {' '.join(wanted)}", 900, cwd=ctx.repo
             ).ok
         return True
     if "pytest" not in spec.test_cmd or spec.repo == "pytest-dev/pytest":

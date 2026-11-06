@@ -51,6 +51,8 @@ CONDA_ONLY = frozenset(
         "libblas",
         "liblapack",
         "cdms2",
+        # PyPI's "iris" is a placeholder that raises on import; SciTools Iris is conda-first
+        "iris",
     }
 )
 CONDA_TO_PYPI = {"netcdf4": "netCDF4", "pytables": "tables", "pytorch": "torch"}
@@ -191,8 +193,62 @@ _NO_PYTHON = re.compile(
 )
 
 
+MICROMAMBA_URL = "https://micro.mamba.pm/api/micromamba/linux-64/latest"
+
+# (version, step) -> absolute path of an interpreter, or None when none can be provided
+PythonProvider = Callable[[str, Stepper], str | None]
+
+
+class MicromambaPythons:
+    """Interpreters older than ``uv`` offers (3.5 to 3.7), from conda-forge, node-local, no root.
+
+    A static ``micromamba`` binary and one environment per version live under ``root`` (the
+    job's cache directory) and are created once, under a lock, then shared by later calls.
+    """
+
+    def __init__(self, root: Path) -> None:
+        self.root = root
+
+    def get(self, version: str, step: Stepper) -> str | None:
+        import fcntl
+
+        self.root.mkdir(parents=True, exist_ok=True)
+        env = self.root / f"py{version}"
+        python = env / "bin" / "python"
+        mm = self.root / "bin" / "micromamba"
+        with (self.root / "lock").open("w") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            if python.exists():
+                return str(python)
+            tarball = shlex.quote(str(self.root / "mm.tar.bz2"))
+            if not mm.exists():
+                got = step(
+                    "micromamba_fetch",
+                    f"curl -sfL -m 600 -o {tarball} {MICROMAMBA_URL}"
+                    f" && tar xjf {tarball} -C {shlex.quote(str(self.root))} bin/micromamba",
+                    900,
+                )
+                if not got.ok:
+                    return None
+            made = step(
+                "micromamba_python",
+                f"MAMBA_ROOT_PREFIX={shlex.quote(str(self.root / 'root'))} {shlex.quote(str(mm))}"
+                f" create -y -q -p {shlex.quote(str(env))} -c conda-forge --override-channels"
+                f" python={shlex.quote(version)}",
+                1800,
+            )
+            return str(python) if made.ok and python.exists() else None
+
+
 class UvEnvBuilder:
-    """Virtual environment from ``uv``: interpreter, requirements, then ``pip_packages``."""
+    """Virtual environment from ``uv``: interpreter, requirements, then ``pip_packages``.
+
+    When ``uv`` has no interpreter for the specification's Python (it starts at 3.8), an
+    optional ``pythons`` provider supplies one (micromamba) and the rest is unchanged.
+    """
+
+    def __init__(self, pythons: PythonProvider | None = None) -> None:
+        self.pythons = pythons
 
     def build(
         self, spec: InstanceSpec, venv: Path, step: Stepper, build_timeout: float
@@ -202,6 +258,16 @@ class UvEnvBuilder:
             f"uv venv --seed --python {shlex.quote(spec.python)} {shlex.quote(str(venv))}",
             600,
         )
+        extra: list[str] = []
+        if not res.ok and self.pythons is not None and _NO_PYTHON.search(res.output):
+            interpreter = self.pythons(spec.python, step)
+            if interpreter is not None:
+                extra.append(f"python {spec.python} from conda-forge (micromamba)")
+                res = step(
+                    "venv_mamba",
+                    f"uv venv --seed --python {shlex.quote(interpreter)} {shlex.quote(str(venv))}",
+                    600,
+                )
         if not res.ok:
             stage = "python_unavailable" if _NO_PYTHON.search(res.output) else "venv"
             return EnvOutcome(False, stage, _tail(res.output))
@@ -212,12 +278,20 @@ class UvEnvBuilder:
         if not res.ok:
             return EnvOutcome(False, "venv", _tail(res.output))
         base, departures = dependency_requirements(spec)
+        departures.extend(extra)
         for name, reqs in (("packages", base), ("pip_packages", list(spec.pip_packages))):
             for _ in range(MAX_DROPS + 1):
                 if not reqs:
                     break
                 quoted = " ".join(shlex.quote(r) for r in reqs)
-                res = step(name, f"uv pip install --python {py} {quoted}", build_timeout)
+                # the specification's own pins are installed without the era date: a pin may name
+                # a release newer than the instance
+                undated = (
+                    "env -u UV_EXCLUDE_NEWER -u PIP_UPLOADED_PRIOR_TO "
+                    if name == "pip_packages"
+                    else ""
+                )
+                res = step(name, f"{undated}uv pip install --python {py} {quoted}", build_timeout)
                 if res.ok:
                     break
                 missing = _NOT_ON_PYPI.search(res.output)

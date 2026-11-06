@@ -1,0 +1,13 @@
+repo,instances,executable,exec_with_l2,exec_with_l3,exec_with_units,exec_l2_and_units,exec_l3_and_units
+astropy/astropy,22,15,15,7,15,15,7
+django/django,231,228,185,134,0,0,0
+matplotlib/matplotlib,34,0,0,0,0,0,0
+mwaskom/seaborn,2,2,2,1,2,2,1
+pallets/flask,1,1,1,1,1,1,1
+psf/requests,8,4,4,2,4,4,2
+pydata/xarray,22,18,14,11,14,14,11
+pylint-dev/pylint,10,4,4,0,0,0,0
+pytest-dev/pytest,19,19,15,10,0,0,0
+scikit-learn/scikit-learn,32,0,0,0,0,0,0
+sphinx-doc/sphinx,44,11,11,7,0,0,0
+sympy/sympy,75,75,69,51,0,0,0

@@ -9,9 +9,9 @@
 #SBATCH --output=ril_rq3_exec/logs/units_%j.out
 # Units per snapshot of one base commit per repository (D106, part 4): how many code units a
 # stored unit record would hold, the input of the build-cost estimate. CPU only, node-local work.
-# From $HOME:  PROBE=ril_rq3_exec/data/units_probe.tsv sbatch ril_rq3_exec/units_probe.sbatch
+# From $HOME:  PROBE=data/units_probe.tsv sbatch ril_rq3_exec/units_probe.sbatch   # PROBE is relative to ril_rq3_exec/
 # PROBE: lines "owner/name<TAB>base_commit". Output: one stats JSON per repository under
-# ril_rq3_exec/out/units_probe/ (small files).
+# ril_rq3_exec/out/units_probe/ (small files). Needs code/scripts/parse_repo.py and code/ril.
 set -u
 cd ~/ril_rq3_exec
 PROBE=${PROBE:?probe list}

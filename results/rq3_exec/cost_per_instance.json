@@ -1,0 +1,44 @@
+{
+ "instances": 377,
+ "peak_rss_mb": {
+  "p50": 124.5,
+  "p95": 299.3,
+  "p99": 443.5
+ },
+ "run_1_seconds": {
+  "p50": 17.8,
+  "p95": 197.6,
+  "p99": 250.8,
+  "sum_hours": 4.04
+ },
+ "run_2_seconds": {
+  "p50": 17.1,
+  "p95": 142.2,
+  "p99": 357.0,
+  "sum_hours": 3.66
+ },
+ "seconds_by_phase_all_runs": {
+  "install": 8514,
+  "tests": 7907,
+  "reinstall": 7113,
+  "packages": 1484,
+  "checkout": 1106,
+  "mirror": 430,
+  "pip_packages": 417,
+  "venv": 241,
+  "setuptools": 132,
+  "reset_tests": 106,
+  "pytest_version": 43,
+  "apply_patch": 39,
+  "mirror_has": 39,
+  "apply_test_patch": 39,
+  "venv_mamba": 33,
+  "req_show": 27,
+  "pre_install": 14,
+  "micromamba_python": 12,
+  "tox_check": 6,
+  "tox_install": 4,
+  "micromamba_fetch": 2,
+  "pytest_pin": 1
+ }
+}

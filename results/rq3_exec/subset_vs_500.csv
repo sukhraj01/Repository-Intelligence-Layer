@@ -1,0 +1,21 @@
+dimension,value,n_all,share_all,n_exec,share_exec
+repository,astropy/astropy,22,0.044,15,0.0398
+repository,django/django,231,0.462,228,0.6048
+repository,matplotlib/matplotlib,34,0.068,0,0.0
+repository,mwaskom/seaborn,2,0.004,2,0.0053
+repository,pallets/flask,1,0.002,1,0.0027
+repository,psf/requests,8,0.016,4,0.0106
+repository,pydata/xarray,22,0.044,18,0.0477
+repository,pylint-dev/pylint,10,0.02,4,0.0106
+repository,pytest-dev/pytest,19,0.038,19,0.0504
+repository,scikit-learn/scikit-learn,32,0.064,0,0.0
+repository,sphinx-doc/sphinx,44,0.088,11,0.0292
+repository,sympy/sympy,75,0.15,75,0.1989
+difficulty,1-4 hours,42,0.084,37,0.0981
+difficulty,15 min - 1 hour,261,0.522,199,0.5279
+difficulty,<15 min fix,194,0.388,139,0.3687
+difficulty,>4 hours,3,0.006,2,0.0053
+has_L2_labels,no,68,0.136,57,0.1512
+has_L2_labels,yes,432,0.864,320,0.8488
+has_L3_labels,no,198,0.396,153,0.4058
+has_L3_labels,yes,302,0.604,224,0.5942

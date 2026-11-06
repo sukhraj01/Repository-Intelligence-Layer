@@ -46,7 +46,12 @@ def shard_of(specs: Sequence[InstanceSpec], index: int, count: int) -> list[Inst
 
 
 def result_record(
-    spec: InstanceSpec, run_index: int, res: ExecResult, cfg_hash: str, node: str
+    spec: InstanceSpec,
+    run_index: int,
+    res: ExecResult,
+    cfg_hash: str,
+    node: str,
+    policy: str = "latest",
 ) -> dict[str, Any]:
     """The small JSON row kept per (instance, run); failing named tests are listed, capped."""
     bad = sorted(t for t, s in res.statuses.items() if s not in ("PASSED", "XFAIL"))
@@ -56,6 +61,7 @@ def result_record(
         "version": spec.version,
         "run": run_index,
         "config_hash": cfg_hash,
+        "env_policy": policy,
         "node": node,
         "built": res.built,
         "failure_stage": res.failure_stage,
@@ -145,6 +151,7 @@ def run_shard(
             {
                 "executor": EXECUTOR_VERSION,
                 "config_hash": cfg_hash,
+                "env_policy": config.env_policy,
                 "commit": commit,
                 "uv": _tool_version(["uv", "--version"]),
                 "git": _tool_version(["git", "--version"]),
@@ -177,7 +184,7 @@ def run_shard(
                 stats.stopped_disk = True
                 return
             res = evaluate(spec, gold[spec.instance_id], config, builder=builder)
-            row = result_record(spec, run_index, res, cfg_hash, str(hw["node"]))
+            row = result_record(spec, run_index, res, cfg_hash, str(hw["node"]), config.env_policy)
             if res.failure_detail:
                 fail_dir = run_dir / "fail_logs"
                 fail_dir.mkdir(exist_ok=True)

@@ -105,6 +105,15 @@ implementation and then written here.**
 - **Assumptions:** class units arrive in header form (`BuildConfig(class_source="header")`); the final agent run supplies the agent model's tokenizer.
 - **Limitations:** no callee signatures (DEV-033); no overlap deduplication beyond repeated ids; token counting dominates the time (about 90% in a profile).
 
+## executor (`ril/evaluation/executor/`)
+
+- **Purpose:** decides whether a patch resolves a SWE-bench Verified instance without root or a container: environment from `uv` and the benchmark's install specification, patch, named tests, per-test outcomes. Implements D106 (`docs/RQ3_PILOT.md`); the same function evaluates a gold patch (does the instance qualify for the executable subset) and, later, a model patch (RQ3's resolved rate).
+- **Files:** `spec.py` (plain-data instance specification), `swebench_specs.py` (reads the benchmark's install specifications, version 4.1.0, never runs the package), `envbuild.py` (conda strings and environment files translated to pip requirements, `UvEnvBuilder`), `runner.py` (`evaluate`, `ExecConfig`, `ExecResult`), `steps.py` (a step with timeout, process-group kill and peak resident size from `wait4`), `log_parsers.py` (per-repository test-output readers, `grade`), `jobs.py` (sharded resumable gold runs), `subset.py` (classification, one reason per exclusion), `summary.py`, `coverage.py`.
+- **Interface:** `evaluate(spec, patch, config) -> ExecResult` (`.resolved`, `.statuses`, `.seconds`, `.departures`); `build_subset(specs, rows, ...)`.
+- **Dependencies:** the standard library and `util/log` only; nothing imports `retrieval/`, `parsing/` or `training/`. Workstream C's `ril/agent/` is not touched.
+- **Invariants:** scratch under the node-local work root with `HOME` pointed at it and removed on exit (`tests/unit/test_executor.py`); a test absent from the output counts as failed; every departure from the specification (pytest pin, build constraint, packages dropped, pip requirements for conda packages) is listed on the result.
+- **Limitations:** Python older than 3.8 cannot be built by `uv`; `apt-get` pre-install steps are excluded; pip is not conda (a pin without a wheel for the interpreter fails); the test-output readers follow the benchmark's formats and are checked only on the logs of the instances run so far.
+
 ## data mining (`ril/data_mining/`)
 
 - **Purpose:** builds the unfiltered PR-mined training set (E-MINE-PILOT, `docs/experiments/B.md`): merged pull requests with their closing issues, the changed units of the base commit as positives, one directory per pull request in the layout `training/pool_reader.py` reads.

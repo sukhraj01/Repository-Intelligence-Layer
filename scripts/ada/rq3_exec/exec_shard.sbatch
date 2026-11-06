@@ -4,7 +4,7 @@
 #SBATCH --account=research
 #SBATCH --qos=low
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=12G
+#SBATCH --mem=8G
 #SBATCH --time=23:00:00
 #SBATCH --output=ril_rq3_exec/logs/exec_%A_%a.out   # relative to the submit directory ($HOME)
 # Gold-patch runs of D106 (docs/RQ3_PILOT.md). The submit limit is 5 jobs per user, so an array
@@ -13,8 +13,9 @@
 #   (set UV_BIN_DIR to the directory of the uv binary)
 #   RUN=pilot SHARDS=5 TASKS=5 IDS=data/pilot25.txt sbatch --array=0-4 ril_rq3_exec/exec_shard.sbatch
 #   RUN=full SHARDS=8 TASKS=4 sbatch --array=0-3 ril_rq3_exec/exec_shard.sbatch
-# (two array tasks at a time: the per-user limit is 10 CPUs and Slurm counts hardware threads,
-#  so --cpus-per-task=2 occupies 4)
+#   ENV_POLICY=era RUN=era1 SHARDS=4 TASKS=2 IDS=data/ids_era1.txt sbatch --array=0-1 ...   (re-run of failures)
+# (two array tasks at a time: the per-user limit is 10 CPUs, and Slurm sizes a job from its memory
+#  as well as --cpus-per-task: 8G occupies 4 CPUs, 12G occupies 6)
 # Work, package caches and repository mirrors live in node-local $TMPDIR; $HOME gets only the
 # small results file. Resumable: the same command continues where the shard stopped.
 set -u
@@ -30,7 +31,7 @@ export PATH="${UV_BIN_DIR:?directory that holds the uv binary}:$PATH"
 rc=0
 for SHARD in $(seq "$TASK" "$TASKS" $((SHARDS-1))); do
   ARGS=(data/specs_v1.jsonl data/gold_v1.jsonl "runs/$RUN/shard_$(printf %02d "$SHARD")"
-        --shard "$SHARD" --count "$SHARDS" --runs 2 --workers "$WORKERS"
+        --shard "$SHARD" --count "$SHARDS" --runs 2 --workers "$WORKERS" --env-policy "${ENV_POLICY:-latest}"
         --work-root "$LOCAL/work" --cache-root "$LOCAL/cache" --local-mirrors "$HOME/ril_e/repo_cache"
         --commit "$(cat code/COMMIT 2>/dev/null)")
   [ -n "$IDS" ] && ARGS+=(--ids "$IDS")
