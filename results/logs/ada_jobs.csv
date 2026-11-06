@@ -129,3 +129,15 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-06,C,60041,S41,E-MINE-FULL listing shard 1 outcome (IncompleteRead; DEV-034),u22,1,0,02:53:13,0.0,FAILED
 2026-11-06,C,60042,S41,E-MINE-FULL mining session 1 outcome (never ran; DependencyNeverSatisfied; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
 2026-11-06,C,60043,S41,E-MINE-FULL mining session 2 outcome (never ran; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-06,A,61759,RQ3P,E-RQ3-PILOT-PREP part A network and container probe,u22,4,0,00:00:47,0.0,COMPLETED
+2026-11-06,A,61762,RQ3P,part A probe with a truncated uv download (dead end),u22,6,0,00:02:03,0.0,COMPLETED (nothing after the download ran)
+2026-11-06,A,61768,RQ3P,part A container module extracted node-locally; image build and run; uv; swebench 5.0.2,u22,6,0,00:05:38,0.0,COMPLETED
+2026-11-06,A,61775,RQ3P,prepare prompts first attempt (limit applied after the build; cancelled),u22,4,0,00:14:51,0.0,CANCELLED
+2026-11-06,A,61776,RQ3P,part A census attempt with swebench 5.x (no install specifications; dead end),u22,6,0,00:02:14,0.0,COMPLETED
+2026-11-06,A,61790,RQ3P,part A swebench 4.1.0 census and gold-patch checks on four instances,u22,6,0,00:09:47,0.0,COMPLETED
+2026-11-06,A,61792,RQ3P,prepare prompts (83 instances; dense scores missing for some drawn instances),u22,4,0,00:14:36,0.0,COMPLETED
+2026-11-06,A,61882,RQ3P,part A environment census and flask retry with pytest<8,u22,4,0,00:00:10,0.0,COMPLETED
+2026-11-06,A,61883,RQ3P,prepare prompts (cancelled after 10 s: output directory reused),u22,4,0,00:00:10,0.0,CANCELLED
+2026-11-06,A,61884,RQ3P,prepare prompts at budget 9760 approximate tokens (100 instances; superseded),u22,4,0,00:09:27,0.0,COMPLETED
+2026-11-06,A,61885,RQ3P,part A joint table of Python version by pre-install step,u22,2,0,00:00:02,0.0,COMPLETED
+2026-11-06,A,61889,RQ3P,prepare prompts at budget 8000 model tokens (ratio 1.0; 100 instances; the pilot's prompt set),u22,4,0,00:09:19,0.0,COMPLETED

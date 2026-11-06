@@ -1,0 +1,288 @@
+[
+ {
+  "instance": "pallets__flask-5014",
+  "repo": "pallets/flask",
+  "version": "2.3",
+  "spec_python": "3.11",
+  "steps": {
+   "clone": {
+    "exit": 0,
+    "seconds": 0.3,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "tail": ""
+   },
+   "venv": {
+    "exit": 0,
+    "seconds": 1.6,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "tail": "Using CPython 3.11.16\nCreating virtual environment with seed packages at: /tmp/ril_rq3_work/pallets__flask-5014/venv\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\n + packaging==26.3\n + pip==26.3\n + setuptools==84.2.1\n + wheel==0.48.0\nActivate with: source /tmp/ril_rq3_work/pallets__flask-5014/venv/bin/activate\n"
+   },
+   "pip_packages": {
+    "exit": 0,
+    "seconds": 6.7,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "tail": ""
+   },
+   "install": {
+    "exit": 0,
+    "seconds": 2.5,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "tail": "hon.org/en/latest/guides/writing-pyproject-toml/#license for details.\n          ********************************************************************************\n  \n  !!\n    self._finalize_license_expression()\n  Created wheel for Flask: filename=flask-2.3.0.dev0-0.editable-py3-none-any.whl size=3997 sha256=c5a5413f951aebbf2089c249dc63eddc976c002badeb454cb4636a51b52938d1\n  Stored in directory: /tmp/pip-ephem-wheel-cache-7p07pgmq/wheels/e1/41/31/852fd4b4baaacd511b5d7ba70bf6a91e31e664a16f211cbc3a\nSuccessfully built Flask\nInstalling collected packages: Flask\nSuccessfully installed Flask-2.3.0.dev0\n"
+   },
+   "pytest_installed": {
+    "exit": 0,
+    "seconds": 3.0,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "tail": ""
+   },
+   "apply_test_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "tail": ""
+   },
+   "tests_before_gold": {
+    "exit": 1,
+    "seconds": 0.8,
+    "peak_rss_mb_cumulative_max": 253.3,
+    "n_passed": 0,
+    "n_failed": 60,
+    "f2p_total": 1,
+    "f2p_passed": 0,
+    "f2p_missing_from_output": [],
+    "tail": " tests/test_blueprints.py::test_child_and_parent_subdomain - AttributeEr...\nERROR tests/test_blueprints.py::test_unique_blueprint_names - AttributeError:...\nERROR tests/test_blueprints.py::test_self_registration - AttributeError: modu...\nERROR tests/test_blueprints.py::test_blueprint_renaming - AttributeError: mod...\n============================== 60 errors in 0.39s ==============================\n"
+   },
+   "apply_gold_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "tests_after_gold": {
+    "exit": 1,
+    "seconds": 0.6,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "n_passed": 0,
+    "n_failed": 60,
+    "f2p_total": 1,
+    "f2p_passed": 0,
+    "f2p_missing_from_output": [],
+    "tail": " tests/test_blueprints.py::test_child_and_parent_subdomain - AttributeEr...\nERROR tests/test_blueprints.py::test_unique_blueprint_names - AttributeError:...\nERROR tests/test_blueprints.py::test_self_registration - AttributeError: modu...\nERROR tests/test_blueprints.py::test_blueprint_renaming - AttributeError: mod...\n============================== 60 errors in 0.32s ==============================\n"
+   }
+  },
+  "resolved_by_gold": false
+ },
+ {
+  "instance": "psf__requests-6028",
+  "repo": "psf/requests",
+  "version": "2.27",
+  "spec_python": "3.9",
+  "steps": {
+   "clone": {
+    "exit": 0,
+    "seconds": 0.3,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "venv": {
+    "exit": 0,
+    "seconds": 13.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": "ownload)\nUsing CPython 3.9.25\nCreating virtual environment with seed packages at: /tmp/ril_rq3_work/psf__requests-6028/venv\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\n + packaging==26.3\n + pip==26.0.1\n + setuptools==82.0.1\n + wheel==0.48.0\nActivate with: source /tmp/ril_rq3_work/psf__requests-6028/venv/bin/activate\n"
+   },
+   "install": {
+    "exit": 0,
+    "seconds": 6.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ".toml): started\n  Building wheel for requests (pyproject.toml): finished with status 'done'\n  Created wheel for requests: filename=requests-2.27.0-py2.py3-none-any.whl size=63161 sha256=d80764859990fc52c752e9a7509dfb56a33b7555a5eabf03cc34fdb484f01c02\n  Stored in directory: /tmp/pip-ephem-wheel-cache-ffxzzw46/wheels/d5/ca/e7/25f3925b637f8ea9a381b3baf9b2f715c1677930cdafff72a5\nSuccessfully built requests\nInstalling collected packages: urllib3, idna, charset_normalizer, certifi, requests\n\nSuccessfully installed certifi-2026.10.23 charset_normalizer-2.0.12 idna-3.20 requests-2.27.0 urllib3-1.26.20\n"
+   },
+   "pytest_installed": {
+    "exit": 0,
+    "seconds": 3.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "apply_test_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "tests_before_gold": {
+    "exit": 1,
+    "seconds": 0.9,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "n_passed": 193,
+    "n_failed": 10,
+    "f2p_total": 2,
+    "f2p_passed": 0,
+    "f2p_missing_from_output": [],
+    "tail": "_hostname[http://user:pass@hostname:5000-hostname]\nFAILED tests/test_utils.py::test_prepend_scheme_if_needed[http://user:pass@example.com/path?query-http://user:pass@example.com/path?query]\nFAILED tests/test_utils.py::test_prepend_scheme_if_needed[http://user@example.com/path?query-http://user@example.com/path?query]\n============= 2 failed, 193 passed, 11 skipped, 8 errors in 0.45s ==============\n"
+   },
+   "apply_gold_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "tests_after_gold": {
+    "exit": 1,
+    "seconds": 0.7,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "n_passed": 195,
+    "n_failed": 8,
+    "f2p_total": 2,
+    "f2p_passed": 2,
+    "f2p_missing_from_output": [],
+    "tail": "ts/test_utils.py::test_should_bypass_proxies_pass_only_hostname[http://hostname:5000/-hostname]\nERROR tests/test_utils.py::test_should_bypass_proxies_pass_only_hostname[http://user:pass@hostname-hostname]\nERROR tests/test_utils.py::test_should_bypass_proxies_pass_only_hostname[http://user:pass@hostname:5000-hostname]\n================== 195 passed, 11 skipped, 8 errors in 0.30s ===================\n"
+   }
+  },
+  "resolved_by_gold": true
+ },
+ {
+  "instance": "mwaskom__seaborn-3187",
+  "repo": "mwaskom/seaborn",
+  "version": "0.12",
+  "spec_python": "3.9",
+  "steps": {
+   "clone": {
+    "exit": 0,
+    "seconds": 1.1,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": "warning: You appear to have cloned an empty repository.\n"
+   },
+   "venv": {
+    "exit": 0,
+    "seconds": 0.7,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": "Using CPython 3.9.25\nCreating virtual environment with seed packages at: /tmp/ril_rq3_work/mwaskom__seaborn-3187/venv\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\n + packaging==26.3\n + pip==26.0.1\n + setuptools==82.0.1\n + wheel==0.48.0\nActivate with: source /tmp/ril_rq3_work/mwaskom__seaborn-3187/venv/bin/activate\n"
+   },
+   "pip_packages": {
+    "exit": 0,
+    "seconds": 75.2,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": "ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\nwheel 0.48.0 requires packaging>=24.0, but you have packaging 23.1 which is incompatible.\n"
+   },
+   "install": {
+    "exit": 0,
+    "seconds": 25.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": "cessfully installed certifi-2026.10.23 cfgv-3.4.0 charset_normalizer-3.5.2 coverage-7.10.7 distlib-0.4.4 docutils-0.23 execnet-2.1.2 filelock-3.19.1 flake8-7.3.0 flit-4.2.0 flit_core-4.2.0 identify-2.6.15 idna-3.20 librt-0.16.0 mccabe-0.7.0 mypy-1.19.1 mypy_extensions-1.1.0 nodeenv-1.11.1 packaging-26.3 pandas-stubs-2.2.2.240807 pathspec-1.1.1 platformdirs-4.4.0 pre-commit-4.3.0 pycodestyle-2.14.0 pyflakes-3.4.0 pytest-cov-7.1.0 pytest-xdist-3.8.0 python-discovery-1.9.4 pyyaml-6.0.3 requests-2.32.5 seaborn-0.12.2.dev0 tomli-w-1.2.0 types-pytz-2025.2.0.20251108 urllib3-2.6.3 virtualenv-21.15.5\n"
+   },
+   "pytest_installed": {
+    "exit": 0,
+    "seconds": 0.6,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "apply_test_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 253.5,
+    "tail": ""
+   },
+   "tests_before_gold": {
+    "exit": 1,
+    "seconds": 83.2,
+    "peak_rss_mb_cumulative_max": 276.4,
+    "n_passed": 249,
+    "n_failed": 2,
+    "f2p_total": 2,
+    "f2p_passed": 0,
+    "f2p_missing_from_output": [],
+    "tail": " undefined\nXFAIL tests/_core/test_plot.py::TestScaling::test_undefined_variable_raises - Need decision on what to do with scale defined for unused variable\nFAILED tests/_core/test_plot.py::TestLegend::test_legend_has_no_offset - Asse...\nFAILED tests/test_relational.py::TestRelationalPlotter::test_legend_has_no_offset\n====== 2 failed, 249 passed, 5 xfailed, 208 warnings in 82.22s (0:01:22) =======\n"
+   },
+   "apply_gold_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 276.4,
+    "tail": ""
+   },
+   "tests_after_gold": {
+    "exit": 0,
+    "seconds": 84.0,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "n_passed": 251,
+    "n_failed": 0,
+    "f2p_total": 2,
+    "f2p_passed": 2,
+    "f2p_missing_from_output": [],
+    "tail": "name for consistency\nXFAIL tests/_core/test_plot.py::TestScaling::test_identity_mapping_color_strings - Correct output representation for color with identity scale undefined\nXFAIL tests/_core/test_plot.py::TestScaling::test_undefined_variable_raises - Need decision on what to do with scale defined for unused variable\n=========== 251 passed, 5 xfailed, 208 warnings in 83.07s (0:01:23) ============\n"
+   }
+  },
+  "resolved_by_gold": true
+ },
+ {
+  "instance": "pydata__xarray-7393",
+  "repo": "pydata/xarray",
+  "version": "2022.09",
+  "spec_python": "3.10",
+  "steps": {
+   "clone": {
+    "exit": 0,
+    "seconds": 0.8,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": ""
+   },
+   "venv": {
+    "exit": 0,
+    "seconds": 0.7,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": "reter at: /usr/bin/python3.10\nCreating virtual environment with seed packages at: /tmp/ril_rq3_work/pydata__xarray-7393/venv\nwarning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.\n         If the cache and target directories are on different filesystems, hardlinking may not be supported.\n         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.\n + packaging==26.3\n + pip==26.3\n + setuptools==84.2.1\n + wheel==0.48.0\nActivate with: source /tmp/ril_rq3_work/pydata__xarray-7393/venv/bin/activate\n"
+   },
+   "pip_packages": {
+    "exit": 0,
+    "seconds": 133.7,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": "ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\nwheel 0.48.0 requires packaging>=24.0, but you have packaging 23.1 which is incompatible.\n"
+   },
+   "install": {
+    "exit": 0,
+    "seconds": 4.5,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": "ing imports.\n          ********************************************************************************\n  \n  !!\n    with strategy, WheelFile(wheel_path, \"w\") as wheel_obj:\n  Created wheel for xarray: filename=xarray-2022.12.1.dev10+g41fef6f13-0.editable-py3-none-any.whl size=9072 sha256=5eb124abccd5f03dca58028124cb9a3f91a3f40b52ab3e171a89656e2e87c864\n  Stored in directory: /tmp/pip-ephem-wheel-cache-bl2_vp9y/wheels/86/df/c4/876550a96c1368d50bf1bc9ca445fbc970db9f8f7f9a841fd1\nSuccessfully built xarray\nInstalling collected packages: xarray\nSuccessfully installed xarray-2022.12.1.dev10+g41fef6f13\n"
+   },
+   "pytest_installed": {
+    "exit": 0,
+    "seconds": 0.6,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": ""
+   },
+   "apply_test_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": ""
+   },
+   "tests_before_gold": {
+    "exit": 1,
+    "seconds": 1.3,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "n_passed": 69,
+    "n_failed": 2,
+    "f2p_total": 2,
+    "f2p_passed": 0,
+    "f2p_missing_from_output": [],
+    "tail": "ndexes.py::test_safe_cast_to_index\nSKIPPED [1] xarray/tests/test_indexes.py:679: requires cftime\nSKIPPED [1] xarray/tests/test_indexes.py:692: requires cftime\nFAILED xarray/tests/test_indexes.py::test_restore_dtype_on_multiindexes[int32]\nFAILED xarray/tests/test_indexes.py::test_restore_dtype_on_multiindexes[float32]\n=================== 2 failed, 69 passed, 2 skipped in 0.41s ====================\n"
+   },
+   "apply_gold_patch": {
+    "exit": 0,
+    "seconds": 0.0,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "tail": ""
+   },
+   "tests_after_gold": {
+    "exit": 0,
+    "seconds": 0.9,
+    "peak_rss_mb_cumulative_max": 296.4,
+    "n_passed": 71,
+    "n_failed": 0,
+    "f2p_total": 2,
+    "f2p_passed": 2,
+    "f2p_missing_from_output": [],
+    "tail": "ndexes.py::test_safe_cast_to_index\nPASSED xarray/tests/test_indexes.py::test_restore_dtype_on_multiindexes[int32]\nPASSED xarray/tests/test_indexes.py::test_restore_dtype_on_multiindexes[float32]\nSKIPPED [1] xarray/tests/test_indexes.py:679: requires cftime\nSKIPPED [1] xarray/tests/test_indexes.py:692: requires cftime\n======================== 71 passed, 2 skipped in 0.21s =========================\n"
+   }
+  },
+  "resolved_by_gold": true
+ }
+]

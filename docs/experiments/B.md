@@ -16,6 +16,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | E-EVAL-REPOS-BUILD | RQ2/RQ3 (evaluation set, build) | nothing varies: unit records, instance caches and dense stores of the eight repositories fixed by D100; no retrieval result is computed or read | the dev build pipeline (e1 units, e3 prepare, x2 prepare, base encoder at 512 tokens, float16), BM25 parameters of the dev configuration | none (no randomness; seed 0 recorded) | `configs/experiments/eval_repos_v1_build.yaml`, `results/tables/eval_repo_build_measured.csv`, `results/logs/eval_repos_build_2026-11-06.json` | done 2026-11-06 (build measured; no evaluation) |
 | E-ASSEMBLY | RQ3 (apparatus, evidence) | the token budget B (4,000 / 8,000 / 16,000 / 32,000) and the first stage (BM25; the stored RRF(BM25, CodeRankEmbed t1024, k 100)) | the assembly policy of ADR-014 (unit cap 1,000 tokens, 200 candidates, class units in header form, approximate tokenizer), the E3 cache and D18 readings, the stored dense scores, dev and Verified-six instances; nothing is trained | none (no randomness except the bootstrap, seed 0) | per-query rows of the run, summary tables, latency rows of `assemble` and `end_to_end` (`results/rq3/assembly_gold_2026-11-06/`, `results/tables/assembly/`, `results/latency/latency_log.csv`) | measured, exploratory 2026-11-06 |
 | E-ASSEMBLY-CAP | RQ3 (apparatus, evidence) | the cap on the text of one unit (500 / 1,000 / 2,000 approximate tokens) | the assembly policy of ADR-014 otherwise, the E3 cache and D18 readings, the stored dense scores, budgets 4,000 to 32,000, both first stages, dev instances only (Verified-six not read) | none (bootstrap seed 0) | per-query rows, selection and paired tables (`results/rq3/assembly_cap_2026-11-06/`, `results/tables/assembly_cap/`) | measured, exploratory 2026-11-06 |
+| E-RQ3-PILOT-PREP | RQ3 (apparatus, evidence) | nothing varies in the measurement: what the cluster can execute (part A), a provider adapter with a persistent limiter, the prompts of the pilot, a three-call smoke test | the assembly of ADR-014 (budget 8,000 model tokens, cap 1,000), BM25 and RRF(BM25, dense) first stages, 100 dev instances drawn with seed 0, template `rq3-pilot-prompt/v1` | 0 (draw and seed field) | `results/rq3_pilot/part_a/`, `results/rq3_pilot/smoke_2026-11-06/`, `docs/RQ3_PILOT.md` | part A and adapter done, 3 calls made; the pilot itself not run |
 | E-LABEL-AUDIT-SHEET | RQ2 (data, noise audit) | nothing varies: a stratified sample of the pilot mined set is drawn and put on a sheet for human readers; nothing is trained | the pilot mined set (`non_test` reading, 1,286 directories, 7,081 positives), BM25 ranks of E-MINED-PILOT, K = 20 at positive level (O3), the sheet columns and truncation rules of `docs/LABEL_AUDIT.md` | 0 (draw and shuffles) | `results/audit/pilot_v1/sample_meta.json`; sheets and key untracked under `data/review/label_audit_pilot_v1/` | built 2026-11-05; nobody has read any pair |
 | E-STORED-ANALYSIS | RQ2 (evidence) | nothing is trained or re-run: four readings of per-query rows already stored under `results/rq2/` | every stored run, query set, gold reading and metric as in E-PILOT-ARMS2 | none (no randomness except the bootstrap, seed 0) | variance components and minimum detectable differences; per-query gain by slice; per-query winner and best-of-arms oracle; per-query loss under injected noise | done 2026-11-02 (exploratory; Part A tables and checkpoint inventory) |
 
@@ -554,3 +555,54 @@ Paired difference, RRF minus BM25, dev, at the selected cap 1,000, primary readi
 At cap 1,000 all 16 cells exclude 0 under both intervals. Across the 48 cells of the paired table (three caps), 46 exclude 0 under both intervals; the two that do not are gold-file differences at L3 whose clustered interval includes 0 (cap 500, B 4,000: +5.93 [-0.4, 11.7]; cap 2,000, B 8,000: +4.93 [-0.2, 9.6]), both with only two repositories. The sign is positive (RRF above BM25) in every cell. This is a dev result on 5 repositories (L2) and 2 (L3); it is not a Verified result and says nothing about the agent.
 
 What is not done: Verified-six is not read again (the cap was chosen on dev only; its Verified numbers stay those of E-ASSEMBLY at cap 1,000); no agent-model tokenizer (budgets are approximate tokens); no agent run; no expansion option; no cap other than the three; no per-repository slice of the cap effect.
+
+## E-RQ3-PILOT-PREP: can resolved rate be measured on the cluster; provider adapter, prompts and smoke test for the RQ3 pilot. Exploratory, 2026-11-06 (decision D104)
+
+**Question.** Before RQ3 is run: (A) can the cluster apply a patch, run the tests and decide resolved; (B) what does a
+hosted-model call cost under the free-tier limits, and can the calls be sent resumably and safely; what do the
+prompts of a 100-instance pilot look like. Nothing here is the RQ3 result.
+
+**Part A, measured (account A, CPU jobs, node-local disk, nothing deleted; commands, scripts and outputs in
+`scripts/ada/rq3_feasibility/` and `results/rq3_pilot/part_a/`, with a README that maps job ids to outputs).**
+Jobs 61759, 61768, 61790, 61882, 61885 carry the evidence; 61762 and 61776 are dead ends (a truncated `uv` download;
+`swebench` 5.x without the install specifications) and are recorded as such.
+- Dataset and instances: SWE-bench Verified, 500 instances, all with a base commit, a test patch, FAIL_TO_PASS and an
+  install specification in `swebench` 4.1.0; 432 have L2 labels, 302 L3. Dev instances not checked.
+- Container runtime: none usable. No runtime on the PATH (login node, gnode004); the module `u22/singularity-ce/4.2.2`
+  points at a directory that is absent from both; its tarball, extracted node-locally, builds an image but cannot run
+  it (`max_user_namespaces` 0, starter not setuid root).
+- Environment without root: partly. 263 of 500 buildable (Python 3.8 or newer, no pre-install), 59 with a non-`apt`
+  pre-install (untested), 35 need `apt-get`, 143 need Python 3.5 to 3.7 (not downloadable with `uv`); 80 distinct
+  environments. Reachable hosts and statuses in `docs/RQ3_PILOT.md`.
+- Gold patch: requests-6028, seaborn-3187, xarray-7393 pass FAIL_TO_PASS after the patch and fail before it; environment
+  19 / 100 / 138 s, tests 0.7 / 84 / 0.9 s, under 0.3 GB. flask-5014 failed first on an unpinned pytest, and ended with 60
+  passed after the patch (exit 0) and 1 failed before it with `pytest<8` (the script's FAIL_TO_PASS id match was lost to
+  output truncation in that retry, so the evidence is the exit status and counts). PASS_TO_PASS not checked.
+
+**Part B.** `ril/agent/providers/` (new files only; nothing of workstream C edited): `gemini.py` (client, key handling
+from `~/.ril_llm_env` or the environment, masked key object, retries with backoff, 429 and 5xx counted),
+`limiter.py` (requests per minute, tokens per minute, requests per day on the Pacific day, state in a JSON-lines
+file, clean stop at the cap, resume), `calllog.py` (per-call rows, prompts and replies as files by hash),
+`patch_format.py` (prompt and edit format, `rq3-pilot-prompt/v1`), `pilot_run.py` (prepare, run with re-asks and
+resume), `report.py`, `contexts.py` (assembled contexts for both first stages); `scripts/rq3_pilot.py`;
+`configs/agent/gemini_limits.yaml` (limits with their date). Tests (no network, a recorded fake transport and a
+manual clock): limiter arithmetic, resume after a stop, the key absent from logs, files and error messages,
+malformed and blocked replies, prompt determinism, run resume, report. Limits used: 90% of the console values (13 a
+minute, 225,000 tokens a minute, 450 a day).
+
+**Prepare.** Job 61792 and 61884 built the first draw (budget 9,760 approximate tokens; 100 instances of the five dev
+repositories, 200 prompts, median about 36,000 characters); the smoke test showed the model's input token count equal
+to the approximate count (ratio 1.00 on three prompts, not the 1.22 of E-ASSEMBLY), so the budget was restated and the
+prompts rebuilt as `prepared_dev100_b8000` (job 61889, config `configs/experiments/rq3_pilot_prepare.yaml`, config hash a8ec4fc94cc9 (SHA-256 prefix of the file), seed 0): 100 instances of five dev repositories (conan 46, deepset 50, qutebrowser 50, openlibrary 40, streamlink 14 across the two arms), 200 prompts of 24,877 to 38,428 characters (median 30,115), the two arms' contexts differ for every instance. The prompt files stay on the cluster (`~/ril_rq3/prepared_dev100_b8000`).
+
+**Smoke test.** Three calls (the key file existed at run time): model string accepted, three usable replies on the
+first attempt, input 10,001 to 10,099 tokens, latency 1.7 to 3.7 s. `results/rq3_pilot/smoke_2026-11-06/`.
+
+**Dry-run plan.** 400 units, 400 to 1,200 calls, 1 to 3 days at 450 requests a day (the 13-a-minute limit alone gives
+about 35 minutes for 450 calls).
+
+**What is not done.** The pilot is not run. Resolved rate is not measured (no model edits, no grader). PASS_TO_PASS was
+not checked. The model's own tokenizer is not used (the ratio is read from logged counts). Free-tier terms on the use
+of submitted content were not read. Dev instances were not checked for execution. The decision, flip experiment and
+open points are in `docs/RQ3_PILOT.md` (D104).
+

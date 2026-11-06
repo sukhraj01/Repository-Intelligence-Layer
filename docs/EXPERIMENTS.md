@@ -68,6 +68,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-LABEL-AUDIT-SHEET | lead | `docs/experiments/B.md` | sheets built, nobody has read any pair | 2026-11-05 |
 | E-ASSEMBLY | lead | `docs/experiments/B.md` | measured (exploratory) | 2026-11-06 |
 | E-ASSEMBLY-CAP | lead | `docs/experiments/B.md` | measured (exploratory; cap 1,000 kept) | 2026-11-06 |
+| E-RQ3-PILOT-PREP | lead | `docs/experiments/B.md` | part A and adapter done; three calls made; the pilot not run | 2026-11-06 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
 | E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |
