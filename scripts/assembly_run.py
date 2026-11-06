@@ -3,6 +3,7 @@
 Usage:
   assembly_run.py measure CONFIG E3_CACHE DENSE_ROOT REPO_CACHE WORK_DIR OUT_DIR [--seed N]
   assembly_run.py tables  OUT_DIR TABLE_PREFIX [--seed N]
+  assembly_run.py cap_tables OUT_DIR TABLE_PREFIX [--seed N]
   assembly_run.py ratio   REPO_DIR REPO_ID TOKENIZER_JSON OUT_JSON [--name NAME] [--seed N]
 """
 
@@ -23,7 +24,7 @@ from ril.util.seed import set_seed  # noqa: E402
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("stage", choices=["measure", "tables", "ratio"])
+    ap.add_argument("stage", choices=["measure", "tables", "cap_tables", "ratio"])
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--only")
@@ -49,6 +50,25 @@ def main() -> int:
         rows, coverage = load_rows(out_dir)
         write_csv(f"{prefix}_summary.csv", summary_rows(rows, args.seed))  # type: ignore[arg-type]
         write_csv(f"{prefix}_coverage.csv", coverage_rows(coverage, rows))  # type: ignore[arg-type]
+        write_csv(f"{prefix}_query_rows.csv", rows)
+        log.info("%d query rows -> %s_*.csv", len(rows), prefix)
+        return 0
+    if args.stage == "cap_tables":
+        from ril.analysis.assembly_tables import (
+            cap_selection_rows,
+            coverage_rows,
+            load_rows,
+            paired_rows,
+            summary_rows,
+        )
+        from ril.analysis.x2_tables import write_csv
+
+        out_dir, prefix = args.paths[:2]
+        rows, coverage = load_rows(out_dir)
+        write_csv(f"{prefix}_summary.csv", summary_rows(rows, args.seed))  # type: ignore[arg-type]
+        write_csv(f"{prefix}_coverage.csv", coverage_rows(coverage, rows))  # type: ignore[arg-type]
+        write_csv(f"{prefix}_selection.csv", cap_selection_rows(rows))  # type: ignore[arg-type]
+        write_csv(f"{prefix}_paired.csv", paired_rows(rows, seed=args.seed))  # type: ignore[arg-type]
         write_csv(f"{prefix}_query_rows.csv", rows)
         log.info("%d query rows -> %s_*.csv", len(rows), prefix)
         return 0

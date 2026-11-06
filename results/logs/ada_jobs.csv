@@ -118,3 +118,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-06,A,60692,S37,E-EVAL-REPOS-BUILD store check (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
 2026-11-06,A,60693,S37,E-EVAL-REPOS-BUILD store check repeated to save the output (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
 2026-11-06,A,60883,S39,E-ASSEMBLY gold-in-context measurement and token ratio,u22,2,0,01:37:43,0.0,COMPLETED
+2026-11-06,A,61413,S40,E-ASSEMBLY-CAP unit-cap measurement (dev only),u22,2,0,01:24:40,0.0,COMPLETED

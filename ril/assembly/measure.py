@@ -23,6 +23,7 @@ import json
 import os
 import time
 from dataclasses import dataclass
+from itertools import product
 from typing import Any
 
 import numpy as np
@@ -52,6 +53,12 @@ class MeasureSpec:
     dense_variant: str
     rrf_k: int
     readings: tuple[str, ...]
+    caps: tuple[int, ...] = ()
+    """Unit caps to compare (E-ASSEMBLY-CAP); empty means the single ``max_unit_tokens``."""
+
+    @property
+    def unit_caps(self) -> tuple[int, ...]:
+        return self.caps or (self.max_unit_tokens,)
 
 
 def spec_from_config(cfg: Record) -> tuple[MeasureSpec, tuple[str, ...]]:
@@ -77,6 +84,7 @@ def spec_from_config(cfg: Record) -> tuple[MeasureSpec, tuple[str, ...]]:
             dense_variant=str(a["dense_variant"]),
             rrf_k=int(a["rrf_k"]),
             readings=readings,
+            caps=tuple(int(c) for c in a.get("max_unit_tokens_grid", ())),
         ),
         roles,
     )
@@ -139,8 +147,8 @@ def measure_level(
             continue
         scores = first_stage_scores(stage, arrays[f"scores_{level}"], dense, sp.rrf_k)
         cands = candidates_of(stage, scores, ids, sp.candidates, stage == "rrf")
-        for budget in sp.budgets:
-            cfg = AssemblyConfig(budget=budget, max_unit_tokens=sp.max_unit_tokens)
+        for cap, budget in product(sp.unit_caps, sp.budgets):
+            cfg = AssemblyConfig(budget=budget, max_unit_tokens=cap)
             out = assemble(cands, snap, cfg, tok)
             m = out.manifest
             for reading in sp.readings:
@@ -157,6 +165,7 @@ def measure_level(
                         "repo_id": meta["repo_id"],
                         "first_stage": stage,
                         "budget": budget,
+                        "max_unit_tokens": cap,
                         "reading": reading,
                         "n_gold_units": g.n_units,
                         "units_in": g.units_in,
