@@ -105,6 +105,7 @@ still complete and defensible.
 ## Weeks 13–16 — All
 
 - [ ] Analysis, error breakdown, report, presentation
+- [x] Final report skeleton (`reports/final/final_report.tex`: every section, generated tables from stored results by `scripts/report_tables.py`, every empty slot a `\todo` naming its experiment entry) and the evidence-gap map (`docs/REPORT_GAPS.md`); the slots fill as the confirmatory contrasts and the agent runs finish
 
 ## Milestones to show the professor
 

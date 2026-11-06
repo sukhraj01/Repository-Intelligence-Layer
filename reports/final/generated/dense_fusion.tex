@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering\small
+\caption{Zero-shot dense encoders and rank fusion with BM25 (final-test-style reading). Evidence class: \emph{measured, exploratory}. Verified-six, 83 L2 and 55 L3 queries in 6 repositories; the interval is repository-clustered; cut and k were chosen on the development repositories. Entry \entry{E-DENSE-FUSION}.}
+\label{tab:dense_fusion}
+\begin{tabular}{lrrrr}
+\toprule
+System & Cut & RRF k & L2 nDCG@10 & L3 Recall@100 \\
+\midrule
+BM25 &  &  & 18.0 [12.1, 25.4] & 31.8 [23.8, 51.0] \\
+CodeRankEmbed & 1024 &  & 17.9 [13.6, 21.2] & 33.6 [23.6, 51.0] \\
+BM25 + CodeRankEmbed (RRF) & 1024 & 100 & 23.0 [13.4, 31.8] & 38.0 [27.7, 58.4] \\
+Qwen3-Embedding-0.6B & 512 &  & 17.0 [12.2, 24.2] & 39.1 [31.6, 54.1] \\
+BM25 + Qwen3-Embedding-0.6B (RRF) & 512 & 20 & 24.9 [18.4, 30.9] & 41.5 [33.1, 59.8] \\
+\bottomrule
+\end{tabular}
+\end{table*}
