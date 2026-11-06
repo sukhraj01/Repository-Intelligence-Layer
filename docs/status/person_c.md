@@ -1,6 +1,6 @@
 # Person C status
 
-Updated 2026-11-05. Branch `c/eval-rq3`, based on `foundation-v0`.
+Updated 2026-11-06. Branch `c/eval-rq3`, fast-forwarded to `origin/main` at `395a6fd`.
 
 ## Cuts, blockers and deviations
 
@@ -11,9 +11,10 @@ Updated 2026-11-05. Branch `c/eval-rq3`, based on `foundation-v0`.
   Colab remains the selected compute environment. No local scientific run substitutes for a cluster run.
 - 2026-11-05: read-only GITHUB_TOKEN absent from this environment. No secret value is requested.
   Real C2 pilot remains blocked on token, admitted remote runtime and held-out content index.
-- Real BM25 artifact audit remains blocked on export of the completed Colab native run directory,
-  query-level rows, saved config/hardware/input identities, timing CSVs and sibling log.
-  Export the existing completed run; do not rerun or upgrade its evidence class first.
+- The completed BM25 native bundle was recovered from ten Drive checkpoint blobs and audited
+  locally. Query rows and intervals reproduce; see the artifact audit below. Raw corpus, qrels,
+  candidate lists and per-query timing samples were not exported, so those identities and
+  latency percentiles cannot be independently recomputed from this bundle.
 - Five-paper full-reading/page-count claim is unverified. Complete corresponding versioned notes
   are absent from the tracked tree; no full reading performed here and no notes invented.
   Completion requires full PDFs, versioned notes and page/numeric checks before paper claims.
@@ -43,12 +44,25 @@ configuration disabled; lint/format/strict typing pass. Source and outputs:
 Earlier round-one exact commands and source hashes:
 `results/logs/c_rulings_validation_2026-11-05.json`. Native macOS execution is unavailable.
 
-## C1 evidence: operator_reported
+## C1 evidence: artifact-backed query-row audit
 
-The stored dev BM25 stdout and aggregate JSON agree with the CSV. All metric rows and completion
-record are **operator_reported**. No query-level interval or timing recomputation is claimed.
-Command: `python scripts/c_review_evidence.py`; evidence:
-`results/logs/c1_colab_bm25_dev_v1_2026-10-31.json` and its referenced stdout capture.
+The original stdout and aggregate JSON remain the historical **operator_reported** receipt.
+On 2026-11-06, the supplied ZIP SHA256
+`e294cad131a014fec9411f3b1b31e030fa050eee6a2bc9b8684d9b38fe73269e`
+matched the operator's printed hash. The native bundle is stored under
+`results/rq1/c1_colab_bm25_dev_v1_2026-10-31/native/`. Running
+`PATH="$PWD/.venv/bin:$PATH" python scripts/c_audit_bm25_bundle.py resultzips/ril-bm25-dev-v1-results.zip`
+verified all ten file hashes, source/config/dataset identities, 36 staged-file records,
+exact original/Rewrite query IDs for nine folder-level pairs, and independently recomputed
+all twelve metric means and repository-clustered intervals from 1,360 query rows. The 18
+latency and nine throughput rows match their embedded result rows and pass workload/count
+checks. Audit output: `results/logs/c1_colab_bm25_artifact_audit_2026-11-06.json`.
+
+This upgrades the reported metrics to **artifact-backed, query-row rederived** evidence.
+The raw corpus, qrels and candidate lists are absent, so the evaluator's loaded-input
+hashes and shared-candidate contract cannot be independently regenerated. Raw timing samples
+are absent, so the saved latency percentiles cannot be recomputed. Colab execution and the
+waited-child peak RSS remain operator supplied; compute billing remains unknown.
 Config hash `ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452`, seed 0;
 reported source kit `dcc19574386fc66c578bb42c872e38f9e95d0201`.
 
@@ -60,7 +74,7 @@ reported source kit `dcc19574386fc66c578bb42c872e38f9e95d0201`.
 | L3 | recall100 | -1.6005 | [-1.7655, -1.3556] | 238 / 3 |
 
 Reported intervals are repository-clustered. L2 intervals include zero; L3 uses few clusters.
-Upgrade only after storing the native run under results/ and recomputing from query-level rows.
+Do not generalize the DEV intervals to other repositories or the final test; L3 has three clusters.
 E-C1-COLAB-DEV in `docs/experiments/C.md` retains the registration and artifact requirements.
 BM25/dense evaluation apparatus, staging and exact/clustered statistics remain implemented.
 
@@ -79,13 +93,13 @@ No new fixture outcome, model/provider choice, mining expansion or remote job wa
 |---|---|---|---|---|---|
 | C experiment index? | add C entries; defer | stored registration | check unique IDs | index C-owned log | prepared rows at hand-back |
 | Full reading / scaffold? | verify notes; defer | unverified / reasoned | complete versioned notes then pinned adapter test | retain provisional ADR-007 | scripted only |
-| Data/access? | export completed run; defer | operator_reported / measured absence | audit native query rows | supply existing bundle/token/index | no rerun or local substitute |
+| Data/access? | audit completed run; defer raw-data audit | artifact-backed query-row audit | compare raw candidate/qrel inputs if available | preserve verified bundle; obtain token/index for C2 | no rerun or local substitute |
 | Mining histories/scale? | validate/expand; defer | synthetic plumbing | real bounded pilot with two diff audits | defer expansion | existing caps and held-out rules |
 | Model/spend? | hosted; pinned-local | measured absence | explicitly capped dev pairs | obtain cost/noise | ADR-008; no calls |
 | Q45 test/estimate? | hypothesis-test; interval-estimate | reasoned | repeated matched dev pairs | state worthwhile effect | unmeasured; no selection |
 
 ## Next work
 
-Engineer pushes corrected branch and sends hand-back for re-review. Export/audit the existing
-Colab BM25 run, then complete only the authorized real-data steps once their gates are met.
+User owns any push. The existing Colab BM25 bundle has been audited at query-row level; next
+complete only the authorized real-data steps once their gates are met.
 Hand back after real evaluation/pilot evidence and again after unfiltered training-set/C2 work.

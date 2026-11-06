@@ -1,0 +1,42 @@
+{
+  "checkpoint_files": 10,
+  "config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452",
+  "dataset_revision": "23da5d97a8a4495d4bd6d5616aa86d5a12a60699",
+  "folder_level_pairs": 9,
+  "hardware": {
+    "branch": "unknown",
+    "commit": "dcc19574386fc66c578bb42c872e38f9e95d0201",
+    "config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452",
+    "cpu_cores": 2,
+    "cpu_model": "Intel(R) Xeon(R) CPU @ 2.20GHz",
+    "cuda_version": "",
+    "dirty": 1,
+    "gpu_driver": "",
+    "gpu_name": "none",
+    "host": "colab",
+    "python": "3.11.18",
+    "ram_gb": 12.7,
+    "timestamp_utc": "2026-10-31T17:38:36Z",
+    "torch": "not imported"
+  },
+  "latency_rows": 18,
+  "limits": [
+    "Raw corpus, qrels and candidate lists are not in the ZIP; loaded-input hashes and the original/Rewrite shared-candidate contract cannot be independently rederived.",
+    "Per-query latency samples are not in the ZIP; saved percentile rows and their CSV copies agree, but latency percentiles cannot be independently recomputed.",
+    "Colab execution and the earlier waited-child peak RSS are operator supplied; the ZIP contains saved hardware and timing rows, not an independent host trace."
+  ],
+  "manifest_sha256": "1b1e022998ab6ac7906514345ab8e82f4817a621d8e4c6a866a05915ccc385ac",
+  "metrics_recomputed": 12,
+  "native_files": 10,
+  "paired_queries_by_level": {
+    "L2": 442,
+    "L3": 238
+  },
+  "query_rows": 1360,
+  "source_commit": "dcc19574386fc66c578bb42c872e38f9e95d0201",
+  "staged_files": 36,
+  "status": "artifact_and_row_audit_passed",
+  "throughput_rows": 9,
+  "zip_bytes": 122229,
+  "zip_sha256": "e294cad131a014fec9411f3b1b31e030fa050eee6a2bc9b8684d9b38fe73269e"
+}

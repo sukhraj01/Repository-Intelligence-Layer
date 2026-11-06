@@ -1,0 +1,57 @@
+{
+  "config_hash": "ce0c977b4f6a93cd5c0615846170090e7389ebc341825fa4bc4f2f69d8b75452",
+  "files": {
+    "configs/dev-v1-bm25.yaml": {
+      "bytes": 1009,
+      "sha256": "451a81484271bfe5366ce499b069a650b44733cbdbfe98730c3d07f079d53e37",
+      "source": "checkpoint"
+    },
+    "dataset-manifest.json": {
+      "bytes": 8318,
+      "sha256": "4c90d33168336d79fd97ddee5b94df52a58ba6e8fedd1c698841d538baf85d2c",
+      "source": "checkpoint"
+    },
+    "dataset-plan.json": {
+      "bytes": 8574,
+      "sha256": "945b0390fea62eb3acf4e44558567871b3b9d9c58363095baff57fe593b23a30",
+      "source": "checkpoint"
+    },
+    "raw/provenance.json": {
+      "bytes": 18112,
+      "sha256": "1aaf5f80fe0a56c8f4a896c666b748dccee033aa8888bc65cde98805400034b4",
+      "source": "checkpoint"
+    },
+    "runs/dev-v1/bm25-log.json": {
+      "bytes": 583845,
+      "sha256": "6a564d841cdaa6b541f20d4cbe3780ee0e9834fea525dcbb4b509a9b1c2b75c2",
+      "source": "checkpoint"
+    },
+    "runs/dev-v1/bm25/config.yaml": {
+      "bytes": 1009,
+      "sha256": "8c434311c04f09382038f1cc6513afd9fb1783c649d5fd5272c072cf5f5a4fc7",
+      "source": "checkpoint"
+    },
+    "runs/dev-v1/bm25/hardware.json": {
+      "bytes": 442,
+      "sha256": "375e9351a95751e43cb7681b4b838cf4d6fa46f4859961b3e6d09a80852e0dd9",
+      "source": "checkpoint"
+    },
+    "runs/dev-v1/bm25/latency_log.csv": {
+      "bytes": 7112,
+      "sha256": "c04cbce003a8e9da5c8c0665e2e63814e46dd18bd6eb37c5b8bab0868eb0a7ff",
+      "source": "checkpoint"
+    },
+    "runs/dev-v1/bm25/results.json": {
+      "bytes": 583845,
+      "sha256": "6a564d841cdaa6b541f20d4cbe3780ee0e9834fea525dcbb4b509a9b1c2b75c2",
+      "source": "checkpoint"
+    },
+    "runs/dev-v1/bm25/throughput_log.csv": {
+      "bytes": 3247,
+      "sha256": "d5ae27701643505aa09831aff365b725899c0352a23ef7b7a2e129264bb14457",
+      "source": "checkpoint"
+    }
+  },
+  "source_commit": "dcc19574386fc66c578bb42c872e38f9e95d0201",
+  "version": "ril-bm25-recovery/v1"
+}

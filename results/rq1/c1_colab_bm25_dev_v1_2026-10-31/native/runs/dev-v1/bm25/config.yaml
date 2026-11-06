@@ -1,0 +1,50 @@
+bootstrap_draws: 2000
+data_root: /content/ril-colab/work/raw
+experiment_id: E-C1-EVAL
+folders:
+- dataset: SWE-bench_Pro
+  folder: instance_internetarchive__openlibrary
+  levels:
+  - L2
+  - L3
+  repo: internetarchive/openlibrary
+- dataset: SWE-bench_Pro
+  folder: instance_qutebrowser__qutebrowser
+  levels:
+  - L2
+  - L3
+  repo: qutebrowser/qutebrowser
+- dataset: SWE-bench-Live
+  folder: conan
+  levels:
+  - L2
+  repo: conan-io/conan
+- dataset: SWE-bench-Live
+  folder: deepset
+  levels:
+  - L2
+  repo: deepset-ai/haystack
+- dataset: SWE-bench-Live
+  folder: streamlink__streamlink
+  levels:
+  - L2
+  repo: streamlink/streamlink
+- dataset: SWE-bench_Pro
+  folder: instance_ansible__ansible
+  levels:
+  - L2
+  - L3
+  repo: ansible/ansible
+log_path: /content/ril-colab/work/runs/dev-v1/bm25-log.json
+output: /content/ril-colab/work/runs/dev-v1/bm25
+prefilter_k: 10000
+repeats: 3
+retriever:
+  b: 0.75
+  k1: 1.5
+  kind: bm25
+rewrite: true
+role: dev
+seed: 0
+split: core-bench-dev3-original-rewrite-v1
+warmup_n: 1

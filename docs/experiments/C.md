@@ -383,3 +383,25 @@ compute billing unknown. Preserve this completed run and collect artifacts rathe
 
 Aggregate-only audit and table extraction: `python scripts/c_review_evidence.py`. This command
 checks stored summaries and evidence labels; it cannot recompute missing query-level intervals.
+
+### E-C1-COLAB-DEV artifact audit — 2026-11-06
+
+The earlier `operator_reported` wording above records what was available on 31 October.
+The recovered native ZIP is now stored under
+`results/rq1/c1_colab_bm25_dev_v1_2026-10-31/native/`. Its SHA256 is
+`e294cad131a014fec9411f3b1b31e030fa050eee6a2bc9b8684d9b38fe73269e`,
+matching the operator's export output. Command:
+`PATH="$PWD/.venv/bin:$PATH" python scripts/c_audit_bm25_bundle.py resultzips/ril-bm25-dev-v1-results.zip`.
+Audit output: `results/logs/c1_colab_bm25_artifact_audit_2026-11-06.json`.
+All ten member checksums, source/config and staged-input identities match. The 1,360
+query rows form exact original/Rewrite pairs: 442 L2 across six repositories and 238 L3
+across three. All twelve means and 95% repository-clustered intervals reproduce from these
+rows using seed 0 and 2,000 draws. Eighteen latency and nine throughput rows match their
+CSV copies and expected workloads. The displayed DEV metric table above is therefore
+**artifact-backed and query-row rederived**. No new run or new statistical row was made.
+
+The ZIP omits raw corpus, qrels and candidate lists, so loaded-input hashes and the
+shared-candidate contract cannot be independently regenerated. It also omits individual
+timing samples, so latency percentiles cannot be recomputed. Remote execution and the
+waited-child peak RSS remain operator supplied; compute billing remains unknown. This
+does not establish an agent outcome or a final-test result.
