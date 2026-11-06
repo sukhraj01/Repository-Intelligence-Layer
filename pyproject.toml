@@ -69,8 +69,8 @@ module = ["networkx", "pyarrow", "pyarrow.*", "rustworkx", "kuzu", "jedi", "Stem
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-# torch is an optional group (Ada only); locally the training modules are checked without it
-module = ["torch", "torch.*"]
+# torch and tokenizers are optional (Ada only); locally the modules that use them are checked without
+module = ["torch", "torch.*", "tokenizers"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

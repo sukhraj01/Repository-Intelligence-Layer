@@ -1,0 +1,200 @@
+test requests test hook receives request arguments
+http proxy auth call r
+test lookup dict test get key value
+test requests test no body content
+test requests test unicode header name
+test select proxies url expected
+test case insensitive dict test
+test case insensitive dict
+connect timeout connection error timeout
+py test run tests
+test preparing ur ls
+requests cookie jar get policy
+test requests test time elapsed blank httpbin
+invalid json error request exception
+test requests test request with bytestring
+lookup dict getitem key
+test requests test unicode header name httpbin
+test test server test requests after
+requests cookie jar mutable mapping
+http adapter build response
+test requests test json
+test data argument accepts tuples data
+super len o
+requests cookie jar contains name
+test to key val list
+rewind body prepared request
+test guess filename test guess filename invalid
+merge cookies cookiejar cookies
+test requests test digest auth sets session cookies
+test timeout test none
+test morsel to cookie expires test expires none
+test case insensitive dict
+test guess jsonutf test encoded encoding
+test get environ proxies test
+server text response server text request timeout kwargs
+test should bypass proxies no proxy
+test requests test response
+server init handler host port requests to
+test requests test digestauth quotes qop value httpbin
+should bypass proxies url no proxy
+session redirect mixin object
+session redirect mixin rebuild
+test hooks hooks list result
+requests cookie jar find
+prepared request prepare headers headers
+http digest auth init
+test get environ proxies test not bypass
+test test server test text response
+test test server test server
+dict from cookiejar cj
+test requests test prepared request hook httpbin
+test can access idna attribute
+test timeout test total timeout connect
+requests cookie jar set name value
+too many redirects request exception
+test should bypass proxies no proxy
+session redirect mixin should strip
+http adapter close
+url required request exception
+test requests test fixes 1329
+test requests test postbin get post files
+requests cookie jar mutable
+response exit args
+mock request add header key val
+test extract zipped paths test unzipped paths unchanged
+requests cookie jar get
+prepared request copy
+test dotted netmask mask
+test requests test http
+test requests test errors
+http digest auth handle 401 r kwargs
+http adapter send request stream
+session redirect mixin get
+test requests test unicode method
+mock response info
+test guess filename test guess filename valid
+invalid json error request exception
+requests cookie jar find no
+requests cookie jar get name default
+test requests test cookie as dict keeps
+session prepare request request
+test case insensitive dict test delitem key
+http proxy auth http basic auth
+invalid json error request exception
+case insensitive dict repr
+test requests test cookie quote wrapped httpbin
+test to key val list
+lookup dict dict
+response iter lines chunk size
+test requests test binary put
+py test run tests
+server accept connection
+session merge environment settings
+test requests test stream with auth does
+test to key val list test invalid
+test preparing ur ls test preparing
+test requests test http 302 changes
+http adapter setstate state
+requests cookie jar keys
+mock request add header key val
+redirect session send args kwargs
+select proxy url proxies
+test requests test cookie as dict keys
+test case insensitive dict test fixes
+test to native string value expected
+prepared request prepare method method
+test requests test http 302 changes post
+requests cookie jar list
+test requests test postbin seeked
+select proxy url proxies
+test requests test response json when content
+test to key val list
+http digest auth call r
+test to key val list
+mock request add unredirected header
+test requests test response
+test default hooks
+test requests test response iter lines reentrant httpbin
+test timeout test connect timeout timeout
+consume socket content sock
+http digest auth init per thread state
+test requests test http 200 ok
+test requests test should
+test requests test post with
+test guess jsonutf test
+prepared request prepare headers
+test requests test long authinfo in url
+test requests test basicauth
+check compatibility urllib 3 version chardet version charset
+file mode warning requests warning
+case insensitive dict len
+redirect session build response
+invalid header request exception value error
+test requests test invalid
+http adapter send request stream timeout
+test requests test rewind
+test idna with version attribute
+test test server test requests after
+stream consumed error request exception
+redirect session build raw
+cookie conflict error runtime
+lookup dict init name
+test super len test string
+test requests test empty content length httpbin method
+cookie conflict error runtime error
+test json encodes as bytes
+test requests test requests history is
+test get environ proxies no
+lookup dict get key default
+test should bypass proxies no proxy
+http adapter base adapter
+test requests test postbin get post
+test requests test empty
+test requests test basic auth str is always
+http digest auth build
+test fragment not sent with
+test case insensitive dict test getitem
+test requests test invalid ca certificate path httpbin
+prepared request prepare cookies cookies
+stream consumed error request exception type error
+select proxy url proxies
+test preparing ur ls test
+test test server test
+test morsel to cookie expires test expires
+test requests test http 302 too
+test requests test path
+http error request exception
+test requests test unicode multipart post fieldnames
+test requests test autoset header values
+prepared request copy
+too many redirects request exception
+test requests test proxy
+test morsel to cookie expires test
+response is permanent redirect
+test super len test super len with
+cookiejar from dict cookie
+requests cookie jar update other
+get encoding from headers
+test requests test hook
+file mode warning requests warning deprecation warning
+test super len test file tmpdir mode warnings
+test case insensitive dict test getitem
+test timeout test invalid timeout httpbin timeout error
+dotted netmask mask
+requests cookie jar set cookie cookie
+get auth from url url
+test set environ raises exception
+test requests test request cookie
+test requests test cookie
+requests cookie jar delitem
+test address in network
+case insensitive dict copy
+test requests are updated each time httpbin
+test idna with version attribute
+cookie conflict error runtime error
+response exit args
+case insensitive dict iter
+test requests test header no return
+test guess jsonutf test bad
+json decode error invalid json error compat json

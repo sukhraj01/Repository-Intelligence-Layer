@@ -1,0 +1,30 @@
+experiment_id: E-ASSEMBLY (gold in the assembled context, by token budget and first stage)
+stage: stated setting on dev and Verified-six (no sweep; a final-test style reading on Verified, no choice made from it)
+status: exploratory pilot
+date: '2026-11-06'
+seed: 0
+roles:
+- dev
+- test
+confirm: true
+tokenizer: approx
+note: >-
+  Stated before any number of this configuration was computed. The cache, the gold readings and the
+  dense scores are those of E-GRAPH-ROLE (the E3 cache with the D18 readings, CodeRankEmbed at 1024
+  tokens). First stages: BM25 alone, and the stored fusion RRF(BM25, CodeRankEmbed t1024) with k 100,
+  the setting E-GRAPH-ROLE stated for that encoder; no dense scores are computed here (no GPU).
+  Assembly (decision D102, provisional): the 200 best units of the first stage in rank order, unit
+  cap 1000 tokens, class units in header form, approximate tokenizer, budgets 4,000 / 8,000 / 16,000
+  / 32,000 as a measurement grid (no budget is chosen for the agent). Primary reading units_all_nomod
+  (D18), units_all beside it. A gold file is in the context when any included unit lies in it; a gold
+  unit when it is included (intact: not cut by the unit cap). Verified is read once, with these
+  values; nothing is selected from it. Instances without stored dense scores contribute BM25 rows
+  only; the tables compare the two first stages on the queries that have both.
+assembly:
+  first_stages: [bm25, rrf]
+  dense_variant: coderankembed__t1024
+  rrf_k: 100
+  candidates: 200
+  max_unit_tokens: 1000
+  budgets: [4000, 8000, 16000, 32000]
+  readings: [units_all_nomod, units_all]
