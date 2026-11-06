@@ -1,0 +1,20 @@
+{
+ "directories": 1391,
+ "dropped": 36,
+ "dropped_by_a": 3,
+ "dropped_by_b_only": 33,
+ "flagged": 0,
+ "pool_like_after": 1263,
+ "pool_like_directories": 1286,
+ "pool_like_positives": 7081,
+ "pool_like_positives_after": 6921,
+ "repositories": 156,
+ "repositories_with_a_dropped_directory": 8,
+ "repositories_with_every_directory_dropped": 2,
+ "rule": {
+  "corpus_share": 0.05,
+  "drop_flagged": true,
+  "floor": 20,
+  "positives": "non_test"
+ }
+}

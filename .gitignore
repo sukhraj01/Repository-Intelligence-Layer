@@ -75,3 +75,6 @@ data/review/
 
 # Hand-check sheets of mined pull requests (third-party issue text and diffs; for the engineer to read)
 results/mining/handcheck_*.md
+
+# built report
+reports/final/*.pdf

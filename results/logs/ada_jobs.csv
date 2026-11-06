@@ -129,6 +129,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-06,C,60041,S41,E-MINE-FULL listing shard 1 outcome (IncompleteRead; DEV-034),u22,1,0,02:53:13,0.0,FAILED
 2026-11-06,C,60042,S41,E-MINE-FULL mining session 1 outcome (never ran; DependencyNeverSatisfied; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
 2026-11-06,C,60043,S41,E-MINE-FULL mining session 2 outcome (never ran; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-06,A,61808,S42,E-OVERLAP-AUDIT index build and pilot-store audit (CPU),u22,2,0,00:37:20,0.0,COMPLETED
 2026-11-06,A,61759,RQ3P,E-RQ3-PILOT-PREP part A network and container probe,u22,4,0,00:00:47,0.0,COMPLETED
 2026-11-06,A,61762,RQ3P,part A probe with a truncated uv download (dead end),u22,6,0,00:02:03,0.0,COMPLETED (nothing after the download ran)
 2026-11-06,A,61768,RQ3P,part A container module extracted node-locally; image build and run; uv; swebench 5.0.2,u22,6,0,00:05:38,0.0,COMPLETED

@@ -1,0 +1,6 @@
+directory	mined_repo	positive_id	nodes	heldout_repos
+sktime__skbase-107	sktime/skbase	skbase/base/_meta.py/BaseMetaEstimator/_get_params	96	scikit-learn/scikit-learn
+autogluon__autogluon-510	autogluon/autogluon	autogluon/utils/tabular/ml/models/tabular_nn/categorical_encoders.py/OneHotMergeRaresHandleUnknownEncoder/inverse_transform	488	scikit-learn/scikit-learn
+rasbt__mlxtend-1018	rasbt/mlxtend	mlxtend/externals/signature_py27.py/Parameter/__init__	174	scikit-learn/scikit-learn
+sktime__skbase-107	sktime/skbase	skbase/base/_meta.py/BaseMetaEstimator/_set_params	114	scikit-learn/scikit-learn
+sktime__skbase-107	sktime/skbase	skbase/base/_meta.py/BaseMetaEstimator/_replace_estimator	66	scikit-learn/scikit-learn
