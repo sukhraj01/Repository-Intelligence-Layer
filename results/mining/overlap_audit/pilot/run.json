@@ -1,0 +1,25 @@
+{
+ "commit": "4420114",
+ "config_hash": "588effda460d97a70979400778f9ced2035fad6756e010210bc9266541f5938c",
+ "corpus_flag_share": 0.05,
+ "directories": 1391,
+ "floors": [
+  10,
+  20,
+  50
+ ],
+ "hardware": {
+  "cpus_visible": 40,
+  "host": "gnode006",
+  "mem_total_kb": 131868128,
+  "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12"
+ },
+ "index_manifest_sha256": "e61a4bea2e361ef2043faf1aaeb60a3f648b991700de2441348729f357fb36b8",
+ "primary_floor": 20,
+ "records_sha256": "65e4f96a7974203e9a3549fb42bccc36d1993f1a606782dcc883cd65dceffc7e",
+ "seconds": 1445.5,
+ "seed": 0,
+ "store": "$HOME/ril_mine/store/pilot",
+ "version": "overlap-audit/v1"
+}

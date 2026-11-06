@@ -1,0 +1,216 @@
+{
+ "ast_hashes": 381971,
+ "ast_hashes_at_floor": 337390,
+ "ast_sha256": "8e80bdce732cbdb175dfb6eff0894a0edbee3c8a10a730035b320b05f1665cb9",
+ "commit": "4420114",
+ "hardware": {
+  "cpus_visible": 40,
+  "host": "gnode006",
+  "mem_total_kb": 131868128,
+  "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12"
+ },
+ "line_hashes": 1513138,
+ "lines_sha256": "f90d4b6bd67540e28939527ac1df76d5760b2e34648f145865ba2a4b7be0014b",
+ "repositories_ast": {
+  "ansible/ansible": 71028,
+  "astropy/astropy": 23112,
+  "aws-cloudformation/cfn-lint": 2784,
+  "conan-io/conan": 11094,
+  "deepset-ai/haystack": 9761,
+  "django/django": 44236,
+  "ibm/mcp-context-forge": 6940,
+  "internetarchive/openlibrary": 8508,
+  "jlowin/fastmcp": 6171,
+  "jupyterlab/jupyter-ai": 696,
+  "matplotlib/matplotlib": 18580,
+  "mwaskom/seaborn": 2317,
+  "pallets/flask": 824,
+  "pdm-project/pdm": 3124,
+  "psf/black": 1270,
+  "psf/requests": 1500,
+  "pydata/xarray": 12229,
+  "pylint-dev/pylint": 10683,
+  "pyomo/pyomo": 18754,
+  "pytest-dev/pytest": 11623,
+  "python-control/python-control": 2184,
+  "qutebrowser/qutebrowser": 13857,
+  "scikit-learn/scikit-learn": 20312,
+  "sphinx-doc/sphinx": 12224,
+  "streamlink/streamlink": 4094,
+  "sympy/sympy": 64730
+ },
+ "repositories_lines": [
+  "ansible/ansible",
+  "astropy/astropy",
+  "aws-cloudformation/cfn-lint",
+  "conan-io/conan",
+  "deepset-ai/haystack",
+  "ibm/mcp-context-forge",
+  "internetarchive/openlibrary",
+  "jlowin/fastmcp",
+  "jupyterlab/jupyter-ai",
+  "matplotlib/matplotlib",
+  "mwaskom/seaborn",
+  "pallets/flask",
+  "pdm-project/pdm",
+  "psf/black",
+  "psf/requests",
+  "pydata/xarray",
+  "pyomo/pyomo",
+  "python-control/python-control",
+  "qutebrowser/qutebrowser",
+  "streamlink/streamlink"
+ ],
+ "seconds": 790.5,
+ "sources": [
+  {
+   "ast_hashes": 222020,
+   "file": "probe_verified_nodes.json",
+   "kind": "probe_set",
+   "repositories": 12,
+   "sha256": "6f9d5ba474411f554e68625569eb9e801a842bb7c79d9bb20a41261f0a8f257f"
+  },
+  {
+   "files": 3,
+   "function_texts_hashed": 172689,
+   "kind": "unit_texts",
+   "repository": "ansible/ansible",
+   "texts": 274336
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 130186,
+   "kind": "unit_texts",
+   "repository": "astropy/astropy",
+   "texts": 184774
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 11701,
+   "kind": "unit_texts",
+   "repository": "aws-cloudformation/cfn-lint",
+   "texts": 26223
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 43847,
+   "kind": "unit_texts",
+   "repository": "conan-io/conan",
+   "texts": 74617
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 38260,
+   "kind": "unit_texts",
+   "repository": "deepset-ai/haystack",
+   "texts": 63059
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 14666,
+   "kind": "unit_texts",
+   "repository": "ibm/mcp-context-forge",
+   "texts": 21195
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 34090,
+   "kind": "unit_texts",
+   "repository": "internetarchive/openlibrary",
+   "texts": 57828
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 21239,
+   "kind": "unit_texts",
+   "repository": "jlowin/fastmcp",
+   "texts": 31916
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 1927,
+   "kind": "unit_texts",
+   "repository": "jupyterlab/jupyter-ai",
+   "texts": 4034
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 69757,
+   "kind": "unit_texts",
+   "repository": "matplotlib/matplotlib",
+   "texts": 110159
+  },
+  {
+   "files": 2,
+   "function_texts_hashed": 4544,
+   "kind": "unit_texts",
+   "repository": "mwaskom/seaborn",
+   "texts": 6191
+  },
+  {
+   "files": 1,
+   "function_texts_hashed": 825,
+   "kind": "unit_texts",
+   "repository": "pallets/flask",
+   "texts": 1091
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 11809,
+   "kind": "unit_texts",
+   "repository": "pdm-project/pdm",
+   "texts": 18019
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 6202,
+   "kind": "unit_texts",
+   "repository": "psf/black",
+   "texts": 9448
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 3932,
+   "kind": "unit_texts",
+   "repository": "psf/requests",
+   "texts": 6013
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 44149,
+   "kind": "unit_texts",
+   "repository": "pydata/xarray",
+   "texts": 55778
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 73744,
+   "kind": "unit_texts",
+   "repository": "pyomo/pyomo",
+   "texts": 110524
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 8954,
+   "kind": "unit_texts",
+   "repository": "python-control/python-control",
+   "texts": 11705
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 51664,
+   "kind": "unit_texts",
+   "repository": "qutebrowser/qutebrowser",
+   "texts": 85490
+  },
+  {
+   "files": 4,
+   "function_texts_hashed": 17333,
+   "kind": "unit_texts",
+   "repository": "streamlink/streamlink",
+   "texts": 34591
+  }
+ ],
+ "version": "overlap-audit/v1"
+}
