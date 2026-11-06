@@ -205,3 +205,16 @@ def test_pacing_sleeps_between_calls() -> None:
     c.get_json("/repos/a/b/1")
     c.get_json("/repos/a/b/2")
     assert clock.slept == [0.5]
+
+
+def test_cut_response_body_is_a_transport_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    import http.client
+
+    from ril.data_mining.github_api import UrllibTransport
+
+    def cut(*args: object, **kwargs: object) -> object:
+        raise http.client.IncompleteRead(b"x" * 10, 5)
+
+    monkeypatch.setattr("urllib.request.urlopen", cut)
+    with pytest.raises(TransportError):
+        UrllibTransport().send("POST", "https://api.github.com/graphql", {}, b"{}")

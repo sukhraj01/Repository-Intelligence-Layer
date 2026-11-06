@@ -134,11 +134,28 @@ def run_pilot(
     if shard is not None:
         names = names[shard[0] :: shard[1]]
     t_list = time.perf_counter()
-    listings, stats = list_population(client, names, store, is_held_out=is_held_out)
+    push_listing = bool(list_only and durable_root)
+    last_push = time.monotonic()
+
+    def push_listings() -> None:
+        nonlocal last_push
+        if time.monotonic() - last_push >= sync_seconds:
+            durable.copy_run(out_root, durable_root or "")
+            last_push = time.monotonic()
+
+    try:
+        listings, stats = list_population(
+            client,
+            names,
+            store,
+            is_held_out=is_held_out,
+            after_listed=push_listings if push_listing else None,
+        )
+    finally:
+        if push_listing:  # a failed listing job keeps every listing it finished (DEV-034)
+            durable.copy_run(out_root, durable_root or "")
     listing_seconds = time.perf_counter() - t_list
     if list_only:  # listing shards: only the per-repository listing files are written
-        if durable_root:
-            durable.copy_run(out_root, durable_root)
         return {
             "listed": stats.listed,
             "reused": stats.reused,

@@ -23,6 +23,7 @@ from __future__ import annotations
 import base64
 import gzip
 import hashlib
+import http.client
 import json
 import logging
 import os
@@ -116,7 +117,12 @@ class UrllibTransport:
             return HttpResponse(
                 err.code, {k.lower(): v for k, v in err.headers.items()}, err.read()
             )
-        except (urllib.error.URLError, TimeoutError, ConnectionError) as err:
+        except (
+            urllib.error.URLError,
+            http.client.HTTPException,  # IncompleteRead, RemoteDisconnected: a cut response body
+            TimeoutError,
+            ConnectionError,
+        ) as err:
             raise TransportError(str(err)) from err
 
 

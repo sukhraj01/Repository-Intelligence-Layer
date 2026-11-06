@@ -69,9 +69,12 @@ def list_population(
     store: MiningStore,
     *,
     is_held_out: Callable[[str], bool],
+    after_listed: Callable[[], None] | None = None,
 ) -> tuple[dict[str, list[PullRequest]], ListingStats]:
     """Listings of every repository (stored ones reused). A repository that has been renamed into
-    the held-out list is dropped and counted (D65)."""
+    the held-out list is dropped and counted (D65). ``after_listed`` runs after each repository
+    listed from the API, so a long listing job can push what it has (a failure loses no finished
+    listing)."""
     out: dict[str, list[PullRequest]] = {}
     stats = ListingStats()
     for repo in repos:
@@ -93,6 +96,8 @@ def list_population(
                 continue
             header = {"current_name": str(info.get("nameWithOwner") or repo).lower()}
             stats.listed += 1
+            if after_listed is not None:
+                after_listed()
         current = str(header["current_name"])
         if current != repo.lower():
             stats.renamed[repo] = current

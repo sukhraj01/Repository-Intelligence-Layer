@@ -299,3 +299,11 @@ engineer sign-off — it is a design decision.
 - Reversible: yes (assembly is the last stage; an option can be added behind a flag and reported separately).
 - Related: ADR-014, `specs/assembly.md`, `docs/experiments/B.md` E-ASSEMBLY
 
+
+## DEV-034 — The miner's transport treats a cut response body as a network failure, and a listing job pushes what it has finished   (2026-11-06 · status: proposed)
+- Master says: the plan of the full run (`results/mining/full_run_plan.md`): the API client retries network-level failures; a listing job pushes its listing files to the store at its end (DEV-032).
+- We do: `UrllibTransport` converts `http.client.HTTPException` (`IncompleteRead`, `RemoteDisconnected`) into `TransportError`, so the client's existing retry with backoff applies; a listing-only job pushes finished listings every `SYNC_SECONDS` and in a `finally`, so a job that fails keeps every listing it completed. No configuration value, sampling order, seed or target changed, and no output of a successful run differs.
+- Why: all three listing jobs of E-MINE-FULL (60032, 60034, 60041) died after 2.6 to 3.0 hours on an unretried `IncompleteRead` of a GraphQL response body, and the listings they had finished lived only on node-local disk, so about three hours of listing per job were lost. The mining session reads the same client and would have hit the same fault.
+- Impact: none on outputs; listing and mining jobs survive a truncated response (retried up to the client's retry limit, then still raised).
+- Reversible: yes.
+- Related: DEV-032, `docs/experiments/B.md` E-MINE-FULL, `tests/unit/test_mining_api.py`, `tests/unit/test_mining_dedup_store.py`
