@@ -119,3 +119,13 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-06,A,60693,S37,E-EVAL-REPOS-BUILD store check repeated to save the output (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
 2026-11-06,A,60883,S39,E-ASSEMBLY gold-in-context measurement and token ratio,u22,2,0,01:37:43,0.0,COMPLETED
 2026-11-06,A,61413,S40,E-ASSEMBLY-CAP unit-cap measurement (dev only),u22,2,0,01:24:40,0.0,COMPLETED
+2026-11-06,C,61677,S41,E-MINE-FULL listing shard 0 of 3 (relaunch of 60032 after the transport fix; DEV-034); commit a80e529,u22,1,0,,0.0,SUBMITTED
+2026-11-06,C,61678,S41,E-MINE-FULL listing shard 1 of 3 (relaunch of 60041); commit a80e529,u22,1,0,,0.0,SUBMITTED
+2026-11-06,C,61679,S41,E-MINE-FULL listing shard 2 of 3 (relaunch of 60034); commit a80e529,u22,1,0,,0.0,SUBMITTED
+2026-11-06,C,61680,S41,E-MINE-FULL mining session 1 (replaces 60042; afterok on 61677 61678 61679 with kill-on-invalid-dep); STOP_AFTER=5000; commit a80e529,u22,2,0,,0.0,SUBMITTED
+2026-11-06,C,61681,S41,E-MINE-FULL mining session 2 (replaces 60043; afterany on 61680 with kill-on-invalid-dep); STOP_AFTER=5000; commit a80e529,u22,2,0,,0.0,SUBMITTED
+2026-11-06,C,60032,S41,E-MINE-FULL listing shard 0 outcome (IncompleteRead; DEV-034),u22,1,0,02:57:36,0.0,FAILED
+2026-11-06,C,60034,S41,E-MINE-FULL listing shard 2 outcome (IncompleteRead; DEV-034),u22,1,0,02:35:52,0.0,FAILED
+2026-11-06,C,60041,S41,E-MINE-FULL listing shard 1 outcome (IncompleteRead; DEV-034),u22,1,0,02:53:13,0.0,FAILED
+2026-11-06,C,60042,S41,E-MINE-FULL mining session 1 outcome (never ran; DependencyNeverSatisfied; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-06,C,60043,S41,E-MINE-FULL mining session 2 outcome (never ran; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
