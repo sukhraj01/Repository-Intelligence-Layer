@@ -1,0 +1,115 @@
+{
+ "executable_all_four": 500,
+ "per_repo": {
+  "astropy/astropy": {
+   "executable": 22,
+   "n": 22,
+   "needs_pre_install": 16,
+   "python": [
+    "3.6",
+    "3.9"
+   ]
+  },
+  "django/django": {
+   "executable": 231,
+   "n": 231,
+   "needs_pre_install": 2,
+   "python": [
+    "3.11",
+    "3.5",
+    "3.6",
+    "3.8",
+    "3.9"
+   ]
+  },
+  "matplotlib/matplotlib": {
+   "executable": 34,
+   "n": 34,
+   "needs_pre_install": 34,
+   "python": [
+    "3.11",
+    "3.7",
+    "3.8"
+   ]
+  },
+  "mwaskom/seaborn": {
+   "executable": 2,
+   "n": 2,
+   "needs_pre_install": 0,
+   "python": [
+    "3.9"
+   ]
+  },
+  "pallets/flask": {
+   "executable": 1,
+   "n": 1,
+   "needs_pre_install": 0,
+   "python": [
+    "3.11"
+   ]
+  },
+  "psf/requests": {
+   "executable": 8,
+   "n": 8,
+   "needs_pre_install": 0,
+   "python": [
+    "3.9"
+   ]
+  },
+  "pydata/xarray": {
+   "executable": 22,
+   "n": 22,
+   "needs_pre_install": 0,
+   "python": [
+    "3.10"
+   ]
+  },
+  "pylint-dev/pylint": {
+   "executable": 10,
+   "n": 10,
+   "needs_pre_install": 0,
+   "python": [
+    "3.9"
+   ]
+  },
+  "pytest-dev/pytest": {
+   "executable": 19,
+   "n": 19,
+   "needs_pre_install": 1,
+   "python": [
+    "3.9"
+   ]
+  },
+  "scikit-learn/scikit-learn": {
+   "executable": 32,
+   "n": 32,
+   "needs_pre_install": 0,
+   "python": [
+    "3.6",
+    "3.9"
+   ]
+  },
+  "sphinx-doc/sphinx": {
+   "executable": 44,
+   "n": 44,
+   "needs_pre_install": 44,
+   "python": [
+    "3.9"
+   ]
+  },
+  "sympy/sympy": {
+   "executable": 75,
+   "n": 75,
+   "needs_pre_install": 0,
+   "python": [
+    "3.9"
+   ]
+  }
+ },
+ "rows": 500,
+ "swebench_version": "4.1.0",
+ "with_base_commit": 500,
+ "with_fail_to_pass": 500,
+ "with_install_spec": 500,
+ "with_test_patch": 500
+}

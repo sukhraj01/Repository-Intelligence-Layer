@@ -50,3 +50,25 @@ The planned paired comparison of resolved rate has a minimum detectable effect o
 ## Addendum 2026-11-03 — stays open; input it is waiting for
 
 Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** the choice of the base LLM (ADR-008) and a pilot that installs and times the Agentless scaffold with a pluggable retriever (about 100 instances, two retrievers, two runs each, ADR-007 addendum of 2026-10-29); also Q45 (whether RQ3 is a test or an estimate with an interval).
+
+## Addendum 2026-11-06 — pilot design and what the cluster can execute (decision D104; status stays Proposed)
+
+**Decision D104 (provisional; reasoned from limits read on 2026-11-06, no call made).** The pilot scaffold is
+Agentless-style with retrieval supplied: one prompt with the issue and the assembled context (the same for
+every arm, ADR-014), one repair call at temperature 0 asking for edits in a fixed format, up to two follow-ups
+after an unusable reply; expected 1 to 3 calls per instance. About 100 instances, two first stages, two runs
+each. Full text, flip experiment and open points: `docs/RQ3_PILOT.md`.
+
+**Evidence (measured, account A, 2026-11-06; `results/rq3_pilot/part_a/`).** No container runtime is usable by the
+engineer on the cluster (no runtime on the PATH; the listed container module's directory is absent from the
+nodes; extracted node-locally it builds an image but cannot run it because user namespaces are disabled).
+Without a container, an environment per (repository, version) can be built with `uv` and the benchmark
+package's own install specification for 263 of the 500 Verified instances; 143 need a Python older than 3.8, 59
+a pre-install step, 35 `apt-get`. The gold patch passes its FAIL_TO_PASS tests on requests-6028,
+seaborn-3187 and xarray-7393 (1 to 5 minutes and under 0.3 GB each); the specification leaves pytest unpinned,
+so a flask instance failed until pytest was pinned below 8. PASS_TO_PASS was not checked. What this does to the
+choice of scaffold: none; it bears on whether resolved rate can be measured on the cluster (options in
+`docs/RQ3_PILOT.md`, none chosen).
+
+**Cheapest flip, still open:** the pilot itself (calls per instance, unusable-reply rate, run-to-run
+agreement); it needs the engineer's key file.

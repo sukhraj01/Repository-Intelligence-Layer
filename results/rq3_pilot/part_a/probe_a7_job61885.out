@@ -1,0 +1,6 @@
+140 python<3.8 + no pre_install
+3 python<3.8 + pre_install (apt-get)
+263 python>=3.8 + no pre_install
+59 python>=3.8 + pre_install
+35 python>=3.8 + pre_install (apt-get)
+done
