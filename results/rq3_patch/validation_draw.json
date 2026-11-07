@@ -1,0 +1,126 @@
+{
+ "seed": 0,
+ "n": 20,
+ "instances": [
+  {
+   "instance_id": "astropy__astropy-14598",
+   "repo": "astropy/astropy",
+   "stratum": "repository_minimum",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-11734",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-12308",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-13568",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-13569",
+   "repo": "django/django",
+   "stratum": "repository_minimum",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-14011",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-14404",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-14725",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-15503",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "django__django-16136",
+   "repo": "django/django",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "psf__requests-1142",
+   "repo": "psf/requests",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "pydata__xarray-2905",
+   "repo": "pydata/xarray",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "pydata__xarray-4966",
+   "repo": "pydata/xarray",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "pydata__xarray-6721",
+   "repo": "pydata/xarray",
+   "stratum": "repository_minimum",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "pytest-dev__pytest-10081",
+   "repo": "pytest-dev/pytest",
+   "stratum": "repository_minimum",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "pytest-dev__pytest-5631",
+   "repo": "pytest-dev/pytest",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "sphinx-doc__sphinx-7910",
+   "repo": "sphinx-doc/sphinx",
+   "stratum": "repository_minimum",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "sympy__sympy-12096",
+   "repo": "sympy/sympy",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "sympy__sympy-14531",
+   "repo": "sympy/sympy",
+   "stratum": "by_size",
+   "env_policy": "latest"
+  },
+  {
+   "instance_id": "sympy__sympy-23413",
+   "repo": "sympy/sympy",
+   "stratum": "repository_minimum",
+   "env_policy": "latest"
+  }
+ ]
+}

@@ -214,6 +214,12 @@ read from the full day's rows, not from these. The prompt format was not changed
 
 Flip criteria of D104, as written: calls per unit 1.41 (pass); unusable first reply 22.5% [18.7, 26.8] (pass; after follow-ups 12.8%); day cap hit on day one with 311 units final (pass as written; ambiguous wording, see the entry). The free tier stays workable: one arm-run of the 377 is about 533 calls, 2 days; 2 to 8 arm-runs 3 to 8 days; the 4-arm fallback grid 5 to 15 days (estimates). Unusable replies are mostly prose that says the code is not shown (40 of 51 final failures) and follow the gold being absent from the context; strict format faults are 3 of 400 units after follow-ups. BM25 against RRF: 17.0% against 8.5% unusable after follow-ups, mostly explained by gold absence (standardised gap 2.3 to 3.8 points, intervals include 0). Run-to-run at temperature 0: same reply text in 63% of pairs, same edits in 63% of usable pairs, same usability in 97.5%. No resolved rate exists; the power placeholders stay. Unusable replies count as failures for every arm. Numbers and their sources: `results/rq3_pilot/analysis/`.
 
+## Applying edit blocks (D110, `E-RQ3-PATCHAPPLY`)
+
+The reply's SEARCH/REPLACE blocks become a unified diff at the base commit in one place (`ril/agent/providers/patch_convert.py`), under a rule fixed before any model output is graded and the same for every arm. **Exact match is primary:** a SEARCH text must occur in its file as an exact string, exactly once; a missing file, no match or several matches fails the block; the edit set is atomic (one failing block, no patch, unresolved; no repair). **Whitespace-tolerant is a labelled sensitivity** (line endings and trailing whitespace normalised, blank lines at the ends of the SEARCH text ignored, still exactly one match, no fuzzy matching or indentation repair), reported beside the exact result wherever the resolved rate is; one switch, never per arm or instance. Blocks of a file apply in reply order to the file as earlier blocks left it. Unusable replies and apply failures are both unresolved and reported separately.
+
+Measured on the pilot's stored edits (100 dev instances, 349 usable units): applying 129 of 200 (BM25) and 147 of 200 (RRF) units under the exact reading; the tolerant reading gives the same counts (0 of 73 failing units rescued); the failing blocks quote text found nowhere in the file. On 20 executable instances the gold patch turned into edit blocks, converted and run through the executor resolves 20 of 20, with trees identical to the gold patch's. Details and limits: the entry.
+
 ## Smoke test (2026-11-06, three calls, `results/rq3_pilot/smoke_2026-11-06/`)
 
 Three calls on the first prepared prompts (a budget of 8,000 times 1.22 approximate tokens, since
@@ -237,4 +243,4 @@ directory that is not the pilot's, so a pilot run the same day may exceed the da
 - **Choice of B.** Choosing between 8,000 and 16,000 from pilot results would be a selection on the
   pilot instances; the pilot runs one value and states it in advance.
 - **Format of the edits.** The edit blocks are checked for format and for paths among the shown files
-  only; whether a block applies to the repository is decided by the grader.
+  only; whether a block applies to the repository is decided by the converter (D110, "Applying edit blocks").

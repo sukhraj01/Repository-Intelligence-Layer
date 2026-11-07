@@ -1,0 +1,18 @@
+{
+ "commit": "e430424+rq3-patch-worktree",
+ "config_hash": "791e76c76923b543",
+ "env_policy": "latest",
+ "executor": "executor/v1",
+ "git": "git version 2.34.1",
+ "hardware": {
+  "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+  "cpu_count": 40,
+  "mem_gb": 125.8,
+  "node": "gnode004",
+  "platform": "Linux-5.15.0-202-generic-x86_64-with-glibc2.35"
+ },
+ "runs": 1,
+ "started": "2026-11-07T20:25:30Z",
+ "uv": "uv 0.12.5 (x86_64-unknown-linux-gnu)",
+ "workers": 2
+}

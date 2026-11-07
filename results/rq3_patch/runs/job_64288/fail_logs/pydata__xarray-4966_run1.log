@@ -1,0 +1,7 @@
+ng: `pip`, `setuptools`, `wheel`
+  Caused by: Request failed after 3 retries in 5.8s
+  Caused by: Failed to fetch: `https://files.pythonhosted.org/packages/ef/55/6dc6d6bb953bdfc52519a0059592c52b6e3b8ad51cf8256dffceb55b0610/setuptools-84.2.1-py3-none-any.whl.metadata`
+  Caused by: error sending request for url (https://files.pythonhosted.org/packages/ef/55/6dc6d6bb953bdfc52519a0059592c52b6e3b8ad51cf8256dffceb55b0610/setuptools-84.2.1-py3-none-any.whl.metadata)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: Name or service not known

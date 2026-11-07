@@ -183,3 +183,8 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-07,A,63792,RQ3C,"retrieved contexts of 377 executable instances (BM25 dense RRF; budgets 8000 and 16000); determinism check; tables; archive",u22,4,0,01:50:21,0.0,COMPLETED
 2026-11-07,A,63939,RQ3C,interactive check of two dense score arrays (failed: script path on node-local /tmp),u22,1,0,00:00:01,0.0,FAILED
 2026-11-07,A,63940,RQ3C,interactive check of two dense score arrays of one instance (seaborn-3069),u22,1,0,00:00:02,0.0,COMPLETED
+2026-11-08,A,64285,RQ3P,"snapshot of base-commit files named by the pilot's usable replies (discarded: repository name derived wrongly for Pro-style ids)",u22,2,0,00:00:04,0.0,COMPLETED
+2026-11-08,A,64286,RQ3P,"snapshot of base-commit files named by the pilot's usable replies (120 of 120 files present)",u22,2,0,00:00:04,0.0,COMPLETED
+2026-11-08,A,64287,RQ3P,"validation of gold-derived edits (cancelled: started with the first converter version)",u22,4,0,00:01:41,0.0,CANCELLED
+2026-11-08,A,64288,RQ3P,"gold-derived edits of 20 executable instances: derive, convert, tree check, executor one run each (two xarray runs failed on a node name-resolution error)",u22,4,0,00:24:31,0.0,COMPLETED
+2026-11-08,A,64304,RQ3P,"rerun of the two xarray instances of 64288",u22,4,0,00:05:47,0.0,COMPLETED
