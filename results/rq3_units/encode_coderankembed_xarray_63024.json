@@ -1,0 +1,69 @@
+{
+ "gate": {
+  "capability": [
+   7,
+   5
+  ],
+  "cuda": "12.1",
+  "device": "NVIDIA GeForce RTX 2080 Ti",
+  "matmul_max_abs_error": 0.0001220703125,
+  "torch": "2.4.1+cu121"
+ },
+ "hardware": {
+  "cpus_visible": 40,
+  "host": "gnode044",
+  "mem_total_kb": 131860596,
+  "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12"
+ },
+ "runs": [
+  {
+   "batch_size": 64,
+   "dtype": "float16",
+   "encoder": "coderankembed",
+   "eos_check": {
+    "default_prompt_name": null,
+    "eos_token_id": null,
+    "last_id_after_cut": 102,
+    "length_after_cut": 512,
+    "sep_token_id": 102
+   },
+   "fp16_vs_fp32": {
+    "mean_cosine": 0.9999986886978149,
+    "min_cosine": 0.9999977946281433,
+    "n": 64
+   },
+   "load_seconds": 5.2,
+   "max_tokens": 512,
+   "model_id": "CodeRankEmbed",
+   "peak_gpu_mem_mb": 1431.4,
+   "query_template": "Represent this query for searching relevant code: {query}",
+   "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1",
+   "seconds_total": 37.9,
+   "stores": [
+    {
+     "cut_at_max_tokens": 3,
+     "encoded_now": 4,
+     "seconds_now": 0.83,
+     "share_cut": 0.75,
+     "store": "queries__L2__SWE-bench_Verified__pydata__xarray",
+     "taken_from_shorter_cut": 0,
+     "texts": 4,
+     "texts_per_s_now": 4.84,
+     "tokens_fed": 1796
+    },
+    {
+     "cut_at_max_tokens": 1209,
+     "encoded_now": 6689,
+     "seconds_now": 36.83,
+     "share_cut": 0.1807,
+     "store": "units__pydata__xarray",
+     "taken_from_shorter_cut": 0,
+     "texts": 6689,
+     "texts_per_s_now": 181.63,
+     "tokens_fed": 1606138
+    }
+   ]
+  }
+ ]
+}

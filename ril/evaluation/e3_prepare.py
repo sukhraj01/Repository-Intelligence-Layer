@@ -166,8 +166,15 @@ def prepare_instance(
     e1_record: Record,
     params: BM25Params,
     chash: str,
+    *,
+    score_without_gold: bool = False,
 ) -> tuple[dict[str, np.ndarray[Any, Any]], Record]:
-    """Arrays and metadata of one instance (``root`` is checked out at the base commit)."""
+    """Arrays and metadata of one instance (``root`` is checked out at the base commit).
+
+    ``score_without_gold`` also scores the levels that have a query but no mapped positives (an
+    instance without labels): the arrays then hold ``scores_<level>`` and no gold arrays. The
+    default keeps the cache of the evaluation pilots unchanged.
+    """
     seconds: dict[str, float] = {}
     t0 = time.perf_counter()
     result = build_repository(root, BuildConfig(repo_id=repo_id, seed=0))
@@ -189,10 +196,12 @@ def prepare_instance(
     rank_mismatch = 0
     rank_checked = 0
     for level in sorted(queries):
-        if level not in gold:
+        if level not in gold and not score_without_gold:
             continue
         scores = index.scores(tokenize(queries[level]))
         arrays[f"scores_{level}"] = scores
+        if level not in gold:
+            continue
         for reading in READINGS:
             ids = sorted(gold[level][reading])
             kept = [index_of[i] for i in ids if i in index_of]

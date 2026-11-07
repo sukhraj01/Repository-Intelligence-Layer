@@ -1,0 +1,50 @@
+{
+ "distinct_texts": 214216,
+ "distinct_to_encode": 214216,
+ "per_repo": {
+  "django__django": {
+   "distinct_share": 0.0108,
+   "distinct_texts": 82625,
+   "instances": 228,
+   "unit_slots": 7684203
+  },
+  "pylint-dev__pylint": {
+   "distinct_share": 0.5095,
+   "distinct_texts": 15757,
+   "instances": 4,
+   "unit_slots": 30928
+  },
+  "pytest-dev__pytest": {
+   "distinct_share": 0.1889,
+   "distinct_texts": 15983,
+   "instances": 19,
+   "unit_slots": 84630
+  },
+  "sphinx-doc__sphinx": {
+   "distinct_share": 0.1009,
+   "distinct_texts": 7514,
+   "instances": 11,
+   "unit_slots": 74442
+  },
+  "sympy__sympy": {
+   "distinct_share": 0.0366,
+   "distinct_texts": 92406,
+   "instances": 75,
+   "unit_slots": 2522569
+  }
+ },
+ "rule": {
+  "allowed": true,
+  "implied_gpu_hours": 0.546,
+  "implied_gpu_hours_at_178": 0.334,
+  "implied_gpu_hours_at_229": 0.26,
+  "implied_gpu_hours_total_texts": 0.546,
+  "limit_gpu_hours": 6.0,
+  "rate_texts_per_s": 109.0,
+  "texts_to_encode": 214216,
+  "texts_total": 214216
+ },
+ "saving_factor": 48.53,
+ "texts_in_stores": 214216,
+ "unit_slots": 10396772
+}
