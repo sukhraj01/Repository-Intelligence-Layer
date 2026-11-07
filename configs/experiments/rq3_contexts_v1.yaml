@@ -1,0 +1,35 @@
+experiment_id: E-RQ3-CONTEXTS
+status: build only (no retrieval result is selected on; no agent call)
+decision: D108
+date: '2026-11-07'
+seed: 0
+note: >-
+  Retrieved contexts of the 377 executable instances of Verified (D106), for the arms that need no
+  trained checkpoint: BM25, the untrained base encoder alone, and RRF over both. Assembly is the
+  stage of ADR-014 unchanged (200 best units in rank order, unit cap 1,000, class units in header
+  form, approximate tokenizer approx-words-v1 with a ratio of 1.0 as in the pilot of D104). Two
+  budgets, 8,000 (primary) and 16,000 (secondary). Dense scores are those of E-RQ3-UNITS (512
+  tokens, float16); the dev cells of E-ASSEMBLY used 1,024 tokens for the 36 earlier instances.
+  Every instance gets a context, labelled or not. Coverage is descriptive and selects nothing.
+subset: results/rq3_exec/executable_instances_v1.json
+assembly:
+  budgets: [8000, 16000]
+  max_unit_tokens: 1000
+  candidates: 200
+  rrf_k: 100
+  query_level: L2
+  tokenizer: approx
+arms: [bm25, dense, rrf]
+dense_key: dense_L2
+# first group with both files wins; the 36 instances of earlier builds are in the third group
+groups:
+  - cache_dir: ~/ril_rq3u/e3_cache
+    dense_dir: ~/ril_rq3u/dense_scores
+  - cache_dir: ~/ril_rq3u_x/e3_cache
+    dense_dir: ~/ril_rq3u_x/dense_scores
+  - cache_dir: ~/ril_t1/work/e3_cache
+    dense_dir: ~/ril_x2/dense/coderankembed__t512
+repo_cache: ~/ril_e/repo_cache
+verify:
+  instances: 30
+  seed: 0
