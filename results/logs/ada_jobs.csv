@@ -171,3 +171,12 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-07,A,63023,RQ3U,unit records and caches of 4 xarray instances (label RIL_COMMIT mistyped; code f690225),u22,4,0,00:00:27,0.0,COMPLETED
 2026-11-07,A,63024,RQ3U,encoding of 6689 distinct unit texts of the xarray instances (block 4),u22,4,1,00:00:50,0.014,COMPLETED
 2026-11-07,A,63025,RQ3U,vector check and dense scores of the xarray instances,u22,2,0,00:00:01,0.0,COMPLETED
+2026-11-07,C,61677,S50,E-MINE-FULL listing shard 0 outcome (name resolution failure after 6.5 h; DEV-035),u22,1,0,06:33:36,0.0,FAILED
+2026-11-07,C,61678,S50,E-MINE-FULL listing shard 1 outcome (name resolution failure; DEV-035),u22,1,0,06:33:16,0.0,FAILED
+2026-11-07,C,61679,S50,E-MINE-FULL listing shard 2 outcome (name resolution failure; DEV-035),u22,1,0,06:32:56,0.0,FAILED
+2026-11-07,C,61680,S50,E-MINE-FULL mining session 1 outcome (cancelled by kill-on-invalid-dep; never ran),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-07,C,61681,S50,E-MINE-FULL mining session 2 outcome (listed the rest then 150 outcomes; unit-id ValueError; DEV-035),u22,2,0,07:58:39,0.0,FAILED
+2026-11-07,C,63960,S50,population versus stored listings check (srun),u22,1,0,00:00:10,0.0,COMPLETED
+2026-11-07,C,63964,S50,E-MINE-FULL listing completion (list-only; reuses stored listings); commit 893703f,u22,1,0,,0.0,SUBMITTED
+2026-11-07,C,63965,S50,E-MINE-FULL mining session 1 (afterok 63964; kill-on-invalid-dep); STOP_AFTER=5000; commit 893703f,u22,2,0,,0.0,SUBMITTED
+2026-11-07,C,63966,S50,E-MINE-FULL mining session 2 (afterok 63964 and afterany 63965; kill-on-invalid-dep); STOP_AFTER=5000; commit 893703f,u22,2,0,,0.0,SUBMITTED

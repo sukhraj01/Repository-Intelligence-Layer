@@ -307,3 +307,13 @@ engineer sign-off — it is a design decision.
 - Impact: none on outputs; listing and mining jobs survive a truncated response (retried up to the client's retry limit, then still raised).
 - Reversible: yes.
 - Related: DEV-032, `docs/experiments/B.md` E-MINE-FULL, `tests/unit/test_mining_api.py`, `tests/unit/test_mining_dedup_store.py`
+
+
+## DEV-035 — The full mining run rides out a network outage, refuses to mine on an incomplete listing, and quarantines a snapshot whose unit ids are rejected   (2026-11-07 · status: proposed)
+- Master says: the plan of the full run (`results/mining/full_run_plan.md`): listing jobs, then mining sessions chained with `afterany`; the client retries network failures (DEV-034).
+- We do: (1) `ClientConfig.network_retries` (default 12, about 14 minutes at the 120 s backoff cap) and `retries` 8 for server errors; (2) a mining session raises `ListingIncomplete` (exit code 4) when any repository could not be listed, and a listing-only job exits 4 when it left one out, so a dependent job is cancelled; (3) `mine_pr` quarantines a pull request whose snapshot makes the parser reject a unit id (reason `corpus_unit_id_rejected:ValueError`); (4) job layout: one listing-completion job (list-only, no shard; it reuses every stored listing), session 1 on `afterok:<listing>`, session 2 on `afterok:<listing>,afterany:<session 1>`, both with `--kill-on-invalid-dep=yes`. No configuration value, seed, sampling order or target changed.
+- Why: the three listing jobs (61677 to 61679) died together after 6.5 hours on a name-resolution failure of about a minute, beyond five retries; session 2 (61681), released by `afterany` on a cancelled job, listed the missing third, silently skipped one repository whose listing failed (`googleapis/google-api-python-client`) and stopped after 150 pull requests on a Kannada identifier the id grammar rejects. A listing without a repository would change the seeded sample without a trace.
+- Impact: on a successful run no output differs. Pull requests of a repository with a non-ASCII identifier in its snapshot are lost to quarantine (the reason is counted in the report); the pilot had none in 2,000, the rate at 10,000 is unknown until the report.
+- Open design option (not decided): accept non-ASCII identifiers in unit ids. That changes the id grammar of the frozen CodeUnit (`specs/code_unit.md`, ADR-013): a version bump and a re-index plan. Cheapest check: the quarantine count in the report after session 1.
+- Reversible: yes.
+- Related: DEV-034, `docs/experiments/B.md` E-MINE-FULL, `tests/unit/test_mining_api.py`, `test_mining_pipeline.py`, `test_mining_jobs_summary.py`
