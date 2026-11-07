@@ -15,14 +15,16 @@
 #   rsync -a --exclude __pycache__ ril scripts configs ada:ril_rq3u/
 #   scp meta.json queries.json ada:ril_rq3u/
 #   sbatch --export=ALL,RIL_COMMIT=<hash> ril_rq3u/scripts/ada/rq3_units_cpu.sbatch
-# Optional: REPOS="pylint-dev/pylint ..." restricts the clones and the members (default: the five).
+# Optional: REPOS="pylint-dev/pylint ..." restricts the clones and the members (default: the five);
+# INSTANCES="id ..." restricts the members further; RQ3U_DIR and RQ3U_CFG name another work directory and
+# configuration (the four xarray instances were built that way, in ril_rq3u_x).
 set -euo pipefail
-W=$HOME/ril_rq3u
+W=${RQ3U_DIR:-$HOME/ril_rq3u}
 E=$HOME/ril_e
 mkdir -p "$W/logs" "$W/out" "$W/e3_cache" "$W/e1_units" "$W/prep"
 PYV=$(python3 -c 'import sys; print("%d%d" % sys.version_info[:2])')
 PY=$E/venv_ril$PYV/bin/python
-CFG=configs/experiments/rq3_units_v1.yaml
+CFG=${RQ3U_CFG:-configs/experiments/rq3_units_v1.yaml}
 FREE=$(df -Pm "$HOME" | awk 'NR==2{print $4}')
 [ "$FREE" -gt 2500 ] || { echo "only $FREE MB free in HOME"; exit 3; }
 NODE_FREE=$(df -Pm /tmp | awk 'NR==2{print $4}')
@@ -40,9 +42,11 @@ mkdir -p "$TMPW/repo_cache" "$TMPW/work" "$TMPW/prep"
 # members of the selected repositories only
 $PY -I - "$W/meta.json" "$W/meta_run.json" "${REPOS[@]}" <<PY
 import json, sys
+import os
 src, dst, repos = sys.argv[1], sys.argv[2], set(sys.argv[3:])
+only = set(os.environ.get("INSTANCES", "").split())
 meta = json.load(open(src))
-json.dump({k: v for k, v in meta.items() if v["repo"] in repos}, open(dst, "w"), sort_keys=True)
+json.dump({k: v for k, v in meta.items() if v["repo"] in repos and (not only or k in only)}, open(dst, "w"), sort_keys=True)
 PY
 T_CLONE=$(date +%s)
 for repo in "${REPOS[@]}"; do

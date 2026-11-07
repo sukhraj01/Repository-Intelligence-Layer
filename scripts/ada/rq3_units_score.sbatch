@@ -11,7 +11,7 @@
 # every unit text has a vector (E-RQ3-UNITS, D107). No retrieval result is evaluated.
 #   sbatch --export=ALL,RIL_COMMIT=<hash> ril_rq3u/scripts/ada/rq3_units_score.sbatch
 set -euo pipefail
-W=$HOME/ril_rq3u
+W=${RQ3U_DIR:-$HOME/ril_rq3u}
 E=$HOME/ril_e
 PYV=$(python3 -c 'import sys; print("%d%d" % sys.version_info[:2])')
 PY=$E/venv_ril$PYV/bin/python

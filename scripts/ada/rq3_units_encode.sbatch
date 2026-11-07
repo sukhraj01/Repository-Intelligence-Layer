@@ -16,7 +16,7 @@
 # are copied to $HOME at the end. The run log records the CUDA gate and the seconds per store.
 #   sbatch --export=ALL,RIL_COMMIT=<hash> ril_rq3u/scripts/ada/rq3_units_encode.sbatch
 set -euo pipefail
-W=$HOME/ril_rq3u
+W=${RQ3U_DIR:-$HOME/ril_rq3u}
 X2=$HOME/ril_x2
 E=$HOME/ril_e
 PYV=$(python3 -c 'import sys; print("%d%d" % sys.version_info[:2])')
