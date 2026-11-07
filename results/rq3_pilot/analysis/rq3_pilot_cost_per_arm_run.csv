@@ -1,0 +1,2 @@
+calls_per_unit,calls_per_unit_lo,calls_per_unit_hi,calls_per_arm_run_377,calls_per_arm_run_377_lo,calls_per_arm_run_377_hi,input_tokens_per_arm_run_mean,output_tokens_per_arm_run_mean,input_tokens_per_call_mean,output_tokens_per_call_mean,tokens_per_min_at_13_rpm,tokens_per_min_limit_effective,requests_per_min_limit_effective
+1.4125,1.2925,1.5400,532.5125,487.2725,580.5800,4761047.2325,351552.5000,8940.7239,660.1770,116229.4106,225000,13

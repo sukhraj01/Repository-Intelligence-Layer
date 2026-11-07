@@ -1,0 +1,4 @@
+arm,instances,both_runs_usable,one_run_usable,no_run_usable
+bm25,100,82,2,16
+rrf,100,90,3,7
+all four units unusable,100,,,4

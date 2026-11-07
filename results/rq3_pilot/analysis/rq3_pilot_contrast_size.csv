@@ -1,0 +1,3 @@
+arm,prompts,input_tokens_first_call_mean,input_tokens_first_call_min,input_tokens_first_call_max,prompt_chars_mean,files_in_context_mean,excerpt_chars_in_test_paths_share_mean,context_hashes_distinct
+bm25,100,8539.7500,7838,13422,30626.2200,15.5100,0.3351,100
+rrf,100,8529.1700,7694,13548,30106.3500,16.0800,0.4025,100
