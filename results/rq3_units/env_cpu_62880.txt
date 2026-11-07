@@ -1,0 +1,7 @@
+host=gnode002
+python=Python 3.10.12
+cpus=6
+mem=MemTotal:       131868136 kB
+cpu_model= Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz
+ril_commit=e2b4b01
+job=62880

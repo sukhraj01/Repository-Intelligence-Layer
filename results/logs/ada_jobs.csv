@@ -164,3 +164,10 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-07,A,62764,RQ3X,units per snapshot probe (failed: path),u22,6,0,00:00:00,0.0,COMPLETED (no work)
 2026-11-07,A,62777,RQ3X,era pass era2 resumed to completion (95 instances),u22,4,0,01:00:50,0.0,COMPLETED
 2026-11-07,A,62847,RQ3X,units per snapshot probe,u22,6,0,,0.0,see RESULTS.md
+2026-11-07,A,62874,RQ3U,smoke of the unit build on pylint (4 instances),u22,4,0,00:01:12,0.0,COMPLETED
+2026-11-07,A,62880,RQ3U,unit records and caches of 337 executable instances (django sympy pytest sphinx pylint),u22,4,0,02:48:58,0.0,COMPLETED
+2026-11-07,A,63012,RQ3U,encoding of 214285 distinct unit texts (CodeRankEmbed 512 tokens; block 4),u22,4,1,00:21:47,0.363,COMPLETED
+2026-11-07,A,63022,RQ3U,vector check and dense scores of 337 instances,u22,2,0,00:01:18,0.0,COMPLETED
+2026-11-07,A,63023,RQ3U,unit records and caches of 4 xarray instances (label RIL_COMMIT mistyped; code f690225),u22,4,0,00:00:27,0.0,COMPLETED
+2026-11-07,A,63024,RQ3U,encoding of 6689 distinct unit texts of the xarray instances (block 4),u22,4,1,00:00:50,0.014,COMPLETED
+2026-11-07,A,63025,RQ3U,vector check and dense scores of the xarray instances,u22,2,0,00:00:01,0.0,COMPLETED

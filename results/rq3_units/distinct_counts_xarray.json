@@ -1,0 +1,26 @@
+{
+ "distinct_texts": 6689,
+ "distinct_to_encode": 6689,
+ "per_repo": {
+  "pydata__xarray": {
+   "distinct_share": 0.3503,
+   "distinct_texts": 6689,
+   "instances": 4,
+   "unit_slots": 19096
+  }
+ },
+ "rule": {
+  "allowed": true,
+  "implied_gpu_hours": 0.017,
+  "implied_gpu_hours_at_178": 0.01,
+  "implied_gpu_hours_at_229": 0.008,
+  "implied_gpu_hours_total_texts": 0.017,
+  "limit_gpu_hours": 6.0,
+  "rate_texts_per_s": 109.0,
+  "texts_to_encode": 6689,
+  "texts_total": 6689
+ },
+ "saving_factor": 2.85,
+ "texts_in_stores": 6689,
+ "unit_slots": 19096
+}

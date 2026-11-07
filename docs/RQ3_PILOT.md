@@ -184,6 +184,8 @@ discordance 10 / 15 / 20 / 30%; the discordance values are placeholders and run-
 labels exist for 224 of the 377, so the L3 claim rests on fewer instances than the table's n = 302 and on a django-heavy
 mix (134 of 224).
 
+**Unit records and encoding (D107, `E-RQ3-UNITS`, 2026-11-07).** All 377 members now have unit records and BM25 scores (36 stored earlier, 341 built, 0 failures), and dense scores of the untrained base encoder at 512 tokens (`dense_L2`). Measured: 10.4 million unit slots over all snapshots hold about 221 thousand distinct texts (django and sympy distinct shares 0.011 and 0.037); the encoding rule fixed before the count (at most 6.0 GPU-hours at 109 texts per second, Block 4) allowed it and the run took 0.377 GPU-hours; summed CPU for the unit and cache build was 8.8 hours (estimate 3.8 to 9.1). Gold readings were built for 284 L2 and 202 L3 instances through the existing mapping, unchanged; none was used for a selection. Not done: encodings of trained checkpoints (their own cost, not in the 0.377), retrieval contexts for the 377, any evaluation.
+
 **Code.** `ril/evaluation/executor/` (`evaluate(spec, patch, config)` serves a gold patch and a model patch alike),
 `scripts/rq3_exec.py`, `scripts/ada/rq3_exec/`; tests `tests/unit/test_executor.py`.
 ## Run in progress (started 2026-11-06, 14:31 UTC, engineer's machine)
