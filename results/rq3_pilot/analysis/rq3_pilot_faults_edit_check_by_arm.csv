@@ -1,0 +1,4 @@
+arm,usable_units,blocks,exact_in_excerpts,exact_in_excerpts_lo,exact_in_excerpts_hi,exact_in_named_file,exact_in_named_file_lo,exact_in_named_file_hi,only_after_whitespace_squash,units_with_a_block_not_in_excerpts,units_with_a_block_not_in_excerpts_lo,units_with_a_block_not_in_excerpts_hi
+bm25,166,226,0.8274,0.7728,0.8711,0.8142,0.7583,0.8595,12,0.2048,0.1504,0.2726
+rrf,183,267,0.8539,0.8066,0.8913,0.8464,0.7983,0.8847,16,0.1639,0.1173,0.2244
+all,349,493,0.8418,0.8069,0.8713,0.8316,0.7961,0.8621,28,0.1834,0.1463,0.2274

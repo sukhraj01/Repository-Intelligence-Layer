@@ -1,0 +1,3 @@
+reading,pairs,only_bm25_unusable,only_rrf_unusable,both_unusable,both_usable,discordance,exact_mcnemar_p_runs_as_pairs,unusable_bm25_minus_rrf,unusable_bm25_minus_rrf_lo,unusable_bm25_minus_rrf_hi
+first_reply,200,29,13,24,134,0.2100,0.0195,0.0800,-0.0050,0.1650
+after_followups,200,26,9,8,157,0.1750,0.0060,0.0850,0.0100,0.1650

@@ -19,6 +19,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | E-RQ3-EXEC | RQ3 (apparatus, measurement) | nothing varies in the measurement: which Verified instances can be evaluated by execution on the cluster (gold patch, two runs, no container, no root) | the benchmark's install specifications (4.1.0), the executor `executor/v1` and its recorded departures, two runs per instance, environment policies `latest` then `era` | none (no randomness; seed field 0) | `results/rq3_exec/executable_instances_v1.json`, `repo_table.csv`, `subset_vs_500.csv`, `cost_per_instance.json`, `coverage_table.csv`, `power_at_n.csv`, `unit_build_estimate.csv`, `older_python_recovery.csv`, `docs/RQ3_PILOT.md` | done 2026-11-07 (subset frozen: 377 of 500) |
 | E-RQ3-UNITS | RQ3 (apparatus, measurement) | nothing varies: unit records, BM25 scores and unit-text vectors (untrained base encoder) of the executable subset of Verified; no retrieval result is read | the dev pipeline (parser, class form full, BM25 k1 1.5 / b 0.75, CodeRankEmbed at 512 tokens, float16), the frozen subset of E-RQ3-EXEC, the encoding rule of D107 (6.0 GPU-hours at 109 texts/s) | none (no randomness; seed field 0) | `results/rq3_units/` (instances, counts, checks, encode logs, manifest), `configs/experiments/rq3_units_v1.yaml`, `docs/RQ3_PILOT.md` | done 2026-11-07 (341 built, 0 failures; 220,974 distinct texts; 0.377 GPU-hours) |
 | E-RQ3-PILOT-PREP | RQ3 (apparatus, evidence) | nothing varies in the measurement: what the cluster can execute (part A), a provider adapter with a persistent limiter, the prompts of the pilot, a three-call smoke test | the assembly of ADR-014 (budget 8,000 model tokens, cap 1,000), BM25 and RRF(BM25, dense) first stages, 100 dev instances drawn with seed 0, template `rq3-pilot-prompt/v1` | 0 (draw and seed field) | `results/rq3_pilot/part_a/`, `results/rq3_pilot/smoke_2026-11-06/`, `docs/RQ3_PILOT.md` | part A and adapter done; pilot run started 2026-11-06 (see update below), not complete |
+| E-RQ3-PILOT-RESULT | RQ3 (apparatus, evidence) | nothing varies: stored data of the finished pilot (400 units, 565 calls, 100 dev instances, BM25 and RRF first stages, two runs, B 8,000) is analysed; no call, no cluster job | the pilot's prompts, replies and log; the unusable definition of `ril/agent/providers/`; D106 subset and D108 budgets unchanged | bootstrap seed 0 | `results/rq3_pilot/analysis/` | done (D109) |
 | E-LABEL-AUDIT-SHEET | RQ2 (data, noise audit) | nothing varies: a stratified sample of the pilot mined set is drawn and put on a sheet for human readers; nothing is trained | the pilot mined set (`non_test` reading, 1,286 directories, 7,081 positives), BM25 ranks of E-MINED-PILOT, K = 20 at positive level (O3), the sheet columns and truncation rules of `docs/LABEL_AUDIT.md` | 0 (draw and shuffles) | `results/audit/pilot_v1/sample_meta.json`; sheets and key untracked under `data/review/label_audit_pilot_v1/` | built 2026-11-05; nobody has read any pair |
 | E-OVERLAP-AUDIT | RQ2 (data, contamination) | floor (10 / 20 / 50 syntax-tree nodes) and corpus-share threshold sensitivity; positives reading (non_test, all); drop of flagged directories as a sensitivity cell | the matching key (E-CONTAM-PROBE syntax-tree hash), primary floor 20, flag share 5%, held-out index, the pilot store (1,391 directories), `non_test` reading | none (no randomness; seed orders the hand-reading sample) | `results/mining/overlap_audit/` records, summary, drop and flag lists | pilot store audited (job 61808, measured); full set not run |
 | E-STORED-ANALYSIS | RQ2 (evidence) | nothing is trained or re-run: four readings of per-query rows already stored under `results/rq2/` | every stored run, query set, gold reading and metric as in E-PILOT-ARMS2 | none (no randomness except the bootstrap, seed 0) | variance components and minimum detectable differences; per-query gain by slice; per-query winner and best-of-arms oracle; per-query loss under injected noise | done 2026-11-02 (exploratory; Part A tables and checkpoint inventory) |
@@ -822,3 +823,102 @@ Share with no gold file in the context at L2 (320): BM25 30.6 / 24.7, dense 26.6
 **Mac side.** The 8,000-token contexts of the three arms as one archive, `~/ril_rq3_contexts/rq3_contexts_b8000.tar.gz` (12.2 MB, 2,262 entries: `<arm>/<instance>.txt` and `.manifest.json`; SHA-256 beside it, checked after the copy). The pilot's directory was not touched.
 
 **Not done / limits.** No trained-checkpoint arm (no encoding pass; its cost is its own and not in Block 4's 0.377); no 16,000-token archive on the Mac; tokens are approximate, so the budgets are not in the agent model's tokens (ratio 1.0 from three prompts); the dense scores of the 36 earlier instances were encoded in an earlier pipeline version at the same revision and cut (the stored arrays are the evidence); RRF k 100 was the dev setting for a 1,024-token encoder and is not re-tuned here; coverage shows what reaches the agent, not what the agent does with it; a result on these instances does not carry to the 123 excluded (D106).
+
+## E-RQ3-PILOT-RESULT: what the finished RQ3 pilot says about cost, usable replies, the two first stages and run-to-run noise. Exploratory, analysis of stored data, 2026-11-07 (decision D109)
+
+Status: **exploratory, outside the pre-registered RQ tables.** Evidence class: measured on 100 development instances, pilot only. Nothing was called and no cluster job was run; the inputs are the pilot's call log (565 rows), its hashed replies and its 200 prepared prompts, and the stored per-query assembly rows, joined to the prompts by the SHA-256 of the context (200 of 200 matched). No resolved rate exists for these instances (they have no executable environment; the executable subset of D106 is Verified). Outputs, inputs' hashes, command and seed: `results/rq3_pilot/analysis/` (README there). Code: `ril/analysis/rq3_pilot_analysis.py`, `scripts/rq3_pilot_analysis.py`, `tests/unit/test_rq3_pilot_analysis.py`. Intervals: Wilson for shares; paired percentile bootstrap over the 100 instances for differences, 10,000 resamples, seed 0 (both runs of an instance move together). A unit is (instance, first stage, run).
+
+**Decision D109** (made before looking; `unusable` is exactly what `ril/agent/providers/patch_format.py` returns as a fault, plus the log's `blocked`; this analysis only refines it).
+1. The flip criteria of D104 are read as written, with no reinterpretation after the data.
+2. No selection on the pilot: D106's subset, D108's contexts and the budget stay as they are; any prompt or format change is a proposal tested later on a fresh draw of dev instances.
+3. Fault classes come from the stored replies, the log's fault code, `finish_reason`, and a check of every stored SEARCH text against the excerpts of the stored prompt (no checkout). Where stored data cannot decide a class, it is said so.
+
+**What ran.** 400 of 400 units final, 565 calls (449 on 2026-11-06, 116 on 2026-11-07, Pacific days), one model string (`gemini-3.5-flash-lite`), temperature 0, B = 8,000 approximate tokens, template `rq3-pilot-prompt/v1`; finish reasons STOP 559, MAX_TOKENS 5, MALFORMED_FUNCTION_CALL 1.
+
+### 1. Cost per unit (analysis 1; `rq3_pilot_cost.csv`)
+
+| first stage | units | calls / unit [interval over instances] | input tokens / unit | output tokens / unit | latency p50 / p95 / p99 (s) | 429 / 5xx / retries |
+|---|---|---|---|---|---|---|
+| BM25 | 200 | 1.52 [1.36, 1.69] | 13,598 | 896 | 2.41 / 6.77 / 10.86 | 0 / 3 / 3 |
+| RRF | 200 | 1.31 [1.19, 1.44] | 11,660 | 969 | 2.76 / 8.26 / 11.49 | 0 / 0 / 0 |
+| both | 400 | 1.41 [1.29, 1.54] (max 3) | 12,629 | 933 | 2.58 / 7.81 / 11.22 | 0 / 3 / 3 |
+
+Per call: input 8,941 tokens, output 660. Per instance (its four units): 5.65 calls [5.17, 6.16]. Thought tokens: 0 in all 565 rows (the adapter counts thought tokens inside the output count; the field is recorded as 0, so crowding-out by thinking did not occur; five replies ran to the 4,096-token output limit in visible prose). Three 5xx answers (all BM25) were retried and succeeded; no non-200 final status. First-message input tokens: BM25 8,540 (min 7,838, max 13,422), RRF 8,529 (7,694, 13,548).
+
+### Flip criteria of D104, as written
+
+| criterion | number | verdict |
+|---|---|---|
+| calls per instance above 3 (read as per unit, as in the design text: 400 units, 400 to 1,200 calls) | 1.41 per unit, interval upper end 1.54; max 3 | **pass** |
+| unusable-reply rate above one third (first reply) | 90 of 400 = 22.5% [18.7, 26.8] (BM25 26.5% [20.9, 33.0], RRF 18.5% [13.7, 24.5]); after follow-ups 51 of 400 = 12.8% [9.8, 16.4] (BM25 17.0%, RRF 8.5%) | **pass** |
+| day cap hit before 100 units finished | the cap (450 of 500, margin 0.9) was hit on day one after 449 calls with 311 units final | **pass as written**; the wording is ambiguous: if "100 units" meant "all units", day one finished 311 of 400 and the criterion would fire (the dry run had planned 1 to 3 days, and 89 units needed day two) |
+
+### 2. Format faults (analysis 2)
+
+Unusable by first stage and run (units, first reply / after follow-ups): BM25 run 0: 26 / 16 of 100; run 1: 27 / 18 of 100. RRF run 0: 19 / 9; run 1: 18 / 8. Follow-ups: 90 first replies were unusable; the first re-ask gave a usable reply in 15 of 90 calls (16.7% [10.4, 25.7]), the second in 24 of 75 (32.0% [22.5, 43.2]). Rescued units: 39 of 90 (43.3% [33.6, 53.6]); not rescued: 51. The two re-asks cost 165 of the 565 calls (29%).
+
+Fault classes of the 90 unusable first replies (classes in order of the rules in the code; `decline_prose` is a keyword reading, not a determination): reply is prose that says no edit can be given (e.g. "I cannot provide a valid SEARCH/REPLACE block from the provided excerpts.") 46; names a file that is not among the excerpts 15; other prose 9; edit-marker text inside prose with no `FILE:` line 5; empty SEARCH section 5; truncated at the output limit 4; unterminated block 2; empty text 2; malformed function call 1; path with a prefix variant of a shown path 1. **Prose or unseen-file replies are 70 of 90 first replies; strict format faults (empty search, unterminated, marker without file line, truncation, malformed call, empty text, prefix variant) are 20 of 400 units (5.0%).** After follow-ups, of the 51 unusable units: prose or unseen file 40 (BM25 28, RRF 12), empty text after a re-ask 8 (4 and 4), other format fault 3 (empty search 2, prefix variant 1): 3 of 400 units (0.75%). Rescue by class of the first reply (n small): truncated 4 of 4, empty search 4 of 5, prose declines 15 of 46 (32.6%), unseen file 6 of 15 (40.0%), markers without file line 1 of 5; rescue when a gold unit is in the context 22 of 30 (73.3%) against 17 of 60 (28.3%) when it is not. Not determinable from stored data: whether the `other_prose` replies are declines (keyword rule), and why a model returns an empty string after a re-ask (8 units, 19 follow-up calls).
+
+**Edit text against the excerpts shown** (349 units with a usable final reply, 493 blocks): the SEARCH text is an exact substring of the excerpts in 415 blocks (84.2%) and of the named file's excerpts in 410; 28 more match only after collapsing whitespace; 64 of 349 units (18.3%; BM25 20.5%, RRF 16.4%) have at least one block whose SEARCH text is not in the excerpts. Units rescued by a follow-up: 91.3% of blocks exact against 83.5% on first-try units. This is the "edit refers to code not shown" class; it is a usable reply by the definition of the code, and whether such a block applies is the grader's decision (Q69).
+
+### 3. Why BM25 is below RRF on usability (analysis 3, tested)
+
+- **Size of the gap.** Unusable, BM25 minus RRF, paired by instance: first reply +8.0 points [-0.5, +16.5]; after follow-ups +8.5 [+1.0, +16.5].
+- **(b) Discordance** on the same instance and run (200 pairs): first reply 29 BM25-only unusable, 13 RRF-only, 24 both, 134 neither; after follow-ups 26, 9, 8, 157. Exact McNemar p 0.020 and 0.006 treating the 200 pairs as independent (they are two runs of 100 instances, so these p-values are optimistic; the instance-clustered intervals above are the ones to use). 16 BM25 instances have no usable run against 7 for RRF; 4 instances have none of their four units usable.
+- **(a) Strata** (gold in the unit's own context; unusable first / after follow-ups):
+
+| stratum | BM25 | RRF |
+|---|---|---|
+| gold file in context | 16.7% / 8.0% (n 162) | 13.7% / 5.5% (n 182) |
+| gold file not in context | 68.4% / 55.3% (n 38) | 66.7% / 38.9% (n 18) |
+| gold unit in context | 10.3% / 3.7% (n 136) | 9.6% / 1.8% (n 166) |
+| gold unit not in context | 60.9% / 45.3% (n 64) | 61.8% / 41.2% (n 34) |
+
+ Gold absence is more frequent under BM25 (no gold file in the context: 19 of 100 instances against 9; no gold unit: 32 against 17). Standardising BM25's within-stratum rates to RRF's mix of strata shrinks the first-reply gap from 8.0 to 2.8 points (file strata; 65% of the gap) or 0.4 (unit strata; 95%), and the after-follow-up gap from 8.5 to 3.8 (56%) or 2.3 (73%); every interval of the standardised gap includes 0 (about ±7). Restricted to instances whose two contexts both hold a gold file (80 instances), the after-follow-up difference is +1.9 points [-4.4, +8.1]; both hold a gold unit (67): +2.2 [-3.0, +7.5].
+- **(c) Size.** First-message input tokens 8,540 (BM25) against 8,529 (RRF); every context fills the budget (D108); files in the context 15.5 against 16.1; share of excerpt characters in paths containing "test" 33.5% against 40.3%. Size does not differ.
+- **(d) Bytes beyond the context.** The text before the excerpts (template, issue) is byte-identical in 100 of 100 instances; issue hash, template version and budget are equal in 100 of 100; the contexts differ in 100 of 100; the follow-up message depends only on the fault code. Nothing but the context differs.
+- **By repository** (units, final unusable, BM25 / RRF): haystack 28.0% / 8.0% (n 50 each), conan 30.4% / 21.7% (46), openlibrary 10.0% / 2.5% (40), streamlink 14.3% / 7.1% (14), qutebrowser 0% / 2.0% (50); gold file in context in the same order 80 / 96, 61 / 78, 80 / 90, 86 / 86, 100 / 100.
+
+**What the data support:** usability tracks whether the code to be changed is in the context, in both arms and at both levels, and the arms differ in how often it is; most of the arm gap sits in that difference. **What they do not support:** that the arms differ in nothing else (the residual after standardising is 0.4 to 3.8 points with intervals of about ±7); a causal reading (gold presence is itself an outcome of the first stage, so stratifying on it describes a route, it does not estimate an effect); the reason behind a prose reply (keyword reading only).
+
+### 4. Run-to-run agreement at temperature 0 (analysis 4; `rq3_pilot_run_to_run.csv`)
+
+| | pairs | same first-reply text | same final reply text | same final usability | runs disagree on usability | same edits given both usable |
+|---|---|---|---|---|---|---|
+| BM25 | 100 | 64.0% | 62.0% | 98.0% | 2.0% (2 of 100) | 58.5% (48 of 82) |
+| RRF | 100 | 63.0% | 64.0% | 97.0% | 3.0% (3 of 100) | 66.7% (60 of 90) |
+| both | 200 | 63.5% [56.6, 69.9] | 63.0% [56.1, 69.4] | 97.5% [94.3, 98.9] | 2.5% [1.1, 5.7] | 62.8% [55.4, 69.7] (108 of 172) |
+
+Temperature 0 does not give identical replies: two runs of the same prompt agree on the reply text in 63% of pairs and on the edits in 63% of usable pairs. Usability itself is stable (97.5%). A resolved-rate study inherits this: the two runs of one arm will often propose different patches; the resolved discordance between two runs of one arm is not measured here (nothing was graded).
+
+### 5. Retrieval side: are the 100 representative? (analysis 5; descriptive, `rq3_pilot_retrieval.csv`)
+
+Share of gold files in context (mean) / share of queries with no gold file, pilot (n 100) against dev matched queries (n 353, `units_all`), BM25: 66.0 / 19.0% [12, 27] against 63.3 / 21.0%; RRF: 75.1 / 9.0% [4, 15] against 70.0 / 13.9%. Unit level (`units_all_nomod`, mean share of gold units): pilot 29.3 / 34.6 against dev 26.0 / 29.6. The pilot is level with dev for BM25 and a little easier for RRF, inside the pilot's interval. **Against the 377 executable instances (D108, L2, 8,000)** the pilot is easier: no gold file in the context 19.0 / 9.0% (BM25 / RRF) against 30.6 / 19.7%; gold unit present 68 / 83 against 51.9 / 64.1%. Estimate, not a measurement: the pilot's within-stratum unusable shares reweighted to the executable subset's coverage give a first-reply unusable share of 32.5% (file strata) to 34.7% (unit strata) for BM25 and 24.2% to 28.4% for RRF, after follow-ups 22.5 to 23.7% and 12.1 to 15.9% (`rq3_pilot_extrapolation_executable.csv`). BM25 would then sit at the one-third line of D104 on the executable subset.
+
+### 6. Cost of the full runs (analysis 6; all figures estimated from the measured rates; `rq3_pilot_cost_grids.csv`)
+
+Per arm-run (377 instances): 533 calls [487, 581] (1.41 per unit times 377), 4.76 million input and 0.35 million output tokens. Requests per day, not tokens per minute, bind: at 13 requests a minute the tokens are 116,000 a minute against the effective limit of 225,000 (52%); at B = 16,000 (input about 17,000 tokens per call, estimate) 13 a minute would be about 220,000, just inside. Calendar days = calls divided by 450 (500 nominal) rounded up, intervals from the calls interval:
+
+| arm-runs | calls | days at 450 a day | days at 500 |
+|---|---|---|---|
+| 1 | 533 | 2 | 2 (1 to 2) |
+| 2 | 1,065 | 3 | 3 (2 to 3) |
+| 3 | 1,598 | 4 | 4 (3 to 4) |
+| 4 | 2,130 | 5 (5 to 6) | 5 (4 to 5) |
+| 6 | 3,195 | 8 (7 to 8) | 7 (6 to 7) |
+
+Grids: RAW against the untrained encoder (D80 fallback), 2 arms x 1 run 3 days, x 2 runs 5, x 3 runs 8; that fallback with BM25 and RRF reference arms (4 arms): x 1 run 5 days (5 to 6), x 2 runs 10 (9 to 11), x 3 runs 15 (13 to 16). Sensitivity (estimate): if the executable subset's higher unusable share (analysis 5) raises BM25's calls per unit to about 1.6 to 1.7, the totals rise by under 10%, which moves a grid by at most one day up to 8 arm-runs. Grading is separate: one pass over the 377 is 3.7 to 4.0 CPU-hours (D106, estimate), so 8 arm-runs is about 30 CPU-hours.
+
+### 7. Power update (analysis 7; `rq3_pilot_power_context.csv`)
+
+The pilot gives **no resolved-rate discordance**; nothing was graded. At n = 377 the placeholder table stays: minimum detectable difference 4.75 / 5.75 / 6.75 / 8.25 points at discordance 10 / 15 / 20 / 30%. Shown beside it as context, and **not the same quantity**: the pilot's paired discordance between BM25 and RRF on the same instance and run (200 pairs) is 17.5% for usability after follow-ups, 21.0% for usability of the first reply, 12.0% for a gold file in the context and 17.0% for a gold unit in the context. The placeholders are not replaced.
+
+### Decisions
+
+1. **The free tier remains workable for the RQ3 runs as designed.** All three criteria pass (1.41 calls per unit, 22.5% first-reply unusable, cap hit with 311 units final); 2 to 8 arm-runs need 3 to 8 days and the 4-arm fallback grid 5 to 15 days. Cautions: BM25's estimated first-reply share on the executable subset is at the one-third line; the limits and the model are not guaranteed over 5 to 15 days (re-read the limits and the model string at the start and the end, as the log records it per call). The paid fallback stays as ADR-008 declares it.
+2. **The unusable replies do not damage the contrast as an artefact; no prompt, follow-up or model change is chosen.** 40 of 51 final failures are prose or unseen-file replies that follow the gold being absent (final unusable with a gold unit in context: BM25 3.7%, RRF 1.8%; without: 45.3%, 41.2%); strict format faults are 20 of 400 first replies and 3 of 400 finally. Candidates: (a) a prompt format change is not supported (format faults are 0.75% of units after follow-ups); (b) a different follow-up policy: the two re-asks rescue 43% of unusable units at 29% of the calls, mostly where the gold is present (73% against 28%); a third re-ask or a different message has no data behind it; (c) a different model: no cross-model data. Residual unexplained: 8 final failures with a gold unit shown and 8 empty replies after a re-ask: too few for a test; no test is proposed. If the engineer wants the cheapest test of whether declines are avoidable, it is one more run of the 100 dev instances' 90 first-unusable units with a changed re-ask message (about 90 to 180 calls, one day), a proposal only.
+3. **Unusable replies count as failures in the resolved rate, identically for all arms** (a unit with no usable edit is unresolved; the same follow-up policy, parser and counting for every arm). In a pilot-style comparison this puts the usability gap (8.5 points [1.0, 16.5] after follow-ups) inside the BM25-to-RRF difference, which is right: the gap is mostly the first stage not showing the code (analysis 3). A resolved rate among usable replies is reported beside it, labelled as conditional on a post-first-stage outcome.
+
+**Not known.** Resolved rate and its discordance (nothing graded; dev instances have no executable environment); whether SEARCH blocks that match only after whitespace squashing (28) or are absent from the excerpts (78 blocks, 64 units) apply to the repository (the rule of application is Q69); whether the executable-subset rates match the extrapolation; whether another model, prompt or budget behaves alike; why empty replies follow a re-ask; any comparison with trained-checkpoint arms (none exist as contexts).
+
+**Dead ends.** None in the analysis itself; one decision was reversed before the numbers were final: the first draft of the repository table split Pro instance ids by their hash suffix and was corrected to the `owner__name` form (the corrected table is the stored one).

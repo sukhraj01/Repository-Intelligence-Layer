@@ -1,0 +1,9 @@
+arm,stratum,reading,pilot_share_stratum_present,executable_share_stratum_present,estimated_unusable_share_executable,kind
+bm25,gold_file_in_context,first_ok,0.8100,0.6940,0.3250,estimate
+bm25,gold_file_in_context,final_ok,0.8100,0.6940,0.2248,estimate
+bm25,gold_unit_in_context,first_ok,0.6800,0.5190,0.3465,estimate
+bm25,gold_unit_in_context,final_ok,0.6800,0.5190,0.2370,estimate
+rrf,gold_file_in_context,first_ok,0.9100,0.8030,0.2416,estimate
+rrf,gold_file_in_context,final_ok,0.9100,0.8030,0.1207,estimate
+rrf,gold_unit_in_context,first_ok,0.8300,0.6410,0.2835,estimate
+rrf,gold_unit_in_context,final_ok,0.8300,0.6410,0.1594,estimate

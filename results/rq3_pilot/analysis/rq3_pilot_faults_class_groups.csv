@@ -1,0 +1,4 @@
+arm,units,final_unusable,prose_or_unseen_file,empty_text,other_format_fault,prose_or_unseen_file_share_of_all_units,prose_or_unseen_file_share_of_all_units_lo,prose_or_unseen_file_share_of_all_units_hi
+bm25,200,34,28,4,2,0.1400,0.0987,0.1949
+rrf,200,17,12,4,1,0.0600,0.0347,0.1019
+all,400,51,40,8,3,0.1000,0.0743,0.1333

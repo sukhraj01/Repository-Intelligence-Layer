@@ -1,6 +1,6 @@
 # RQ3 pilot: cost, variance and feasibility of measuring resolved rate
 
-**Status: design of the pilot, `provisional: D104`. Run started 2026-11-06 14:31 UTC (see "Run in progress").** The pilot measures what an RQ3 run costs and how
+**Status: design of the pilot, `provisional: D104`. Run finished 2026-11-07 (400 of 400 units, 565 calls); analysed in `E-RQ3-PILOT-RESULT` (D109); see "Pilot result".** The pilot measures what an RQ3 run costs and how
 much it varies. It is not the RQ3 result. The language model of the final RQ3 runs is decided after the
 pilot (ADR-008 stays open); the scaffold is ADR-007 (Proposed). Code: `ril/agent/providers/`,
 `scripts/rq3_pilot.py`. Experiment entry: `E-RQ3-PILOT-PREP` in `docs/experiments/B.md`.
@@ -190,7 +190,7 @@ mix (134 of 224).
 
 **Code.** `ril/evaluation/executor/` (`evaluate(spec, patch, config)` serves a gold patch and a model patch alike),
 `scripts/rq3_exec.py`, `scripts/ada/rq3_exec/`; tests `tests/unit/test_executor.py`.
-## Run in progress (started 2026-11-06, 14:31 UTC, engineer's machine)
+## Run record (started 2026-11-06, 14:31 UTC, finished 2026-11-07, engineer's machine)
 
 Model string `gemini-3.5-flash-lite`, temperature 0, seed field 0, 200 prompts (100 dev instances, BM25 and
 RRF first stages, budget 8,000 model tokens), two runs each: 400 units. Daily cap used: 450 of 500 (margin
@@ -201,13 +201,7 @@ daily cap by design; the same command continues after Pacific midnight (08:00 UT
 calls. Expected finish: about 620 calls (1.5 calls per unit in the first 10 minutes), so the first day stops
 near 450 and the second day finishes the rest, on 2026-11-07 after 08:00 UTC.
 
-Resume (run from the repository root; same command every day until `report` shows 400 final units):
-
-```
-cd <repository root> && nohup caffeinate -i poetry run python scripts/rq3_pilot.py run ~/ril_rq3_pilot/prepared_dev100_b8000 ~/ril_rq3_pilot/log_dev100_b8000 >> ~/ril_rq3_pilot/log_dev100_b8000/run.out 2>&1 &
-```
-
-Status: `poetry run python scripts/rq3_pilot.py report ~/ril_rq3_pilot/log_dev100_b8000`.
+The run stopped at the daily cap on 2026-11-06 (449 calls, 311 units final) and finished on 2026-11-07 (116 calls); the log directory is outside the repository.
 
 First ten minutes (133 calls, 85 units started): no 429, no 5xx, no retry, all HTTP 200; latency p50 2.1 s,
 p95 6.1 s; approximate tokens per model token on the first message p50 1.01 (p5 0.96, p95 1.04); first replies
@@ -215,6 +209,10 @@ unusable 35% (BM25) and 24% (RRF), unusable after re-asks 28% and 17% (mostly `n
 `path_not_in_context` and `empty_reply`). Of the first 20 calls 10 were unusable, exactly half, so the stop
 rule (more than half) did not fire; the unusable share is near the one-third line of the flip experiment above and is
 read from the full day's rows, not from these. The prompt format was not changed.
+
+## Pilot result (D109, `E-RQ3-PILOT-RESULT`, exploratory, 100 dev instances)
+
+Flip criteria of D104, as written: calls per unit 1.41 (pass); unusable first reply 22.5% [18.7, 26.8] (pass; after follow-ups 12.8%); day cap hit on day one with 311 units final (pass as written; ambiguous wording, see the entry). The free tier stays workable: one arm-run of the 377 is about 533 calls, 2 days; 2 to 8 arm-runs 3 to 8 days; the 4-arm fallback grid 5 to 15 days (estimates). Unusable replies are mostly prose that says the code is not shown (40 of 51 final failures) and follow the gold being absent from the context; strict format faults are 3 of 400 units after follow-ups. BM25 against RRF: 17.0% against 8.5% unusable after follow-ups, mostly explained by gold absence (standardised gap 2.3 to 3.8 points, intervals include 0). Run-to-run at temperature 0: same reply text in 63% of pairs, same edits in 63% of usable pairs, same usability in 97.5%. No resolved rate exists; the power placeholders stay. Unusable replies count as failures for every arm. Numbers and their sources: `results/rq3_pilot/analysis/`.
 
 ## Smoke test (2026-11-06, three calls, `results/rq3_pilot/smoke_2026-11-06/`)
 

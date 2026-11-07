@@ -1,0 +1,16 @@
+group,units_first_unusable,rescued,rescued_lo,rescued_hi
+all,90,0.4333,0.3358,0.5364
+first_class=decline_prose,46,0.3261,0.2087,0.4703
+first_class=empty_search,5,0.8000,0.3755,0.9638
+first_class=empty_text,2,1.0000,0.3424,1.0000
+first_class=malformed_function_call,1,1.0000,0.2065,1.0000
+first_class=markers_without_file_line,5,0.2000,0.0362,0.6245
+first_class=other_prose,9,0.5556,0.2667,0.8112
+first_class=path_not_shown,15,0.4000,0.1982,0.6425
+first_class=path_prefix_variant_of_shown_path,1,1.0000,0.2065,1.0000
+first_class=truncated_at_output_limit,4,1.0000,0.5101,1.0000
+first_class=unterminated_block,2,0.0000,0.0000,0.6576
+gold_unit_in_context=True,30,0.7333,0.5555,0.8582
+gold_unit_in_context=False,60,0.2833,0.1851,0.4077
+edit_text_in_excerpts: usable_on_first_try,310,0.8345,0.7972,0.8660
+edit_text_in_excerpts: rescued_by_followup,39,0.9130,0.7968,0.9657

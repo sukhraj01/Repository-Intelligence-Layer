@@ -1,0 +1,5 @@
+stratum,reading,raw_gap,raw_gap_lo,raw_gap_hi,gap_after_standardising,gap_after_standardising_lo,gap_after_standardising_hi,share_of_gap_explained
+gold_file_in_context,first_ok,0.0800,-0.0050,0.1650,0.0282,-0.0435,0.1020,0.6469
+gold_file_in_context,final_ok,0.0850,0.0100,0.1650,0.0378,-0.0236,0.1004,0.5557
+gold_unit_in_context,first_ok,0.0800,-0.0050,0.1650,0.0040,-0.0664,0.0760,0.9496
+gold_unit_in_context,final_ok,0.0850,0.0100,0.1650,0.0225,-0.0350,0.0831,0.7348

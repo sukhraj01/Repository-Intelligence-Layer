@@ -1,0 +1,4 @@
+arm,pairs,same_first_reply_text,same_first_reply_text_lo,same_first_reply_text_hi,same_final_reply_text,same_final_reply_text_lo,same_final_reply_text_hi,same_first_reply_usability,same_first_reply_usability_lo,same_first_reply_usability_hi,same_final_usability,same_final_usability_lo,same_final_usability_hi,runs_disagree_on_final_usability,runs_disagree_on_final_usability_lo,runs_disagree_on_final_usability_hi,both_usable_pairs,same_edits_given_both_usable,same_edits_given_both_usable_lo,same_edits_given_both_usable_hi
+bm25,100,0.6400,0.5424,0.7273,0.6200,0.5221,0.7090,0.9500,0.8882,0.9785,0.9800,0.9300,0.9945,0.0200,0.0055,0.0700,82,0.5854,0.4773,0.6858
+rrf,100,0.6300,0.5322,0.7182,0.6400,0.5424,0.7273,0.9300,0.8625,0.9657,0.9700,0.9155,0.9897,0.0300,0.0103,0.0845,90,0.6667,0.5642,0.7555
+all,200,0.6350,0.5663,0.6986,0.6300,0.5612,0.6939,0.9400,0.8981,0.9653,0.9750,0.9428,0.9893,0.0250,0.0107,0.0572,172,0.6279,0.5536,0.6966

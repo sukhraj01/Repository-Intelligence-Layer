@@ -335,8 +335,13 @@ retrieval failures from reasoning failures. The scaffold and the base model are 
 \paragraph{Power.} With the published fixed-agent retrieval swap read in full as the only comparison
 available, the differences it reports are below the minimum detectable effect at Verified sizes, so
 the resolved-rate comparison may be reportable only as an estimate with an interval. The smallest
-worthwhile difference is stated before the runs. \todo{Power table from stored discordance and
-run-to-run spread of the agent pilot: \entry{E-POWER}.}
+worthwhile difference is stated before the runs. A cost and noise pilot of the agent call (100
+development instances, two first stages, two runs, one hosted model on its free tier;
+\entry{E-RQ3-PILOT-RESULT}, exploratory) gives no resolved rate, because nothing was graded. It gives
+1.41 calls per instance-run and 22.5\% unusable first replies (12.8\% after two follow-ups); at
+temperature 0 two runs agree on the reply text in 63\% of pairs and on the edits in 63\% of usable
+pairs. The placeholder discordances of the power table stay.
+\todo{Power table from stored resolved-rate discordance and run-to-run spread: \entry{E-POWER}.}
 
 \paragraph{Fallback (declared before any final run).} If the arms do not separate under the rule
 above, RQ3 contrasts \textsc{Raw} against the untrained encoder and is labelled as measuring
