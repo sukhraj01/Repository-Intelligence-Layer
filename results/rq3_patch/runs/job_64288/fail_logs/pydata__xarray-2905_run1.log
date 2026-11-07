@@ -1,0 +1,7 @@
+found when resolving: `pip`, `setuptools`, `wheel`
+  Caused by: Request failed after 3 retries in 5.9s
+  Caused by: Failed to fetch: `https://files.pythonhosted.org/packages/07/25/ee8c38ae72d66b844ce8eb9711ba905dba21ca1a8a0c960057c41cd23337/pip-26.3-py3-none-any.whl.metadata`
+  Caused by: error sending request for url (https://files.pythonhosted.org/packages/07/25/ee8c38ae72d66b844ce8eb9711ba905dba21ca1a8a0c960057c41cd23337/pip-26.3-py3-none-any.whl.metadata)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: Name or service not known

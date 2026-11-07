@@ -1,0 +1,7 @@
+arm,reading,units,usable,applied,applied_empty,file_missing,no_match,multiple_matches,usable_and_applying,share_of_units,share_low,share_high
+bm25,exact,200,166,122,7,0,37,0,129,0.645,0.5765,0.708
+bm25,tolerant,200,166,122,7,0,37,0,129,0.645,0.5765,0.708
+rrf,exact,200,183,147,0,0,33,3,147,0.735,0.6698,0.7913
+rrf,tolerant,200,183,147,0,0,33,3,147,0.735,0.6698,0.7913
+all,exact,400,349,269,7,0,70,3,276,0.69,0.643,0.7333
+all,tolerant,400,349,269,7,0,70,3,276,0.69,0.643,0.7333
