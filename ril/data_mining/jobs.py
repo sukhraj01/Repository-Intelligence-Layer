@@ -44,6 +44,14 @@ class TokenMissing(RuntimeError):
     """The live run needs ``GITHUB_TOKEN`` and the environment has none."""
 
 
+class ListingIncomplete(RuntimeError):
+    """A repository could not be listed, so the seeded order of pull requests would change.
+
+    Mining on a listing without that repository silently shifts the sample (DEV-035); the
+    session stops instead, and the repository is listed alone by a listing-only job.
+    """
+
+
 def require_token() -> str:
     """The token, or :class:`TokenMissing` (the message never contains a value)."""
     token = token_from_env()
@@ -163,6 +171,10 @@ def run_pilot(
             "listing_seconds": round(listing_seconds, 1),
             "api": budget_delta(budget_before, client.budget.to_dict()),
         }
+    if stats.failed:
+        raise ListingIncomplete(
+            f"{len(stats.failed)} repositories not listed: {sorted(stats.failed)[:5]}"
+        )
     selected = select_prs(listings, config, population.published)
     t_mine = time.perf_counter()
     syncer = (

@@ -159,6 +159,11 @@ def test_added_function_count_and_file_added() -> None:
         (MODIFY, {"m.py": "def broken(:\n"}, "changed_file_unparseable:syntax-other"),
         (MODIFY, {"o.py": OTHER}, "old_file_missing_at_base"),
         (
+            MODIFY,
+            {"m.py": OLD, "k.py": "def \u0c8f\u0ca8\u0cbe\u0ca6\u0cb0\u0cc2():\n    return 1\n"},
+            "corpus_unit_id_rejected:ValueError",
+        ),
+        (
             [file_entry("m.py", "modified", make_patch(OLD, NEW.replace("3", "9")))],
             {"m.py": "print 'hello'\n"},
             "changed_file_unparseable:python2-print",
