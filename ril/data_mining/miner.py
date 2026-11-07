@@ -274,7 +274,12 @@ def mine_pr(
             snapshots.materialize(pr.repo, comparison.merge_base, work)
         except SnapshotError:
             return _quarantine(pr, "snapshot_unavailable", **counters)
-        parsed = parse_repository(work, pr.repo)
+        try:
+            parsed = parse_repository(work, pr.repo)
+        except ValueError as exc:
+            # a unit id the frozen id grammar rejects (a non-ASCII identifier, DEV-035): the
+            # snapshot cannot be indexed, so the pull request is quarantined, not repaired
+            return _quarantine(pr, f"corpus_unit_id_rejected:{type(exc).__name__}", **counters)
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

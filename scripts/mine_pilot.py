@@ -366,26 +366,33 @@ def main(argv: list[str] | None = None) -> int:
     repos = None
     if a.repos is not None:
         repos = list(population.repos[: a.repos])
-    res = jobs.run_pilot(
-        config=config,
-        out_root=a.out,
-        population=population,
-        is_held_out=is_held_out,
-        client=client,
-        snapshots=GitSnapshots(a.work, workers=max(1, a.lookahead)),
-        lookahead=a.lookahead,
-        list_only=a.list_only,
-        shard=tuple(a.shard) if a.shard else None,
-        created=a.created,
-        code_commit=_commit(),
-        stop_after=a.stop_after,
-        repos=repos,
-        store_layout=a.store_layout,
-        durable_root=a.durable,
-        sync_every=a.sync_every,
-        sync_seconds=a.sync_seconds,
-    )
+    try:
+        res = jobs.run_pilot(
+            config=config,
+            out_root=a.out,
+            population=population,
+            is_held_out=is_held_out,
+            client=client,
+            snapshots=GitSnapshots(a.work, workers=max(1, a.lookahead)),
+            lookahead=a.lookahead,
+            list_only=a.list_only,
+            shard=tuple(a.shard) if a.shard else None,
+            created=a.created,
+            code_commit=_commit(),
+            stop_after=a.stop_after,
+            repos=repos,
+            store_layout=a.store_layout,
+            durable_root=a.durable,
+            sync_every=a.sync_every,
+            sync_seconds=a.sync_seconds,
+        )
+    except jobs.ListingIncomplete as exc:
+        sys.stderr.write(f"LISTING INCOMPLETE: {exc}\n")
+        return 4
     sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
+    if a.list_only and res.get("failed"):  # a listing job that left a repository out must fail
+        sys.stderr.write(f"LISTING INCOMPLETE: {sorted(res['failed'])[:5]}\n")
+        return 4
     return 0
 
 

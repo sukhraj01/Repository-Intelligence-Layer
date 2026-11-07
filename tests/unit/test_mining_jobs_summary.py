@@ -516,3 +516,38 @@ def test_mined_run_flows_from_ranks_to_a_cache_and_a_filter_size_and_ranks_repro
     assert none["examples_kept"] <= none["examples_in"]
     with pytest.raises(ValueError):
         filter_size_job(cache, table, "nope", 20)
+
+
+def test_a_listing_that_fails_stops_the_session_before_any_pull_request_is_mined(
+    tmp_path, monkeypatch
+) -> None:
+    from ril.data_mining import runner
+    from ril.data_mining.github_api import ApiError
+
+    real = runner.list_repository
+
+    def flaky(client, repo, store):  # type: ignore[no-untyped-def]
+        if repo == "zeta/other":
+            raise ApiError(502, "bad gateway")
+        return real(client, repo, store)
+
+    monkeypatch.setattr(runner, "list_repository", flaky)
+    client, snaps, _ = synthetic_client()
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    root = str(tmp_path / "run")
+    common = {
+        "config": MiningConfig(n_repos=2, max_prs=3),
+        "out_root": root,
+        "population": pop,
+        "is_held_out": lambda r: False,
+        "client": client,
+        "snapshots": snaps,
+        "created": "2026-11-07",
+        "code_commit": "abc1234",
+        "repos": [REPO, "zeta/other"],
+    }
+    with pytest.raises(jobs.ListingIncomplete):
+        jobs.run_pilot(**common)
+    assert not os.path.exists(os.path.join(root, "pr"))  # nothing mined on a shifted sample
+    res = jobs.run_pilot(**{**common, "list_only": True})
+    assert sorted(res["failed"]) == ["zeta/other"]  # the listing job reports it (exit code 4)

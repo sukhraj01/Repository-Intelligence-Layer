@@ -239,7 +239,11 @@ def endpoint_label(path: str) -> str:
 class ClientConfig:
     """Retry and pacing parameters (no magic numbers in the client)."""
 
-    retries: int = 5
+    retries: int = 8
+    network_retries: int | None = 12
+    """Attempts after a network-level failure (DNS, reset, timeout); ``None`` means ``retries``.
+    With the 120 s backoff cap twelve retries ride out about 14 minutes of an outage (a name
+    resolution fault of about a minute killed three listing jobs of the full run, DEV-035)."""
     backoff_base: float = 2.0
     backoff_cap: float = 120.0
     secondary_base: float = 60.0
@@ -375,7 +379,13 @@ class ApiClient:
         key = request_key(method, url, body)
         cached = self._etags.get(key) if conditional else None
         endpoint = endpoint_label(urllib.parse.urlparse(url).path)
-        for attempt in range(self.config.retries + 1):
+        net_limit = (
+            self.config.retries
+            if self.config.network_retries is None
+            else self.config.network_retries
+        )
+        net_failures = 0
+        for attempt in range(max(self.config.retries, net_limit) + 1):
             rem = self.budget.remaining
             if rem is not None and rem <= self.config.reserve and self.budget.reset_epoch:
                 self._wait_for_reset("primary-reserve")
@@ -390,10 +400,11 @@ class ApiClient:
                 resp = self._transport.send(method, url, self._headers(extra), body)
             except TransportError as err:
                 self._last_call = self.clock.now()
-                if attempt == self.config.retries:
+                if net_failures == net_limit:
                     raise
                 self.budget.retries += 1
-                self._sleep(self._backoff(attempt), f"network:{type(err).__name__}")
+                self._sleep(self._backoff(net_failures), f"network:{type(err).__name__}")
+                net_failures += 1
                 continue
             self._last_call = self.clock.now()
             self.budget.calls += 1
@@ -426,7 +437,7 @@ class ApiClient:
                     raise ApiError(resp.status, resp.text())
                 continue
             if resp.status >= 500:
-                if attempt == self.config.retries:
+                if attempt >= self.config.retries:
                     raise ApiError(resp.status, resp.text())
                 self.budget.retries += 1
                 self._sleep(self._backoff(attempt), f"http-{resp.status}")
@@ -436,7 +447,7 @@ class ApiClient:
 
     def _handle_limit(self, resp: HttpResponse, attempt: int) -> bool:
         """Sleep for a rate-limit refusal; ``False`` when the 403 is a real refusal."""
-        if attempt == self.config.retries:
+        if attempt >= self.config.retries:
             return False
         retry_after = resp.headers.get("retry-after")
         message = resp.text().lower()

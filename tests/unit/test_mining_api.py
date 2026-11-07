@@ -19,7 +19,7 @@ from ril.data_mining.github_api import (
 )
 from tests.unit._mining_fixtures import FakeClock, FakeTransport, json_response
 
-CFG = ClientConfig(retries=3, min_interval=0.0)
+CFG = ClientConfig(retries=3, network_retries=None, min_interval=0.0)
 
 
 def client(tr: FakeTransport, clock: FakeClock, **kw) -> ApiClient:
@@ -69,6 +69,35 @@ def test_network_errors_retry_then_raise() -> None:
     with pytest.raises(TransportError):
         c.get_json("/repos/a/b/x")
     assert len(tr.calls) == 4
+
+
+def test_network_outage_is_ridden_out_up_to_the_network_retry_limit() -> None:
+    tr, clock = FakeTransport(), FakeClock()
+    tr.queue = [TransportError("name resolution")] * 6 + [json_response({"ok": 1})]
+    cfg = ClientConfig(retries=3, network_retries=6, min_interval=0.0)
+    c = client(tr, clock, config=cfg)
+    assert c.get_json("/repos/a/b/x") == {"ok": 1}
+    assert clock.slept == [2.0, 4.0, 8.0, 16.0, 32.0, 64.0]
+    tr2, clock2 = FakeTransport(), FakeClock()
+    tr2.queue = [TransportError("name resolution")] * 8
+    with pytest.raises(TransportError):
+        client(tr2, clock2, config=cfg).get_json("/repos/a/b/x")
+    assert len(tr2.calls) == 7  # the first call plus six retries
+
+
+def test_server_errors_after_a_network_outage_still_stop_at_the_retry_limit() -> None:
+    tr, clock = FakeTransport(), FakeClock()
+    tr.queue = [TransportError("reset")] * 5 + [HttpResponse(502, {}, b"bad")] * 6
+    cfg = ClientConfig(retries=3, network_retries=6, min_interval=0.0)
+    with pytest.raises(ApiError):
+        client(tr, clock, config=cfg).get_json("/repos/a/b/x")
+    assert len(tr.calls) == 6  # five resets, then one 502 past the server-error limit
+
+
+def test_default_client_tolerates_a_quarter_hour_outage() -> None:
+    cfg = ClientConfig()
+    assert cfg.network_retries == 12 and cfg.retries == 8
+    assert sum(min(cfg.backoff_cap, cfg.backoff_base * 2**i) for i in range(12)) > 840
 
 
 def test_not_found_is_not_retried() -> None:
