@@ -171,3 +171,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-07,A,63023,RQ3U,unit records and caches of 4 xarray instances (label RIL_COMMIT mistyped; code f690225),u22,4,0,00:00:27,0.0,COMPLETED
 2026-11-07,A,63024,RQ3U,encoding of 6689 distinct unit texts of the xarray instances (block 4),u22,4,1,00:00:50,0.014,COMPLETED
 2026-11-07,A,63025,RQ3U,vector check and dense scores of the xarray instances,u22,2,0,00:00:01,0.0,COMPLETED
+2026-11-07,A,63792,RQ3C,"retrieved contexts of 377 executable instances (BM25 dense RRF; budgets 8000 and 16000); determinism check; tables; archive",u22,4,0,01:50:21,0.0,COMPLETED
+2026-11-07,A,63939,RQ3C,interactive check of two dense score arrays (failed: script path on node-local /tmp),u22,1,0,00:00:01,0.0,FAILED
+2026-11-07,A,63940,RQ3C,interactive check of two dense score arrays of one instance (seaborn-3069),u22,1,0,00:00:02,0.0,COMPLETED
