@@ -1,0 +1,17 @@
+{
+ "cache_sha256": "26545f95a88ed88d37c9739a839a63264b1f8b0023fcd419aa34e783cdf1db6c",
+ "form": "code",
+ "seconds": 4.4,
+ "stats": {
+  "errors": [],
+  "fetch_errors": 0,
+  "held_out_dropped": 0,
+  "listed": 0,
+  "no_positive": 0,
+  "not_in_table_dropped": 0,
+  "positives_not_in_table": 0,
+  "selected": 0,
+  "yielded": 18
+ },
+ "written": 18
+}

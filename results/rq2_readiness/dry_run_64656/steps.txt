@@ -1,0 +1,11 @@
+materialise rc=0 seconds=13
+rank_prepare rc=0 seconds=7
+rank_bm25 rc=0 seconds=6
+features rc=0 seconds=1
+select rc=0 seconds=1
+cache rc=0 seconds=4
+filter_size rc=0 seconds=1
+overlap_audit rc=0 seconds=24
+overlap_apply rc=0 seconds=1
+plan rc=0 seconds=0
+eval_plan rc=0 seconds=17

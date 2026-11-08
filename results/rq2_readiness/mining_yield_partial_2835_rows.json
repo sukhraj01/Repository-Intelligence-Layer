@@ -1,0 +1,57 @@
+{
+ "attempted": 2835,
+ "g2_pilot_directories_met": true,
+ "largest_repositories": [
+  [
+   "open-metadata/openmetadata",
+   128
+  ],
+  [
+   "apache/airflow",
+   89
+  ],
+  [
+   "project-chip/connectedhomeip",
+   72
+  ],
+  [
+   "policyengine/policyengine-us",
+   51
+  ],
+  [
+   "jupyterlab/jupyterlab",
+   47
+  ]
+ ],
+ "mined_share": 0.6257,
+ "mined_with_positive": 1774,
+ "positives_per_mined": 9.76,
+ "positives_unrestricted": 17318,
+ "projection": {
+  "basis": "linear in the rows so far (seeded hash order: a prefix is a sample)",
+  "g2_met_unrestricted": true,
+  "g2_positives": 10000,
+  "mined": 6257,
+  "positives_unrestricted": 61086,
+  "target_attempted": 10000
+ },
+ "quarantine_by_reason": {
+  "changed_file_unparseable:python2-except": 2,
+  "changed_file_unparseable:python2-long-literal": 1,
+  "changed_file_unparseable:python2-print": 3,
+  "changed_file_unparseable:syntax-other": 10,
+  "corpus_unit_id_rejected": 3,
+  "diff_truncated": 4,
+  "old_file_missing_at_base": 5,
+  "patch_missing": 6
+ },
+ "quarantined_share": 0.012,
+ "repositories_seen": 723,
+ "status": {
+  "mined": 1774,
+  "no_positive": 301,
+  "no_python_change": 726,
+  "quarantined": 34
+ },
+ "timeout_quarantined": 0
+}

@@ -89,6 +89,9 @@ def main(argv: list[str] | None = None) -> int:
     pr_ = sub.add_parser("report")
     pr_.add_argument("out")
     pr_.add_argument("md")
+    yl = sub.add_parser("yield", help="yield and gate G2 from state.jsonl (no directory opened)")
+    yl.add_argument("state", help="state.jsonl of a store or run root")
+    yl.add_argument("--target-attempted", type=int)
     rpt = sub.add_parser("repeat")
     rpt.add_argument("reference")
     rpt.add_argument("out")
@@ -261,6 +264,14 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
         sys.stdout.write(json.dumps({"unit": unit, "rows": rows}, indent=1, sort_keys=True) + "\n")
+        return 0
+    if a.cmd == "yield":
+        from ril.data_mining import state_yield
+
+        res_y = state_yield.yield_report(
+            state_yield.read_state(a.state), target_attempted=a.target_attempted
+        )
+        sys.stdout.write(json.dumps(res_y, indent=1, sort_keys=True) + "\n")
         return 0
     if a.cmd == "report":
         from ril.data_mining import report
