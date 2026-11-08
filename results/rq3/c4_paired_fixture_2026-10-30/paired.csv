@@ -1,0 +1,11 @@
+instance_id,first,second,first_resolved,second_resolved,discordant
+fixture-000,bm25,oracle,True,True,False
+fixture-001,bm25,oracle,True,True,False
+fixture-002,bm25,oracle,True,True,False
+fixture-003,bm25,oracle,False,True,True
+fixture-004,bm25,oracle,False,False,False
+fixture-005,bm25,oracle,True,True,False
+fixture-006,bm25,oracle,True,True,False
+fixture-007,bm25,oracle,True,True,False
+fixture-008,bm25,oracle,False,True,True
+fixture-009,bm25,oracle,False,False,False

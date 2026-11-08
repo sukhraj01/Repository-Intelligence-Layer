@@ -1,8 +1,8 @@
 # System Architecture
 
-**Last updated:** 2026-10-31
+**Last updated:** 2026-11-06
 **Status:** Parsing, retrieval signals, evaluation, the training stack, the benchmark harness and the analysis tables exist and run; the fusion
-stage, rerank, context assembly and agent integration are not built, and no configuration is frozen. This file is **live**: update it whenever a
+stage, rerank and agent integration are not built (context assembly is built, ADR-014), and no configuration is frozen. This file is **live**: update it whenever a
 boundary changes. The static design rationale is in `09_architecture.md` (derived from the master doc). Each module named below was checked to
 exist on the date above; "planned" marks those that do not.
 
@@ -81,7 +81,7 @@ implementation and then written here.**
 ## retrieval (`ril/retrieval/`)
 
 - **Purpose:** the online path — three candidate generators, fusion, rerank, assembly. Built so far: the three signals as separate, measured components; fusion exists as measurement code only.
-- **Files (built):** `bm25_index.py`, `dense_encoder.py`, `graph_expansion.py`, `recency.py`. **Planned, not written:** a fusion module, rerank and `assemble()`.
+- **Files (built):** `bm25_index.py`, `dense_encoder.py`, `graph_expansion.py`, `recency.py`. **Planned, not written:** a fusion module and rerank. Context assembly lives in `ril/assembly/` (next section).
 - **Interfaces:**
   - `bm25_index.BM25Index` (reference tokenisation, Lucene-variant scoring, `BM25Params` k₁=1.5 / b=0.75, `provisional: ADR-004`; `top_k_of`, `order_by_score`). Options added by workstream A and merged 2026-10-31: `split_identifier`, `tokenize_code(keep_original=...)` and `field_tokens` with integer field weights. The reference form is the default and the reproduction of the published BM25 rows depends on it.
   - `dense_encoder.DenseEncoder` over a registered `EncoderSpec` (CodeRankEmbed, Qwen3-Embedding-0.6B, SweRankEmbed-Small as a teacher; revisions pinned, `provisional: ADR-006`) and `FlatIndex`, an exact search over normalised vectors (never ANN). Needs torch, so it runs on the cluster.
@@ -90,9 +90,29 @@ implementation and then written here.**
 - **Dependencies:** `parsing/`, `config/`.
 - **Consumers:** evaluation, bench, analysis, the agent.
 - **Assumptions:** flat exact index is cheap at 10³–10⁵ units per repo (dense search latency rows in `results/latency/`); RRF needs no retuning (to be checked on L2 versus L3).
-- **Limitations:** no assembly and no rerank yet; the graph's role is undecided (ADR-003: on the fused first stage, same-file expansion ordered by score is level with the stored graph, E-GRAPH-ROLE); the measured encoder numbers are zero-shot on development repositories. Rerank is hypothesised to dominate latency (about 500–1000 ms for 100 candidates versus a few ms for the rest); unmeasured.
-- **Invariant:** `assemble()` is **byte-identical across RQ2 arms** (reproducibility test).
+- **Limitations:** no rerank yet; the graph's role is undecided (ADR-003: on the fused first stage, same-file expansion ordered by score is level with the stored graph, E-GRAPH-ROLE); the measured encoder numbers are zero-shot on development repositories. Rerank is hypothesised to dominate latency (about 500–1000 ms for 100 candidates versus a few ms for the rest); unmeasured.
 - **Governing decisions:** ADR-003, ADR-006 (encoder), ADR-009 (rerank).
+
+## assembly (`ril/assembly/`)
+
+- **Purpose:** the last stage of the online path: a ranked list of units becomes the text an agent reads, under a token budget. Implements `specs/assembly.md` (ADR-014, D102, `provisional`).
+- **Files:** `assemble.py` (policy, manifest), `tokens.py` (pluggable tokenizer, deterministic approximation, ratio helper), `config.py`, `gold.py` (`gold_in_context`), `snapshot.py` (parsed units to the assembler's view), `measure.py` (E-ASSEMBLY runner on the E3 cache).
+- **Interface:** `assemble(candidates, snapshot, config, tokenizer) -> Assembled(context, manifest)`; `gold_in_context(manifest, gold_units, gold_files)`.
+- **Dependencies:** `parsing/`, `config/`; `measure.py` also reads the evaluation cache (`evaluation/`). Nothing in `retrieval/` is imported by the policy, so the stage cannot depend on how a list was made.
+- **Consumers:** the agent integration (RQ3), `bench/assembly_measure.py` (stages `assemble`, `end_to_end`), `analysis/assembly_tables.py`.
+- **Report tables:** `analysis/report_tables.py` reads `results/` only and writes the LaTeX fragments of `reports/final/generated/` (every number from a stored file, checked by `tests/unit/test_report_tables.py`); `scripts/report_tables.py` is the command line.
+- **Invariant:** **byte-identical for the same ranked list** (same candidates, snapshot, configuration and tokenizer give the same bytes; `tests/unit/test_assembly.py`), which is what makes assembly identical across RQ2 arms. The budget is never exceeded (tested on random inputs).
+- **Assumptions:** class units arrive in header form (`BuildConfig(class_source="header")`); the final agent run supplies the agent model's tokenizer.
+- **Limitations:** no callee signatures (DEV-033); no overlap deduplication beyond repeated ids; token counting dominates the time (about 90% in a profile).
+
+## executor (`ril/evaluation/executor/`)
+
+- **Purpose:** decides whether a patch resolves a SWE-bench Verified instance without root or a container: environment from `uv` and the benchmark's install specification, patch, named tests, per-test outcomes. Implements D106 (`docs/RQ3_PILOT.md`); the same function evaluates a gold patch (does the instance qualify for the executable subset) and, later, a model patch (RQ3's resolved rate).
+- **Files:** `spec.py` (plain-data instance specification), `swebench_specs.py` (reads the benchmark's install specifications, version 4.1.0, never runs the package), `envbuild.py` (conda strings and environment files translated to pip requirements, `UvEnvBuilder`), `runner.py` (`evaluate`, `ExecConfig`, `ExecResult`), `steps.py` (a step with timeout, process-group kill and peak resident size from `wait4`), `log_parsers.py` (per-repository test-output readers, `grade`), `jobs.py` (sharded resumable gold runs), `subset.py` (classification, one reason per exclusion), `summary.py`, `coverage.py`.
+- **Interface:** `evaluate(spec, patch, config) -> ExecResult` (`.resolved`, `.statuses`, `.seconds`, `.departures`); `build_subset(specs, rows, ...)`.
+- **Dependencies:** the standard library and `util/log` only; nothing imports `retrieval/`, `parsing/` or `training/`. Workstream C's `ril/agent/` is not touched.
+- **Invariants:** scratch under the node-local work root with `HOME` pointed at it and removed on exit (`tests/unit/test_executor.py`); a test absent from the output counts as failed; every departure from the specification (pytest pin, build constraint, packages dropped, pip requirements for conda packages) is listed on the result.
+- **Limitations:** Python older than 3.8 cannot be built by `uv`; `apt-get` pre-install steps are excluded; pip is not conda (a pin without a wheel for the interpreter fails); the test-output readers follow the benchmark's formats and are checked only on the logs of the instances run so far.
 
 ## data mining (`ril/data_mining/`)
 
@@ -185,7 +205,7 @@ implementation and then written here.**
 
 # Known limits and expected bottlenecks
 
-Measured so far (numbers in `results/latency/` and `RESULTS.md`; per hardware spec, p50/p95/p99): parse and graph-build throughput on flask, requests and django; `bm25` and graph expansion on 974 and 35,860 units; dense query encode, flat search and encode throughput; training step throughput per batch shape. Memory: the local box is 8 GB and runs none of the torch work; training memory was checked on the cluster (E-ENCODER-NUMBERS). Storage: graph storage options measured (ADR-011 addendum). Not measured: rerank, assembly, end-to-end latency.
+Measured so far (numbers in `results/latency/` and `RESULTS.md`; per hardware spec, p50/p95/p99): parse and graph-build throughput on flask, requests and django; `bm25` and graph expansion on 974 and 35,860 units; dense query encode, flat search and encode throughput; training step throughput per batch shape. Memory: the local box is 8 GB and runs none of the torch work; training memory was checked on the cluster (E-ENCODER-NUMBERS). Storage: graph storage options measured (ADR-011 addendum). `assemble` and a BM25-only `end_to_end` on flask, requests and django (E-ASSEMBLY, ADR-014). Not measured: rerank, end-to-end latency with dense search, fusion and rerank.
 Expected at 10×: reranking; indexing throughput for L2-scale corpora; disk on Ada (`$HOME` quota, `docs/COMPUTE.md`).
 
 # Architecture changelog

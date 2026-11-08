@@ -1,0 +1,73 @@
+{
+ "arms": [
+  "bm25",
+  "dense",
+  "rrf"
+ ],
+ "budget": 8000,
+ "confirmatory": 327,
+ "held_out": 50,
+ "instances_in_subset": 377,
+ "issue_agreement": {
+  "compared_with_folder": 320,
+  "different": [],
+  "equal": 320,
+  "instances": 377,
+  "with_table_text": 377
+ },
+ "issue_source": "problem_statement of the benchmark table",
+ "job": 64598,
+ "note": "first-pass preparation: the reviewed address list and the screen as of this commit; rejected prompts are not written",
+ "prefix_identity": {
+  "differing_instances": [],
+  "identical": true,
+  "instances": 320,
+  "prompts_by_arm": {
+   "bm25": 289,
+   "dense": 301,
+   "rrf": 297
+  }
+ },
+ "prompts_expected": 1131,
+ "prompts_written": 887,
+ "rejected": 244,
+ "rejection_table": [
+  {
+   "arm": "bm25",
+   "kind": "email",
+   "prompts_rejected": 51
+  },
+  {
+   "arm": "bm25",
+   "kind": "home_path",
+   "prompts_rejected": 42
+  },
+  {
+   "arm": "dense",
+   "kind": "email",
+   "prompts_rejected": 44
+  },
+  {
+   "arm": "dense",
+   "kind": "home_path",
+   "prompts_rejected": 33
+  },
+  {
+   "arm": "rrf",
+   "kind": "email",
+   "prompts_rejected": 48
+  },
+  {
+   "arm": "rrf",
+   "kind": "home_path",
+   "prompts_rejected": 34
+  },
+  {
+   "arm": "all",
+   "distinct_digests": 228,
+   "instances_affected": 109,
+   "kind": "any",
+   "prompts_rejected": 244
+  }
+ ]
+}

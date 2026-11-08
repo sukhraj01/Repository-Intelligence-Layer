@@ -1,0 +1,67 @@
+experiment_id: E-RQ3-UNITS
+status: build only (no retrieval result is read; no agent call)
+date: '2026-11-07'
+seed: 0
+bm25:
+  k1: 1.5
+  b: 0.75
+  stopwords: en (33 words)
+  stemmer: snowball english
+  token_pattern: (?u)\b\w\w+\b
+  provisional: ADR-004
+prefilter_k: 10000
+metrics:
+  ndcg_at: 10
+  recall_at: 100
+  gain: binary
+  aggregation: mean over queries
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  unit: queries
+note: 'Unit records, instance caches and text stores of the executable subset of Verified
+  (D106) for the five repositories without stored unit records. BM25 parameters, parser,
+  class form (full) and ambiguity policy are those of the dev configuration, unchanged.
+  Role test: no tuning on these instances.'
+folders:
+- role: test
+  dataset: SWE-bench_Verified
+  folder: django__django
+  repo: django/django
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: sympy__sympy
+  repo: sympy/sympy
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pytest
+  repo: pytest-dev/pytest
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: sphinx
+  repo: sphinx-doc/sphinx
+  levels:
+  - L2
+  - L3
+  units: true
+- role: test
+  dataset: SWE-bench_Verified
+  folder: pylint
+  repo: pylint-dev/pylint
+  levels:
+  - L2
+  - L3
+  units: true
+decision: D107

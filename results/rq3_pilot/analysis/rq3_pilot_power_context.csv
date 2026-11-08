@@ -1,0 +1,9 @@
+kind,discordance,n,mde_exact_points
+placeholder_discordance,0.1000,377,4.7500
+placeholder_discordance,0.1500,377,5.7500
+placeholder_discordance,0.2000,377,6.7500
+placeholder_discordance,0.3000,377,8.2500
+"pilot (not resolved rate): pilot usability, final, pairs = instance x run",0.1750,200,
+"pilot (not resolved rate): pilot usability, first reply",0.2100,200,
+"pilot (not resolved rate): pilot gold file in context, pairs = instance x run",0.1200,200,
+pilot (not resolved rate): pilot gold unit in context,0.1700,200,

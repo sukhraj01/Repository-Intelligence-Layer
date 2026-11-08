@@ -1,0 +1,53 @@
+{
+  "date_utc": "2026-10-31",
+  "scope": "five unpublished commits after foundation-v0",
+  "foundation": "04da656d7307c925140d2cf54407a5ae5c3743f3",
+  "commits": [
+    {
+      "old_commit": "66d0f6f2546cceb3be7a384655b00af6d747b18b",
+      "new_commit": "01411762bd4721bd5342ce0e0ce5f65df62fad54",
+      "tree": "059bb88ac3a69bd140d9fc80f7e9ad66acbc9d1b",
+      "subject": "Updated evaluation and stats",
+      "tree_unchanged": true,
+      "author_and_author_date_preserved": true
+    },
+    {
+      "old_commit": "645925b8b21f31ca78401d59c30b044bb5380b4e",
+      "new_commit": "e3ee90d3fe2a09e381861eef682b7f50ea19821e",
+      "tree": "ce4dbea75ed6387f5e6988ca839b86d4079f213d",
+      "subject": "Added PR mining",
+      "tree_unchanged": true,
+      "author_and_author_date_preserved": true
+    },
+    {
+      "old_commit": "af41eb10efffd40e9d87de73e681e424bc99d28a",
+      "new_commit": "969b3bdbac4c2cbdac4b474b95a395b59ef4faab",
+      "tree": "542db5ea5ce73b1319eed57426af87df15ce76fc",
+      "subject": "Added agent pilot",
+      "tree_unchanged": true,
+      "author_and_author_date_preserved": true
+    },
+    {
+      "old_commit": "5206110d47febc3cfa863245deb3e9d8fe281790",
+      "new_commit": "e0e29d429824decee084e313a854f8b2077471f6",
+      "tree": "4f5f8dc5b62a7bd4c3b2285619baaa760bf096b0",
+      "subject": "Added paired agent runs",
+      "tree_unchanged": true,
+      "author_and_author_date_preserved": true
+    },
+    {
+      "old_commit": "c8f24c3b20f31d84d60aaa0d8d1b235d0e596d9e",
+      "new_commit": "8a9d7734eed508cc05eb0dfdb1475f57958824a6",
+      "tree": "7ca4faf1c674d356fabb4bce7feead7afa85845b",
+      "subject": "Added data staging scripts",
+      "tree_unchanged": true,
+      "author_and_author_date_preserved": true
+    }
+  ],
+  "all_per_commit_trees_identical": true,
+  "commit_bodies_empty": true,
+  "historical_measurement_files_unchanged": true,
+  "runtime_source_changes": 0,
+  "tests_rerun": false,
+  "validation": "exact per-commit tree comparison; existing 618-unit validation applies to identical source"
+}

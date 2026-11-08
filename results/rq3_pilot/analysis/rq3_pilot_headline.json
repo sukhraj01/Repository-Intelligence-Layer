@@ -1,0 +1,17 @@
+{
+  "calls": 565,
+  "calls_per_pacific_day": {
+    "2026-11-06": 449,
+    "2026-11-07": 116
+  },
+  "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 1,
+    "MAX_TOKENS": 5,
+    "STOP": 559
+  },
+  "models": [
+    "gemini-3.5-flash-lite"
+  ],
+  "units": 400,
+  "units_final_by_end_of_first_day": 311
+}

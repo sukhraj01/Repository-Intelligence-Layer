@@ -1,0 +1,47 @@
+== node gnode004 2026-11-06T12:23:34Z
+/usr/local/apps on this node:
+amber24
+cmake-3.31.7
+cmake-4.0.1
+max_user_namespaces: 0
+== container module tarball, extracted node-locally
+/tmp/ril_rq3/sing/usr/local/apps/singularity-ce-4.2.2/bin:
+total 62816
+-rwxr-xr-x 1 <user> research     1217 Feb  1  2025 run-singularity
+-rwxr-xr-x 1 <user> research 64316248 Feb  1  2025 singularity
+
+/tmp/ril_rq3/sing/usr/local/apps/singularity-ce-4.2.2/libexec/singularity/bin:
+total 76240
+-rwxr-xr-x 1 <user> research   172272 Feb  1  2025 conmon
+-rwxr-xr-x 1 <user> research 46853600 Feb  1  2025 singularity-buildkitd
+-rwxr-xr-x 1 <user> research    59168 Feb  1  2025 squashfuse_ll
+-rwxr-xr-x 1 <user> research 30977424 Feb  1  2025 starter
+singularity-ce version 4.2.2
+allow setuid = yes
+allow user ns = yes
+mount hostfs = no
+enable overlay = try
+sif fuse = no
+/usr/bin/mksquashfs
+/usr/bin/unsquashfs
+/usr/bin/squashfuse
+/usr/bin/fusermount
+== try a container as the engineer (python:3.11-slim)
+-rwxr-xr-x 1 <user> research 44740608 Nov  6 17:47 py311.sif
+INFO:    Mounting image with FUSE.
+[91mERROR  : Failed to create user namespace: maximum number of user namespaces exceeded, check /proc/sys/user/max_user_namespaces
+[0m== uv (resumable download)
+uv http=416 bytes=0
+uv 0.13.7 (x86_64-unknown-linux-gnu)
+a45b1fe4e2f0c8390b2b2938ac83e92ed5979000856808f3679c07812e9e6dcd  $HOME/ril_rq3/data/verified.parquet
+== tools venv
+12:25:45
+Using Python 3.11.16 environment at: tools
+Checked 2 packages in 5ms
+12:25:45
+pyarrow            26.0.1
+swebench           5.0.2
+== census + gold checks
+[]
+no specs dictionary found in swebench.harness.constants
+done

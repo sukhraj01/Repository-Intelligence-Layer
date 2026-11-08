@@ -1,0 +1,53 @@
+== node: gnode004 date: 2026-11-06T12:11:37Z
+== kernel: 5.15.0-202-generic  os: PRETTY_NAME="Ubuntu 22.04.5 LTS"
+== id: uid=<uid>(<user>) gid=2000(research) groups=2000(research)
+TMPDIR=/tmp
+/dev/sdb1       1.8T  103G  1.7T   6% /tmp
+== container runtimes on PATH
+apptainer: none
+singularity: none
+docker: none
+podman: none
+== user namespaces
+0
+unshare: unshare failed: No space left on device
+unshare -Ur failed
+== singularity config (setuid / fakeroot)
+dirname: missing operand
+Try 'dirname --help' for more information.
+ls: cannot access '/../libexec/singularity/bin/starter-suid': No such file or directory
+dirname: missing operand
+Try 'dirname --help' for more information.
+dirname: missing operand
+Try 'dirname --help' for more information.
+grep: /etc/singularity/singularity.conf: No such file or directory
+/usr/bin/squashfuse
+/usr/bin/fusermount
+== network (code, seconds)
+https://pypi.org/simple/pip/ -> 200 0.536880
+https://files.pythonhosted.org/ -> 404 5.508544
+https://github.com -> 200 0.174396
+https://codeload.github.com -> 301 0.710231
+https://objects.githubusercontent.com -> 404 0.615185
+https://github.com/astral-sh/python-build-standalone/releases -> 200 1.378926
+https://huggingface.co -> 200 0.362091
+https://registry-1.docker.io/v2/ -> 401 0.838948
+https://ghcr.io/v2/ -> 405 0.401169
+https://quay.io/v2/ -> 401 8.089575
+https://repo.anaconda.com -> 200 0.337716
+https://conda.anaconda.org -> 302 0.335714
+https://astral.sh -> 200 5.278121
+https://download.pytorch.org -> 403 5.756555
+https://api.github.com -> 200 5.280661
+https://index.docker.io -> 301 1.133645
+https://auth.docker.io/token -> 405 0.341587
+https://cloud.sylabs.io -> 000 0.099563
+https://hub.docker.com -> 200 0.353921
+== throughput probe (pythonhosted wheel)
+bytes=0 speed=0 B/s time=0.317606
+== SWE-bench Verified metadata
+http=200 bytes=2096679 t=8.956793
+-rw-r--r-- 1 <user> research 2096679 Nov  6 17:42 verified.parquet
+a45b1fe4e2f0c8390b2b2938ac83e92ed5979000856808f3679c07812e9e6dcd  verified.parquet
+Traceback (most recent call last):
+done

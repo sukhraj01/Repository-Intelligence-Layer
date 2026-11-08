@@ -25,6 +25,7 @@ Kept compatible with Python 3.10.
 
 from __future__ import annotations
 
+import copy
 import glob
 import hashlib
 import json
@@ -49,6 +50,13 @@ from ril.training.data_loader import Batch, BatchPlanner, BatchSpec
 from ril.training.encoders import TrainEncoder, build_encoder
 from ril.training.negatives import Mined, make_policy, needs_mining
 from ril.training.pool_reader import PoolExample
+from ril.training.retention import (
+    MODEL_SUBDIR,
+    build_manifest,
+    check_retain_dir,
+    retain_requested,
+    write_manifest,
+)
 from ril.training.supervision import Arm, NoiseKnowledge, QualitySignal, arm_from_config
 from ril.util.portable import neutral_paths
 
@@ -71,6 +79,8 @@ ARM_KEYS = frozenset({"arm"})
 """Configuration keys allowed to differ between the arms of one comparison."""
 LABEL_KEYS = frozenset({"exp_id", "label", "notes"})
 """Keys that name a run and do not change what it computes."""
+STORAGE_KEYS = frozenset({("checkpoint", "retain_final")})
+"""Nested keys that only say where outputs are kept (``ril.training.retention``): not hashed."""
 Record = dict[str, Any]
 
 
@@ -85,10 +95,23 @@ class StepHook(Protocol):
 # --------------------------------------------------------------------------- configuration
 
 
+def _without_storage_keys(cfg: Mapping[str, Any]) -> Record:
+    """The configuration without the storage options (they change no computed value)."""
+    out: Record = {k: dict(v) if isinstance(v, Mapping) else v for k, v in cfg.items()}
+    for section, key in STORAGE_KEYS:
+        if isinstance(out.get(section), dict):
+            out[section].pop(key, None)
+    return out
+
+
 def config_hash(cfg: Mapping[str, Any]) -> str:
-    """SHA-256 over the canonical JSON of the parsed configuration and the code version."""
+    """SHA-256 over the canonical JSON of the parsed configuration and the code version.
+
+    ``checkpoint.retain_final`` is left out: retaining the final model changes where a file is
+    written and nothing that is computed, so a run keeps its hash and its result directory.
+    """
     blob = json.dumps(
-        {"version": TRAINING_VERSION, "config": cfg},
+        {"version": TRAINING_VERSION, "config": _without_storage_keys(cfg)},
         sort_keys=True,
         separators=(",", ":"),
         default=str,
@@ -117,7 +140,7 @@ def load_train_config(path: str) -> Record:
 
 def held_identical_view(cfg: Mapping[str, Any]) -> Record:
     """The configuration without the arm and the run labels: what must match across arms."""
-    return {k: v for k, v in cfg.items() if k not in ARM_KEYS | LABEL_KEYS}
+    return {k: v for k, v in _without_storage_keys(cfg).items() if k not in ARM_KEYS | LABEL_KEYS}
 
 
 def check_comparable(cfgs: Sequence[Mapping[str, Any]]) -> None:
@@ -414,8 +437,16 @@ def train(
     extra_log: Mapping[str, Any] | None = None,
     hook: StepHook | None = None,
     ledger: NoiseKnowledge | None = None,
+    retain_dir: str | None = None,
+    commit: str | None = None,
 ) -> Record:
     """Run (or resume) one training run; returns the results record.
+
+    ``retain_dir`` (the job's ``RETAIN_DIR``): with ``checkpoint.retain_final`` on, the finished
+    model is also written there in half precision with a manifest (``ril.training.retention``).
+    The switch on and no directory raises before the first update, not after the last. With the
+    switch off the run, its outputs and its record are those of a run without this option.
+    ``commit`` goes into the manifest only.
 
     ``ledger`` is the injected-noise indicator of a noised pool; only the ORACLE_CLEAN arm and a
     size-matched subsample read it (``ril.training.noise``).
@@ -431,6 +462,11 @@ def train(
     seed = int(cfg["seed"])
     updates = int(cfg["budget"]["updates"])
     end = planned_end(cfg)
+    retain_to: str | None = None
+    if retain_requested(cfg):
+        if not retain_dir:
+            raise ValueError("checkpoint.retain_final is on but no retention directory is set")
+        retain_to = check_retain_dir(retain_dir)
     paths = RunPaths.of(cfg, results_root, work_root, date)
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -520,8 +556,53 @@ def train(
         enc.save(final)
         record["final_model"] = final
         record["final_dtype"] = final_dtype
+        if retain_to is not None:
+            record["retained"] = _retain_final(
+                cfg, record, enc, retain_to, updates_done=end, commit=commit
+            )
         write_run(cfg, record, paths, device, trace, extra_log or {})
     return record
+
+
+def _retain_final(
+    cfg: Mapping[str, Any],
+    record: Mapping[str, Any],
+    enc: TrainEncoder,
+    retain_to: str,
+    *,
+    updates_done: int,
+    commit: str | None,
+) -> Record:
+    """Write the half-precision copy and the manifest of a finished run; returns a summary.
+
+    The copy is made from a deep copy of the encoder, so the in-memory model (and the float32 or
+    float16 ``final`` folder written before) is not touched. The folder is named by the cell and
+    the configuration hash and is replaced atomically on a rerun.
+    """
+    h8 = str(record["config_hash"])[:8]
+    folder = os.path.join(retain_to, f"{cfg['exp_id']}__s{int(cfg['seed'])}__{h8}")
+    tmp = f"{folder}.tmp"
+    shutil.rmtree(tmp, ignore_errors=True)
+    half = copy.deepcopy(enc)
+    half.module.half()
+    half.save(os.path.join(tmp, MODEL_SUBDIR))
+    manifest = build_manifest(
+        cfg,
+        config_hash=str(record["config_hash"]),
+        arm=record["arm"],
+        updates_done=updates_done,
+        model_dir=os.path.join(tmp, MODEL_SUBDIR),
+        dtype="float16",
+        commit=commit,
+    )
+    write_manifest(tmp, manifest)
+    shutil.rmtree(folder, ignore_errors=True)
+    os.replace(tmp, folder)
+    return {
+        "folder": os.path.basename(folder),
+        "sha256": manifest["sha256"],
+        "bytes": manifest["bytes"],
+    }
 
 
 def planned_end(cfg: Mapping[str, Any]) -> int:

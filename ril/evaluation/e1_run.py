@@ -179,7 +179,10 @@ def run_unit_level(
         repo_dir = spec["repo"].replace("/", "__")
         bare = os.path.join(cache_dir, f"{repo_dir}.git")
         fails: list[Record] = []
+        prefix = repo_dir.lower() + "-" if spec.get("instances_of_repo") else ""
         for instance in sorted({i for q in qrels.values() for i in q}):
+            if prefix and not instance.lower().startswith(prefix):
+                continue  # shared folder: keep this repository only
             out = os.path.join(out_dir, "units", f"{instance}.json")
             if _load_if_current(out, chash) is not None:
                 continue

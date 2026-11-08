@@ -1,0 +1,516 @@
+{
+ "experiment": "E-EVAL-REPOS-BUILD",
+ "decision": "D100",
+ "seed": 0,
+ "account": "A",
+ "code_commits": {
+  "cpu_job": "b4aa33f",
+  "gpu_job": "bcb57ef"
+ },
+ "config": {
+  "build_config": "configs/experiments/eval_repos_v1_build.yaml",
+  "build_config_sha256": "2fb77306b3e336ebd35084ccd6cdf5f150552466c5113ca8aaa274ac351243b4",
+  "e1_units_config_hash": "238055a9deaf5ae5e57b170149e500a5ec8686ba7f0d3e348ae19d39235b7ba5",
+  "e3_prepare_config_hash": "70b481631de49849dbf639d7459b1c16fb2f047f100bb8d6572932d36fdaa682",
+  "selection": "configs/experiments/eval_repos_v1.json",
+  "selection_sha256": "24a54b6138bc982eb917dd84123ead38a513c8d9d45fc5afd570afcd1c1444a9",
+  "inventory_sha256": "4b69835eea2e5336c0e7674765143059e8c723d6779c2f8f398df6356e2c39a4"
+ },
+ "jobs": [
+  {
+   "id": 60670,
+   "what": "CPU build",
+   "node": "gnode012",
+   "state": "FAILED",
+   "elapsed": "00:00:00",
+   "reason": "node-local /tmp full (No space left on device)"
+  },
+  {
+   "id": 60671,
+   "what": "CPU build (raw folders, 8 bare clones, unit records, instance caches, text stores)",
+   "node": "gnode025",
+   "state": "FAILED (exit 1 from the last step only)",
+   "elapsed": "00:23:42",
+   "max_rss_kb": 3491152,
+   "cpus": 4,
+   "cpu_model": "Intel Xeon E5-2640 v4",
+   "clone_seconds": 413,
+   "note": "unit records 179 of 179, instance caches 179 of 179, unit-text stores 179 of 179, 0 failures at every stage; the exit code comes from prep-queries, which wrote the query stores and then stopped at the dev-only latency statistic (no development role in this configuration)"
+  },
+  {
+   "id": 60677,
+   "what": "GPU encoding, CodeRankEmbed 512 tokens fp16, units and queries",
+   "node": "gnode052",
+   "state": "COMPLETED",
+   "elapsed": "00:14:45",
+   "max_rss_kb": 10717400,
+   "gpu": "NVIDIA GeForce RTX 2080 Ti",
+   "gpu_hours_job": 0.2458
+  },
+  {
+   "id": 60678,
+   "what": "cache statistics (CPU)",
+   "node": "gnode002",
+   "elapsed": "00:00:01"
+  },
+  {
+   "id": 60692,
+   "what": "store check (CPU)",
+   "node": "gnode002",
+   "elapsed": "00:00:04"
+  },
+  {
+   "id": 60693,
+   "what": "store check repeated to save the output (CPU)",
+   "node": "gnode002",
+   "elapsed": "00:00:04"
+  }
+ ],
+ "per_repository_cache": {
+  "aws-cloudformation/cfn-lint": {
+   "snapshots": 82,
+   "units_total": 351775,
+   "units_median": 3938,
+   "units_max": 5342,
+   "seconds": {
+    "bm25_index": 45.6,
+    "exploratory": 39.3,
+    "graph_build": 272.8,
+    "history": 28.7,
+    "parse": 137.3
+   },
+   "seconds_total": 536.7
+  },
+  "ibm/mcp-context-forge": {
+   "snapshots": 9,
+   "units_total": 30539,
+   "units_median": 2791,
+   "units_max": 7472,
+   "seconds": {
+    "bm25_index": 6.9,
+    "exploratory": 1.8,
+    "graph_build": 43.7,
+    "history": 0.4,
+    "parse": 15.5
+   },
+   "seconds_total": 69.4
+  },
+  "jlowin/fastmcp": {
+   "snapshots": 22,
+   "units_total": 57801,
+   "units_median": 2017,
+   "units_max": 4551,
+   "seconds": {
+    "bm25_index": 7.2,
+    "exploratory": 1.0,
+    "graph_build": 56.5,
+    "history": 1.1,
+    "parse": 21.5
+   },
+   "seconds_total": 88.9
+  },
+  "jupyterlab/jupyter-ai": {
+   "snapshots": 11,
+   "units_total": 6119,
+   "units_median": 562,
+   "units_max": 681,
+   "seconds": {
+    "bm25_index": 0.6,
+    "exploratory": 0.2,
+    "graph_build": 4.6,
+    "history": 0.3,
+    "parse": 1.9
+   },
+   "seconds_total": 7.8
+  },
+  "pdm-project/pdm": {
+   "snapshots": 33,
+   "units_total": 70684,
+   "units_median": 2096,
+   "units_max": 2338,
+   "seconds": {
+    "bm25_index": 6.1,
+    "exploratory": 1.3,
+    "graph_build": 61.2,
+    "history": 4.0,
+    "parse": 21.6
+   },
+   "seconds_total": 96.0
+  },
+  "psf/black": {
+   "snapshots": 5,
+   "units_total": 12215,
+   "units_median": 2443,
+   "units_max": 2444,
+   "seconds": {
+    "bm25_index": 3.7,
+    "exploratory": 0.2,
+    "graph_build": 15.9,
+    "history": 0.4,
+    "parse": 9.9
+   },
+   "seconds_total": 30.3
+  },
+  "pyomo/pyomo": {
+   "snapshots": 5,
+   "units_total": 120470,
+   "units_median": 24026,
+   "units_max": 24332,
+   "seconds": {
+    "bm25_index": 22.0,
+    "exploratory": 2.9,
+    "graph_build": 170.2,
+    "history": 6.1,
+    "parse": 73.8
+   },
+   "seconds_total": 279.7
+  },
+  "python-control/python-control": {
+   "snapshots": 12,
+   "units_total": 20994,
+   "units_median": 1767,
+   "units_max": 1844,
+   "seconds": {
+    "bm25_index": 4.7,
+    "exploratory": 0.4,
+    "graph_build": 43.8,
+    "history": 1.0,
+    "parse": 14.2
+   },
+   "seconds_total": 65.0
+  }
+ },
+ "store_check": {
+  "aws-cloudformation__cfn-lint": {
+   "instances": 82,
+   "distinct_hashes": 6506,
+   "stored": 7754,
+   "missing": 0,
+   "extra": 1248,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "ibm__mcp-context-forge": {
+   "instances": 9,
+   "distinct_hashes": 9484,
+   "stored": 10902,
+   "missing": 0,
+   "extra": 1418,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "jlowin__fastmcp": {
+   "instances": 22,
+   "distinct_hashes": 8433,
+   "stored": 9871,
+   "missing": 0,
+   "extra": 1438,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "jupyterlab/jupyter-ai": {
+   "instances": 11,
+   "distinct_hashes": 1278,
+   "stored": 1580,
+   "missing": 0,
+   "extra": 302,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "pdm-project__pdm": {
+   "instances": 33,
+   "distinct_hashes": 4401,
+   "stored": 5057,
+   "missing": 0,
+   "extra": 656,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "psf__black": {
+   "instances": 5,
+   "distinct_hashes": 2137,
+   "stored": 2415,
+   "missing": 0,
+   "extra": 278,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "pyomo__pyomo": {
+   "instances": 5,
+   "distinct_hashes": 24019,
+   "stored": 28881,
+   "missing": 0,
+   "extra": 4862,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  },
+  "python-control__python-control": {
+   "instances": 12,
+   "distinct_hashes": 3159,
+   "stored": 3501,
+   "missing": 0,
+   "extra": 342,
+   "arrays": [
+    "hashes",
+    "vectors",
+    "ntok"
+   ]
+  }
+ },
+ "encode_run": {
+  "gate": {
+   "capability": [
+    7,
+    5
+   ],
+   "cuda": "12.1",
+   "device": "NVIDIA GeForce RTX 2080 Ti",
+   "matmul_max_abs_error": 0.0001220703125,
+   "torch": "2.4.1+cu121"
+  },
+  "hardware": {
+   "cpus_visible": 40,
+   "host": "gnode052",
+   "mem_total_kb": 131860684,
+   "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+   "python": "3.10.12"
+  },
+  "runs": [
+   {
+    "batch_size": 64,
+    "dtype": "float16",
+    "encoder": "coderankembed",
+    "eos_check": {
+     "default_prompt_name": null,
+     "eos_token_id": null,
+     "last_id_after_cut": 102,
+     "length_after_cut": 512,
+     "sep_token_id": 102
+    },
+    "fp16_vs_fp32": {
+     "mean_cosine": 0.9999980926513672,
+     "min_cosine": 0.9999958276748657,
+     "n": 64
+    },
+    "load_seconds": 108.9,
+    "max_tokens": 512,
+    "model_id": "registry:coderankembed",
+    "peak_gpu_mem_mb": 1431.4,
+    "query_template": "Represent this query for searching relevant code: {query}",
+    "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1",
+    "seconds_total": 692.7,
+    "stores": [
+     {
+      "cut_at_max_tokens": 0,
+      "encoded_now": 1,
+      "seconds_now": 19.99,
+      "share_cut": 0.0,
+      "store": "queries__L2__SWE-Bench-plus-plus__IBM__mcp",
+      "taken_from_shorter_cut": 0,
+      "texts": 1,
+      "texts_per_s_now": 0.05,
+      "tokens_fed": 310
+     },
+     {
+      "cut_at_max_tokens": 4,
+      "encoded_now": 8,
+      "seconds_now": 0.17,
+      "share_cut": 0.5,
+      "store": "queries__L2__SWE-bench-Live__IBM__mcp",
+      "taken_from_shorter_cut": 0,
+      "texts": 8,
+      "texts_per_s_now": 46.69,
+      "tokens_fed": 2777
+     },
+     {
+      "cut_at_max_tokens": 3,
+      "encoded_now": 5,
+      "seconds_now": 0.11,
+      "share_cut": 0.6,
+      "store": "queries__L2__SWE-bench-Live__Pyomo__pyomo",
+      "taken_from_shorter_cut": 0,
+      "texts": 5,
+      "texts_per_s_now": 47.61,
+      "tokens_fed": 2171
+     },
+     {
+      "cut_at_max_tokens": 32,
+      "encoded_now": 83,
+      "seconds_now": 0.9,
+      "share_cut": 0.3855,
+      "store": "queries__L2__SWE-bench-Live__aws",
+      "taken_from_shorter_cut": 0,
+      "texts": 83,
+      "texts_per_s_now": 92.45,
+      "tokens_fed": 34343
+     },
+     {
+      "cut_at_max_tokens": 7,
+      "encoded_now": 22,
+      "seconds_now": 0.22,
+      "share_cut": 0.3182,
+      "store": "queries__L2__SWE-bench-Live__jlowin__fastmcp",
+      "taken_from_shorter_cut": 0,
+      "texts": 22,
+      "texts_per_s_now": 98.53,
+      "tokens_fed": 7703
+     },
+     {
+      "cut_at_max_tokens": 5,
+      "encoded_now": 11,
+      "seconds_now": 0.24,
+      "share_cut": 0.4545,
+      "store": "queries__L2__SWE-bench-Live__jupyterlab__jupyter",
+      "taken_from_shorter_cut": 0,
+      "texts": 11,
+      "texts_per_s_now": 46.72,
+      "tokens_fed": 4598
+     },
+     {
+      "cut_at_max_tokens": 20,
+      "encoded_now": 33,
+      "seconds_now": 0.52,
+      "share_cut": 0.6061,
+      "store": "queries__L2__SWE-bench-Live__pdm",
+      "taken_from_shorter_cut": 0,
+      "texts": 33,
+      "texts_per_s_now": 63.61,
+      "tokens_fed": 14053
+     },
+     {
+      "cut_at_max_tokens": 4,
+      "encoded_now": 5,
+      "seconds_now": 0.1,
+      "share_cut": 0.8,
+      "store": "queries__L2__SWE-bench-Live__psf__black",
+      "taken_from_shorter_cut": 0,
+      "texts": 5,
+      "texts_per_s_now": 49.06,
+      "tokens_fed": 2190
+     },
+     {
+      "cut_at_max_tokens": 16,
+      "encoded_now": 56,
+      "seconds_now": 0.53,
+      "share_cut": 0.2857,
+      "store": "queries__L2__SWE-bench-Live__python",
+      "taken_from_shorter_cut": 0,
+      "texts": 56,
+      "texts_per_s_now": 105.31,
+      "tokens_fed": 19833
+     },
+     {
+      "cut_at_max_tokens": 2551,
+      "encoded_now": 7754,
+      "seconds_now": 263.83,
+      "share_cut": 0.329,
+      "store": "units__aws-cloudformation__cfn-lint",
+      "taken_from_shorter_cut": 0,
+      "texts": 7754,
+      "texts_per_s_now": 29.39,
+      "tokens_fed": 2087160
+     },
+     {
+      "cut_at_max_tokens": 2403,
+      "encoded_now": 10902,
+      "seconds_now": 75.62,
+      "share_cut": 0.2204,
+      "store": "units__ibm__mcp-context-forge",
+      "taken_from_shorter_cut": 0,
+      "texts": 10902,
+      "texts_per_s_now": 144.17,
+      "tokens_fed": 2938861
+     },
+     {
+      "cut_at_max_tokens": 1533,
+      "encoded_now": 9871,
+      "seconds_now": 53.57,
+      "share_cut": 0.1553,
+      "store": "units__jlowin__fastmcp",
+      "taken_from_shorter_cut": 0,
+      "texts": 9871,
+      "texts_per_s_now": 184.26,
+      "tokens_fed": 2217628
+     },
+     {
+      "cut_at_max_tokens": 206,
+      "encoded_now": 1580,
+      "seconds_now": 7.99,
+      "share_cut": 0.1304,
+      "store": "units__jupyterlab/jupyter-ai",
+      "taken_from_shorter_cut": 0,
+      "texts": 1580,
+      "texts_per_s_now": 197.74,
+      "tokens_fed": 325226
+     },
+     {
+      "cut_at_max_tokens": 785,
+      "encoded_now": 5057,
+      "seconds_now": 27.55,
+      "share_cut": 0.1552,
+      "store": "units__pdm-project__pdm",
+      "taken_from_shorter_cut": 0,
+      "texts": 5057,
+      "texts_per_s_now": 183.53,
+      "tokens_fed": 1110546
+     },
+     {
+      "cut_at_max_tokens": 203,
+      "encoded_now": 2415,
+      "seconds_now": 19.37,
+      "share_cut": 0.0841,
+      "store": "units__psf__black",
+      "taken_from_shorter_cut": 0,
+      "texts": 2415,
+      "texts_per_s_now": 124.69,
+      "tokens_fed": 339959
+     },
+     {
+      "cut_at_max_tokens": 4658,
+      "encoded_now": 28881,
+      "seconds_now": 158.49,
+      "share_cut": 0.1613,
+      "store": "units__pyomo__pyomo",
+      "taken_from_shorter_cut": 0,
+      "texts": 28881,
+      "texts_per_s_now": 182.23,
+      "tokens_fed": 6132765
+     },
+     {
+      "cut_at_max_tokens": 1261,
+      "encoded_now": 3501,
+      "seconds_now": 33.73,
+      "share_cut": 0.3602,
+      "store": "units__python-control__python-control",
+      "taken_from_shorter_cut": 0,
+      "texts": 3501,
+      "texts_per_s_now": 103.81,
+      "tokens_fed": 1144214
+     }
+    ]
+   }
+  ]
+ },
+ "note": "Store and directory names are written in owner/name form where the cluster name uses a double underscore (one repository), and the encoder is named by its registry key; the cluster files are unchanged."
+}

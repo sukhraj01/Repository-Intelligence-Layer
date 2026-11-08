@@ -1,0 +1,27 @@
+{
+ "commit_after": "branch b/final-prep, uncommitted at run time",
+ "commit_before": "d9c62c5",
+ "config": "tiny CPU configuration of tests/unit/_training_fixtures.py (512 buckets, 16 dimensions, 6 updates, batch 4), two repositories x four pull requests",
+ "config_hash": "8dbdf0bee9c5c0a7faacedf7f7417494000da8c17a6aa70674078aa8e1429242",
+ "decision": "D98",
+ "experiment": "E-RETAIN-FINAL",
+ "hardware": "Ada CPU node gnode006 (40 CPUs, 125.8 GB; model per earlier throughput rows: Xeon E5-2640 v4), torch 2.4.1 CPU, Python 3.10, job 60205 (account A); tests: job 60207",
+ "keys_added_with_switch_on": [
+  "retained"
+ ],
+ "keys_removed_with_switch_on": [],
+ "model_file_sha256": {
+  "encoder.json": "579b03cc627e8c8e1b9a80ae65d73487f8e51d718a535104da4220b817fce1e3",
+  "tiny.pt": "d6264b5d5d1800ecb45cbdfef9177e9440df2affb8bdac58eb193836bd74499c"
+ },
+ "old_vs_switch_off_identical": true,
+ "old_vs_switch_on_identical": true,
+ "plan_sha256": "ebe0a8b4f1a5e9c9910c696e31c841760ab87a106cdf808f1ca5863b20656b39",
+ "reload": {
+  "reload_max_abs_diff": 0.00013127923011779785,
+  "reload_mean_abs_diff": 3.936839857487939e-05
+ },
+ "reload_note": "max and mean absolute difference over all components of unit-length query embeddings of 8 queries; half-precision file reloaded as a model against the in-memory model",
+ "seed": 3,
+ "tests_job_60207": "41 passed (test list of scripts/ada/t1_tests.sbatch incl. tests/unit/test_retention_training.py and tests/leakage)"
+}

@@ -1,0 +1,76 @@
+{
+  "decision": "D100",
+  "rule": "Python-class repositories outside dev and Verified with at least 5 L2 queries, ordered by sha256(\"0:<repository>\") ascending; the first eight are the evaluation set, the next eight the reserve (used only for a technical build failure recorded before any result is read)",
+  "key": "sha256(\"0:<repository>\")",
+  "floor_l2_queries": 5,
+  "eligible": 67,
+  "inventory_sha256": "4b69835eea2e5336c0e7674765143059e8c723d6779c2f8f398df6356e2c39a4",
+  "evaluation": [
+    {
+      "repository": "pdm-project/pdm",
+      "l2_queries": 33
+    },
+    {
+      "repository": "psf/black",
+      "l2_queries": 5
+    },
+    {
+      "repository": "python-control/python-control",
+      "l2_queries": 12
+    },
+    {
+      "repository": "jupyterlab/jupyter-ai",
+      "l2_queries": 11
+    },
+    {
+      "repository": "aws-cloudformation/cfn-lint",
+      "l2_queries": 82
+    },
+    {
+      "repository": "ibm/mcp-context-forge",
+      "l2_queries": 9
+    },
+    {
+      "repository": "jlowin/fastmcp",
+      "l2_queries": 22
+    },
+    {
+      "repository": "pyomo/pyomo",
+      "l2_queries": 5
+    }
+  ],
+  "reserve": [
+    {
+      "repository": "sissbruecker/linkding",
+      "l2_queries": 34
+    },
+    {
+      "repository": "quantumlib/cirq",
+      "l2_queries": 5
+    },
+    {
+      "repository": "pvlib/pvlib-python",
+      "l2_queries": 80
+    },
+    {
+      "repository": "python-telegram-bot/python-telegram-bot",
+      "l2_queries": 14
+    },
+    {
+      "repository": "dynaconf/dynaconf",
+      "l2_queries": 5
+    },
+    {
+      "repository": "spesmilo/electrum",
+      "l2_queries": 7
+    },
+    {
+      "repository": "delgan/loguru",
+      "l2_queries": 6
+    },
+    {
+      "repository": "projectmesa/mesa",
+      "l2_queries": 7
+    }
+  ]
+}

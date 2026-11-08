@@ -1,0 +1,262 @@
+{
+ "by_repository": [
+  {
+   "executable": 15,
+   "held_out": 2,
+   "repo": "astropy/astropy"
+  },
+  {
+   "executable": 228,
+   "held_out": 30,
+   "repo": "django/django"
+  },
+  {
+   "executable": 2,
+   "held_out": 0,
+   "repo": "mwaskom/seaborn"
+  },
+  {
+   "executable": 1,
+   "held_out": 0,
+   "repo": "pallets/flask"
+  },
+  {
+   "executable": 4,
+   "held_out": 1,
+   "repo": "psf/requests"
+  },
+  {
+   "executable": 18,
+   "held_out": 2,
+   "repo": "pydata/xarray"
+  },
+  {
+   "executable": 4,
+   "held_out": 1,
+   "repo": "pylint-dev/pylint"
+  },
+  {
+   "executable": 19,
+   "held_out": 2,
+   "repo": "pytest-dev/pytest"
+  },
+  {
+   "executable": 11,
+   "held_out": 2,
+   "repo": "sphinx-doc/sphinx"
+  },
+  {
+   "executable": 75,
+   "held_out": 10,
+   "repo": "sympy/sympy"
+  }
+ ],
+ "instances": [
+  {
+   "instance_id": "astropy__astropy-13977",
+   "repo": "astropy/astropy"
+  },
+  {
+   "instance_id": "astropy__astropy-14598",
+   "repo": "astropy/astropy"
+  },
+  {
+   "instance_id": "django__django-11133",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-11400",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-11433",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-11740",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-11790",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-12276",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-12741",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-12774",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-13033",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-13128",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-13195",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-13417",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-13786",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-13810",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-14155",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-14238",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-14373",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-14376",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-14539",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-14915",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-15104",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-15252",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-15732",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-15930",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-16116",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-16136",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-16315",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-16485",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-16631",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "django__django-16877",
+   "repo": "django/django"
+  },
+  {
+   "instance_id": "psf__requests-1142",
+   "repo": "psf/requests"
+  },
+  {
+   "instance_id": "pydata__xarray-4966",
+   "repo": "pydata/xarray"
+  },
+  {
+   "instance_id": "pydata__xarray-7229",
+   "repo": "pydata/xarray"
+  },
+  {
+   "instance_id": "pylint-dev__pylint-4551",
+   "repo": "pylint-dev/pylint"
+  },
+  {
+   "instance_id": "pytest-dev__pytest-7236",
+   "repo": "pytest-dev/pytest"
+  },
+  {
+   "instance_id": "pytest-dev__pytest-7432",
+   "repo": "pytest-dev/pytest"
+  },
+  {
+   "instance_id": "sphinx-doc__sphinx-7985",
+   "repo": "sphinx-doc/sphinx"
+  },
+  {
+   "instance_id": "sphinx-doc__sphinx-8265",
+   "repo": "sphinx-doc/sphinx"
+  },
+  {
+   "instance_id": "sympy__sympy-12096",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-13372",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-13647",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-15809",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-16886",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-20438",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-21596",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-22456",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-23534",
+   "repo": "sympy/sympy"
+  },
+  {
+   "instance_id": "sympy__sympy-24213",
+   "repo": "sympy/sympy"
+  }
+ ],
+ "min_per_repo": 2,
+ "min_repo_size": 5,
+ "n": 50,
+ "population": 377,
+ "seed": 0,
+ "version": "rq3-holdout/v1"
+}

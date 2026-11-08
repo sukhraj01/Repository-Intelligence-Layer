@@ -1,0 +1,467 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\setlist{nosep,leftmargin=*}
+\setlength{\columnsep}{0.25in}
+\setlength{\textfloatsep}{8pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\parskip}{2pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{6pt}{3pt}{\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{4pt}{2pt}{\normalfont\normalsize\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{3pt}{-0.5em}{\normalfont\bfseries}}
+\makeatother
+\newcommand{\num}[1]{\textbf{#1}}
+% An empty slot: names the experiment entry whose result will fill it.
+\newcommand{\todo}[1]{\textcolor{BrickRed}{\textbf{[TODO: #1]}}}
+% experiment entry id; hyphens may break
+\newcommand{\entry}[1]{{\ttfamily\hyphenchar\font=`\-\relax #1}}
+\setlength{\tabcolsep}{4pt}
+
+\title{\vspace{-0.65in}\textbf{Repository Intelligence Layer: Final Report}\\[2pt]
+\large Does the quality of a retriever's training data reach coding-agent success?}
+\author{Sukhraj Singh\\ \small 2025202009 \and Neill Rawani\\ \small 2025202027 \and
+Chaitanya Shah\\ \small 2025202033}
+\date{\vspace{-6pt}IIIT Hyderabad}
+
+\begin{document}
+\maketitle
+\vspace{-0.4in}
+
+\todo{Abstract: written after the confirmatory contrasts and the agent runs are in; fills from
+\entry{E-RQ2-FILTER}, \entry{E-RQ2-CTRL-SUBRAW}, \entry{E-RQ3-AGENT}.}
+
+% =============================================================================================
+\section{Introduction}
+
+Coding agents work inside a fixed context window, while a real repository is many times larger.
+Something has to decide which code the agent reads; when that choice is poor, the agent spends its
+budget on irrelevant files or never sees the code it has to change. The \emph{Repository
+Intelligence Layer} (RIL) is a repository-level retrieval layer: given an issue, it returns a small,
+ranked set of Python code units that fit a token budget. The system is the apparatus; the
+experiment is the study. Two things are built and only one is the contribution: the system is
+engineering and is not novel on its own, while the experiment measures whether the way a
+retriever's training pairs are handled changes whether the agent resolves the issue.
+
+\paragraph{Research questions.}
+\textbf{RQ1} Which retrieval signals contribute to repository-level code retrieval? Incremental
+ablation on a dense baseline (dense, dense and BM25, dense and structure, all three), reported with
+latency per configuration. This fixes the stack that the other questions hold constant.
+\textbf{RQ2} How does training supervision quality and composition affect repository-level retrieval
+under \emph{matched optimization budgets}? Four arms (\textsc{Raw}, \textsc{Filter}, \textsc{Weight},
+\textsc{Curriculum}) trained for the same number of optimizer updates at matched batch size and
+schedule; optimizer updates, distinct examples seen and effective epochs are reported for every cell,
+and a random subsample of the raw pool of the filtered pool's size is trained beside every filtering
+comparison. \textbf{RQ3} Does improving retriever supervision translate into improved coding-agent
+performance? One fixed agent scaffold, one fixed base model, the same instances; the outcome is the
+resolved rate, with, for every failure, whether the file of the reference fix was in the retrieved
+context.
+
+\paragraph{Claim.} Our literature audit did not identify a study that systematically evaluates the
+controlled pipeline from retriever supervision quality, through retrieval performance, to
+repository-level coding-agent success. The contribution is an empirical comparison, not an
+intervention: filtering, weighting and curriculum each exist in the literature, and we compare them
+under one protocol with the agent held fixed. The scope is Python only. Absolute resolved rates are
+not statements about agent capability, because benchmark contamination raises them identically
+across arms.
+
+\paragraph{Contributions, stated as what is measured.} Every item points to a table below and to its
+entry in the experiment registry; none is a claim about a retriever trained to convergence.
+\begin{itemize}
+  \item A function-level index with a typed code graph, and the published BM25 rows reproduced from
+  it (Table~\ref{tab:bm25_repro}).
+  \item Zero-shot dense encoders and rank fusion with BM25, and the graph's role measured against a
+  same-file control (Tables~\ref{tab:dense_fusion}, \ref{tab:graph_role}).
+  \item A noise dose-response of the supervision arms at matched updates, with the teacher caveat
+  stated (Table~\ref{tab:noise_dose_response}).
+  \item An unfiltered pull-request-mined training set, its rank profile against the published pool,
+  and a first training pilot on it (Tables~\ref{tab:mined_vs_pool_ranks}, \ref{tab:mined_pilot}).
+  \item The context assembly stage and how much of the reference fix lands in the context
+  (Tables~\ref{tab:assembly_gold}, \ref{tab:assembly_cap}).
+\end{itemize}
+Every pilot result in this report is labelled \emph{exploratory} in its caption and is outside the
+pre-registered contrasts of Section~\ref{sec:rq2}. \todo{Contributions on the confirmatory contrasts
+and on resolved rate: \entry{E-RQ2-FILTER}, \entry{E-RQ3-AGENT}.}
+
+% =============================================================================================
+\section{Related work}
+
+Only papers read in full are cited; each has a note in the project's reading log.
+
+\paragraph{Retrievers for issue localization and the benchmarks.} SWE-bench defines the resolved-rate
+task~\cite{swebench}. CORE-Bench provides repository-level retrieval labels at three levels and
+a BM25 baseline~\cite{corebench}; SweRank and SweRank+ train code retrievers for issue
+localization, with a consistency filter on the rank of the positive~\cite{swerank,swerankplus}; CoRNStack
+supplies the contrastive training corpus that the published pool builds on~\cite{cornstack}. Two
+follow-up benchmarks evaluate retrieval for coding agents and the cost of exploration
+\cite{agentretrievalbench,costexploration}. One trained retrieval agent reports resolved rate
+with the agent fixed~\cite{codegrep}.
+
+\paragraph{Graph-structured localization.} Several systems give an agent or a retriever a repository
+graph: LocAgent, KGCompass, SpIDER, GraphLocator and SemNav~\cite{locagent,kgcompass,spider,graphlocator,semnav};
+RepoNavigator and LogicLoc make symbol resolution or program facts a tool~\cite{reponavigator,logicloc}.
+The static call graphs underneath have measured precision and recall against dynamic
+baselines for Python~\cite{pycg,dypybench}. We use the graph as a retrieval signal and test it
+against a same-file control, which these systems do not report.
+
+\paragraph{Training-data quality for retrievers.} Query filtering for code search~\cite{sun}; weighting
+of negatives~\cite{rethinking}; synthetic data with a staged curriculum~\cite{coder}; false
+negatives and pruning in text retrieval~\cite{rlhn}; a rank-relative-to-the-positive edit of mined
+negatives~\cite{arhn}; loss-based detection of mismatched pairs~\cite{npc}; negative selection with
+false-negative removal~\cite{nvretriever}; filtering the training pairs of a code retriever~\cite{map4cs};
+and a study of which negative sources transfer~\cite{hardneg}. Curriculum and self-paced selection for
+retrieval distillation~\cite{cldrd,penha,adam}. These works study one intervention each, in
+most cases outside repository-level code retrieval; the comparison here is of the three
+interventions under one matched protocol, followed through to the resolved rate.
+
+\todo{Related-work refresh before submission: the dated search log and the papers still unread are
+in the project's literature notes; nothing is cited from an abstract.}
+
+% =============================================================================================
+\section{System}
+\label{sec:system}
+
+\paragraph{Parser and typed graph.} The index is function level: every top-level function, method
+and class is a unit, plus one residual module unit per file for module-level code; the unit schema is
+frozen. Typed edges are \emph{contain}, \emph{import}, \emph{invoke}, \emph{inherit} and
+\emph{override}; every edge carries a resolution status (resolved, ambiguous, external,
+unresolved) and ambiguous call sites are dropped from the stored graph. Test and configuration edges
+exist as exploratory families and are off by default. Rebuilds are byte-identical, and an
+incremental updater re-reads only the files a commit changes and their dependants and equals the
+full rebuild on every commit checked. \todo{Edge recovery against a dynamic oracle, and graph storage
+cost: \entry{E-GRAPH-BUILD} tables.}
+
+\paragraph{Retrieval signals.} BM25 in a reference form (stemmed tokens, a stop list, Lucene-variant
+scoring) is the lexical signal. The dense signal is a code embedding model over a flat exact index
+(no approximate search); the working encoder is CodeRankEmbed, and a larger encoder is used
+zero-shot only because it cannot be fine-tuned on the reachable GPUs. The graph is a third signal in
+the form of hop-decayed expansion from the top units.
+
+\paragraph{Fusion.} Reciprocal rank fusion, which is rank-based, not a weighted score sum; the
+fusion constant and the encoder cut were chosen on the development repositories.
+
+\paragraph{Context assembly.} Candidates are taken in rank order and each unit's text is cut at a
+per-unit cap; a unit that does not fit the remaining budget is skipped and the walk continues;
+included blocks are ordered by file and line, each with a header giving path, lines, kind, name and
+retrieval rank; the finished string is verified against the budget (ADR-014, provisional until the
+agent pilot). Assembly is byte-identical across RQ2 arms, so that the only thing RQ3 varies is the
+retriever. No graph or same-file expansion is applied in assembly. Table~\ref{tab:assembly_cap} shows
+the cap measurement and Table~\ref{tab:assembly_gold} the gold in context. \todo{Budget in the agent
+model's tokens: set by the agent pilot, \entry{E-RQ3-AGENT}.}
+
+\paragraph{Latency harness.} Every commit that touches the query path appends a row of per-stage
+latency (query encode, BM25, dense search, graph expansion, fusion, rerank, assemble, end to end) at
+batch size one; latency is reported as p50, p95 and p99, never the mean, with warm-up calls
+discarded, GPU sections synchronised and cold and warm cache separated. Indexing and training are
+throughput, in separate tables, and numbers are never compared across hardware without saying so.
+\todo{Per-stage latency table with the frozen configuration's benchmark snapshot, and nDCG per
+millisecond: \entry{E-LAT-STAGES}, \entry{E-RQ1-ALL}.}
+
+% =============================================================================================
+\section{Evaluation setup}
+
+\paragraph{Benchmark and levels.} CORE-Bench Level~2 asks for the file-and-function context needed to
+edit; Level~3 asks for context beyond the edited files. Evaluation is at unit level (decision
+D12): a chunk's positive counts for every unit it overlaps, the reading without module-residual
+positives is primary and the benchmark-faithful reading is reported beside it (D18, provisional).
+Chunk-level numbers with folder means are reported only where they reproduce the published rows
+(Table~\ref{tab:bm25_repro}). The metrics are nDCG@10 at Level~2 and Recall@100 at Level~3.
+
+\paragraph{Roles.} Every choice (K, teacher, weight form, update count, fusion constant, assembly
+cap) is made on development repositories only: five at Level~2 and two to three at Level~3. SWE-bench
+Verified is the final test and is looked at once, after the protocol, the cell list and the
+decision rules are registered and the development analysis is complete. To raise the number of
+repositories, which seeds cannot buy, eight further repositories take the test role under a rule
+fixed before any result (decision D100): Python-class repositories outside the development set and
+Verified with at least five Level~2 queries, ordered by a hash of the repository name, the first
+eight taken, the next eight held as a reserve for a technical build failure only. They add Level~2
+only; the Level~3 claim is stated on the fifteen repositories that have Level~3 labels (three
+development, twelve Verified). \todo{Evaluation of the eight repositories and of Verified: one look,
+after the development analysis; \entry{E-EVAL-REPOS-BUILD} built the stores, \entry{E-RQ2-FILTER} reads
+them.}
+
+\paragraph{Leakage.} The training pool shares no repository with CORE-Bench Level~2 and Level~3 or
+Verified; instance-level disjointness is not enough. The held-out list is built first, current
+repository names are resolved, the pool is filtered against it and the surviving counts are
+reported. Tests assert repository disjointness, no patch or gold text in any training query,
+that the quality-signal encoder is not the encoder being trained, and that no evaluation data is
+reachable from a training path. \todo{Surviving counts for the mined set after the content-overlap
+audit: \entry{E-MINE-FULL}.}
+
+\paragraph{Statistics.} The primary number is the mean over queries. Intervals are 95\% bootstrap
+intervals (2,000 draws, seed 0), clustered by repository where at least three repositories are
+present and query-level otherwise (development Level~3 has two repositories, so its interval carries
+query sampling only and is marked). Every contrast is a paired difference of two cells trained with
+the same seed on the same queries; seed-to-seed spread is reported because the bootstrap carries
+query and repository sampling, not retraining variance. Two cells that overlap within one seed
+standard deviation are called indistinguishable at this sample size. Multiplicity: Holm step-down within
+each pre-registered family, with the uncorrected intervals beside it. The smallest difference worth
+reporting is $\delta = 1.5$ points at both levels; smaller differences are estimates with bounds,
+never effects. The minimum detectable difference for $R$ repositories, $n$ queries and $k$ seeds is
+$2.8016\sqrt{s^2_{\mathrm{repo}}/R + s^2_{\mathrm{query}}/n + (s^2_{\mathrm{seed\times query}}/n +
+s^2_{\mathrm{seed}})/k}$ with variance components estimated from stored runs; seeds divide only the
+last bracket, so repositories, not seeds, reduce the repository term.
+
+\paragraph{Evidence classes.} Every number carries one: \emph{measured} (a run in this project, with
+log, configuration hash, seed and hardware), \emph{operator\_reported}, \emph{reasoned} (arithmetic
+without new data) or \emph{synthetic}; numbers quoted from a paper are \emph{paper\_reported}.
+
+% =============================================================================================
+\section{RQ1: which signals matter}
+
+Table~\ref{tab:dense_fusion} gives the zero-shot signals on the final-test-style reading, and
+Table~\ref{tab:graph_role} the graph against the same-file control: expansion over typed edges is
+always compared with taking more units of the files already found, at the same candidate budget,
+because a plain expansion baseline understates what file-level information already provides. The
+tables are exploratory, with settings chosen on the development repositories.
+
+\input{generated/bm25_repro}
+\input{generated/dense_fusion}
+\input{generated/graph_role}
+
+\paragraph{Reading.} \todo{One paragraph per table once the RQ1 ladder exists: the contribution of
+BM25 over dense, and of structure over the same-file control, at both levels, with the interval
+and the latency column; \entry{E-RQ1-DENSE}, \entry{E-RQ1-DENSE-BM25}, \entry{E-RQ1-DENSE-STRUCT},
+\entry{E-RQ1-ALL}.}
+
+\paragraph{Open graph question.} Typed edges that leave a file are tested against the control in
+Table~\ref{tab:graph_role}; whether training-time structure or an agent-tool role adds anything is
+unmeasured. \todo{Stacked expansion at the same budget on development, Verified-six and the third
+development Level~3 repository: \entry{E-GRAPH-L3}.}
+
+% =============================================================================================
+\section{RQ2: supervision under matched budgets}
+\label{sec:rq2}
+
+\subsection{Protocol}
+
+The retrieval stack is frozen across arms; only the supervision strategy varies. Held identical:
+base checkpoint (CodeRankEmbed), architecture, pooling, batch shape, learning-rate schedule,
+temperature, maximum length, one negative policy for all arms, the evaluation set, the flat exact
+index, rank fusion and byte-identical context assembly. The protocol settles fifteen items before any
+final run (O1 to O15); the ones that shape the claim are:
+\begin{itemize}
+  \item \textbf{Updates (O1):} the primary budget is 100 optimizer updates of a longer schedule, with
+  1,000 updates as a sensitivity check on a subset of cells, because the pilots saturate early.
+  \item \textbf{Signal and teachers (O3):} the quality signal is SweRank's K-rank (minimum rank of
+  the positive under a base retriever) at K = 20, positive level. BM25 is the primary teacher because the
+  published pool's construction does not favour it; SweRankEmbed-Small is reported with the caveat
+  that it shaped the pool. No cell uses the encoder being trained as its own teacher.
+  \item \textbf{Confirmatory scope (O2):} exactly two contrasts, both on the unfiltered mined set:
+  \textsc{Filter} (BM25 teacher) against \textsc{Raw}, and against the size-matched random
+  subsample. Everything else (the second teacher, \textsc{Weight}, \textsc{Curriculum}, the injected-noise
+  calibration, the dose-response, the noise-audit prediction) is exploratory and labelled so.
+  \item \textbf{Matching rule:} equal optimizer updates and reported distinct-example counts; a
+  cell that cannot reach the common count without repeating examples is flagged, never silently
+  included.
+  \item \textbf{Design of record (O7, O12):} three seeds per cell and as many evaluation
+  repositories as the budget allows (the eight above), over more seeds.
+  \item \textbf{Fresh noise (O15):} confirmatory runs draw new noise realisations with the same
+  rule; the pilot realisations are not reused.
+  \item \textbf{Retention (O9):} final models of runs that feed RQ3 are retained (half precision).
+\end{itemize}
+
+\paragraph{Decision rules, fixed before any final run.} \emph{Positive}: the lower end of the
+adjusted interval is above zero at Level~2 (repository-clustered) and at Level~3 on the final test,
+with the same sign on development at both levels, and the same holds against the subsample for the claim
+``quality beyond quantity''. \emph{Negative, with a bound}: the interval includes zero and its upper
+end is below $\delta$ at both levels, reported as ``no gain larger than $u$ points at this
+design''. \emph{Inconclusive}: the lower end is at most zero and the upper end is at least $\delta$
+at either level, reported with the minimum detectable difference. For the injected-noise cells,
+\textsc{Raw} must degrade against the clean cell and \textsc{Oracle-Clean} must recover it, or the
+calibration is reported as not informative. A null stays a null: if arms differ in retrieval but
+not in resolved rate, RQ3 reports the retrieval-versus-reasoning failure breakdown.
+
+\subsection{Pilots: dose-response and the mined set}
+
+Table~\ref{tab:noise_dose_response} injects label noise of a known kind at a known rate into the
+published pool and measures what the arms recover; Table~\ref{tab:mined_vs_pool_ranks} compares the
+rank profile of the unfiltered mined set with the published pool's; Table~\ref{tab:mined_pilot} is the
+first training run on the mined set. Two cautions are part of the result. The published pool looks
+pre-selected by one retriever, so \textsc{Raw} on it is not raw; and injected noise is a proxy whose
+transfer to real noise is open (a second kind of noise failed its pre-registered sanity check).
+\todo{Sibling-noise decision and its two further seeds: \entry{E-PILOT-NOISE-SIB}.}
+
+\input{generated/noise_dose_response}
+\input{generated/mined_vs_pool_ranks}
+\input{generated/mined_pilot}
+
+\subsection{Noise audit}
+
+The share of mined pairs that carry harmful noise, and of what kind, is estimated from a
+stratified sample: a wrong positive (an edited function the issue is not about), a sibling of the
+relevant function, or a missing positive (a false negative among the negatives, which is not
+harmful on the positive side). The sample is stratified by K-rank (kept and dropped under each
+teacher) so that the precision and recall of the filter are estimated, not only the overall rate. Two
+readers who are not the lead read the pairs, so the lead's knowledge of the arms cannot influence the
+sample; a 100-pair overlap gives their agreement. A binomial rate to a half-width of 0.05 needs
+about 400 pairs. If the audit cannot be done the report states the K-rank profile of the mined set
+as a proxy and does not test the prediction from the audited rate. \todo{Audited noise rate and
+reader agreement: \entry{E-LABEL-AUDIT-SHEET}.}
+
+\subsection{Confirmatory contrasts}
+
+\todo{\textsc{Filter} (BM25) minus \textsc{Raw} on the mined set, both levels, three seeds, adjusted
+and unadjusted intervals, verdict by the rules above: \entry{E-RQ2-FILTER}, \entry{E-RQ2-RAW}.}
+\todo{\textsc{Filter} (BM25) minus the size-matched subsample, same layout, with the distinct-example
+counts of every cell: \entry{E-RQ2-CTRL-SUBRAW}.}
+\todo{Exploratory arms (second teacher, \textsc{Weight}, \textsc{Curriculum}) and the dose-response
+at fresh draws: \entry{E-RQ2-WEIGHT}, \entry{E-RQ2-CURRICULUM}.}
+\todo{Mined-set size after the full mining run, yield and surviving counts: \entry{E-MINE-FULL}.}
+\todo{Longer-schedule sensitivity cells and the quantity--quality curve if the core completes:
+\entry{E-RQ2-SEC-QQ}.}
+
+% =============================================================================================
+\section{RQ3: from retrieval to resolved rate}
+
+\paragraph{Design.} Each RQ2 retriever is plugged into one fixed agent scaffold with one fixed base
+model, temperature and seed, over the same instances; the outcome is the resolved rate with a paired
+McNemar test and intervals, and for every failure the gold-in-context indicator that separates
+retrieval failures from reasoning failures. The scaffold and the base model are open decisions
+(ADR-007, ADR-008) and nothing is run until their cost and noise are known. The assembly policy
+(Section~\ref{sec:system}, Tables~\ref{tab:assembly_gold}, \ref{tab:assembly_cap}) is shared by all arms.
+
+\input{generated/assembly_gold}
+\input{generated/assembly_cap}
+
+\paragraph{Power.} With the published fixed-agent retrieval swap read in full as the only comparison
+available, the differences it reports are below the minimum detectable effect at Verified sizes, so
+the resolved-rate comparison may be reportable only as an estimate with an interval. The smallest
+worthwhile difference is stated before the runs. A cost and noise pilot of the agent call (100
+development instances, two first stages, two runs, one hosted model on its free tier;
+\entry{E-RQ3-PILOT-RESULT}, exploratory) gives no resolved rate, because nothing was graded. It gives
+1.41 calls per instance-run and 22.5\% unusable first replies (12.8\% after two follow-ups); at
+temperature 0 two runs agree on the reply text in 63\% of pairs and on the edits in 63\% of usable
+pairs. The placeholder discordances of the power table stay.
+\todo{Power table from stored resolved-rate discordance and run-to-run spread: \entry{E-POWER}.}
+
+\paragraph{Fallback (declared before any final run).} If the arms do not separate under the rule
+above, RQ3 contrasts \textsc{Raw} against the untrained encoder and is labelled as measuring
+``does training help'', not ``does supervision quality help''. \todo{Agent runs, resolved rate with
+interval, McNemar, failure breakdown and resolved rate per agent wall-clock: \entry{E-RQ3-AGENT}.}
+
+% =============================================================================================
+\section{Threats to validity}
+\label{sec:threats}
+
+\begin{table*}[t]
+\centering\small
+\caption{Threats to validity and their mitigations. Evidence class: \emph{reasoned}, with the
+evidence behind each row in the entries named.}
+\label{tab:threats}
+\begin{tabular}{@{}p{0.04\textwidth}p{0.35\textwidth}p{0.53\textwidth}@{}}
+\toprule
+& Threat & What we do about it \\
+\midrule
+T1 & The published pool was built with a retriever in the loop, so \textsc{Raw} on it is not raw
+(\entry{E-POOL-RANKS}) & Unfiltered mined set as the pool on which \textsc{Raw} is defined; the pool is kept as the
+comparison population so the selection stays measurable \\
+T2 & Pretraining exposure: the favoured teacher was trained on the same repository family; the base
+encoder and the agent's model may have seen the repositories (\entry{E-CONTAM-SCAN}, \entry{E-CONTAM-EDITED}) &
+BM25 carries the primary claim; each teacher reported separately; arms compared inside one benchmark, so inflation is equal across arms \\
+T3 & Injected noise is a proxy; a neighbouring-function kind failed its sanity check
+(\entry{E-PILOT-NOISE-SIB}) & Noise audit of the mined set; ``findable'' is measured, not assumed; the dose-response is a calibration, not a model of real labels \\
+T4 & No trained checkpoint of a pilot result run is retained, and RQ3 needs the models & Retention switch in
+the training jobs; final models of runs that feed RQ3 archived (\entry{E-RETAIN-FINAL}) \\
+T5 & Few repositories: five at Level~2 and two to three at Level~3 on development; one Verified project dominates its Level~3 labels & Repository-clustered intervals
+where possible, the repository term beside every query-level interval, a leave-one-project-out sensitivity, eight added Level~2 repositories \\
+T6 & Short training: the pilots run a small fraction of the master schedule and could miss an effect that appears later & Longer-schedule sensitivity cells on the mined set (needs a mined pool large enough to avoid repeats) \\
+T7 & Data-budget confound: filtering sees fewer distinct examples at equal updates & The size-matched subsample is in every comparison, one draw per seed, distinct-example counts reported \\
+T8 & A teacher equal to the encoder being trained is a self-confirming loop & Removed from the final cells; a separately pretrained teacher only \\
+T9 & Multiplicity and analytic flexibility: many contrasts were run in the pilots without correction & One confirmatory family fixed in advance, Holm within families, rules written before any final run \\
+T10 & Single language, single encoder; Level~3 labels are judged by models & Claims scoped to Python and to the CodeRankEmbed base; Level~3 is secondary evidence for the context question \\
+T11 & Level~3 rests on fifteen repositories, twelve of which are the final test & The Level~3 statement names its repositories; Level~2 carries the repository-count argument \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:threats} lists the threats that the protocol raises itself. Two more are standing
+limits of the evidence: absolute levels are not capability claims, and every retrieval result here
+is for Python.
+\todo{Threats that the agent runs add (scaffold sensitivity, model non-determinism, repository
+contamination of the agent's model): \entry{E-RQ3-AGENT}.}
+
+% =============================================================================================
+\section{Conclusion}
+
+What is measured so far is the apparatus and the pilots: the published BM25 rows are reproduced,
+the zero-shot signals and fusion are measured, the graph is compared with a same-file control, the
+supervision arms are compared under injected noise at matched updates, and the mined set and the
+assembly stage are built and measured once (Tables~\ref{tab:bm25_repro}--\ref{tab:assembly_cap}). Each
+of these is exploratory, on development repositories unless the caption says Verified-six, and none is a
+confirmatory result. The confirmatory question, whether \textsc{Filter} with the BM25 teacher
+beats \textsc{Raw} and the size-matched subsample on unfiltered pairs at matched budgets, and the
+resolved-rate question, are not answered here. \todo{Conclusion of the confirmatory contrasts, stated
+with its bound and its verdict, null or not: \entry{E-RQ2-FILTER}, \entry{E-RQ3-AGENT}.}
+
+% =============================================================================================
+\begin{thebibliography}{99}\small
+\bibitem{swebench} % note: swe-bench-2310.06770
+C.~Jimenez, J.~Yang et al. SWE-bench: can language models resolve real-world GitHub issues? ICLR 2024 (arXiv 2310.06770).
+\bibitem{corebench} % note: core-bench-2606.11864
+Zhang et al. CORE-Bench (arXiv 2606.11864, 2026).
+\bibitem{swerank} % note: swerank-2505.07849
+Gangi Reddy, Suresh, Doo et al. SweRank (arXiv 2505.07849, ICLR 2026 version).
+\bibitem{swerankplus} % note: swerank-plus-2512.20482
+Gangi Reddy, Liu et al. SweRank+ (arXiv 2512.20482).
+\bibitem{cornstack} % note: cornstack-2412.01007
+Suresh, Gangi Reddy et al. CoRNStack (arXiv 2412.01007, ICLR 2025).
+\bibitem{agentretrievalbench} % note: agent-retrieval-bench-2607.24882
+Qin and Xie. Agent Retrieval Bench: evaluating repository context retrieval for coding agents (arXiv 2607.24882, 2026).
+\bibitem{costexploration} % note: cost-effective-exploration-2608.29675
+Al Awad and Ivanov. Cost-effective repository exploration for agentic issue localization (arXiv 2608.29675, 2026).
+\bibitem{codegrep} % note: codegrep-2608.05886
+Chen et al. CodeGrep: an RL-trained retrieval agent for coding agents (arXiv 2608.05886, 2026).
+\bibitem{locagent} % note: locagent-2503.09089
+Chen, Tang, Deng et al. LocAgent (arXiv 2503.09089, ACL 2025).
+\bibitem{kgcompass} % note: kgcompass-2503.21710
+Yang, Ren, Jin et al. KGCompass (arXiv 2503.21710).
+\bibitem{spider} % note: spider-2512.16956
+Chaudhari et al. SpIDER (arXiv 2512.16956).
+\bibitem{graphlocator} % note: graphlocator-2512.22469
+Liu et al. GraphLocator: graph-guided causal reasoning for issue localization (arXiv 2512.22469).
+\bibitem{semnav} % note: semnav-2609.31176
+Wei, Lei and Li. SemNav: semantic navigation for repository-level issue localization (arXiv 2609.31176, 2026).
+\bibitem{reponavigator} % note: reponavigator-2512.20957
+Zhang, Duan, Zhang et al. One tool is enough: reinforcement learning of agents for repository-level code navigation (arXiv 2512.20957).
+\bibitem{logicloc} % note: logicloc-2604.16021
+Xu, Wu, Zhang and Li. Neurosymbolic repo-level code localization (arXiv 2604.16021, 2026).
+\bibitem{pycg} % note: pycg-2103.00587
+Salis et al. PyCG: practical call graph generation in Python. ICSE 2021 (arXiv 2103.00587).
+\bibitem{dypybench} % note: dypybench-2403.00539
+Bouzenia, Krishan and Pradel. DyPyBench. FSE 2024 (arXiv 2403.00539).
+\bibitem{sun} % note: sun-2202.06649
+Sun et al. On the importance of building high-quality training datasets for neural code search. ICSE 2022 (arXiv 2202.06649).
+\bibitem{rethinking} % note: rethinking-negative-pairs-2310.08069
+Li et al. Rethinking negative pairs in code search. EMNLP 2023 (arXiv 2310.08069).
+\bibitem{coder} % note: coder-2505.12697
+Li et al. Towards a generalist code embedding model based on massive data synthesis (arXiv 2505.12697).
+\bibitem{rlhn} % note: rlhn-2505.16967
+Thakur, Zhang, Ma and Lin. Hard negatives, hard lessons: revisiting training data quality for robust information retrieval. EMNLP 2025 Findings (arXiv 2505.16967).
+\bibitem{arhn} % note: arhn-2604.11092
+Choi et al. Answer-centric relabeling of hard negatives with open-source models for dense retrieval (arXiv 2604.11092, 2026).
+\bibitem{npc} % note: npc-2311.03798
+Zhang et al. Noisy pair corrector for dense retrieval. Findings of EMNLP 2023 (arXiv 2311.03798).
+\bibitem{nvretriever} % note: nv-retriever-2407.15831
+Moreira et al. NV-Retriever: improving text embedding models with effective hard-negative mining (arXiv 2407.15831).
+\bibitem{map4cs} % note: map4cs-2610.11727
+Chen et al. MAP4CS: a multi-dimensional data pruning framework for efficient code retriever fine-tuning (arXiv 2610.11727, 2026).
+\bibitem{hardneg} % note: hard-negative-transfer-2603.20990
+Sinha, Seetharaman and Bansal. What tracks hard-negative transfer? A study of lexical and semantic signals (arXiv 2603.20990).
+\bibitem{cldrd} % note: cl-drd-2204.13679
+Zeng, Zamani and Vinay. Curriculum learning for dense retrieval distillation. SIGIR 2022 (arXiv 2204.13679).
+\bibitem{penha} % note: curriculum-ir-1912.08555
+Penha and Hauff. Curriculum learning strategies for IR. ECIR 2020 (arXiv 1912.08555).
+\bibitem{adam} % note: adam-2212.10192
+Tao et al. Dense retrieval distillation with adaptive dark examples (arXiv 2212.10192).
+\end{thebibliography}
+
+\end{document}

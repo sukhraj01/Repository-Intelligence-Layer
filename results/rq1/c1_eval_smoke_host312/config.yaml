@@ -1,0 +1,29 @@
+bootstrap_draws: 2000
+data_root: tests/fixtures/c_eval
+experiment_id: E-C1-EVAL
+folders:
+- dataset: fixture
+  folder: alpha
+  levels:
+  - L2
+  - L3
+  repo: example/alpha
+- dataset: fixture
+  folder: beta
+  levels:
+  - L2
+  - L3
+  repo: example/beta
+log_path: results/logs/c1_eval_smoke_2026-10-30.json
+output: data/processed/c_eval_smoke
+prefilter_k: 10000
+repeats: 3
+retriever:
+  b: 0.75
+  k1: 1.5
+  kind: bm25
+rewrite: true
+role: fixture
+seed: 0
+split: synthetic-c1-v1
+warmup_n: 1

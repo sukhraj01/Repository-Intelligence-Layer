@@ -1,0 +1,46 @@
+# Report gaps: evidence map of the final report
+
+One row per planned claim of `reports/final/final_report.tex`, ordered by what blocks the paper most.
+Status words, from the strongest to the weakest:
+
+- **measured**: a run in this project, stored output, config hash, seed and hardware; the report may state it with its interval.
+- **exploratory only**: every run behind the claim is labelled exploratory by its own entry (development repositories, one encoder, 100
+  updates, two or three seeds, or a single pilot). Such a claim is never listed as done, and the report carries it only as an
+  exploratory table.
+- **not run**: the experiment is designed but nothing was computed.
+- **blocked**: the experiment cannot start; the blocker is named.
+
+Owners: A (retrieval stack and RQ1 workstream), B (RQ2 and integration workstream), C (evaluation, mined data and RQ3
+workstream), lead. Where a row says "readers", the two readers of the label audit are team members who are not the lead (D101).
+Every number in a generated table of the report is read from a stored file (`scripts/report_tables.py`); a slot that is still empty
+is a `\todo{...}` in the report naming the entry that fills it.
+
+| # | Claim the report will make | Experiment (entry id) | Status | What is missing | Owner | Cheapest next step |
+|---|---|---|---|---|---|---|
+| 1 | Under matched optimization budgets, FILTER (BM25 teacher) beats RAW on unfiltered pull-request pairs (both levels, three seeds) | E-RQ2-FILTER, E-RQ2-RAW on the set of E-MINE-FULL | exploratory only | the full mined set (the full run is in progress; yield and size unknown until its report step); the content-overlap audit of mined corpora (not built); registration of the cell list, Holm families and delta; the final-stage GPU authorisation (design of record option E); retained final models | lead | read the report step of the first mining session and decide on the second; build the overlap audit (CPU) |
+| 2 | FILTER (BM25 teacher) beats the size-matched random subsample ("quality beyond quantity") | E-RQ2-CTRL-SUBRAW | exploratory only | same as row 1; one subsample draw per seed on the mined set; distinct-example counts per cell | lead | same as row 1; the subsample cells are in the same job list |
+| 3 | The mined set's share of harmful, findable noise predicts where filtering helps (H1b) | E-LABEL-AUDIT-SHEET | not run | the sheets are built and nobody has read a pair; two readers who are not the lead; a 100-pair overlap for agreement | A and C (readers); lead (scoring) | hand the pilot sheets to the two readers (`docs/LABEL_AUDIT.md`) |
+| 4 | Resolved rate with the agent fixed differs between retrievers (RQ3), with the retrieval-versus-reasoning breakdown | E-RQ3-AGENT | blocked | scaffold and base model undecided (ADR-007, ADR-008, the budget figure); the cost and noise pilot ran (E-RQ3-PILOT-RESULT: 1.41 calls per unit, 22.5% unusable first replies, same edits in 63% of repeated usable pairs) but nothing was graded, so no resolved rate exists; retained retrievers from row 1; budget in the agent model's tokens | C (apparatus); lead (decisions) | settle the spend and model question and the rule that applies edit blocks (Q69); the grader then runs the retained arms on the 377-instance subset |
+| 5 | The comparison has the power to detect the smallest worthwhile resolved-rate difference | E-POWER | not run (calculation only, reasoned) | discordance and run-to-run spread of a real agent pilot; the smallest worthwhile difference fixed by the lead | C; lead | the pilot of row 4 did not grade anything; take both numbers from the first graded runs, then rerun the power table |
+| 6 | The fallback contrast (RAW against the untrained encoder) is the RQ3 minimum if arms do not separate | E-RQ3-AGENT (declared fallback) | blocked | same as row 4; the retrieval difference it relies on is exploratory (pilot, development repositories) | lead | none before row 4; the declaration itself is recorded |
+| 7 | Final-test numbers on Verified and on the eight test-role repositories, read once | E-EVAL-REPOS-BUILD (stores), E-RQ2-FILTER (evaluation) | blocked | stores are built and nothing is evaluated; the one look waits for the development analysis, registered cells and retained models | lead | register the protocol items; run the evaluation in the same job as the final cells |
+| 8 | RQ1: each signal's contribution over dense, with latency per configuration (nDCG per millisecond) | E-RQ1-DENSE, E-RQ1-DENSE-BM25, E-RQ1-DENSE-STRUCT, E-RQ1-ALL, E-LAT-STAGES | exploratory only | zero-shot rows exist at one stated cell; no ladder with the frozen configuration; no rerank stage (ADR-009 open); no per-stage latency table in the report; the real development BM25 run with stored query-level rows (the stored one is operator-reported) | A | A's development runs and the tuned-index variants; then one latency snapshot of the frozen configuration |
+| 9 | Typed graph edges add nothing beyond same-file expansion by score (stated as no evidence that they do, with the interval) | E-GRAPH-ROLE, E-GRAPH-L3 | exploratory only | interval at Verified Level 3 reaches about 4 points above zero; the stacked-expansion flip test is not run; the third development Level 3 repository has no dense scores; training-time and agent-tool roles unmeasured | A; lead | stacked expansion at the same budget (about an hour of code, ten minutes CPU, no GPU) |
+| 10 | Dose-response: the gain of FILTER over RAW rises with the injected noise rate | E-PILOT-NOISE (fresh draws in the final design) | exploratory only | two seeds at the lower rate, three at the higher; fresh realisations (O15) not drawn; the neighbouring-function noise kind failed its sanity check, so transfer to plausible noise is open | lead | decide the options of the sibling-noise entry (stronger noise, or two more seeds at about 1.5 GPU-hours) |
+| 11 | The published pool is pre-selected by one retriever, so RAW on it is not raw | E-POOL-RANKS, E-MINE-PILOT (rank comparison) | exploratory only | the flip experiment that separates a pull-request filter from the checkpoint's fit (E-POOL-DATES) is not run; pilot-sized samples; one seed | lead | run E-POOL-DATES (no GPU; the read-only token now exists) |
+| 12 | Training on the mined set gains over the untrained encoder as the published pool does | E-MINED-PILOT | exploratory only | the full mined set; three seeds; the minimum detectable difference at two seeds is above the FILTER gain | lead | none before row 1 |
+| 13 | WEIGHT and CURRICULUM are reported with the same rule but carry no claim | E-RQ2-WEIGHT, E-RQ2-CURRICULUM | exploratory only | final cells (exploratory by protocol); pilots show no cell above RAW at both levels | B | run inside the final job list at no extra stage cost |
+| 14 | The assembled context holds the reference-fix files at the stated budgets | E-ASSEMBLY, E-ASSEMBLY-CAP | exploratory only | budgets are in approximate tokens, not the agent model's tokenizer; no expansion option; Verified-six read once; no agent run | lead; C | convert budgets once the agent model is chosen (row 4) |
+| 15 | The extraction pipeline and graph are sound (byte-identical rebuilds, incremental update equals full rebuild, edge recovery under stated definitions) | E-GRAPH-BUILD, tests | measured | a generated table for the report (the measurement exists as stored tables, the builder does not read them yet); one resolver-fix figure has no stored edge diff | A | add a builder to `ril/analysis/report_tables.py` for the recovery and storage tables |
+| 16 | Contamination: the share of base-commit functions and of edited functions found in a large public code corpus | E-CONTAM-SCAN, E-CONTAM-EDITED | measured | not yet a generated table in the report | lead | add a builder for the two stored tables |
+| 17 | BM25 reproduces the published baseline rows | E-BM25-REPRO | measured | none for the report (Table 1 is generated) | lead | none |
+| 18 | The graph, latency and encoder choices are made on development repositories only | E-DENSE-FUSION, E-ENCODER-NUMBERS | measured | none for the claim as a process statement; the numbers behind it are exploratory (rows 8 and 9) | lead | none |
+| 19 | Related work covers the recent literature on supervision quality, graph localization and agents | literature notes | exploratory only (scan of a dated window; absence in a window is not absence in the literature) | a refresh before submission; two papers on the supervision side not read in full | lead | rerun the dated queries and read what they return in full |
+
+## Reading the table
+
+- Rows 1, 2 and 4 decide whether the paper answers its own research questions; everything below them is supporting evidence.
+- The report states the approved sentence for the study's novelty ("Our literature audit did not identify a study that ...") and none of the
+  forbidden formulations; the contribution is an empirical comparison.
+- If row 1 ends as a null, the report states it as a null with its bound (the protocol's decision rules), and row 4 reports the failure
+  breakdown rather than a reframing.

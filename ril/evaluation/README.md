@@ -25,3 +25,10 @@ Design: `docs/06_core_bench.md`, `docs/08_experimental_design.md`.
   outputs in the untracked `data/review/`).
 
 Depends on: `retrieval/`, `parsing/`, `config/`.
+
+- `executor/` — patch evaluation by execution for Verified instances without root or a container (D106,
+  `docs/RQ3_PILOT.md`; `scripts/rq3_exec.py`, `scripts/ada/rq3_exec/`): environment from `uv`, patch, tests, graded outcomes,
+  the sharded gold-patch runs that fix the executable subset and the coverage and cost helpers.
+- `rq3_units.py` — unit records, BM25 caches, de-duplicated text stores, distinct-text counts and the encoding rule for the
+  executable subset (D107, `E-RQ3-UNITS`; `scripts/rq3_units.py`, `scripts/ada/rq3_units_*.sbatch`); reuses the unit stage,
+  `e3_prepare` and `x2_dense` unchanged.

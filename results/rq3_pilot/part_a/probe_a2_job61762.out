@@ -1,0 +1,27 @@
+== node gnode004 2026-11-06T12:13:41Z
+dirname: missing operand
+Try 'dirname --help' for more information.
+prefix=
+grep: /etc/singularity/singularity.conf: No such file or directory
+ls: cannot access '/libexec/singularity/bin/starter-suid': No such file or directory
+== fakeroot mappings
+== pull a small image (docker://python:3.11-slim), 600 s
+timeout: failed to run command ‘singularity’: No such file or directory
+ls: cannot access 'py311.sif': No such file or directory
+timeout: failed to run command ‘singularity’: No such file or directory
+== image for a Verified instance: manifest reachable?
+token_len=2745
+manifest http=200
+== uv
+uv http=200 bytes=12429843
+
+gzip: stdin: unexpected end of file
+tar: Unexpected EOF in archive
+tar: Unexpected EOF in archive
+tar: Error is not recoverable: exiting now
+a45b1fe4e2f0c8390b2b2938ac83e92ed5979000856808f3679c07812e9e6dcd  verified.parquet
+/var/spool/slurmd/job61762/slurm_script: line 33: uv: command not found
+/var/spool/slurmd/job61762/slurm_script: line 34: uv: command not found
+== census + gold checks
+/var/spool/slurmd/job61762/slurm_script: line 37: tools/bin/python: No such file or directory
+done

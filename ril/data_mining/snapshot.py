@@ -24,11 +24,25 @@ from ril.util.log import get_logger
 
 log = get_logger("data_mining.snapshot")
 GIT_TIMEOUT_S = 900
+LOW_SPEED_BYTES_S = 1000
+LOW_SPEED_SECONDS = 120
+"""A transfer below this rate for this long is aborted by git itself (and retried as a failed
+fetch), so a stalled connection does not hold a worker for the whole ``GIT_TIMEOUT_S``."""
 FETCH_ATTEMPTS = 3
 
 
 class SnapshotError(RuntimeError):
     """The commit could not be fetched or unpacked (the pull request is quarantined)."""
+
+
+class SnapshotTimeout(SnapshotError):
+    """A git step of this commit ran past ``GIT_TIMEOUT_S`` (quarantined as ``snapshot_timeout``).
+
+    Not retried: a commit whose shallow fetch takes longer than the limit once (a very large tree)
+    takes that long again, and the retry would cost another full limit per pull request. The
+    sessions of the third relaunch (DEV-036) died of this timeout escaping as a bare
+    ``subprocess.TimeoutExpired``.
+    """
 
 
 class SnapshotProvider(Protocol):
@@ -77,14 +91,25 @@ class GitSnapshots:
         return os.path.join(self.work, f"{repo.replace('/', '__')}__{sha[:16]}.git")
 
     def _git(self, repo: str, sha: str, *args: str) -> subprocess.CompletedProcess[bytes]:
-        env = dict(os.environ, GIT_TERMINAL_PROMPT="0", GIT_ASKPASS="true")
-        return subprocess.run(
-            ["git", "-C", self._bare(repo, sha), *args],
-            capture_output=True,
-            timeout=GIT_TIMEOUT_S,
-            env=env,
-            check=False,
+        env = dict(
+            os.environ,
+            GIT_TERMINAL_PROMPT="0",
+            GIT_ASKPASS="true",
+            GIT_HTTP_LOW_SPEED_LIMIT=str(LOW_SPEED_BYTES_S),
+            GIT_HTTP_LOW_SPEED_TIME=str(LOW_SPEED_SECONDS),
         )
+        try:
+            return subprocess.run(
+                ["git", "-C", self._bare(repo, sha), *args],
+                capture_output=True,
+                timeout=GIT_TIMEOUT_S,
+                env=env,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise SnapshotTimeout(
+                f"git {args[0]} of {sha[:12]} ran past {GIT_TIMEOUT_S} s"
+            ) from exc
 
     def _fetch(self, repo: str, sha: str) -> None:
         """Shallow-fetch ``sha`` into its own bare repository (retried; raises SnapshotError)."""
@@ -162,14 +187,17 @@ class GitSnapshots:
                 wanted.append((blob, rel))
         if not wanted:
             return 0
-        proc = subprocess.run(
-            ["git", "-C", self._bare(repo, sha), "cat-file", "--batch"],
-            input="".join(f"{blob}\n" for blob, _ in wanted).encode("ascii"),
-            capture_output=True,
-            timeout=GIT_TIMEOUT_S,
-            env=dict(os.environ, GIT_TERMINAL_PROMPT="0"),
-            check=False,
-        )
+        try:
+            proc = subprocess.run(
+                ["git", "-C", self._bare(repo, sha), "cat-file", "--batch"],
+                input="".join(f"{blob}\n" for blob, _ in wanted).encode("ascii"),
+                capture_output=True,
+                timeout=GIT_TIMEOUT_S,
+                env=dict(os.environ, GIT_TERMINAL_PROMPT="0"),
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise SnapshotTimeout(f"cat-file of {sha[:12]} ran past {GIT_TIMEOUT_S} s") from exc
         if proc.returncode != 0:
             raise SnapshotError(f"cat-file failed: {proc.stderr.decode('utf-8', 'replace')[:200]}")
         data, pos, written = proc.stdout, 0, 0

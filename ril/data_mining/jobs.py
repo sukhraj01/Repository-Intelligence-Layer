@@ -44,6 +44,14 @@ class TokenMissing(RuntimeError):
     """The live run needs ``GITHUB_TOKEN`` and the environment has none."""
 
 
+class ListingIncomplete(RuntimeError):
+    """A repository could not be listed, so the seeded order of pull requests would change.
+
+    Mining on a listing without that repository silently shifts the sample (DEV-035); the
+    session stops instead, and the repository is listed alone by a listing-only job.
+    """
+
+
 def require_token() -> str:
     """The token, or :class:`TokenMissing` (the message never contains a value)."""
     token = token_from_env()
@@ -134,11 +142,28 @@ def run_pilot(
     if shard is not None:
         names = names[shard[0] :: shard[1]]
     t_list = time.perf_counter()
-    listings, stats = list_population(client, names, store, is_held_out=is_held_out)
+    push_listing = bool(list_only and durable_root)
+    last_push = time.monotonic()
+
+    def push_listings() -> None:
+        nonlocal last_push
+        if time.monotonic() - last_push >= sync_seconds:
+            durable.copy_run(out_root, durable_root or "")
+            last_push = time.monotonic()
+
+    try:
+        listings, stats = list_population(
+            client,
+            names,
+            store,
+            is_held_out=is_held_out,
+            after_listed=push_listings if push_listing else None,
+        )
+    finally:
+        if push_listing:  # a failed listing job keeps every listing it finished (DEV-034)
+            durable.copy_run(out_root, durable_root or "")
     listing_seconds = time.perf_counter() - t_list
     if list_only:  # listing shards: only the per-repository listing files are written
-        if durable_root:
-            durable.copy_run(out_root, durable_root)
         return {
             "listed": stats.listed,
             "reused": stats.reused,
@@ -146,6 +171,10 @@ def run_pilot(
             "listing_seconds": round(listing_seconds, 1),
             "api": budget_delta(budget_before, client.budget.to_dict()),
         }
+    if stats.failed:
+        raise ListingIncomplete(
+            f"{len(stats.failed)} repositories not listed: {sorted(stats.failed)[:5]}"
+        )
     selected = select_prs(listings, config, population.published)
     t_mine = time.perf_counter()
     syncer = (
@@ -153,16 +182,20 @@ def run_pilot(
         if durable_root
         else None
     )
-    session = mine_selected(
-        selected,
-        client=client,
-        snapshots=snapshots,
-        store=store,
-        config=config,
-        stop_after=stop_after,
-        lookahead=lookahead,
-        after_record=syncer.tick if syncer else None,
-    )
+    try:
+        session = mine_selected(
+            selected,
+            client=client,
+            snapshots=snapshots,
+            store=store,
+            config=config,
+            stop_after=stop_after,
+            lookahead=lookahead,
+            after_record=syncer.tick if syncer else None,
+        )
+    finally:
+        if syncer is not None:  # a session that ends on an error keeps the rows it recorded
+            syncer.flush()
     mining_seconds = time.perf_counter() - t_mine
     budget = store.add_budget(budget_delta(budget_before, client.budget.to_dict()))
     summary = build_summary(store, listings, population)

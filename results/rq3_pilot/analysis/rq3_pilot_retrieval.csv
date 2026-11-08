@@ -1,0 +1,7 @@
+source,arm,queries_file_level,file_share_mean_pct,no_gold_file_pct,queries_unit_level,unit_share_mean_pct,no_gold_unit_pct,no_gold_file_boot_pct,no_gold_file_boot_pct_lo,no_gold_file_boot_pct_hi
+pilot_100,bm25,100,66.0368,19.0000,100,29.3217,32.0000,19.0000,12.0000,27.0000
+pilot_100,rrf,100,75.1034,9.0000,100,34.6227,17.0000,9.0000,4.0000,15.0000
+dev_matched_units_all,bm25,353,63.2800,20.9600,,24.6100,,,,
+dev_matched_units_all,rrf,353,70.0100,13.8800,,29.2000,,,,
+dev_matched_units_all_nomod,bm25,351,66.2700,21.0800,,26.0100,,,,
+dev_matched_units_all_nomod,rrf,351,73.7800,13.6800,,29.5900,,,,

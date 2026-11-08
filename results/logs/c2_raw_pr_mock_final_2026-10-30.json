@@ -1,0 +1,1999 @@
+{
+  "commands": [
+    "python scripts/c_mine_prs.py record --out data/raw/c_raw_pr_recording.json",
+    "python scripts/c_mine_prs.py mine --recording data/raw/c_raw_pr_recording.json --config configs/experiments/c_raw_pr_pilot.yaml --out data/raw/c_raw_pr_mock_final",
+    "python scripts/c_mine_prs.py ranks --out data/raw/c_raw_pr_mock_final"
+  ],
+  "evidence_class": "measured synthetic plumbing only",
+  "gpu_hours": 0,
+  "limits": [
+    "All API responses and source snapshots are generated synthetic fixtures. API-call counts are replay calls, not real GitHub cost.",
+    "No real content-overlap index supplied; audit blocked.",
+    "Dense scores absent; actual pilot and dense rank measurements have n=0.",
+    "Equal synthetic repository templates give a degenerate bootstrap interval, not scientific certainty.",
+    "Only standard two-parent merges admitted; other histories quarantined."
+  ],
+  "memory_probe": {
+    "baseline_rss_kib": 39432,
+    "linear_projection_200_repos_kib": 59912,
+    "observed_pilot_peak_rss_kib": 86840,
+    "peak_rss_kib": 39944,
+    "projection_assessment": "underpredicted; synthetic source size does not size real snapshots",
+    "recording_bytes": 41592,
+    "repositories": 5
+  },
+  "provenance": {
+    "api": {
+      "api_calls": 7688,
+      "cache_hits": 0,
+      "wait_seconds": 0.0
+    },
+    "config_hash": "7bd4a210bfc82de113b99d5549c60b27911d2dadfe8767687c1edf996dec9280",
+    "content_overlap": {
+      "applied_as_filter": false,
+      "status": "blocked: held-out content index absent"
+    },
+    "counts": {
+      "kept": 1379,
+      "linked_issues": 1773,
+      "linked_prs": 1773,
+      "merged_prs": 1970,
+      "no_linked_issue": 197,
+      "no_overlapping_function": 197,
+      "parse_incomplete": 197,
+      "positives": 1576
+    },
+    "date": "2026-10-30T16:00:53.566611+00:00",
+    "elapsed_seconds_cumulative": 9.601389827000276,
+    "full_scale_authorized": false,
+    "git_dirty": true,
+    "git_hash": "66d0f6f2546cceb3be7a384655b00af6d747b18b",
+    "hardware": {
+      "peak_rss_kib": 86840,
+      "platform": "Linux",
+      "processor": "aarch64",
+      "python": "3.11.18"
+    },
+    "held_out_rule_counts": [
+      {
+        "instances_after": 199,
+        "instances_dropped": 1,
+        "repos_after": 199,
+        "repos_dropped": 1,
+        "rule": "exact"
+      },
+      {
+        "instances_after": 198,
+        "instances_dropped": 2,
+        "repos_after": 198,
+        "repos_dropped": 2,
+        "rule": "+current_name"
+      },
+      {
+        "instances_after": 197,
+        "instances_dropped": 3,
+        "repos_after": 197,
+        "repos_dropped": 3,
+        "rule": "+loc_bench"
+      },
+      {
+        "instances_after": 197,
+        "instances_dropped": 3,
+        "repos_after": 197,
+        "repos_dropped": 3,
+        "rule": "sensitivity: +fork_network"
+      }
+    ],
+    "implementation_sources": {
+      "ril/data_mining/__init__.py": "7e3d405066962f58ce00de068edcb9f1fde5c99709295e7dcb9fcad0152bea11",
+      "ril/data_mining/github.py": "db0f701a6e3bb490d743857ea1e73ad8a241c21ab43a1d4466cef89fb2a22494",
+      "ril/data_mining/miner.py": "8b568864540e7fb36b3401c3460bb0709eb0e6ee9cc377c866dedbf5302bca93",
+      "ril/data_mining/ranks.py": "2d140870adde553779e3ff3be23565ac935d9a4641e6063211d601548d94653e",
+      "ril/data_mining/recording.py": "d9d57afd353013f521182039d913a72bb9bf5aab313a5a0a8eebe04c0d9e2ab8",
+      "ril/parsing/repository_parser.py": "7dd4b7f82c07e4b3d179708e85d556056a8f5de03e3af31afb2130db1fd6c6a0",
+      "ril/training/pool_ranks.py": "a5ea38e55dbd9dec6148333811261d7093455e9048afbb5909dcf469f9b9bc7c",
+      "ril/training/pool_reader.py": "523d1a9553987dd829dd453841f5f98976a780c6fcb8f1a194007fb055b8e6ae",
+      "scripts/c_mine_prs.py": "a869ae265ecb65e7bf95a2f5e016ab8ef46bbe1b28ec5dd6c1589bd9757a9436"
+    },
+    "parse_failure_denominator": 1773,
+    "parse_failure_share": 0.1111111111111111,
+    "pool_sha256": "2b6debed37352d3e36bf8b9694528a0bdcee9ea7f551a819373488a9fb929497",
+    "positive_policy": "every overlapping base-commit function/method; no retriever filter",
+    "positives_per_kept_pr": 1.1428571428571428,
+    "rename_resolution": {
+      "complete": true,
+      "requested": 200,
+      "resolved": 200,
+      "unresolved": []
+    },
+    "repositories_after_held_out": 197,
+    "repositories_selected": 200,
+    "repository_metadata": {
+      "held/core": {
+        "archived": null,
+        "fork": null,
+        "full_name": "held/core",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "held/localization": {
+        "archived": null,
+        "fork": null,
+        "full_name": "held/localization",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "renamed/core-copy": {
+        "archived": null,
+        "fork": null,
+        "full_name": "held/core",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-000": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-000",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-001": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-001",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-002": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-002",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-003": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-003",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-004": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-004",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-005": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-005",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-006": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-006",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-007": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-007",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-008": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-008",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-009": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-009",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-010": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-010",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-011": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-011",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-012": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-012",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-013": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-013",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-014": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-014",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-015": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-015",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-016": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-016",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-017": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-017",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-018": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-018",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-019": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-019",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-020": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-020",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-021": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-021",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-022": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-022",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-023": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-023",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-024": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-024",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-025": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-025",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-026": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-026",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-027": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-027",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-028": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-028",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-029": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-029",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-030": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-030",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-031": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-031",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-032": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-032",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-033": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-033",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-034": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-034",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-035": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-035",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-036": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-036",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-037": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-037",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-038": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-038",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-039": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-039",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-040": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-040",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-041": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-041",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-042": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-042",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-043": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-043",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-044": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-044",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-045": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-045",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-046": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-046",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-047": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-047",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-048": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-048",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-049": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-049",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-050": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-050",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-051": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-051",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-052": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-052",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-053": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-053",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-054": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-054",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-055": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-055",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-056": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-056",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-057": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-057",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-058": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-058",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-059": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-059",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-060": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-060",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-061": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-061",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-062": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-062",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-063": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-063",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-064": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-064",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-065": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-065",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-066": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-066",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-067": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-067",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-068": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-068",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-069": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-069",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-070": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-070",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-071": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-071",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-072": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-072",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-073": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-073",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-074": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-074",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-075": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-075",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-076": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-076",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-077": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-077",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-078": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-078",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-079": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-079",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-080": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-080",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-081": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-081",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-082": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-082",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-083": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-083",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-084": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-084",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-085": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-085",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-086": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-086",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-087": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-087",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-088": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-088",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-089": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-089",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-090": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-090",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-091": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-091",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-092": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-092",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-093": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-093",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-094": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-094",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-095": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-095",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-096": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-096",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-097": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-097",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-098": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-098",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-099": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-099",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-100": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-100",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-101": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-101",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-102": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-102",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-103": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-103",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-104": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-104",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-105": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-105",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-106": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-106",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-107": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-107",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-108": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-108",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-109": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-109",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-110": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-110",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-111": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-111",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-112": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-112",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-113": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-113",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-114": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-114",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-115": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-115",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-116": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-116",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-117": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-117",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-118": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-118",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-119": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-119",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-120": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-120",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-121": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-121",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-122": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-122",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-123": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-123",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-124": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-124",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-125": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-125",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-126": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-126",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-127": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-127",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-128": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-128",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-129": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-129",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-130": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-130",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-131": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-131",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-132": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-132",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-133": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-133",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-134": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-134",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-135": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-135",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-136": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-136",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-137": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-137",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-138": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-138",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-139": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-139",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-140": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-140",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-141": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-141",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-142": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-142",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-143": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-143",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-144": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-144",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-145": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-145",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-146": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-146",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-147": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-147",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-148": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-148",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-149": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-149",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-150": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-150",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-151": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-151",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-152": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-152",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-153": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-153",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-154": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-154",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-155": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-155",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-156": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-156",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-157": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-157",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-158": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-158",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-159": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-159",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-160": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-160",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-161": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-161",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-162": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-162",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-163": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-163",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-164": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-164",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-165": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-165",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-166": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-166",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-167": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-167",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-168": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-168",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-169": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-169",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-170": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-170",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-171": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-171",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-172": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-172",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-173": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-173",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-174": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-174",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-175": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-175",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-176": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-176",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-177": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-177",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-178": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-178",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-179": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-179",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-180": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-180",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-181": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-181",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-182": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-182",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-183": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-183",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-184": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-184",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-185": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-185",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-186": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-186",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-187": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-187",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-188": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-188",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-189": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-189",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-190": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-190",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-191": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-191",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-192": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-192",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-193": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-193",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-194": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-194",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-195": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-195",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      },
+      "synthetic/package-196": {
+        "archived": null,
+        "fork": null,
+        "full_name": "synthetic/package-196",
+        "language": null,
+        "license": null,
+        "pushed_at": null,
+        "stargazers_count": null
+      }
+    },
+    "run_identity": "52c9caafe4d269f5c17eb1d7414226a7c4f2b1d4b0692935e7d0d3d327595a68",
+    "source": "https://api.github.com",
+    "source_kind": "synthetic_recorded_responses",
+    "supported_history": "two-parent merge; second parent equals recorded PR head",
+    "version": "raw-pr-miner/v1"
+  },
+  "rank_audit": {
+    "comparability": "Synthetic cells validate mechanics only; corpus, teacher, text form and weighting differ.",
+    "comparison": [
+      {
+        "dataset": "raw pilot",
+        "evidence": "synthetic_recorded_responses",
+        "high": 0.8571428571428571,
+        "interval": "repository-clustered bootstrap; 2000 draws; seed 0",
+        "low": 0.8571428571428571,
+        "n": 1379,
+        "share": 0.8571428571428571,
+        "teacher": "bm25",
+        "text_form": "code"
+      },
+      {
+        "dataset": "raw pilot",
+        "evidence": "blocked: pinned dense scores absent",
+        "high": null,
+        "interval": "unavailable",
+        "low": null,
+        "n": 0,
+        "share": null,
+        "teacher": "coderankembed",
+        "text_form": "code"
+      },
+      {
+        "dataset": "published pool",
+        "evidence": "archived E-POOL-RANKS; not rerun",
+        "high": 0.222,
+        "interval": "stratified bootstrap; weighted pool estimate",
+        "low": 0.088,
+        "n": 160,
+        "share": 0.153,
+        "teacher": "coderankembed",
+        "text_form": "code"
+      },
+      {
+        "dataset": "published pool",
+        "evidence": "archived E-POOL-RANKS; not rerun",
+        "high": 0.31,
+        "interval": "stratified bootstrap; weighted pool estimate",
+        "low": 0.164,
+        "n": 160,
+        "share": 0.232,
+        "teacher": "bm25",
+        "text_form": "code"
+      },
+      {
+        "dataset": "never-filtered Verified",
+        "evidence": "archived E-POOL-RANKS; not rerun",
+        "high": 0.232,
+        "interval": "exact binomial",
+        "low": 0.157,
+        "n": 457,
+        "share": 0.193,
+        "teacher": "swerankembed-small",
+        "text_form": "pool"
+      },
+      {
+        "dataset": "never-filtered Verified",
+        "evidence": "archived E-POOL-RANKS; not rerun",
+        "high": 0.403,
+        "interval": "exact binomial",
+        "low": 0.313,
+        "n": 457,
+        "share": 0.357,
+        "teacher": "coderankembed",
+        "text_form": "code"
+      }
+    ],
+    "config_hash": "7bd4a210bfc82de113b99d5549c60b27911d2dadfe8767687c1edf996dec9280",
+    "dense_metadata": null,
+    "n": 1379,
+    "run_identity": "52c9caafe4d269f5c17eb1d7414226a7c4f2b1d4b0692935e7d0d3d327595a68",
+    "seed": 0,
+    "source_kind": "synthetic_recorded_responses"
+  },
+  "real_data_instances": 0,
+  "run_id": "c2-raw-pr-mock-final",
+  "supersedes": "c2-raw-pr-mock-pilot"
+}

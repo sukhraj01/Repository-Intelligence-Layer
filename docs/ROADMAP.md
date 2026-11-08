@@ -50,7 +50,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 3–6 — Person C: evaluation harness
 
-- [ ] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite splits not yet run
+- [ ] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite pairing and staging code merged after review (E-C1-EVAL); the one real dev BM25 run is operator_reported (E-C1-COLAB-DEV), so the item stays open until a run with stored query-level output exists
 - [x] Metrics at chunk granularity; reproduces a published CORE-Bench number as a sanity check (BM25 rows reproduced to the printed decimal, pilot E1)
 
 ## Weeks 5–8 — Person A: RQ1
@@ -67,10 +67,11 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 Design of record: option E, 12 cells x 3 seeds, 8 extra evaluation repositories, 38.9 GPU-hours; Block 3 cap 46.7 (`docs/COMPUTE.md`). Primary update count 100, with a 1,000-update sensitivity check on a subset of cells. Confirmatory: FILTER (BM25 teacher) against RAW and against the size-matched subsample, on the unfiltered mined set; everything else exploratory.
 
-- [ ] Enlarge the evaluation set (O8): at least eight repositories at L2 and as many with L3 labels as obtainable; unit records and dense stores must be built for each; cost per repository about 0.06 GPU-hours per checkpoint (placeholder, to be measured on the first one). The choice of repositories is a later task
-- [ ] Retention switch in the training job scripts (O9): keep the half-precision final model of runs that feed RQ3 and the report (about 274 MB each) and archive it to account B's storage (needs an alias for account B and a staged copy)
-- [ ] Label sheet for pull-request labels (O11): relevance of each edited function to its issue, three-way verdict and reason, for the noise audit (400 stratified pairs, two readers on a 100-pair overlap); the call-edge sheet stays separate
-- [ ] Mined-set gates: token on the cluster (D2), M1 to M4, G2 at 100 pilot directories with a positive and 10,000 positives at full scale (O10), content-overlap audit of the mined corpora (not built)
+- [ ] Enlarge the evaluation set (O8, D75, D100): the eight repositories are fixed by rule (`configs/experiments/eval_repos_v1.json`, `scripts/select_eval_repos.py`); unit records and dense stores are built for them (E-EVAL-REPOS-BUILD, build only, no retrieval result read); evaluation happens once, after the dev analysis
+- [x] Retention switch in the training job scripts (O9, D76; built and tested 2026-11-05, `ril/training/retention.py`, `scripts/archive_checkpoints.py`; no GPU run yet): keep the half-precision final model of runs that feed RQ3 and the report (about 274 MB each). Still open: the archive copy to account B's storage (needs an alias for account B; numbered script written, not run)
+- [x] Label sheet for pull-request labels (O11): relevance of each edited function to its issue, three-way verdict and reason, for the noise audit (400 stratified pairs, two readers on a 100-pair overlap); the call-edge sheet stays separate — sheets and scorer built 2026-11-05 (E-LABEL-AUDIT-SHEET, `docs/LABEL_AUDIT.md`); **nobody has read any pair yet**; reading the sheets and scoring them is a separate, open item below
+- [ ] Read the pilot label sheets (reader 1 and reader 2 are two team members who are not the lead; the lead reads no pair, D101; two readers, about 5 hours each) and score them with `scripts/label_audit_score.py` (E-LABEL-AUDIT-SHEET); then decide whether the full mined set needs a second, larger audit
+- [ ] Mined-set gates: token on the cluster (D2), M1 to M4, G2 at 100 pilot directories with a positive and 10,000 positives at full scale (O10), content-overlap audit of the mined corpora (built 2026-11-06, D105, E-OVERLAP-AUDIT; pilot store audited, the full-set run waits for the mining run)
 - [ ] Draw fresh noise realisations for the confirmatory and calibration cells (O15); the Wave 7 and 8 realisations are not reused
 - [ ] Register the cell list, Holm families (O5) and delta = 1.5 points (O6) before any final run
 - [ ] **Declared fallback (O13), stated before any final run:** if the arms do not separate by the rule of protocol section 6, RQ3 contrasts RAW with the untrained encoder. This measures "does training help", not "does supervision quality help", and is labelled so (DEV-022)
@@ -96,12 +97,22 @@ still complete and defensible.
 
 ## Weeks 10–14 — Person C: RQ3
 
+- [x] Context assembly stage (2026-11-06, D102, ADR-014 Proposed; `ril/assembly/`, `assemble` and BM25-only `end_to_end` latency rows, gold-in-context by budget and first stage, E-ASSEMBLY exploratory); the agent-model tokenizer and the budget for the agent are not done
+- [x] Unit-cap re-run of the assembly stage (2026-11-06, D103, E-ASSEMBLY-CAP, dev only): cap 1,000 kept; RRF above BM25 on dev, intervals exclude 0
+- [x] RQ3 pilot preparation (2026-11-06, D104, E-RQ3-PILOT-PREP; `docs/RQ3_PILOT.md`): what the cluster can execute (no container runtime usable; 263 of 500 Verified environments buildable without root; gold patch passes on three repositories), a provider adapter with a persistent limiter and tests (`ril/agent/providers/`, `scripts/rq3_pilot.py`), prompts for 100 dev instances, a three-call smoke test; the pilot itself is not run
+- [x] Executable evaluation for RQ3 (2026-11-07, D106, E-RQ3-EXEC; `ril/evaluation/executor/`, `results/rq3_exec/`): 377 of 500 Verified instances qualify (gold patch passes all FAIL_TO_PASS and PASS_TO_PASS tests twice, no root, no container); cost of one model patch is one run (p50 17 s); 111 of 140 older-Python instances recovered with micromamba; retrieval contexts for the subset need unit records for django, sympy, pytest, sphinx, pylint (estimate in `results/rq3_exec/unit_build_estimate.csv`); nothing evaluated with a model patch
+- [x] Unit records, BM25 scores and encoding for the executable subset (2026-11-07, D107, E-RQ3-UNITS; `ril/evaluation/rq3_units.py`, `results/rq3_units/`): 341 instances built with 0 failures plus the 36 already stored, so all 377 have units and BM25 scores; 220,974 distinct unit texts encoded with the untrained base encoder at 0.377 GPU-hours (rule: at most 6.0 at 109 texts/s); nothing evaluated; trained-checkpoint encodings and retrieval contexts remain open
+- [x] Retrieved contexts for the executable subset (2026-11-07, D108, E-RQ3-CONTEXTS; `ril/assembly/rq3_contexts.py`, `results/rq3_contexts/`): 377 instances x BM25, untrained dense, RRF x budgets 8,000 and 16,000, 0 failures, 30 of 30 rebuilt files byte-identical; all 377 already had query vectors (no GPU time); 8,000-token archive on the engineer's machine; trained-checkpoint arms and the agent runs remain open
+- [x] RQ3 pilot run (2026-11-06 to 2026-11-07: 400 of 400 units, 565 calls) and its analysis from stored data (D109, E-RQ3-PILOT-RESULT; `ril/analysis/rq3_pilot_analysis.py`, `results/rq3_pilot/analysis/`): all three flip criteria pass, free tier workable (3 to 8 days for 2 to 8 arm-runs), BM25 17.0% against RRF 8.5% unusable after follow-ups mostly through gold absence, run-to-run same edits 63%; no resolved rate (nothing graded); scaffold, model and Q45 decisions remain the engineer's
+- [x] Edit blocks to the executor's patch (2026-11-08, D110, E-RQ3-PATCHAPPLY; `ril/agent/providers/patch_convert.py`, `results/rq3_patch/`): exact primary, tolerant sensitivity; pilot edits apply in 276 of 400 units (tolerant rescues 0); 20 of 20 gold-derived edits resolve through the executor; no model call
+- [x] RQ3 driver and plan (2026-11-08, D111 to D114, E-RQ3-DRIVER; `ril/agent/providers/driver.py`, `results/rq3_driver/`): held-out slice of 50 frozen (N = 327), prompts of the 377 built (887 of 1,131 pass the screen; Q70), driver replay-tested on the real executor (30 of 30), analysis plan with run-noise power, cost model, spend guard; no model call; graded model check waits for the engineer (billing, cap, key, limits)
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
 
 ## Weeks 13–16 — All
 
 - [ ] Analysis, error breakdown, report, presentation
+- [x] Final report skeleton (`reports/final/final_report.tex`: every section, generated tables from stored results by `scripts/report_tables.py`, every empty slot a `\todo` naming its experiment entry) and the evidence-gap map (`docs/REPORT_GAPS.md`); the slots fill as the confirmatory contrasts and the agent runs finish
 
 ## Milestones to show the professor
 

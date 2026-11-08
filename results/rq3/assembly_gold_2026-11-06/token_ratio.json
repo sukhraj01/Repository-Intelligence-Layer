@@ -1,0 +1,10 @@
+{
+ "approx": "approx-words-v1",
+ "n": 200,
+ "ratio_median": 1.2632,
+ "ratio_p5": 1.049,
+ "ratio_p95": 1.5862,
+ "ratio_total": 1.2185,
+ "real": "qwen3-embedding-0.6b",
+ "seed": 0
+}

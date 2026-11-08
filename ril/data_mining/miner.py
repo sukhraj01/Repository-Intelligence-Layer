@@ -29,13 +29,17 @@ from ril.data_mining.diff import (
     merge_pages,
     parse_comparison,
 )
+from ril.data_mining.failure import corpus_error_reason, is_infrastructure_error
 from ril.data_mining.github_api import ApiClient, ApiError, NotFound
 from ril.data_mining.links import LinkedIssue, PullRequest, issue_edited_after
 from ril.data_mining.mapping import FileMapping, UnitHit, map_change
-from ril.data_mining.snapshot import SnapshotError, SnapshotProvider
+from ril.data_mining.snapshot import SnapshotError, SnapshotProvider, SnapshotTimeout
 from ril.parsing.code_unit import CodeUnit
 from ril.parsing.repository_parser import ParsedRepository, parse_repository
 from ril.parsing.unit_id import id_to_pool
+from ril.util.log import get_logger
+
+log = get_logger("data_mining.miner")
 
 COMPARE_PAGE = 100
 COMPARE_MAX_PAGES = 3
@@ -237,6 +241,16 @@ def needs_snapshot(comparison: Comparison) -> bool:
     )
 
 
+def quarantine_unexpected(pr: PullRequest, exc: Exception) -> Outcome:
+    """Quarantine ``pr`` for an exception raised while processing its content (DEV-036).
+
+    Infrastructure errors (:func:`ril.data_mining.failure.is_infrastructure_error`) are not
+    handled here: the caller re-raises them. The message goes to the log, not to the state row.
+    """
+    log.warning("%s: %s: %s", pr.key, type(exc).__name__, str(exc)[:300])
+    return _quarantine(pr, corpus_error_reason(exc))
+
+
 def mine_pr(
     pr: PullRequest,
     *,
@@ -248,10 +262,30 @@ def mine_pr(
     """Mine one pull request that closes at least one issue; see the module docstring.
 
     ``comparison`` is the result of :func:`compare_for` when the caller fetched it ahead of time
-    (the snapshot fetch overlaps); the outcome is the same either way.
+    (the snapshot fetch overlaps); the outcome is the same either way. An exception raised by the
+    pull request's content that none of the named quarantine reasons covers quarantines it as
+    ``corpus_error:<ExceptionClass>``; an infrastructure error propagates (DEV-036).
     """
     if not pr.issues:
         raise ValueError(f"{pr.key}: no linked issue; select before mining")
+    try:
+        return _mine_pr(
+            pr, client=client, snapshots=snapshots, config=config, comparison=comparison
+        )
+    except Exception as exc:
+        if is_infrastructure_error(exc):
+            raise
+        return quarantine_unexpected(pr, exc)
+
+
+def _mine_pr(
+    pr: PullRequest,
+    *,
+    client: ApiClient,
+    snapshots: SnapshotProvider,
+    config: MiningConfig,
+    comparison: Comparison | Outcome | None,
+) -> Outcome:
     if comparison is None:
         comparison = compare_for(pr, client)
     if isinstance(comparison, Outcome):
@@ -272,9 +306,16 @@ def mine_pr(
     try:
         try:
             snapshots.materialize(pr.repo, comparison.merge_base, work)
+        except SnapshotTimeout:
+            return _quarantine(pr, "snapshot_timeout", **counters)
         except SnapshotError:
             return _quarantine(pr, "snapshot_unavailable", **counters)
-        parsed = parse_repository(work, pr.repo)
+        try:
+            parsed = parse_repository(work, pr.repo)
+        except ValueError as exc:
+            # a unit id the frozen id grammar rejects (a non-ASCII identifier, DEV-035): the
+            # snapshot cannot be indexed, so the pull request is quarantined, not repaired
+            return _quarantine(pr, f"corpus_unit_id_rejected:{type(exc).__name__}", **counters)
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

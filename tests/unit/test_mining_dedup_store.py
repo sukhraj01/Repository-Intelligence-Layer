@@ -380,3 +380,41 @@ def test_manifest_roundtrip_row_block_and_store_bytes(tmp_path) -> None:
     assert sizes["rows"] > 0 and sizes["digests"] == (42 + 5) * 20
     stats = durable.copy_run(dedup.root, str(tmp_path / "d"))
     assert stats.to_dict()["directories"] == 5
+
+
+def test_a_listing_job_that_fails_keeps_the_listings_it_finished(tmp_path, monkeypatch) -> None:
+    import pytest
+
+    from ril.data_mining import jobs, runner
+    from ril.data_mining.config import MiningConfig
+    from ril.data_mining.github_api import TransportError
+    from ril.data_mining.population import select_population
+    from tests.unit.test_mining_jobs_summary import POOL_NAMES, REPO, synthetic_client
+
+    real = runner.list_repository
+
+    def flaky(client, repo, store):
+        if repo == "boom/later":
+            raise TransportError("cut body")
+        return real(client, repo, store)
+
+    monkeypatch.setattr(runner, "list_repository", flaky)
+    pop = select_population(POOL_NAMES, is_held_out=lambda r: False, seed=0, pool_size=10)
+    dur = str(tmp_path / "durable")
+    client, snaps, _ = synthetic_client()
+    with pytest.raises(TransportError):
+        jobs.run_pilot(
+            config=MiningConfig(n_repos=2, max_prs=3),
+            out_root=str(tmp_path / "node"),
+            population=pop,
+            is_held_out=lambda r: False,
+            client=client,
+            snapshots=snaps,
+            created="2026-11-06",
+            code_commit="x",
+            repos=[REPO, "boom/later"],
+            list_only=True,
+            store_layout=LAYOUT_DEDUP,
+            durable_root=dur,
+        )
+    assert MiningStore(dur, LAYOUT_DEDUP).has_listing(REPO)

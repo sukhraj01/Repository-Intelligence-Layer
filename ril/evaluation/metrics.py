@@ -15,8 +15,15 @@ from __future__ import annotations
 import math
 from collections.abc import Sequence
 
-import numpy as np
-import numpy.typing as npt
+from ril.evaluation.stats import (
+    bootstrap_means as bootstrap_means,
+)
+from ril.evaluation.stats import (
+    mean_ci as mean_ci,
+)
+from ril.evaluation.stats import (
+    paired_diff_ci as paired_diff_ci,
+)
 
 Rank = int | None
 
@@ -59,39 +66,3 @@ def drop_from_ranking(kept: Sequence[Rank], removed: Sequence[Rank]) -> list[Ran
         else:
             out.append(r - sum(1 for g in gone if g < r))
     return out
-
-
-def bootstrap_means(
-    values: npt.ArrayLike, *, draws: int = 2000, seed: int = 0
-) -> npt.NDArray[np.float64]:
-    """Means of ``draws`` resamples (with replacement) of ``values``."""
-    v = np.asarray(values, dtype=np.float64)
-    if v.size == 0:
-        return np.full(draws, np.nan)
-    rng = np.random.default_rng(seed)
-    idx = rng.integers(0, v.size, size=(draws, v.size))
-    return np.asarray(v[idx].mean(axis=1), dtype=np.float64)
-
-
-def mean_ci(
-    values: npt.ArrayLike, *, draws: int = 2000, seed: int = 0, level: float = 0.95
-) -> tuple[float, float, float]:
-    """``(mean, low, high)``: the sample mean and its percentile-bootstrap interval."""
-    v = np.asarray(values, dtype=np.float64)
-    if v.size == 0:
-        return (math.nan, math.nan, math.nan)
-    means = bootstrap_means(v, draws=draws, seed=seed)
-    a = (1.0 - level) / 2.0
-    lo, hi = np.quantile(means, [a, 1.0 - a])
-    return (float(v.mean()), float(lo), float(hi))
-
-
-def paired_diff_ci(
-    a: npt.ArrayLike, b: npt.ArrayLike, *, draws: int = 2000, seed: int = 0, level: float = 0.95
-) -> tuple[float, float, float]:
-    """``(mean(a - b), low, high)`` with the same queries resampled for both conditions."""
-    x = np.asarray(a, dtype=np.float64)
-    y = np.asarray(b, dtype=np.float64)
-    if x.shape != y.shape:
-        raise ValueError(f"paired samples differ in length: {x.shape} vs {y.shape}")
-    return mean_ci(x - y, draws=draws, seed=seed, level=level)

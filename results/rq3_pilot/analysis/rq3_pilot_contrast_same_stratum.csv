@@ -1,0 +1,9 @@
+stratum,instances,n_instances,reading,unusable_bm25_minus_rrf,unusable_bm25_minus_rrf_lo,unusable_bm25_minus_rrf_hi
+gold_file_in_context,both_arms_have_it,80,first,0.0375,-0.0312,0.1125
+gold_file_in_context,both_arms_have_it,80,final,0.0187,-0.0437,0.0813
+gold_file_in_context,neither_arm_has_it,8,first,0.0000,-0.3750,0.3750
+gold_file_in_context,neither_arm_has_it,8,final,-0.0625,-0.4375,0.3125
+gold_unit_in_context,both_arms_have_it,67,first,0.0075,-0.0522,0.0746
+gold_unit_in_context,both_arms_have_it,67,final,0.0224,-0.0299,0.0746
+gold_unit_in_context,neither_arm_has_it,16,first,-0.0312,-0.2812,0.2188
+gold_unit_in_context,neither_arm_has_it,16,final,0.0625,-0.1875,0.3438

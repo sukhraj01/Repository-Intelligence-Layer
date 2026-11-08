@@ -1,0 +1,68 @@
+{
+  "date_received_utc": "2026-10-31",
+  "evidence_class": "operator_supplied_runtime_report",
+  "independent_remote_execution": false,
+  "local_consistency_checks": {
+    "profile_sha256_matches_kit": true,
+    "source_commit_matches_kit": true,
+    "all_26_cpu_build_pins_match": true,
+    "proof_sha256_matches_fields": true
+  },
+  "report": {
+    "compute_usd": null,
+    "cross_platform_parity": "not measured",
+    "cuda_check": null,
+    "environment_profile_sha256": "6c090945b09e9eabb5eb7bee57e65f320695c67016e3bb46220e8cc7fab29395",
+    "installed_packages": {
+      "ast-serialize": "0.13.0",
+      "bm25s": "0.3.13",
+      "coverage": "7.16.2",
+      "iniconfig": "2.3.1",
+      "jedi": "0.20.1",
+      "kuzu": "0.11.3",
+      "librt": "0.16.0",
+      "mypy": "2.4.0",
+      "mypy-extensions": "1.1.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "packaging": "26.3",
+      "parso": "0.8.7",
+      "pathspec": "1.1.1",
+      "pluggy": "1.7.0",
+      "poetry-core": "2.5.0",
+      "pyarrow": "26.0.0",
+      "pystemmer": "3.1.0",
+      "pytest": "9.1.1",
+      "pytest-cov": "7.1.0",
+      "pyyaml": "6.0.3",
+      "pygments": "2.21.0",
+      "ruff": "0.17.1",
+      "rustworkx": "0.18.1",
+      "types-pyyaml": "6.0.12.20260906",
+      "typing-extensions": "4.16.0"
+    },
+    "live_agent_adapter": "not configured; fixture-only",
+    "model_api_usd": 0,
+    "persistent_store": "/content/drive/MyDrive/ril-colab/dcc19574386f",
+    "phase": "cpu",
+    "runtime": {
+      "architecture": "x86_64",
+      "cpu_cores": 2,
+      "gpu_allocated": false,
+      "host_alias": "colab",
+      "proof": {
+        "boot_id": "2341d91c-b2a1-4877-b8e8-a33c3adfa05b",
+        "colab_module": "/usr/local/lib/python3.13/dist-packages/google/colab/__init__.py",
+        "gpus": [],
+        "host_python": "/usr/bin/python3.13"
+      },
+      "proof_sha256": "a43faa2b66c59794df678ac6b584a226071946530cc38a2209dbeafbaf142c02",
+      "python": "3.11.18",
+      "runtime": "colab",
+      "version": "execution-runtime/v1"
+    },
+    "source_commit": "dcc19574386fc66c578bb42c872e38f9e95d0201",
+    "status": "COLAB_READY"
+  },
+  "limits": "CPU environment readiness only; GPU/CUDA, VM-reset restoration, actual data and cross-platform parity not established."
+}

@@ -1,0 +1,4 @@
+arm,units,instances,calls,calls_per_unit,calls_per_unit_lo,calls_per_unit_hi,calls_per_instance_all_units,calls_per_instance_all_units_lo,calls_per_instance_all_units_hi,max_calls_per_unit,input_tokens_per_unit_mean,output_tokens_per_unit_mean,thought_tokens_total,input_tokens_per_call_mean,output_tokens_per_call_mean,latency_p50,latency_p95,latency_p99,http_429,http_5xx,retries,http_non200
+bm25,200,100,303,1.5150,1.3550,1.6850,3.0300,2.7100,3.3700,3,13597.6350,896.4250,0,8975.3366,591.6997,2.4140,6.7710,10.8570,0,3,3,0
+rrf,200,100,262,1.3100,1.1900,1.4400,2.6200,2.3800,2.8800,3,11659.9100,968.5750,0,8900.6947,739.3702,2.7570,8.2620,11.4900,0,0,0,0
+all,400,100,565,1.4125,1.2925,1.5400,5.6500,5.1700,6.1600,3,12628.7725,932.5000,0,8940.7239,660.1770,2.5830,7.8070,11.2230,0,3,3,0

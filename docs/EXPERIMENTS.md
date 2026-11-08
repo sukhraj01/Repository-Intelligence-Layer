@@ -61,7 +61,28 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-MINE-PILOT | lead | `docs/experiments/B.md` | code built and tested offline; live runs blocked (no token) | 2026-11-02 |
 | E-MINED-PILOT | lead | `docs/experiments/B.md` | done (six runs, two seeds; exploratory) | 2026-11-03 |
 | E-MINE-STORE | lead | `docs/experiments/B.md` | done (pilot; the full run is not started) | 2026-11-05 |
+| E-MINE-FULL | lead | `docs/experiments/B.md` | running (launched 2026-11-05, account C) | 2026-11-05 |
+| E-RETAIN-FINAL | lead | `docs/experiments/B.md` | done (switch built and tested; no GPU run yet) | 2026-11-05 |
+| E-EVAL-REPOS | lead | `docs/experiments/B.md` | done (inventory; nothing chosen) | 2026-11-05 |
+| E-EVAL-REPOS-BUILD | lead | `docs/experiments/B.md` | done (build measured; nothing evaluated) | 2026-11-06 |
+| E-LABEL-AUDIT-SHEET | lead | `docs/experiments/B.md` | sheets built, nobody has read any pair | 2026-11-05 |
+| E-ASSEMBLY | lead | `docs/experiments/B.md` | measured (exploratory) | 2026-11-06 |
+| E-ASSEMBLY-CAP | lead | `docs/experiments/B.md` | measured (exploratory; cap 1,000 kept) | 2026-11-06 |
+| E-OVERLAP-AUDIT | lead | `docs/experiments/B.md` | built; pilot run submitted | 2026-11-06 |
+| E-RQ3-PILOT-PREP | lead | `docs/experiments/B.md` | part A and adapter done; three calls made; the pilot not run | 2026-11-06 |
+| E-RQ3-EXEC | lead | `docs/experiments/B.md` | done; executable subset frozen (377 of 500) | 2026-11-07 |
+| E-RQ3-CONTEXTS | lead | `docs/experiments/B.md` | done; contexts of 377 instances x 3 arms x 2 budgets, 0 failures (D108) | 2026-11-07 |
+| E-RQ3-PILOT-RESULT | lead | `docs/experiments/B.md` | done; pilot analysed from stored data (D109), free tier workable, no resolved rate | 2026-11-07 |
+| E-RQ3-PATCHAPPLY | lead | `docs/experiments/B.md` | done; converter and apply rates of the pilot's edits (D110), 20 of 20 gold-derived edits resolved | 2026-11-08 |
+| E-RQ3-DRIVER | lead | `docs/experiments/B.md` | done; held-out slice, prompts of the 377, driver replay-tested (30 of 30), analysis plan, power with run noise, cost model (D111 to D114); no model call | 2026-11-08 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
+| E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
+| E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |
+| E-C3-AGENT-PILOT | C | `docs/experiments/C.md` | done (apparatus; synthetic execution) | 2026-10-30 |
+| E-C4-RQ3 | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures) | 2026-10-30 |
+| E-C1-LAUNCH | C | `docs/experiments/C.md` | done (offline preparation) | 2026-10-31 |
+| E-COLAB-SETUP | C | `docs/experiments/C.md` | done (offline preparation) | 2026-10-31 |
+| E-C1-COLAB-DEV | C | `docs/experiments/C.md` | done (operator_reported; not independently rerun) | 2026-10-31 |
 | E-POWER | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-PROBE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
 | E-CONTAM-SCAN | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |

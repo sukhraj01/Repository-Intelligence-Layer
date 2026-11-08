@@ -86,8 +86,18 @@ Prerequisites (**engineer**): `GITHUB_TOKEN` set on account C; an SSH alias `<C>
     # 6. report, once a stage is finished (reads the durable directory; JSON files only)
     python3 -I ril_mine/scripts/mine_pilot.py report ril_mine/store/full ril_mine/store/full/report.md
     # 7. a job that needs the directory layout (ranks, training) rebuilds it on its own node-local disk, then reads it in the reading it needs
-    #    (the default for RQ2 comparisons with the published pool is pool_aligned, DEV-031)
+    #    (the primary reading for RQ2 is non_test, the reading of M3 (D96, evidence: measured on 300 directories, exploratory);
+    #    pool_aligned is a sensitivity reading, reported on the pilot and not recomputed for the full set unless a later result needs it)
     python3 -I ril_mine/scripts/mine_pilot.py materialise ril_mine/store/full "$TMPDIR/view" \
-      && python3 -I ril_mine/scripts/mine_pilot.py rank-prepare "$TMPDIR/view" "$TMPDIR/work" --reading pool_aligned
+      && python3 -I ril_mine/scripts/mine_pilot.py rank-prepare "$TMPDIR/view" "$TMPDIR/work" --reading non_test
 
 The pool-like rank measurement (M3) is a separate GPU stage with its own limit and is not part of this plan; its cost at 178 texts per second is in `m3_ranks.md`.
+
+## Step 8 (after mining): content-overlap audit of the full store (E-OVERLAP-AUDIT, D105)
+
+Run once the mining sessions are done. The held-out index is built once and reused (`$HOME/ril_ov/index/v1`; stage the code with `rsync -a --exclude __pycache__ ril scripts <A>:ril_ov/`). The job reads the store and writes only under `$HOME/ril_ov`; the store on C is not read in place from A, so either copy it to A first (a numbered script, engineer runs it) or run the job on C with the same sbatch after staging the held-out inputs there.
+
+    sbatch --export=ALL,STORE=$HOME/ril_mine/store/full,RUN=full,RIL_COMMIT=<hash> ril_ov/scripts/ada/overlap_audit.sbatch
+
+Estimate (linear in distinct rows, from the pilot): the pilot audit took 1,445 s for a 0.44 GB store; the full store is up to 2 GB, so about 1.5 to 2 hours, plus 13 minutes for the index if it is not built; peak 4.84 GB on the pilot, the largest repository decides at full scale (12 GB asked). Then `apply` lists the directories to drop; training reads the store through the reading with those names removed.
+

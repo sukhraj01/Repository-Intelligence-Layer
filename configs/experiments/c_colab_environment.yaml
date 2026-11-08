@@ -1,0 +1,132 @@
+version: colab-environment/v1
+python: 3.11.18
+uv: 0.13.6
+source_lock_sha256: 4112e5235e1f11b2f8dbfb159d50a0d19c70163d03242b2c5ba12f380e2602ab
+cpu:
+  requirements:
+  - ast-serialize==0.13.0
+  - bm25s==0.3.13
+  - coverage==7.16.2
+  - iniconfig==2.3.1
+  - jedi==0.20.1
+  - kuzu==0.11.3
+  - librt==0.16.0
+  - mypy-extensions==1.1.0
+  - mypy==2.4.0
+  - networkx==3.6.1
+  - numpy==2.4.6
+  - packaging==26.3
+  - parso==0.8.7
+  - pathspec==1.1.1
+  - pluggy==1.7.0
+  - pyarrow==26.0.0
+  - pygments==2.21.0
+  - pystemmer==3.1.0
+  - pytest-cov==7.1.0
+  - pytest==9.1.1
+  - pyyaml==6.0.3
+  - ruff==0.17.1
+  - rustworkx==0.18.1
+  - types-pyyaml==6.0.12.20260906
+  - typing-extensions==4.16.0
+  status: exact_main_dev_lock_pins
+  excluded:
+  - Windows-only colorama
+  - optional train group
+  install_policy: isolated Python 3.11 environment; no torch
+gpu:
+  requirements:
+  - certifi==2026.10.23
+  - charset-normalizer==3.5.2
+  - cloudpickle==3.1.2
+  - einops==0.8.1
+  - filelock==4.2.5
+  - fsspec==2026.9.0
+  - hf-xet==1.8.0
+  - huggingface-hub==0.36.0
+  - idna==3.20
+  - jinja2==3.1.6
+  - joblib==1.6.0
+  - markupsafe==3.0.4
+  - mpmath==1.3.0
+  - narwhals==2.28.0
+  - networkx==3.6.1
+  - numpy==1.26.4
+  - nvidia-cublas-cu12==12.1.3.1
+  - nvidia-cuda-cupti-cu12==12.1.105
+  - nvidia-cuda-nvrtc-cu12==12.1.105
+  - nvidia-cuda-runtime-cu12==12.1.105
+  - nvidia-cudnn-cu12==9.1.0.70
+  - nvidia-cufft-cu12==11.0.2.54
+  - nvidia-curand-cu12==10.3.2.106
+  - nvidia-cusolver-cu12==11.4.5.107
+  - nvidia-cusparse-cu12==12.1.0.106
+  - nvidia-nccl-cu12==2.20.5
+  - nvidia-nvjitlink-cu12==12.9.86
+  - nvidia-nvtx-cu12==12.1.105
+  - packaging==26.3
+  - pillow==13.0.0
+  - pystemmer==3.1.0
+  - pyyaml==6.0.3
+  - regex==2026.9.29
+  - requests==2.34.2
+  - safetensors==0.8.0
+  - scikit-learn==1.9.1
+  - scipy==1.17.1
+  - sentence-transformers==3.1.1
+  - sympy==1.14.0
+  - threadpoolctl==3.7.0
+  - tokenizers==0.19.1
+  - torch==2.4.1+cu121
+  - tqdm==4.70.1
+  - transformers==4.44.2
+  - triton==3.0.0
+  - typing-extensions==4.16.0
+  - urllib3==2.8.0
+  index_url: https://download.pytorch.org/whl/cu121
+  default_index_url: https://pypi.org/simple
+  index_strategy: unsafe-best-match
+  target_platform: x86_64-manylinux_2_28
+  status: exact_transitive_metadata_resolution_only
+  direct_requirements:
+  - torch==2.4.1+cu121
+  - numpy==1.26.4
+  - transformers==4.44.2
+  - sentence-transformers==3.1.1
+  - tokenizers==0.19.1
+  - einops==0.8.1
+  - pyyaml==6.0.3
+  - pystemmer==3.1.0
+  - huggingface-hub==0.36.0
+  compatibility:
+  - 'Separate environment from CPU evaluation: GPU NumPy 1.26.4 matches the recorded Ada encoding environment;
+    CPU NumPy remains the project lock pin.'
+  - CodeRankEmbed uses transformers 4.44.2, sentence-transformers 3.1.1 and tokenizers 0.19.1, matching
+    the existing Ada compatibility overlay.
+  - Torch 2.4.1 CUDA 12.1 uses the official PyTorch wheel index; a real CUDA matrix product must pass
+    on the allocated card.
+  - Exact pins resolve for Linux x86_64 and Python 3.11; this profile does not claim installation, CUDA
+    support or model output parity on an actual Colab VM.
+  - Install dependencies and acquire pinned model files on a CPU runtime before switching to a GPU runtime;
+    never fall back to CPU model encoding.
+  - UV first-index selection can reject otherwise available PyPI pins on the PyTorch index; use the declared
+    index strategy with these complete exact requirements.
+validation:
+  metadata_resolution_only: true
+  metadata_packages: 47
+  metadata_resolver: uv 0.13.6
+  metadata_python_version: '3.11'
+  metadata_platform: x86_64-manylinux_2_28
+  metadata_source_indexes:
+  - https://download.pytorch.org/whl/cu121
+  - https://pypi.org/simple
+  colab_install_tested: false
+  cuda_tested: false
+  models_loaded: false
+  local_torch_installed: false
+  gpu_requirements_sha256: 967cc0aa6e6c247952c02cab0e11a7b4eb9e556456706cf53ac987bc300592cf
+build:
+  requirements:
+  - poetry-core==2.5.0
+  install_policy: Install in each isolated environment, then install the checkout with --no-build-isolation
+    --no-deps so the build backend is pinned.

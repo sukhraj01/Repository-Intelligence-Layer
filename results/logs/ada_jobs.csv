@@ -105,3 +105,95 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-05,A,58608,S3,E-MINE-STORE BM25 shares under three readings on the 300 directories of M3 (CPU first run; gnode006),u22,1,0,00:21:44,0.0,COMPLETED
 2026-11-05,A,58615,S2,E-MINE-STORE store conversion rebuild and byte comparison of the mining pilot at commit 3622e71 (CPU; gnode006),u22,2,0,00:20:44,0.0,COMPLETED
 2026-11-05,A,58616,S3,E-MINE-STORE BM25 shares under three readings at commit 3622e71 (CPU; gnode006),u22,1,0,00:21:42,0.0,COMPLETED
+2026-11-05,C,60032,S4,E-MINE-FULL listing shard 0 of 3; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
+2026-11-05,C,60033,S4,E-MINE-FULL listing shard 1 of 3 (failed at start: three jobs created the shared virtual environment at once; resubmitted as 60041); scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,FAILED (venv creation race)
+2026-11-05,C,60034,S4,E-MINE-FULL listing shard 2 of 3; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
+2026-11-05,C,60041,S4,E-MINE-FULL listing shard 1 of 3 (resubmission of 60033); scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,1,0,,0.0,SUBMITTED
+2026-11-05,C,60042,S4,E-MINE-FULL mining session 1; STOP_AFTER=5000; 12G; 4 days; dependency afterok on listing jobs 60032 60041 60034; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,2,0,,0.0,SUBMITTED
+2026-11-05,C,60043,S4,E-MINE-FULL mining session 2; STOP_AFTER=5000; dependency afterany on 60042; scripts/ada/mine_pilot.sbatch; mining config hash 33b73360; commit 0c0200a,u22,2,0,,0.0,SUBMITTED
+2026-11-06,A,60670,S37,E-EVAL-REPOS-BUILD CPU build; failed at start (node-local disk full on one node); scripts/ada/eval_build_cpu.sbatch,u22,4,0,00:00:00,0.0,FAILED (node /tmp full)
+2026-11-06,A,60671,S37,E-EVAL-REPOS-BUILD CPU build of the eight evaluation repositories (D100); resubmission with a node excluded; scripts/ada/eval_build_cpu.sbatch; commit b4aa33f,u22,4,0,00:23:42,0.0,FAILED (last step only; outputs complete)
+2026-11-06,A,60677,S37,E-EVAL-REPOS-BUILD GPU encoding of the eight repositories; 2080ti; scripts/ada/eval_encode.sbatch; commit bcb57ef,u22,4,1,00:14:45,0.2458,COMPLETED
+2026-11-06,A,60678,S37,E-EVAL-REPOS-BUILD cache statistics (interactive step),u22,1,0,00:00:01,0.0,COMPLETED
+2026-11-06,A,60692,S37,E-EVAL-REPOS-BUILD store check (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
+2026-11-06,A,60693,S37,E-EVAL-REPOS-BUILD store check repeated to save the output (interactive step),u22,1,0,00:00:04,0.0,COMPLETED
+2026-11-06,A,60883,S39,E-ASSEMBLY gold-in-context measurement and token ratio,u22,2,0,01:37:43,0.0,COMPLETED
+2026-11-06,A,61413,S40,E-ASSEMBLY-CAP unit-cap measurement (dev only),u22,2,0,01:24:40,0.0,COMPLETED
+2026-11-06,C,61677,S41,E-MINE-FULL listing shard 0 of 3 (relaunch of 60032 after the transport fix; DEV-034); commit a80e529,u22,1,0,,0.0,SUBMITTED
+2026-11-06,C,61678,S41,E-MINE-FULL listing shard 1 of 3 (relaunch of 60041); commit a80e529,u22,1,0,,0.0,SUBMITTED
+2026-11-06,C,61679,S41,E-MINE-FULL listing shard 2 of 3 (relaunch of 60034); commit a80e529,u22,1,0,,0.0,SUBMITTED
+2026-11-06,C,61680,S41,E-MINE-FULL mining session 1 (replaces 60042; afterok on 61677 61678 61679 with kill-on-invalid-dep); STOP_AFTER=5000; commit a80e529,u22,2,0,,0.0,SUBMITTED
+2026-11-06,C,61681,S41,E-MINE-FULL mining session 2 (replaces 60043; afterany on 61680 with kill-on-invalid-dep); STOP_AFTER=5000; commit a80e529,u22,2,0,,0.0,SUBMITTED
+2026-11-06,C,60032,S41,E-MINE-FULL listing shard 0 outcome (IncompleteRead; DEV-034),u22,1,0,02:57:36,0.0,FAILED
+2026-11-06,C,60034,S41,E-MINE-FULL listing shard 2 outcome (IncompleteRead; DEV-034),u22,1,0,02:35:52,0.0,FAILED
+2026-11-06,C,60041,S41,E-MINE-FULL listing shard 1 outcome (IncompleteRead; DEV-034),u22,1,0,02:53:13,0.0,FAILED
+2026-11-06,C,60042,S41,E-MINE-FULL mining session 1 outcome (never ran; DependencyNeverSatisfied; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-06,C,60043,S41,E-MINE-FULL mining session 2 outcome (never ran; cancelled),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-06,A,61808,S42,E-OVERLAP-AUDIT index build and pilot-store audit (CPU),u22,2,0,00:37:20,0.0,COMPLETED
+2026-11-06,A,61759,RQ3P,E-RQ3-PILOT-PREP part A network and container probe,u22,4,0,00:00:47,0.0,COMPLETED
+2026-11-06,A,61762,RQ3P,part A probe with a truncated uv download (dead end),u22,6,0,00:02:03,0.0,COMPLETED (nothing after the download ran)
+2026-11-06,A,61768,RQ3P,part A container module extracted node-locally; image build and run; uv; swebench 5.0.2,u22,6,0,00:05:38,0.0,COMPLETED
+2026-11-06,A,61775,RQ3P,prepare prompts first attempt (limit applied after the build; cancelled),u22,4,0,00:14:51,0.0,CANCELLED
+2026-11-06,A,61776,RQ3P,part A census attempt with swebench 5.x (no install specifications; dead end),u22,6,0,00:02:14,0.0,COMPLETED
+2026-11-06,A,61790,RQ3P,part A swebench 4.1.0 census and gold-patch checks on four instances,u22,6,0,00:09:47,0.0,COMPLETED
+2026-11-06,A,61792,RQ3P,prepare prompts (83 instances; dense scores missing for some drawn instances),u22,4,0,00:14:36,0.0,COMPLETED
+2026-11-06,A,61882,RQ3P,part A environment census and flask retry with pytest<8,u22,4,0,00:00:10,0.0,COMPLETED
+2026-11-06,A,61883,RQ3P,prepare prompts (cancelled after 10 s: output directory reused),u22,4,0,00:00:10,0.0,CANCELLED
+2026-11-06,A,61884,RQ3P,prepare prompts at budget 9760 approximate tokens (100 instances; superseded),u22,4,0,00:09:27,0.0,COMPLETED
+2026-11-06,A,61885,RQ3P,part A joint table of Python version by pre-install step,u22,2,0,00:00:02,0.0,COMPLETED
+2026-11-06,A,61889,RQ3P,prepare prompts at budget 8000 model tokens (ratio 1.0; 100 instances; the pilot's prompt set),u22,4,0,00:09:19,0.0,COMPLETED
+2026-11-06,A,61929,RQ3P,reachability of the model API host from a compute node (no key),u22,1,0,00:00:06,0.0,COMPLETED
+2026-11-07,A,61941,RQ3X,gold-patch pilot attempt 1 (cancelled: log path),u22,4,0,00:00:48,0.0,CANCELLED
+2026-11-07,A,61944,RQ3X,gold-patch pilot attempt 2 (failed: ids path),u22,4,0,00:00:01,0.0,FAILED
+2026-11-07,A,61949,RQ3X,gold-patch pilot attempt 3 (cancelled: no failure logs),u22,4,0,00:01:51,0.0,CANCELLED
+2026-11-07,A,61964,RQ3X,"gold-patch pilot b (25 instances,  5 shards)",u22,4,0,00:06:17,0.0,COMPLETED
+2026-11-07,A,61978,RQ3X,"gold-patch pilot c (25 instances,  after setuptools constraint and comment fixes)",u22,6,0,00:08:09,0.0,COMPLETED
+2026-11-07,A,61989,RQ3X,gold-patch re-check of five instances,u22,6,0,00:02:22,0.0,COMPLETED
+2026-11-07,A,61991,RQ3X,"full run,  first submission (cancelled: 12G memory sized 6 CPUs,  one job at a time)",u22,6,0,00:13:05,0.0,CANCELLED
+2026-11-07,A,61997,RQ3X,"full run: 500 instances x 2 runs,  4 array tasks over 8 shards",u22,4,0,01:00:56,0.0,COMPLETED
+2026-11-07,A,62344,RQ3X,conda-forge and micromamba reachability probe,u22,2,0,00:01:09,0.0,COMPLETED
+2026-11-07,A,62352,RQ3X,uv on micromamba interpreters probe,u22,2,0,00:00:07,0.0,COMPLETED
+2026-11-07,A,62365,RQ3X,supplement full_x: xarray name fix and Python 3.5 to 3.7 from conda-forge (162 instances),u22,4,0,00:35:34,0.0,COMPLETED
+2026-11-07,A,62599,RQ3X,era pass first submission (cancelled: policy flag missing in the job script),u22,4,0,00:00:00,0.0,CANCELLED
+2026-11-07,A,62600,RQ3X,"era pass era2,  first part (cancelled to fix the tox plugin)",u22,4,0,01:17:43,0.0,CANCELLED
+2026-11-07,A,62678,RQ3X,sphinx supplement (cancelled: ids too broad),u22,4,0,00:00:00,0.0,CANCELLED
+2026-11-07,A,62680,RQ3X,sphinx supplement full_y (cancelled: clone failures),u22,4,0,00:18:59,0.0,CANCELLED
+2026-11-07,A,62696,RQ3X,sphinx supplement full_z (39 instances),u22,4,0,00:34:14,0.0,COMPLETED
+2026-11-07,A,62733,RQ3X,"era pass on sphinx era3 (stopped: roman missing; rows kept,  not used)",u22,4,0,00:39:14,0.0,CANCELLED
+2026-11-07,A,62763,RQ3X,sphinx supplement full_s (tox plugin and roman; 39 instances),u22,4,0,00:45:17,0.0,COMPLETED
+2026-11-07,A,62764,RQ3X,units per snapshot probe (failed: path),u22,6,0,00:00:00,0.0,COMPLETED (no work)
+2026-11-07,A,62777,RQ3X,era pass era2 resumed to completion (95 instances),u22,4,0,01:00:50,0.0,COMPLETED
+2026-11-07,A,62847,RQ3X,units per snapshot probe,u22,6,0,,0.0,see RESULTS.md
+2026-11-07,A,62874,RQ3U,smoke of the unit build on pylint (4 instances),u22,4,0,00:01:12,0.0,COMPLETED
+2026-11-07,A,62880,RQ3U,unit records and caches of 337 executable instances (django sympy pytest sphinx pylint),u22,4,0,02:48:58,0.0,COMPLETED
+2026-11-07,A,63012,RQ3U,encoding of 214285 distinct unit texts (CodeRankEmbed 512 tokens; block 4),u22,4,1,00:21:47,0.363,COMPLETED
+2026-11-07,A,63022,RQ3U,vector check and dense scores of 337 instances,u22,2,0,00:01:18,0.0,COMPLETED
+2026-11-07,A,63023,RQ3U,unit records and caches of 4 xarray instances (label RIL_COMMIT mistyped; code f690225),u22,4,0,00:00:27,0.0,COMPLETED
+2026-11-07,A,63024,RQ3U,encoding of 6689 distinct unit texts of the xarray instances (block 4),u22,4,1,00:00:50,0.014,COMPLETED
+2026-11-07,A,63025,RQ3U,vector check and dense scores of the xarray instances,u22,2,0,00:00:01,0.0,COMPLETED
+2026-11-07,C,61677,S50,E-MINE-FULL listing shard 0 outcome (name resolution failure after 6.5 h; DEV-035),u22,1,0,06:33:36,0.0,FAILED
+2026-11-07,C,61678,S50,E-MINE-FULL listing shard 1 outcome (name resolution failure; DEV-035),u22,1,0,06:33:16,0.0,FAILED
+2026-11-07,C,61679,S50,E-MINE-FULL listing shard 2 outcome (name resolution failure; DEV-035),u22,1,0,06:32:56,0.0,FAILED
+2026-11-07,C,61680,S50,E-MINE-FULL mining session 1 outcome (cancelled by kill-on-invalid-dep; never ran),u22,2,0,00:00:00,0.0,CANCELLED
+2026-11-07,C,61681,S50,E-MINE-FULL mining session 2 outcome (listed the rest then 150 outcomes; unit-id ValueError; DEV-035),u22,2,0,07:58:39,0.0,FAILED
+2026-11-07,C,63960,S50,population versus stored listings check (srun),u22,1,0,00:00:10,0.0,COMPLETED
+2026-11-07,C,63964,S50,E-MINE-FULL listing completion (list-only; reuses stored listings); commit 893703f,u22,1,0,,0.0,SUBMITTED
+2026-11-07,C,63965,S50,E-MINE-FULL mining session 1 (afterok 63964; kill-on-invalid-dep); STOP_AFTER=5000; commit 893703f,u22,2,0,,0.0,SUBMITTED
+2026-11-07,C,63966,S50,E-MINE-FULL mining session 2 (afterok 63964 and afterany 63965; kill-on-invalid-dep); STOP_AFTER=5000; commit 893703f,u22,2,0,,0.0,SUBMITTED
+2026-11-07,A,63792,RQ3C,"retrieved contexts of 377 executable instances (BM25 dense RRF; budgets 8000 and 16000); determinism check; tables; archive",u22,4,0,01:50:21,0.0,COMPLETED
+2026-11-07,A,63939,RQ3C,interactive check of two dense score arrays (failed: script path on node-local /tmp),u22,1,0,00:00:01,0.0,FAILED
+2026-11-07,A,63940,RQ3C,interactive check of two dense score arrays of one instance (seaborn-3069),u22,1,0,00:00:02,0.0,COMPLETED
+2026-11-08,A,64285,RQ3P,"snapshot of base-commit files named by the pilot's usable replies (discarded: repository name derived wrongly for Pro-style ids)",u22,2,0,00:00:04,0.0,COMPLETED
+2026-11-08,A,64286,RQ3P,"snapshot of base-commit files named by the pilot's usable replies (120 of 120 files present)",u22,2,0,00:00:04,0.0,COMPLETED
+2026-11-08,A,64287,RQ3P,"validation of gold-derived edits (cancelled: started with the first converter version)",u22,4,0,00:01:41,0.0,CANCELLED
+2026-11-08,A,64288,RQ3P,"gold-derived edits of 20 executable instances: derive, convert, tree check, executor one run each (two xarray runs failed on a node name-resolution error)",u22,4,0,00:24:31,0.0,COMPLETED
+2026-11-08,A,64304,RQ3P,"rerun of the two xarray instances of 64288",u22,4,0,00:05:47,0.0,COMPLETED
+2026-11-08,C,63964,S55,E-MINE-FULL listing completion outcome (1,473 of 1,473 listings stored),u22,1,0,00:13:29,0.0,COMPLETED
+2026-11-08,C,63965,S55,E-MINE-FULL mining session 1 outcome (git fetch of one commit past 900 s; TimeoutExpired not handled; DEV-036),u22,2,0,02:58:37,0.0,FAILED
+2026-11-08,C,63966,S55,E-MINE-FULL mining session 2 outcome (same cause on another commit of the same repository; DEV-036),u22,2,0,00:54:04,0.0,FAILED
+2026-11-08,C,64593,S55,E-MINE-FULL mining session 1 (relaunch; no dependency); STOP_AFTER=5000; commit 1b61213,u22,2,0,,0.0,SUBMITTED
+2026-11-08,C,64594,S55,E-MINE-FULL mining session 2 (afterany 64593; kill-on-invalid-dep); STOP_AFTER=5000; commit 1b61213,u22,2,0,,0.0,SUBMITTED
+2026-11-08,A,64589,RQ3D,"prompts of the 377 executable instances x 3 arms at 8,000 tokens, first pass (issue text from the folders only: 57 instances without a folder text were skipped)",u22,4,0,00:00:20,0.0,COMPLETED
+2026-11-08,A,64590,RQ3D,"driver replay test on the real executor: 20 gold-derived edit sets and 10 broken variants (30 of 30 classes as expected)",u22,4,0,00:11:50,0.0,COMPLETED
+2026-11-08,A,64597,RQ3D,"what the prompt screen matched (addresses and path strings with counts; output kept off the repository)",u22,4,0,00:00:15,0.0,COMPLETED
+2026-11-08,A,64598,RQ3D,"prompts of the 377 executable instances x 3 arms at 8,000 tokens, issue text from the benchmark table (887 written, 244 rejected by the screen)",u22,4,0,00:00:11,0.0,COMPLETED

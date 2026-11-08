@@ -1,0 +1,78 @@
+{
+ "calls": 3,
+ "dates_pacific": [
+  "2026-11-06"
+ ],
+ "http_429": 0,
+ "http_5xx": 0,
+ "latency_s": {
+  "p50": 2.852,
+  "p95": 3.68,
+  "p99": 3.68
+ },
+ "models": [
+  "gemini-3.5-flash-lite"
+ ],
+ "per_arm": {
+  "bm25": {
+   "calls_per_unit": {
+    "max": 1,
+    "mean": 1,
+    "median": 1.0
+   },
+   "input_tokens_per_unit": {
+    "max": 10099,
+    "mean": 10050,
+    "median": 10050.0
+   },
+   "malformed_first_reply_rate": 0.0,
+   "output_tokens_per_unit": {
+    "max": 1143,
+    "mean": 759,
+    "median": 759.0
+   },
+   "units_final": 2,
+   "unusable_after_reasks_rate": 0.0
+  },
+  "rrf": {
+   "calls_per_unit": {
+    "max": 1,
+    "mean": 1,
+    "median": 1
+   },
+   "input_tokens_per_unit": {
+    "max": 10078,
+    "mean": 10078,
+    "median": 10078
+   },
+   "malformed_first_reply_rate": 0.0,
+   "output_tokens_per_unit": {
+    "max": 348,
+    "mean": 348,
+    "median": 348
+   },
+   "units_final": 1,
+   "unusable_after_reasks_rate": 0.0
+  }
+ },
+ "provider_failures": 0,
+ "reply_calls": 3,
+ "retries": 0,
+ "run_to_run": {
+  "both_usable": NaN,
+  "pairs": 0,
+  "same_patch_given_both_usable": NaN,
+  "same_reply_text": NaN,
+  "same_usability": NaN
+ },
+ "token_ratio": {
+  "approx_per_model_token": {
+   "p5": 0.9995000499950005,
+   "p50": 1.0000990197049213,
+   "p95": 1.0013891645167692
+  },
+  "n": 3
+ },
+ "units_final": 3,
+ "units_started": 3
+}

@@ -1,0 +1,28 @@
+experiment_id: E-RQ3-PILOT-PREP (prompts for the RQ3 pilot; no model call)
+status: exploratory pilot
+decision: D104
+provisional: D104
+note: >-
+  Instance source: dev instances only (355 across the five dev repositories; the Verified final test
+  is not read), a seeded draw of whole instances. Level L2 queries are the issue texts. Both first
+  stages go through the same assembly (specs/assembly.md, ADR-014). The budget is stated in the
+  model's tokens and converted to the assembly's approximate tokens with a ratio of 1.0: three
+  smoke-test prompts (one repository) had approximate counts of 1.000, 1.001 and 1.000 times the
+  model's input token count; the ratio 1.22 measured in E-ASSEMBLY was against a different tokenizer.
+  Three prompts are thin evidence: the first full run's report prints the realised ratio, and a value
+  far from 1.0 means the budget is restated before anything is reported. Nothing in this file is
+  tuned on results.
+roles: [dev]
+level: L2
+limit: 100
+budget_model_tokens: 8000
+approx_per_model_token: 1.0
+max_unit_tokens: 1000
+candidates: 200
+dense_variant: coderankembed__t1024
+rrf_k: 100
+cache_dir: ~/ril_t1/work/e3_cache
+dense_root: ~/ril_x2/dense
+repo_cache: ~/ril_e/repo_cache
+core_bench_raw: ~/ril_e/raw/data
+work_dir: ${TMPDIR}/ril_rq3_work   # node-local, regenerable

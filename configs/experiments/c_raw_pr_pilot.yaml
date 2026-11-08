@@ -1,0 +1,5 @@
+repositories: 200
+pull_requests: 2000
+repository_query: "language:Python archived:false fork:false stars:>=100 pushed:<=2026-10-30"
+seed: 0
+provisional: "ADR-001; D1 current names; D3 Loc-Bench on"

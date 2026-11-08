@@ -1,0 +1,9 @@
+repository,l2_queries,snapshots,units_median_per_snapshot,units_per_snapshot_estimated,parse_seconds_measured,e3_prepare_seconds_measured,parse_seconds_estimated,distinct_unit_texts_full_measured,distinct_unit_texts_estimated,texts_encoded_all_forms,encode_seconds_units,texts_per_second,encode_gpu_hours_measured,encode_gpu_hours_estimated_at_229,encode_gpu_hours_estimated_at_178
+pdm-project/pdm,33,33,2096,1306,21.6,96.0,76.8,4401,12354,5057,27.6,183.6,0.0077,0.015,0.0193
+psf/black,5,5,2443,795,9.9,30.3,7.1,2137,7514,2415,19.4,124.7,0.0054,0.0091,0.0117
+python-control/python-control,12,12,1767,1889,14.2,65.0,40.4,3159,17862,3501,33.7,103.8,0.0094,0.0217,0.0279
+jupyterlab/jupyter-ai,11,11,562,629,1.9,7.8,12.3,1278,5950,1580,8.0,197.7,0.0022,0.0072,0.0093
+aws-cloudformation/cfn-lint,82,82,3938,8648,137.3,536.7,1263.1,6506,81782,7754,263.8,29.4,0.0733,0.0992,0.1276
+ibm/mcp-context-forge,9,9,2791,4646,15.5,69.4,74.5,9484,43935,10902,75.6,144.2,0.021,0.0533,0.0686
+jlowin/fastmcp,22,22,2017,2168,21.5,88.9,84.9,8433,20498,9871,53.6,184.3,0.0149,0.0249,0.032
+pyomo/pyomo,5,5,24026,6964,73.8,279.7,62.0,24019,65861,28881,158.5,182.2,0.044,0.0799,0.1028

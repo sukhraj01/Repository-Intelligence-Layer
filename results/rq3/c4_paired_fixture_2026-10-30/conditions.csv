@@ -1,0 +1,3 @@
+retriever_id,n,resolved_count,resolved_rate,resolved_low,resolved_high,input_tokens,output_tokens,synthetic_usd,actual_usd,wall_seconds
+bm25,10,6,0.6,0.6,0.6,316,161,0.0006379999999999999,0.0,0.3143939710025734
+oracle,10,8,0.8,0.8,0.8,294,163,0.0006199999999999999,0.0,0.31704767399060074
