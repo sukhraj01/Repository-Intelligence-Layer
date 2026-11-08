@@ -1,0 +1,10 @@
+{
+ "directories_complete": 18,
+ "directories_ranked": 18,
+ "out": "/tmp/ril_rdy_64656/features.csv",
+ "positive_rows": 110,
+ "sha256": "9e6b8d6244309850275dfa7901a355f11a8dc594c1c96151a4681ddc12b3c773",
+ "teachers": [
+  "bm25"
+ ]
+}

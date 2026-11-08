@@ -1,0 +1,5 @@
+account,kind,jobs,wait_hours_p50,wait_hours_p90,wait_hours_max,window,source
+A,gpu,44,0.03,2.75,8.25,2026-10-20 to 2026-11-08,sacct Submit to Start (jobs that ran over 1 minute; dependency holds included)
+A,cpu,139,0.00,0.37,21.39,2026-10-20 to 2026-11-08,sacct Submit to Start (jobs that ran over 1 minute)
+C,gpu,1,0.01,0.01,0.01,2026-10-20 to 2026-11-08,sacct Submit to Start (one job)
+C,cpu,11,0.01,3.21,6.55,2026-10-20 to 2026-11-08,sacct Submit to Start (jobs that ran over 1 minute)
