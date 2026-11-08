@@ -19,3 +19,5 @@ Final report: `reports/final/final_report.tex` compiles with `tectonic final_rep
 `reports/final/generated/` are written by `python scripts/report_tables.py` from the stored results; do not edit them by hand
 (`tests/unit/test_report_tables.py` rebuilds them and compares). A caption states the evidence class, n and the experiment entry.
 Slots still empty are `\todo{...}` naming the entry that fills them; `docs/REPORT_GAPS.md` ranks the missing claims.
+The prose is checked by `python -I scripts/check_report.py [--slots]`: every number carries a source comment, citations and
+references resolve, and `--slots` lists the open slots with the entry each waits for.
