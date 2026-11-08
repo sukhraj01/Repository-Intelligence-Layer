@@ -125,3 +125,16 @@ still complete and defensible.
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
 
 > Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).
+
+## RQ2 final launch (audit of 2026-11-08, `docs/RQ2_LAUNCH_PLAN.md`)
+
+- [x] Readiness audit of the chain from the mined store to the final tables; plan-only launcher, evaluation-set check, yield from the state log; dry run at minimal scale (E-RQ2-READINESS, D115)
+- [ ] Final cell configurations and run script for the 36 runs (cache, noise scores, retention directory, 30 GB, dev set, the eight repositories, Verified look as a separate job after the dev analysis); needs decisions 1 to 4 and 6 of the plan
+- [ ] Full-store prep job (materialise with a names file, `non_test` reading, BM25 ranks, feature table, cache, FILTER size) with the overlap drop list applied; run at 200 directories first
+- [ ] Overlap audit on the full store and its drop list (about 2 h; stage the held-out index and code on the account holding the store)
+- [ ] Final analysis module: Holm within families, paired bootstrap, delta 1.5, verdict rules, seed spread, sanity rules, report tables; tested on the pilot rows
+- [ ] Dense teacher cost on the mined store: per-repository de-duplicated pass on 100 directories (about 0.4 GPU-hours) before deciding the FILTER-SweRankEmbed-Small mined cell
+- [ ] Decide the Verified look set (six folders with stores, the executable subset of 377, or build the other six) and record the departure if it is not the protocol's 12 folders
+- [ ] Encoding of the 377 executable instances with a retained model directory and trained-arm contexts (0.377 GPU-hours per checkpoint, Block 4)
+- [ ] Alias for the archive account and the copy of retained models; retention directory on the account with space (account A has 5.1 GB free)
+- [ ] Return of the pilot label sheets from two readers who are not the lead; decide pilot sample or new draw

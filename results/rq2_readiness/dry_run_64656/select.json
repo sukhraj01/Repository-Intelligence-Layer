@@ -1,0 +1,24 @@
+{
+ "exclude_path": null,
+ "feature_table_sha256": "9e6b8d6244309850275dfa7901a355f11a8dc594c1c96151a4681ddc12b3c773",
+ "held_out_directories_in_listing": 0,
+ "held_out_directories_selected": 0,
+ "held_out_sha256": "ba463ded28b7b46a5dcd30240d02168490b84b395778931ee6f6962466dcbfb7",
+ "include_held_out": false,
+ "listing_sha256": "11cfd2d9c555c4d7a9a5e9d0c08e31a75fd9cbea8ebf902f4bd1d7b4efb5336d",
+ "max_instances": null,
+ "rename_cache_sha256": "84e48adc75717ad5b42dd94258d0123c257df6d86acca7c1cee6c160a6e2a85e",
+ "seed": 0,
+ "selected": 18,
+ "stats": {
+  "errors": [],
+  "fetch_errors": 0,
+  "held_out_dropped": 0,
+  "listed": 18,
+  "no_positive": 0,
+  "not_in_table_dropped": 0,
+  "positives_not_in_table": 0,
+  "selected": 18,
+  "yielded": 0
+ }
+}

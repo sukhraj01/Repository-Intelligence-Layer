@@ -1,7 +1,8 @@
 """Plan-only launcher of the RQ2 final experiment: no GPU, no model, no torch.
 
   plan  [--seeds S ...] [--filter-size N] [--pool-examples N] [--accounts A C ...]
-        [--queue-wait-hours H] [--mined-template P] [--injected-template P]
+        [--family-accounts mined=C injected=A] [--queue-wait-hours H]
+        [--mined-template P] [--injected-template P]
         render the 36 configurations, check the held-identical block and the hashes, account the
         budget against Block 3 on the protocol and the measured basis, check distinct examples,
         and print the job graph and its critical path
@@ -34,7 +35,8 @@ def cmd_plan(a: argparse.Namespace) -> int:
     }
     runs = rp.plan_runs(a.seeds)
     rows = rp.validate_runs(runs, templates, filter_size=a.filter_size or 1)
-    jobs = rp.job_graph(runs, train_accounts=a.accounts)
+    family_accounts = dict(kv.split("=", 1) for kv in a.family_accounts) or None
+    jobs = rp.job_graph(runs, train_accounts=a.accounts, family_accounts=family_accounts)
     out = {
         "version": rp.PLAN_VERSION,
         "seeds": a.seeds,
@@ -78,6 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     pl.add_argument("--filter-size", type=int)
     pl.add_argument("--pool-examples", type=int)
     pl.add_argument("--accounts", nargs="+", default=["A"])
+    pl.add_argument("--family-accounts", nargs="*", default=[], metavar="FAMILY=ACCOUNT")
     pl.add_argument("--queue-wait-hours", type=float, default=0.0)
     pl.add_argument("--mined-template", default="configs/experiments/mp/mp_raw_s0.yaml")
     pl.add_argument("--injected-template", default="configs/experiments/n1/n1_r40_raw_s0.yaml")

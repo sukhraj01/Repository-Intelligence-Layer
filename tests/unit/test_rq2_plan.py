@@ -144,3 +144,22 @@ def test_verified_look_follows_the_dev_analysis_and_all_training() -> None:
     assert all("dev_analysis" in j.after for j in looks)
     assert looks[1].after[-1] == looks[0].job_id  # one GPU job at a time on the account
     assert sum(j.gpu_hours for j in looks) == pytest.approx(7.2)
+
+
+def test_cli_places_jobs_by_family(capsys: pytest.CaptureFixture[str]) -> None:
+    import json
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+    import rq2_plan
+
+    rc = rq2_plan.main(["plan", "--family-accounts", "mined=C", "injected=A"])
+    assert rc == 0
+    jobs = json.loads(capsys.readouterr().out)["jobs"]
+    by_family = {
+        ("mined" if "mined" in j["stage"] else "injected"): j["account"]
+        for j in jobs
+        if j["stage"].startswith("train")
+    }
+    assert by_family == {"mined": "C", "injected": "A"}

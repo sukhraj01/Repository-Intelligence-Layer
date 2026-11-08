@@ -1,0 +1,74 @@
+{
+ "encode_gpu_hours_per_checkpoint": 1.012,
+ "ready": true,
+ "sets": [
+  {
+   "encode_gpu_hours_at_rate": 0.542,
+   "encode_seconds_at_rate": 1952.6,
+   "instance_cache_files": 521,
+   "missing": [],
+   "query_texts": 680,
+   "repositories": [
+    "ansible__ansible",
+    "conan-io__conan",
+    "deepset-ai__haystack",
+    "internetarchive__openlibrary",
+    "qutebrowser__qutebrowser",
+    "streamlink__streamlink"
+   ],
+   "roles": [
+    "dev"
+   ],
+   "set": "dev",
+   "unit_lines": 589921,
+   "unit_text_stores": 6,
+   "unit_texts": 212834
+  },
+  {
+   "encode_gpu_hours_at_rate": 0.178,
+   "encode_seconds_at_rate": 641.8,
+   "instance_cache_files": 179,
+   "missing": [],
+   "query_texts": 224,
+   "repositories": [
+    "aws-cloudformation__cfn-lint",
+    "ibm__mcp-context-forge",
+    "jlowin__fastmcp",
+    "jupyterlab/jupyter-ai",
+    "pdm-project__pdm",
+    "psf__black",
+    "pyomo__pyomo",
+    "python-control__python-control"
+   ],
+   "roles": [
+    "test"
+   ],
+   "set": "eight",
+   "unit_lines": 233064,
+   "unit_text_stores": 8,
+   "unit_texts": 69961
+  },
+  {
+   "encode_gpu_hours_at_rate": 0.292,
+   "encode_seconds_at_rate": 1050.5,
+   "instance_cache_files": 521,
+   "missing": [],
+   "query_texts": 734,
+   "repositories": [
+    "astropy__astropy",
+    "matplotlib__matplotlib",
+    "mwaskom__seaborn",
+    "pallets__flask",
+    "psf__requests",
+    "pydata__xarray"
+   ],
+   "roles": [
+    "test"
+   ],
+   "set": "verified",
+   "unit_lines": 364006,
+   "unit_text_stores": 6,
+   "unit_texts": 114503
+  }
+ ]
+}
