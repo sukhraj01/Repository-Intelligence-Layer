@@ -36,6 +36,8 @@ DEFAULT_SEEDS = (100, 101, 102)
 """Three seeds disjoint from the exploratory waves, so every noise draw is fresh (D82). The values
 are a tactical choice under D82; the count (three) is O7."""
 
+PREP_HOURS = 3.0
+OVERLAP_HOURS = 2.0
 BLOCK3_CAP = 46.7
 OPTION_E_TOTAL = 38.9
 
@@ -367,21 +369,22 @@ def job_graph(
         "overlap",
         "overlap audit and drop list",
         "cpu",
-        "C",
+        store_account,
         (rep,),
         0.0,
-        2.0,
-        "about 2 h linear; 13 min index",
+        OVERLAP_HOURS,
+        "about 2 h linear from the pilot (1,445 s for 0.44 GB); 13 min if the index is built",
     )
     prep = add(
         "prep",
         "materialise, rank inputs, BM25 teacher, feature table, cache",
         "cpu",
-        "C",
+        store_account,
         (ov,),
         0.0,
-        6.0,
-        "reasoned: pilot 1,036 s BM25 + 695 s materialise for 1,286 directories, scaled",
+        PREP_HOURS,
+        "reasoned: pilot 695 s materialise and 1,036 s BM25 for 1,286 directories, scaled to "
+        "about 5,800 and rounded up with the cache build",
     )
     fs = add(
         "filter_size", "FILTER size for the subsample", "cpu", store_account, (prep,), 0.0, 0.1
@@ -417,6 +420,34 @@ def job_graph(
                 f"{len(chunk)} runs",
             )
             last_on[acct] = jid
+    train_ids = tuple(j.job_id for j in jobs if j.kind == "gpu")
+    da = add(
+        "dev_analysis",
+        "dev analysis: paired contrasts, Holm, decision rules (the Verified look follows it)",
+        "cpu",
+        store_account,
+        train_ids,
+        0.0,
+        0.5,
+    )
+    look_runs = [r for r in runs if r.cell.verified_look]
+    look_acct = next(
+        (j.account for j in jobs if j.kind == "gpu" and "mined" in j.stage), accounts[0]
+    )
+    prev = ""
+    for seed in sorted({r.seed for r in look_runs}):
+        n = sum(1 for r in look_runs if r.seed == seed)
+        gh = n * COSTS["verified_look"].value
+        prev = add(
+            f"verified_look_s{seed}",
+            f"Verified look, seed {seed}",
+            "gpu",
+            look_acct,
+            (da, prev) if prev else (da,),
+            round(gh, 2),
+            round(gh, 2),
+            f"{n} retained models; placeholder cost per model",
+        )
     return jobs
 
 

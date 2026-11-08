@@ -114,7 +114,7 @@ def test_job_graph_chains_per_account_and_orders_stages() -> None:
     assert rp.critical_path_hours(two) < rp.critical_path_hours(one)
     ids = {j.job_id: j for j in one}
     assert ids["overlap"].after == ("report",) and ids["prep"].after == ("overlap",)
-    gpu = [j for j in one if j.kind == "gpu"]
+    gpu = [j for j in one if j.stage.startswith("train")]
     assert all("filter_size" in j.after for j in gpu if "mined" in j.stage)
     assert len(gpu) == 6 and all(j.account == "A" for j in gpu)
     for a, b in zip(gpu, gpu[1:], strict=False):
@@ -124,11 +124,23 @@ def test_job_graph_chains_per_account_and_orders_stages() -> None:
 def test_family_placement_lets_injected_cells_start_without_the_store() -> None:
     runs = rp.plan_runs()
     jobs = rp.job_graph(runs, family_accounts={"mined": "C", "injected": "A"})
-    inj = [j for j in jobs if j.kind == "gpu" and "injected" in j.stage]
-    mined = [j for j in jobs if j.kind == "gpu" and "mined" in j.stage]
+    inj = [j for j in jobs if j.stage.startswith("train") and "injected" in j.stage]
+    mined = [j for j in jobs if j.stage.startswith("train") and "mined" in j.stage]
     assert {j.account for j in inj} == {"A"} and {j.account for j in mined} == {"C"}
     assert inj[0].after == ()  # no dependence on mining or the overlap audit
     assert all("filter_size" in j.after for j in mined[:1])
     one = rp.critical_path_hours(rp.job_graph(runs, train_accounts=("A",)))
     split = rp.critical_path_hours(jobs)
     assert split < one
+
+
+def test_verified_look_follows_the_dev_analysis_and_all_training() -> None:
+    jobs = rp.job_graph(rp.plan_runs())
+    ids = {j.job_id: j for j in jobs}
+    train = {j.job_id for j in jobs if j.stage.startswith("train")}
+    assert set(ids["dev_analysis"].after) == train
+    looks = [j for j in jobs if j.job_id.startswith("verified_look")]
+    assert len(looks) == 3 and looks[0].after == ("dev_analysis",)
+    assert all("dev_analysis" in j.after for j in looks)
+    assert looks[1].after[-1] == looks[0].job_id  # one GPU job at a time on the account
+    assert sum(j.gpu_hours for j in looks) == pytest.approx(7.2)
