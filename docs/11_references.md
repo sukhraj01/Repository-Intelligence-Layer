@@ -29,9 +29,9 @@ All links verified October 2026. Citations corrected against the earlier proposa
 
 ## Agents and related benchmarks
 
-- Xia, C. S., Deng, Y., Dunn, S. & Zhang, L. (2024). *Agentless: Demystifying LLM-based Software Engineering Agents.* [arXiv:2407.01489](https://arxiv.org/abs/2407.01489)
-- Yang, J. et al. (2024). *SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering.* [arXiv:2405.15793](https://arxiv.org/abs/2405.15793)
-- Wang, X. et al. (2025). *OpenHands: An Open Platform for AI Software Developers as Generalist Agents.* ICLR 2025. [arXiv:2407.16741](https://arxiv.org/abs/2407.16741) (identifier added, see DEV-011)
+- Xia, C. S., Deng, Y., Dunn, S. & Zhang, L. (2024). *Agentless: Demystifying LLM-based Software Engineering Agents.* [arXiv:2407.01489](https://arxiv.org/abs/2407.01489) (read in full as v2, 2026-11-08)
+- Yang, J. et al. (2024). *SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering.* [arXiv:2405.15793](https://arxiv.org/abs/2405.15793) (NeurIPS 2024; read in full as v3, 2026-11-08)
+- Wang, X. et al. (2025). *OpenHands: An Open Platform for AI Software Developers as Generalist Agents.* ICLR 2025. [arXiv:2407.16741](https://arxiv.org/abs/2407.16741) (identifier added, see DEV-011; read in full as v3, 2026-11-08)
 - Wang, Z. Z. et al. (2024). *CodeRAG-Bench: Can Retrieval Augment Code Generation?* [arXiv:2406.14497](https://arxiv.org/abs/2406.14497)
 
 ## Datasets

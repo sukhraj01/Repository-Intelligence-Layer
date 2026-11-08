@@ -61,6 +61,8 @@ All values are from this paper (label `paper_reported`, never `measured`). Page 
 | Training trajectories: from a closed-source model / later from the fine-tuned 32B | 433; 335 | Sec. 3.3, p.6 |
 | Training samples in Appendix C.1.3 | 768 | App. C.1.3, p.16 |
 | Downstream repair, Acc@5 / Pass@10 with a closed-source localizer in the agent vs the baseline pipeline | 73.36; 37.59 vs 58.39; 33.58 | Table 8, p.11 |
+| Same table, Pass@1: baseline pipeline / fine-tuned 32B localizer / closed-source localizer | 26.31; 26.79; 27.92 | Table 8, p.11 |
+| Same table, fine-tuned 32B localizer: Acc@5 / Pass@10 | 69.34; 36.13 | Table 8, p.11 |
 | Loc-Bench file Acc@5 / function Acc@10, fine-tuned 7B vs CodeRankEmbed | 78.57; 51.43 vs 74.29; 43.39 | Table 7, p.11 |
 
 ## Method details we need
@@ -124,3 +126,25 @@ All values are from this paper (label `paper_reported`, never `measured`). Page 
 | L1 contain-only is almost the same as no traversal | confirmed | Table 6, p.9; Sec. 5.6, p.10 | Function Acc@10 66.42 vs 66.06; the paper says contain adds "only marginal improvements" (p.10). |
 | L1 Loc-Bench 660 = 282 / 203 / 31 / 144 | contradicted for v2 | Table 3, p.7 | v2 gives 560 = 242 / 150 / 29 / 139; the 660 split is in the superseded v1 (search only). |
 | L1 Loc-Bench created after October 2024 | partly confirmed | Sec. 4.2, p.7 | Bug Report category only. |
+
+## Scaffold reading (added 2026-11-08 for ADR-007; sections quoted below were re-read against the PDF v2 fetched that day, page count 18 unchanged; the full reading is the one dated in the first line)
+
+- **What the repair stage is (Sec. 5.8, p.11).** The paper does not build a repair scaffold: for the downstream test it
+  takes the Agentless editing method, with a closed-source model as the editor "for consistency", and changes only the
+  localization given to it. Baseline is the Agentless pipeline's own localization (Table 8, p.11).
+- **Retrieval swap with a fixed repair stage.** This is a retrieval-stage swap under a fixed edit method, the shape RQ3
+  needs, but through a localization agent, not a retriever. Acc@5 rises from 58.39 to 69.34 (fine-tuned 32B) and 73.36
+  (closed-source model), while Pass@1 rises from 26.31 to 26.79 and 27.92 (Table 8, p.11): a 15-point localization gain
+  moves Pass@1 by 1.61 points (derived), and Pass@10 by 4.01 (derived from 33.58 and 37.59). One run per row, no
+  interval, no run count stated; the paper does not define how Pass@1 and Pass@10 were obtained from the edit stage.
+- **Model and decoding for the edit stage:** not stated beyond a named closed-source model (Sec. 5.8, p.11) and "the Agentless editing method"; no
+  temperature, no seed, no budget. Cost is reported for localization only (Table 5, p.9), not for repair.
+- **Implication for this project (inference).** The one published fixed-repair swap with a Pass@1 column shows a
+  resolved-rate gain of about 1.6 points for a very large localization gain; the project's power table (minimum
+  detectable difference 4.4 to 9.7 points at N = 327, `docs/RQ3_PILOT.md`) cannot see an effect of that size. That does not
+  change D113, which names estimates with intervals for every contrast except the one primary; it is the reason the
+  primary contrast is RAW against the untrained encoder (the larger expected difference).
+- **Against the project's documents:** `docs/EVAL_API.md` lists "LocAgent v2: separate localization tools from a fixed
+  downstream repair scaffold; count localization and repair together; repeat matched dev pairs". The paper counts
+  localization cost only (Table 5, p.9) and does not repeat matched pairs; the first part of that row is how the paper
+  proceeds, the other two are the project's requirements, not the paper's practice.
