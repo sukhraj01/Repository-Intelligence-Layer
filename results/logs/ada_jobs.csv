@@ -188,3 +188,8 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-08,A,64287,RQ3P,"validation of gold-derived edits (cancelled: started with the first converter version)",u22,4,0,00:01:41,0.0,CANCELLED
 2026-11-08,A,64288,RQ3P,"gold-derived edits of 20 executable instances: derive, convert, tree check, executor one run each (two xarray runs failed on a node name-resolution error)",u22,4,0,00:24:31,0.0,COMPLETED
 2026-11-08,A,64304,RQ3P,"rerun of the two xarray instances of 64288",u22,4,0,00:05:47,0.0,COMPLETED
+2026-11-08,C,63964,S55,E-MINE-FULL listing completion outcome (1,473 of 1,473 listings stored),u22,1,0,00:13:29,0.0,COMPLETED
+2026-11-08,C,63965,S55,E-MINE-FULL mining session 1 outcome (git fetch of one commit past 900 s; TimeoutExpired not handled; DEV-036),u22,2,0,02:58:37,0.0,FAILED
+2026-11-08,C,63966,S55,E-MINE-FULL mining session 2 outcome (same cause on another commit of the same repository; DEV-036),u22,2,0,00:54:04,0.0,FAILED
+2026-11-08,C,64593,S55,E-MINE-FULL mining session 1 (relaunch; no dependency); STOP_AFTER=5000; commit 1b61213,u22,2,0,,0.0,SUBMITTED
+2026-11-08,C,64594,S55,E-MINE-FULL mining session 2 (afterany 64593; kill-on-invalid-dep); STOP_AFTER=5000; commit 1b61213,u22,2,0,,0.0,SUBMITTED
