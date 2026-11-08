@@ -1,0 +1,41 @@
+experiment_id: E-A1-FUSED
+status: exploratory; development folders only; rule fixed before the run
+date: '2026-11-08'
+seed: 0
+base: configs/experiments/e1_bm25_reproduction.yaml (the five role-dev folders; units flag not used)
+reading: filter-first (each query ranked among its own candidate list), as the chunk level of E-DENSE-FUSION
+bm25_cells:
+  control: [ref, 1.5, 0.75]
+  variants:
+  - [split, 1.5, 0.75]
+  - [split, 2.0, 0.75]
+dense:
+  qwen3:
+    store: qwen3-embedding-0.6b__t512
+    rrf_k: 20
+  coderankembed:
+    store: coderankembed__t512
+    rrf_k: 100
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  units: queries (paired) and repositories then queries (clustered)
+metrics:
+  primary: ndcg10
+  secondary: recall100
+rule: 'Fixed before the run. Systems: BM25 alone, RRF(BM25, Qwen3-Embedding-0.6B 512, k 20) and RRF(BM25,
+  CodeRankEmbed 512, k 100); the dense stores and the two k are the dev selections of E-DENSE-FUSION
+  (results/tables/x2_chunks_dev_selection.json), not tuned here. Cells: the default (ref, k1 1.5, b 0.75) as
+  control; split at k1 1.5 / b 0.75 (the tokenizer alone) and split at k1 2.0 / b 0.75 (the A1-DEV candidate).
+  Primary reading: nDCG@10 difference to the control inside the same system, per level (L2, L3) and pooled,
+  with the paired query-level and the repository-clustered interval. A BM25 gain "survives the fusion" if the
+  fused difference at L2 has a repository-clustered interval above 0; the L3 set has two repositories, so there
+  only the query-level interval is informative and it is labelled so. Regression control: the control cell must
+  reproduce the stored ranks of the E-DENSE-FUSION chunk scoring (BM25, rrf20 Qwen3, rrf100 CodeRankEmbed)
+  exactly on every dev query. Test folders are never read.'
+folders:
+- {role: dev, dataset: SWE-bench_Pro, folder: instance_internetarchive__openlibrary, repo: internetarchive/openlibrary, levels: [L2, L3]}
+- {role: dev, dataset: SWE-bench_Pro, folder: instance_qutebrowser__qutebrowser, repo: qutebrowser/qutebrowser, levels: [L2, L3]}
+- {role: dev, dataset: SWE-bench-Live, folder: conan, repo: conan-io/conan, levels: [L2]}
+- {role: dev, dataset: SWE-bench-Live, folder: deepset, repo: deepset-ai/haystack, levels: [L2]}
+- {role: dev, dataset: SWE-bench-Live, folder: streamlink__streamlink, repo: streamlink/streamlink, levels: [L2]}

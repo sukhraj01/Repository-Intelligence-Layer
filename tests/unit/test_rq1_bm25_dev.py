@@ -134,3 +134,17 @@ def test_query_level_rows_and_run_file_hashes(data: Path, tmp_path: Path) -> Non
     files = a1.run_file_hashes(out)
     assert len(files) == 9 and all(len(str(f["sha256"])) == 64 for f in files)
     assert files == a1.run_file_hashes(out)
+
+
+def test_compare_logs_reports_each_value_and_missing_cells() -> None:
+    row = {f: 1.0 for f in a1.COMPARED_FIELDS}
+    old = {"stage1": {"rows": [{"cell": "c1", **row}]}, "stage2": {"rows": []}}
+    new = {
+        "stage1": {"rows": [{"cell": "c1", **{**row, "ndcg10": 1.5}}]},
+        "stage2": {"rows": [{"cell": "c2", **row}]},
+    }
+    rows = a1.compare_logs(new, old)
+    by = {(r["cell"], r["field"]): r for r in rows}
+    assert by[("c1", "ndcg10")]["equal"] is False and by[("c1", "ndcg10")]["difference"] == 0.5
+    assert by[("c1", "recall100")]["equal"] is True
+    assert by[("c2", "ndcg10")]["logged"] is None and by[("c2", "ndcg10")]["equal"] is False

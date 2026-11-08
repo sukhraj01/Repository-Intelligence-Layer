@@ -270,7 +270,11 @@ The best cell, k1 2.0 / b 0.75, gains +0.6 [+0.3, +0.9] over queries and +0.6 [+
 it. It lies on the edge of the grid (k1 2.0 is the largest value swept), so a larger k1 may do slightly better; extending
 the grid now would be a second look chosen after seeing the first and is not done.
 
-**Reading.** Evidence class: measured on dev. Identifier splitting is the one large lever for BM25 on CORE-Bench code
+**Reading.** Evidence class: measured on dev; the cells were re-run on another account with the query-level rows stored
+(`E-A1-TAKEOVER` in `docs/experiments/B.md`: every value equal, run files listed with SHA-256 in
+`results/logs/a1_bm25_dev_run_files_2026-11-08.json`). The k1 2.0 cell is the best of 15 non-default cells of the grid, so
+its interval is optimistic and the candidate is unconfirmed until it has been read inside the fused first stage.
+Identifier splitting is the one large lever for BM25 on CORE-Bench code
 chunks (+5.9 nDCG@10, every repository, clustered interval well above 0), consistent with A1-PILOT; k1 and b are a small
 second-order adjustment. Cost: tokenising with splitting is about 3x slower (3,359 against 9,890 chunks per second),
 index build is nearly unchanged, and query p95 rises from 5.4 to 8.0 ms in stage 1 (longer token lists); the stage 2

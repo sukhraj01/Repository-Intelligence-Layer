@@ -320,6 +320,56 @@ def summarise_cells(
     return rows
 
 
+COMPARED_FIELDS = (
+    "queries",
+    "ndcg10",
+    "ndcg10_L2",
+    "ndcg10_L3",
+    "recall100",
+    "recall100_L2",
+    "recall100_L3",
+    "diff_vs_baseline",
+    "diff_lo",
+    "diff_hi",
+    "clustered_lo",
+    "clustered_hi",
+)
+
+
+def compare_logs(new: Record, old: Record) -> list[Record]:
+    """Cell by cell, the statistics of a reproduction against the logged run (timings excluded).
+
+    One row per cell and field with both values and their difference; ``equal`` is exact equality
+    of the printed (rounded) values. Cells missing from either log are reported, not skipped.
+    """
+    rows: list[Record] = []
+
+    def cells(log: Record) -> dict[tuple[str, str], Record]:
+        out: dict[tuple[str, str], Record] = {}
+        for stage in ("stage1", "stage2"):
+            for row in log[stage]["rows"]:
+                out[(stage, row["cell"])] = row
+        return out
+
+    a, b = cells(new), cells(old)
+    for key in sorted(set(a) | set(b)):
+        for field in COMPARED_FIELDS:
+            x = a[key].get(field) if key in a else None
+            y = b[key].get(field) if key in b else None
+            rows.append(
+                {
+                    "stage": key[0],
+                    "cell": key[1],
+                    "field": field,
+                    "reproduction": x,
+                    "logged": y,
+                    "difference": None if x is None or y is None else round(x - y, 6),
+                    "equal": x is not None and x == y,
+                }
+            )
+    return rows
+
+
 def regression_check(
     out_dir: str, folders: list[str], expected_ndcg10: float, expected_queries: int
 ) -> Record:

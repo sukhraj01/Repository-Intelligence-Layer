@@ -3,6 +3,7 @@
 Usage: a_bm25_dev.py run CONFIG DATA_ROOT OUT_DIR --stage stage1|stage2 [--tokenizer NAME]
        a_bm25_dev.py summarise CONFIG OUT_DIR --log LOG.json --table TABLE.csv [--host LABEL]
        a_bm25_dev.py rows CONFIG OUT_DIR --tokenizer NAME --rows ROWS.csv --files FILES.json
+       a_bm25_dev.py compare NEW_LOG.json OLD_LOG.json --table TABLE.csv
 ``run`` is the cluster stage (resumable per folder, level and cell); ``summarise`` reads the run
 files, applies the selection rule of the configuration and checks the regression control against
 ``results/tables/e1_dev_sweep.csv``. The logic is in ``ril.analysis.rq1_bm25_dev``.
@@ -60,8 +61,23 @@ def main() -> int:
     rows_cmd.add_argument("--tokenizer", required=True)
     rows_cmd.add_argument("--rows", required=True)
     rows_cmd.add_argument("--files", required=True)
+    cmp_cmd = sub.add_parser("compare")
+    cmp_cmd.add_argument("new_log")
+    cmp_cmd.add_argument("old_log")
+    cmp_cmd.add_argument("--table", required=True)
     args = ap.parse_args()
     log = get_logger("a1_dev")
+    if args.cmd == "compare":
+        new = json.loads(Path(args.new_log).read_text(encoding="utf-8"))
+        old = json.loads(Path(args.old_log).read_text(encoding="utf-8"))
+        diff = a1.compare_logs(new, old)
+        with open(args.table, "w", newline="", encoding="utf-8") as handle:
+            w = csv.DictWriter(handle, fieldnames=list(diff[0]))
+            w.writeheader()
+            w.writerows(diff)
+        unequal = [r for r in diff if not r["equal"]]
+        log.info("%d of %d values equal", len(diff) - len(unequal), len(diff))
+        return 0
     cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
     if args.cmd == "run":
         cells = a1.stage_cells(cfg, args.stage, args.tokenizer)

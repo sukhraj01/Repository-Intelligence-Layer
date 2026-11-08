@@ -1,0 +1,812 @@
+[
+ {
+  "path": "ref_k1_1.5_b_0.75/L2__SWE-bench-Live__conan.json",
+  "bytes": 84826,
+  "sha256": "aa3fcec2770c2cf94dac3d80dce60ececa8b5385c94025f45caa5be60b482149"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98113,
+  "sha256": "0c4c6489e0949a5b476fb65b5034111fa5202276d2da870450fd4f80b7b93ca2"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27162,
+  "sha256": "fbd1008d5294c00449f241be6f4af23eee40e08d273f93aac1a536084dce829e"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 220698,
+  "sha256": "fedd08b0f9750b7b058a1293d0be29109bcc121eb1ed94a866d6f4ae105e6676"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 201068,
+  "sha256": "b6e103ad9c28bb6ff6f6126a2f394cc197ee50601ce0da53cefcf10000fd1684"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110620,
+  "sha256": "17eca5a72442795416cd3355cc0281bb7cebd8cbbea64b863adb5908bd2969e1"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 359810,
+  "sha256": "089e4a51f042502b07c1eeafc2b02502110cc9f85a434a4319f938c38d00c9d0"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394611,
+  "sha256": "d9562a935b57f4a22d1be6b33e2d656cdd12260026a955a755fa1ce96788d8bd"
+ },
+ {
+  "path": "ref_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204974,
+  "sha256": "8a61bd72b0d9c1b6df8cf88d6dde198dc475044df671125328656d884c1869ab"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L2__SWE-bench-Live__conan.json",
+  "bytes": 84891,
+  "sha256": "7d83892f9af69db4e092de23f429613c3dec9edff921c78725d5f0dede99abb6"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98282,
+  "sha256": "1722ae467ad0dc4b930837f13036dfb0fb5fb7fd2372f2e20a45c2e9c5b5d2e0"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27272,
+  "sha256": "6accc9b3b7900e433b5dd148cf6a0d5ddef80b72abc129842723122f5fa4acbb"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 220361,
+  "sha256": "d18a7d81082a9e7d29fcef02e04fa62c1b4155969394052a82ffad006066793d"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 201194,
+  "sha256": "0f96b81b8f67456ab82f3770daf14069a00b0884f078e0e08541d6f2e7c18dc2"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110703,
+  "sha256": "eb74ac0ae06f5618cea91ae50634f560eb17b5f9706991e4d93a35748643916c"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 359414,
+  "sha256": "81b23cfbe0f46523a69952bffbec0e0af8e4078f978e4ea371982a0c49011ca0"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394695,
+  "sha256": "35bdb358d590d3ab1ac16783d6eaf3fdfed6584b2c4e59df97a3aefdc4d96807"
+ },
+ {
+  "path": "split_k1_0.9_b_0.4/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 205172,
+  "sha256": "b0df645e530dd5b2b92fffc7b0de950e4084f62e02e0395e4c1e37861c49639d"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L2__SWE-bench-Live__conan.json",
+  "bytes": 84819,
+  "sha256": "14360d25839a4e314a09bc62b35bec4045322a01ed947df095895e82f6787bb5"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98259,
+  "sha256": "40d8c3b43f215f02f5b25bf524022d0018114d5330cfbf7b153a291d76bfcacb"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27251,
+  "sha256": "dccc3322d52c0219ec09fe30236d3626f7477c1de272a12bdd0589835c8e2f09"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 220082,
+  "sha256": "672a166c5436b1ea1a63b39dfddfb01716c0493e0e7b8c36d38521f03839c803"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 201072,
+  "sha256": "fbfc203224f56f04c4f888736c6756c5036a40e550b9b4f8a3ad0e70d5d5e0ae"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110581,
+  "sha256": "ebc8e61e899d49d5546b69eeaf0767bd320454e3724cf74658b1bc99dc469eab"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358944,
+  "sha256": "7cc9051269d9baf240d08bd1f07474a80dcd60655ea3ac779dc745704d87b164"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394328,
+  "sha256": "a1dcca5f4b4176a4aeaa5096385ddb73216714787e9244fbd42eca910edee938"
+ },
+ {
+  "path": "split_k1_0.9_b_0.6/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204951,
+  "sha256": "b5163ca9b438204656dded118d9f9e5646c0934a9995e69e3cf634e33767ebef"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L2__SWE-bench-Live__conan.json",
+  "bytes": 84811,
+  "sha256": "93cb20089a0dd6ef0c2552ff8349e9a477ea6d2a6bfa5b3b598214818c46f6a5"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98289,
+  "sha256": "bc96ca5ce8d9f90c2ec0f098ee6ab5d913cc5bfc8048832ab7f8cc07d61ac864"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27251,
+  "sha256": "6890d3a50b4bb284a1891d434a47f622345a6f8b4197f25143b92a4dd995aedb"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219904,
+  "sha256": "69589cc5db793165177efa93537f5f39cab5e0d83c5eb73b2c3208c478ef3461"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200894,
+  "sha256": "315292f2f704fbcae4a0e8a8da60da9c49757ec9c214823b383e2a64ebcaaae4"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110541,
+  "sha256": "ca128bc408838806d5838b5cb2933685ae3b804cc7198189ad665ddc21eb159e"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358559,
+  "sha256": "70c31ebd605d3985583314bb5a0a970d965f1a17ea98d62f56141c386db4e1a9"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394014,
+  "sha256": "ff969ce64941733491edab0bef55808b5970c520964bae369945d85fe76c6fd9"
+ },
+ {
+  "path": "split_k1_0.9_b_0.75/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204776,
+  "sha256": "af61dc4abb2602bb39b754d0cf075cab712189ed812b7769296fb649776df171"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L2__SWE-bench-Live__conan.json",
+  "bytes": 84796,
+  "sha256": "f1b10cf5dd75377a3945ab9ed4d2d8bd801b8fb227a4cac01a46270df701014c"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98265,
+  "sha256": "37c87f48e851a956e36da24b23312bccd159c9eb727d629af03bef5d93c549ad"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27234,
+  "sha256": "0a54d0a8eee635a246fb49323b2715949c3310fdb03bce592cd37224e9f4a644"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219750,
+  "sha256": "8aca82087646e710377b18c46223fca74e1aa637e769bc54a286ea179a727a29"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200826,
+  "sha256": "2e08519b110a8e157043a6b258286de40f765ba48faa0c89dcdd1a2aa27e30f6"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110467,
+  "sha256": "71e966498e0d2402337171933c300c8df666c648854b96b1defc90b5c234f957"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358208,
+  "sha256": "f054979cede241caa5f2dd711cc4e62cc1ada08b4a0e8068172ddd839396cb90"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393813,
+  "sha256": "2e2477c2dbd6b510d1d67149eb7399fbbed1f98f0166c7158f5903f2df590873"
+ },
+ {
+  "path": "split_k1_0.9_b_0.9/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204655,
+  "sha256": "810104a30789f01e85f19aad6d39e1a1b884f0aa6f9fdfef24f27150ed3048fb"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L2__SWE-bench-Live__conan.json",
+  "bytes": 84864,
+  "sha256": "d0a8bf192cfebe8ee51be05a8342bffe49f041da98e46a049be4adeaf81bdbc3"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98262,
+  "sha256": "9cf481054ae1aea6652de5a67bb9e16b63102119a6e3429e233e8744059f8b86"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27266,
+  "sha256": "407e985380cf27cef1d6ffc5a1084939f0a681961859f8786fcf6ddc22f3f8f2"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 220308,
+  "sha256": "41fdf7dd4f66590f3c050a5bc56de1e88a01bf795a529ebd9586ba0a528f999f"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 201215,
+  "sha256": "3625ca66f685651847882d3bc76b1aabaa44a80bf8a4599c8f984ab83dc98680"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110693,
+  "sha256": "de9f6519a314e9c9253cd3a0319075f94abc55b46c39ed39e215b20e7225c60c"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 359294,
+  "sha256": "58baa4ad85c47745bf780edceb04986695e779b20dbe697b56bf4a677f928bca"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394647,
+  "sha256": "1b44b9c401e8ab8cdaab61fd6dc7ec9ace543c0a54f277fff4b863021a5cca3b"
+ },
+ {
+  "path": "split_k1_1.2_b_0.4/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 205083,
+  "sha256": "ec851c442bb508400109bdeaad9e8a1fde30a3f13ed616848fb6715b5c428f26"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L2__SWE-bench-Live__conan.json",
+  "bytes": 84820,
+  "sha256": "c38bff641ee3f898e5afee55164c6a766374e2c50e580a3f64a2e64b2b673e9c"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98254,
+  "sha256": "800ac69187a14574da9ca416b64b5a96276bcf770fa9eaf3a86fa84eef588e43"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27246,
+  "sha256": "bf5c5101f08a4d96207d50fa33e87cdfd32ffb3911cc0db9905d5b658a318c94"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219986,
+  "sha256": "ffbb809a6cc6eb2212811ca1de1a1032950b74982e58c702c930da92ead8faa0"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200969,
+  "sha256": "1b2498c855b78ef227226e62cf08852e0d9bcc12bf661ce96a88043b285443f4"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110548,
+  "sha256": "1a3002fa3768b3b6aef860dbdaa94f635b7f70709d4c27cf3cdcc3cdddaf6b55"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358721,
+  "sha256": "3ce331c1bc8e6468c98ed5eb87ae445b218e4cf4426a0e009bbb0e4848f245dc"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394090,
+  "sha256": "e69a1d2b6f774a78c9b2536a654572e2927ccd8a0de82f1ed86ee286ecfdf468"
+ },
+ {
+  "path": "split_k1_1.2_b_0.6/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204803,
+  "sha256": "a8dfabaac709cca4d3ec0240a97709adb7be3618857620043a56ee4275d2871e"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L2__SWE-bench-Live__conan.json",
+  "bytes": 84767,
+  "sha256": "4396eb1b19509f2a57be2539256711f658a3c2259b64ab93ea4e517ed30bedc1"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98257,
+  "sha256": "a11abd3af249609551b7ccfa13809177a9573fb2e5ec3b1c248ae2f5062a41d2"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27221,
+  "sha256": "a3c8276c2bdd0ab673216c564a0eccce56b39330a4589e0728c54bc97ea4125f"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219745,
+  "sha256": "645479c19118a5b56a9c8b22daca1e392889328da6f76df8b6e196d679339d02"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200825,
+  "sha256": "fa2296490f16d852dfa264049eac7b8d37f07b9b0fe75dcff8abf46b0a2530fc"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110479,
+  "sha256": "8c7636b5e6dbf4f7e6e80eb601af1fe4937d9f3a626f0b1cec72cc5f67542178"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358210,
+  "sha256": "d709a6fc0a7d98d44b83b0041b2d1190ae176d32adcf381482d37f92dcb14d60"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393808,
+  "sha256": "41f2ef8d0e8138bf6ba2fb8c75f728104f2225b16090ebdfa623404d7f61ae51"
+ },
+ {
+  "path": "split_k1_1.2_b_0.75/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204630,
+  "sha256": "579a33e01ff8ddc723f2b787733ce71d1764d9d6db3a6b9738b192df43084caf"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L2__SWE-bench-Live__conan.json",
+  "bytes": 84706,
+  "sha256": "6485c778eaa6ccfb83e79843333ce996601b9af73d657cc68aebfd3c4c56c50a"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98244,
+  "sha256": "26d0fb3f551cb0ab53101836aceb48cdf9e6620e72c9a46d369caae4c2b62dff"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27219,
+  "sha256": "11a931640ca1268ca72664a72a93a22b8bb5c691cc7ea2bd94b3919329b46b71"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219572,
+  "sha256": "9cc84f5fe973b672dfa8b453dd8b8069ba52a45f256decaa6548fbcf453be5cb"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200699,
+  "sha256": "b2c6c9e51222702d300b1a2a1876aab09ca18d1a9f4f5a0030d8aa1987a2eee4"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110362,
+  "sha256": "26a45646f3e71c6279a760d7f641fcc3f88f17949c1fe06935c33965b57d4c6f"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 357870,
+  "sha256": "5e431dee6c9690323469d60c5e08cb8f84728a663c1883fc67d94241cdd6d532"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393563,
+  "sha256": "3b2a89d362b301b5da81a44a69913381a239d7524f7f23faaf921da85e0fb7b7"
+ },
+ {
+  "path": "split_k1_1.2_b_0.9/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204509,
+  "sha256": "a062c7fae8307cc8ca5e7ac6d28bb05a75d439c27c21f6f6698797d235b1e9b0"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L2__SWE-bench-Live__conan.json",
+  "bytes": 84846,
+  "sha256": "7b153ab8496ae825093b81b97fb7c99a45bebf8a030dbed0d4851777b20503b2"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98267,
+  "sha256": "3cd1399152177f7f2aefc9acfee988570c9e3dc15639169be9f3fc1eb5c1eae6"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27258,
+  "sha256": "a45ce688bc92e9f0e416aa691c4cdde8482b7e21699ec8b3cfd8cf12d0ceacbd"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 220155,
+  "sha256": "de8a5fecaae43fb083bcdc73d2de7a9846bc881ec7667e7354d1bec434d38c24"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 201148,
+  "sha256": "49a7690bc5b495c1221c662e3ec49a622277b603fb647627b5ed611f3456ef84"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110650,
+  "sha256": "71f666abf4a31db72bf6b4005254cd91998dbe6ed50631f37d9cded05ec5d778"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 359120,
+  "sha256": "296af1df5cd80a2ba19860003d199a2607c581b35f24d46b638dbe018d123043"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394484,
+  "sha256": "32bc1a2fad8ae9a259f24109baa62b6c47f1fa3339489bed68c62436db859f13"
+ },
+ {
+  "path": "split_k1_1.5_b_0.4/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 205044,
+  "sha256": "4fcf5bc888f5805a79d034431cfac9f3d41951289a37b5c5e3121dae17889ef9"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L2__SWE-bench-Live__conan.json",
+  "bytes": 84768,
+  "sha256": "61a75e59c09896f576fe3238fafd8f07d819201dd13c3cbe20f879b93ec6a810"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98265,
+  "sha256": "11d8b40f2971f7cb536b4a168b08533eaa69756c03232256c80eb669d7f1ad85"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27231,
+  "sha256": "5dd54b7b2df4c0f1f9f23ece5e0aa1c4ec61486294c5e7c8b9f0b6895c718292"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219851,
+  "sha256": "faf6066e4de527578efd645fd10e85f12a84d17faf6dfc3e04a19ff3058154c2"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200916,
+  "sha256": "2808c099d83c0f8c603144872a7a5c74b0f1a6b88caad3469270229471a153f7"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110543,
+  "sha256": "bc44d326569d1b8441a33b26dd8f06952fd836b8748818c2da4c081e93166982"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358429,
+  "sha256": "b277299ad79eb086006879f6447231e56bd15c09090f17f519d5f1e8454db1f2"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393989,
+  "sha256": "54fecabb460437933286e5fe307771a23ee523295054f8a90771a5652fbf0e12"
+ },
+ {
+  "path": "split_k1_1.5_b_0.6/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204738,
+  "sha256": "3cdd5d50dfefc67e8cf7272963fdc02bfd152b10c556af39fd200e6e5071820c"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L2__SWE-bench-Live__conan.json",
+  "bytes": 84739,
+  "sha256": "5ae7148c95cf8b8c5df94a0d3437e295a9ce54714a620cb51f08ca22167f36c1"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98289,
+  "sha256": "d70f093d8c6a869ae9cf1b2fe45eab69a3a6eb1be19f602180e8fe78f31565ab"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27231,
+  "sha256": "6404a6c281795d49fcfbfd4c1bd6dafa0ac1e8ac8e4209fa83423c4eec6b988f"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219658,
+  "sha256": "6e642cf5aa9258331e7084f15dcf08abe4e4b8ec64ba7fe54ad786354c59bdd9"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200796,
+  "sha256": "d42a2e9a71912c775dd5cb4620f701f815f56e19ad3596f125fa884e4d7ad260"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110422,
+  "sha256": "9340bde0ec78cf251501462c4b640c5d79e9822181c3c951b7f880f1a0cd8d37"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358031,
+  "sha256": "1962aa383ee0a8c497a86780192076bcd651542c1693f2200d8a0d436d70e07e"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393740,
+  "sha256": "23aaa8a560a645ba1fb10286eb7ed129e1696f29c301125acf7c8bb0fb94d47e"
+ },
+ {
+  "path": "split_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204555,
+  "sha256": "866e5fb6eb24a302769eccfbf23c38fb7e6d3d0f17f7ca806be19ec04e61931a"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L2__SWE-bench-Live__conan.json",
+  "bytes": 84715,
+  "sha256": "eff8448879d5a0360d77055f647a39a337461020256bc68b984452dfb702408d"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98274,
+  "sha256": "81c946a7d035323ea0f317d37cb7c72afd90502154c60c626574bca82363dfe5"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27206,
+  "sha256": "6f475f4d21d9b6f21a5a54a793f33bc04c9bda3cb71b49fef1fc9f674bbc4700"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219442,
+  "sha256": "e8de835532f700f99a678691e1e1c369df21e5d6f15c6ec6246286c58f08520d"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200608,
+  "sha256": "016435a90aaa542bf94da22289ec29db5c6de33dedfc5c616a9c595e5a2e6952"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110366,
+  "sha256": "948e4ace9b84a838b4d75270ac64a7f121d0944f562e10e565324a23f1ece646"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 357743,
+  "sha256": "4d31acaab4d416c14e179e01058bae445209ba000109a3b29e226dd04b5cd8b8"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393411,
+  "sha256": "ca08e05ed5621fa4393ba294cbff13673c8500659646fad31356be3e3ace2306"
+ },
+ {
+  "path": "split_k1_1.5_b_0.9/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204447,
+  "sha256": "2a121cf6a666ce32c0cfb063a5567f6be671abb770f1a2f9a66f8910a70cba6d"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L2__SWE-bench-Live__conan.json",
+  "bytes": 84810,
+  "sha256": "abf8678464035224f0c7982f2f3347a62decea65f1d0937c0a1f8952911baa20"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98253,
+  "sha256": "65b33bfd2a00e49ba6faab914b0f82029fd00eeb52c15da9d4dc105e1297c292"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27260,
+  "sha256": "7f813e730952f93dbb08d4d8b046d2b16adce6c839d11f70874577c457a79350"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 220112,
+  "sha256": "a6b9bce945b1f9b59357767e9f62bebfe9ef4be5f92912bb89c0ca41af47f228"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 201099,
+  "sha256": "a89bee1372d78197643bdd819362feee107bbc6086ecdd00d948bca8e9e0569f"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110627,
+  "sha256": "283b6c4986f211d49049c5c74120178cb932f5e8f2bdcd6d43738e4cb7f1062d"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358956,
+  "sha256": "6110be64c6e5ae4a51810eb571225afa57eb3347d65acccea5315ad80a4719b4"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 394359,
+  "sha256": "fe699a0d93f4226d5cfcf85052772773790e51dd1184b7e55c827a4ff80b7f13"
+ },
+ {
+  "path": "split_k1_2.0_b_0.4/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204987,
+  "sha256": "20bcc6ed139815cee072d62e12919faab77d8319ce20ff7fd7e5bb12db651eec"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L2__SWE-bench-Live__conan.json",
+  "bytes": 84747,
+  "sha256": "d4caa6175920051864830a5dca0d0c85e70b08b77bd26f5f03131873a42aea7e"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98251,
+  "sha256": "3bd4c4e60ca23190431368471dcdaba2eccf0c18e0e64b3fe84b5e8374cceb07"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27230,
+  "sha256": "98b8e885aea5f096ad9dee0c233ce5b3eda564a6412197e556f44c14b365f6ec"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219726,
+  "sha256": "bb3aa92fb14bbe94ab429d7642a3ec37d42e74b7710c807c66e01799392ec0d0"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200891,
+  "sha256": "1318982e5a5f1ac8b4fac44e01d3b43f530ea52634b93ac6da120ac211e5fc9c"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110528,
+  "sha256": "9f094d59e9553bcd4c00acb6565086d0a9365e61b5cc37f48eb915ecc252a59b"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358312,
+  "sha256": "da1487232ee7cec191f0c8e9a9b811db349570866624323ef8aec782ffc91598"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393870,
+  "sha256": "811290f07005dc247caaaaec0529a9b2a6d858ee0296ca8191014228a3c6f186"
+ },
+ {
+  "path": "split_k1_2.0_b_0.6/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204677,
+  "sha256": "fad4238b612ea21d00a924ce69e5effc7e75b1076d1cd415c5c854bd271c511e"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L2__SWE-bench-Live__conan.json",
+  "bytes": 84686,
+  "sha256": "f4021a1992641eaa0b0130e1f95a9a5d45311eebd3f9c085a3e607f0b39d958e"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98314,
+  "sha256": "7b25b9338308e78e19aa4813389745f98ad1756cba4bf6510e2e9b71286afa1a"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27221,
+  "sha256": "d85a983c44effdb8bbf779e27c78608bb2223e175ac51800ff2b9b3db91148e2"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219533,
+  "sha256": "26af616e1ab84d8bf3f5125d212ab8280f8e0e6a9a8b417d5683fb91ec7deef4"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200706,
+  "sha256": "619d8bb1aea540367d05c00dc81a5cc6f0e85572777b1ad50f705d01862cfd02"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110391,
+  "sha256": "3675253d6cc8f932379852487a7df87ad369ff9c9825fc758815220049819189"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 357843,
+  "sha256": "19b2793f8f456bbc08d558672c8b233da95f5784ac025a2dd475b852e6de0fd7"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393546,
+  "sha256": "98994943b09f56f7e53ee481c864026f6d3837d1e8069fe56bd54601480a9f75"
+ },
+ {
+  "path": "split_k1_2.0_b_0.75/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204462,
+  "sha256": "8a969f2a6b6bc0e441d64fe3fc92b6880c81075dc15b1af64fb66dbea036cbd8"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L2__SWE-bench-Live__conan.json",
+  "bytes": 84670,
+  "sha256": "631486c59dd95fae400dedf395d9655374724a591f7da8b430f077e62d03428d"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98294,
+  "sha256": "135fac4bf0d3a7d1b8eeed2e07e0259d7b9a0563b25249f1a426617d8454db03"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27191,
+  "sha256": "4803133902dd048507787b6c1440e45c9d1b3c698ac8e79127873bf5abe4beb0"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219385,
+  "sha256": "6e1255408b8dc7463c09f7065349f444118c9caa86b64905634ba880c1b419f4"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200612,
+  "sha256": "8c0766034a459c45c61373098cae384b9fff247a78e623d5c8ca13b769f9527b"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110286,
+  "sha256": "8a9c9ddea0ca5ec6cb3495b85365f44e4def14e86801e31c670dc096bfaa6150"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 357438,
+  "sha256": "aed7397e4a242ad1a53c4f819d23c9c28960463ee534d0abfc4157c7b6ed80d5"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393352,
+  "sha256": "2464a059e04faaa7a018562420468403d3319ee0164a61cd52fbecaac1663efd"
+ },
+ {
+  "path": "split_k1_2.0_b_0.9/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204320,
+  "sha256": "bbdfa4977663d40c2a091ab9da8182662f82af99b267757239d8498024d3f6ab"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L2__SWE-bench-Live__conan.json",
+  "bytes": 84718,
+  "sha256": "2178e55574f0abab6729d6bda6cde7203973a5e603c90afeae9f8a68987e5c1f"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L2__SWE-bench-Live__deepset.json",
+  "bytes": 98296,
+  "sha256": "217b7201b05c0b72e221481472fe2ef9c5fbaa7f59161515532abd9e3d559645"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L2__SWE-bench-Live__streamlink__streamlink.json",
+  "bytes": 27245,
+  "sha256": "7cffa864d661086a49720df8f561d7caa4be14691df45ef9ef408686c97d8c3b"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 219698,
+  "sha256": "0ab3f6a5267843c3ab24583792a37f4a54e109b7870baf780af2819f5674c7ac"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 200888,
+  "sha256": "eedee3ccb1d53cf504401e6f948bf09afd19235f5e2cc8cdfd0eea3ae90c41ba"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L2__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 110511,
+  "sha256": "acf65966b1f9ffd73c51b575226ebd2cd8b18a53208489deda2ae8ba0a82a238"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_ansible__ansible.json",
+  "bytes": 358205,
+  "sha256": "f65a804bbe3215dfa0b966bfffa67e5e557b2e8e38b2097db421699e7f959a9c"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_internetarchive__openlibrary.json",
+  "bytes": 393921,
+  "sha256": "a3843da87cff43b78d8f8eafe9db681bfdaafce23128d778849a975b89f67209"
+ },
+ {
+  "path": "split_noorig_k1_1.5_b_0.75/L3__SWE-bench_Pro__instance_qutebrowser__qutebrowser.json",
+  "bytes": 204692,
+  "sha256": "c7a9e9e33de94e0bf2dd58654fdd12cdd4a16e1a6ae04ab2812f20fc5d9294fd"
+ }
+]
