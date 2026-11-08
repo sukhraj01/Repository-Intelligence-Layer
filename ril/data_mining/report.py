@@ -163,7 +163,7 @@ def render(summary: Mapping[str, Any]) -> str:
     ]
     sel = summary["selection"]
     s = sel["summary"]
-    shares = sorted(r["kept_share"] for r in sel["per_repo"] if r["linked_prs"])
+    shares = sorted(r["kept_share"] for r in sel.get("per_repo", []) if r["linked_prs"])
     median_share = shares[len(shares) // 2] if shares else None
     out += [
         "",

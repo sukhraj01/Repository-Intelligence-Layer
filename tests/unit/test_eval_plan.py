@@ -30,7 +30,9 @@ def _fixture(tmp: Path, with_texts: bool) -> EvalSet:
     (prep / "queries").mkdir()
     (prep / "queries" / "L2__D__f.jsonl").write_text("{}\n{}\n", encoding="utf-8")
     if with_texts:
-        (prep / "texts_units" / "o__r.s1.jsonl").write_text("{}\n{}\n{}\n", encoding="utf-8")
+        (prep / "texts_units" / "o__r.s1.jsonl").write_text(
+            '{"h": "a"}\n{"h": "b"}\n{"h": "a"}\n', encoding="utf-8"
+        )
     (tmp / "cache").mkdir()
     return EvalSet("fixture", str(e1), str(prep), ("test",), str(tmp / "cache"))
 
@@ -38,7 +40,12 @@ def _fixture(tmp: Path, with_texts: bool) -> EvalSet:
 def test_ready_set_is_counted(tmp_path: Path) -> None:
     plan = plan_sets([_fixture(tmp_path, True)])
     row = plan["sets"][0]
-    assert plan["ready"] and row["unit_texts"] == 3 and row["query_texts"] == 2
+    assert (
+        plan["ready"]
+        and row["unit_texts"] == 2
+        and row["unit_lines"] == 3
+        and row["query_texts"] == 2
+    )
 
 
 def test_missing_texts_block_the_launch(tmp_path: Path) -> None:

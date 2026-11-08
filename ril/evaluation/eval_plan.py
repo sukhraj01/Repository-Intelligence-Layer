@@ -7,6 +7,7 @@ a GPU job starts. Implements ``docs/RQ2_PROTOCOL.md`` section 4 and ``docs/RQ2_L
 
 from __future__ import annotations
 
+import json
 import os
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -33,6 +34,27 @@ def _lines(path: str) -> int:
         return sum(1 for _ in handle)
 
 
+def _distinct_texts(files: Sequence[str]) -> int:
+    """Distinct text hashes (``h``) over the shards of one repository, as the encoder sees them.
+
+    The shards ``sN`` hold the class-source forms of one repository, which share most texts;
+    counting lines overstates the encoding by about 3 times (233,064 lines against 69,961 distinct
+    texts for the eight repositories, E-EVAL-REPOS-BUILD).
+    """
+    seen: set[str] = set()
+    for path in files:
+        with open(path, encoding="utf-8") as handle:
+            for line in handle:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    seen.add(str(json.loads(line)["h"]))
+                except (ValueError, KeyError, TypeError):
+                    seen.add(line)
+    return len(seen)
+
+
 def plan_set(
     s: EvalSet, *, chunks: bool = False, rate: float = TEXTS_PER_SECOND_MEASURED
 ) -> dict[str, Any]:
@@ -57,13 +79,14 @@ def plan_set(
     )
     stores = stores_for(s.e1_config, s.prep_dir, list(s.roles), chunks)
     unit_texts = 0
+    unit_lines = 0
     queries = 0
     for name, files in stores.items():
-        n = sum(_lines(f) for f in files)
         if name.startswith("units__"):
-            unit_texts += n
+            unit_texts += _distinct_texts(files)
+            unit_lines += sum(_lines(f) for f in files)
         elif name.startswith("queries__"):
-            queries += n
+            queries += sum(_lines(f) for f in files)
     have = {n.removeprefix("units__") for n in stores if n.startswith("units__")}
     missing += [f"unit texts of {r}" for r in wanted_repos if r not in have]
     cache_files = len(os.listdir(s.e3_cache))
@@ -73,6 +96,7 @@ def plan_set(
         "repositories": wanted_repos,
         "unit_text_stores": len(have),
         "unit_texts": unit_texts,
+        "unit_lines": unit_lines,
         "query_texts": queries,
         "instance_cache_files": cache_files,
         "encode_seconds_at_rate": round(unit_texts / rate, 1),

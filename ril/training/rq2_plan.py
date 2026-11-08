@@ -341,6 +341,8 @@ def job_graph(
     runs: Sequence[Run],
     *,
     train_accounts: Sequence[str] = ("A",),
+    family_accounts: Mapping[str, str] | None = None,
+    store_account: str = "C",
     cells_per_job: int = 6,
     wall_per_run_hours: float = 0.42 + 0.178,
 ) -> list[Job]:
@@ -348,8 +350,10 @@ def job_graph(
 
     CPU stages are single jobs on the account that holds the store; GPU training jobs batch
     ``cells_per_job`` runs of one seed (a job of six runs measured 2.4 to 2.7 GPU-hours) and are
-    spread over ``train_accounts`` in order; one GPU job at a time per account is the scheduler's
-    rule, so jobs of one account chain on each other.
+    spread over ``train_accounts`` in order, or placed by data condition with ``family_accounts``
+    (``{"mined": "C", "injected": "A"}``); one GPU job at a time per account is the scheduler's
+    rule, so jobs of one account chain on each other. ``store_account`` holds the mined store and
+    runs the CPU stages.
     """
     jobs: list[Job] = []
 
@@ -358,7 +362,7 @@ def job_graph(
         jobs.append(j)
         return j.job_id
 
-    rep = add("report", "mining report", "cpu", "C", (), 0.0, 0.1)
+    rep = add("report", "mining report", "cpu", store_account, (), 0.0, 0.1)
     ov = add(
         "overlap",
         "overlap audit and drop list",
@@ -379,7 +383,9 @@ def job_graph(
         6.0,
         "reasoned: pilot 1,036 s BM25 + 695 s materialise for 1,286 directories, scaled",
     )
-    fs = add("filter_size", "FILTER size for the subsample", "cpu", "C", (prep,), 0.0, 0.1)
+    fs = add(
+        "filter_size", "FILTER size for the subsample", "cpu", store_account, (prep,), 0.0, 0.1
+    )
     by_seed: dict[int, list[Run]] = {}
     for r in runs:
         by_seed.setdefault(r.seed, []).append(r)
@@ -390,9 +396,11 @@ def job_graph(
         rs = by_seed[seed]
         for i in range(0, len(rs), cells_per_job):
             chunk = rs[i : i + cells_per_job]
-            acct = accounts[k % len(accounts)]
+            fam1 = chunk[0].cell.family
+            acct = family_accounts[fam1] if family_accounts else accounts[k % len(accounts)]
             k += 1
-            after = [fs] if any(r.cell.family == "mined" for r in chunk) else [prep]
+            mined = any(r.cell.family == "mined" for r in chunk)
+            after = [fs] if mined else []
             if acct in last_on:
                 after.append(last_on[acct])
             fam = "+".join(sorted({r.cell.family for r in chunk}))
