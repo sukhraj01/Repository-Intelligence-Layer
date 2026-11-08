@@ -220,6 +220,115 @@ The reply's SEARCH/REPLACE blocks become a unified diff at the base commit in on
 
 Measured on the pilot's stored edits (100 dev instances, 349 usable units): applying 129 of 200 (BM25) and 147 of 200 (RRF) units under the exact reading; the tolerant reading gives the same counts (0 of 73 failing units rescued); the failing blocks quote text found nowhere in the file. On 20 executable instances the gold patch turned into edit blocks, converted and run through the executor resolves 20 of 20, with trees identical to the gold patch's. Details and limits: the entry.
 
+## Driver, held-out slice and analysis plan (D111 to D114, `E-RQ3-DRIVER`)
+
+Fixed before any model output on the executable subset exists. All four decisions are `provisional` until the graded model
+check. Evidence classes: D111 and D114 reasoned; D112 reasoned (the rule) with unverified prices; D113 reasoned, with the
+run-to-run figures measured in the pilot and the power inputs partly assumed (listed in `results/rq3_driver/`).
+
+**D111, held-out model-check slice.** 50 of the 377 executable instances (D106) are drawn by a seeded draw (seed 0)
+stratified over repositories: a repository with at least 5 executable instances contributes at least 2; the places are
+otherwise proportional to size (a large repository whose proportional share is below 2 is fixed at 2 and the rest is shared over
+the others; shares are rounded by the largest remainder, ties by repository name; inside a repository the draw is uniform
+over the sorted ids). Result: django 30, sympy 10, astropy 2, pytest 2, sphinx 2, xarray 2, pylint 1, requests 1, flask 0,
+seaborn 0 (`results/rq3_driver/heldout_v1.json`, frozen and committed before any model call). The slice is excluded from every
+confirmatory analysis and from the confirmatory N (N = 327); it is used only to choose the model (D112) and to exercise the
+grading path on real replies; its results are reported separately and never enter a headline table.
+
+**D112, model-choice rule.** Candidates: the cheapest model that can plausibly work and the next one or two stronger models on
+the same API, at dated list prices read from the provider console by the engineer or at run time and stored with their date
+(`configs/agent/prices.yaml`; the figures stored on 2026-11-08 are third-party and unverified: about 0.30 in / 2.50 out per
+million tokens for the cheapest, 1.50 / 9.00 for a Flash-class model; a third candidate has no stored price). Each candidate runs
+the RRF 8,000-token arm once on the held-out slice, temperature 0, same prompt, same follow-up policy and same thinking
+configuration (recorded in the run's `meta.json`, with the thought tokens billed). The cheapest candidate whose resolved rate on
+the slice (exact reading) is at least 15% is chosen (a discordance of 10% or more between arms is then attainable at N = 327);
+if none reaches 15% the strongest candidate is taken, the floor is reported as not met, and the resolved-rate contrast is reported
+as low-power with the retrieval-side readings carrying the weight. No other selection on resolved results is allowed
+(`ril/agent/providers/model_choice.py`). Cheapest flip: the graded check itself.
+
+**D113, scaffold and analysis plan (ADR-007 Accepted `provisional`; Q45 answered).** Scaffold as piloted: retrieval-supplied, one
+repair call at temperature 0, up to two follow-ups for an unusable reply (same for all arms), edit application as D110. Unit of
+analysis: the instance. k runs per arm (k = 3 if the spend allows, otherwise 2); an instance's score for an arm is the fraction of
+its k runs that resolve; unusable and non-applying replies count as unresolved (D109, D110). **One primary contrast:** RAW against
+the untrained encoder (the D80 declared fallback; the trained-checkpoint arms of RQ2 are added when their contexts exist), on the
+327 confirmatory instances, as the paired difference in mean score with a paired bootstrap interval over instances (10,000
+resamples, fixed seed) and a paired sign-flip permutation test (10,000 flips). Every other contrast (BM25, RRF, the RQ2 arms
+against RAW) is an estimate with an interval and no test claim, so the family of tests is one and no multiplicity correction is
+needed. Both patch readings are reported (exact primary, tolerant sensitivity), overall and by repository
+(`ril/analysis/rq3_results.py`). A null result stays a null result: if retrieval differs and resolved rate does not, it is reported with the
+outcome-class breakdown (unusable, apply failure, executed but unresolved), not reframed.
+
+**D114, spend guard.** The driver keeps its own running cost from billed input, output and thought tokens at the stored dated
+prices and stops before a call whose worst case (input estimated at 3 characters per token plus the full output allowance billed as
+output) would pass a cap given on the command line; it refuses to start without a cap; a resumed run counts the cost already in the
+call log; a run records the cap and the realised cost in `meta.json`. The provider-side hard cap, set by the engineer, is the second layer.
+
+### The driver
+
+`ril/agent/providers/driver.py`; command line `scripts/rq3_driver.py`. A unit is (instance, arm, run index). The driver takes the
+final reply (a call through the provider client and limiter, resumable and logged as in the pilot; a reply already in a call log; or,
+in replay mode, a stored or synthetic reply with no provider), converts it under both readings, executes the patch in the instance's
+environment, reads FAIL_TO_PASS and PASS_TO_PASS and appends one row per unit to `results.jsonl`. Outcome classes: `unusable`,
+`apply_failed:<class>` (`file_missing`, `no_match`, `multiple_matches`, `git_apply`), `executed_unresolved` (the patch applied and a named test
+did not pass, including a patch after which no test output exists, and an empty diff, which is not executed), `resolved`; and
+`exec_error:<stage>` for an environment failure before the patch is involved: tactical addition to the four classes, such a row is not
+final, a restart reruns it with the stored reply, and the analysis counts what is left as unresolved and lists it apart (it must be
+empty before a result is reported). A step that fails on a name-resolution outage is retried with backoff (3 retries, 30 s doubling) and
+logged; a failure of the tests themselves is never retried. Both readings are stored (`outcome`, `outcome_tolerant`); a diff that is
+the same under both runs once. Known limit: `no_test_output` after a patch is classed `executed_unresolved`; the 377 instances
+passed the gold patch twice, so it means the patch broke the code, but an environment fault that looks the same would be counted
+against the model.
+
+### Prompts of the 377 (8,000-token set; job 64598)
+
+The contexts of E-RQ3-CONTEXTS go through the pilot's builder (`build_prompt`) and screen. Issue text: the benchmark table's
+`problem_statement` for all 377 (the 57 instances without an L2 label have no query folder; for the 320 that have one, the folder text
+equals the table text, 320 of 320). Of 1,131 prompts (377 x BM25, untrained dense, RRF) **887 pass the screen and 244 are rejected**:
+135 for an e-mail address that is not on the reviewed list (228 distinct addresses or path strings in all), 101 for a home-directory path, 8 for both
+(`results/rq3_driver/prepare_report.json`). 109 instances have at least one rejected prompt and 57 have all three rejected; 232 of the 327
+confirmatory instances and 36 of the 50 held-out ones have all three arms sendable, and 258 and 39 have the RRF prompt sendable
+(`prepare_sendable_by_set.csv`). The matches are mostly placeholders in code excerpts (`example.com`, `foo@bar.com`), maintainer
+addresses in headers and user names in tracebacks quoted in issues: public repository text, but the screen was written for the unpaid
+quota's terms and has no reviewed list for path strings. **Nothing was added to the reviewed list and the screen was not changed**:
+the options are open question Q70. The prompt text before the excerpts is byte-identical across arms for every instance that has a
+prompt (320 of 320). The 16,000-token set was not prepared (not run).
+
+### Replay test (job 64590, account A, CPU, node-local scratch, nothing deleted)
+
+The 20 gold-derived edit sets of E-RQ3-PATCHAPPLY (regenerated from the gold patches) and 10 deliberately broken variants went through the
+driver in replay mode on the real executor: **30 of 30 outcome classes as expected** (`replay/replay_table.csv`).
+
+| variant | n | expected | observed |
+|---|---|---|---|
+| gold-derived edits | 20 | `resolved` | 20 `resolved` (FAIL_TO_PASS and PASS_TO_PASS all pass; no environment failure this time) |
+| a SEARCH text altered to match nothing | 4 | `apply_failed:no_match` | 4 as expected, no execution |
+| a SEARCH text cut to a fragment that occurs twice | 3 | `apply_failed:multiple_matches` | 3 as expected, no execution |
+| a top-level `raise` added after an import line (valid syntax) | 3 | `executed_unresolved` | 3 as expected: sphinx-7910 ran its tests (0 of 1 and 0 of 16 pass); the two pytest instances produced no test output (the module fails on import) |
+
+### Power with run-to-run noise (`results/rq3_driver/rq3_power_run_noise*.csv`; estimated by simulation, 500 datasets per cell)
+
+The old McNemar table (placeholder discordance, one pass; `rq3_power_placeholder.csv`: 5.25 to 8.75 points at N = 327) is kept beside it.
+Simulation of the primary contrast as analysed: N = 327 (and 232, the complete-case count under the current screen), k = 1, 2, 3, resolved rate
+10, 20, 30%, arm effect 0 to 10 points, instance heterogeneity kappa 1 and 4, repeated runs repeating the previous reply with probability 0.635
+(**measured**: same first-reply text in 63.5% of pairs; same usability in 97.5%, folded into the resolve probability). **Assumptions, not
+measurements:** the resolved rate, the effect, kappa (no resolved rate exists), independence of the arms given the instance. Size of the test
+(effect 0): 2.4 to 5.0% across the 18 cells (nominal 5%). **Minimum detectable difference at power 0.8, N = 327:** k = 1: 5.5 to 9.7 points; k = 2: 4.9 to 8.8;
+k = 3: 4.4 to 7.7 (the low end is rate 10% and kappa 1; the high end rate 30% and kappa 4). At N = 232: k = 1: 6.4 to over 10; k = 3: 5.4 to 9.8. A third run
+buys about 1 to 2 points of detectable difference over one run; instance count matters more. A difference of 4 points or less is not
+detectable at power 0.8 in any scenario of the grid (the lowest minimum is 4.4 points).
+
+### Cost model (`results/rq3_driver/rq3_cost_model.csv`; tokens measured in the pilot, prices estimated and unverified)
+
+From the pilot (1.41 calls and 12,629 input and 933 output tokens per unit, 400 units). One arm-run of 327 on the cheapest candidate: 462 calls, about
+2.0 dollars (3.8 in the high scenario: upper calls interval and three times the output tokens); the 50 held-out: about 0.31 (0.59). A Flash-class
+model at the stored price: 8.9 (15.7) and 1.4 (2.4). Grids at 327 on the cheapest: 3 arms x k = 2: about 12, x k = 3: 18; 4 arms x k = 2: 16, x k = 3: 24; on a Flash-class model
+roughly 4.5 times that. A model that thinks longer than the pilot model is the main uncertainty (the pilot billed no thought tokens).
+
+### Not done, limits
+
+No model was called on any executable instance; no resolved rate exists. The graded check needs the engineer's billing, cap and limits. The 16,000-token
+prompts are not prepared. Trained-checkpoint arms have no contexts. The screen's policy (Q70) decides how many confirmatory instances can be sent.
+
 ## Smoke test (2026-11-06, three calls, `results/rq3_pilot/smoke_2026-11-06/`)
 
 Three calls on the first prepared prompts (a budget of 8,000 times 1.22 approximate tokens, since

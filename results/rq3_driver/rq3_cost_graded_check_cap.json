@@ -1,0 +1,9 @@
+{
+ "candidates": [
+  "gemini-3.5-flash-lite",
+  "gemini-3.6-flash"
+ ],
+ "margin": 1.25,
+ "recommended_cap_usd": 4,
+ "sum_high_usd": 3.0
+}

@@ -1,9 +1,9 @@
 # ADR-007: Agent scaffold
 
-- **Status:** Proposed — **not decided**
+- **Status:** Accepted, `provisional` (D113, 2026-11-08; settled by the engineer, reasoned, not yet measured on graded replies)
 - **Date opened:** 2026-10-12
 - **Decide by:** end of week 2 (all ten decisions)
-- **Decided by:** _pending — team_
+- **Decided by:** engineer (2026-11-08), provisional until the graded model check (D112)
 - **Master doc:** open decision #7 (`docs/12_open_decisions.md`)
 - **Affects:** RQ3, the agent integration module (not written yet)
 
@@ -20,8 +20,15 @@ RQ3 needs one fixed scaffold, one fixed base model, fixed temperature and seed, 
 Agentless — simplest to hold constant; complexity is a liability for a controlled study.
 
 ## Decision
-_Pending — the team decides._ If work cannot wait, proceed behind a config flag marked
-`provisional: ADR-007` (never in `configs/frozen/`) until the decision is made.
+**Scaffold (D113, `provisional: ADR-007`, never in `configs/frozen/`).** Retrieval-supplied, Agentless-style: one prompt
+with the issue and the assembled context (byte-identical text before the excerpts for every arm), one repair call at
+temperature 0, up to two follow-ups for an unusable reply (same for all arms), edit blocks applied under D110. The
+retriever is the only thing that changes between arms. Unit of analysis, number of runs, the one primary contrast and
+the statistics are fixed in `docs/RQ3_PILOT.md` ("Driver, held-out slice and analysis plan"). Q45 is answered by that plan.
+The scaffold is not a tool-using agent; this is a scope statement for the claim (a retrieval-supplied one-shot repair),
+not only a design choice. Rejected for now: SWE-agent and OpenHands (a tool loop adds variance and cost that the
+paired design cannot afford on the free or a capped paid tier); revisit if the resolved rate under this scaffold is near
+zero on the held-out slice for every candidate model.
 
 ## Rationale
 _Pending._
@@ -72,3 +79,15 @@ choice of scaffold: none; it bears on whether resolved rate can be measured on t
 
 **Cheapest flip, still open:** the pilot itself (calls per instance, unusable-reply rate, run-to-run
 agreement); it needs the engineer's key file.
+
+## Addendum 2026-11-08 — scaffold accepted `provisional`; driver and analysis plan (D111 to D114)
+
+**Evidence class: reasoned (design), pipeline checks measured on gold-derived and deliberately broken edits.** The
+engineer settled the scaffold as piloted (D113). What changed in the record: the status above; the analysis plan (one
+primary contrast, RAW against the untrained encoder, paired bootstrap interval and sign-flip permutation test over
+instances on the 327 confirmatory instances; k runs per arm, an instance's score the fraction of its runs that resolve);
+a held-out slice of 50 executable instances reserved for the model check and kept out of every confirmatory analysis
+(D111); the driver and its replay test (`ril/agent/providers/driver.py`, E-RQ3-DRIVER); a power table with run-to-run
+noise (minimum detectable difference 4.4 to 9.7 points at N = 327, k = 1 to 3, scenario assumptions listed beside it).
+**Cheapest flip:** the graded model check on the held-out slice (time-box: one day of calendar time); if every
+candidate model resolves under 5% there, the scaffold, not only the model, is the thing to change.

@@ -193,3 +193,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-08,C,63966,S55,E-MINE-FULL mining session 2 outcome (same cause on another commit of the same repository; DEV-036),u22,2,0,00:54:04,0.0,FAILED
 2026-11-08,C,64593,S55,E-MINE-FULL mining session 1 (relaunch; no dependency); STOP_AFTER=5000; commit 1b61213,u22,2,0,,0.0,SUBMITTED
 2026-11-08,C,64594,S55,E-MINE-FULL mining session 2 (afterany 64593; kill-on-invalid-dep); STOP_AFTER=5000; commit 1b61213,u22,2,0,,0.0,SUBMITTED
+2026-11-08,A,64589,RQ3D,"prompts of the 377 executable instances x 3 arms at 8,000 tokens, first pass (issue text from the folders only: 57 instances without a folder text were skipped)",u22,4,0,00:00:20,0.0,COMPLETED
+2026-11-08,A,64590,RQ3D,"driver replay test on the real executor: 20 gold-derived edit sets and 10 broken variants (30 of 30 classes as expected)",u22,4,0,00:11:50,0.0,COMPLETED
+2026-11-08,A,64597,RQ3D,"what the prompt screen matched (addresses and path strings with counts; output kept off the repository)",u22,4,0,00:00:15,0.0,COMPLETED
+2026-11-08,A,64598,RQ3D,"prompts of the 377 executable instances x 3 arms at 8,000 tokens, issue text from the benchmark table (887 written, 244 rejected by the screen)",u22,4,0,00:00:11,0.0,COMPLETED

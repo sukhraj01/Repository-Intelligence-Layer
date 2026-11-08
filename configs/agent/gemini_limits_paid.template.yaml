@@ -1,0 +1,12 @@
+# Template for the limits of a billed (paid) project. NOT filled in: read the rate limits of the paid
+# tier for each candidate model from the provider console, write them here with the date, and pass
+# the file to `rq3_driver.py run --limits`. A model without an entry is refused by the limiter.
+# `provisional: D112`. Keep `margin` below 1 so that the run stays inside the console's figures.
+as_of: "UNSET"
+source: "Gemini developer console, billed tier (fill in)"
+timezone: "America/Los_Angeles"
+margin: 0.9
+models: {}
+# models:
+#   gemini-3.5-flash-lite: {rpm: <console>, tpm: <console>, rpd: <console>}
+#   gemini-3.6-flash: {rpm: <console>, tpm: <console>, rpd: <console>}

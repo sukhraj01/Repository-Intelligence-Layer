@@ -1,0 +1,18 @@
+{
+ "assumptions": {
+  "arm effect (0 to 10 points)": "assumption: the quantity the test is meant to detect",
+  "arms independent given the instance": "assumption",
+  "heterogeneity kappa (1, 4)": "assumption: no pilot evidence; low kappa = instances mostly always solved or never solved, so the arms' outcomes are strongly correlated",
+  "overall resolved rate (10, 20, 30%)": "assumption: no resolved rate has been measured",
+  "same reply in repeated runs (0.635)": "measured on the 100-instance pilot (Flash-Lite, BM25 and RRF), dev instances, a different model may differ",
+  "same usability (97.5%)": "measured in the pilot; not modelled separately: an unusable reply is an unresolved outcome and is inside the resolve probability"
+ },
+ "n": [
+  327,
+  232
+ ],
+ "permutations": 2000,
+ "same_reply": 0.635,
+ "seed": 0,
+ "sims": 500
+}
