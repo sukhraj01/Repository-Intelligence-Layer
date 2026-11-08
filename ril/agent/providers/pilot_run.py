@@ -27,6 +27,7 @@ from ril.agent.providers.patch_format import (
     reask_message,
 )
 from ril.agent.providers.screen import screen_text
+from ril.agent.providers.spend import SpendCapReached
 
 PREPARED_VERSION = "rq3-pilot-prepared/v1"
 
@@ -119,6 +120,7 @@ class RunConfig:
     max_reasks: int = 2
     max_calls: int | None = None
     wait_for_daily: bool = False
+    run_indices: tuple[int, ...] | None = None
 
 
 @dataclass
@@ -132,11 +134,13 @@ class RunSummary:
 
 
 def plan_units(
-    items: Sequence[Mapping[str, Any]], runs: int
+    items: Sequence[Mapping[str, Any]], runs: int, run_indices: Sequence[int] | None = None
 ) -> list[tuple[Unit, Mapping[str, Any]]]:
-    """Units in the fixed order (run index, instance, arm)."""
+    """Units in the fixed order (run index, instance, arm); ``run_indices`` names the runs
+    explicitly (default ``range(runs)``)."""
     ordered = sorted(items, key=lambda r: (r["instance_id"], r["arm"]))
-    return [((r["instance_id"], r["arm"], k), r) for k in range(runs) for r in ordered]
+    indices = list(run_indices) if run_indices is not None else list(range(runs))
+    return [((r["instance_id"], r["arm"], k), r) for k in indices for r in ordered]
 
 
 def _user(text: str) -> dict[str, Any]:
@@ -145,6 +149,106 @@ def _user(text: str) -> dict[str, Any]:
 
 def _model(text: str) -> dict[str, Any]:
     return {"role": "model", "parts": [{"text": text}]}
+
+
+def run_unit(
+    unit: Unit,
+    item: Mapping[str, Any],
+    log: CallLog,
+    client: Generator,
+    cfg: RunConfig,
+    day_of: Any,
+    summary: RunSummary,
+    done: Mapping[Unit, list[Row]] | None = None,
+) -> bool:
+    """Send the calls of one unit until its reply is final; ``False`` when the run must stop.
+
+    A unit with a final row in the log is counted as skipped and not sent again. The reason for
+    stopping (daily cap, ``max_calls``, provider fault, spend cap) is left in ``summary.stopped``.
+    """
+    prior = (done if done is not None else log.by_unit()).get(unit, [])
+    if prior and any(r["final"] for r in prior):
+        summary.units_skipped += 1
+        return True
+    replies = [r for r in prior if r["kind"] == "reply"]
+    contents: list[dict[str, Any]] = [_user(str(item["prompt"]))]
+    for r in replies:
+        contents += [
+            _model(log.load("responses", r["response_sha256"])),
+            _user(reask_message(r["format_error"])),
+        ]
+    attempt = len(replies)
+    while True:
+        if cfg.max_calls is not None and summary.calls >= cfg.max_calls:
+            summary.stopped = "max_calls"
+            return False
+        t_start = time.time()
+        try:
+            res = client.generate(contents, wait_for_daily=cfg.wait_for_daily)
+        except DailyCapReached as stop:
+            summary.stopped = "daily_cap"
+            summary.resume_at = stop.resume_at
+            return False
+        except SpendCapReached as stop:
+            summary.stopped = "spend_cap"
+            summary.errors.append(str(stop))
+            return False
+        summary.calls += 1
+        prompt_sha = log.store("prompts", canonical(contents))
+        row: Row = {
+            "instance_id": unit[0],
+            "arm": unit[1],
+            "run_index": unit[2],
+            "attempt": attempt,
+            "model": cfg.model,
+            "seed": cfg.seed,
+            "temperature": cfg.temperature,
+            "date_pacific": day_of(t_start),
+            "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t_start)),
+            "input_tokens": res.input_tokens,
+            "output_tokens": res.output_tokens,
+            "thought_tokens": res.thought_tokens,
+            "latency_s": round(res.latency_s, 3),
+            "finish_reason": res.finish_reason,
+            "http_status": res.status,
+            "retries": res.retries,
+            "n_429": res.n_429,
+            "n_5xx": res.n_5xx,
+            "prompt_sha256": prompt_sha,
+            "request_sha256": res.request_sha256,
+            "response_sha256": "",
+            "budget": item.get("budget"),
+            "first_stage": item.get("first_stage"),
+            "template_version": item.get("template_version"),
+            "format_error": res.error or "",
+            "patch_ok": False,
+            "edits_sha256": "",
+            "final": False,
+            "kind": "failed",
+        }
+        if res.error == "retries_exhausted":
+            log.append(row)
+            summary.stopped = "provider_unavailable"
+            summary.errors.append(f"{unit}: retries exhausted (last status {res.status})")
+            return False
+        row["kind"] = "reply"
+        row["response_sha256"] = log.store("responses", res.text)
+        if res.error == "blocked":
+            row["final"] = True
+        else:
+            code = "empty_reply" if res.error == "malformed_response" else None
+            edits, err = ((), code) if code else parse_edits(res.text, item["paths"])
+            row["format_error"] = err or ""
+            row["patch_ok"] = err is None
+            if err is None:
+                row["edits_sha256"] = sha256_text(edits_key(edits))
+            row["final"] = err is None or attempt >= cfg.max_reasks
+        log.append(row)
+        if row["final"]:
+            summary.units_finished += 1
+            return True
+        contents += [_model(res.text), _user(reask_message(str(row["format_error"])))]
+        attempt += 1
 
 
 def run_units(
@@ -160,85 +264,8 @@ def run_units(
     """
     summary = RunSummary()
     done = log.by_unit()
-    for unit, item in plan_units(items, cfg.runs):
-        prior = done.get(unit, [])
-        if prior and any(r["final"] for r in prior):
-            summary.units_skipped += 1
-            continue
-        replies = [r for r in prior if r["kind"] == "reply"]
-        contents: list[dict[str, Any]] = [_user(str(item["prompt"]))]
-        for r in replies:
-            contents += [
-                _model(log.load("responses", r["response_sha256"])),
-                _user(reask_message(r["format_error"])),
-            ]
-        attempt = len(replies)
-        while True:
-            if cfg.max_calls is not None and summary.calls >= cfg.max_calls:
-                summary.stopped = "max_calls"
-                return summary
-            t_start = time.time()
-            try:
-                res = client.generate(contents, wait_for_daily=cfg.wait_for_daily)
-            except DailyCapReached as stop:
-                summary.stopped = "daily_cap"
-                summary.resume_at = stop.resume_at
-                return summary
-            summary.calls += 1
-            prompt_sha = log.store("prompts", canonical(contents))
-            row: Row = {
-                "instance_id": unit[0],
-                "arm": unit[1],
-                "run_index": unit[2],
-                "attempt": attempt,
-                "model": cfg.model,
-                "seed": cfg.seed,
-                "temperature": cfg.temperature,
-                "date_pacific": day_of(t_start),
-                "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t_start)),
-                "input_tokens": res.input_tokens,
-                "output_tokens": res.output_tokens,
-                "thought_tokens": res.thought_tokens,
-                "latency_s": round(res.latency_s, 3),
-                "finish_reason": res.finish_reason,
-                "http_status": res.status,
-                "retries": res.retries,
-                "n_429": res.n_429,
-                "n_5xx": res.n_5xx,
-                "prompt_sha256": prompt_sha,
-                "request_sha256": res.request_sha256,
-                "response_sha256": "",
-                "budget": item.get("budget"),
-                "first_stage": item.get("first_stage"),
-                "template_version": item.get("template_version"),
-                "format_error": res.error or "",
-                "patch_ok": False,
-                "edits_sha256": "",
-                "final": False,
-                "kind": "failed",
-            }
-            if res.error == "retries_exhausted":
-                log.append(row)
-                summary.stopped = "provider_unavailable"
-                summary.errors.append(f"{unit}: retries exhausted (last status {res.status})")
-                return summary
-            row["kind"] = "reply"
-            row["response_sha256"] = log.store("responses", res.text)
-            if res.error == "blocked":
-                row["final"] = True
-            else:
-                code = "empty_reply" if res.error == "malformed_response" else None
-                edits, err = ((), code) if code else parse_edits(res.text, item["paths"])
-                row["format_error"] = err or ""
-                row["patch_ok"] = err is None
-                if err is None:
-                    row["edits_sha256"] = sha256_text(edits_key(edits))
-                row["final"] = err is None or attempt >= cfg.max_reasks
-            log.append(row)
-            if row["final"]:
-                summary.units_finished += 1
-                break
-            contents += [_model(res.text), _user(reask_message(str(row["format_error"])))]
-            attempt += 1
+    for unit, item in plan_units(items, cfg.runs, cfg.run_indices):
+        if not run_unit(unit, item, log, client, cfg, day_of, summary, done):
+            return summary
     summary.stopped = summary.stopped or "complete"
     return summary
