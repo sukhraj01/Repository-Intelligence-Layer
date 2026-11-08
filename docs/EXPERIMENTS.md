@@ -75,6 +75,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-RQ3-PILOT-RESULT | lead | `docs/experiments/B.md` | done; pilot analysed from stored data (D109), free tier workable, no resolved rate | 2026-11-07 |
 | E-RQ3-PATCHAPPLY | lead | `docs/experiments/B.md` | done; converter and apply rates of the pilot's edits (D110), 20 of 20 gold-derived edits resolved | 2026-11-08 |
 | E-RQ3-DRIVER | lead | `docs/experiments/B.md` | done; held-out slice, prompts of the 377, driver replay-tested (30 of 30), analysis plan, power with run noise, cost model (D111 to D114); no model call | 2026-11-08 |
+| E-REPORT-DRAFT-1 | lead | `docs/experiments/B.md` | done; settled sections of the final report drafted from stored evidence, three generated tables, a prose checker | 2026-11-08 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
 | E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |

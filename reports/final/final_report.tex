@@ -39,17 +39,28 @@ Chaitanya Shah\\ \small 2025202033}
 \todo{Abstract: written after the confirmatory contrasts and the agent runs are in; fills from
 \entry{E-RQ2-FILTER}, \entry{E-RQ2-CTRL-SUBRAW}, \entry{E-RQ3-AGENT}.}
 
+% Numbers in the prose of this file carry the experiment entry and the stored file they were read
+% from in a comment on the same line; scripts/check_report.py enforces it.
+
 % =============================================================================================
 \section{Introduction}
 
 Coding agents work inside a fixed context window, while a real repository is many times larger.
 Something has to decide which code the agent reads; when that choice is poor, the agent spends its
 budget on irrelevant files or never sees the code it has to change. The \emph{Repository
-Intelligence Layer} (RIL) is a repository-level retrieval layer: given an issue, it returns a small,
-ranked set of Python code units that fit a token budget. The system is the apparatus; the
-experiment is the study. Two things are built and only one is the contribution: the system is
-engineering and is not novel on its own, while the experiment measures whether the way a
-retriever's training pairs are handled changes whether the agent resolves the issue.
+Intelligence Layer} (RIL) is a repository-level retrieval layer for LLM coding agents: given an
+issue, it returns a small, ranked set of Python code units that fit a token budget. Two things are
+built and only one is the contribution. The system (a function-level index, lexical, dense and
+structural signals, rank fusion, context assembly) is the apparatus and is not novel on its own. The
+experiment is the study: retrievers that differ \emph{only} in how their training pairs are handled,
+one fixed agent, and a measurement of whether the difference survives to the resolved rate.
+
+\paragraph{Why the question matters.} Retrievers for issue localization are trained on pairs that
+were mined automatically: the issue is the query and the functions edited by the closing pull request
+are the positives. Some positives are wrong (a refactoring, a test helper), and some relevant
+functions are missing and later drawn as negatives. Whether handling that noise (filtering, weighting,
+ordering) changes retrieval, and whether a retrieval change reaches the agent's success, is not
+answered by the papers that each study one intervention (Section~\ref{sec:related}).
 
 \paragraph{Research questions.}
 \textbf{RQ1} Which retrieval signals contribute to repository-level code retrieval? Incremental
@@ -65,16 +76,19 @@ performance? One fixed agent scaffold, one fixed base model, the same instances;
 resolved rate, with, for every failure, whether the file of the reference fix was in the retrieved
 context.
 
-\paragraph{Claim.} Our literature audit did not identify a study that systematically evaluates the
-controlled pipeline from retriever supervision quality, through retrieval performance, to
-repository-level coding-agent success. The contribution is an empirical comparison, not an
-intervention: filtering, weighting and curriculum each exist in the literature, and we compare them
-under one protocol with the agent held fixed. The scope is Python only. Absolute resolved rates are
-not statements about agent capability, because benchmark contamination raises them identically
-across arms.
+\paragraph{What is claimed, and what is not.} Our literature audit did not identify a study that systematically evaluates
+the controlled pipeline from retriever supervision quality, through
+retrieval performance, to repository-level coding-agent success. The contribution is an empirical
+comparison, not an intervention: filtering, weighting and curriculum each exist in the literature, and
+we compare them under one protocol with the agent held fixed. The scope is Python only. Absolute
+resolved rates are not statements about agent capability, because benchmark contamination raises them
+identically across arms. As of this draft, the apparatus is built and measured, the training arms
+have been piloted, and \emph{no resolved rate and no confirmatory contrast exists}; the sections
+below say for each claim whether it is measured, exploratory only, not run or blocked, in the
+words of the project's evidence map.
 
-\paragraph{Contributions, stated as what is measured.} Every item points to a table below and to its
-entry in the experiment registry; none is a claim about a retriever trained to convergence.
+\paragraph{Contributions, stated as what is measured.} Every item points to a table or section below
+and to its entry in the experiment registry; none is a claim about a retriever trained to convergence.
 \begin{itemize}
   \item A function-level index with a typed code graph, and the published BM25 rows reproduced from
   it (Table~\ref{tab:bm25_repro}).
@@ -83,27 +97,72 @@ entry in the experiment registry; none is a claim about a retriever trained to c
   \item A noise dose-response of the supervision arms at matched updates, with the teacher caveat
   stated (Table~\ref{tab:noise_dose_response}).
   \item An unfiltered pull-request-mined training set, its rank profile against the published pool,
-  and a first training pilot on it (Tables~\ref{tab:mined_vs_pool_ranks}, \ref{tab:mined_pilot}).
+  its overlap audit against held-out code, and a first training pilot on it
+  (Section~\ref{sec:data}, Tables~\ref{tab:mined_vs_pool_ranks}, \ref{tab:mined_pilot}).
   \item The context assembly stage and how much of the reference fix lands in the context
   (Tables~\ref{tab:assembly_gold}, \ref{tab:assembly_cap}).
+  \item An executable evaluation of resolved rate that runs without root or a container, its
+  population and its power (Section~\ref{sec:rq3}, Tables~\ref{tab:rq3_subset}, \ref{tab:rq3_power}).
 \end{itemize}
 Every pilot result in this report is labelled \emph{exploratory} in its caption and is outside the
 pre-registered contrasts of Section~\ref{sec:rq2}. \todo{Contributions on the confirmatory contrasts
 and on resolved rate: \entry{E-RQ2-FILTER}, \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
+\section{Background}
+\label{sec:background}
+
+\paragraph{Retrieval for coding agents.} An agent that fixes an issue edits code it has read. Context
+can reach it in two ways: a retriever selects code before the agent starts (the setting studied
+here, one retrieval pass whose output is placed in the agent's input), or the agent searches the
+repository itself through tools, which costs calls and tokens that single-pass benchmarks do not
+measure~\cite{corebench,costexploration}. We study the first form because it isolates the retriever:
+the agent, the model and the edit procedure are identical for every arm.
+
+\paragraph{Retrieval levels.} CORE-Bench has three levels~\cite{corebench}: Level~1 is traditional
+code understanding; Level~2 is issue-to-edit localization, with relevant chunks taken from the pull
+request's patch; Level~3 asks for broader context (tests, documentation, configuration), with labels
+taken from agent browse traces filtered by a three-vote judge ensemble. Evaluation is over the whole
+repository snapshot at the pull request's base, not over a short candidate list. The paper reports that
+the best general embedding model falls from 71.7 nDCG@10 at Level~1 to 20.3 at Level~2
+\cite{corebench}. % paper_reported: knowledge/papers/core-bench-2606.11864.md, Table 3
+Level~3 labels are model-judged and the paper does not say how the three votes combine into the
+kept label, so Level~3 is secondary evidence here. The metrics are nDCG@10, which rewards placing
+relevant units early, and Recall@100, which asks whether they are reachable at all.
+
+\paragraph{Resolved rate.} A SWE-bench-style instance consists of a repository, a base commit, an
+issue text, a reference patch, and tests; an instance is \emph{resolved} when every test that must
+change from fail to pass does so and every test that passed before still passes after the model's
+patch is applied~\cite{swebench}. The benchmark's own analysis shows that resolution depends on the
+length of the context, the size of the edit and the issue content, so a retrieval metric and the
+resolved rate are different quantities~\cite{swebench}. The human-validated subset of 500 instances
+used as the final test here was released separately, and the paper we read in full does not describe
+it. % E-RQ3-EXEC results/rq3_exec/repo_table.csv (500 instances)
+\todo{cite: SWE-bench Verified source note (no note exists; nothing is stated about its
+construction beyond the instance count).}
+Because the same instances carry retrieval labels and executable tests, retrieval quality and
+resolved rate can be paired per instance, which is what makes RQ3 a paired design.
+
+% =============================================================================================
 \section{Related work}
+\label{sec:related}
 
 Only papers read in full are cited; each has a note in the project's reading log.
 
 \paragraph{Retrievers for issue localization and the benchmarks.} SWE-bench defines the resolved-rate
 task~\cite{swebench}. CORE-Bench provides repository-level retrieval labels at three levels and
-a BM25 baseline~\cite{corebench}; SweRank and SweRank+ train code retrievers for issue
-localization, with a consistency filter on the rank of the positive~\cite{swerank,swerankplus}; CoRNStack
-supplies the contrastive training corpus that the published pool builds on~\cite{cornstack}. Two
-follow-up benchmarks evaluate retrieval for coding agents and the cost of exploration
-\cite{agentretrievalbench,costexploration}. One trained retrieval agent reports resolved rate
-with the agent fixed~\cite{codegrep}.
+a BM25 baseline~\cite{corebench}; its supervised fine-tuning uses one recipe and compares no
+filtering, weighting or curriculum, which leaves the comparison of RQ2 open~\cite{corebench}. SweRank and SweRank+
+train code retrievers for issue localization, with a consistency filter that keeps a pair only if the
+positive ranks within the top $K$ under a separately pretrained encoder; SweRank selected $K=20$ among
+five settings with one run per setting~\cite{swerank,swerankplus}. % knowledge/papers/swerank-2505.07849.md; K = 20 of {5, 10, 20, 50, none}
+CoRNStack is a large contrastive corpus with consistency filtering and a curriculum over negative difficulty
+(not over example order); CodeRankEmbed, our base encoder, was trained on it~\cite{cornstack}.
+Two recent benchmarks evaluate repository context for coding agents and the cost of
+exploration~\cite{agentretrievalbench,costexploration}; neither measures a resolved rate. One
+retrieval agent reports a resolved rate with the downstream agent held fixed, a gain of 1.2
+points (six of 500 instances) from one run per configuration and without an interval%
+~\cite{codegrep}. % paper_reported: knowledge/papers/codegrep-2608.05886.md
 
 \paragraph{Graph-structured localization.} Several systems give an agent or a retriever a repository
 graph: LocAgent, KGCompass, SpIDER, GraphLocator and SemNav~\cite{locagent,kgcompass,spider,graphlocator,semnav};
@@ -123,7 +182,107 @@ most cases outside repository-level code retrieval; the comparison here is of th
 interventions under one matched protocol, followed through to the resolved rate.
 
 \todo{Related-work refresh before submission: the dated search log and the papers still unread are
-in the project's literature notes; nothing is cited from an abstract.}
+in the project's literature notes; nothing is cited from an abstract. Two papers on the supervision
+side are not read in full (evidence map row 19).}
+
+% =============================================================================================
+\section{Data and ground truth}
+\label{sec:data}
+
+\paragraph{Roles.} CORE-Bench ships evaluation data only, so ``train on CORE-Bench supervision'' has no
+referent; supervision comes from a published pool and from a set we mine. Evaluation uses CORE-Bench
+Level~2 and Level~3 and SWE-bench Verified; development repositories (Section~\ref{sec:setup}) take
+every tuning decision.
+
+\paragraph{The published pool and its limitation.} The pool is the Python part of a public
+issue-localization training set: one directory per pull request.
+It holds 24,285 directories from 2,448 repositories, % E-POOL-CHECK docs/POOL_CONSTRUCTION.md
+and 307,996 positive rows, not the 49,973 instances its source paper's table lists for Python
+(the discrepancy is open). % E-POOL-CHECK docs/RQ2_PROTOCOL.md section 2; 49,973 is paper_reported
+The dataset carries no card, and the released construction code differs from the papers' description in the
+teacher and cut of the consistency filter, in whether a test change is required, and in how a pull
+request is linked to an issue (keyword matching over title, body and commit messages rather than the
+platform's closing references). % docs/POOL_CONSTRUCTION.md, table of disagreements
+The measured consequence is selection by a retriever: only 1.7\% of pool directories lack a positive in the
+top 10 of SweRankEmbed-Small (an encoder trained on that pool's source data), against 23.2\% under BM25 and 15.3\% under CodeRankEmbed, and 39.4\%
+of positives inside the directories lie outside that teacher's top 40 (interval 24.1 to 48.0). % E-POOL-RANKS results/mining/m3_ranks.md; docs/RQ2_PROTOCOL.md section 2
+So \textsc{Raw} on the pool is not raw. The pool is kept as a comparison population with this limitation stated, not as the arm on which
+\textsc{Raw} is defined.
+
+\paragraph{Held-out list and leakage controls.} The held-out list is built before any pool or mined set
+is filtered. It is the union of the repositories of CORE-Bench Level~2, Level~3 (and the rewritten-query
+variants, which add none) and Verified: 605 distinct repositories at Level~2, 92 at Level~3, all
+Verified's 12 among them. % data/held_out/report.md
+Names are read from the instance identifiers of all 1,458 benchmark folders, never from folder names
+(folder names are truncated and several owners share one); the canonical form is the case-folded
+\texttt{owner/name}, current names are resolved through a rename cache, a 169-repository
+issue-localization benchmark tier is held out by switch, and the fork network is reported as a
+sensitivity only. % data/held_out/report.md, specs/held_out_repos.md
+Applied to the pool, the exact filter drops 89 repositories (3,431 pull requests) and name resolution
+three more, leaving 20,800 directories in 2,356 repositories. % data/held_out/pool_filter_report_gangiswag_train_data_python.md
+Rename resolution is partial (cached for 47 of the pool's repositories at the last run), so every count after
+resolution is a lower bound on the removal. % data/held_out/pool_filter_report_gangiswag_train_data_python.md
+Tests that must always pass assert that no training repository is held out, that no patch or gold text
+appears in a training query, that the quality-signal encoder is not the encoder being trained, and that no
+evaluation data is reachable from a training path.
+
+\paragraph{The mined set.} The set is built by one rule and no retriever in the loop. Repositories are those of the pool's
+population. Merged pull requests are linked to issues through the platform's closing references; the issue's title and
+body are the query; the positives are the innermost units of the base commit that own an edited line (so a function that
+only gained lines counts, which the pool's code does not do); every other unit of the snapshot is a candidate negative.
+A pilot attempted 2,000 pull requests from 200 repositories, of which 1,391 were mined, 386 had no Python change, 206
+had no positive and 17 were quarantined (unparseable changed file, truncated diff, missing file); the 1,391 hold
+11,047 positives, 35.9\% of them in test files, which the pool never contains. % E-MINE-PILOT results/mining/m2_report.md
+Pull requests the pool kept were larger (median 6 positives against 2, intervals exclude zero). % E-MINE-PILOT m2_report.md, selection table
+Two readings of one stored run are selected by name and never by re-mining: \texttt{non\_test} (no test-file function in the corpora,
+no test positive, directories without a remaining positive dropped), which is primary, and \texttt{pool\_aligned}, a sensitivity
+reading that also drops \texttt{async} functions and positives that gained lines only. Both give the same BM25 no-top-10-positive
+share on a 300-directory subset (53.3\%), and the second drops a fifth of the directories, which is why the primary reading was kept. % E-MINE-FULL D96 docs/experiments/B.md
+That share is 53.3\% against 23.2\% for the pool (Table~\ref{tab:mined_vs_pool_ranks}), so the mined set holds pairs the BM25 teacher cannot find, which
+is what a filter would act on. The pilot's \texttt{non\_test} reading has 1,286 directories and 7,081 positives. % E-MINED-PILOT results/mining/m3_ranks.md
+\todo{Size, yield and quarantine of the full mined set; the full run is in progress and none of its numbers is
+stored as a result: \entry{E-MINE-FULL}.}
+Known limits of the construction: about one pilot pull request in ten has a corpus file that does not parse (Python~2 syntax),
+so those units are absent; % 133 of 1,391, E-MINE-PILOT results/mining/m2_report.md
+changed files with non-ASCII identifiers are not yet representable in unit identifiers (the identifier schema
+is frozen), and a pull request whose base-commit fetch exceeds the time limit is quarantined and counted, not retried
+indefinitely; quarantined pull requests are a stated limitation of the set, not a random subsample.
+
+\paragraph{Content-overlap audit.} Matching repository names does not catch a held-out function that was
+vendored into another repository. The audit hashes each function's syntax tree (docstring, comments and layout
+ignored) with a floor of 20 syntax-tree nodes and drops a mined directory whose non-test positive matches a held-out function;
+corpus-level overlap alone only flags the directory. % E-OVERLAP-AUDIT docs/experiments/B.md, D105
+On the pilot store it drops 3 of 1,286 pool-like directories (0.2\%) and 85 of 7,081 positives (1.2\%), and flags 33 more; a hand reading of the five
+matched positives at the floor finds code copied or adapted from one held-out library. % E-OVERLAP-AUDIT results/mining/overlap_audit/pilot/summary.json
+The audit sees 26 of the 605 held-out repositories (stored function records exist for no others), so a leak
+into the remaining ones is undetectable by it; it has not been run on the full store. % E-OVERLAP-AUDIT docs/experiments/B.md
+\todo{Surviving counts of the full mined set after the audit: \entry{E-MINE-FULL}, \entry{E-OVERLAP-AUDIT}.}
+
+\paragraph{Label audit.} Whether mined positives are wrong is measured, not assumed. Positives of the pilot's 1,286 directories are
+the sampled population. A pair's K-rank is the rank of its best-ranked positive when a base retriever ranks the
+repository's functions against the issue; at $K=20$ under BM25 a pair is kept when that rank is at most 20, which splits the population into a kept and a dropped cell, and the sheet holds 200 pairs from each
+(247 directories, 91 repositories; pairs of one pull request are not independent). % E-LABEL-AUDIT-SHEET docs/experiments/B.md, D99
+Each pair shows the issue, the edited function before the change, the diff hunk and the other edited functions; the reader gives a
+three-way verdict (relevant, not relevant, cannot tell) and answers whether a function the issue is about was left unedited. Two readers
+who are not the lead read 250 rows each, with 100 pairs read by both for agreement; 399 of 400 pairs reproduce the stored
+line counts of the diff. % E-LABEL-AUDIT-SHEET docs/experiments/B.md
+Every rate is reported three ways (unresolved answers excluded, counted as not wrong, counted as wrong), and a disagreement is
+unresolved, not adjudicated. Sampling is stratified by the BM25 cell only, because dense-teacher ranks exist for too few sampled pairs
+(111 of 400) to fill a cell. % E-LABEL-AUDIT-SHEET docs/experiments/B.md
+Nobody has read a pair, so there is no noise rate, agreement or findability figure.
+\todo{Audited noise rate, reader agreement and the precision of the filter's drops: \entry{E-LABEL-AUDIT-SHEET}.}
+
+\paragraph{Contamination.} Pretraining exposure is measured, not argued. Functions at the base commits of the Verified
+instances were matched by syntax-tree hash against the documents of all 240 shards of a public code-retrieval training corpus
+(23,881,192 rows). % E-CONTAM-SCAN docs/EXPERIMENTS.md
+At the 20-node floor, 13.7\% of the probed functions occur in the corpus (interval 13.5 to 13.8), from 4.1\% to 26.5\% by repository
+(Table~\ref{tab:contamination}), and every instance has at least one match, so ``has a hit'' carries no information. % E-CONTAM-SCAN results/tables/x4_contam_scan_by_repo.csv
+The functions the reference patches edit match less often than other functions (8.9\% of 783 edited functions, interval 7.1 to 11.1), so
+the patched code is not over-represented. % E-CONTAM-EDITED docs/EXPERIMENTS.md
+A match is equal code, not proof that a pair was trained on or that a model memorised it; renamed or edited copies are missed.
+Contamination bears on absolute levels and is equal across arms, which is why no absolute resolved rate is a capability claim.
+
+\input{generated/contamination}
 
 % =============================================================================================
 \section{System}
@@ -143,7 +302,11 @@ cost: \entry{E-GRAPH-BUILD} tables.}
 scoring) is the lexical signal. The dense signal is a code embedding model over a flat exact index
 (no approximate search); the working encoder is CodeRankEmbed, and a larger encoder is used
 zero-shot only because it cannot be fine-tuned on the reachable GPUs. The graph is a third signal in
-the form of hop-decayed expansion from the top units.
+the form of hop-decayed expansion from the top units. As measured (Table~\ref{tab:graph_role},
+exploratory), expansion over the stored graph is above the first stage at both levels and above the
+same-file control by a small margin at Level~2, but not above the control at Level~3, and the edges that
+leave a file are below the control there. We therefore report no evidence that typed edges add to file-level
+expansion at Level~3; whether structure helps at training time or as an agent tool is unmeasured.
 
 \paragraph{Fusion.} Reciprocal rank fusion, which is rank-based, not a weighted score sum; the
 fusion constant and the encoder cut were chosen on the development repositories.
@@ -152,10 +315,14 @@ fusion constant and the encoder cut were chosen on the development repositories.
 per-unit cap; a unit that does not fit the remaining budget is skipped and the walk continues;
 included blocks are ordered by file and line, each with a header giving path, lines, kind, name and
 retrieval rank; the finished string is verified against the budget (ADR-014, provisional until the
-agent pilot). Assembly is byte-identical across RQ2 arms, so that the only thing RQ3 varies is the
+agent runs). Assembly is byte-identical across RQ2 arms, so that the only thing RQ3 varies is the
 retriever. No graph or same-file expansion is applied in assembly. Table~\ref{tab:assembly_cap} shows
-the cap measurement and Table~\ref{tab:assembly_gold} the gold in context. \todo{Budget in the agent
-model's tokens: set by the agent pilot, \entry{E-RQ3-AGENT}.}
+the cap measurement and Table~\ref{tab:assembly_gold} the gold in context. Stated limits: budgets are
+counted in approximate tokens, not the agent model's tokenizer (against one embedding model's tokenizer
+the approximation counts 1.22 times as many tokens on a 200-unit sample, but three counts returned by the
+hosted agent model matched it, ratio 1.00, so the ratio of the final model is not known); % E-ASSEMBLY docs/experiments/B.md; E-RQ3-PILOT-PREP smoke test
+the cap was chosen on development only; there is no expansion option and no cached token count.
+\todo{Budget in the agent model's tokens: set once the final model is chosen, \entry{E-RQ3-AGENT}.}
 
 \paragraph{Latency harness.} Every commit that touches the query path appends a row of per-stage
 latency (query encode, BM25, dense search, graph expansion, fusion, rerank, assemble, end to end) at
@@ -167,13 +334,15 @@ millisecond: \entry{E-LAT-STAGES}, \entry{E-RQ1-ALL}.}
 
 % =============================================================================================
 \section{Evaluation setup}
+\label{sec:setup}
 
-\paragraph{Benchmark and levels.} CORE-Bench Level~2 asks for the file-and-function context needed to
-edit; Level~3 asks for context beyond the edited files. Evaluation is at unit level (decision
+\paragraph{Benchmark and levels.} Evaluation is at unit level (decision
 D12): a chunk's positive counts for every unit it overlaps, the reading without module-residual
 positives is primary and the benchmark-faithful reading is reported beside it (D18, provisional).
 Chunk-level numbers with folder means are reported only where they reproduce the published rows
-(Table~\ref{tab:bm25_repro}). The metrics are nDCG@10 at Level~2 and Recall@100 at Level~3.
+(Table~\ref{tab:bm25_repro}). The metrics are nDCG@10 at Level~2 and Recall@100 at Level~3. Patch-derived
+labels are approximate targets (reasoned): a bug can be fixed somewhere other than where it was fixed
+historically, and edited documentation and imports are not positives.
 
 \paragraph{Roles.} Every choice (K, teacher, weight form, update count, fusion constant, assembly
 cap) is made on development repositories only: five at Level~2 and two to three at Level~3. SWE-bench
@@ -182,33 +351,29 @@ decision rules are registered and the development analysis is complete. To raise
 repositories, which seeds cannot buy, eight further repositories take the test role under a rule
 fixed before any result (decision D100): Python-class repositories outside the development set and
 Verified with at least five Level~2 queries, ordered by a hash of the repository name, the first
-eight taken, the next eight held as a reserve for a technical build failure only. They add Level~2
+eight taken, the next eight held as a reserve for a technical build failure only. % E-EVAL-REPOS-BUILD docs/experiments/B.md
+They add Level~2
 only; the Level~3 claim is stated on the fifteen repositories that have Level~3 labels (three
-development, twelve Verified). \todo{Evaluation of the eight repositories and of Verified: one look,
+development, twelve Verified). % E-EVAL-REPOS-BUILD docs/RQ2_PROTOCOL.md threat 11
+\todo{Evaluation of the eight repositories and of Verified: one look,
 after the development analysis; \entry{E-EVAL-REPOS-BUILD} built the stores, \entry{E-RQ2-FILTER} reads
 them.}
 
-\paragraph{Leakage.} The training pool shares no repository with CORE-Bench Level~2 and Level~3 or
-Verified; instance-level disjointness is not enough. The held-out list is built first, current
-repository names are resolved, the pool is filtered against it and the surviving counts are
-reported. Tests assert repository disjointness, no patch or gold text in any training query,
-that the quality-signal encoder is not the encoder being trained, and that no evaluation data is
-reachable from a training path. \todo{Surviving counts for the mined set after the content-overlap
-audit: \entry{E-MINE-FULL}.}
-
 \paragraph{Statistics.} The primary number is the mean over queries. Intervals are 95\% bootstrap
-intervals (2,000 draws, seed 0), clustered by repository where at least three repositories are
+intervals (2,000 draws, seed 0), % docs/RQ2_PROTOCOL.md section 4
+clustered by repository where at least three repositories are
 present and query-level otherwise (development Level~3 has two repositories, so its interval carries
 query sampling only and is marked). Every contrast is a paired difference of two cells trained with
 the same seed on the same queries; seed-to-seed spread is reported because the bootstrap carries
 query and repository sampling, not retraining variance. Two cells that overlap within one seed
 standard deviation are called indistinguishable at this sample size. Multiplicity: Holm step-down within
 each pre-registered family, with the uncorrected intervals beside it. The smallest difference worth
-reporting is $\delta = 1.5$ points at both levels; smaller differences are estimates with bounds,
+reporting is $\delta = 1.5$ points at both levels; % docs/RQ2_PROTOCOL.md section 5
+smaller differences are estimates with bounds,
 never effects. The minimum detectable difference for $R$ repositories, $n$ queries and $k$ seeds is
 $2.8016\sqrt{s^2_{\mathrm{repo}}/R + s^2_{\mathrm{query}}/n + (s^2_{\mathrm{seed\times query}}/n +
 s^2_{\mathrm{seed}})/k}$ with variance components estimated from stored runs; seeds divide only the
-last bracket, so repositories, not seeds, reduce the repository term.
+last bracket, so repositories, not seeds, reduce the repository term. % docs/RQ2_PROTOCOL.md section 5
 
 \paragraph{Evidence classes.} Every number carries one: \emph{measured} (a run in this project, with
 log, configuration hash, seed and hardware), \emph{operator\_reported}, \emph{reasoned} (arithmetic
@@ -244,17 +409,25 @@ development Level~3 repository: \entry{E-GRAPH-L3}.}
 \subsection{Protocol}
 
 The retrieval stack is frozen across arms; only the supervision strategy varies. Held identical:
-base checkpoint (CodeRankEmbed), architecture, pooling, batch shape, learning-rate schedule,
-temperature, maximum length, one negative policy for all arms, the evaluation set, the flat exact
-index, rank fusion and byte-identical context assembly. The protocol settles fifteen items before any
+base checkpoint (CodeRankEmbed), architecture, pooling, batch shape (32 pairs, one positive and one
+negative each, half-precision, 512 tokens), learning-rate schedule, temperature, one negative policy for all
+arms (random, repository-local), the evaluation set, the flat exact index, rank fusion and byte-identical
+context assembly. % docs/RQ2_PROTOCOL.md section 3, DEV-012, DEV-013
+The arms enter only through which pairs are used, how they are weighted, or in what order:
+\textsc{Raw} uses every pair; \textsc{Filter} drops a pair whose positive's K-rank under a teacher exceeds $K$;
+\textsc{Weight} scales a pair's loss by a power-form function of that rank with a floor;
+\textsc{Curriculum} presents pairs in four rank buckets from easy to hard, with the reversed order as its
+control. Controls: a random subsample of \textsc{Raw} of the filtered size, an
+oracle-clean arm that reads the injected-noise ledger, and a noise arm. % docs/RQ2_PROTOCOL.md section 3
+The protocol settles fifteen items before any
 final run (O1 to O15); the ones that shape the claim are:
 \begin{itemize}
   \item \textbf{Updates (O1):} the primary budget is 100 optimizer updates of a longer schedule, with
-  1,000 updates as a sensitivity check on a subset of cells, because the pilots saturate early.
+  1,000 updates as a sensitivity check on a subset of cells, because the pilots saturate early. % docs/RQ2_PROTOCOL.md section 3
   \item \textbf{Signal and teachers (O3):} the quality signal is SweRank's K-rank (minimum rank of
   the positive under a base retriever) at K = 20, positive level. BM25 is the primary teacher because the
   published pool's construction does not favour it; SweRankEmbed-Small is reported with the caveat
-  that it shaped the pool. No cell uses the encoder being trained as its own teacher.
+  that it shaped the pool. No cell uses the encoder being trained as its own teacher. % docs/RQ2_PROTOCOL.md section 3
   \item \textbf{Confirmatory scope (O2):} exactly two contrasts, both on the unfiltered mined set:
   \textsc{Filter} (BM25 teacher) against \textsc{Raw}, and against the size-matched random
   subsample. Everything else (the second teacher, \textsc{Weight}, \textsc{Curriculum}, the injected-noise
@@ -268,6 +441,15 @@ final run (O1 to O15); the ones that shape the claim are:
   rule; the pilot realisations are not reused.
   \item \textbf{Retention (O9):} final models of runs that feed RQ3 are retained (half precision).
 \end{itemize}
+
+\paragraph{Noise design.} Injected noise calibrates what the arms can recover. For each pair independently with
+probability $r$, the positives are replaced by non-positive functions of the same snapshot (the uniform kind, $r$ of 0.2 and 0.4) or of the
+same file (the sibling kind, $r$ of 0.4), the true positives are masked and an indicator is stored in a ledger that only the
+oracle-clean arm and the subsample's size read. % E-PILOT-NOISE, E-PILOT-NOISE-SIB docs/RQ2_PROTOCOL.md section 2
+The teacher separates injected from clean pairs well for the uniform kind (area under the curve 0.83 to 0.84 for BM25, 0.97 to 0.98 for
+SweRankEmbed-Small) and less for the sibling kind (0.77 to 0.79 and 0.94). % E-PILOT-NOISE, E-PILOT-NOISE-SIB docs/RQ2_PROTOCOL.md section 2
+Run-to-run variance is measured, not assumed: at three seeds the query-level minimum detectable difference
+is 1.10 points at Level~2 and 1.02 at Level~3, and with the repository term 1.85 and 3.08 (computed for three seeds from the stored arms-pilot runs). % E-STORED-ANALYSIS results/tables/stored/s1_mdd.csv
 
 \paragraph{Decision rules, fixed before any final run.} \emph{Positive}: the lower end of the
 adjusted interval is above zero at Level~2 (repository-clustered) and at Level~3 on the final test,
@@ -285,7 +467,10 @@ not in resolved rate, RQ3 reports the retrieval-versus-reasoning failure breakdo
 Table~\ref{tab:noise_dose_response} injects label noise of a known kind at a known rate into the
 published pool and measures what the arms recover; Table~\ref{tab:mined_vs_pool_ranks} compares the
 rank profile of the unfiltered mined set with the published pool's; Table~\ref{tab:mined_pilot} is the
-first training run on the mined set. Two cautions are part of the result. The published pool looks
+first training run on the mined set. These are exploratory, at 100 updates and two or three seeds. On the pool at the
+base budget \textsc{Raw} gains 9.6 points at Level~2 and 11.1 at Level~3 over the untrained encoder, and
+no supervision cell is above \textsc{Raw} or the size-matched subsample beyond seed noise. % E-PILOT-ARMS2 docs/EXPERIMENTS.md stage 1 (+9.59, +11.13)
+Two cautions are part of the result. The published pool looks
 pre-selected by one retriever, so \textsc{Raw} on it is not raw; and injected noise is a proxy whose
 transfer to real noise is open (a second kind of noise failed its pre-registered sanity check).
 \todo{Sibling-noise decision and its two further seeds: \entry{E-PILOT-NOISE-SIB}.}
@@ -296,16 +481,11 @@ transfer to real noise is open (a second kind of noise failed its pre-registered
 
 \subsection{Noise audit}
 
-The share of mined pairs that carry harmful noise, and of what kind, is estimated from a
-stratified sample: a wrong positive (an edited function the issue is not about), a sibling of the
-relevant function, or a missing positive (a false negative among the negatives, which is not
-harmful on the positive side). The sample is stratified by K-rank (kept and dropped under each
-teacher) so that the precision and recall of the filter are estimated, not only the overall rate. Two
-readers who are not the lead read the pairs, so the lead's knowledge of the arms cannot influence the
-sample; a 100-pair overlap gives their agreement. A binomial rate to a half-width of 0.05 needs
-about 400 pairs. If the audit cannot be done the report states the K-rank profile of the mined set
-as a proxy and does not test the prediction from the audited rate. \todo{Audited noise rate and
-reader agreement: \entry{E-LABEL-AUDIT-SHEET}.}
+The audit's design, sample and scoring are in Section~\ref{sec:data}. Its role in RQ2 is to place the mined set on the dose-response
+curve (is its harmful-noise rate near the injected rates or far below), to measure how much of that noise a K-rank filter can find, and to
+decide whether sibling-kind noise needs a stronger test. If the audit cannot be done the report states the K-rank profile of the mined set as a proxy
+for findable noise and does not test the prediction that the filter's gain rises with the audited rate.
+\todo{Audited noise rate and reader agreement: \entry{E-LABEL-AUDIT-SHEET}.}
 
 \subsection{Confirmatory contrasts}
 
@@ -321,35 +501,82 @@ at fresh draws: \entry{E-RQ2-WEIGHT}, \entry{E-RQ2-CURRICULUM}.}
 
 % =============================================================================================
 \section{RQ3: from retrieval to resolved rate}
+\label{sec:rq3}
 
-\paragraph{Design.} Each RQ2 retriever is plugged into one fixed agent scaffold with one fixed base
-model, temperature and seed, over the same instances; the outcome is the resolved rate with a paired
-McNemar test and intervals, and for every failure the gold-in-context indicator that separates
-retrieval failures from reasoning failures. The scaffold and the base model are open decisions
-(ADR-007, ADR-008) and nothing is run until their cost and noise are known. The assembly policy
-(Section~\ref{sec:system}, Tables~\ref{tab:assembly_gold}, \ref{tab:assembly_cap}) is shared by all arms.
+\paragraph{Design.} Each retriever is plugged into one fixed agent scaffold with one fixed base
+model, temperature and seed, over the same instances; the outcome is the resolved rate, and for
+every failure the gold-in-context indicator that separates retrieval failures from reasoning failures.
+Only one comparison carries a test: the declared fallback of the project, \textsc{Raw} against the untrained
+encoder (``does training help''), with the trained arms of RQ2 added as estimates once their contexts exist. % docs/RQ3_PILOT.md D113
+The assembly policy (Section~\ref{sec:system}, Tables~\ref{tab:assembly_gold}, \ref{tab:assembly_cap}) is
+shared by all arms.
 
 \input{generated/assembly_gold}
 \input{generated/assembly_cap}
 
-\paragraph{Power.} With the published fixed-agent retrieval swap read in full as the only comparison
-available, the differences it reports are below the minimum detectable effect at Verified sizes, so
-the resolved-rate comparison may be reportable only as an estimate with an interval. The smallest
-worthwhile difference is stated before the runs. A cost and noise pilot of the agent call (100
-development instances, two first stages, two runs, one hosted model on its free tier;
-\entry{E-RQ3-PILOT-RESULT}, exploratory) gives no resolved rate, because nothing was graded. It gives
-1.41 calls per instance-run and 22.5\% unusable first replies (12.8\% after two follow-ups); at
-temperature 0 two runs agree on the reply text in 63\% of pairs and on the edits in 63\% of usable
-pairs. The placeholder discordances of the power table stay.
-\todo{Power table from stored resolved-rate discordance and run-to-run spread: \entry{E-POWER}.}
+\paragraph{Population.} Resolved rate is measured on the executable subset of Verified: the instances for which the
+environment builds on the cluster without root or a container, and for which the reference patch passes every
+named test in two agreeing runs. The subset was fixed by this procedure before any retriever's patch was
+evaluated and is stored with the reason for every exclusion; a result on it does not carry to the excluded instances.
+Of 500 instances 429 build and 377 are executable; % E-RQ3-EXEC results/rq3_exec/repo_table.csv
+the 123 exclusions are mostly packages that need system installation (38), compiled installs without a wheel (39), a
+test-start failure of one project (28) and a reference patch that fails a test (18). % E-RQ3-EXEC docs/RQ3_PILOT.md
+The subset is skewed (Table~\ref{tab:rq3_subset}): one project supplies 228 of 377 instances (60.5\%
+against 46.2\% of the 500), two projects have none, and Level~2 labels exist for 320 and Level~3 labels for 224 of the 377. % E-RQ3-EXEC docs/RQ3_PILOT.md
+One model patch costs one run, with a median of 17.8 seconds per instance on the cluster. % E-RQ3-EXEC results/rq3_exec/cost_per_instance.json
 
-\paragraph{Fallback (declared before any final run).} If the arms do not separate under the rule
+\input{generated/rq3_subset}
+
+\paragraph{Scaffold and edit rules.} The scaffold is retrieval-supplied: the assembled context and the issue go to the model in one
+call at temperature 0; the model answers with search-and-replace blocks; an unusable reply gets at most two follow-ups, the same for every arm.
+Blocks become a patch under a rule fixed before any reply is graded: each search text must occur exactly once in its file, the edit set is
+atomic, and there is no repair; a whitespace-tolerant reading is reported beside it as a labelled sensitivity. % E-RQ3-PATCHAPPLY docs/RQ3_PILOT.md D110
+Unusable replies and failures to apply are both unresolved and reported apart. The path from reply to graded outcome was checked
+on the executor: the reference patches of 20 instances, turned into edit blocks, resolve 20 of 20, and 10 deliberately broken variants
+landed in the expected outcome class 10 of 10. % E-RQ3-PATCHAPPLY, E-RQ3-DRIVER results/rq3_driver/replay
+Contexts for all 377 instances exist for BM25, the untrained encoder and their rank fusion at an 8,000-token budget (primary) and 16,000;
+the share of the 320 Level~2-labelled instances with a gold file in the 8,000-token context is 69.4\%, 73.4\% and 80.3\% respectively
+(descriptive, no interval). % E-RQ3-CONTEXTS docs/RQ3_PILOT.md D108
+Because the screen that keeps private strings out of provider inputs rejects an e-mail address or a home-directory path, 887 of the 1,131
+inputs pass and 244 are rejected; 232 of the 327 confirmatory instances have all three arms sendable. % E-RQ3-DRIVER results/rq3_driver/prepare_report.json
+Whether to relax the screen, or to analyse the complete cases, is an open policy question; each option changes the population, and the choice will be stated.
+
+\paragraph{Pilot of the model call (exploratory).} A cost and noise pilot on 100 development instances (400 units: two
+first stages, two runs; one hosted model on its free tier) measured the call, not retrieval. It used 1.41 calls per unit; 22.5\% of first replies were
+unusable (interval 18.7 to 26.8) and 12.8\% after the follow-ups, mostly prose saying the code is not shown, and BM25 leaves more unusable replies than the
+fused list (17.0\% against 8.5\%), largely where the gold unit is absent from the context. % E-RQ3-PILOT-RESULT docs/RQ3_PILOT.md D109
+Repeating a unit at temperature 0 gives the same reply text in 63\% of pairs, so run-to-run noise is real and enters the power. % E-RQ3-PILOT-RESULT docs/RQ3_PILOT.md D109
+Edits applied in 276 of 400 units under the exact rule, and the tolerant reading rescued none of the 73 that failed; the failing blocks quote
+text found nowhere in the file. % E-RQ3-PATCHAPPLY docs/RQ3_PILOT.md D110
+Nothing was graded: there is no resolved rate of any arm, and the dev instances had no executable environment.
+
+\paragraph{Analysis plan and power.} The unit of analysis is the instance. A model check on a slice of 50 of the 377, drawn by seed and
+stratified by repository, chooses the model by a rule written beforehand (the cheapest candidate with a resolved rate of at least 15\% on the slice, else
+the strongest, with the floor reported as not met); the slice is excluded from every confirmatory analysis, leaving 327. % E-RQ3-DRIVER docs/RQ3_PILOT.md D111, D112
+Each arm is run $k$ times ($k=3$ if the spend allows, otherwise 2) and an instance's score is the fraction of its runs that resolve. The primary contrast is
+the paired difference in mean score with a paired bootstrap interval over instances (10,000 resamples) and a paired sign-flip test (10,000 flips); every other
+contrast is an estimate with an interval and no test, so one test is run and no multiplicity correction is needed. Both patch readings and
+every repository are reported. % E-RQ3-DRIVER docs/RQ3_PILOT.md D113
+A spend guard stops the driver before a call that could pass a cap that must be given on the command line. % E-RQ3-DRIVER docs/RQ3_PILOT.md D114
+Table~\ref{tab:rq3_power} gives the minimum detectable difference by simulation, with the run-to-run agreement taken from the pilot and the baseline rate
+and the instance heterogeneity assumed. At 327 instances it lies between 4.4 and 9.7 points, and a difference of 4 points or less is not
+detectable in any cell of the grid; % E-RQ3-DRIVER results/rq3_driver/rq3_power_run_noise_mdd.csv
+a third run buys about one to two points, and the instance count matters more. The published fixed-agent retrieval swap is also small
+(1.2 points). % paper_reported: knowledge/papers/codegrep-2608.05886.md
+So the resolved-rate comparison may be reportable only as an estimate with an interval, and the report will state a null as a bound.
+
+\input{generated/rq3_power}
+
+\paragraph{Fallback and status.} If the arms do not separate under the rule
 above, RQ3 contrasts \textsc{Raw} against the untrained encoder and is labelled as measuring
-``does training help'', not ``does supervision quality help''. \todo{Agent runs, resolved rate with
-interval, McNemar, failure breakdown and resolved rate per agent wall-clock: \entry{E-RQ3-AGENT}.}
+``does training help'', not ``does supervision quality help''. The scaffold is accepted provisionally; the model, $k$, the screen policy and the
+spend cap are not decided, and no model has been called on an executable instance.
+\todo{Agent runs, resolved rate with
+interval, paired tests, failure breakdown and resolved rate per agent wall-clock: \entry{E-RQ3-AGENT}.}
+\todo{Power table from stored resolved-rate discordance and run-to-run spread of graded runs: \entry{E-POWER}.}
 
 % =============================================================================================
-\section{Threats to validity}
+\section{Threats to validity and limitations}
 \label{sec:threats}
 
 \begin{table*}[t]
@@ -379,6 +606,13 @@ T8 & A teacher equal to the encoder being trained is a self-confirming loop & Re
 T9 & Multiplicity and analytic flexibility: many contrasts were run in the pilots without correction & One confirmatory family fixed in advance, Holm within families, rules written before any final run \\
 T10 & Single language, single encoder; Level~3 labels are judged by models & Claims scoped to Python and to the CodeRankEmbed base; Level~3 is secondary evidence for the context question \\
 T11 & Level~3 rests on fifteen repositories, twelve of which are the final test & The Level~3 statement names its repositories; Level~2 carries the repository-count argument \\
+T12 & Executable-subset skew: more than half of the instances come from one project, two projects are absent, and Level~3 labels exist for 224 of 377 (\entry{E-RQ3-EXEC}) & The subset is fixed before any patch and listed with its exclusions; results are by repository; the claim is stated for the subset only \\
+T13 & Quarantine in the mined set: pull requests with Python~2 files, non-ASCII identifiers or a fetch time-out are dropped, not sampled at random (\entry{E-MINE-PILOT}, \entry{E-MINE-FULL}) & Quarantined counts and reasons are reported with the set; a share above a stated limit halts the run; the drop is a stated limit of the set \\
+T14 & The overlap audit covers 26 of 605 held-out repositories, and misses renamed or edited copies (\entry{E-OVERLAP-AUDIT}) & Stated with the counts; the contamination scan is a separate measurement; extension to more repositories is open \\
+T15 & Difficulty and transfer: the mined set holds more pairs the lexical teacher cannot find than the pool does, RAW's gain on it differs from its gain on the pool, and the pilot's development instances have an easier context mix than the executable subset (\entry{E-MINED-PILOT}, \entry{E-RQ3-PATCHAPPLY}) & Both sets are reported beside each other; pilot rates of unusable replies and applied edits are not carried to the executable subset \\
+T16 & Power: between 4.4 and 9.7 points at 327 instances, from assumed baseline rate and heterogeneity (\entry{E-RQ3-DRIVER}); the label audit and the confirmatory runs have no result yet & A null is reported as a bound, never as no effect; the power table is rerun from graded runs \\
+T17 & Model limits: the pilot model ran on a free tier with a daily request cap, 22.5\% unusable first replies, and terms that let the provider read inputs, so only public text is sent and a screen rejects part of it; the final model is undecided and a weak one may leave the resolved rate near zero (\entry{E-RQ3-PILOT-RESULT}, \entry{E-RQ3-DRIVER}) & The model-choice rule and its floor are fixed in advance; the retrieval-side readings carry the weight if the floor is not met; the screen policy is stated with its effect on the population \\
+T18 & Label approximation: a patch-derived location is an approximation of where an issue is fixed, and no pair of the mined set has been read (\entry{E-LABEL-AUDIT-SHEET}) & The audit's rates are reported three ways and as judgements of readers, not as ground truth \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -390,12 +624,38 @@ is for Python.
 contamination of the agent's model): \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
+\section{Reproducibility}
+\label{sec:repro}
+
+\paragraph{What is stored.} Every number of a generated table is read from a file under the results folder by one script;
+each fragment's source files and their SHA-256 are listed beside the fragments, and a test rebuilds them and compares. Every run
+has a log with its configuration hash, seed, code commit and hardware, and every benchmark has one line in a run ledger; cluster jobs are
+listed with their identifiers and GPU-hours against a block budget. Entry points take a seed and the same code, data and seed give the same
+result; byte-identical outputs are tested where claimed (the assembly step, graph rebuilds, the mined store, which rebuilt 1,391 of 1,391 pilot directories
+byte-identically). % E-MINE-STORE docs/EXPERIMENTS.md
+The held-out list is stored with its hash, the unit and edge stores are rebuilt from a repository and a commit, and the model-call logs store every reply, so a
+graded outcome can be recomputed without calling the model again.
+
+\paragraph{What regenerates what.} The environment is set up with \texttt{make setup}; \texttt{make test} runs the fast unit tests and \texttt{make test-all}
+the integration, leakage and reproducibility tests (the last is meant for the cluster). The tables of this report are rebuilt with
+\texttt{python scripts/report\_tables.py}, the report with \texttt{tectonic final\_report.tex} in the report folder, and its slots, citations and
+source comments are checked with \texttt{python scripts/check\_report.py}. The held-out list comes from \texttt{scripts/build\_held\_out.py}, the mined set from
+\texttt{scripts/mine\_pilot.py} and its job scripts, the executable subset from \texttt{scripts/rq3\_exec.py} and the agent runs from \texttt{scripts/rq3\_driver.py}.
+
+\paragraph{What is not stored.} No trained checkpoint of a pilot result run was retained (node-local storage is cleared at job exit), so a new evaluation of a pilot
+needs a retrain; final models of runs that feed RQ3 are retained under the retention switch. The label sheets are kept off the tracked tree because they quote public issues
+verbatim, and the key that joins them to the sample is never in a reader's file. Re-mining needs a read-only platform token and is subject to API rate limits; the hosted model's replies
+are not bit-reproducible (identical text in 63\% of repeated pairs), % E-RQ3-PILOT-RESULT docs/RQ3_PILOT.md D109
+which is why they are stored. Latency and throughput are specific to the stated hardware, and numbers are never compared across machines.
+
+% =============================================================================================
 \section{Conclusion}
 
 What is measured so far is the apparatus and the pilots: the published BM25 rows are reproduced,
 the zero-shot signals and fusion are measured, the graph is compared with a same-file control, the
-supervision arms are compared under injected noise at matched updates, and the mined set and the
-assembly stage are built and measured once (Tables~\ref{tab:bm25_repro}--\ref{tab:assembly_cap}). Each
+supervision arms are compared under injected noise at matched updates, the mined set and the overlap audit
+are built and measured on a pilot, and the assembly stage and the executable evaluation are built and measured once
+(Tables~\ref{tab:bm25_repro}--\ref{tab:rq3_power}). Each
 of these is exploratory, on development repositories unless the caption says Verified-six, and none is a
 confirmatory result. The confirmatory question, whether \textsc{Filter} with the BM25 teacher
 beats \textsc{Raw} and the size-matched subsample on unfiltered pairs at matched budgets, and the

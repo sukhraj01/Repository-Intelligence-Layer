@@ -1023,3 +1023,20 @@ Status: **apparatus and plan; no model was called, no resolved rate exists.** Ev
 **Not known.** Any resolved rate; whether the screen will be relaxed (Q70) and therefore the confirmatory N; the model; the price of a third candidate; whether a stronger model bills thought tokens (the pilot model billed none).
 
 **Remains before the first confirmatory run.** The graded model check (engineer: billing, hard cap, key on the cluster, billed-tier limits, price check, Q70), the choice of k, trained-checkpoint contexts (blocked on RQ2), the 16,000-token prompts (optional, not run).
+
+## E-REPORT-DRAFT-1: the settled sections of the final report, drafted from stored evidence. Writing, 2026-11-08
+
+Status: done. No cluster job, no model call, no GPU. Evidence class: nothing new is measured; every number of the prose is read from a stored file or an entry named in a comment beside it.
+
+**What was written** (`reports/final/final_report.tex`, 13 pages two-column): Introduction (claim and non-claims, contributions), Background (retrieval for agents, evaluation levels, resolved rate), Related work (corrected sentence on the training corpus; the corpus paper's note says CodeRankEmbed was trained on it, not that the published pool builds on it), Data and ground truth (published pool and its limitation, held-out list and leakage controls, mined set and its two readings, overlap audit, label audit design, contamination), System with stated limits, Evaluation setup, RQ2 protocol with arms and noise design, RQ3 method (executable subset and skew, scaffold, edit rules, model-call pilot, analysis plan, power), Threats (T12 to T18 added), Reproducibility. Results appear only as the existing exploratory tables plus three new generated ones (`contamination`, `rq3_subset`, `rq3_power`, built by `ril/analysis/report_tables.py` from `results/`).
+
+**Checks.** `scripts/check_report.py` (`ril/util/report_check.py`, tests `tests/unit/test_report_check.py`): every prose number is closed by a source comment, citations and references resolve, open slots are listed. Compiled with `tectonic`: 13 pages, no error, no undefined reference, no overfull box; underfull boxes come from float placement. The course's report limit is not in the repository; sections were kept tight and the page count is stated, not checked against a limit.
+
+**Conflicts in the sources, later correction followed.** (1) The skeleton and the protocol say the noise-audit sample is stratified under each teacher; the built sheet is stratified by BM25 only (D99). (2) The skeleton says RQ3 uses McNemar over four retrievers and placeholder discordances; D113 fixes one primary contrast (RAW against the untrained encoder), paired bootstrap and sign-flip, and the run-noise power table. (3) The skeleton says the scaffold and model are open; the scaffold is accepted provisionally (ADR-007, D113). (4) The earlier count of 263 buildable instances is superseded by 377 executable (D106). (5) The 1.22 token ratio is against an embedding model's tokenizer; the agent model's own counts gave 1.00.
+
+**Open slots (24) and what each waits for.** Abstract, contributions on contrasts, conclusion: E-RQ2-FILTER, E-RQ3-AGENT. Full mined set size, yield, surviving counts after the audit: E-MINE-FULL, E-OVERLAP-AUDIT. Audited noise rate and agreement: E-LABEL-AUDIT-SHEET. Edge recovery: E-GRAPH-BUILD. Latency table: E-LAT-STAGES. RQ1 ladder reading: E-RQ1-*. Stacked expansion: E-GRAPH-L3. Sibling noise: E-PILOT-NOISE-SIB. Confirmatory contrasts and exploratory arms: E-RQ2-FILTER, E-RQ2-RAW, E-RQ2-CTRL-SUBRAW, E-RQ2-WEIGHT, E-RQ2-CURRICULUM, E-RQ2-SEC-QQ. Evaluation of the eight repositories: E-EVAL-REPOS-BUILD. Agent runs, power from graded runs, agent threats, token budget: E-RQ3-AGENT, E-POWER. A missing citation for the benchmark's verified subset (no note exists); the related-work refresh.
+
+**Not written for lack of evidence.** Any confirmatory contrast, resolved rate, noise rate, full-mined-set figures, RQ1 ladder, latency table, edge-recovery table.
+
+**Dead ends.** None.
+

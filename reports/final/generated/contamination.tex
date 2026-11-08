@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering\small
+\caption{Share of base-commit functions found in a public code-retrieval training corpus. Evidence class: \emph{measured, exploratory}. Probe: functions of at least 20 syntax-tree nodes at the base commits of 500 instances of the final-test benchmark in twelve repositories, matched by syntax-tree hash against the documents of a public training corpus. Intervals are Wilson intervals over functions, descriptive only (functions are not independent draws); a match is equal code, not evidence that any model was trained on the pair. Entry \entry{E-CONTAM-SCAN}.}
+\label{tab:contamination}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.3\linewidth}>{\raggedleft\arraybackslash}p{0.15\linewidth}>{\raggedleft\arraybackslash}p{0.17\linewidth}>{\raggedleft\arraybackslash}p{0.21\linewidth}}
+\toprule
+Repository & Instances & Functions & In corpus (\%) \\
+\midrule
+astropy/\allowbreak astropy & 22 & 20449 & 22.3 [21.7, 22.9] \\
+django/\allowbreak django & 231 & 38826 & 17.6 [17.3, 18.0] \\
+matplotlib/\allowbreak matplotlib & 34 & 16013 & 12.8 [12.3, 13.3] \\
+mwaskom/\allowbreak seaborn & 2 & 2146 & 14.3 [12.8, 15.8] \\
+pallets/\allowbreak flask & 1 & 714 & 4.1 [2.8, 5.8] \\
+psf/\allowbreak requests & 8 & 1219 & 26.5 [24.1, 29.0] \\
+pydata/\allowbreak xarray & 22 & 11241 & 8.5 [8.0, 9.1] \\
+pylint-dev/\allowbreak pylint & 10 & 7498 & 7.7 [7.2, 8.4] \\
+pytest-dev/\allowbreak pytest & 19 & 10407 & 7.0 [6.5, 7.5] \\
+scikit-learn/\allowbreak scikit-learn & 32 & 18809 & 18.6 [18.1, 19.2] \\
+sphinx-doc/\allowbreak sphinx & 44 & 10732 & 6.0 [5.6, 6.5] \\
+sympy/\allowbreak sympy & 75 & 56208 & 10.7 [10.5, 11.0] \\
+\midrule
+All twelve (a function counted once) & 500 & 194187 & 13.7 [13.5, 13.8] \\
+\bottomrule
+\end{tabular}
+\end{table}
