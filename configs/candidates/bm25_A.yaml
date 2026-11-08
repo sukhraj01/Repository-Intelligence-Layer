@@ -1,0 +1,18 @@
+# Candidate BM25 setting of workstream A (session A1). Not frozen: the lead decides (ADR-004).
+# Every parameter is marked tuned-on-dev (A1-DEV, docs/experiments/A.md) or provisional.
+candidate: bm25_A
+version: 1
+date: '2026-11-05'
+seed: 0                  # the selection runs (A1-DEV) are deterministic; bootstrap seed 0
+evidence: docs/experiments/A.md section A1-DEV; results/logs/a1_bm25_dev_2026-11-05.json
+level: chunk (CORE-Bench chunks); unit-level fields not yet selected
+tokenizer:
+  name: split            # ril.retrieval.bm25_index.tokenize_code(keep_original=True)
+  status: tuned-on-dev   # +5.9 nDCG@10 over ref, clustered 95% [+3.3, +8.2], 680 dev queries, 6 repositories
+  stopwords: en (33 words)   # provisional: ADR-004 (reference, not swept)
+  stemmer: snowball english  # provisional: ADR-004 (reference, not swept)
+bm25:
+  k1: 2.0                # tuned-on-dev: +0.6 over k1 1.5, clustered [+0.1, +1.0]; at the edge of the grid
+  b: 0.75                # tuned-on-dev (no other b beat it on the chosen tokenizer)
+fields: null             # provisional: not measured on dev yet (needs unit texts)
+query_tokenizer: same as documents

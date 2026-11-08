@@ -200,3 +200,5 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-08,A,64656,RDY,RQ2 readiness dry run at minimal scale (20 directories of the pilot store: materialise; rank inputs; BM25; features; selection; cache; FILTER size; overlap audit; plan-only launcher; evaluation-set check); scripts/ada/rq2_readiness.sbatch,u22,2,0,00:01:15,0.0,COMPLETED
 2026-11-08,A,64658,RDY,evaluation-set check of the dev set and the eight repositories and the six Verified repositories with stores (plan only; no model),u22,2,0,00:00:20,0.0,COMPLETED
 2026-11-08,A,64669,RDY,torch tests after moving the configuration loader out of the training module (unit hooks and retention; integration training end to end and run-batch and curve hook; reproducibility; leakage): 41 passed; scripts/ada/t1_tests.sbatch,u22,6,0,00:00:23,0.0,COMPLETED
+2026-11-08,A,64665,A1T,"reproduction of the A1-DEV cells (stage 1, stage 2, summary, query-level rows) on the development folders",u22,4,0,00:14:56,0.0,COMPLETED
+2026-11-08,A,64671,A1T,"E-A1-FUSED: default and two split variants alone and inside RRF(BM25, dense) from stored chunk vectors",u22,4,0,00:01:26,0.0,COMPLETED

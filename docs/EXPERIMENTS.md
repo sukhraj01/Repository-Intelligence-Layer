@@ -77,6 +77,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-RQ3-DRIVER | lead | `docs/experiments/B.md` | done; held-out slice, prompts of the 377, driver replay-tested (30 of 30), analysis plan, power with run noise, cost model (D111 to D114); no model call | 2026-11-08 |
 | E-LIT-SCAFFOLD | lead | `docs/experiments/B.md` | done; five scaffold papers read in full with checked notes, ADR-007 addendum (D116), no model call | 2026-11-08 |
 | E-REPORT-DRAFT-1 | lead | `docs/experiments/B.md` | done; settled sections of the final report drafted from stored evidence, three generated tables, a prose checker | 2026-11-08 |
+| E-A1-TAKEOVER | lead | `docs/experiments/B.md` | done; A1-DEV cells reproduced (228 of 228 values equal, control 23.8244 over 510 queries), BM25 variant inside RRF(BM25, dense) on dev (D117 to D119) | 2026-11-08 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
 | E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |

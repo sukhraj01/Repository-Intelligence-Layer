@@ -34,7 +34,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 - [x] Repository parser + CodeUnit emission (`ril/parsing/repository_parser.py`; first build of 2026-10-17)
 - [x] Call / import / inherit graph with edge-recovery coverage (`ril/parsing/call_graph.py`; the coverage is reported under several definitions, ADR-012)
-- [ ] BM25 index (identifier splitting, field weights, tune b) — reference form built (`ril/retrieval/bm25_index.py`, `RESULTS.md` rows `e1-*`); identifier splitting and field weights added as options and piloted locally (A1-PILOT, `results/ledger_a.md`, merged 2026-10-31); the development-set runs and the b tuning are open
+- [ ] BM25 index (identifier splitting, field weights, tune b) — reference form built (`ril/retrieval/bm25_index.py`, `RESULTS.md` rows `e1-*`); identifier splitting and field weights added as options and piloted locally (A1-PILOT, `results/ledger_a.md`, merged 2026-10-31); tokenizer and k1/b selected on dev at chunk level (A1-DEV, reproduced 2026-11-08, E-A1-TAKEOVER); the gain is +4.6 to +5.1 alone at L2 and not distinguishable from 0 inside RRF(BM25, dense) at L2; field weights and unit-level granularity are open, so the item stays unticked
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
