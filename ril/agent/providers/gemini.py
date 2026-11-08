@@ -126,6 +126,9 @@ class GeminiConfig:
     max_retries: int = 5
     backoff_base_s: float = 4.0
     backoff_cap_s: float = 120.0
+    thinking_config: Mapping[str, Any] | None = None
+    """Sent verbatim as ``generationConfig.thinkingConfig`` when set; omitted (the request bytes of
+    the pilot) when ``None``, so the provider's default applies."""
 
 
 @dataclass(frozen=True)
@@ -159,14 +162,14 @@ def canonical(obj: Any) -> str:
 
 
 def request_body(config: GeminiConfig, contents: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    return {
-        "contents": list(contents),
-        "generationConfig": {
-            "temperature": config.temperature,
-            "seed": config.seed,
-            "maxOutputTokens": config.max_output_tokens,
-        },
+    generation: dict[str, Any] = {
+        "temperature": config.temperature,
+        "seed": config.seed,
+        "maxOutputTokens": config.max_output_tokens,
     }
+    if config.thinking_config is not None:
+        generation["thinkingConfig"] = dict(config.thinking_config)
+    return {"contents": list(contents), "generationConfig": generation}
 
 
 def parse_response(body: str) -> tuple[str, str, int, int, int, str | None]:

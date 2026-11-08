@@ -1,0 +1,19 @@
+# List prices of the candidate models of D112, USD per million tokens, with the date they were read.
+# `verified: false` until the project owner confirms them in the provider console; the spend guard
+# and the cost model refuse a model that has no entry, and print the flag with every figure.
+# Billed output tokens include thought tokens (the provider bills both as output).
+as_of: "2026-11-08"
+source: "third-party price pages seen on the as_of date; not the provider console"
+currency: "USD"
+per_tokens: 1000000
+models:
+  gemini-3.5-flash-lite:
+    input: 0.30
+    output: 2.50
+    verified: false
+  gemini-3.6-flash:
+    # indicative price of a Flash-class model; which model string it belongs to is to be read
+    # from the console before the graded check
+    input: 1.50
+    output: 9.00
+    verified: false
