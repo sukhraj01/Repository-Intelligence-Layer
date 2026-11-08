@@ -97,6 +97,7 @@ def cmd_prepare(args: argparse.Namespace) -> int:
         issue_agreement,
         issues_from_parquet,
         prepare_screened,
+        pseudonymise_report,
         rejection_table,
         rows_from_records,
     )
@@ -136,6 +137,7 @@ def cmd_prepare(args: argparse.Namespace) -> int:
         "rejected": len(rejected),
         "rejection_table": rejection_table(rejected),
         "prefix_identity": prefix,
+        "pseudonymisation": pseudonymise_report(items, args.budget, args.token_tolerance),
     }
     _write_json(out / "prepare_report.json", report)
     _write_json(out / "rejections.json", rejected)
@@ -333,6 +335,23 @@ def cmd_replay(args: argparse.Namespace) -> int:
             return 3
         edits[i] = derived.edits
     items, replies = build_replay_set(ids, edits, readers)
+    if args.prepared:
+        from ril.agent.providers.pilot_run import load_items
+        from ril.agent.providers.pseudonymise import quote_text
+
+        maps: dict[str, Any] = {}
+        for prepared in load_items(args.prepared):  # the first touched arm of each instance
+            if "restore" in prepared:
+                maps.setdefault(str(prepared["instance_id"]), prepared["restore"])
+        missing = [i for i in ids if i not in maps]
+        if missing:
+            log.error("%d replay instances have no pseudonymised prompt", len(missing))
+            return 4
+        for it in items:
+            mapping = maps[str(it["instance_id"])]
+            key = (str(it["instance_id"]), str(it["arm"]), 0)
+            replies[key] = quote_text(replies[key], mapping)
+            it["restore"] = mapping
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
     executor, _, hash_latest, hash_era = _exec_wiring(args, set(ids), args.subset)
@@ -366,6 +385,92 @@ def cmd_replay(args: argparse.Namespace) -> int:
     for e in summary.errors:
         log.warning("%s", e)
     return 0 if ok == len(table) else 1
+
+
+# ---------------------------------------------------------------------------- pseudonymisation
+
+
+def cmd_pseudonym_check(args: argparse.Namespace) -> int:
+    """Round trips on the prepared prompts that the transform touched (D120); no model call."""
+    import random
+
+    from ril.agent.providers.patch_convert import git_reader
+    from ril.agent.providers.pilot_run import load_items
+    from ril.agent.providers.pseudonym_check import (
+        excerpt_round_trip,
+        gold_round_trip,
+        summarise,
+    )
+    from ril.evaluation.executor.spec import load_specs
+    from ril.evaluation.gold_edits import derive_edits
+    from ril.evaluation.patch_validation import ensure_bare
+
+    touched = [r for r in load_items(args.prepared_dir) if "restore" in r]
+    ids = sorted({str(r["instance_id"]) for r in touched})
+    specs = {s.instance_id: s for s in load_specs(Path(args.specs)) if s.instance_id in set(ids)}
+    gold = {
+        r["instance_id"]: r["patch"]
+        for r in (
+            json.loads(x) for x in Path(args.gold).read_text(encoding="utf-8").splitlines() if x
+        )
+        if r["instance_id"] in set(ids)
+    }
+    local = Path(args.local_mirrors) if args.local_mirrors else None
+    scratch = Path(args.scratch)
+    scratch.mkdir(parents=True, exist_ok=True)
+    excerpt_rows: list[dict[str, Any]] = []
+    gold_rows: list[dict[str, Any]] = []
+    mirrors: dict[str, tuple[str, Any]] = {}
+    overlapping: set[str] = set()
+    for iid in ids:
+        spec = specs[iid]
+        sources = [f"https://github.com/{spec.repo}.git"]
+        if local is not None and (local / (spec.repo.replace("/", "__") + ".git")).exists():
+            sources.insert(0, str(local / (spec.repo.replace("/", "__") + ".git")))
+        mirror = ensure_bare(spec.repo, spec.base_commit, Path(args.mirror_dir), sources)
+        if mirror is None:
+            gold_rows.append({"instance_id": iid, "arm": "", "outcome": "mirror_unavailable"})
+            continue
+        read = git_reader(str(mirror), spec.base_commit)
+        mirrors[iid] = (str(mirror), read)
+        derived = derive_edits(gold[iid], read)
+        for it in (t for t in touched if t["instance_id"] == iid):
+            for r in excerpt_round_trip(it["prompt"], it["restore"], read):
+                excerpt_rows.append({"instance_id": iid, "arm": it["arm"], **r})
+            g = gold_round_trip(
+                gold[iid], it["restore"], read, str(mirror), spec.base_commit, str(scratch), derived
+            )
+            gold_rows.append({"instance_id": iid, "arm": it["arm"], **g})
+            if g["overlap"]:
+                overlapping.add(iid)
+    out = Path(args.out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    _write_csv(out / "pseudonym_roundtrip_excerpt_lines.csv", excerpt_rows)
+    _write_csv(out / "pseudonym_roundtrip_gold.csv", gold_rows)
+    # the replay sample: touched instances whose gold-derived blocks hold a substitution first
+    rng = random.Random(args.seed)
+    rest = [i for i in ids if i not in overlapping and i in mirrors]
+    rng.shuffle(rest)
+    pick = (sorted(overlapping) + rest)[: args.sample]
+    draw = {"instances": [{"instance_id": i} for i in sorted(pick)], "seed": args.seed}
+    _write_json(out / "pseudonym_draw.json", draw)
+    report = {
+        "touched_prompts": len(touched),
+        "touched_instances": len(ids),
+        "excerpt_lines": len(excerpt_rows),
+        "excerpt_outcomes": summarise(excerpt_rows),
+        "excerpt_writes_original": summarise(
+            [r for r in excerpt_rows if "writes_original" in r], "writes_original"
+        ),
+        "gold_outcomes": summarise(gold_rows),
+        "gold_with_overlap": sum(1 for r in gold_rows if r.get("overlap")),
+        "gold_instances_with_overlap": len(overlapping),
+        "replay_sample": [r["instance_id"] for r in draw["instances"]],
+        "replay_sample_overlapping": len(set(pick) & overlapping),
+    }
+    _write_json(out / "pseudonym_check_report.json", report)
+    log.info("excerpt %s, gold %s", report["excerpt_outcomes"], report["gold_outcomes"])
+    return 0
 
 
 # ---------------------------------------------------------------------------- analyse etc.
@@ -510,7 +615,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--heldout", required=True)
     p.add_argument("--budget", type=int, default=8000)
     p.add_argument("--arms", nargs="+", default=["bm25", "dense", "rrf"])
+    p.add_argument("--token-tolerance", type=float, default=0.01)
     p.set_defaults(fn=cmd_prepare)
+    p = sub.add_parser("pseudonym-check")
+    p.add_argument("prepared_dir")
+    p.add_argument("out_dir")
+    p.add_argument("--specs", required=True)
+    p.add_argument("--gold", required=True)
+    p.add_argument("--subset", required=True)
+    p.add_argument("--mirror-dir", required=True)
+    p.add_argument("--local-mirrors")
+    p.add_argument("--scratch", required=True)
+    p.add_argument("--sample", type=int, default=10)
+    p.set_defaults(fn=cmd_pseudonym_check)
     for name in ("run", "grade"):
         p = sub.add_parser(name)
         p.add_argument("items_dir")
@@ -540,6 +657,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--local-mirrors")
     p.add_argument("--subset", required=True)
     p.add_argument("--workers", type=int, default=1)
+    p.add_argument(
+        "--prepared",
+        help="quote the replies in placeholder form with this prepared "
+        "directory's mappings and restore them in the driver (D120)",
+    )
     p.set_defaults(fn=cmd_replay)
     p = sub.add_parser("analyse")
     p.add_argument("out")

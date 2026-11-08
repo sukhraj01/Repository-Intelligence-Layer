@@ -47,7 +47,7 @@ def test_screened_preparation_reports_instead_of_raising(tmp_path: Path) -> None
     bad = "### a/b.py:1-2 function f (rank 1)\n# contact: someone@example.org\nx = 1\n"
     path = "see /Users/someone/project/file"
     rows = [row("i1", "bm25", ok), row("i1", "rrf", bad), row("i2", "bm25", ok, issue=path)]
-    n, rejected = prepare_screened(rows, tmp_path / "p")
+    n, rejected = prepare_screened(rows, tmp_path / "p", pseudonymise_prompts=False)
     assert n == 1 and [(r["instance_id"], r["arm"]) for r in rejected] == [
         ("i1", "rrf"),
         ("i2", "bm25"),
@@ -56,13 +56,19 @@ def test_screened_preparation_reports_instead_of_raising(tmp_path: Path) -> None
     assert "someone@example.org" not in str(rejected)
     # the same address on the reviewed list passes
     n2, rej2 = prepare_screened(
-        rows[:2], tmp_path / "p2", allowed_email_digests={email_digest("someone@example.org")}
+        rows[:2],
+        tmp_path / "p2",
+        allowed_email_digests={email_digest("someone@example.org")},
+        pseudonymise_prompts=False,
     )
     assert n2 == 2 and rej2 == []
     table = rejection_table(rejected)
     assert table[-1]["prompts_rejected"] == 2 and table[-1]["instances_affected"] == 2
     with pytest.raises(ValueError):
         prepare_screened([{**rows[0], "context_sha256": "0" * 64}], tmp_path / "p3")
+    # with the transform (the default since D120) nothing here is rejected
+    n3, rej3 = prepare_screened(rows, tmp_path / "p4")
+    assert n3 == 3 and rej3 == []
 
 
 def test_prefix_identity_across_arms(tmp_path: Path) -> None:

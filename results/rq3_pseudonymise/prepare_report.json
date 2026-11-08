@@ -1,0 +1,92 @@
+{
+ "arms": [
+  "bm25",
+  "dense",
+  "rrf"
+ ],
+ "budget": 8000,
+ "confirmatory": 327,
+ "held_out": 50,
+ "instances_in_subset": 377,
+ "issue_agreement": {
+  "compared_with_folder": 320,
+  "different": [],
+  "equal": 320,
+  "instances": 377,
+  "with_table_text": 377
+ },
+ "issue_source": "problem_statement of the benchmark table",
+ "prefix_identity": {
+  "differing_instances": [],
+  "identical": true,
+  "instances": 377,
+  "prompts_by_arm": {
+   "bm25": 377,
+   "dense": 377,
+   "rrf": 377
+  }
+ },
+ "prompts_expected": 1131,
+ "prompts_written": 1131,
+ "pseudonymisation": {
+  "by_arm": {
+   "bm25": {
+    "both": 5,
+    "email": 46,
+    "none": 289,
+    "path": 37
+   },
+   "dense": {
+    "both": 1,
+    "email": 43,
+    "none": 301,
+    "path": 32
+   },
+   "rrf": {
+    "both": 2,
+    "email": 46,
+    "none": 297,
+    "path": 32
+   }
+  },
+  "by_kind": {
+   "both": 8,
+   "email": 135,
+   "none": 887,
+   "path": 101
+  },
+  "max_context_overshoot": 72,
+  "max_context_tokens": 8072,
+  "prompts": 1131,
+  "prompts_over_budget": 14,
+  "tokens_delta_context_all": {
+   "max": 84,
+   "mean": 0.346,
+   "min": -45
+  },
+  "tokens_delta_prompt_all": {
+   "max": 91,
+   "mean": 0.717,
+   "min": -45
+  },
+  "tokens_delta_prompt_touched": {
+   "max": 91,
+   "mean": 3.324,
+   "min": -45
+  },
+  "tolerance_tokens": 80,
+  "transform_version": "rq3-pseudonymise/v1",
+  "within_tolerance": true
+ },
+ "rejected": 0,
+ "rejection_table": [
+  {
+   "arm": "all",
+   "distinct_digests": 0,
+   "instances_affected": 0,
+   "kind": "any",
+   "prompts_rejected": 0
+  }
+ ],
+ "skipped": []
+}

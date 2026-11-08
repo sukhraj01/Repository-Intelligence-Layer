@@ -1,0 +1,31 @@
+{
+ "excerpt_lines": 1126,
+ "excerpt_outcomes": {
+  "applied": 870,
+  "multiple_matches": 256
+ },
+ "excerpt_writes_original": {
+  "True": 870
+ },
+ "gold_instances_with_overlap": 0,
+ "gold_outcomes": {
+  "derivation_limit": 3,
+  "tree_equal": 241
+ },
+ "gold_with_overlap": 0,
+ "replay_sample": [
+  "astropy__astropy-14369",
+  "django__django-12262",
+  "django__django-12276",
+  "django__django-12965",
+  "django__django-14238",
+  "django__django-15278",
+  "psf__requests-6028",
+  "pytest-dev__pytest-5631",
+  "sympy__sympy-17318",
+  "sympy__sympy-17630"
+ ],
+ "replay_sample_overlapping": 0,
+ "touched_instances": 109,
+ "touched_prompts": 244
+}
