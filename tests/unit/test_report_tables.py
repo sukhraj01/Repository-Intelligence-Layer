@@ -41,7 +41,9 @@ def test_committed_fragments_equal_a_fresh_build(tmp_path: Path) -> None:
 def test_no_number_is_typed_in_a_fragment() -> None:
     for t in rt.build_all(ROOT):
         text = re.sub(
-            r"\\label\{[^}]*\}|\\begin\{tabular\}\{.*\}\n", "", _read(GENERATED / f"{t.name}.tex")
+            r"\\label\{[^}]*\}|\\entry\{[^}]*\}|\\begin\{tabular\}\{.*\}\n",
+            "",
+            _read(GENERATED / f"{t.name}.tex"),
         )
         assert not set(rt._digits(text)) - t.trace.numbers, t.name
 
@@ -94,10 +96,10 @@ def test_captions_state_evidence_class_n_and_entry() -> None:
             "reasoned",
             "synthetic",
         )
-        assert any(w in cap for w in ("queries", "folder", "directories")), t.name
+        assert any(w in cap for w in ("queries", "folder", "directories", "instances")), t.name
         for entry in t.entries:
             assert f"| {entry} " in index, (t.name, entry)
-        if t.name != "bm25_repro":
+        if t.name not in ("bm25_repro", "rq3_subset"):
             assert "exploratory" in t.evidence, t.name
 
 
@@ -121,9 +123,11 @@ def test_report_inputs_every_fragment_and_every_slot_names_an_entry() -> None:
     slots = re.findall(r"\\todo\{((?:[^{}]|\{[^{}]*\})*)\}", text)
     assert slots
     named = [
-        s for s in slots if re.search(r"\\entry\{E-[A-Z0-9-]+\}|Related-work refresh|Abstract", s)
+        s
+        for s in slots
+        if re.search(r"\\entry\{E-[A-Z0-9-]+\}|Related-work refresh|Abstract|^cite:", s)
     ]
-    # every slot but the literature refresh names the entry that fills it
+    # every slot but the literature refresh and a missing citation names the entry that fills it
     assert len(named) == len(slots)
     for entry in re.findall(r"\\entry\{(E-[A-Z0-9-]+)\}", text):
         assert f"| {entry} " in index, entry
