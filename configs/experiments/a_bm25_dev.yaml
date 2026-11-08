@@ -1,0 +1,89 @@
+experiment_id: A1-DEV
+status: development-set selection (chunk level)
+date: '2026-11-05'
+seed: 0
+base: configs/experiments/e1_bm25_dev3.yaml (dev folders only, copied unchanged; prefilter, metrics and bootstrap
+  as E1)
+bm25:
+  k1: 1.5
+  b: 0.75
+  stopwords: en (33 words)
+  stemmer: snowball english
+  token_pattern: (?u)\b\w\w+\b
+  provisional: ADR-004
+prefilter_k: 10000
+metrics:
+  ndcg_at: 10
+  recall_at: 100
+  gain: binary
+  reading: protocol
+  aggregation: mean over queries, L2 and L3 pooled
+bootstrap:
+  draws: 2000
+  interval: 95% percentile
+  units: queries (paired) and repositories then queries (clustered, D17)
+stage1:
+  tokenizers:
+  - ref
+  - split
+  - split_noorig
+  k1: 1.5
+  b: 0.75
+stage2:
+  k1:
+  - 0.9
+  - 1.2
+  - 1.5
+  - 2.0
+  b:
+  - 0.4
+  - 0.6
+  - 0.75
+  - 0.9
+selection: 'Fixed before any run. Criterion: pooled nDCG@10 over all dev queries, protocol reading (as the E1 sweep).
+  Stage 1: the tokenizer with the highest criterion is chosen if its repository-clustered paired interval against
+  ref lies above 0, else ref. Stage 2: k1 and b swept on the chosen tokenizer; the best cell replaces k1 1.5 / b
+  0.75 only if its repository-clustered paired interval against that default lies above 0. Regression control: ref
+  at k1 1.5 / b 0.75 on the five folders of e1_bm25_reproduction.yaml must reproduce the default row of results/tables/e1_dev_sweep.csv
+  (510 queries, pooled nDCG@10 23.8244) exactly. Fields and unit-level granularity need unit texts and are a separate
+  stage. Test folders are never read.'
+folders:
+- role: dev
+  dataset: SWE-bench_Pro
+  folder: instance_internetarchive__openlibrary
+  repo: internetarchive/openlibrary
+  levels:
+  - L2
+  - L3
+- role: dev
+  dataset: SWE-bench_Pro
+  folder: instance_qutebrowser__qutebrowser
+  repo: qutebrowser/qutebrowser
+  levels:
+  - L2
+  - L3
+- role: dev
+  dataset: SWE-bench-Live
+  folder: conan
+  repo: conan-io/conan
+  levels:
+  - L2
+- role: dev
+  dataset: SWE-bench-Live
+  folder: deepset
+  repo: deepset-ai/haystack
+  levels:
+  - L2
+- role: dev
+  dataset: SWE-bench-Live
+  folder: streamlink__streamlink
+  repo: streamlink/streamlink
+  levels:
+  - L2
+- role: dev
+  dataset: SWE-bench_Pro
+  folder: instance_ansible__ansible
+  repo: ansible/ansible
+  levels:
+  - L2
+  - L3

@@ -117,7 +117,9 @@ class Table:
 
     def check(self) -> None:
         """Every digit string of the rendered fragment must have come from a source file."""
-        text = re.sub(r"\\label\{[^}]*\}|\\begin\{tabular\}\{.*\}\n", "", self.render())
+        text = re.sub(
+            r"\\label\{[^}]*\}|\\entry\{[^}]*\}|\\begin\{tabular\}\{.*\}\n", "", self.render()
+        )
         stray = sorted(set(_digits(text)) - self.trace.numbers)
         if stray:
             raise ValueError(f"{self.name}: numbers not read from a file: {stray}")
@@ -775,6 +777,155 @@ def _bounds(text: str) -> tuple[str, str]:
     return lo.strip(), hi.strip()
 
 
+def contamination(root: Path) -> Table:
+    tr = Trace()
+    rows_in = _csv(root, "results/tables/x4_contam_scan_by_repo.csv", tr)
+    out: list[list[str]] = []
+    total = ""
+    for r in rows_in:
+        if r["floor_nodes"] != "20":
+            continue
+        if r["repo"].startswith("ALL"):
+            total = r["instances"]
+            continue
+        lo, hi = _bounds(r["functions_matched_share_ci95"])
+        share = f"{tr.num(float(r['functions_matched']) / float(r['functions_above_floor']) * 100)}"
+        out.append(
+            [
+                tr.label(r["repo"]).replace("/", "/\\allowbreak "),
+                tr.count(r["instances"]),
+                tr.count(r["functions_above_floor"]),
+                f"{share} [{tr.num(float(lo) * 100)}, {tr.num(float(hi) * 100)}]",
+            ]
+        )
+    allrow = _pick(rows_in, repo="ALL (hash counted once)", floor_nodes="20")
+    lo, hi = _bounds(allrow["functions_matched_share_ci95"])
+    share_all = tr.num(
+        float(allrow["functions_matched"]) / float(allrow["functions_above_floor"]) * 100
+    )
+    out.append([])
+    out.append(
+        [
+            tr.lit("All twelve (a function counted once)"),
+            tr.count(allrow["instances"]),
+            tr.count(allrow["functions_above_floor"]),
+            f"{share_all} [{tr.num(float(lo) * 100)}, {tr.num(float(hi) * 100)}]",
+        ]
+    )
+    facts = (
+        f"Probe: functions of at least {tr.count('20')} syntax-tree nodes at the base commits of "
+        f"{tr.count(total)} instances of the final-test benchmark in twelve repositories, "
+        "matched by "
+        "syntax-tree hash against the documents of a public training corpus. Intervals are Wilson "
+        "intervals over functions, descriptive only (functions are not independent draws); a match "
+        "is equal code, not evidence that any model was trained on the pair"
+    )
+    return Table(
+        name="contamination",
+        title="Share of base-commit functions found in a public code-retrieval training corpus",
+        evidence="measured, exploratory",
+        facts=facts,
+        entries=["E-CONTAM-SCAN"],
+        colspec=_L(0.30) + _R(0.15) + _R(0.17) + _R(0.21),
+        header=[
+            tr.lit("Repository"),
+            tr.lit("Instances"),
+            tr.lit("Functions"),
+            tr.lit("In corpus (%)"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_subset(root: Path) -> Table:
+    tr = Trace()
+    rows_in = _csv(root, "results/rq3_exec/repo_table.csv", tr)
+    out: list[list[str]] = []
+    tot = [0, 0, 0]
+    for r in sorted(rows_in, key=lambda x: -int(x["executable"])):
+        out.append(
+            [
+                tr.label(r["repo"]).replace("/", "/\\allowbreak "),
+                tr.count(r["instances"]),
+                tr.count(r["built"]),
+                tr.count(r["executable"]),
+            ]
+        )
+        for i, k in enumerate(("instances", "built", "executable")):
+            tot[i] += int(r[k])
+    out.append([])
+    out.append([tr.lit("All")] + [tr.count(v) for v in tot])
+    facts = (
+        "Counts of instances of the final-test benchmark for which the environment builds "
+        "without root or a "
+        "container (built in two runs), and for which the reference patch then passes every "
+        "named test in two agreeing runs (executable). The executable set is the population of the "
+        "resolved-rate claim; it is not a sample of the benchmark"
+    )
+    return Table(
+        name="rq3_subset",
+        title="Executable subset of the final-test benchmark by repository",
+        evidence="measured, apparatus counts",
+        facts=facts,
+        entries=["E-RQ3-EXEC"],
+        colspec=_L(0.30) + _R(0.16) + _R(0.13) + _R(0.21),
+        header=[
+            tr.lit("Repository"),
+            tr.lit("Instances"),
+            tr.lit("Built"),
+            tr.lit("Executable"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_power(root: Path) -> Table:
+    tr = Trace()
+    mdd = _csv(root, "results/rq3_driver/rq3_power_run_noise_mdd.csv", tr)
+    asm = _json(root, "results/rq3_driver/rq3_power_run_noise_assumptions.json", tr)
+    out: list[list[str]] = []
+    for rate in ("0.1", "0.2", "0.3"):
+        for kappa in ("1.0", "4.0"):
+            cells = [
+                _pick(mdd, n="327", rate=rate, kappa=kappa, runs=k)["mdd_points"]
+                for k in ("1", "2", "3")
+            ]
+            out.append(
+                [
+                    tr.num(float(rate) * 100, 0),
+                    tr.num(kappa, 0),
+                    *[tr.num(c, 1) for c in cells],
+                ]
+            )
+    facts = (
+        f"Simulation of the primary paired contrast on {tr.count('327')} confirmatory instances, "
+        f"power {tr.num('0.8', 1)}, {tr.count(str(asm['sims']))} simulated datasets per cell. "
+        "The baseline resolved rate and the "
+        "instance-heterogeneity parameter are assumptions, since no resolved rate exists; only the "
+        "run-to-run agreement of repeated replies is measured in the pilot. The unit is "
+        "percentage points of resolved rate"
+    )
+    return Table(
+        name="rq3_power",
+        title="Minimum detectable resolved-rate difference with run-to-run noise",
+        evidence="reasoned, exploratory (assumed inputs)",
+        facts=facts,
+        entries=["E-RQ3-DRIVER"],
+        colspec=_R(0.17) + _R(0.24) + _R(0.13) + _R(0.13) + _R(0.13),
+        header=[
+            tr.lit("Baseline rate (%)"),
+            tr.lit("Heterogeneity"),
+            tr.lit("One run"),
+            tr.lit("Two runs"),
+            tr.lit("Three runs"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
 BUILDERS = (
     bm25_repro,
     dense_fusion,
@@ -784,6 +935,9 @@ BUILDERS = (
     mined_pilot,
     assembly_gold,
     assembly_cap,
+    contamination,
+    rq3_subset,
+    rq3_power,
 )
 
 

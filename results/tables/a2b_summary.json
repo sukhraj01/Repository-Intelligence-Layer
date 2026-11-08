@@ -1,0 +1,135 @@
+{
+ "dynamic": {
+  "pallets/flask infer_returns": {
+   "added_executed_pct": 0.0,
+   "added_vs_stored": 1,
+   "precision_lower_bound_pct": 61.8,
+   "recall_resolved_pct": 48.3
+  },
+  "pallets/flask infer_returns+merge_locals+param_defaults": {
+   "added_executed_pct": 69.2,
+   "added_vs_stored": 13,
+   "precision_lower_bound_pct": 62.0,
+   "recall_resolved_pct": 49.2
+  },
+  "pallets/flask merge_locals": {
+   "added_executed_pct": 75.0,
+   "added_vs_stored": 12,
+   "precision_lower_bound_pct": 62.0,
+   "recall_resolved_pct": 49.2
+  },
+  "pallets/flask param_defaults": {
+   "added_executed_pct": null,
+   "added_vs_stored": 0,
+   "precision_lower_bound_pct": 61.8,
+   "recall_resolved_pct": 48.3
+  },
+  "pallets/flask stored": {
+   "added_executed_pct": null,
+   "added_vs_stored": 0,
+   "precision_lower_bound_pct": 61.8,
+   "recall_resolved_pct": 48.3
+  }
+ },
+ "experiment": "a2b-summary",
+ "invoke_breakdown": {
+  "ambiguous_or_unresolved": 51235,
+  "invoke_sites": 232474,
+  "unknown_receiver_among_them": 41147,
+  "unknown_receiver_share_pct": 80.3
+ },
+ "sources": {
+  "breakdown": "results/logs/a2b_invoke_breakdown_2026-10-31.json",
+  "dynamic": "results/logs/a2b_resolver_pilot_dynamic_2026-11-05.json",
+  "static": "results/logs/a2b_resolver_pilot_static_2026-11-03.json"
+ },
+ "static_totals_over_repositories": {
+  "infer_returns": {
+   "graph_build_change_pct": 3.9,
+   "graph_build_ms": 20066,
+   "invoke_resolved": 92566,
+   "invoke_sites": 232474,
+   "resolved_gain": 495,
+   "resolved_gain_pct": 0.5,
+   "resolved_gain_pct_of_all_sites": 0.2,
+   "unknown_receiver_change_pct": -1.4,
+   "unknown_receiver_sites": 47984
+  },
+  "infer_returns+merge_locals+param_defaults": {
+   "graph_build_change_pct": 7.1,
+   "graph_build_ms": 20701,
+   "invoke_resolved": 93204,
+   "invoke_sites": 232474,
+   "resolved_gain": 1133,
+   "resolved_gain_pct": 1.2,
+   "resolved_gain_pct_of_all_sites": 0.5,
+   "unknown_receiver_change_pct": -4.3,
+   "unknown_receiver_sites": 46563
+  },
+  "merge_locals": {
+   "graph_build_change_pct": 3.8,
+   "graph_build_ms": 20061,
+   "invoke_resolved": 92589,
+   "invoke_sites": 232474,
+   "resolved_gain": 518,
+   "resolved_gain_pct": 0.6,
+   "resolved_gain_pct_of_all_sites": 0.2,
+   "unknown_receiver_change_pct": -2.7,
+   "unknown_receiver_sites": 47379
+  },
+  "param_defaults": {
+   "graph_build_change_pct": 7.5,
+   "graph_build_ms": 20763,
+   "invoke_resolved": 92091,
+   "invoke_sites": 232474,
+   "resolved_gain": 20,
+   "resolved_gain_pct": 0.0,
+   "resolved_gain_pct_of_all_sites": 0.0,
+   "unknown_receiver_change_pct": -0.0,
+   "unknown_receiver_sites": 48654
+  },
+  "stored": {
+   "graph_build_change_pct": 0.0,
+   "graph_build_ms": 19321,
+   "invoke_resolved": 92071,
+   "invoke_sites": 232474,
+   "resolved_gain": 0,
+   "resolved_gain_pct": 0.0,
+   "resolved_gain_pct_of_all_sites": 0.0,
+   "unknown_receiver_change_pct": 0.0,
+   "unknown_receiver_sites": 48669
+  }
+ },
+ "untyped_receivers_combined_options": {
+  "attribute_chain_pct": 51.5,
+  "receivers": 46620,
+  "share_pct": {
+   "attribute chain on another object": 34.3,
+   "attribute chain on self": 17.2,
+   "call result": 12.0,
+   "local: ann + annotated parameter + assign": 0.0,
+   "local: ann + assign": 0.3,
+   "local: ann + assign + other": 0.0,
+   "local: ann + other": 0.0,
+   "local: annotated parameter": 0.3,
+   "local: annotated parameter + assign": 0.2,
+   "local: annotated parameter + assign + other": 0.0,
+   "local: annotated parameter + other": 0.0,
+   "local: annotated parameter + unannotated parameter": 0.0,
+   "local: assign": 14.7,
+   "local: assign + def": 0.0,
+   "local: assign + import": 0.0,
+   "local: assign + other": 0.6,
+   "local: assign + other + unannotated parameter": 0.0,
+   "local: assign + unannotated parameter": 0.9,
+   "local: def": 0.7,
+   "local: import": 0.0,
+   "local: other": 6.8,
+   "local: other + unannotated parameter": 0.1,
+   "local: unannotated parameter": 9.2,
+   "module-level name": 0.5,
+   "other expression": 0.3,
+   "subscript": 1.6
+  }
+ }
+}

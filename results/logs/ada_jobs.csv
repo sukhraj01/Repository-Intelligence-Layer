@@ -197,5 +197,10 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-08,A,64590,RQ3D,"driver replay test on the real executor: 20 gold-derived edit sets and 10 broken variants (30 of 30 classes as expected)",u22,4,0,00:11:50,0.0,COMPLETED
 2026-11-08,A,64597,RQ3D,"what the prompt screen matched (addresses and path strings with counts; output kept off the repository)",u22,4,0,00:00:15,0.0,COMPLETED
 2026-11-08,A,64598,RQ3D,"prompts of the 377 executable instances x 3 arms at 8,000 tokens, issue text from the benchmark table (887 written, 244 rejected by the screen)",u22,4,0,00:00:11,0.0,COMPLETED
+2026-11-08,A,64656,RDY,RQ2 readiness dry run at minimal scale (20 directories of the pilot store: materialise; rank inputs; BM25; features; selection; cache; FILTER size; overlap audit; plan-only launcher; evaluation-set check); scripts/ada/rq2_readiness.sbatch,u22,2,0,00:01:15,0.0,COMPLETED
+2026-11-08,A,64658,RDY,evaluation-set check of the dev set and the eight repositories and the six Verified repositories with stores (plan only; no model),u22,2,0,00:00:20,0.0,COMPLETED
+2026-11-08,A,64669,RDY,torch tests after moving the configuration loader out of the training module (unit hooks and retention; integration training end to end and run-batch and curve hook; reproducibility; leakage): 41 passed; scripts/ada/t1_tests.sbatch,u22,6,0,00:00:23,0.0,COMPLETED
+2026-11-08,A,64665,A1T,"reproduction of the A1-DEV cells (stage 1, stage 2, summary, query-level rows) on the development folders",u22,4,0,00:14:56,0.0,COMPLETED
+2026-11-08,A,64671,A1T,"E-A1-FUSED: default and two split variants alone and inside RRF(BM25, dense) from stored chunk vectors",u22,4,0,00:01:26,0.0,COMPLETED
 2026-11-08,A,65086,RQ3P,"prompts of the 377 x 3 arms at 8,000 tokens, pseudonymised before the screen (1,131 written, 0 rejected)",u22,4,0,00:00:32,0.0,COMPLETED
 2026-11-08,A,65087,RQ3P,"round trips on the 244 touched prompts and replay of 10 touched instances on the real executor (20 of 20 as expected)",u22,4,0,00:09:44,0.0,COMPLETED

@@ -1,0 +1,286 @@
+{
+ "date": "2026-11-05",
+ "dynamic": [
+  {
+   "added_by_trace_reading": {},
+   "added_pairs": [],
+   "added_vs_stored": 0,
+   "dynamic_pairs": 1049,
+   "missed_by_category": {
+    "implicit-protocol-dunder": 199,
+    "instantiation-no-site": 17,
+    "no-call-site-for-callee-name": 75,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "options": "stored",
+   "precision_caller_executed_n": 820,
+   "precision_lower_bound": 0.6183,
+   "recall_resolved": 0.4833,
+   "recall_resolved_or_ambiguous": 0.6606,
+   "recovered_resolved": 507,
+   "removed_vs_stored": 0,
+   "repo_id": "pallets/flask",
+   "static_resolved_pairs": 935
+  },
+  {
+   "added_by_trace_reading": {
+    "caller not executed": 1
+   },
+   "added_pairs": [
+    {
+     "callee": "src/flask/app.py::Flask.app_context",
+     "caller": "examples/tutorial/tests/conftest.py::app",
+     "trace": "caller not executed"
+    }
+   ],
+   "added_vs_stored": 1,
+   "dynamic_pairs": 1049,
+   "missed_by_category": {
+    "implicit-protocol-dunder": 199,
+    "instantiation-no-site": 17,
+    "no-call-site-for-callee-name": 75,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "options": "infer_returns",
+   "precision_caller_executed_n": 820,
+   "precision_lower_bound": 0.6183,
+   "recall_resolved": 0.4833,
+   "recall_resolved_or_ambiguous": 0.6606,
+   "recovered_resolved": 507,
+   "removed_vs_stored": 0,
+   "repo_id": "pallets/flask",
+   "static_resolved_pairs": 936
+  },
+  {
+   "added_by_trace_reading": {
+    "caller executed, pair not seen": 1,
+    "class target (the trace records its __init__)": 2,
+    "executed": 9
+   },
+   "added_pairs": [
+    {
+     "callee": "src/flask/testing.py::FlaskCliRunner",
+     "caller": "src/flask/app.py::Flask.test_cli_runner",
+     "trace": "class target (the trace records its __init__)"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskCliRunner.__init__",
+     "caller": "src/flask/app.py::Flask.test_cli_runner",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient",
+     "caller": "src/flask/app.py::Flask.test_client",
+     "trace": "class target (the trace records its __init__)"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.__init__",
+     "caller": "src/flask/app.py::Flask.test_client",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_basic.py::test_static_folder_with_pathlib_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.open",
+     "caller": "tests/test_basic.py::test_static_folder_with_pathlib_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_basic.py::test_static_url_empty_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.open",
+     "caller": "tests/test_basic.py::test_static_url_empty_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_basic.py::test_static_url_empty_path_default",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.open",
+     "caller": "tests/test_basic.py::test_static_url_empty_path_default",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_session_interface.py::test_open_session_with_endpoint",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/scaffold.py::Scaffold.get",
+     "caller": "tests/test_session_interface.py::test_open_session_with_endpoint",
+     "trace": "caller executed, pair not seen"
+    }
+   ],
+   "added_vs_stored": 12,
+   "dynamic_pairs": 1049,
+   "missed_by_category": {
+    "implicit-protocol-dunder": 199,
+    "instantiation-no-site": 15,
+    "no-call-site-for-callee-name": 75,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "options": "merge_locals",
+   "precision_caller_executed_n": 832,
+   "precision_lower_bound": 0.6202,
+   "recall_resolved": 0.4919,
+   "recall_resolved_or_ambiguous": 0.6625,
+   "recovered_resolved": 516,
+   "removed_vs_stored": 0,
+   "repo_id": "pallets/flask",
+   "static_resolved_pairs": 947
+  },
+  {
+   "added_by_trace_reading": {},
+   "added_pairs": [],
+   "added_vs_stored": 0,
+   "dynamic_pairs": 1049,
+   "missed_by_category": {
+    "implicit-protocol-dunder": 199,
+    "instantiation-no-site": 17,
+    "no-call-site-for-callee-name": 75,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "options": "param_defaults",
+   "precision_caller_executed_n": 820,
+   "precision_lower_bound": 0.6183,
+   "recall_resolved": 0.4833,
+   "recall_resolved_or_ambiguous": 0.6606,
+   "recovered_resolved": 507,
+   "removed_vs_stored": 0,
+   "repo_id": "pallets/flask",
+   "static_resolved_pairs": 935
+  },
+  {
+   "added_by_trace_reading": {
+    "caller executed, pair not seen": 1,
+    "caller not executed": 1,
+    "class target (the trace records its __init__)": 2,
+    "executed": 9
+   },
+   "added_pairs": [
+    {
+     "callee": "src/flask/app.py::Flask.app_context",
+     "caller": "examples/tutorial/tests/conftest.py::app",
+     "trace": "caller not executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskCliRunner",
+     "caller": "src/flask/app.py::Flask.test_cli_runner",
+     "trace": "class target (the trace records its __init__)"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskCliRunner.__init__",
+     "caller": "src/flask/app.py::Flask.test_cli_runner",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient",
+     "caller": "src/flask/app.py::Flask.test_client",
+     "trace": "class target (the trace records its __init__)"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.__init__",
+     "caller": "src/flask/app.py::Flask.test_client",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_basic.py::test_static_folder_with_pathlib_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.open",
+     "caller": "tests/test_basic.py::test_static_folder_with_pathlib_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_basic.py::test_static_url_empty_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.open",
+     "caller": "tests/test_basic.py::test_static_url_empty_path",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_basic.py::test_static_url_empty_path_default",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/testing.py::FlaskClient.open",
+     "caller": "tests/test_basic.py::test_static_url_empty_path_default",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/app.py::Flask.test_client",
+     "caller": "tests/test_session_interface.py::test_open_session_with_endpoint",
+     "trace": "executed"
+    },
+    {
+     "callee": "src/flask/scaffold.py::Scaffold.get",
+     "caller": "tests/test_session_interface.py::test_open_session_with_endpoint",
+     "trace": "caller executed, pair not seen"
+    }
+   ],
+   "added_vs_stored": 13,
+   "dynamic_pairs": 1049,
+   "missed_by_category": {
+    "implicit-protocol-dunder": 199,
+    "instantiation-no-site": 15,
+    "no-call-site-for-callee-name": 75,
+    "property-access": 40,
+    "site-present-not-recovered": 11,
+    "site-present-other-target": 14
+   },
+   "options": "infer_returns+merge_locals+param_defaults",
+   "precision_caller_executed_n": 832,
+   "precision_lower_bound": 0.6202,
+   "recall_resolved": 0.4919,
+   "recall_resolved_or_ambiguous": 0.6625,
+   "recovered_resolved": 516,
+   "removed_vs_stored": 0,
+   "repo_id": "pallets/flask",
+   "static_resolved_pairs": 948
+  }
+ ],
+ "experiment": "a2b-resolver-pilot",
+ "hardware": {
+  "cpus_visible": 16,
+  "host": "local-laptop",
+  "mem_total_kb": 15681604,
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+  "python": "3.11.15"
+ },
+ "static": [],
+ "traces": [
+  {
+   "outcomes": {
+    "call:passed": 482,
+    "setup:skipped": 2
+   },
+   "pytest_exit_code": 0,
+   "python": "3.11.15",
+   "repo_id": "pallets/flask",
+   "trace": "data/processed/flask_trace.json"
+  }
+ ],
+ "untyped_receivers_combined_options": {}
+}

@@ -1,0 +1,602 @@
+{
+ "budget_measured": {
+  "basis": "measured",
+  "block3_cap": 46.7,
+  "eight_repositories": 6.41,
+  "margin": 17.97,
+  "runs": 36,
+  "sensitivity_1000": 0.0,
+  "total": 28.73,
+  "train_and_dev_eval": 15.12,
+  "verified_look": 7.2
+ },
+ "budget_protocol": {
+  "basis": "protocol",
+  "block3_cap": 46.7,
+  "eight_repositories": 17.28,
+  "margin": 7.82,
+  "runs": 36,
+  "sensitivity_1000": 0.0,
+  "total": 38.88,
+  "train_and_dev_eval": 14.4,
+  "verified_look": 7.2
+ },
+ "critical_path_hours": 19.0,
+ "jobs": [
+  {
+   "account": "C",
+   "after": [],
+   "gpu_hours": 0.0,
+   "job_id": "report",
+   "kind": "cpu",
+   "note": "",
+   "stage": "mining report",
+   "wall_hours": 0.1
+  },
+  {
+   "account": "C",
+   "after": [
+    "report"
+   ],
+   "gpu_hours": 0.0,
+   "job_id": "overlap",
+   "kind": "cpu",
+   "note": "about 2 h linear; 13 min index",
+   "stage": "overlap audit and drop list",
+   "wall_hours": 2.0
+  },
+  {
+   "account": "C",
+   "after": [
+    "overlap"
+   ],
+   "gpu_hours": 0.0,
+   "job_id": "prep",
+   "kind": "cpu",
+   "note": "reasoned: pilot 1,036 s BM25 + 695 s materialise for 1,286 directories, scaled",
+   "stage": "materialise, rank inputs, BM25 teacher, feature table, cache",
+   "wall_hours": 6.0
+  },
+  {
+   "account": "C",
+   "after": [
+    "prep"
+   ],
+   "gpu_hours": 0.0,
+   "job_id": "filter_size",
+   "kind": "cpu",
+   "note": "",
+   "stage": "FILTER size for the subsample",
+   "wall_hours": 0.1
+  },
+  {
+   "account": "A",
+   "after": [
+    "filter_size"
+   ],
+   "gpu_hours": 3.59,
+   "job_id": "train_s100_1",
+   "kind": "gpu",
+   "note": "6 runs",
+   "stage": "train and evaluate mined, seed 100",
+   "wall_hours": 3.59
+  },
+  {
+   "account": "C",
+   "after": [
+    "prep"
+   ],
+   "gpu_hours": 3.59,
+   "job_id": "train_s100_2",
+   "kind": "gpu",
+   "note": "6 runs",
+   "stage": "train and evaluate injected, seed 100",
+   "wall_hours": 3.59
+  },
+  {
+   "account": "A",
+   "after": [
+    "filter_size",
+    "train_s100_1"
+   ],
+   "gpu_hours": 3.59,
+   "job_id": "train_s101_3",
+   "kind": "gpu",
+   "note": "6 runs",
+   "stage": "train and evaluate mined, seed 101",
+   "wall_hours": 3.59
+  },
+  {
+   "account": "C",
+   "after": [
+    "prep",
+    "train_s100_2"
+   ],
+   "gpu_hours": 3.59,
+   "job_id": "train_s101_4",
+   "kind": "gpu",
+   "note": "6 runs",
+   "stage": "train and evaluate injected, seed 101",
+   "wall_hours": 3.59
+  },
+  {
+   "account": "A",
+   "after": [
+    "filter_size",
+    "train_s101_3"
+   ],
+   "gpu_hours": 3.59,
+   "job_id": "train_s102_5",
+   "kind": "gpu",
+   "note": "6 runs",
+   "stage": "train and evaluate mined, seed 102",
+   "wall_hours": 3.59
+  },
+  {
+   "account": "C",
+   "after": [
+    "prep",
+    "train_s101_4"
+   ],
+   "gpu_hours": 3.59,
+   "job_id": "train_s102_6",
+   "kind": "gpu",
+   "note": "6 runs",
+   "stage": "train and evaluate injected, seed 102",
+   "wall_hours": 3.59
+  }
+ ],
+ "open_choices": [
+  "teacher of WEIGHT and CURRICULUM on the mined set (not named in the protocol)",
+  "the 1,000-update sensitivity subset (O1 names no cells)"
+ ],
+ "reused_noise_seeds": [],
+ "runs": [
+  {
+   "cell": "mined_raw",
+   "config_hash": "93d27d37dc543312b1672d2258cdaf9680807ff1ec2a3a81f5883f17bc15dab1",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_raw_u100_s100",
+   "seed": 100,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "cell": "mined_raw",
+   "config_hash": "cc5cbe822cc4fe2645be9744051d5df848af0afcbb33185970be9c096015d455",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_raw_u100_s101",
+   "seed": 101,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "cell": "mined_raw",
+   "config_hash": "8364c6ef91a56dadc577fbbe6d49bbf391f536f11f0cb5f7a234f8728037e287",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_raw_u100_s102",
+   "seed": 102,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "cell": "mined_sub",
+   "config_hash": "7ff89bbc6bc72c257678c07a1ec5c6338b5fde393b222ec72c5bb5a2471e741a",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_sub_u100_s100",
+   "seed": 100,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "cell": "mined_sub",
+   "config_hash": "cc23f337a5abfe118673fde983fd42643ee76965a3026208598e3ccc6c92fcdc",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_sub_u100_s101",
+   "seed": 101,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "cell": "mined_sub",
+   "config_hash": "4e07d91d6d078e60a69892d6e947fb0f2124c7346112b736292f7b098044c194",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_sub_u100_s102",
+   "seed": 102,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "config_hash": "283cce2d3a2328a1bfa6e7ef051b69bcda03ef9b9c68191b72ba1658fc004113",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_bm25_u100_s100",
+   "seed": 100,
+   "status": "confirmatory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "config_hash": "a6a94aa3b9afe70418c4369040e1a15501dc935e2b36b8794b8bf8a67987cfe3",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_bm25_u100_s101",
+   "seed": 101,
+   "status": "confirmatory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "config_hash": "755c9b4d5f29dc4fd1fbad10705e3492563a09b35cb5450a0280b5ac98f927b2",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_bm25_u100_s102",
+   "seed": 102,
+   "status": "confirmatory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_filter_srs",
+   "config_hash": "9c5e08261f76a0ed094bc51e101fbea53d6ba302adf7b107e53bbc0e08e679c0",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_srs_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "mined_filter_srs",
+   "config_hash": "aded92425e71167d25bdd5eb2fc9be476a0640d5aa9deea7bdca1e4a2771a29e",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_srs_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "mined_filter_srs",
+   "config_hash": "75f591668f1f27634ba90b0e62b07dbe8e7b980b0955f54b78fe96d6ea004c7f",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_srs_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "mined_weight",
+   "config_hash": "d4ddc83ec715cf1fbb949ac3fb5720995ca2c898cc8fd866e841f8f404852ef2",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_weight_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_weight",
+   "config_hash": "0e0b204b6122c6775aca66b76f1f68f35c30e3d2e22d2515d9247ef96fd71063",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_weight_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_weight",
+   "config_hash": "5cf2f6d3b0453c27351acaa23b162bafedbe4e39fdf27032092a813f1267c077",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_weight_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_curriculum",
+   "config_hash": "726dac22d3d3c809a471fb6eeb425f8399f1a2bf19bf4d2d1efb68d3eafe158a",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_curriculum_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_curriculum",
+   "config_hash": "bc4217e746889e1d66290125edf0ce64ee39b2e7e3241c2b9f91be31774879ac",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_curriculum_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "mined_curriculum",
+   "config_hash": "bd65e025b934360183cdc1d099068bbf768e32a3281a60be670fbc27c7f5e72c",
+   "example_visits": 3200,
+   "family": "mined",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_curriculum_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "inj_raw",
+   "config_hash": "7397d9418b810ee4d4afa68fda9fb21108ec303c764b505e3410bc57ff21a434",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_raw_u100_s100",
+   "seed": 100,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_raw",
+   "config_hash": "cf8acf37a9542c99e9d8046448cd6a4e30fa0139b43584a17248b544c2de9c39",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_raw_u100_s101",
+   "seed": 101,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_raw",
+   "config_hash": "25e51cc9df9dd3b3de8d19e612dd5dc624fc8a64ca6d706603a01d8220a7b5f1",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_raw_u100_s102",
+   "seed": 102,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_oracle",
+   "config_hash": "fadfd4953c0856e53b9a24d88ecdad36529907b03ef3c39dc98cb80175dcf8ff",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_oracle_u100_s100",
+   "seed": 100,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_oracle",
+   "config_hash": "2ee65109f6b89498c7d74288fccf028bcbf0b8ccdb57650134998a9c158ed1bc",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_oracle_u100_s101",
+   "seed": 101,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_oracle",
+   "config_hash": "9f408103754d244070652124277ef5d5712b4986758690efc1d481f4a5e76810",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_oracle_u100_s102",
+   "seed": 102,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_sub",
+   "config_hash": "0dcf847edff2718927b14993c26aadc49482124eeb5687b6e79751ff1bc99159",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_sub_u100_s100",
+   "seed": 100,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_sub",
+   "config_hash": "d6d5280b00f5f3ef7683d594c5dc3603a51b43d3dc93789616a33c05e9f1a662",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_sub_u100_s101",
+   "seed": 101,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_sub",
+   "config_hash": "33701fd24e8fd908c8698e9e887fdc6133f654a02a5cb39f17e5e60194c59ead",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_sub_u100_s102",
+   "seed": 102,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "cell": "inj_filter_bm25",
+   "config_hash": "55de72721b8c4cb331bba25463f511e33ccebcf46c451b1663467d64a0ef3017",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_filter_bm25_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "inj_filter_bm25",
+   "config_hash": "8948e2e8ec5d023190db08333b175950402e6aa1e26dbd4d5bf93f0cc0ca7611",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_filter_bm25_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "inj_filter_bm25",
+   "config_hash": "d29c76d229477da495c1943f30529123a467cc690ba7d585adce734c2deba1d0",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_filter_bm25_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "cell": "inj_filter_srs",
+   "config_hash": "c44a91436f11a75eaa177dece07a35d97df2d17c8b27fd2013bf36624189adb5",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_filter_srs_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "inj_filter_srs",
+   "config_hash": "7a254a75daafd258625d73b96dcf627927f3d4248203a2c0e57ac868e5c09f0e",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_filter_srs_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "inj_filter_srs",
+   "config_hash": "062daabf7d0c0c012516192a7decaffbad98deb451078cdba4c32fcc33dd6984",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_filter_srs_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "inj_weight",
+   "config_hash": "b49314b2f1aaf5c6abcdbd6e8d74a0366b0b7b3aab0bb4f4bdce73160122ca4f",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_weight_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "inj_weight",
+   "config_hash": "ac102deb6b123136b9bec7886e7000951f402613f65de313584a20bc18c643b8",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_weight_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "cell": "inj_weight",
+   "config_hash": "b654a44a484e9b825bf0e7297801934e4313dea2fb415619c6112ee3e3f4beb9",
+   "example_visits": 3200,
+   "family": "injected",
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "inj_weight_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  }
+ ],
+ "seeds": [
+  100,
+  101,
+  102
+ ],
+ "unique_examples": {
+  "filter_passes": 213.33,
+  "filter_reaches_unique": false,
+  "raw_passes": 177.78,
+  "raw_reaches_unique": false,
+  "shortfall_filter": 3185,
+  "visits": 3200
+ },
+ "version": "rq2-plan/v1"
+}

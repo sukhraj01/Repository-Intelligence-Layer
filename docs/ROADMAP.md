@@ -34,7 +34,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 - [x] Repository parser + CodeUnit emission (`ril/parsing/repository_parser.py`; first build of 2026-10-17)
 - [x] Call / import / inherit graph with edge-recovery coverage (`ril/parsing/call_graph.py`; the coverage is reported under several definitions, ADR-012)
-- [ ] BM25 index (identifier splitting, field weights, tune b) — reference form built (`ril/retrieval/bm25_index.py`, `RESULTS.md` rows `e1-*`); identifier splitting and field weights added as options and piloted locally (A1-PILOT, `results/ledger_a.md`, merged 2026-10-31); the development-set runs and the b tuning are open
+- [ ] BM25 index (identifier splitting, field weights, tune b) — reference form built (`ril/retrieval/bm25_index.py`, `RESULTS.md` rows `e1-*`); identifier splitting and field weights added as options and piloted locally (A1-PILOT, `results/ledger_a.md`, merged 2026-10-31); tokenizer and k1/b selected on dev at chunk level (A1-DEV, reproduced 2026-11-08, E-A1-TAKEOVER); the gain is +4.6 to +5.1 alone at L2 and not distinguishable from 0 inside RRF(BM25, dense) at L2; field weights and unit-level granularity are open, so the item stays unticked
 
 ## Weeks 3–8 — Person B: dense encoder, baseline training, data pipeline
 
@@ -106,6 +106,7 @@ still complete and defensible.
 - [x] RQ3 pilot run (2026-11-06 to 2026-11-07: 400 of 400 units, 565 calls) and its analysis from stored data (D109, E-RQ3-PILOT-RESULT; `ril/analysis/rq3_pilot_analysis.py`, `results/rq3_pilot/analysis/`): all three flip criteria pass, free tier workable (3 to 8 days for 2 to 8 arm-runs), BM25 17.0% against RRF 8.5% unusable after follow-ups mostly through gold absence, run-to-run same edits 63%; no resolved rate (nothing graded); scaffold, model and Q45 decisions remain the engineer's
 - [x] Edit blocks to the executor's patch (2026-11-08, D110, E-RQ3-PATCHAPPLY; `ril/agent/providers/patch_convert.py`, `results/rq3_patch/`): exact primary, tolerant sensitivity; pilot edits apply in 276 of 400 units (tolerant rescues 0); 20 of 20 gold-derived edits resolve through the executor; no model call
 - [x] RQ3 driver and plan (2026-11-08, D111 to D114, E-RQ3-DRIVER; `ril/agent/providers/driver.py`, `results/rq3_driver/`): held-out slice of 50 frozen (N = 327), prompts of the 377 built (887 of 1,131 pass the screen; Q70), driver replay-tested on the real executor (30 of 30), analysis plan with run-noise power, cost model, spend guard; no model call; graded model check waits for the engineer (billing, cap, key, limits)
+- [x] Read the five agent-scaffold papers in full (Agentless, SWE-agent, OpenHands new notes; LocAgent, CoSIL re-verified), ADR-007 addendum (D116, E-LIT-SCAFFOLD)
 - [x] RQ3 prompt pseudonymisation (2026-11-08, D120, E-RQ3-PSEUDONYMISE; Q70 answered): 1,131 of 1,131 prompts pass the screen, restore in the driver, round trips and replay checked, no model call
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
@@ -126,3 +127,16 @@ still complete and defensible.
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
 
 > Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).
+
+## RQ2 final launch (audit of 2026-11-08, `docs/RQ2_LAUNCH_PLAN.md`)
+
+- [x] Readiness audit of the chain from the mined store to the final tables; plan-only launcher, evaluation-set check, yield from the state log; dry run at minimal scale (E-RQ2-READINESS, D115)
+- [ ] Final cell configurations and run script for the 36 runs (cache, noise scores, retention directory, 30 GB, dev set, the eight repositories, Verified look as a separate job after the dev analysis); needs decisions 1 to 4 and 6 of the plan
+- [ ] Full-store prep job (materialise with a names file, `non_test` reading, BM25 ranks, feature table, cache, FILTER size) with the overlap drop list applied; run at 200 directories first
+- [ ] Overlap audit on the full store and its drop list (about 2 h; stage the held-out index and code on the account holding the store)
+- [ ] Final analysis module: Holm within families, paired bootstrap, delta 1.5, verdict rules, seed spread, sanity rules, report tables; tested on the pilot rows
+- [ ] Dense teacher cost on the mined store: per-repository de-duplicated pass on 100 directories (about 0.4 GPU-hours) before deciding the FILTER-SweRankEmbed-Small mined cell
+- [ ] Decide the Verified look set (six folders with stores, the executable subset of 377, or build the other six) and record the departure if it is not the protocol's 12 folders
+- [ ] Encoding of the 377 executable instances with a retained model directory and trained-arm contexts (0.377 GPU-hours per checkpoint, Block 4)
+- [ ] Alias for the archive account and the copy of retained models; retention directory on the account with space (account A has 5.1 GB free)
+- [ ] Return of the pilot label sheets from two readers who are not the lead; decide pilot sample or new draw
