@@ -207,6 +207,54 @@ def _query_vectors(runs: list[Record]) -> tuple[list[tuple[str, str, str]], np.n
     return keys, np.array([s[0] for s in sc]), np.array([s[1] for s in sc])
 
 
+def query_level_rows(out_dir: str, cells: list[Cell]) -> list[Record]:
+    """One row per (cell, level, folder, query): positives, nDCG@10 and Recall@100 (percent),
+    protocol reading. The stored form of a run, so that every interval can be recomputed."""
+    rows: list[Record] = []
+    for cell in cells:
+        runs = load_cell(out_dir, cell)
+        n_pos = {
+            (r["level"], r["folder"], q["query_id"]): (q["n_positives"], q["n_positives_in_corpus"])
+            for r in runs
+            for q in r["records"]
+        }
+        keys, nd, rc = _query_vectors(runs)
+        for (level, folder, qid), n, c in zip(keys, nd, rc, strict=True):
+            positives, in_corpus = n_pos[(level, folder, qid)]
+            rows.append(
+                {
+                    "cell": cell_name(cell),
+                    "level": level,
+                    "folder": folder,
+                    "query_id": qid,
+                    "positives": positives,
+                    "positives_in_corpus": in_corpus,
+                    "ndcg10": round(100 * float(n), 6),
+                    "recall100": round(100 * float(c), 6),
+                }
+            )
+    return rows
+
+
+def run_file_hashes(out_dir: str) -> list[Record]:
+    """Path (relative to ``out_dir``), size and SHA-256 of every run file, in path order."""
+    files = []
+    for root, _dirs, names in os.walk(out_dir):
+        for name in names:
+            if name.endswith(".json"):
+                path = os.path.join(root, name)
+                with open(path, "rb") as handle:
+                    digest = hashlib.sha256(handle.read()).hexdigest()
+                files.append(
+                    {
+                        "path": os.path.relpath(path, out_dir),
+                        "bytes": os.path.getsize(path),
+                        "sha256": digest,
+                    }
+                )
+    return sorted(files, key=lambda f: str(f["path"]))
+
+
 def _by_repository(keys: list[tuple[str, str, str]], values: np.ndarray) -> dict[str, np.ndarray]:
     groups: dict[str, list[float]] = defaultdict(list)
     for (_level, folder, _q), v in zip(keys, values, strict=True):

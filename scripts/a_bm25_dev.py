@@ -2,6 +2,7 @@
 
 Usage: a_bm25_dev.py run CONFIG DATA_ROOT OUT_DIR --stage stage1|stage2 [--tokenizer NAME]
        a_bm25_dev.py summarise CONFIG OUT_DIR --log LOG.json --table TABLE.csv [--host LABEL]
+       a_bm25_dev.py rows CONFIG OUT_DIR --tokenizer NAME --rows ROWS.csv --files FILES.json
 ``run`` is the cluster stage (resumable per folder, level and cell); ``summarise`` reads the run
 files, applies the selection rule of the configuration and checks the regression control against
 ``results/tables/e1_dev_sweep.csv``. The logic is in ``ril.analysis.rq1_bm25_dev``.
@@ -53,6 +54,12 @@ def main() -> int:
     summ.add_argument("--log", required=True)
     summ.add_argument("--table", required=True)
     summ.add_argument("--host", default="ada")
+    rows_cmd = sub.add_parser("rows")
+    rows_cmd.add_argument("config")
+    rows_cmd.add_argument("out_dir")
+    rows_cmd.add_argument("--tokenizer", required=True)
+    rows_cmd.add_argument("--rows", required=True)
+    rows_cmd.add_argument("--files", required=True)
     args = ap.parse_args()
     log = get_logger("a1_dev")
     cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
@@ -60,6 +67,18 @@ def main() -> int:
         cells = a1.stage_cells(cfg, args.stage, args.tokenizer)
         n = a1.run_cells(cfg, args.data_root, args.out_dir, cells, only=args.only)
         log.info("%s: %d run files written", args.stage, n)
+        return 0
+    if args.cmd == "rows":
+        cells = a1.stage_cells(cfg, "stage1") + a1.stage_cells(cfg, "stage2", args.tokenizer)
+        unique = list(dict.fromkeys(cells))
+        query_rows = a1.query_level_rows(args.out_dir, unique)
+        with open(args.rows, "w", newline="", encoding="utf-8") as handle:
+            w = csv.DictWriter(handle, fieldnames=list(query_rows[0]))
+            w.writeheader()
+            w.writerows(query_rows)
+        files = a1.run_file_hashes(args.out_dir)
+        Path(args.files).write_text(json.dumps(files, indent=1) + "\n", encoding="utf-8")
+        log.info("%d query rows, %d run files hashed", len(query_rows), len(files))
         return 0
     seed, draws = int(cfg["seed"]), int(cfg["bootstrap"]["draws"])
     default = ("ref", *a1.DEFAULT_K1_B)

@@ -118,3 +118,19 @@ def test_stage2_grid_is_on_one_tokenizer() -> None:
     assert cells == [("split", 1.2, 0.75), ("split", 1.5, 0.75)]
     with pytest.raises(ValueError):
         a1.stage_cells(_cfg(FOLDERS), "stage2")
+
+
+def test_query_level_rows_and_run_file_hashes(data: Path, tmp_path: Path) -> None:
+    cfg, out = _cfg(FOLDERS), str(tmp_path / "out")
+    s1 = a1.stage_cells(cfg, "stage1")
+    a1.run_cells(cfg, str(data), out, s1)
+    rows = a1.query_level_rows(out, s1)
+    assert len(rows) == 9 * 3
+    assert {r["cell"] for r in rows} == {a1.cell_name(c) for c in s1}
+    first = [r for r in rows if r["cell"] == "ref_k1_1.5_b_0.75"]
+    pooled = a1.summarise_cells(out, s1[:1], s1[0], draws=200)[0]["ndcg10"]
+    assert round(sum(r["ndcg10"] for r in first) / len(first), 4) == pooled
+    assert all(0.0 <= r["recall100"] <= 100.0 and r["positives"] >= 1 for r in rows)
+    files = a1.run_file_hashes(out)
+    assert len(files) == 9 and all(len(str(f["sha256"])) == 64 for f in files)
+    assert files == a1.run_file_hashes(out)
