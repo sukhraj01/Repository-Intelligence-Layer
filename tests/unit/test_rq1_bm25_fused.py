@@ -119,3 +119,13 @@ def test_test_folders_are_refused(setup: dict[str, Any]) -> None:
 def test_read_folder_import_is_the_loader_of_the_stored_scoring(setup: dict[str, Any]) -> None:
     folder = read_folder(str(setup["data"] / "data" / "LEVEL-2" / "Pro" / "alpha"))
     assert [t for _, t in CORPUS] == list(folder.corpus_texts)
+
+
+def test_cells_systems_and_single_folder_run(setup: dict[str, Any]) -> None:
+    cfg = setup["cfg"]
+    assert fused.cells_of(cfg)[0] == ("ref", 1.5, 0.75) and len(fused.cells_of(cfg)) == 3
+    assert fused.system_names(cfg) == ["bm25", "rrf_a_k20", "rrf_b_k100"]
+    out = str(setup["tmp"] / "single")
+    spec = cfg["folders"][0]
+    assert fused.run_folder(cfg, spec, "L2", str(setup["data"]), str(setup["enc"]), out) is True
+    assert fused.run_folder(cfg, spec, "L2", str(setup["data"]), str(setup["enc"]), out) is False
