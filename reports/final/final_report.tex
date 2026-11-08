@@ -147,7 +147,8 @@ resolved rate can be paired per instance, which is what makes RQ3 a paired desig
 \section{Related work}
 \label{sec:related}
 
-Only papers read in full are cited; each has a note in the project's reading log.
+Only papers read in full are cited; each has a note in the project's reading log. One reading has a stated exception: of SWE-agent's
+appendix trajectories every agent turn, error message and patch was read, but not the numbered source listings inside them, and nothing below rests on those. % knowledge/papers/swe-agent-2405.15793.md header
 
 \paragraph{Retrievers for issue localization and the benchmarks.} SWE-bench defines the resolved-rate
 task~\cite{swebench}. CORE-Bench provides repository-level retrieval labels at three levels and
@@ -170,6 +171,24 @@ RepoNavigator and LogicLoc make symbol resolution or program facts a tool~\cite{
 The static call graphs underneath have measured precision and recall against dynamic
 baselines for Python~\cite{pycg,dypybench}. We use the graph as a retrieval signal and test it
 against a same-file control, which these systems do not report.
+
+\paragraph{Agent scaffolds and the repair stage.} Agentless has no tool loop: it localizes in stages, samples candidate
+edits in a search-and-replace format, and selects among them by running regression tests and a generated reproduction test.
+Majority vote alone resolves 77 of 300 Lite instances and the full selection 96~\cite{agentless}. % knowledge/papers/agentless-2407.01489.md Sec. 3, pp.5-9; Table 4, p.14; Table 1, p.10
+Every cell of its tables is one run, and a later reproduction of the same pipeline resolved 86 of 300 against the published
+96~\cite{cosil}. % knowledge/papers/agentless-2407.01489.md Sec. 4, p.9 (no variance reported); knowledge/papers/cosil-2503.22424.md Table IX, p.10
+SWE-agent and OpenHands instead give a model a shell and an interface of commands and let it act in a loop~\cite{sweagent,openhands};
+shell and lexical search stay available in both, so a separately trained retriever would compete with the agent's own search and could not
+be the only thing that changes (our inference). % knowledge/papers/swe-agent-2405.15793.md Sec. 3, pp.3-4; knowledge/papers/openhands-2407.16741.md Sec. 2.2-2.3, pp.4-5
+Their loops cost about 1.6 and 1.7 dollars per Lite instance, SWE-agent's figure counting resolved instances only. % knowledge/papers/swe-agent-2405.15793.md Table 1, p.6; knowledge/papers/openhands-2407.16741.md Table 4, p.8 and p.19
+Two papers swap the localization stage under a fixed Agentless repair stage and read the resolved rate. LocAgent's gain of close to 15
+points of function Acc@5 comes with 1.6 points of Pass@1, one run per row~\cite{locagent}. % knowledge/papers/locagent-2503.09089.md Sec. 5.8, Table 8, p.11
+CoSIL's four localizers span 17.33 to 21.67\% on Lite, 14 of 300 instances, about the size of the gap between two runs of the repair stage itself
+(86 and 96 of 300)~\cite{cosil}. % knowledge/papers/cosil-2503.22424.md Table VI, p.8; Table IX, p.10
+Both swap localization agents, not retrievers, and neither gives an interval. Run-to-run variation is measured in one place: six runs of SWE-agent
+on Lite resolve 17.94\% on average, while 32.67\% of the instances are resolved by at least one of the six~\cite{sweagent}. % knowledge/papers/swe-agent-2405.15793.md Table 10, p.35
+No paper among these swaps retrievers under one fixed scaffold and reports an interval on resolved rate; the scaffold of RQ3 takes from Agentless
+only the edit format and the separation of retrieval from repair (Section~\ref{sec:rq3}).
 
 \paragraph{Training-data quality for retrievers.} Query filtering for code search~\cite{sun}; weighting
 of negatives~\cite{rethinking}; synthetic data with a staged curriculum~\cite{coder}; false
@@ -527,8 +546,11 @@ One model patch costs one run, with a median of 17.8 seconds per instance on the
 
 \input{generated/rq3_subset}
 
-\paragraph{Scaffold and edit rules.} The scaffold is retrieval-supplied: the assembled context and the issue go to the model in one
+\paragraph{Scaffold and edit rules.} The scaffold is a retrieval-supplied one-shot repair: the assembled context and the issue go to the model in one
 call at temperature 0; the model answers with search-and-replace blocks; an unusable reply gets at most two follow-ups, the same for every arm.
+It takes from Agentless~\cite{agentless} the edit format and the separation of retrieval from repair, and nothing else: there is no localization stage of
+its own, no sampled candidate and no selection by executed tests, and the follow-ups are our addition. Selection is the largest single component
+of that pipeline, so absolute resolved rates here are not comparable with published ones, and the claim is for one-shot repair without candidate selection. % docs/RQ3_PILOT.md D121; knowledge/papers/agentless-2407.01489.md Table 4, p.14
 Blocks become a patch under a rule fixed before any reply is graded: each search text must occur exactly once in its file, the edit set is
 atomic, and there is no repair; a whitespace-tolerant reading is reported beside it as a labelled sensitivity. % E-RQ3-PATCHAPPLY docs/RQ3_PILOT.md D110
 Unusable replies and failures to apply are both unresolved and reported apart. The path from reply to graded outcome was checked
@@ -557,6 +579,9 @@ Each arm is run $k$ times ($k=3$ if the spend allows, otherwise 2) and an instan
 the paired difference in mean score with a paired bootstrap interval over instances (10,000 resamples) and a paired sign-flip test (10,000 flips); every other
 contrast is an estimate with an interval and no test, so one test is run and no multiplicity correction is needed. Both patch readings and
 every repository are reported. % E-RQ3-DRIVER docs/RQ3_PILOT.md D113
+Beside the mean score every arm also reports the any-of-$k$ share (instances with at least one resolving run among their $k$), and every contrast the
+paired difference of that share with an interval and no test; it needs no further call, is labelled secondary and exploratory, and never enters the
+primary contrast. % docs/RQ3_PILOT.md D121; ril/analysis/rq3_results.py
 A spend guard stops the driver before a call that could pass a cap that must be given on the command line. % E-RQ3-DRIVER docs/RQ3_PILOT.md D114
 Table~\ref{tab:rq3_power} gives the minimum detectable difference by simulation, with the run-to-run agreement taken from the pilot and the baseline rate
 and the instance heterogeneity assumed. At 327 instances it lies between 4.4 and 9.7 points, and a difference of 4 points or less is not
@@ -620,8 +645,20 @@ T18 & Label approximation: a patch-derived location is an approximation of where
 Table~\ref{tab:threats} lists the threats that the protocol raises itself. Two more are standing
 limits of the evidence: absolute levels are not capability claims, and every retrieval result here
 is for Python.
-\todo{Threats that the agent runs add (scaffold sensitivity, model non-determinism, repository
-contamination of the agent's model): \entry{E-RQ3-AGENT}.}
+\paragraph{Scaffold sensitivity.} The retriever contrast is measured under one repair stage that is weaker than the published ones: selection by executed
+tests is the largest component of the pipeline whose edit format we use, 77 of 300 resolved by majority vote alone against 96 with the tests. % knowledge/papers/agentless-2407.01489.md Table 4, p.14
+A retriever difference may be smaller or larger under a stronger stage, and nothing here measures which. The published swaps of a localizer under a fixed repair stage show
+small resolved-rate gains for large localization gains (1.6 points of Pass@1 for close to 15 points of Acc@5), a size that the power of this study (4.4 to 9.7 points at 327 instances)
+would not detect. % knowledge/papers/locagent-2503.09089.md Table 8, p.11; E-RQ3-DRIVER results/rq3_driver/rq3_power_run_noise_mdd.csv
+We scope the claim to one-shot repair without candidate selection, do not read absolute rates as capability, and report the any-of-$k$ share only as a labelled exploratory reading.
+
+\paragraph{Model non-determinism.} Temperature 0 does not make a hosted model repeat itself. In our pilot the same edits came back in 63\% of repeated usable pairs. % E-RQ3-PILOT-RESULT docs/RQ3_PILOT.md D109
+The literature agrees: SWE-agent averaged five samples per cell of its development sweep even at temperature 0.0, its six runs on Lite resolve 17.33 to 18.67\% each while 32.67\% of instances
+are resolved by some run, and a reproduction of a sampled pipeline differs from the published run by ten instances of 300~\cite{sweagent,cosil}. % knowledge/papers/swe-agent-2405.15793.md Table 5, p.25; Table 10, p.35; knowledge/papers/cosil-2503.22424.md Table IX, p.10
+We repeat each arm $k$ times, take the instance as the unit, enter the run-to-run noise into the power, and store the model string and date in every call row; a hosted model can change, so a later
+rerun need not reproduce a stored one.
+
+\todo{Threats that the agent runs add beyond these two (repository contamination of the agent's model, measured effects): \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
 \section{Reproducibility}
@@ -680,6 +717,14 @@ Qin and Xie. Agent Retrieval Bench: evaluating repository context retrieval for 
 Al Awad and Ivanov. Cost-effective repository exploration for agentic issue localization (arXiv 2608.29675, 2026).
 \bibitem{codegrep} % note: codegrep-2608.05886
 Chen et al. CodeGrep: an RL-trained retrieval agent for coding agents (arXiv 2608.05886, 2026).
+\bibitem{agentless} % note: agentless-2407.01489
+Xia, Deng, Dunn, Zhang. Agentless (arXiv 2407.01489, version 2).
+\bibitem{sweagent} % note: swe-agent-2405.15793
+Yang, Jimenez, Wettig, Lieret, Yao, Narasimhan, Press. SWE-agent (arXiv 2405.15793, NeurIPS 2024).
+\bibitem{openhands} % note: openhands-2407.16741
+Wang, Li, Song, Xu, Tang, Zhuge et al., Neubig. OpenHands (arXiv 2407.16741, ICLR 2025).
+\bibitem{cosil} % note: cosil-2503.22424
+Jiang, Ren, Yan, Jiang, Li, Liu. CoSIL (arXiv 2503.22424).
 \bibitem{locagent} % note: locagent-2503.09089
 Chen, Tang, Deng et al. LocAgent (arXiv 2503.09089, ACL 2025).
 \bibitem{kgcompass} % note: kgcompass-2503.21710

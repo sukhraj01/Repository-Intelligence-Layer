@@ -89,7 +89,8 @@ Evidence class: read in full for what the paper does; inference for what it mean
 - **Cost footnotes:** a conservative 3 dollars per instance gives 6.9k for 2,294 instances (p.7); Table 4's 1.72 dollars
   times 300 is 516 dollars, against the 600 dollars of footnote 4 (p.19); the footnotes' basis is not given.
 - **Against Agentless (read in full, Table 1, p.10 of that paper):** Table 3 here lists Agentless at 27.3 on Lite; Agentless
-  v2 reports 32.00%. The version cited here is not stated (cause not established).
+  v2 reports 32.00%. The difference is unexplained: this paper does not state which version of Agentless its row comes from,
+  and no earlier version of Agentless was read.
 - **Against `docs/EVAL_API.md` ("OpenHands v3: pin one agent and test its retrieval extension and bypass policy"):** the
   paper has no retrieval extension and no policy for bypassing search; "retry, usage and termination records" are only
   partly present: accumulated cost is in the state (Sec. 2.1, p.3), retry and termination rules are not described.

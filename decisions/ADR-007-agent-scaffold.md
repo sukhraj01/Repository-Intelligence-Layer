@@ -20,7 +20,7 @@ RQ3 needs one fixed scaffold, one fixed base model, fixed temperature and seed, 
 Agentless — simplest to hold constant; complexity is a liability for a controlled study.
 
 ## Decision
-**Scaffold (D113, `provisional: ADR-007`, never in `configs/frozen/`).** Retrieval-supplied, Agentless-style: one prompt
+**Scaffold (D113, `provisional: ADR-007`, never in `configs/frozen/`).** Retrieval-supplied one-shot repair (edit blocks as in Agentless, no candidate selection): one prompt
 with the issue and the assembled context (byte-identical text before the excerpts for every arm), one repair call at
 temperature 0, up to two follow-ups for an unusable reply (same for all arms), edit blocks applied under D110. The
 retriever is the only thing that changes between arms. Unit of analysis, number of runs, the one primary contrast and
@@ -56,12 +56,12 @@ The planned paired comparison of resolved rate has a minimum detectable effect o
 
 ## Addendum 2026-11-03 — stays open; input it is waiting for
 
-Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** the choice of the base LLM (ADR-008) and a pilot that installs and times the Agentless scaffold with a pluggable retriever (about 100 instances, two retrievers, two runs each, ADR-007 addendum of 2026-10-29); also Q45 (whether RQ3 is a test or an estimate with an interval).
+Reviewed with the other nine on 2026-11-03; the status stays Proposed. **Waiting for:** the choice of the base LLM (ADR-008) and a pilot that installs and times the retrieval-supplied one-shot repair scaffold with a pluggable retriever (about 100 instances, two retrievers, two runs each, ADR-007 addendum of 2026-10-29); also Q45 (whether RQ3 is a test or an estimate with an interval).
 
 ## Addendum 2026-11-06 — pilot design and what the cluster can execute (decision D104; status stays Proposed)
 
 **Decision D104 (provisional; reasoned from limits read on 2026-11-06, no call made).** The pilot scaffold is
-Agentless-style with retrieval supplied: one prompt with the issue and the assembled context (the same for
+retrieval-supplied one-shot repair (edit blocks as in Agentless): one prompt with the issue and the assembled context (the same for
 every arm, ADR-014), one repair call at temperature 0 asking for edits in a fixed format, up to two follow-ups
 after an unusable reply; expected 1 to 3 calls per instance. About 100 instances, two first stages, two runs
 each. Full text, flip experiment and open points: `docs/RQ3_PILOT.md`.
@@ -111,3 +111,16 @@ candidate model resolves under 5% there, the scaffold, not only the model, is th
 3. *If the held-out slice shows a rate near zero.* The ADR's revisit condition stands. The only retrieval-supplied one-shot baseline in the five papers (BM25 files, whole-patch generation, 2024 models) resolves 2.67 and 4.33% of Lite (SWE-agent Table 1), a different prompt format and weaker models, so it is no forecast; the graded model check decides.
 
 **Contradictions with statements already in the project's documents** (none changes a decision; each is listed in the paper's note under Discrepancies): `docs/ADR_DECISION_BRIEF.md` ADR-007 point 4 says Agentless has "retrieval as one call" (it is several localization calls plus embedding retrieval); the wording "Agentless-style, one repair call" in D104 and D113 describes the project's scaffold, not the paper's; `docs/EVAL_API.md`'s scaffold table asks for seed support in SWE-agent (none is mentioned in the paper), a replaceable retrieval tool in SWE-agent (three search commands plus the shell), a retrieval extension and bypass policy in OpenHands (none described), whole-repair cost in LocAgent and CoSIL (localization only), and all-attempt cost in Agentless (not stated); and the first line of that section, that the five full readings were unverified, is now answered (those pages belong to the C workstream and are not edited here). Between the papers: OpenHands Table 3 lists Agentless at 27.3 on Lite, Agentless v2 reports 32.00% (OpenHands's version not stated); OpenHands Table 3 and Table 4 give 6.3 and 7.0 for the same small model; SWE-agent's cost column averages resolved instances only.
+
+## Addendum 2026-11-08 (third) — rulings on the scaffold-paper reading: name, note headers, secondary reading (D121; D113 is not changed)
+
+**Evidence class: read in full**, per the five notes (SWE-agent: in full except the numbered source listings inside the appendix trajectories, pp. 45 to 116; every agent turn, error message, patch and summary was read, and no claim in the project rests on those listings). Reasoned for the rulings themselves; no experiment could flip them cheaply, and none is needed (wording and an analysis column).
+
+1. **Header of a partly read note.** The reading stands; the header now says what was and was not read: `read: in full except <part> (pp. A to B); <what was read of it> was read — N pages ...`. `scripts/check_paper_note.py` accepts and requires this form: a header that says `read: full` above a note that describes a skipped part fails, and so does a number cited from a skipped page. All other tracked notes were checked against the same rule (none skipped part of its own document; mentions of other, unread versions are not skips).
+2. **Name.** The scaffold is **retrieval-supplied one-shot repair**: one repair call at temperature 0 with a fixed edit format, up to two follow-ups after an unusable reply, no candidate selection. "Agentless-style" is retired as a description of it, because the paper's pipeline localizes in several calls and samples 40 candidates that it selects by executed tests, none of which the scaffold does. "Agentless" stays wherever the paper itself is meant (citations, comparison with its pipeline); the edit-block format is credited to it. The wording in the D113 statement above, in the D104 addendum, in `docs/RQ3_PILOT.md` and in the log entry E-LIT-SCAFFOLD was replaced; the proposal quoted in the addendum of 2026-11-08 (second) keeps the old phrase because it quotes it. Ids, entry names and file paths are unchanged.
+3. **Secondary reading.** The RQ3 analysis reports the any-of-k resolved share (an instance counts if at least one of its k runs resolves) beside the mean resolved fraction for every arm, and the paired difference of that share beside each contrast, at no extra calls, labelled secondary and exploratory, with bootstrap intervals and no test. The primary contrast of D113 (RAW against the untrained encoder, mean fraction, paired bootstrap and sign-flip) is unchanged. Code: `ril/analysis/rq3_results.py`, tests on synthetic rows. The RQ2 analysis does not share that code, so its scope is unchanged.
+4. **Unexplained difference.** OpenHands Table 3 lists Agentless at 27.3 on Lite, Agentless v2 reports 32.00%. The difference is unexplained: OpenHands does not say which version its row comes from and no earlier version of Agentless was read. No reason is offered here or in the notes.
+
+**Trade-offs.** The longer name costs words; it states the claim's scope in the term itself, which the report's limitation (one-shot repair without candidate selection) needs anyway. The any-of-k share can be read as a capability claim; the label and the absence of a test are the guard.
+
+**Conditions to revisit.** If a version of Agentless before v2 is read and explains the 4.7-point difference, record it in the notes. If the graded model check shows a near-zero rate, the revisit condition of D113 applies as before.

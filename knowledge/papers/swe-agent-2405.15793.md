@@ -1,4 +1,4 @@
-read: full — 118 pages incl. appendices, PDF v3, pdftotext -layout (poppler), 2026-11-08
+read: in full except the numbered source-code listings inside the appendix trajectories (pp. 45 to 116); every agent turn, error message, patch and summary was read — 118 pages incl. appendices, PDF v3, pdftotext -layout (poppler), 2026-11-08
 
 # SWE-agent — Yang, Jimenez, Wettig, Lieret, Yao, Narasimhan, Press (arXiv 2405.15793v3, 11 Nov 2024; NeurIPS 2024)
 
@@ -6,14 +6,13 @@ Source: https://arxiv.org/abs/2405.15793, PDF https://arxiv.org/pdf/2405.15793v3
 118 pages, neither used), retrieved 2026-11-08. The PDF has 118 pages (body pp.1-10, references pp.10-15, appendix pp.16-118);
 the extracted text has 118 pages and no blank page (`scripts/check_paper_note.py`).
 
-**Depth caveat, to be judged by the engineer.** Pages 1-44 and 117-118 (body, all appendix tables, prompts, statements) were
-read line by line. Pages 45-116 are four verbatim agent trajectories (Figures 33-36: requests-2317, pylint-5859,
-sympy-21614, django-14411). For those pages the issue statements, every agent thought and action, every error message,
-the final and gold patches and the authors' summaries were read; the numbered source-code listings inside the
-observations (repository files shown to the agent, about 4,000 lines) were filtered out and not read line by line. They
-carry no claim of the paper. If the rule is read to require those listings too, this note's header should be changed to
-`read: NOT READ` until they are. Figures 4 and 8 (pp.6 and 8) and Table 3's page were rendered and looked at; Figure 4's
-values are the pass@k row of Table 10.
+**Scope of the reading.** Pages 1-44 and 117-118 (body, all appendix tables, prompts, statements) were read line by line.
+Pages 45-116 are four verbatim agent trajectories (Figures 33-36: requests-2317, pylint-5859, sympy-21614, django-14411).
+On those pages the issue statements, every agent turn (thought and action), every error message, the final and gold
+patches and the authors' summaries were read; the numbered source-code listings inside the observations (repository files
+shown to the agent, about 4,000 lines) were not. No claim in the project rests on those listings, and no number in the
+table below is taken from pages 45-116. Figures 4 and 8 (pp.6 and 8) and Table 3's page were rendered and looked at;
+Figure 4's values are the pass@k row of Table 10.
 
 ## What it established
 

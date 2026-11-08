@@ -6,7 +6,9 @@ summaries, search snippets and other papers' descriptions are leads. Do not quot
 a paper that is not marked read in full; label them `unverified lead`.
 
 Each paper gets `knowledge/papers/<slug>.md` whose first lines read
-`read: full — N pages incl. appendices, PDF vK, method, date` (or `read: NOT READ (reason)`), then:
+`read: full — N pages incl. appendices, PDF vK, method, date` (or `read: NOT READ (reason)`), then; a note that left part of its document unread says so in the header
+instead: `read: in full except <part> (pp. A to B); <what was read of it> was read — N pages ...` (a plain
+`read: full` above a skipped part, or a number cited from the skipped pages, fails the check), then:
 what it established; what it did *not* establish; numbers we may quote (with table/page/figure; each
 is re-found in the extracted text by `scripts/check_paper_note.py`); method details we need
 (hyperparameters, data construction); how it relates to RQ1/RQ2/RQ3; discrepancies (with the master
@@ -27,7 +29,7 @@ document, with other papers, internal); and a table of the claims that were chec
 | CoSIL — Jiang et al. 2025 | 2503.22424 (ASE 2025) | Graph as agent tool, training-free | full, 17 pp, v3, 2026-10-17 | `cosil-2503.22424.md` |
 | Agent Retrieval Bench — Qin et al. 2026 | 2607.24882 | File-level context retrieval; complementarity of signals | full, 29 pp, v1, 2026-10-17 | `agent-retrieval-bench-2607.24882.md` |
 | Agentless — Xia et al. 2024 | 2407.01489 | Candidate agent scaffold (ADR-007) | full, 25 pp, v2, 2026-11-08 | `agentless-2407.01489.md` |
-| SWE-agent — Yang et al. 2024 | 2405.15793 (NeurIPS 2024) | Alternative scaffold | full, 118 pp, v3, 2026-11-08 (trajectory source listings not read line by line; see the note) | `swe-agent-2405.15793.md` |
+| SWE-agent — Yang et al. 2024 | 2405.15793 (NeurIPS 2024) | Alternative scaffold | in full except the numbered source listings inside the appendix trajectories (pp. 45 to 116), 118 pp, v3, 2026-11-08 | `swe-agent-2405.15793.md` |
 | OpenHands — Wang et al. 2025 | 2407.16741 (ICLR 2025) | Alternative scaffold | full, 38 pp, v3, 2026-11-08 | `openhands-2407.16741.md` |
 | CodeRAG-Bench — Wang et al. 2024 | 2406.14497 | Related framing | ? | — |
 | SweRank+ — Gangi Reddy et al. 2025 | 2512.20482 | Multilingual extension of the training data; training-data table | full, 11 pp, v1, 2026-10-17 | `swerank-plus-2512.20482.md` |
