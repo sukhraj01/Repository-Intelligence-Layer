@@ -182,16 +182,20 @@ def run_pilot(
         if durable_root
         else None
     )
-    session = mine_selected(
-        selected,
-        client=client,
-        snapshots=snapshots,
-        store=store,
-        config=config,
-        stop_after=stop_after,
-        lookahead=lookahead,
-        after_record=syncer.tick if syncer else None,
-    )
+    try:
+        session = mine_selected(
+            selected,
+            client=client,
+            snapshots=snapshots,
+            store=store,
+            config=config,
+            stop_after=stop_after,
+            lookahead=lookahead,
+            after_record=syncer.tick if syncer else None,
+        )
+    finally:
+        if syncer is not None:  # a session that ends on an error keeps the rows it recorded
+            syncer.flush()
     mining_seconds = time.perf_counter() - t_mine
     budget = store.add_budget(budget_delta(budget_before, client.budget.to_dict()))
     summary = build_summary(store, listings, population)

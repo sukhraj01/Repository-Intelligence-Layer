@@ -344,6 +344,7 @@ def main(argv: list[str] | None = None) -> int:
 
     from ril.data_mining.config import MiningConfig
     from ril.data_mining.github_api import ApiClient, ClientConfig, UrllibTransport, token_from_env
+    from ril.data_mining.runner import QuarantineRateExceeded
     from ril.data_mining.snapshot import GitSnapshots
     from ril.training.pool_rank_jobs import held_out_predicate
 
@@ -389,6 +390,9 @@ def main(argv: list[str] | None = None) -> int:
     except jobs.ListingIncomplete as exc:
         sys.stderr.write(f"LISTING INCOMPLETE: {exc}\n")
         return 4
+    except QuarantineRateExceeded as exc:
+        sys.stderr.write(f"QUARANTINE RATE EXCEEDED: {exc}\n")
+        return 5
     sys.stdout.write(json.dumps(res, indent=1, sort_keys=True) + "\n")
     if a.list_only and res.get("failed"):  # a listing job that left a repository out must fail
         sys.stderr.write(f"LISTING INCOMPLETE: {sorted(res['failed'])[:5]}\n")

@@ -11,16 +11,25 @@ Kept compatible with Python 3.10 (the cluster's compute nodes).
 
 from __future__ import annotations
 
-from collections import deque
+from collections import Counter, deque
 from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
 from ril.data_mining.config import MiningConfig
 from ril.data_mining.diff import Comparison
+from ril.data_mining.failure import is_infrastructure_error
 from ril.data_mining.github_api import ApiClient, ApiError, NotFound
 from ril.data_mining.links import PR_PAGE_QUERY, PullRequest, parse_pr_page
-from ril.data_mining.miner import STATUS_MINED, Outcome, compare_for, mine_pr, needs_snapshot
+from ril.data_mining.miner import (
+    STATUS_MINED,
+    STATUS_QUARANTINED,
+    Outcome,
+    compare_for,
+    mine_pr,
+    needs_snapshot,
+    quarantine_unexpected,
+)
 from ril.data_mining.snapshot import SnapshotProvider
 from ril.data_mining.store import MiningStore
 from ril.training import pool_ranks as pr_tools
@@ -29,6 +38,16 @@ from ril.util.log import get_logger
 log = get_logger("data_mining.runner")
 MAX_PAGES_PER_REPO = 2000
 """Safety bound on listing pages of one repository (50 pull requests each)."""
+QUARANTINE_WINDOW = 200
+QUARANTINE_MAX_SHARE = 0.05
+"""A session stops when more than this share of its last ``QUARANTINE_WINDOW`` attempted pull
+requests is quarantined: a rate that high in a window means a bug, not rare content (DEV-036).
+They are session-level safeguards, not mining configuration, so they are not in the configuration
+hash."""
+
+
+class QuarantineRateExceeded(RuntimeError):
+    """Too many of the recent pull requests were quarantined (the job exits with code 5)."""
 
 
 @dataclass
@@ -143,6 +162,19 @@ class RunSummary:
     stopped: bool = False
 
 
+def _check_quarantine_rate(recent: deque[Outcome], window: int, max_share: float) -> None:
+    """Raise :class:`QuarantineRateExceeded` when a full window is too often quarantined."""
+    if len(recent) < window:
+        return
+    reasons = Counter(o.reason for o in recent if o.status == STATUS_QUARANTINED)
+    total = sum(reasons.values())
+    if total > max_share * window:
+        raise QuarantineRateExceeded(
+            f"{total} of the last {window} attempted pull requests are quarantined "
+            f"(limit {max_share:.0%}): {dict(reasons.most_common())}"
+        )
+
+
 def mine_selected(
     selected: Iterable[PullRequest],
     *,
@@ -154,6 +186,8 @@ def mine_selected(
     stop_after: int | None = None,
     lookahead: int = 1,
     after_record: Callable[[], None] | None = None,
+    quarantine_window: int = QUARANTINE_WINDOW,
+    quarantine_max_share: float = QUARANTINE_MAX_SHARE,
 ) -> RunSummary:
     """Mine the selected pull requests that have no state row; record each right away.
 
@@ -164,6 +198,12 @@ def mine_selected(
     while the current one is parsed; pull requests are still mined and recorded in the selected
     order, so the outputs do not depend on ``lookahead``. ``after_record`` is called after each
     state row (the copy of the run root to a durable area, ``durable.Syncer.tick``).
+
+    A pull request whose content raises an unexpected exception is quarantined and the session
+    goes on; an infrastructure error propagates (DEV-036). When the window of the last
+    ``quarantine_window`` attempted pull requests of this session is full and holds more than
+    ``quarantine_max_share`` quarantined ones, the row just recorded stays and
+    :class:`QuarantineRateExceeded` is raised with the counts by reason.
     """
     summary = RunSummary()
     store.clean_partial()
@@ -176,6 +216,7 @@ def mine_selected(
     window: deque[tuple[PullRequest, Comparison | Outcome]] = deque()
     exhausted = False
     planned = 0
+    recent: deque[Outcome] = deque(maxlen=quarantine_window)
 
     def refill() -> None:
         nonlocal exhausted, planned
@@ -190,7 +231,12 @@ def mine_selected(
                 summary.skipped += 1
                 continue
             planned += 1
-            fetched = compare_for(nxt, client)
+            try:
+                fetched = compare_for(nxt, client)
+            except Exception as exc:
+                if is_infrastructure_error(exc):
+                    raise
+                fetched = quarantine_unexpected(nxt, exc)
             if isinstance(fetched, Comparison) and needs_snapshot(fetched):
                 snapshots.prefetch(nxt.repo, fetched.merge_base)
             window.append((nxt, fetched))
@@ -212,6 +258,8 @@ def mine_selected(
                 after_record()
             summary.attempted += 1
             summary.outcomes[outcome.status] = summary.outcomes.get(outcome.status, 0) + 1
+            recent.append(outcome)
+            _check_quarantine_rate(recent, quarantine_window, quarantine_max_share)
             refill()
         if not exhausted:  # the session was bounded: count what is already done, note the rest
             for rest in pending:
