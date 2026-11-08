@@ -26,9 +26,9 @@ document, with other papers, internal); and a table of the claims that were chec
 | KGCompass — Yang et al. 2025 | 2503.21710 | Issue node; multi-hop share (89.7% in v3; 69.7% was v1) | full, 21 pp, v3, 2026-10-17 | `kgcompass-2503.21710.md` |
 | CoSIL — Jiang et al. 2025 | 2503.22424 (ASE 2025) | Graph as agent tool, training-free | full, 17 pp, v3, 2026-10-17 | `cosil-2503.22424.md` |
 | Agent Retrieval Bench — Qin et al. 2026 | 2607.24882 | File-level context retrieval; complementarity of signals | full, 29 pp, v1, 2026-10-17 | `agent-retrieval-bench-2607.24882.md` |
-| Agentless — Xia et al. 2024 | 2407.01489 | Candidate agent scaffold (ADR-007) | ? | — |
-| SWE-agent — Yang et al. 2024 | 2405.15793 | Alternative scaffold | ? | — |
-| OpenHands — Wang et al. 2025 | 2407.16741 (ICLR 2025) | Alternative scaffold | ? | — |
+| Agentless — Xia et al. 2024 | 2407.01489 | Candidate agent scaffold (ADR-007) | full, 25 pp, v2, 2026-11-08 | `agentless-2407.01489.md` |
+| SWE-agent — Yang et al. 2024 | 2405.15793 (NeurIPS 2024) | Alternative scaffold | full, 118 pp, v3, 2026-11-08 (trajectory source listings not read line by line; see the note) | `swe-agent-2405.15793.md` |
+| OpenHands — Wang et al. 2025 | 2407.16741 (ICLR 2025) | Alternative scaffold | full, 38 pp, v3, 2026-11-08 | `openhands-2407.16741.md` |
 | CodeRAG-Bench — Wang et al. 2024 | 2406.14497 | Related framing | ? | — |
 | SweRank+ — Gangi Reddy et al. 2025 | 2512.20482 | Multilingual extension of the training data; training-data table | full, 11 pp, v1, 2026-10-17 | `swerank-plus-2512.20482.md` |
 | LARGER — 2026 | 2605.16352 | Typed repository graph incl. test/docs/config links; expansion on top of lexical search | full, 21 pp, v1, 2026-10-17 | `larger-2605.16352.md` |
