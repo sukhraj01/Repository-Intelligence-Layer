@@ -328,10 +328,11 @@ engineer sign-off — it is a design decision.
 - Reversible: yes.
 - Related: DEV-034, DEV-035, `docs/experiments/B.md` E-MINE-FULL, `tests/unit/test_mining_failure.py`, `tests/unit/test_mining_pipeline.py`
 
-## DEV-037 — The RQ3 scaffold is a retrieval-supplied one-shot repair, not the Agentless pipeline the master recommends   (2026-11-08 · status: proposed (D116))
+## DEV-037 — The RQ3 scaffold is a retrieval-supplied one-shot repair, not the Agentless pipeline the master recommends   (2026-11-08 · status: accepted (D121))
 - Master says: open decision 7, "Agentless — simplest to hold constant; complexity is a liability here".
 - We do: ADR-007 (D113) takes only the edit-block format and the separation of retrieval from repair: one call per run at temperature 0, up to two follow-ups for an unusable reply, no candidate sampling, no test-based selection, an assembled 8,000-token context in place of localized snippets.
 - Why: read in full (Agentless v2): the paper's default runs 40 repair samples and 40 reproduction-test samples with test execution and its localization is several calls; a controlled retriever contrast needs one fixed call. Detail: `decisions/ADR-007-agent-scaffold.md` addendum of 2026-11-08 (second).
 - Impact: absolute resolved rates are not comparable with Agentless's; selection is its largest component (77 against 96 of 300), so the repair stage is weaker; the claim is scoped to one-shot repair without candidate selection.
 - Reversible: yes.
-- Related: D113, D116, `knowledge/papers/agentless-2407.01489.md`, `docs/RQ3_PILOT.md`
+- Name: ruled D121 ("retrieval-supplied one-shot repair"; the earlier label is retired).
+- Related: D113, D116, D121, `knowledge/papers/agentless-2407.01489.md`, `docs/RQ3_PILOT.md`

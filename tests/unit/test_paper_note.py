@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from ril.util.paper_note import (
     check_note,
     number_present,
@@ -109,3 +111,63 @@ def test_missing_other_sections_only_warn() -> None:
     rep = check_note(note, TEXT)
     assert rep.ok
     assert rep.warnings
+
+
+PARTIAL = (
+    "read: in full except the numbered source-code listings inside the appendix trajectories "
+    "(pp. 2 to 2); every agent turn, error message, patch and summary was read — 2 pages incl. "
+    "appendices, PDF v1, pdftotext -layout, 2026-11-08\n\n"
+)
+
+
+def test_qualified_header_passes() -> None:
+    rep = check_note(_note("| chunks | 9,377,120 | p.1 |", PARTIAL), TEXT)
+    assert rep.errors == [], rep.errors
+
+
+def test_plain_full_header_with_skipped_part_fails() -> None:
+    note = (
+        _note("| chunks | 13.0 | p.1 |")
+        + "\nDepth caveat: pages 2 were filtered out and not read line by line.\n"
+    )
+    rep = check_note(note, TEXT)
+    assert not rep.ok
+    assert any("skipped part" in e for e in rep.errors)
+
+
+def test_plain_full_header_may_mention_other_versions_not_read() -> None:
+    note = (
+        _note("| chunks | 13.0 | p.1 |")
+        + "\nv1 (found by search, v1 not read in full) says otherwise.\n"
+    )
+    assert check_note(note, TEXT).ok
+
+
+def test_qualified_header_number_on_skipped_page_fails() -> None:
+    rep = check_note(_note("| score | 62.0 | p.2 |", PARTIAL), TEXT)
+    assert any("skipped page" in e for e in rep.errors)
+
+
+def test_qualified_header_range_outside_document_fails() -> None:
+    bad = PARTIAL.replace("(pp. 2 to 2)", "(pp. 2 to 9)")
+    rep = check_note(_note("| chunks | 13.0 | p.1 |", bad), TEXT)
+    assert any("not inside" in e for e in rep.errors)
+
+
+def test_qualified_header_page_count_mismatch_fails() -> None:
+    rep = check_note(
+        _note("| chunks | 13.0 | p.1 |", PARTIAL.replace("— 2 pages", "— 3 pages")), TEXT
+    )
+    assert any("declares 3 pages" in e for e in rep.errors)
+
+
+def test_repository_notes_never_hide_a_skipped_part() -> None:
+    """Every tracked note either says 'read: in full except' or describes no skipped part."""
+    from ril.util.paper_note import READ_FULL, SKIP_MARKERS
+
+    root = Path(__file__).resolve().parents[2] / "knowledge" / "papers"
+    for path in sorted(root.glob("*.md")):
+        note = path.read_text(encoding="utf-8")
+        first = next((ln for ln in note.splitlines() if ln.strip()), "")
+        if READ_FULL.match(first):
+            assert not SKIP_MARKERS.search(note), path.name

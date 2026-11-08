@@ -27,7 +27,7 @@ guaranteed, can change; stored with their date in `configs/agent/gemini_limits.y
    they are a different model family, so a pilot on them would measure a different cost. The exact model string and the date go into every call row. Free-tier limits are not guaranteed and
    the model is a moving target, so the pilot measures cost and variance only. Declared fallback: a
    pinned paid version on Tier 1 billing with a hard spend cap. Terms of use: see "Terms of use" below.
-2. **Scaffold.** Agentless-style with retrieval supplied: one prompt per instance holding the issue text
+2. **Scaffold.** Retrieval-supplied one-shot repair (edit blocks as in Agentless, no candidate selection): one prompt per instance holding the issue text
    and the assembled context (`specs/assembly.md`, ADR-014; the same assembly for every arm), one repair
    call at temperature 0 asking for edits in a fixed format (`ril/agent/providers/patch_format.py`),
    and up to two follow-ups after a reply whose format is unusable (counted, the same for every arm).
@@ -257,6 +257,13 @@ against RAW) is an estimate with an interval and no test claim, so the family of
 needed. Both patch readings are reported (exact primary, tolerant sensitivity), overall and by repository
 (`ril/analysis/rq3_results.py`). A null result stays a null result: if retrieval differs and resolved rate does not, it is reported with the
 outcome-class breakdown (unusable, apply failure, executed but unresolved), not reframed.
+
+**D121, addendum to D113 (wording and a secondary reading; D113 is otherwise unchanged).** The scaffold is named
+*retrieval-supplied one-shot repair* (edit blocks as in Agentless, no candidate selection); "Agentless-style" is retired. Beside the
+mean resolved fraction every arm also reports the **any-of-k resolved share** (an instance counts if at least one of its k runs
+resolves), and every contrast the paired difference of that share, with bootstrap intervals and no test, labelled secondary and
+exploratory, at no extra calls (`ril/analysis/rq3_results.py`: columns `any_of_k_*` of the arm and contrast tables). The primary
+contrast above is unchanged.
 
 **D114, spend guard.** The driver keeps its own running cost from billed input, output and thought tokens at the stored dated
 prices and stops before a call whose worst case (input estimated at 3 characters per token plus the full output allowance billed as

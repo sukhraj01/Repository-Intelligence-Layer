@@ -11,8 +11,10 @@ import pytest
 from ril.agent.providers.spend import Price
 from ril.analysis import rq3_cost, rq3_power_noise
 from ril.analysis.rq3_results import (
+    SECONDARY,
     Plan,
     analyse,
+    any_of_k,
     discordance,
     latest,
     outcome_group,
@@ -207,3 +209,62 @@ def test_cost_model_scales_with_units_and_marks_classes() -> None:
     assert cap["recommended_cap_usd"] >= cap["sum_high_usd"]
     with pytest.raises(ValueError):
         rq3_cost.cost_of(1, tokens, price, "nope")
+
+
+def test_any_of_k_marks_instances_with_at_least_one_resolving_run() -> None:
+    col = np.array([0.0, 1 / 3, 0.5, 1.0, math.nan])
+    out = any_of_k(col)
+    assert list(out[:4]) == [0.0, 1.0, 1.0, 1.0] and math.isnan(out[4])
+
+
+def test_any_of_k_share_sits_beside_the_mean_in_the_arm_table_for_every_arm() -> None:
+    rows = [
+        # i1: A resolves in one of three runs; B never.  i2: both arms resolve every run.
+        row("i1", "A", 0, "resolved"),
+        row("i1", "A", 1, "unusable"),
+        row("i1", "A", 2, "unusable"),
+        *[row("i1", "B", r, "executed_unresolved") for r in range(3)],
+        *[row("i2", arm, r, "resolved") for arm in "AB" for r in range(3)],
+        *[row("i3", arm, r, "unusable") for arm in "AB" for r in range(3)],
+    ]
+    t = analyse(rows, ["i1", "i2", "i3"], {}, Plan(("A", "B"), ("A", "B"), (), (0, 1, 2)), 200, 200)
+    arms = {a["arm"]: a for a in t["arms"] if a["reading"] == "exact"}
+    assert set(arms) == {"A", "B"}
+    # mean resolved fraction: A (1/3 + 1 + 0) / 3, B (0 + 1 + 0) / 3; any-of-k: A 2/3, B 1/3
+    assert arms["A"]["resolved_score"] == pytest.approx(4 / 9)
+    assert arms["B"]["resolved_score"] == pytest.approx(1 / 3)
+    assert arms["A"]["any_of_k_share"] == pytest.approx(2 / 3)
+    assert arms["B"]["any_of_k_share"] == pytest.approx(1 / 3)
+    assert all(a["any_of_k_status"] == SECONDARY for a in t["arms"])
+    assert all(
+        a["any_of_k_ci_low"] <= a["any_of_k_share"] <= a["any_of_k_ci_high"] for a in t["arms"]
+    )
+    # both readings carry it
+    assert {a["reading"] for a in t["arms"] if "any_of_k_share" in a} == {"exact", "tolerant"}
+
+
+def test_any_of_k_is_at_least_the_mean_and_never_changes_the_primary_contrast() -> None:
+    rows = synthetic(200, 0.20, 0.30, 3, seed=5)
+    ids = [f"i{i}" for i in range(200)]
+    plan = Plan(("A", "B"), ("B", "A"), (), (0, 1, 2))
+    t = analyse(rows, ids, {i: "r" for i in ids}, plan, 400, 400)
+    for a in t["arms"]:
+        assert a["any_of_k_share"] >= a["resolved_score"] - 1e-12
+    primary = next(c for c in t["contrasts"] if c["role"] == "primary" and c["reading"] == "exact")
+    assert primary["p_permutation"] is not None
+    assert primary["any_of_k_status"] == SECONDARY
+    assert "any_of_k_p_permutation" not in primary
+    # the primary difference is the mean-score difference, not the any-of-k one
+    assert primary["difference"] != pytest.approx(primary["any_of_k_difference"], abs=1e-9)
+
+
+def test_any_of_k_difference_on_synthetic_rows_with_a_known_effect() -> None:
+    rows = synthetic(327, 0.20, 0.35, 3, seed=2)
+    ids = [f"i{i}" for i in range(327)]
+    t = analyse(
+        rows, ids, {i: "r" for i in ids}, Plan(("A", "B"), ("B", "A"), (), (0, 1, 2)), 800, 400
+    )
+    c = next(c for c in t["contrasts"] if c["reading"] == "exact")
+    # P(any of 3) = 1 - (1 - p)^3: 0.488 for 0.20 against 0.725 for 0.35, a difference of about 0.24
+    assert c["any_of_k_difference"] == pytest.approx(0.24, abs=0.08)
+    assert c["any_of_k_ci_low"] <= c["any_of_k_difference"] <= c["any_of_k_ci_high"]

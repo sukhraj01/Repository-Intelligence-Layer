@@ -5,7 +5,11 @@ must be traceable to the paper. A note starts with a ``read:`` line (page count,
 method, date) and holds a table of numbers that may be quoted. This module verifies that the
 extracted text has as many pages as the note says, that no page is blank, and that every number in
 that table occurs in the extracted text (on the stated page when one is given).
-Implements ``knowledge/papers/README.md`` (note format); used by ``scripts/check_paper_note.py``.
+A note that skipped part of its document (for example numbered source listings inside appendix
+trajectories) may not say ``read: full``: it uses the qualified header
+``read: in full except <part> (pp. A to B); <what was read of it> was read — N pages ...``, and no
+number in its table may sit on a skipped page. Implements ``knowledge/papers/README.md`` (note
+format); used by ``scripts/check_paper_note.py``.
 """
 
 from __future__ import annotations
@@ -18,6 +22,18 @@ from pathlib import Path
 READ_FULL = re.compile(
     r"^read: full — (?P<pages>\d+) pages incl\. appendices, PDF v(?P<ver>\S+), "
     r"(?P<method>.+), (?P<date>\d{4}-\d{2}-\d{2})\s*$"
+)
+READ_PARTIAL = re.compile(
+    r"^read: in full except (?P<part>[^;]+?) \(pp\. (?P<lo>\d+) to (?P<hi>\d+)\); "
+    r"(?P<what>.+?) (?:was|were) read — (?P<pages>\d+) pages incl\. appendices, PDF v(?P<ver>\S+), "
+    r"(?P<method>.+), (?P<date>\d{4}-\d{2}-\d{2})\s*$"
+)
+# Wording that says part of the paper's own document was not read; a plain "read: full" header may
+# not sit above any of it. ("v1 was not read in full" about another version is not matched.)
+SKIP_MARKERS = re.compile(
+    r"depth caveat|not read line by line|\b(?:was|were) (?:filtered out|skipped)\b|\bskipped\b"
+    r"|\bpages? \d+(?:\s*[–-]\s*\d+)? (?:was|were) not read",
+    re.IGNORECASE,
 )
 READ_NONE = re.compile(r"^read: NOT READ \((?P<reason>.+)\)\s*$")
 NUMBER = re.compile(r"(?<![\w.])\d[\d,]*(?:\.\d+)?")
@@ -122,18 +138,36 @@ def check_note(note: str, text: str) -> NoteReport:
     rows = numbers_section(note)
     m_none = READ_NONE.match(first)
     m_full = READ_FULL.match(first)
+    m_part = READ_PARTIAL.match(first)
     if m_none:
         data_rows = [r for r in (rows or []) if not _is_header_or_rule(r)]
         if data_rows:
             rep.errors.append("note says NOT READ but lists numbers that may be quoted")
         return rep
-    if not m_full:
+    if not (m_full or m_part):
         rep.errors.append(
-            "first line is not 'read: full — N pages incl. appendices, PDF vK, method, date' "
+            "first line is not 'read: full — N pages incl. appendices, PDF vK, method, date', "
+            "'read: in full except <part> (pp. A to B); <what was read> was read — N pages ...' "
             "or 'read: NOT READ (reason)'"
         )
         return rep
-    declared = int(m_full.group("pages"))
+    skipped: range | None = None
+    if m_full:
+        marker = SKIP_MARKERS.search(note)
+        if marker:
+            rep.errors.append(
+                f"header says 'read: full' but the note describes a skipped part "
+                f"({marker.group(0)!r}); "
+                "use 'read: in full except <part> (pp. A to B); <what was read> was read — ...'"
+            )
+        declared = int(m_full.group("pages"))
+    else:
+        assert m_part is not None
+        declared = int(m_part.group("pages"))
+        lo, hi = int(m_part.group("lo")), int(m_part.group("hi"))
+        if not 1 <= lo <= hi <= declared:
+            rep.errors.append(f"skipped range pp. {lo} to {hi} is not inside 1..{declared}")
+        skipped = range(lo, hi + 1)
     pages = split_pages(text)
     rep.declared_pages, rep.extracted_pages = declared, len(pages)
     if len(pages) != declared:
@@ -169,6 +203,10 @@ def check_note(note: str, text: str) -> NoteReport:
         nums = [n.rstrip(",") for n in NUMBER.findall(value)]
         refs = parse_page_refs(where)
         bad_refs = [p for p in refs if not 1 <= p <= len(pages)]
+        in_skipped = [p for p in refs if skipped is not None and p in skipped]
+        if in_skipped:
+            rep.errors.append(f"number cites skipped page(s) {in_skipped}: {cells[0][:50]}")
+            continue
         if bad_refs:
             rep.errors.append(f"page reference out of range {bad_refs}: {cells[0][:50]}")
             continue

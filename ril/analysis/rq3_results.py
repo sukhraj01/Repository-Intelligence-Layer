@@ -7,6 +7,12 @@ tests failing all count as unresolved (D109, D110). Primary contrast: one named 
 score with a paired bootstrap interval over instances and a paired sign-flip permutation test; every
 other contrast is an estimate with an interval and no test. Both patch readings are tabulated
 (exact primary, tolerant sensitivity). Resamples use a fixed seed.
+
+Secondary reading (D121, exploratory): beside the mean resolved fraction every arm reports the
+any-of-k resolved share, the share of instances with at least one resolving run among their ``k``
+(no extra calls), with a bootstrap interval over instances, and every contrast carries the paired
+difference of that share as an estimate. It is labelled secondary and exploratory (``SECONDARY``)
+and never enters the primary contrast or its test.
 """
 
 from __future__ import annotations
@@ -27,6 +33,7 @@ Table = list[dict[str, Any]]
 READINGS = ("exact", "tolerant")
 BOOTSTRAP_RESAMPLES = 10_000
 PERMUTATIONS = 10_000
+SECONDARY = "secondary_exploratory"
 OUTCOME_CLASSES = ("resolved", "executed_unresolved", "apply_failed", "unusable", "exec_error")
 
 
@@ -156,6 +163,14 @@ def paired_contrast(
     return out
 
 
+def any_of_k(col: Arr) -> Arr:
+    """1.0 where at least one run of the instance resolved, 0.0 where none did, ``nan`` kept.
+    An instance with a missing run counts only its stored runs (they are listed in ``missing``)."""
+    out = np.where(col > 0, 1.0, 0.0)
+    out[np.isnan(col)] = math.nan
+    return out
+
+
 def arm_table(scores: Scores, seed: int, reading: str) -> Table:
     table: Table = []
     for a, arm in enumerate(scores.arms):
@@ -170,8 +185,27 @@ def arm_table(scores: Scores, seed: int, reading: str) -> Table:
         if ok.size:
             lo, hi = percentile_interval(bootstrap_means(ok, seed + a))
             row.update(resolved_score=float(ok.mean()), ci_low=lo, ci_high=hi)
+            anyk = any_of_k(ok)
+            alo, ahi = percentile_interval(bootstrap_means(anyk, seed + a + 1000))
+            row.update(
+                any_of_k_share=float(anyk.mean()),
+                any_of_k_ci_low=alo,
+                any_of_k_ci_high=ahi,
+                any_of_k_status=SECONDARY,
+            )
         table.append(row)
     return table
+
+
+def _secondary_contrast(a: Arr, b: Arr, seed: int, resamples: int) -> dict[str, Any]:
+    """Paired difference of the any-of-k shares with an interval and no test (D121)."""
+    res = paired_contrast(any_of_k(a), any_of_k(b), seed, resamples, test=False)
+    return {
+        "any_of_k_difference": res["difference"],
+        "any_of_k_ci_low": res.get("ci_low", math.nan),
+        "any_of_k_ci_high": res.get("ci_high", math.nan),
+        "any_of_k_status": SECONDARY,
+    }
 
 
 def discordance(a: Arr, b: Arr) -> dict[str, Any]:
@@ -309,6 +343,7 @@ def analyse(
                     "reading": reading,
                     "role": "primary" if primary else "estimate",
                     **res,
+                    **_secondary_contrast(col[first], col[second], plan.seed + 200, resamples),
                 }
             )
             tables["discordance"].append(

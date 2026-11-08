@@ -94,7 +94,7 @@ Evidence class: read in full for what the paper does; inference for what it mean
   greedy decoding as the default. The paper itself treats localization as a stage whose output feeds repair, so
   "retrieval supplied" is a faithful reading of the pipeline's shape, with the project's retriever in place of the paper's
   localization.
-- **What it does not share (the label "Agentless-style" covers only the repair half).** The paper's repair context is
+- **What it does not share (the project's former label "Agentless-style", retired in favour of "retrieval-supplied one-shot repair", covered only the repair half).** The paper's repair context is
   the localized snippets with 10 lines each side (p.9); the project passes an assembled context of ranked units under an
   8,000-token budget (`docs/RQ3_PILOT.md`). The paper samples 40 candidates and selects by executing tests (pp.8-9);
   the project makes one call per run and executes nothing before grading. The paper has no follow-up call; D113's up to
@@ -121,12 +121,12 @@ Evidence class: read in full for what the paper does; inference for what it mean
 ## Discrepancies
 
 - **Against OpenHands (read in full, Table 3, p.7):** that paper lists Agentless with GPT-4o at 27.3 on Lite; this paper
-  (v2) says 96 of 300 = 32.00% (Table 1, p.10). The two differ by 4.7 points; OpenHands cites an earlier version of
-  Agentless (v1 is 17 pages; its number was not read, so the cause is not established).
+  (v2) says 96 of 300 = 32.00% (Table 1, p.10). The two differ by 4.7 points. The difference is unexplained: OpenHands does not state which version of Agentless its
+  row comes from, and no earlier version of Agentless was read (v1 is 17 pages).
 - **Against the project's decision brief:** it says Agentless has "retrieval as one call" (`docs/ADR_DECISION_BRIEF.md`,
   ADR-007 recommendation). In the paper localization is several calls: a file-ranking prompt, an irrelevant-folder prompt,
   a skeleton prompt, an edit-location prompt sampled four times, plus embedding retrieval (Sec. 3.1, pp.6-7).
-- **Against the project's wording "Agentless-style, one repair call":** the paper's repair stage makes 40 calls per issue
+- **Against the project's former wording "Agentless-style, one repair call" (retired):** the paper's repair stage makes 40 calls per issue
   and selects among them (Sec. 4, p.9).
 - Internal: Table 2's edit-location rows list four unlabelled "Multi-samples" values (49.67, 49.33, 49.33, 48.33 percent, one per
   sampled location set) under one label; only the named rows are quoted here.
