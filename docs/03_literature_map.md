@@ -36,6 +36,15 @@ Every paper that bears on the project, what it established, and why our work is 
 | [Jiang et al., ASE 2025 — CoSIL](https://arxiv.org/abs/2503.22424) (venue added, see DEV-011) | Training-free, index-free call-graph search; +8.6–98.2% function Top-1; resolved rate +9.3–31.5% | Graph as agent tool, no training |
 | [Qin et al., 2026 — Agent Retrieval Bench](https://arxiv.org/abs/2607.24882) (first author added, see DEV-011) | File-level repository context retrieval; semantic and structure-aware retrieval are complementary | Supports RQ1's premise |
 
+## Agent scaffolds (read in full 2026-11-08; ADR-007)
+
+| Work | Established | Relevance |
+|---|---|---|
+| [Xia et al., 2024 — Agentless](https://arxiv.org/abs/2407.01489) (v2) | Localize, sample repair edits in a search/replace format, select by executed tests; 96 of 300 on Lite, one run, no variance | The repair-stage format the scaffold uses; the paper samples 40 candidates and selects, the scaffold makes one call |
+| [Yang et al., 2024 — SWE-agent](https://arxiv.org/abs/2405.15793) (v3, NeurIPS 2024) | A tool interface for an agent; six runs of one configuration on Lite | Rejected scaffold; retriever not isolable (shell stays open); six-run variation reference |
+| [Wang et al., 2025 — OpenHands](https://arxiv.org/abs/2407.16741) (v3, ICLR 2025) | An agent platform with a sandbox and 15 benchmarks; single-run, no decoding settings stated | Rejected scaffold; no retrieval component or swap |
+| LocAgent (v2), CoSIL (v3) | Localization agents tested under the Agentless repair stage | Scaffold sections added to their notes: the swap under a fixed repair stage gives small resolved-rate gains |
+
 ## Precedent for the RQ3 shape
 
-LocAgent, CoSIL and KGCompass all show that better localization raises resolved rate. All three vary the *localization method*. None varies the *retriever's training supervision* with the agent held constant. That distinction is the whole of RQ3 and must be stated explicitly whenever RQ3 is defended.
+LocAgent, CoSIL and KGCompass all show that better localization raises resolved rate. All three vary the *localization method*. None varies the *retriever's training supervision* with the agent held constant. (Qualified by the 2026-11-08 reading, DEV-037: LocAgent's Pass@1 gain is 1.6 points for a 15-point Acc@5 gain, and CoSIL's own end-to-end comparison shows a localization gain with no resolved-rate gain.) That distinction is the whole of RQ3 and must be stated explicitly whenever RQ3 is defended.

@@ -58,6 +58,8 @@ numbers are for the 32B open backbone on SWE-bench Lite unless stated.
 | Tokens and dollars per instance, Lite mini sample, open large model: CoSIL / LocAgent | 0.07M and 0.022 / 0.53M and 0.055 | Table VII, p.9 |
 | Same with a closed-source model: CoSIL / LocAgent | 0.14M and 0.341 / 2.07M and 4.004 | Table VII, p.9 |
 | Maximum search iterations; search time cap for agent baselines | 10; 15 minutes | Sec. IV-E, p.6 |
+| Repair stage of the resolved-rate comparison: candidates per instance, of which sampled at temperature 0.8; locations used; retries per agent baseline | 10; 9; 0.8; top-3; 3 | Sec. IV-E, p.6 |
+| Candidate patch sets per instance in the end-to-end comparison (CoSIL@40), patches per set | 4; 10 | Sec. V-E, p.10 |
 | Size of each "mini" sample | 50 | Sec. V-D, p.9 |
 | End-to-end comparison with a closed-source model: resolved %, CoSIL@40 vs Agentless-1.5 (published) vs reproduced | 31.3 vs 32.0 vs 28.3 | Table VIII, p.10; Table IX, p.10 |
 | Function Top-1, CoSIL vs Agentless-1.5 in that comparison | 0.480 vs 0.250 | Table IX, p.10 |
@@ -122,3 +124,26 @@ numbers are for the 32B open backbone on SWE-bench Lite unless stated.
 |---|---|---|---|
 | README "graph as agent tool, training-free" | confirmed | Abstract, p.1; Sec. III, p.4 | "without training or indexing"; graphs are LLM-built. |
 | README "function-level localization improves Top-1 over prior localizers" | confirmed | Tables II-III, pp.6-7 | 0.433 vs 0.247 (Agentless-FL) on Lite, 32B. |
+
+## Scaffold reading (added 2026-11-08 for ADR-007; sections quoted below were re-read against the PDF v3 fetched that day, page count 17 unchanged; the full reading is the one dated in the first line)
+
+- **Repair stage used for the resolved-rate comparison (Sec. IV-E, p.6).** Not a one-call repair: the repair component of
+  the Agentless pipeline (v1.5 in the paper's label; its published 96 of 300 equals the 96 of 300 of Agentless v2) takes the
+  top-3 locations, makes 10 candidates per instance (one greedy, nine at temperature 0.8) and selects among them with
+  regression tests chosen by the model and reproduction tests written by the model. In the end-to-end row four such sets (40 patches) are
+  used (Sec. V-E, p.10). Localization is greedy, at most 10 search iterations; agent baselines get 3 retries and 15
+  minutes.
+- **Retrieval swap under a fixed repair stage.** Table VI (p.8) swaps four localizers under that stage: 17.33, 17.00, 19.00 and
+  21.67% resolved on Lite with the open 32B backbone (one run each, 300 instances: the range is 14 instances).
+  Because the repair stage samples and selects, the spread between two runs of the same pipeline is itself about ten
+  instances (published 96 against reproduced 86, Table IX, p.10), the same size as the whole localizer range; the
+  authors name sampling randomness in patch generation as the reason (p.10).
+- **Model and decoding:** open and closed-source backbones named per table; greedy for localization, 0.8 for sampled
+  patches; no seeds; no run count; costs are for localization (Table VII, p.9).
+- **Implication for this project (inference).** The strongest published evidence that a repair stage which samples and
+  selects makes resolved-rate differences between retrievers hard to read at 300 instances. The project's one call at
+  temperature 0 removes the sampling term but keeps run-to-run reply variation (same edits in 63% of usable pairs in the
+  pilot), which is why D113 repeats runs. No change to D113.
+- **Against the project's documents:** `docs/EVAL_API.md` lists "CoSIL v3: verify decoding, retry and usage contracts;
+  distinguish partial and whole-repair costs". Decoding and retries are stated (greedy; 3 retries for agent baselines);
+  the paper reports localization tokens and dollars only, so whole-repair cost is not in it.

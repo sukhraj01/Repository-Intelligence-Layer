@@ -1025,6 +1025,20 @@ Status: **apparatus and plan; no model was called, no resolved rate exists.** Ev
 
 **Remains before the first confirmatory run.** The graded model check (engineer: billing, hard cap, key on the cluster, billed-tier limits, price check, Q70), the choice of k, trained-checkpoint contexts (blocked on RQ2), the 16,000-token prompts (optional, not run).
 
+## E-LIT-SCAFFOLD: the five agent-scaffold papers read in full, scaffold compared with how they use it. Literature, 2026-11-08 (decision D116)
+
+Status: **done; no model call, no cluster job.** Evidence class: read in full. Answers Q63.
+
+**Why.** The standing rule makes a paper a source only after a full, versioned, checked reading. ADR-007 and the report rest on Agentless-style retrieval-supplied repair; the scaffold table of `docs/EVAL_API.md` names five papers.
+
+**Papers (PDF fetched from the paper's own arXiv page, 2026-11-08).** Agentless v2 (25 pp), SWE-agent v3 (118 pp), OpenHands v3 (38 pp): new notes, `scripts/check_paper_note.py` PASS (page counts equal `pdfinfo`, 57, 69 and 19 numbers found on the stated pages). LocAgent v2 (18 pp) and CoSIL v3 (17 pp): notes from 2026-10-17 re-verified (PASS on freshly fetched PDFs, 56 and 69 numbers) and extended with a scaffold section from re-read passages, not a second full reading. None is unread.
+
+**Findings.** (1) The scaffold shares the edit format and the retrieval/repair separation with Agentless; it has no sampling, no test selection and no follow-ups in the paper, and a different context shape (10 lines around locations against 8,000 tokens of ranked units). (2) SWE-agent and OpenHands cannot isolate the retriever (shell open); costs about 1.6 to 1.7 dollars per Lite instance. (3) Fixed-repair swaps in LocAgent and CoSIL give small resolved-rate gains (+1.6 Pass@1 for +15 Acc@5; 14 instances of 300 across four localizers against a ten-instance reproduction spread). (4) SWE-agent six runs: mean 17.94%, pass@6 32.67%, so at least 15.3 points of instances flip between runs (inference). (5) Contradictions with project text and between papers: listed in the ADR-007 addendum and each note.
+
+**Dead ends / limits.** SWE-agent's trajectory pages (45 to 116) were read without the numbered source listings inside observations; the note carries the caveat and the header can be downgraded if the rule requires them. Agentless v1 and OpenHands/SWE-agent earlier versions were not read, so version drift (Agentless 27.3 in OpenHands against 32.00% in v2) is unexplained.
+
+**Report slots fed** (`reports/final/final_report.tex`, not edited here): Related work, a new paragraph on agent scaffolds and the repair stage; RQ3 Design paragraph (scaffold wording, DEV-037); the Threats todo (scaffold sensitivity, model non-determinism).
+
 
 ## E-RQ2-READINESS: which stages between the mined store and the final RQ2 tables are missing, broken or unmeasured at full scale? Audit, dry run and plan, 2026-11-08 (decision D115)
 
