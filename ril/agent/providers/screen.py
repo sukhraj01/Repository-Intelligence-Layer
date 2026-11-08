@@ -7,6 +7,10 @@ is not on the reviewed list. Public source files and issues do carry addresses (
 author lines, placeholders), so the list holds the SHA-256 of each reviewed lowercase address and
 no address is written to a tracked file. ``forbidden`` addresses (the operator's own identity) are
 rejected even if listed.
+
+The prompts of the RQ3 runs are pseudonymised first (``pseudonymise.py``, D120): the screen accepts
+exactly ``person<N>@example.invalid`` and ``user<N>`` in the user-name position of a home path, and
+nothing else beyond what it accepted before.
 """
 
 from __future__ import annotations
@@ -17,10 +21,11 @@ from collections.abc import Collection, Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
+from ril.agent.providers.pseudonymise import EMAIL, PLACEHOLDER_EMAIL, PLACEHOLDER_PATH
+
 HOME_PATH = re.compile(
     r"(?:/Users/[A-Za-z0-9._-]+|/home[0-9]*/[A-Za-z0-9._-]+|[A-Za-z]:\\Users\\[^\\\s]+)"
 )
-EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+")
 TOKEN = re.compile(
     r"AIza[0-9A-Za-z_-]{35}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}"
     r"|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}"
@@ -58,12 +63,15 @@ def screen_text(
     found = [
         Finding("home_path", hashlib.sha256(m.group(0).encode()).hexdigest())
         for m in HOME_PATH.finditer(text)
+        if not PLACEHOLDER_PATH.match(text, m.start())
     ]
     found += [
         Finding("token", hashlib.sha256(m.group(0).encode()).hexdigest())
         for m in TOKEN.finditer(text)
     ]
     for m in EMAIL.finditer(text):
+        if PLACEHOLDER_EMAIL.fullmatch(m.group(0)):
+            continue  # the pseudonymised form (``pseudonymise.py``), the only new form accepted
         d = email_digest(m.group(0))
         if d in forbidden or d not in allowed_email_digests:
             found.append(Finding("email", d))

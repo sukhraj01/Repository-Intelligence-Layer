@@ -290,8 +290,26 @@ confirmatory instances and 36 of the 50 held-out ones have all three arms sendab
 (`prepare_sendable_by_set.csv`). The matches are mostly placeholders in code excerpts (`example.com`, `foo@bar.com`), maintainer
 addresses in headers and user names in tracebacks quoted in issues: public repository text, but the screen was written for the unpaid
 quota's terms and has no reviewed list for path strings. **Nothing was added to the reviewed list and the screen was not changed**:
-the options are open question Q70. The prompt text before the excerpts is byte-identical across arms for every instance that has a
+the options were open question Q70 (settled by D120, see "Pseudonymised prompts" below, which supersedes the counts of this paragraph). The prompt text before the excerpts is byte-identical across arms for every instance that has a
 prompt (320 of 320). The 16,000-token set was not prepared (not run).
+
+### Pseudonymised prompts (D120, `E-RQ3-PSEUDONYMISE`; closes Q70)
+
+Terms read on 2026-11-08 (effective 2026-03-23): for unpaid services content may be used to improve products and read by
+reviewers, and personal information must not be submitted; for paid services (a Cloud project with an active billing account) prompts
+and responses are not used to improve products and are logged for a limited period to detect violations. The screen was written for
+the unpaid terms. **Decision D120 (reasoned; evidence class: terms read, counts of E-RQ3-DRIVER): pseudonymise and restore, the same for
+every arm and instance, on whichever tier is used.** After the context is assembled and before the screen, every e-mail address becomes
+`person<N>@example.invalid` and the user-name segment of every home-directory path becomes `user<N>` (N by first occurrence in the prompt,
+issue and excerpts alike); the per-prompt mapping is kept outside tracked paths. The driver applies the inverse to the reply before both
+readings of the converter, so an edit that quotes a placeholder matches the original file and writes the original text. The screen
+accepts exactly those two forms and nothing new, the reviewed list is unchanged. Result: **1,131 of 1,131 prompts pass** (244 touched: email 135,
+path 101, both 8), restore gives back the original prompt for all, 377 of 377 instances have three sendable arms (327 confirmatory,
+50 held-out), the text before the excerpts is identical across arms, tokens change by +0.72 per prompt on average (max +91) and the
+largest context overshoot of 8,000 is 72 approximate tokens (tolerance fixed in advance: 80). Round trips on real data and the replay
+of 10 touched instances (20 of 20 as expected) are in the experiment entry. Prompts sent in the free-tier pilot passed the old screen
+and are unaffected. The tables `prepare_report.json` and `prepare_sendable_by_set.csv` in `results/rq3_driver/` describe the earlier
+screen; the current ones are in `results/rq3_pseudonymise/`.
 
 ### Replay test (job 64590, account A, CPU, node-local scratch, nothing deleted)
 
@@ -327,7 +345,7 @@ roughly 4.5 times that. A model that thinks longer than the pilot model is the m
 ### Not done, limits
 
 No model was called on any executable instance; no resolved rate exists. The graded check needs the engineer's billing, cap and limits. The 16,000-token
-prompts are not prepared. Trained-checkpoint arms have no contexts. The screen's policy (Q70) decides how many confirmatory instances can be sent.
+prompts are not prepared. Trained-checkpoint arms have no contexts. The screen's policy (Q70, settled by D120: pseudonymisation) decided how many confirmatory instances can be sent.
 
 ## Smoke test (2026-11-06, three calls, `results/rq3_pilot/smoke_2026-11-06/`)
 

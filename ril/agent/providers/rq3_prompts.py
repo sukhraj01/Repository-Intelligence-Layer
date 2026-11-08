@@ -4,7 +4,11 @@
 instance, arms and budgets inside) and pairs each with the instance's issue text.
 ``prepare_screened`` then follows the pilot's ``prepare`` path: the same ``build_prompt`` and the
 same prompt screen
-(public text only; an e-mail address is accepted only if its digest is on the reviewed list). Where
+(public text only; an e-mail address is accepted only if its digest is on the reviewed list). Since
+D120 the built prompt is pseudonymised first (``pseudonymise.py``, the same for every arm), the
+screen runs on the result, and the prompt's mapping is written to ``maps/<prompt hash>.json``
+(outside any tracked path, never printed) for ``pilot_run.load_items`` and the driver's restore
+step. Where
 the pilot's ``prepare_items`` raises on the first screen finding, this version writes the prompts
 that pass and reports each rejection by (instance, arm) with the finding kinds and digests, so a
 whole run can be prepared and the rejections reviewed afterwards.
@@ -24,9 +28,12 @@ from typing import Any
 from ril.agent.providers.calllog import sha256_text
 from ril.agent.providers.patch_format import TEMPLATE_VERSION, build_prompt
 from ril.agent.providers.pilot_run import PREPARED_VERSION
+from ril.agent.providers.pseudonymise import TRANSFORM_VERSION, pseudonymise, restore_text
 from ril.agent.providers.screen import screen_text
+from ril.assembly.tokens import ApproxTokenizer
 
 EXCERPT_MARK = "## Repository excerpts"
+_TOKENS = ApproxTokenizer()
 Row = dict[str, Any]
 
 
@@ -115,6 +122,7 @@ def prepare_screened(
     out_dir: str | Path,
     allowed_email_digests: Collection[str] = (),
     forbidden_emails: Iterable[str] = (),
+    pseudonymise_prompts: bool = True,
 ) -> tuple[int, list[Row]]:
     """Write the sendable items; return (number written, rejections).
 
@@ -124,6 +132,7 @@ def prepare_screened(
     """
     root = Path(out_dir)
     (root / "prompts").mkdir(parents=True, exist_ok=True)
+    (root / "maps").mkdir(parents=True, exist_ok=True)
     forbidden = tuple(forbidden_emails)
     items: list[Row] = []
     rejected: list[Row] = []
@@ -136,8 +145,18 @@ def prepare_screened(
         context = str(row["context"])
         if sha256_text(context) != row["context_sha256"]:
             raise ValueError(f"{key}: context does not match its recorded hash")
-        prompt = build_prompt(str(row["issue"]), context)
+        original = build_prompt(str(row["issue"]), context)
+        if pseudonymise_prompts:
+            prompt, mapping = pseudonymise(original)
+        else:
+            prompt, mapping = original, None
         findings = screen_text(prompt, allowed_email_digests, forbidden)
+        if mapping is not None and restore_text(prompt, mapping) != original:
+            # the transform must be invertible on this prompt; if not, the prompt is not sent
+            rejected.append(
+                {"instance_id": key[0], "arm": key[1], "kinds": ["restore_mismatch"], "digests": []}
+            )
+            continue
         if findings:
             rejected.append(
                 {
@@ -150,6 +169,10 @@ def prepare_screened(
             continue
         digest = sha256_text(prompt)
         (root / "prompts" / f"{digest}.txt").write_text(prompt, encoding="utf-8")
+        if mapping is not None and mapping.touched != "none":
+            (root / "maps" / f"{digest}.json").write_text(
+                json.dumps(mapping.to_dict(), sort_keys=True), encoding="utf-8"
+            )
         items.append(
             {
                 "instance_id": key[0],
@@ -161,6 +184,15 @@ def prepare_screened(
                 "context_sha256": row["context_sha256"],
                 "issue_sha256": sha256_text(str(row["issue"])),
                 "prompt_sha256": digest,
+                "original_prompt_sha256": sha256_text(original),
+                "pseudonymised": mapping.touched if mapping is not None else "off",
+                "n_emails": len(mapping.emails) if mapping is not None else 0,
+                "n_users": len(mapping.users) if mapping is not None else 0,
+                "transform_version": TRANSFORM_VERSION if mapping is not None else "",
+                "approx_tokens_prompt_original": _TOKENS.count(original),
+                "approx_tokens_prompt": _TOKENS.count(prompt),
+                "approx_tokens_context_original": _TOKENS.count(context),
+                "approx_tokens_context": _TOKENS.count(_excerpts(prompt)),
                 "paths": sorted(set(row["files"])),
                 "template_version": TEMPLATE_VERSION,
                 "prepared_version": PREPARED_VERSION,
@@ -171,6 +203,61 @@ def prepare_screened(
         "".join(json.dumps(r, sort_keys=True) + "\n" for r in items), encoding="utf-8"
     )
     return len(items), rejected
+
+
+def _excerpts(prompt: str) -> str:
+    """The context as the prompt carries it (the text after the excerpt heading)."""
+    return prompt.partition(EXCERPT_MARK + "\n\n")[2].removesuffix("\n")
+
+
+def pseudonymise_report(
+    items: Sequence[Mapping[str, Any]], budget: int, tolerance: float
+) -> dict[str, Any]:
+    """Prompts touched by kind and arm, and the token effect of the transform.
+
+    Tokens are the assembly's approximate count. ``overshoot`` is how far a context passes the
+    budget after the transform (0 when it stays within it); ``tolerance`` is the stated share of
+    the budget that is allowed (D120).
+    """
+    by_kind: Counter[str] = Counter()
+    by_arm: dict[str, Counter[str]] = {}
+    delta_prompt: list[int] = []
+    delta_context: list[int] = []
+    overshoot: list[int] = []
+    for it in items:
+        kind = str(it.get("pseudonymised", "off"))
+        by_kind[kind] += 1
+        by_arm.setdefault(str(it["arm"]), Counter())[kind] += 1
+        delta_prompt.append(
+            int(it["approx_tokens_prompt"]) - int(it["approx_tokens_prompt_original"])
+        )
+        delta_context.append(
+            int(it["approx_tokens_context"]) - int(it["approx_tokens_context_original"])
+        )
+        overshoot.append(max(0, int(it["approx_tokens_context"]) - budget))
+
+    def stats(xs: list[int]) -> dict[str, float]:
+        if not xs:
+            return {"mean": 0.0, "min": 0, "max": 0}
+        return {"mean": round(sum(xs) / len(xs), 3), "min": min(xs), "max": max(xs)}
+
+    touched = [
+        d for it, d in zip(items, delta_prompt, strict=True) if it.get("pseudonymised") != "none"
+    ]
+    return {
+        "prompts": len(items),
+        "by_kind": dict(sorted(by_kind.items())),
+        "by_arm": {a: dict(sorted(c.items())) for a, c in sorted(by_arm.items())},
+        "tokens_delta_prompt_all": stats(delta_prompt),
+        "tokens_delta_prompt_touched": stats(touched),
+        "tokens_delta_context_all": stats(delta_context),
+        "max_context_tokens": max((int(it["approx_tokens_context"]) for it in items), default=0),
+        "max_context_overshoot": max(overshoot, default=0),
+        "prompts_over_budget": sum(1 for o in overshoot if o > 0),
+        "tolerance_tokens": int(budget * tolerance),
+        "within_tolerance": max(overshoot, default=0) <= int(budget * tolerance),
+        "transform_version": TRANSFORM_VERSION,
+    }
 
 
 def rejection_table(rejected: Sequence[Mapping[str, Any]]) -> list[Row]:

@@ -10,6 +10,8 @@
 # CPU only, no network, no model call (E-RQ3-DRIVER, D113). Prompts of the 377 executable instances
 # for BM25, untrained dense and RRF at 8,000 tokens, from the stored contexts (E-RQ3-CONTEXTS), through
 # the pilot's prompt builder and screen; rejections are reported, not raised.
+# Since D120 the built prompt is pseudonymised before the screen (`ril/agent/providers/pseudonymise.py`),
+# and the per-prompt mappings are written to $OUT/maps (never printed).
 # Submit from $HOME after:
 #   rsync -a --exclude __pycache__ ril scripts configs ada:ril_rq3_driver/code/
 #   scp executable_instances_v1.json heldout_v1.json ada:ril_rq3_driver/in/

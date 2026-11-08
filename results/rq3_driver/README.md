@@ -8,7 +8,7 @@ No model was called. Nothing here is a resolved rate.
 |---|---|
 | `heldout_v1.json` | the frozen held-out slice: 50 of the 377 executable instances, seed 0, rule and places per repository (D111); the other 327 are the confirmatory instances |
 | `ids_heldout.txt`, `ids_confirmatory.txt` | the two instance lists, one id per line |
-| `prepare_report.json` | prompts built from the stored 8,000-token contexts: counts, rejection counts by screen finding and arm, issue-source agreement, prefix identity across arms |
+| `prepare_report.json` | (superseded by `results/rq3_pseudonymise/`, D120) prompts built from the stored 8,000-token contexts: counts, rejection counts by screen finding and arm, issue-source agreement, prefix identity across arms |
 | `prepare_sendable_by_set.csv` | per set and repository: instances whose three prompts all pass the screen, some pass, none pass, and RRF prompts that pass |
 | `replay/replay_table.csv`, `replay/results.jsonl`, `replay/meta.json` | the replay test on the real executor (job 64590): 20 gold-derived edit sets and 10 broken variants, expected against observed outcome class |
 | `rq3_power_run_noise.csv`, `rq3_power_run_noise_mdd.csv`, `rq3_power_run_noise_assumptions.json` | power of the primary contrast by simulation (N = 327 and N = 232, k = 1 to 3), minimum detectable difference at power 0.8, and which inputs are assumptions |

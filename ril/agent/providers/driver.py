@@ -42,6 +42,7 @@ from typing import Any, Protocol
 from ril.agent.providers.calllog import CallLog, Row, Unit
 from ril.agent.providers.patch_convert import READINGS, Conversion, Reading, convert_reply
 from ril.agent.providers.pilot_run import Generator, RunConfig, RunSummary, plan_units, run_unit
+from ril.agent.providers.pseudonymise import restore_text
 from ril.agent.providers.spend import Price
 from ril.evaluation.executor.runner import ExecResult
 from ril.util.log import get_logger
@@ -271,10 +272,13 @@ def process_unit(
         row["outcome"] = row["outcome_tolerant"] = "unusable"
         return _finish(row, t0, item)
     paths = item.get("paths")
+    text = restore_text(
+        reply.text, item.get("restore")
+    )  # placeholders back to the original text (D120)
     convs: dict[Reading, Conversion] = {}
     try:
         for reading in READINGS:
-            convs[reading] = convert_reply(reply.text, reader, reading, paths)
+            convs[reading] = convert_reply(text, reader, reading, paths)
     except (UnicodeDecodeError, ValueError) as err:
         row["outcome"] = row["outcome_tolerant"] = f"exec_error:{READ_FAULT}"
         row["failure_stage"] = type(err).__name__

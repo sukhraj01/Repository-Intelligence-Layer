@@ -26,6 +26,7 @@ from ril.agent.providers.patch_format import (
     parse_edits,
     reask_message,
 )
+from ril.agent.providers.pseudonymise import PseudonymMap
 from ril.agent.providers.screen import screen_text
 from ril.agent.providers.spend import SpendCapReached
 
@@ -97,6 +98,9 @@ def load_items(prepared_dir: str | Path) -> list[dict[str, Any]]:
     ]
     for r in rows:
         r["prompt"] = (root / "prompts" / f"{r['prompt_sha256']}.txt").read_text(encoding="utf-8")
+        mapping = root / "maps" / f"{r['prompt_sha256']}.json"
+        if mapping.exists():
+            r["restore"] = PseudonymMap.from_dict(json.loads(mapping.read_text(encoding="utf-8")))
     return rows
 
 
