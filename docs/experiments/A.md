@@ -111,7 +111,8 @@ instead of returning a graph. Tests: `tests/unit/test_edge_store.py` (round trip
 version).
 
 **Result** (history off, seven loads per check level, nearest-rank p50, local CPU, warm file cache; every round trip
-reproduced the graph digest):
+reproduced the graph digest; with seven loads the nearest-rank p95 and p99 are the largest of the seven, so the p95 columns
+of the table in `results/tables/a2c_edge_store.csv` are a maximum, not an estimate of a tail):
 
 | repository | edges | raw JSONL | store | write | load, counts only | load, hashes (default) | load, deep | adjacency |
 |---|---|---|---|---|---|---|---|---|
@@ -124,8 +125,9 @@ reproduced the graph digest):
 Table `results/tables/a2c_edge_store.csv`, log `results/logs/a2c_edge_store_2026-10-31.json`.
 
 **Reading.** Evidence class: measured. The store is 16 to 20 times smaller than the raw canonical JSONL, and hash checking
-costs almost nothing over an unchecked load (django 2.26 s against 1.98 s); recomputing the digest costs about 2.4 times a
-load, so it is opt-in. Load time is JSON parsing of the edge records; a reader that needs only the adjacency of resolved
+costs almost nothing over an unchecked load (django 2.26 s against 1.98 s); recomputing the digest costs 2.6 to 3.1 times an
+unchecked load and 2.35 to 3.15 times a hash-checked load (p50 over the five repositories, ratios of the table above; django
+2.7 and 2.35), so it is opt-in. Load time is JSON parsing of the edge records; a reader that needs only the adjacency of resolved
 edges could store that projection separately (not done: D16 reads the typed edge list).
 
 ## A2b-PREP: where the resolver fails, by call-site rule, done 2026-10-31
