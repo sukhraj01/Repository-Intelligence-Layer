@@ -50,7 +50,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 3–6 — Person C: evaluation harness
 
-- [ ] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite pairing and staging code merged after review (E-C1-EVAL); the one real dev BM25 run is operator_reported (E-C1-COLAB-DEV), so the item stays open until a run with stored query-level output exists
+- [x] CORE-Bench loaders (L2, L3, REWRITE splits) — L2 and L3 folders load (`ril/evaluation/core_bench.py`); Rewrite pairing and staging code merged after review (E-C1-EVAL); the dev BM25 run reported from Colab (E-C1-COLAB-DEV) was re-run natively on account A with stored query-level rows and equals it in 12 of 12 cells (E-C-CATCHUP, D144)
 - [x] Metrics at chunk granularity; reproduces a published CORE-Bench number as a sanity check (BM25 rows reproduced to the printed decimal, pilot E1)
 
 ## Weeks 5–8 — Person A: RQ1
@@ -110,6 +110,7 @@ still complete and defensible.
 - [x] Read the five agent-scaffold papers in full (Agentless, SWE-agent, OpenHands new notes; LocAgent, CoSIL re-verified), ADR-007 addendum (D116, E-LIT-SCAFFOLD)
 - [x] Rulings on that reading applied (2026-11-08, D121, E-LIT-SCAFFOLD addendum): qualified header for a partly read note (check and test), scaffold renamed retrieval-supplied one-shot repair, any-of-k secondary reading in `ril/analysis/rq3_results.py`, report paragraphs on scaffolds and two threats
 - [x] RQ3 prompt pseudonymisation (2026-11-08, D120, E-RQ3-PSEUDONYMISE; Q70 answered): 1,131 of 1,131 prompts pass the screen, restore in the driver, round trips and replay checked, no model call
+- [x] Workstream C catch-up (2026-11-09, D144, E-C-CATCHUP): scaffold table of the evaluation API brought to the five-paper reading; Colab C1 dev BM25 comparison re-run natively on account A (12 of 12 cells equal, query-level rows stored, Q64 answered)
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
 
