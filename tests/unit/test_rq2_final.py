@@ -185,8 +185,9 @@ def test_both_metrics_reported_and_only_primary_gets_holm() -> None:
     assert all((c["holm"] is not None) == c["primary"] for c in cs)
 
 
-def test_matches_the_existing_clustered_bootstrap() -> None:
-    # the interval is the stored D17 bootstrap (whole repositories, shared draws), not a new one
+def test_the_beside_interval_is_the_stored_clustered_bootstrap() -> None:
+    # the percentile interval kept beside the decision interval is the stored D17 bootstrap
+    # (whole repositories, shared draws), unchanged by D135
     rows = synthetic_rows(effects={FILTER: 1.5}, seed=9, repos=6)
     panel = R.build_panels(rows)[("dev", "L2")]
     d = 100 * (panel.cells[FILTER].pooled("ndcg10") - panel.cells["mined_raw"].pooled("ndcg10"))
@@ -194,8 +195,36 @@ def test_matches_the_existing_clustered_bootstrap() -> None:
     lo, hi = np.quantile(boot.cluster @ d, [0.025, 0.975])
     e = R.estimate(panel, SPEC, "ndcg10", boot)
     assert e is not None
-    assert e.ci == pytest.approx((lo, hi))
+    assert e.ci_boot == pytest.approx((lo, hi))
+    assert e.ci_cluster == pytest.approx((lo, hi))
     assert e.d == pytest.approx(d.mean())
+
+
+def test_the_decision_interval_is_the_cluster_robust_t_with_r_minus_one_df() -> None:
+    # D135: the interval a decision is read from is mean +- t(R - 1) * cluster-robust se
+    rows = synthetic_rows(effects={FILTER: 1.5}, seed=9, repos=6)
+    panel = R.build_panels(rows)[("dev", "L2")]
+    d = 100 * (panel.cells[FILTER].pooled("ndcg10") - panel.cells["mined_raw"].pooled("ndcg10"))
+    e = R.estimate(panel, SPEC, "ndcg10", Boot(panel.repos, 0, 200))
+    assert e is not None and e.t.df == 5 and e.interval_kind == "repository-clustered"
+    resid = d - d.mean()
+    sums = [resid[[r == name for r in panel.repos]].sum() for name in sorted(set(panel.repos))]
+    se = np.sqrt(6 / 5 * sum(v * v for v in sums)) / len(d)
+    half = 2.5706 * se
+    assert e.ci == pytest.approx((d.mean() - half, d.mean() + half), abs=2e-3)
+    assert e.p == pytest.approx(e.t.p_value())
+
+
+def test_every_decision_row_carries_both_intervals() -> None:
+    s = _analyse(synthetic_rows(effects={FILTER: 2.0}, seed=3, repos=8))
+    assert "cluster-robust t" in s["interval_rule"]
+    for c in s["contrasts"]:
+        assert c["ci_boot_uncorrected"] is not None and c["ci_uncorrected"] is not None
+        if c["holm"]:
+            assert c["holm"]["ci"] != c["holm"]["boot"]["ci"]
+            assert c["df"] == 7
+    for c in s["cells"]:
+        assert c["ci"] is not None and c["ci_boot"] is not None
 
 
 # ---------------------------------------------------------------------------- invariances
@@ -569,21 +598,24 @@ def _coverage(
     return hit / n, hit_q / n
 
 
-def _fwer(tau: float, n: int, draws: int = 400) -> tuple[float, float]:
-    any_rej = any_eff = 0
+def _fwer(tau: float, n: int, draws: int = 400, repos: int = 12) -> tuple[float, float, float]:
+    """Family-wise rejection rate of the decision rule (t) and of the old bootstrap rule, and the
+    rate of reported effects, over ``n`` simulations of the four confirmatory contrasts."""
+    rej_t = rej_boot = any_eff = 0
     for i in range(n):
-        rows = synthetic_rows(effects={FILTER: 0.0}, seed=5000 + i, tau=tau, seeds=3)
+        rows = synthetic_rows(effects={FILTER: 0.0}, seed=5000 + i, tau=tau, seeds=3, repos=repos)
         conf = _confirmatory(_analyse(rows, draws=draws))
         assert len(conf) == 4  # two contrasts at two levels
-        any_rej += any(c["holm"]["rejected"] for c in conf)
+        rej_t += any(c["holm"]["rejected"] for c in conf)
+        rej_boot += any(c["holm"]["boot"]["rejected"] for c in conf)
         any_eff += any(c["class"] == "reported-effect" for c in conf)
-    return any_rej / n, any_eff / n
+    return rej_t / n, rej_boot / n, any_eff / n
 
 
 def test_simulation_smoke_runs_and_is_roughly_calibrated() -> None:
     cov, _ = _coverage(1.5, 1.0, 3, SIM_SMOKE)
     assert cov >= 0.80  # 60 simulations: standard error 0.03, this only catches gross errors
-    rej, eff = _fwer(1.0, SIM_SMOKE)
+    rej, _, eff = _fwer(1.0, SIM_SMOKE)
     assert rej <= 0.15 and eff <= rej
 
 
@@ -615,35 +647,32 @@ def test_coverage_of_the_query_level_interval_with_two_repositories() -> None:
     assert 0.93 <= hit / 1000 <= 0.97
 
 
-_NOMINAL_REASON = (
-    "measured: the repository-clustered percentile interval of D17 does not hold the family-wise "
-    "error rate of Holm at 8 to 12 repositories (1,000 simulations: 0.16 and 0.10 at 12 "
-    "repositories, 0.22 and 0.15 at 8); the entry E-RQ2-ANALYSIS lists the options for the lead. "
-    "strict: this test starts passing the day the interval rule changes, which must be a decision"
-)
-
-
 @pytest.mark.slow
-@pytest.mark.xfail(strict=True, reason=_NOMINAL_REASON)
 @pytest.mark.parametrize("tau", [0.0, 1.5])
-def test_false_positive_rate_after_holm_is_nominal_with_twelve_repositories(tau: float) -> None:
-    # 1,000 simulations of the four confirmatory contrasts under no effect: the chance that Holm
-    # rejects any of them (family-wise) should not exceed the nominal 5% by more than 2 points
-    # (Monte Carlo standard error 0.7). It does, so the assertion is expected to fail.
-    rej, _ = _fwer(tau, 1000, draws=500)
+@pytest.mark.parametrize("repos", [8, 12, 20])
+def test_false_positive_rate_after_holm_is_nominal(repos: int, tau: float) -> None:
+    # D135: 1,000 simulations of the four confirmatory contrasts under no effect; the chance that
+    # Holm on the cluster-robust t intervals rejects any of them (family-wise) must not exceed the
+    # nominal 5% by more than 2 points (Monte Carlo standard error 0.7). Measured 0.027 to 0.054
+    # over these six cells (seeds 5000 to 5999, 500 draws for the beside interval).
+    rej, _, _ = _fwer(tau, 1000, draws=500, repos=repos)
     assert rej <= 0.07, rej
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize("tau", [0.0, 1.5])
-def test_family_wise_error_rate_of_the_current_rule_is_pinned(tau: float) -> None:
-    # characterisation of the rule as protocol-fixed (D17, D72): 1,000 simulations, 12 repositories,
-    # three seeds, 500 draws. Measured 0.16 (tau 0) and 0.10 (tau 1.5); the band keeps a change of
-    # rule a conscious one. A reported effect (a rejection of at least delta) never occurs here
-    # because the paired difference is estimated far more tightly than delta.
-    rej, eff = _fwer(tau, 1000, draws=500)
-    assert 0.07 <= rej <= 0.25, rej
-    assert eff <= 0.02
+@pytest.mark.parametrize(
+    ("repos", "tau", "low", "high"),
+    [(8, 0.0, 0.12, 0.26), (12, 0.0, 0.10, 0.22), (12, 1.5, 0.06, 0.15), (20, 0.0, 0.07, 0.17)],
+)
+def test_family_wise_error_rate_of_the_beside_interval_is_pinned(
+    repos: int, tau: float, low: float, high: float
+) -> None:
+    # characterisation of the percentile bootstrap run through the same Holm procedure (the rule
+    # before D135): 1,000 simulations, three seeds, 500 draws. Measured 0.187 (8 repositories),
+    # 0.159 (12, tau 0), 0.100 (12, tau 1.5), 0.113 (20). It stays in every table beside the
+    # decision interval; this band keeps a change of the beside interval a conscious one.
+    _, rej_boot, _ = _fwer(tau, 1000, draws=500, repos=repos)
+    assert low <= rej_boot <= high, rej_boot
 
 
 @pytest.mark.slow
@@ -652,5 +681,5 @@ def test_false_reported_effects_stay_rare_in_a_wide_stress_case() -> None:
     # detectable difference 2.6 points, wider than the design's 1.3 to 1.5 at 12 repositories,
     # which tau 1.5 matches). 12 repositories, 1,000 simulations: measured 0.032; tolerance 0.07.
     # The delta guard, not Holm, is what keeps this rate low.
-    _, eff = _fwer(3.0, 1000, draws=500)
+    _, _, eff = _fwer(3.0, 1000, draws=500)
     assert eff <= 0.07, eff

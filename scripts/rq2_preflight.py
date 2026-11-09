@@ -51,6 +51,12 @@ def main(argv: list[str] | None = None) -> int:
         include_conditional=a.include_conditional,
         head_commit=head or None,
     )
+    mined_n = None
+    if a.family == "mined":
+        try:
+            mined_n = rl.read_updates(a.work)
+        except rl.UpdatesError:
+            mined_n = None  # the failed updates_computed check is in the file
     rec = rl.write_preflight(
         a.out,
         account=a.account,
@@ -58,6 +64,7 @@ def main(argv: list[str] | None = None) -> int:
         commit=commit,
         include_conditional=a.include_conditional,
         checks=checks,
+        updates=mined_n,
     )
     sys.stdout.write(json.dumps(rec, indent=1) + "\n")
     return 0 if rec["ready"] else 1

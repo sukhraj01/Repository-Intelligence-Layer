@@ -49,8 +49,10 @@ def _facts(summary: Rec, tr: Trace) -> str:
     sets = ", ".join(tr.label(s) for s in summary["eval_sets"])
     return (
         f"Evaluation sets: {sets}; delta {tr.num(summary['delta'], 1)} points; Holm within each "
-        f"family on each set; the interval beside the Holm interval is uncorrected; "
-        f"{tr.count(summary['draws'])} bootstrap draws, seed {tr.count(summary['bootstrap_seed'])}"
+        f"family on each set; intervals are cluster-robust t over repositories (degrees of "
+        f"freedom one fewer than repositories), the interval beside the Holm interval is "
+        f"uncorrected, the percentile bootstrap beside it ({tr.count(summary['draws'])} draws, "
+        f"seed {tr.count(summary['bootstrap_seed'])})"
     )
 
 
@@ -88,7 +90,7 @@ def arms_table(summary: Rec, tr: Trace) -> Table:
     ]
     return Table(
         name="rq2_final_arms",
-        title="Final RQ2 cells: mean over queries, clustered over repositories from three up",
+        title="Final RQ2 cells: mean over queries, cluster-robust t interval over repositories",
         evidence="measured",
         facts=_facts(summary, tr),
         notes=(
@@ -127,6 +129,7 @@ def contrast_table(
                 tr.level(c["level"]),
                 f"{tr.num(c['d'], 1, True)} {_iv(tr, h['ci'] if h else None)}",
                 _iv(tr, c["ci_uncorrected"]),
+                _iv(tr, h["boot"]["ci"] if h else None),
                 tr.lit(
                     {"repository-clustered": "repository", "query-level": "query"}[c["interval"]]
                 ),
@@ -140,6 +143,7 @@ def contrast_table(
         tr.lit("Level"),
         tr.lit("Difference, Holm interval"),
         tr.lit("Uncorrected"),
+        tr.lit("Bootstrap, Holm"),
         tr.lit("Interval"),
         tr.lit("Reading"),
         tr.lit("Distinct dirs"),
@@ -154,7 +158,15 @@ def contrast_table(
             "least delta; a difference below delta is an estimate with bounds"
         ),
         entries=[ENTRY],
-        colspec=_L(0.1) + _L(0.26) + _L(0.05) + _R(0.2) + _R(0.14) + _L(0.07) + _L(0.15) + _R(0.1),
+        colspec=_L(0.09)
+        + _L(0.22)
+        + _L(0.05)
+        + _R(0.16)
+        + _R(0.12)
+        + _R(0.14)
+        + _L(0.06)
+        + _L(0.12)
+        + _R(0.09),
         wide=True,
         header=hdr,
         rows=rows,
