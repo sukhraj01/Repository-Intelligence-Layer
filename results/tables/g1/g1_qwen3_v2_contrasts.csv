@@ -1,0 +1,181 @@
+group,level,metric,gold_reading,contrast,family,a,b,queries,repos,d,t_lo,t_hi,t_kind,df,boot_cluster_lo,boot_cluster_hi,boot_query_lo,boot_query_hi,reading
+dev,L2,ndcg10,units_all_nomod,plain: graph - same-file,core,graph|core,sfscore|core,351,5,0.573,-1.17,2.316,repository-clustered,4,-0.539,1.698,-0.198,1.385,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - topm,core,graph|core,topm|core,351,5,1.747,0.452,3.041,repository-clustered,4,1.072,2.849,0.873,2.677,beats control
+dev,L2,ndcg10,units_all_nomod,plain: graph - random same-file,core,graph|core,sfrand|core,351,5,1.015,-1.446,3.475,repository-clustered,4,-0.826,2.369,0.148,1.869,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: same-file - topm,core,sfscore|core,topm|core,351,5,1.174,-1.285,3.632,repository-clustered,4,-0.351,2.823,0.405,1.95,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - first stage,core,graph|core,a_none,351,5,1.68,-0.08,3.44,repository-clustered,4,0.743,2.892,0.59,2.849,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: same-file - first stage,core,sfscore|core,a_none,351,5,1.107,-1.65,3.863,repository-clustered,4,-0.611,2.754,0.148,2.073,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - same-file,coretc,graph|coretc,sfscore|coretc,351,5,0.547,-1.075,2.17,repository-clustered,4,-0.516,1.576,-0.222,1.366,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - topm,coretc,graph|coretc,topm|coretc,351,5,1.765,0.412,3.118,repository-clustered,4,1.062,2.959,0.9,2.693,beats control
+dev,L2,ndcg10,units_all_nomod,plain: graph - random same-file,coretc,graph|coretc,sfrand|coretc,351,5,0.793,-1.39,2.977,repository-clustered,4,-0.791,1.999,-0.074,1.658,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: same-file - topm,coretc,sfscore|coretc,topm|coretc,351,5,1.218,-1.203,3.638,repository-clustered,4,-0.278,2.839,0.443,2.0,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - first stage,coretc,graph|coretc,a_none,351,5,1.68,-0.13,3.49,repository-clustered,4,0.707,2.926,0.599,2.846,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: same-file - first stage,coretc,sfscore|coretc,a_none,351,5,1.133,-1.562,3.827,repository-clustered,4,-0.539,2.754,0.17,2.086,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - same-file,tc,graph|tc,sfscore|tc,351,5,-2.802,-5.284,-0.32,repository-clustered,4,-4.052,-1.238,-3.635,-2.005,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - topm,tc,graph|tc,topm|tc,351,5,-2.076,-3.483,-0.668,repository-clustered,4,-2.872,-1.153,-2.822,-1.317,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - random same-file,tc,graph|tc,sfrand|tc,351,5,-2.172,-4.537,0.193,repository-clustered,4,-3.98,-1.006,-2.971,-1.422,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: same-file - topm,tc,sfscore|tc,topm|tc,351,5,0.726,-1.042,2.494,repository-clustered,4,-0.359,1.863,0.061,1.398,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: graph - first stage,tc,graph|tc,a_none,351,5,-1.958,-3.22,-0.697,repository-clustered,4,-2.765,-1.197,-2.943,-0.957,does not beat control
+dev,L2,ndcg10,units_all_nomod,plain: same-file - first stage,tc,sfscore|tc,a_none,351,5,0.843,-1.582,3.269,repository-clustered,4,-0.539,2.372,-0.051,1.765,does not beat control
+dev,L2,ndcg10,units_all_nomod,recency: prior - first stage,recency,recency,a_none,351,5,-1.081,-5.053,2.89,repository-clustered,4,-3.469,1.165,-2.496,0.18,does not beat control
+dev,L2,ndcg10,units_all_nomod,recency: prior - shuffled ages,recency,recency,recencyshuf,351,5,3.233,-0.303,6.77,repository-clustered,4,0.922,4.917,2.032,4.411,does not beat control
+dev,L2,ndcg10,units_all_nomod,recency: prior - same-file,recency,recency,sfscore|core,351,5,-2.188,-4.366,-0.01,repository-clustered,4,-3.436,-0.749,-3.67,-0.798,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - same-file,nc,stack10|nc,ref|samefile,351,5,0.004,-0.087,0.095,repository-clustered,4,-0.057,0.057,-0.113,0.136,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - topm swap,nc,stack10|nc,stacktopm10|nc,351,5,0.21,-0.055,0.475,repository-clustered,4,0.061,0.397,-0.03,0.447,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - random swap,nc,stack10|nc,stackrand10|nc,351,5,-0.046,-0.343,0.251,repository-clustered,4,-0.237,0.125,-0.223,0.161,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: topm swap - same-file,nc,stacktopm10|nc,ref|samefile,351,5,-0.206,-0.535,0.123,repository-clustered,4,-0.439,-0.026,-0.449,0.043,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - same-file,nctc,stack10|nctc,ref|samefile,351,5,0.004,-0.087,0.095,repository-clustered,4,-0.057,0.057,-0.113,0.136,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - topm swap,nctc,stack10|nctc,stacktopm10|nctc,351,5,0.21,-0.055,0.475,repository-clustered,4,0.061,0.397,-0.03,0.447,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - random swap,nctc,stack10|nctc,stackrand10|nctc,351,5,-0.04,-0.321,0.242,repository-clustered,4,-0.218,0.13,-0.212,0.167,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: topm swap - same-file,nctc,stacktopm10|nctc,ref|samefile,351,5,-0.206,-0.535,0.123,repository-clustered,4,-0.439,-0.026,-0.449,0.043,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - same-file,tc,stack10|tc,ref|samefile,351,5,-0.001,-0.137,0.135,repository-clustered,4,-0.093,0.075,-0.139,0.152,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - topm swap,tc,stack10|tc,stacktopm10|tc,351,5,0.206,-0.041,0.452,repository-clustered,4,0.066,0.373,-0.042,0.446,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: stacked - random swap,tc,stack10|tc,stackrand10|tc,351,5,-0.051,-0.301,0.199,repository-clustered,4,-0.214,0.088,-0.218,0.155,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=10: topm swap - same-file,tc,stacktopm10|tc,ref|samefile,351,5,-0.206,-0.535,0.123,repository-clustered,4,-0.439,-0.026,-0.449,0.043,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - same-file,nc,stack25|nc,ref|samefile,351,5,-0.149,-0.296,-0.001,repository-clustered,4,-0.226,-0.041,-0.336,0.019,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - topm swap,nc,stack25|nc,stacktopm25|nc,351,5,0.034,-0.516,0.583,repository-clustered,4,-0.341,0.266,-0.346,0.384,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - random swap,nc,stack25|nc,stackrand25|nc,351,5,-0.311,-1.086,0.464,repository-clustered,4,-0.828,0.089,-0.648,0.007,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: topm swap - same-file,nc,stacktopm25|nc,ref|samefile,351,5,-0.182,-0.676,0.311,repository-clustered,4,-0.416,0.149,-0.55,0.236,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - same-file,nctc,stack25|nctc,ref|samefile,351,5,-0.15,-0.299,-0.002,repository-clustered,4,-0.227,-0.043,-0.338,0.017,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - topm swap,nctc,stack25|nctc,stacktopm25|nctc,351,5,0.032,-0.516,0.58,repository-clustered,4,-0.341,0.266,-0.347,0.382,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - random swap,nctc,stack25|nctc,stackrand25|nctc,351,5,-0.317,-1.097,0.463,repository-clustered,4,-0.837,0.085,-0.652,-0.0,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: topm swap - same-file,nctc,stacktopm25|nctc,ref|samefile,351,5,-0.182,-0.676,0.311,repository-clustered,4,-0.416,0.149,-0.55,0.236,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - same-file,tc,stack25|tc,ref|samefile,351,5,-0.062,-0.208,0.085,repository-clustered,4,-0.148,0.029,-0.237,0.101,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - topm swap,tc,stack25|tc,stacktopm25|tc,351,5,0.121,-0.307,0.549,repository-clustered,4,-0.163,0.32,-0.293,0.476,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: stacked - random swap,tc,stack25|tc,stackrand25|tc,351,5,-0.231,-1.089,0.626,repository-clustered,4,-0.781,0.218,-0.585,0.071,does not beat control
+dev,L2,ndcg10,units_all_nomod,stacked N=25: topm swap - same-file,tc,stacktopm25|tc,ref|samefile,351,5,-0.182,-0.676,0.311,repository-clustered,4,-0.416,0.149,-0.55,0.236,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - same-file,core,graph|core,sfscore|core,353,5,0.969,-0.532,2.469,repository-clustered,4,0.07,1.947,0.21,1.815,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - topm,core,graph|core,topm|core,353,5,2.362,1.264,3.46,repository-clustered,4,1.737,3.144,1.408,3.333,beats control
+dev,L2,ndcg10,units_all,plain: graph - random same-file,core,graph|core,sfrand|core,353,5,1.708,-1.11,4.525,repository-clustered,4,-0.397,3.245,0.818,2.662,does not beat control
+dev,L2,ndcg10,units_all,plain: same-file - topm,core,sfscore|core,topm|core,353,5,1.393,-1.005,3.792,repository-clustered,4,-0.069,2.91,0.577,2.235,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - first stage,core,graph|core,a_none,353,5,2.407,1.021,3.793,repository-clustered,4,1.688,3.373,1.29,3.477,beats control
+dev,L2,ndcg10,units_all,plain: same-file - first stage,core,sfscore|core,a_none,353,5,1.438,-1.177,4.053,repository-clustered,4,-0.22,3.11,0.483,2.41,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - same-file,coretc,graph|coretc,sfscore|coretc,353,5,0.908,-0.502,2.317,repository-clustered,4,0.076,1.827,0.136,1.751,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - topm,coretc,graph|coretc,topm|coretc,353,5,2.34,1.209,3.471,repository-clustered,4,1.688,3.145,1.376,3.303,beats control
+dev,L2,ndcg10,units_all,plain: graph - random same-file,coretc,graph|coretc,sfrand|coretc,353,5,1.377,-1.041,3.794,repository-clustered,4,-0.321,2.626,0.469,2.297,does not beat control
+dev,L2,ndcg10,units_all,plain: same-file - topm,coretc,sfscore|coretc,topm|coretc,353,5,1.432,-0.944,3.808,repository-clustered,4,-0.031,2.951,0.619,2.278,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - first stage,coretc,graph|coretc,a_none,353,5,2.367,0.933,3.802,repository-clustered,4,1.634,3.389,1.255,3.425,beats control
+dev,L2,ndcg10,units_all,plain: same-file - first stage,coretc,sfscore|coretc,a_none,353,5,1.46,-1.105,4.024,repository-clustered,4,-0.165,3.11,0.503,2.442,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - same-file,tc,graph|tc,sfscore|tc,353,5,-3.172,-6.027,-0.318,repository-clustered,4,-4.604,-1.282,-4.03,-2.359,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - topm,tc,graph|tc,topm|tc,353,5,-2.425,-4.005,-0.844,repository-clustered,4,-3.321,-1.386,-3.224,-1.706,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - random same-file,tc,graph|tc,sfrand|tc,353,5,-2.3,-4.717,0.116,repository-clustered,4,-4.028,-1.084,-3.088,-1.552,does not beat control
+dev,L2,ndcg10,units_all,plain: same-file - topm,tc,sfscore|tc,topm|tc,353,5,0.748,-1.058,2.553,repository-clustered,4,-0.376,1.922,0.07,1.455,does not beat control
+dev,L2,ndcg10,units_all,plain: graph - first stage,tc,graph|tc,a_none,353,5,-2.246,-3.721,-0.77,repository-clustered,4,-3.122,-1.23,-3.203,-1.35,does not beat control
+dev,L2,ndcg10,units_all,plain: same-file - first stage,tc,sfscore|tc,a_none,353,5,0.927,-1.365,3.218,repository-clustered,4,-0.362,2.441,0.033,1.808,does not beat control
+dev,L2,ndcg10,units_all,recency: prior - first stage,recency,recency,a_none,353,5,-0.79,-4.771,3.19,repository-clustered,4,-3.451,1.249,-2.148,0.523,does not beat control
+dev,L2,ndcg10,units_all,recency: prior - shuffled ages,recency,recency,recencyshuf,353,5,3.815,-0.29,7.92,repository-clustered,4,1.092,5.711,2.555,5.095,does not beat control
+dev,L2,ndcg10,units_all,recency: prior - same-file,recency,recency,sfscore|core,353,5,-2.228,-4.965,0.508,repository-clustered,4,-4.431,-0.654,-3.795,-0.733,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - same-file,nc,stack10|nc,ref|samefile,353,5,0.004,-0.087,0.095,repository-clustered,4,-0.058,0.055,-0.111,0.137,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - topm swap,nc,stack10|nc,stacktopm10|nc,353,5,0.177,-0.039,0.392,repository-clustered,4,0.047,0.317,-0.039,0.412,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - random swap,nc,stack10|nc,stackrand10|nc,353,5,-0.022,-0.369,0.326,repository-clustered,4,-0.236,0.212,-0.214,0.234,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: topm swap - same-file,nc,stacktopm10|nc,ref|samefile,353,5,-0.173,-0.448,0.103,repository-clustered,4,-0.359,-0.012,-0.406,0.042,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - same-file,nctc,stack10|nctc,ref|samefile,353,5,0.004,-0.087,0.095,repository-clustered,4,-0.058,0.055,-0.111,0.137,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - topm swap,nctc,stack10|nctc,stacktopm10|nctc,353,5,0.177,-0.039,0.392,repository-clustered,4,0.047,0.317,-0.039,0.412,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - random swap,nctc,stack10|nctc,stackrand10|nctc,353,5,-0.015,-0.348,0.318,repository-clustered,4,-0.216,0.211,-0.203,0.238,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: topm swap - same-file,nctc,stacktopm10|nctc,ref|samefile,353,5,-0.173,-0.448,0.103,repository-clustered,4,-0.359,-0.012,-0.406,0.042,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - same-file,tc,stack10|tc,ref|samefile,353,5,-0.002,-0.136,0.133,repository-clustered,4,-0.094,0.073,-0.144,0.153,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - topm swap,tc,stack10|tc,stacktopm10|tc,353,5,0.171,-0.031,0.374,repository-clustered,4,0.052,0.309,-0.057,0.402,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: stacked - random swap,tc,stack10|tc,stackrand10|tc,353,5,-0.027,-0.328,0.274,repository-clustered,4,-0.216,0.172,-0.218,0.226,does not beat control
+dev,L2,ndcg10,units_all,stacked N=10: topm swap - same-file,tc,stacktopm10|tc,ref|samefile,353,5,-0.173,-0.448,0.103,repository-clustered,4,-0.359,-0.012,-0.406,0.042,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - same-file,nc,stack25|nc,ref|samefile,353,5,-0.201,-0.407,0.006,repository-clustered,4,-0.32,-0.053,-0.402,-0.023,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - topm swap,nc,stack25|nc,stacktopm25|nc,353,5,0.017,-0.524,0.559,repository-clustered,4,-0.352,0.263,-0.354,0.338,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - random swap,nc,stack25|nc,stackrand25|nc,353,5,-0.338,-1.101,0.426,repository-clustered,4,-0.841,0.065,-0.708,0.014,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: topm swap - same-file,nc,stacktopm25|nc,ref|samefile,353,5,-0.218,-0.784,0.348,repository-clustered,4,-0.537,0.149,-0.596,0.196,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - same-file,nctc,stack25|nctc,ref|samefile,353,5,-0.202,-0.41,0.005,repository-clustered,4,-0.323,-0.055,-0.403,-0.023,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - topm swap,nctc,stack25|nctc,stacktopm25|nctc,353,5,0.016,-0.524,0.556,repository-clustered,4,-0.352,0.261,-0.358,0.337,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - random swap,nctc,stack25|nctc,stackrand25|nctc,353,5,-0.343,-1.113,0.426,repository-clustered,4,-0.85,0.062,-0.71,0.01,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: topm swap - same-file,nctc,stacktopm25|nctc,ref|samefile,353,5,-0.218,-0.784,0.348,repository-clustered,4,-0.537,0.149,-0.596,0.196,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - same-file,tc,stack25|tc,ref|samefile,353,5,-0.114,-0.34,0.113,repository-clustered,4,-0.259,0.031,-0.301,0.066,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - topm swap,tc,stack25|tc,stacktopm25|tc,353,5,0.104,-0.322,0.531,repository-clustered,4,-0.179,0.317,-0.289,0.449,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: stacked - random swap,tc,stack25|tc,stackrand25|tc,353,5,-0.258,-1.112,0.597,repository-clustered,4,-0.797,0.204,-0.619,0.093,does not beat control
+dev,L2,ndcg10,units_all,stacked N=25: topm swap - same-file,tc,stacktopm25|tc,ref|samefile,353,5,-0.218,-0.784,0.348,repository-clustered,4,-0.537,0.149,-0.596,0.196,does not beat control
+dev,L3,recall100,units_all_nomod,plain: graph - same-file,core,graph|core,sfscore|core,155,2,-1.008,-2.97,0.955,query-level,154,-2.867,0.691,-2.939,0.798,does not beat control
+dev,L3,recall100,units_all_nomod,plain: graph - topm,core,graph|core,topm|core,155,2,10.132,8.013,12.252,query-level,154,8.892,11.266,8.036,12.244,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - random same-file,core,graph|core,sfrand|core,155,2,2.024,-0.066,4.114,query-level,154,0.152,3.734,-0.235,4.048,does not beat control
+dev,L3,recall100,units_all_nomod,plain: same-file - topm,core,sfscore|core,topm|core,155,2,11.14,8.743,13.537,query-level,154,10.574,11.759,8.833,13.603,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - first stage,core,graph|core,a_none,155,2,10.25,8.172,12.328,query-level,154,9.268,11.148,8.294,12.339,beats control
+dev,L3,recall100,units_all_nomod,plain: same-file - first stage,core,sfscore|core,a_none,155,2,11.258,8.934,13.582,query-level,154,10.457,12.135,9.004,13.6,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - same-file,coretc,graph|coretc,sfscore|coretc,155,2,-1.075,-3.024,0.873,query-level,154,-2.833,0.53,-2.957,0.703,does not beat control
+dev,L3,recall100,units_all_nomod,plain: graph - topm,coretc,graph|coretc,topm|coretc,155,2,10.123,8.008,12.238,query-level,154,8.927,11.216,8.033,12.234,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - random same-file,coretc,graph|coretc,sfrand|coretc,155,2,2.496,0.526,4.466,query-level,154,1.002,3.86,0.421,4.373,beats control
+dev,L3,recall100,units_all_nomod,plain: same-file - topm,coretc,sfscore|coretc,topm|coretc,155,2,11.199,8.806,13.592,query-level,154,10.686,11.759,8.921,13.674,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - first stage,coretc,graph|coretc,a_none,155,2,10.241,8.166,12.316,query-level,154,9.302,11.099,8.285,12.368,beats control
+dev,L3,recall100,units_all_nomod,plain: same-file - first stage,coretc,sfscore|coretc,a_none,155,2,11.317,8.997,13.636,query-level,154,10.569,12.135,9.074,13.625,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - same-file,tc,graph|tc,sfscore|tc,155,2,-1.552,-3.211,0.107,query-level,154,-3.137,-0.104,-3.279,-0.036,does not beat control
+dev,L3,recall100,units_all_nomod,plain: graph - topm,tc,graph|tc,topm|tc,155,2,0.25,-0.612,1.112,query-level,154,-0.303,0.755,-0.574,1.118,does not beat control
+dev,L3,recall100,units_all_nomod,plain: graph - random same-file,tc,graph|tc,sfrand|tc,155,2,-1.636,-3.105,-0.166,query-level,154,-3.046,-0.348,-3.148,-0.303,does not beat control
+dev,L3,recall100,units_all_nomod,plain: same-file - topm,tc,sfscore|tc,topm|tc,155,2,1.802,0.37,3.234,query-level,154,0.859,2.834,0.5,3.279,beats control
+dev,L3,recall100,units_all_nomod,plain: graph - first stage,tc,graph|tc,a_none,155,2,0.224,-0.707,1.155,query-level,154,-0.453,0.842,-0.649,1.174,does not beat control
+dev,L3,recall100,units_all_nomod,plain: same-file - first stage,tc,sfscore|tc,a_none,155,2,1.776,0.295,3.257,query-level,154,0.946,2.684,0.425,3.285,beats control
+dev,L3,recall100,units_all_nomod,recency: prior - first stage,recency,recency,a_none,155,2,3.58,2.009,5.15,query-level,154,3.065,4.05,2.099,5.129,beats control
+dev,L3,recall100,units_all_nomod,recency: prior - shuffled ages,recency,recency,recencyshuf,155,2,6.708,4.946,8.471,query-level,154,6.349,7.037,5.015,8.506,beats control
+dev,L3,recall100,units_all_nomod,recency: prior - same-file,recency,recency,sfscore|core,155,2,-7.678,-10.272,-5.085,query-level,154,-9.07,-6.407,-10.254,-5.172,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - same-file,nc,stack10|nc,ref|samefile,155,2,0.027,-0.811,0.865,query-level,154,-1.357,1.292,-0.772,0.803,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - topm swap,nc,stack10|nc,stacktopm10|nc,155,2,2.033,1.283,2.782,query-level,154,1.321,2.683,1.308,2.8,beats control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - random swap,nc,stack10|nc,stackrand10|nc,155,2,2.611,1.879,3.343,query-level,154,1.822,3.331,1.902,3.365,beats control
+dev,L3,recall100,units_all_nomod,stacked N=10: topm swap - same-file,nc,stacktopm10|nc,ref|samefile,155,2,-2.006,-2.756,-1.256,query-level,154,-2.678,-1.391,-2.769,-1.286,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - same-file,nctc,stack10|nctc,ref|samefile,155,2,-0.006,-0.822,0.81,query-level,154,-1.323,1.197,-0.778,0.746,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - topm swap,nctc,stack10|nctc,stacktopm10|nctc,155,2,2.0,1.267,2.733,query-level,154,1.355,2.588,1.291,2.759,beats control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - random swap,nctc,stack10|nctc,stackrand10|nctc,155,2,2.579,1.895,3.262,query-level,154,1.832,3.261,1.912,3.289,beats control
+dev,L3,recall100,units_all_nomod,stacked N=10: topm swap - same-file,nctc,stacktopm10|nctc,ref|samefile,155,2,-2.006,-2.756,-1.256,query-level,154,-2.678,-1.391,-2.769,-1.286,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - same-file,tc,stack10|tc,ref|samefile,155,2,-0.038,-0.625,0.548,query-level,154,-0.663,0.533,-0.62,0.528,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - topm swap,tc,stack10|tc,stacktopm10|tc,155,2,1.968,1.211,2.724,query-level,154,1.924,2.015,1.246,2.764,beats control
+dev,L3,recall100,units_all_nomod,stacked N=10: stacked - random swap,tc,stack10|tc,stackrand10|tc,155,2,2.574,1.841,3.306,query-level,154,2.505,2.637,1.87,3.315,beats control
+dev,L3,recall100,units_all_nomod,stacked N=10: topm swap - same-file,tc,stacktopm10|tc,ref|samefile,155,2,-2.006,-2.756,-1.256,query-level,154,-2.678,-1.391,-2.769,-1.286,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - same-file,nc,stack25|nc,ref|samefile,155,2,-2.91,-4.651,-1.168,query-level,154,-5.485,-0.557,-4.693,-1.316,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - topm swap,nc,stack25|nc,stacktopm25|nc,155,2,3.51,2.221,4.798,query-level,154,1.859,5.017,2.318,4.76,beats control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - random swap,nc,stack25|nc,stackrand25|nc,155,2,5.213,4.001,6.424,query-level,154,3.775,6.527,4.079,6.376,beats control
+dev,L3,recall100,units_all_nomod,stacked N=25: topm swap - same-file,nc,stacktopm25|nc,ref|samefile,155,2,-6.419,-8.087,-4.752,query-level,154,-7.345,-5.574,-8.158,-4.828,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - same-file,nctc,stack25|nctc,ref|samefile,155,2,-2.893,-4.632,-1.154,query-level,154,-5.45,-0.557,-4.681,-1.292,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - topm swap,nctc,stack25|nctc,stacktopm25|nctc,155,2,3.526,2.239,4.814,query-level,154,1.894,5.017,2.327,4.772,beats control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - random swap,nctc,stack25|nctc,stackrand25|nctc,155,2,5.397,4.184,6.61,query-level,154,3.886,6.778,4.244,6.58,beats control
+dev,L3,recall100,units_all_nomod,stacked N=25: topm swap - same-file,nctc,stacktopm25|nctc,ref|samefile,155,2,-6.419,-8.087,-4.752,query-level,154,-7.345,-5.574,-8.158,-4.828,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - same-file,tc,stack25|tc,ref|samefile,155,2,-1.242,-2.459,-0.025,query-level,154,-2.727,0.115,-2.551,-0.139,does not beat control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - topm swap,tc,stack25|tc,stacktopm25|tc,155,2,5.177,3.727,6.628,query-level,154,4.617,5.689,3.794,6.65,beats control
+dev,L3,recall100,units_all_nomod,stacked N=25: stacked - random swap,tc,stack25|tc,stackrand25|tc,155,2,7.002,5.636,8.369,query-level,154,6.626,7.346,5.692,8.41,beats control
+dev,L3,recall100,units_all_nomod,stacked N=25: topm swap - same-file,tc,stacktopm25|tc,ref|samefile,155,2,-6.419,-8.087,-4.752,query-level,154,-7.345,-5.574,-8.158,-4.828,does not beat control
+dev,L3,recall100,units_all,plain: graph - same-file,core,graph|core,sfscore|core,155,2,-0.193,-2.059,1.672,query-level,154,-1.96,1.421,-2.011,1.53,does not beat control
+dev,L3,recall100,units_all,plain: graph - topm,core,graph|core,topm|core,155,2,10.719,8.614,12.823,query-level,154,9.763,11.591,8.645,12.838,beats control
+dev,L3,recall100,units_all,plain: graph - random same-file,core,graph|core,sfrand|core,155,2,3.063,1.054,5.073,query-level,154,1.037,4.915,0.859,5.01,beats control
+dev,L3,recall100,units_all,plain: same-file - topm,core,sfscore|core,topm|core,155,2,10.912,8.637,13.186,query-level,154,10.17,11.724,8.734,13.229,beats control
+dev,L3,recall100,units_all,plain: graph - first stage,core,graph|core,a_none,155,2,10.827,8.785,12.868,query-level,154,10.2,11.399,8.818,12.838,beats control
+dev,L3,recall100,units_all,plain: same-file - first stage,core,sfscore|core,a_none,155,2,11.02,8.84,13.2,query-level,154,9.978,12.161,8.936,13.243,beats control
+dev,L3,recall100,units_all,plain: graph - same-file,coretc,graph|coretc,sfscore|coretc,155,2,-0.251,-2.105,1.603,query-level,154,-1.928,1.282,-2.076,1.45,does not beat control
+dev,L3,recall100,units_all,plain: graph - topm,coretc,graph|coretc,topm|coretc,155,2,10.711,8.611,12.811,query-level,154,9.796,11.547,8.638,12.838,beats control
+dev,L3,recall100,units_all,plain: graph - random same-file,coretc,graph|coretc,sfrand|coretc,155,2,3.532,1.615,5.449,query-level,154,2.014,4.919,1.524,5.367,beats control
+dev,L3,recall100,units_all,plain: same-file - topm,coretc,sfscore|coretc,topm|coretc,155,2,10.962,8.691,13.232,query-level,154,10.265,11.724,8.812,13.255,beats control
+dev,L3,recall100,units_all,plain: graph - first stage,coretc,graph|coretc,a_none,155,2,10.819,8.781,12.857,query-level,154,10.232,11.355,8.815,12.851,beats control
+dev,L3,recall100,units_all,plain: same-file - first stage,coretc,sfscore|coretc,a_none,155,2,11.07,8.893,13.246,query-level,154,10.073,12.161,9.003,13.285,beats control
+dev,L3,recall100,units_all,plain: graph - same-file,tc,graph|tc,sfscore|tc,155,2,-1.623,-3.234,-0.011,query-level,154,-3.33,-0.063,-3.186,-0.176,does not beat control
+dev,L3,recall100,units_all,plain: graph - topm,tc,graph|tc,topm|tc,155,2,0.303,-0.509,1.115,query-level,154,-0.124,0.693,-0.466,1.115,does not beat control
+dev,L3,recall100,units_all,plain: graph - random same-file,tc,graph|tc,sfrand|tc,155,2,-1.596,-2.998,-0.195,query-level,154,-2.985,-0.328,-2.976,-0.332,does not beat control
+dev,L3,recall100,units_all,plain: same-file - topm,tc,sfscore|tc,topm|tc,155,2,1.926,0.541,3.31,query-level,154,0.755,3.207,0.72,3.36,beats control
+dev,L3,recall100,units_all,plain: graph - first stage,tc,graph|tc,a_none,155,2,0.277,-0.596,1.149,query-level,154,-0.27,0.776,-0.523,1.179,does not beat control
+dev,L3,recall100,units_all,plain: same-file - first stage,tc,sfscore|tc,a_none,155,2,1.899,0.471,3.327,query-level,154,0.839,3.06,0.65,3.327,beats control
+dev,L3,recall100,units_all,recency: prior - first stage,recency,recency,a_none,155,2,3.205,1.723,4.687,query-level,154,2.661,3.702,1.79,4.66,beats control
+dev,L3,recall100,units_all,recency: prior - shuffled ages,recency,recency,recencyshuf,155,2,6.365,4.61,8.12,query-level,154,5.873,6.814,4.691,8.144,beats control
+dev,L3,recall100,units_all,recency: prior - same-file,recency,recency,sfscore|core,155,2,-7.815,-10.356,-5.273,query-level,154,-9.5,-6.276,-10.379,-5.314,does not beat control
+dev,L3,recall100,units_all,stacked N=10: stacked - same-file,nc,stack10|nc,ref|samefile,155,2,0.148,-0.627,0.924,query-level,154,-1.25,1.426,-0.591,0.869,does not beat control
+dev,L3,recall100,units_all,stacked N=10: stacked - topm swap,nc,stack10|nc,stacktopm10|nc,155,2,1.954,1.229,2.678,query-level,154,1.194,2.648,1.266,2.702,beats control
+dev,L3,recall100,units_all,stacked N=10: stacked - random swap,nc,stack10|nc,stackrand10|nc,155,2,2.617,1.923,3.312,query-level,154,1.714,3.442,1.958,3.348,beats control
+dev,L3,recall100,units_all,stacked N=10: topm swap - same-file,nc,stacktopm10|nc,ref|samefile,155,2,-1.805,-2.521,-1.089,query-level,154,-2.443,-1.222,-2.545,-1.121,does not beat control
+dev,L3,recall100,units_all,stacked N=10: stacked - same-file,nctc,stack10|nctc,ref|samefile,155,2,0.118,-0.637,0.872,query-level,154,-1.218,1.338,-0.602,0.818,does not beat control
+dev,L3,recall100,units_all,stacked N=10: stacked - topm swap,nctc,stack10|nctc,stacktopm10|nctc,155,2,1.923,1.213,2.632,query-level,154,1.226,2.56,1.246,2.657,beats control
+dev,L3,recall100,units_all,stacked N=10: stacked - random swap,nctc,stack10|nctc,stackrand10|nctc,155,2,2.557,1.904,3.21,query-level,154,1.717,3.324,1.925,3.233,beats control
+dev,L3,recall100,units_all,stacked N=10: topm swap - same-file,nctc,stacktopm10|nctc,ref|samefile,155,2,-1.805,-2.521,-1.089,query-level,154,-2.443,-1.222,-2.545,-1.121,does not beat control
+dev,L3,recall100,units_all,stacked N=10: stacked - same-file,tc,stack10|tc,ref|samefile,155,2,0.046,-0.524,0.615,query-level,154,-0.498,0.543,-0.507,0.608,does not beat control
+dev,L3,recall100,units_all,stacked N=10: stacked - topm swap,tc,stack10|tc,stacktopm10|tc,155,2,1.851,1.113,2.588,query-level,154,1.765,1.945,1.146,2.641,beats control
+dev,L3,recall100,units_all,stacked N=10: stacked - random swap,tc,stack10|tc,stackrand10|tc,155,2,2.514,1.8,3.228,query-level,154,2.452,2.571,1.832,3.258,beats control
+dev,L3,recall100,units_all,stacked N=10: topm swap - same-file,tc,stacktopm10|tc,ref|samefile,155,2,-1.805,-2.521,-1.089,query-level,154,-2.443,-1.222,-2.545,-1.121,does not beat control
+dev,L3,recall100,units_all,stacked N=25: stacked - same-file,nc,stack25|nc,ref|samefile,155,2,-2.515,-4.104,-0.927,query-level,154,-5.11,-0.145,-4.067,-1.04,does not beat control
+dev,L3,recall100,units_all,stacked N=25: stacked - topm swap,nc,stack25|nc,stacktopm25|nc,155,2,3.495,2.265,4.725,query-level,154,1.749,5.091,2.37,4.713,beats control
+dev,L3,recall100,units_all,stacked N=25: stacked - random swap,nc,stack25|nc,stackrand25|nc,155,2,5.23,4.077,6.382,query-level,154,3.581,6.736,4.169,6.365,beats control
+dev,L3,recall100,units_all,stacked N=25: topm swap - same-file,nc,stacktopm25|nc,ref|samefile,155,2,-6.011,-7.553,-4.468,query-level,154,-6.859,-5.236,-7.597,-4.539,does not beat control
+dev,L3,recall100,units_all,stacked N=25: stacked - same-file,nctc,stack25|nctc,ref|samefile,155,2,-2.5,-4.087,-0.913,query-level,154,-5.078,-0.145,-4.052,-1.037,does not beat control
+dev,L3,recall100,units_all,stacked N=25: stacked - topm swap,nctc,stack25|nctc,stacktopm25|nctc,155,2,3.511,2.281,4.741,query-level,154,1.781,5.091,2.382,4.738,beats control
+dev,L3,recall100,units_all,stacked N=25: stacked - random swap,nctc,stack25|nctc,stackrand25|nctc,155,2,5.384,4.231,6.537,query-level,154,3.686,6.935,4.311,6.515,beats control
+dev,L3,recall100,units_all,stacked N=25: topm swap - same-file,nctc,stacktopm25|nctc,ref|samefile,155,2,-6.011,-7.553,-4.468,query-level,154,-6.859,-5.236,-7.597,-4.539,does not beat control
+dev,L3,recall100,units_all,stacked N=25: stacked - same-file,tc,stack25|tc,ref|samefile,155,2,-1.034,-2.149,0.081,query-level,154,-2.347,0.165,-2.228,-0.005,does not beat control
+dev,L3,recall100,units_all,stacked N=25: stacked - topm swap,tc,stack25|tc,stacktopm25|tc,155,2,4.977,3.619,6.334,query-level,154,4.512,5.401,3.683,6.366,beats control
+dev,L3,recall100,units_all,stacked N=25: stacked - random swap,tc,stack25|tc,stackrand25|tc,155,2,6.808,5.507,8.108,query-level,154,6.402,7.179,5.555,8.15,beats control
+dev,L3,recall100,units_all,stacked N=25: topm swap - same-file,tc,stacktopm25|tc,ref|samefile,155,2,-6.011,-7.553,-4.468,query-level,154,-6.859,-5.236,-7.597,-4.539,does not beat control

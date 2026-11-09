@@ -1,0 +1,30 @@
+experiment_id: E-A-OWNER-ITEMS items 1 and 2 (stacked expansion against the same-file control; test and configure edges on L3)
+stage: stated cell on dev only (no sweep, no test instance, nothing chosen)
+status: exploratory pilot
+date: '2026-11-09'
+seed: 0
+roles:
+- dev
+note: >-
+  Stated before any score of this configuration was computed. First stage and cell are those of
+  E-GRAPH-ROLE (s1_graph_role_cre: RRF(BM25, coderankembed__t1024) k 100, score-level alpha 0.4, C 5, gamma 0.7, 2 hops, weight
+  0.5, cap 50, 3 draws); nothing is tuned. Plain family sets core, coretc (core plus tests and
+  configures) and tc, each against same-file by score, the next best units (topm) and random
+  same-file units, size-matched. Stacked lists at the budget M of the core expansion: the last N
+  (10, 25) of the same-file list replaced by the best neighbours over import/invoke/inherit (nc),
+  those plus tests/configures (nctc) or tests/configures (tc), against the unreplaced same-file
+  list and against the same N positions filled by the next best units or by random units. Decision
+  interval: cluster-robust t (D136), bootstrap beside; a variant that does not beat its same-file
+  control is reported as not a graph gain. Regression control: graph|core, sfscore|core, topm|core
+  and sfrand|core must equal the stored S1 rows of the same instances.
+graph:
+  variant: coderankembed__t1024
+  k: 100
+  alpha: 0.4
+  seeds: [5]
+  gammas: [0.7]
+  hops: [2]
+  weights: [0.5]
+  cap: 50
+  draws: 3
+  reach_top: [5, 100]
