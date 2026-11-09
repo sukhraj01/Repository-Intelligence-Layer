@@ -77,3 +77,15 @@ def test_paired_deltas_and_listing(tmp_path: Path) -> None:
             "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
         }
     ]
+
+
+def test_load_reported_requires_twelve_cells(tmp_path: Path) -> None:
+    import json
+
+    path = tmp_path / "summary.json"
+    cells = [{**_cell(0.2, 0.1, 0.3), "metric": f"m{i}"} for i in range(12)]
+    path.write_text(json.dumps({"reported_cli_summary": {"metrics": cells}}))
+    assert len(cmp.load_reported(path)) == 12
+    path.write_text(json.dumps({"reported_cli_summary": {"metrics": cells[:11]}}))
+    with pytest.raises(ValueError):
+        cmp.load_reported(path)
