@@ -281,18 +281,19 @@ def write_cache(path: str, examples: Iterable[PoolExample]) -> int:
 
 
 def read_cache(path: str) -> list[PoolExample]:
-    """Examples back from :func:`write_cache`, in file order."""
-    return _read_cache(path, None)
+    """Examples back from :func:`write_cache`, in file order.
 
-
-def read_cache_shared(path: str) -> list[PoolExample]:
-    """The same examples as :func:`read_cache`, with one copy of each distinct id and text.
-
-    A repository's snapshot repeats most of its functions from one pull request to the next, so
-    the plain reader holds the same text many times. Every value compares equal to the plain
-    reader's; only the number of string objects in memory differs.
+    One copy of each distinct id and text is kept: a repository's snapshot repeats most of its
+    functions from one pull request to the next, so the plain reader (:func:`read_cache_plain`)
+    holds the same text many times. Every value compares equal to the plain reader's; only the
+    number of string objects in memory differs (``docs/experiments/B.md`` E-RQ2-FULL-PREP).
     """
     return _read_cache(path, {})
+
+
+def read_cache_plain(path: str) -> list[PoolExample]:
+    """:func:`read_cache` without sharing equal strings (kept to measure the memory it saves)."""
+    return _read_cache(path, None)
 
 
 def _read_cache(path: str, pool: dict[str, str] | None) -> list[PoolExample]:

@@ -10,12 +10,16 @@ Subcommands (logic in ``ril/``; E-RQ2-FULL-PREP):
                                       materialised directories against the store (small files, rows)
   check RUN --held-out H --rename-cache R --readings ...
                                       counts, held-out and drop-list checks over a run's outputs
-  cache-memory CACHE --variant plain|shared
+  cache-memory CACHE --variant plain|shared|equal
                                       resident memory after reading a whole example cache
+  link RUN WORK [--reading R] [--allow-trial]
+                                      links a run's cache, features, summary into a work dir
+  progress STATE STORE                yield from the state log and the store's growth by quarter
   compare A B                         two output directories, byte for byte (timing fields aside)
   pilot-check RUN PILOT_RANKS PILOT_FEATURES --reading R
                                       ranks and features of the directories shared with the pilot
   project RUN STATE --full-state STATE --full-directories N
+          [--probe-run RUN2 --trial-store S --full-store S]
                                       the run's stage costs projected to the whole store
 Every subcommand prints a JSON document.
 """
@@ -91,6 +95,32 @@ def cmd_cache_memory(a: argparse.Namespace) -> dict[str, object]:
     return fr.cache_memory(a.cache, a.variant)
 
 
+def cmd_link(a: argparse.Namespace) -> dict[str, object]:
+    return fr.link_outputs(a.run, a.work, a.reading, allow_trial=a.allow_trial)
+
+
+def cmd_progress(a: argparse.Namespace) -> dict[str, object]:
+    from ril.data_mining import state_yield
+
+    rows = fp.read_state_rows(a.state)
+    cas_root = Path(a.store) / "cas"
+    sizes = {
+        d.name: sum(f.stat().st_size for f in d.iterdir() if f.is_file())
+        for d in cas_root.iterdir()
+        if d.is_dir()
+    }
+    return {
+        "state_sha256": fp.sha256_file(a.state),
+        "yield": state_yield.yield_report(rows, target_attempted=len(rows)),
+        "store_bytes": {
+            "cas": sum(sizes.values()),
+            "pr": fp.tree_size(str(Path(a.store) / "pr")),
+            "listing": fp.tree_size(str(Path(a.store) / "listing")),
+        },
+        "quarters": fp.quarter_table(rows, sizes),
+    }
+
+
 def cmd_compare(a: argparse.Namespace) -> dict[str, object]:
     return fp.compare_outputs(a.a, a.b)
 
@@ -118,12 +148,42 @@ def cmd_project(a: argparse.Namespace) -> dict[str, object]:
         if r.get("status") == "mined" and fp.dir_name_of_key(str(r["key"])) in used
     ]
     full_units = fp.corpus_units_of_mined(full_state)
+    extra: dict[str, object] = {}
+    if a.probe_run:
+        probe_names = fp.read_names(f"{a.probe_run}/names_kept.txt")
+        probe_set = set(probe_names)
+        probe_units = [
+            float((r.get("counters") or {}).get("corpus_units", 0))
+            for r in full_state
+            if r.get("status") == "mined" and fp.dir_name_of_key(str(r["key"])) in probe_set
+        ]
+        kept = fp.read_names(f"{a.run}/names_kept.txt")
+        extra = {
+            "probe_rows": [
+                json.loads(x)
+                for x in Path(f"{a.probe_run}/stages.jsonl").read_text().splitlines()
+                if x.strip()
+            ],
+            "trial_x": (fp.cas_megabytes(a.trial_store, kept), sum(trial_units) / 1e6),
+            "probe_x": (fp.cas_megabytes(a.full_store, probe_names), sum(probe_units) / 1e6),
+            "full_x": (
+                fp.cas_megabytes(a.full_store, fp.select_closed(a.full_state, a.full_store).names),
+                sum(full_units) / 1e6,
+            ),
+        }
     return fp.project_chain(
         rows,
         trial_directories=int(sel["directories"]),
         full_directories=a.full_directories,
         trial_units=trial_units,
         full_units=full_units,
+        exclude_steps=tuple(
+            f"{sep}{r}{tail}"
+            for r in ("pool_aligned", "unrestricted")
+            if r != a.reading
+            for sep, tail in (("_", ""), ("_", "_again"))
+        ),
+        **extra,  # type: ignore[arg-type]
     )
 
 
@@ -163,7 +223,15 @@ def main(argv: list[str] | None = None) -> int:
     ck.add_argument("--readings", nargs="+", required=True)
     cm = sub.add_parser("cache-memory")
     cm.add_argument("cache")
-    cm.add_argument("--variant", choices=["plain", "shared"], required=True)
+    cm.add_argument("--variant", choices=["plain", "shared", "equal"], required=True)
+    ln = sub.add_parser("link")
+    ln.add_argument("run")
+    ln.add_argument("work")
+    ln.add_argument("--reading", default="non_test")
+    ln.add_argument("--allow-trial", action="store_true")
+    pg = sub.add_parser("progress")
+    pg.add_argument("state")
+    pg.add_argument("store")
     c = sub.add_parser("compare")
     c.add_argument("a")
     c.add_argument("b")
@@ -177,6 +245,10 @@ def main(argv: list[str] | None = None) -> int:
     j.add_argument("state", help="state.jsonl of the trial store")
     j.add_argument("--full-state", required=True)
     j.add_argument("--full-directories", type=int, required=True)
+    j.add_argument("--reading", default="non_test", help="the reading whose steps are costed")
+    j.add_argument("--probe-run", help="a run over a few large repositories (two-factor reading)")
+    j.add_argument("--trial-store")
+    j.add_argument("--full-store")
     a = p.parse_args(argv)
     if a.cmd == "verify-snapshot":
         out = fp.verify_snapshot(a.dest)
@@ -184,6 +256,8 @@ def main(argv: list[str] | None = None) -> int:
         out = {
             "verify-materialised": cmd_verify_materialised,
             "check": cmd_check,
+            "link": cmd_link,
+            "progress": cmd_progress,
             "cache-memory": cmd_cache_memory,
             "snapshot": cmd_snapshot,
             "run": cmd_run,

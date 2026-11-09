@@ -1,0 +1,116 @@
+{
+ "equality_plain_against_shared": [
+  {
+   "cache_bytes": 238201901,
+   "equal": true,
+   "examples": 201,
+   "variant": "equal"
+  },
+  {
+   "cache_bytes": 60318239,
+   "equal": true,
+   "examples": 188,
+   "variant": "equal"
+  },
+  {
+   "cache_bytes": 46247369,
+   "equal": true,
+   "examples": 159,
+   "variant": "equal"
+  }
+ ],
+ "later_trial_pair": [
+  {
+   "cache_bytes": 60318239,
+   "candidate_text_bytes": 339967563,
+   "examples": 188,
+   "peak_rss_kb": 352332,
+   "seconds": 3.71,
+   "variant": "shared"
+  },
+  {
+   "cache_bytes": 60318239,
+   "candidate_text_bytes": 339967563,
+   "examples": 188,
+   "peak_rss_kb": 476496,
+   "seconds": 3.37,
+   "variant": "plain"
+  }
+ ],
+ "memory": [
+  {
+   "cache": "trial200_r1 non_test cache (188 examples, 137 repositories)",
+   "rows": [
+    {
+     "cache_bytes": 60318239,
+     "candidate_text_bytes": 339967563,
+     "examples": 188,
+     "peak_rss_kb": 476172,
+     "seconds": 3.87,
+     "variant": "plain"
+    },
+    {
+     "cache_bytes": 60318239,
+     "candidate_text_bytes": 339967563,
+     "examples": 188,
+     "peak_rss_kb": 352560,
+     "seconds": 3.89,
+     "variant": "shared"
+    },
+    {
+     "cache_bytes": 60318239,
+     "candidate_text_bytes": 339967563,
+     "examples": 188,
+     "peak_rss_kb": 476084,
+     "seconds": 3.47,
+     "variant": "plain"
+    },
+    {
+     "cache_bytes": 60318239,
+     "candidate_text_bytes": 339967563,
+     "examples": 188,
+     "peak_rss_kb": 352268,
+     "seconds": 3.83,
+     "variant": "shared"
+    }
+   ]
+  },
+  {
+   "cache": "probe_big non_test cache (201 examples, 3 repositories)",
+   "rows": [
+    {
+     "cache_bytes": 238201901,
+     "candidate_text_bytes": 1280018522,
+     "examples": 201,
+     "peak_rss_kb": 1712700,
+     "seconds": 14.49,
+     "variant": "plain"
+    },
+    {
+     "cache_bytes": 238201901,
+     "candidate_text_bytes": 1280018522,
+     "examples": 201,
+     "peak_rss_kb": 295224,
+     "seconds": 15.03,
+     "variant": "shared"
+    },
+    {
+     "cache_bytes": 238201901,
+     "candidate_text_bytes": 1280018522,
+     "examples": 201,
+     "peak_rss_kb": 1712420,
+     "seconds": 13.23,
+     "variant": "plain"
+    },
+    {
+     "cache_bytes": 238201901,
+     "candidate_text_bytes": 1280018522,
+     "examples": 201,
+     "peak_rss_kb": 295056,
+     "seconds": 14.9,
+     "variant": "shared"
+    }
+   ]
+  }
+ ]
+}

@@ -215,3 +215,19 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-09,A,66036,RQ2F,"plan-only validation of the 36 configurations on the merged final code: plan, evaluation sets, preflight (real and rehearsal), submit refusals (CPU)",u22,4,0,00:00:47,0.0,COMPLETED
 2026-11-09,A,66037,RQ2F,"torch-marked tests and leakage tests on the merged final code: 41 passed",u22,2,0,00:00:19,0.0,COMPLETED
 2026-11-09,C,66038,RQ2F,"plan-only validation on the merged final code (CPU, separate from the prep allocation)",u22,4,0,00:00:55,0.0,COMPLETED
+2026-11-09,C,65954,RQ2P,"snapshot of the first 200 final mined directories into a trial store (405 MB, 1,236 files, every file re-hashed)",u22,2,0,00:00:21,0.0,COMPLETED
+2026-11-09,C,65955,RQ2P,"first trial run of the chain on the snapshot (both readings, 3 audit shards); per-step peak memory floored by the runner's own memory, superseded by 66000",u22,6,0,00:11:27,0.0,COMPLETED (superseded)
+2026-11-09,C,65956,RQ2P,"second run of the first version, cancelled 40 s after it started when the memory measurement was found contaminated",u22,6,0,00:00:40,0.0,CANCELLED
+2026-11-09,C,66000,RQ2P,"trial run r1 of the chain on the 200-directory snapshot (both readings, 3 audit shards, 12 GB asked)",u22,6,0,00:10:49,0.0,COMPLETED
+2026-11-09,C,66001,RQ2P,"trial run r2, a second run of the same stages for the byte comparison with r1",u22,6,0,00:11:00,0.0,COMPLETED (outputs equal to r1)
+2026-11-09,C,66002,RQ2P,"overlap stage with one shard, to compare the merged records of three shards with an unsharded audit",u22,6,0,00:06:14,0.0,COMPLETED (records equal)
+2026-11-09,C,66016,RQ2P,"resident memory after reading the trial cache, earlier reader against shared strings",u22,4,0,00:00:17,0.0,COMPLETED
+2026-11-09,C,66017,RQ2P,"pilot comparison of ranks and feature rows (26 directories shared with the pilot)",u22,2,0,00:00:01,0.0,COMPLETED (26 of 26 equal)
+2026-11-09,C,66022,RQ2P,"probe over three large repositories asked for 30 GB: allocation needs 11 CPUs against the limit of 10, never started",u22,0,0,00:00:00,0.0,CANCELLED (never started)
+2026-11-09,C,66040,RQ2P,"hashes of the archives, listings and sample files of r1 and r2 on the node that holds their scratch",u22,2,0,00:00:01,0.0,COMPLETED (equal)
+2026-11-09,C,66044,RQ2P,"scale probe: the chain on 210 directories of airflow, openmetadata and azure-cli (201 non_test), 14 GB asked",u22,6,0,00:13:09,0.0,COMPLETED
+2026-11-09,C,66054,RQ2P,"resident memory after reading the probe cache, earlier reader against shared strings (two repeats each)",u22,4,0,00:01:02,0.0,COMPLETED
+2026-11-09,C,66057,RQ2P,"trial run r3 on the final code (adds the launch summary file)",u22,6,0,00:10:52,0.0,COMPLETED
+2026-11-09,C,66058,RQ2P,"equality of the shared-strings reader with the earlier reader on three real caches",u22,4,0,00:00:51,0.0,COMPLETED (3 of 3 equal)
+2026-11-09,C,66081,RQ2P,"pilot comparison of ranks and feature rows on the probe (93 directories shared with the pilot)",u22,2,0,00:00:00,0.0,COMPLETED (93 of 93 equal)
+2026-11-09,C,66093,RQ2P,"list of the node-local scratch directories the trial runs left on gnode006 (sizes for the cleanup script)",u22,2,0,00:00:01,0.0,COMPLETED

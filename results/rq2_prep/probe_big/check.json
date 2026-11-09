@@ -1,0 +1,15 @@
+{
+ "non_test": {
+  "cache_candidates": 1527531,
+  "cache_examples": 201,
+  "cache_positives": 810,
+  "cache_repositories": 3,
+  "directories_in_reading": 201,
+  "dropped_in_cache": 0,
+  "dropped_in_manifest": 0,
+  "held_out_in_cache": 0,
+  "held_out_in_manifest": 0,
+  "manifest_names": 201,
+  "positives_in_reading": 810
+ }
+}

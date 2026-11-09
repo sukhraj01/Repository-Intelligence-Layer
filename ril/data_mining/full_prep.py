@@ -358,14 +358,15 @@ def compare_outputs(
     b_dir: str,
     *,
     suffixes: Sequence[str] = (".jsonl", ".json", ".csv", ".txt", ".tsv", ".gz", ".zip"),
-    skip: Sequence[str] = ("stages.jsonl", "run_env.json"),
+    skip: Sequence[str] = ("stages.jsonl", "run_env.json", "env_"),
     timing_keys: Sequence[str] = TIMING_KEYS,
 ) -> dict[str, Any]:
     """Compare the outputs of two runs of the same stages file by file.
 
     Equal means byte-equal, except that rank rows are compared without their timing fields and
-    gzip files by their decompressed bytes (a gzip header holds a time). Files named in ``skip``
-    (the stage table and the environment record) differ by design and are not compared; a
+    gzip files by their decompressed bytes (a gzip header holds a time). Files whose names start
+    with an entry of ``skip`` (the stage table and the environment records, which hold job ids and
+    timings) differ by design and are not compared; a
     ``.json`` that holds a ``seconds`` key at top level is compared without it.
     """
 
@@ -373,7 +374,7 @@ def compare_outputs(
         found: dict[str, str] = {}
         for dirpath, _, fnames in os.walk(root):
             for f in fnames:
-                if f in skip or not f.endswith(tuple(suffixes)):
+                if f.startswith(tuple(skip)) or not f.endswith(tuple(suffixes)):
                     continue
                 p = os.path.join(dirpath, f)
                 found[os.path.relpath(p, root)] = p
@@ -482,6 +483,81 @@ def mapping_sum(rows: Iterable[Mapping[str, Any]], key: str) -> float:
     return float(sum(float(r.get(key, 0) or 0) for r in rows))
 
 
+def tree_size(path: str) -> int:
+    """Total bytes of the files under ``path``."""
+    return sum(os.path.getsize(os.path.join(d, f)) for d, _, files in os.walk(path) for f in files)
+
+
+def cas_megabytes(store_root: str, names: Sequence[str]) -> float:
+    """Megabytes of distinct-row storage (``cas/<repo>``) behind the named directories."""
+    repos: set[str] = set()
+    for name in names:
+        repos.add(cas.repo_dir_name(cas._repo_of(os.path.join(store_root, "pr", name))))
+    total = 0
+    for r in repos:
+        base = os.path.join(store_root, "cas", r)
+        total += sum(os.path.getsize(os.path.join(base, f)) for f in os.listdir(base))
+    return total / 1e6
+
+
+def fit_two_factor(
+    trial: tuple[float, float, float], probe: tuple[float, float, float]
+) -> tuple[float, float] | None:
+    """``(a, b)`` with ``seconds = a * distinct_row_MB + b * million_slots`` through two runs.
+
+    Each run is ``(seconds, distinct_row_MB, million_slots)``. Two points fix two coefficients and
+    leave no degrees of freedom: the result is a reading, not an estimate with an interval. It
+    returns ``None`` when the runs are collinear or a coefficient comes out negative.
+    """
+    (t1, c1, s1), (t2, c2, s2) = trial, probe
+    det = c1 * s2 - c2 * s1
+    if abs(det) < 1e-9:
+        return None
+    a = (t1 * s2 - t2 * s1) / det
+    b = (c1 * t2 - c2 * t1) / det
+    return (a, b) if a >= 0 and b >= 0 else None
+
+
+def quarter_table(
+    rows: Sequence[Mapping[str, Any]], cas_bytes: Mapping[str, int], quarters: int = 4
+) -> list[dict[str, Any]]:
+    """The store's growth by quarter of the state log: rows, mined, size of the snapshots, new rows.
+
+    ``cas_bytes`` maps a repository's directory name (``owner__name``) to the bytes of its distinct
+    rows; a repository is charged to the quarter in which its first mined pull request appears, so
+    the column shows how fast the distinct-row store grows against the number of directories.
+    """
+    n = len(rows)
+    seen: set[str] = set()
+    out: list[dict[str, Any]] = []
+    for q in range(quarters):
+        chunk = rows[q * n // quarters : (q + 1) * n // quarters]
+        mined = [r for r in chunk if r.get("status") == "mined"]
+        units = [float((r.get("counters") or {}).get("corpus_units", 0)) for r in mined]
+        pos = [float((r.get("counters") or {}).get("positives", 0)) for r in mined]
+        new: list[str] = []
+        for r in mined:
+            repo = cas.repo_dir_name(str(r["key"]).partition("#")[0].lower())
+            if repo not in seen:
+                seen.add(repo)
+                new.append(repo)
+        added = sum(int(cas_bytes.get(x, 0)) for x in new)
+        out.append(
+            {
+                "quarter": q + 1,
+                "rows": len(chunk),
+                "mined": len(mined),
+                "quarantined": sum(1 for r in chunk if r.get("status") == "quarantined"),
+                "mean_corpus_units": round(sum(units) / len(units), 1) if units else 0.0,
+                "positives_per_mined": round(sum(pos) / len(pos), 2) if pos else 0.0,
+                "new_repositories": len(new),
+                "new_distinct_row_bytes": added,
+                "new_distinct_row_bytes_per_mined": round(added / len(mined)) if mined else 0,
+            }
+        )
+    return out
+
+
 def corpus_units_of_mined(state_rows: Iterable[Mapping[str, Any]]) -> list[float]:
     """``corpus_units`` (functions in the snapshot) of each mined row, in state order."""
     return [
@@ -499,6 +575,11 @@ def project_chain(
     trial_units: Sequence[float],
     full_units: Sequence[float],
     reading_share: Mapping[str, float] | None = None,
+    probe_rows: Sequence[Mapping[str, Any]] | None = None,
+    trial_x: tuple[float, float] | None = None,
+    probe_x: tuple[float, float] | None = None,
+    full_x: tuple[float, float] | None = None,
+    exclude_steps: Sequence[str] = (),
 ) -> dict[str, Any]:
     """Project each stage's measured time to the full set, two linear readings, no interval.
 
@@ -513,9 +594,33 @@ def project_chain(
     q_full = quarter_means(full_units)
     ratio_dirs = full_directories / trial_directories
     ratio_units = sum(full_units) / sum(trial_units)
+
+    def seconds_of(row: Mapping[str, Any]) -> float:
+        """Seconds of a stage's steps, leaving out steps of other readings (``exclude_steps``)."""
+        steps = row.get("steps") or []
+        if not exclude_steps or not steps:
+            return float(row["step_seconds"])
+        return sum(
+            float(s["seconds"]) for s in steps if not str(s["step"]).endswith(tuple(exclude_steps))
+        )
+
+    probe_by = {str(r["stage"]): r for r in probe_rows or ()}
     rows: list[dict[str, Any]] = []
     for r in stage_rows:
-        sec = float(r["step_seconds"])
+        sec = seconds_of(r)
+        two: dict[str, Any] | None = None
+        pr_ = probe_by.get(str(r["stage"]))
+        if pr_ is not None and trial_x and probe_x and full_x and sec > 0:
+            fit = fit_two_factor((sec, trial_x[0], trial_x[1]), (seconds_of(pr_), *probe_x))
+            two = {
+                "probe_seconds": seconds_of(pr_),
+                "coefficients": None
+                if fit is None
+                else {"seconds_per_distinct_row_mb": fit[0], "seconds_per_million_slots": fit[1]},
+                "full_seconds": None
+                if fit is None
+                else round(fit[0] * full_x[0] + fit[1] * full_x[1], 1),
+            }
         rows.append(
             {
                 "stage": r["stage"],
@@ -527,6 +632,7 @@ def project_chain(
                 "trial_bytes_written": int(r["bytes_written"]),
                 "full_bytes_per_directory": int(int(r["bytes_written"]) * ratio_dirs),
                 "full_bytes_per_corpus_unit": int(int(r["bytes_written"]) * ratio_units),
+                "two_factor": two,
             }
         )
     return {

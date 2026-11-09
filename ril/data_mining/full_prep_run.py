@@ -213,6 +213,7 @@ class Runner:
         else:
             sel = fp.select_closed(self.cfg.state_path(), self.cfg.store, self.cfg.limit)
             names, doc = sel.names, sel.to_dict()
+            doc["limit"] = self.cfg.limit
         _write_names(self.p("names.txt"), names)
         _write_json(self.p("selection.json"), doc)
         return doc
@@ -511,6 +512,8 @@ def check_run(
     drop_path = os.path.join(out, "overlap", "drop_f20_non_test.txt")
     dropped = set(fp.read_names(drop_path)) if os.path.exists(drop_path) else set()
     info: dict[str, Any] = {}
+    drop_doc = _read_json(os.path.join(out, "drop_manifest.json"))
+    sel_doc = _read_json(os.path.join(out, "selection.json"))
     for r in readings:
         manifest = _read_json(os.path.join(out, r, "selection_mined.json"))["names"]
         summary = fp.cache_summary(os.path.join(out, r, "mined.jsonl.gz"))
@@ -529,24 +532,109 @@ def check_run(
             "dropped_in_cache": sum(1 for x in summary["ids"] if x in dropped),
             "dropped_in_manifest": sum(1 for n in manifest if n in dropped),
         }
+        info[r]["prep_summary"] = prep_summary(out, r, info[r], drop_doc, sel_doc)
     return info
+
+
+def prep_summary(
+    out: str,
+    reading: str,
+    counts: dict[str, Any],
+    drop_doc: dict[str, Any],
+    sel_doc: dict[str, Any],
+) -> dict[str, Any]:
+    """The record the launch preflight reads (``work/prep_summary.json``), plus its provenance.
+
+    ``held_out_rows`` counts held-out feature rows and held-out cache examples (both must be 0).
+    ``drop_list_applied`` is true only when a drop list was applied to this run's manifest and none
+    of its names is in the cache. ``scope`` is ``full`` only for a run over every final directory
+    of the store (no ``--limit``, no names file); a trial's summary says ``trial``.
+    """
+    import csv
+
+    with open(os.path.join(out, reading, "features_mined.csv"), encoding="utf-8", newline="") as h:
+        feature_held = sum(int(row["held_out"]) for row in csv.DictReader(h))
+    cache_doc = _read_json(os.path.join(out, reading, "cache.json"))
+    size = _read_json(os.path.join(out, reading, "filter_size.json"))
+    full = sel_doc.get("limit") is None and "names_file_sha256" not in sel_doc
+    doc: dict[str, Any] = {
+        "reading": reading,
+        "scope": "full" if full else "trial",
+        "examples": counts["cache_examples"],
+        "filter_size": size["examples_kept"],
+        "filter_positives_kept": size["positives_kept"],
+        "teacher": size["teacher"],
+        "k": size["k"],
+        "level": size["level"],
+        "held_out_rows": feature_held + counts["held_out_in_cache"],
+        "drop_list_applied": bool(drop_doc.get("drop_list_sha256"))
+        and counts["dropped_in_cache"] == 0
+        and counts["dropped_in_manifest"] == 0,
+        "drop_list_sha256": drop_doc.get("drop_list_sha256"),
+        "names_sha256": sel_doc.get("names_sha256"),
+        "state_rows": sel_doc.get("state_rows"),
+        "directories_selected": sel_doc.get("directories"),
+        "directories_dropped": drop_doc.get("dropped"),
+        "cache_sha256": cache_doc.get("cache_sha256"),
+        "cache_bytes": os.path.getsize(os.path.join(out, reading, "mined.jsonl.gz")),
+        "feature_table_sha256": fp.sha256_file(os.path.join(out, reading, "features_mined.csv")),
+    }
+    _write_json(os.path.join(out, reading, "prep_summary.json"), doc)
+    return doc
+
+
+def link_outputs(out: str, work: str, reading: str, *, allow_trial: bool = False) -> dict[str, Any]:
+    """Symbolic links to a run's cache, feature table and summary in a launch ``work`` directory.
+
+    The launch scripts read ``work/mined.jsonl.gz``, ``work/features_mined.csv`` and
+    ``work/prep_summary.json``; the cache is not copied. An existing path is never replaced, and a
+    trial's outputs are refused unless asked for.
+    """
+    summary = _read_json(os.path.join(out, reading, "prep_summary.json"))
+    if summary["scope"] != "full" and not allow_trial:
+        raise RuntimeError("these outputs are from a trial run, not the whole store")
+    os.makedirs(work, exist_ok=True)
+    pairs = {
+        "mined.jsonl.gz": os.path.join(out, reading, "mined.jsonl.gz"),
+        "mined.jsonl.gz.json": os.path.join(out, reading, "mined.jsonl.gz.json"),
+        "features_mined.csv": os.path.join(out, reading, "features_mined.csv"),
+        "prep_summary.json": os.path.join(out, reading, "prep_summary.json"),
+    }
+    made: list[str] = []
+    for name in pairs:
+        link = os.path.join(work, name)
+        if os.path.lexists(link):
+            raise RuntimeError(f"{link} exists; nothing replaced")
+    for name, target in pairs.items():
+        os.symlink(os.path.abspath(target), os.path.join(work, name))
+        made.append(name)
+    return {"linked": made, "work": work, "scope": summary["scope"]}
 
 
 def cache_memory(path: str, variant: str) -> dict[str, Any]:
     """Resident memory after reading a whole example cache, plain or with equal strings shared.
 
-    ``plain`` is :func:`ril.training.pool_reader.read_cache` as training reads it. ``shared`` reads
-    the same rows but keeps one copy of each distinct text and id (function texts repeat across the
-    pull requests of one repository), so the examples compare equal to the plain ones. The peak is
-    the process's own: run each variant in a fresh process.
+    ``plain`` reads every string separately; ``shared`` is ``pool_reader.read_cache`` as training
+    reads it (one copy of each distinct text and id: function texts repeat across the
+    pull requests of one repository). ``equal`` reads both and reports whether the examples
+    compare equal. The peak is the process's own: run each variant in a fresh process.
     """
     import resource
 
-    from ril.training.pool_reader import read_cache, read_cache_shared
+    from ril.training.pool_reader import read_cache, read_cache_plain
 
     t0 = time.perf_counter()
-    examples = read_cache(path) if variant == "plain" else read_cache_shared(path)
+    examples = read_cache_plain(path) if variant == "plain" else read_cache(path)
     seconds = time.perf_counter() - t0
+    if variant == "equal":
+        from ril.training.pool_reader import read_cache_plain as plain
+
+        return {
+            "variant": variant,
+            "examples": len(examples),
+            "equal": examples == plain(path),
+            "cache_bytes": os.path.getsize(path),
+        }
     text_bytes = sum(len(t.encode("utf-8")) for e in examples for t in e.candidate_texts)
     return {
         "variant": variant,

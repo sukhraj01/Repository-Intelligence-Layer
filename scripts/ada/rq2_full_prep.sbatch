@@ -4,7 +4,7 @@
 #SBATCH --account=research
 #SBATCH --qos=low
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=30G
+#SBATCH --mem=12G
 #SBATCH --time=08:00:00
 #SBATCH --exclude=gnode004,gnode044
 #SBATCH --output=ril_prep/logs/prep_%j.out
@@ -15,18 +15,24 @@
 # materialised directories, zips and listings go to node-local scratch ($TMPDIR, else /tmp), which is lost
 # with the node: a resubmission with the same RUN skips finished stages and rebuilds what it needs.
 # Submit from $HOME (the log path is relative):
-#   sbatch --export=ALL,STORE=<store>,RUN=<name>[,LIMIT=N][,STAGES=a,b][,SHARDS=n][,READINGS=non_test:pool_aligned] \
+#   sbatch --export=ALL,STORE=<store>,RUN=<name>[,LIMIT=N][,STAGES=a:b][,SHARDS=n][,READINGS=non_test:pool_aligned] \
 #          [--mem=..G] ril_prep/code/scripts/ada/rq2_full_prep.sbatch
-# Options (environment): LIMIT (the first N final mined directories; the trial), NAMES_FILE (a named
-# subset, for scale probes), STAGES (default all),
-# SHARDS (audit shards, default from configs/rq2_prep/full.yaml), READINGS (colon-separated, default
-# non_test; pool_aligned is the sensitivity reading), DROP_LIST + DROP_SHA256 (a tracked, hashed drop list instead of this run's own
-# audit), CLEAN_SCRATCH=1 (remove this job's scratch at the end; off by default), FORCE=1 (rerun finished
-# stages), INDEX (held-out index, default $HOME/ril_prep/inputs/ril_ov/index/v1).
-# Memory: the request is 30 GB because the chain's largest step at the full mined set reads the whole
-# example cache into memory (filter-size; the same read as a training process): projected 17 GB decoded
-# plus the encoder and evaluation in a run (docs/RQ2_LAUNCH_PLAN.md stage 3). A trial passes a smaller --mem.
-# Wall time: see docs/RQ2_LAUNCH_PLAN.md stage 3 for the measured cost per directory.
+# Options (environment; lists use colons because --export splits on commas): LIMIT (the first N final mined
+# directories: the trial), NAMES_FILE (a named subset, for scale probes), STAGES (default all), SHARDS (audit
+# shards, default from configs/rq2_prep/full.yaml), READINGS (default non_test; pool_aligned is the sensitivity
+# reading), DROP_LIST + DROP_SHA256 (a tracked, hashed drop list instead of this run's own audit), CLEAN_SCRATCH=1
+# (remove this job's scratch at the end; off by default), FORCE=1 (rerun finished stages), INDEX (held-out
+# index, default $HOME/ril_prep/inputs/ril_ov/index/v1).
+# Memory: 12 GB is asked (Slurm allocates 5 to 6 CPUs for it: the cluster grants at most 3,000 MB per CPU and
+# the account's limit is 10 CPUs, so a request above 30,000 MB cannot start and one of 30 GB is 11 CPUs).
+# Measured on a 200-directory trial (peak 1.2 GB, the overlap audit of one shard) and on 201 directories of three
+# large repositories (peak 1.7 GB, the cache read of filter-size with the earlier reader); projected at the full
+# store: the largest repository decides the audit and materialise (4.8 GB on the pilot) and the example cache is
+# read once, with equal strings shared, about 3 to 6 GB (17 GB with the earlier reader). See
+# docs/RQ2_LAUNCH_PLAN.md stage 3. Check sacct MaxRSS after the full run.
+# Wall time: projected 2.0 to 2.6 hours for the primary reading (measured per directory and per stage on the
+# trial, linear, no interval; docs/RQ2_LAUNCH_PLAN.md stage 3); 8 hours are requested, finished stages are
+# skipped on a resubmission and audit shards are resumable.
 set -euo pipefail
 P=$HOME/ril_prep
 CODE=${CODE:-$P/code}

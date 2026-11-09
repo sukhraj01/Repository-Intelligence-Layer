@@ -1,0 +1,202 @@
+{
+ "cells": {
+  "drop_flagged": {
+   "directories": 200,
+   "dropped": 3,
+   "dropped_by_a": 1,
+   "dropped_by_b_only": 2,
+   "flagged": 0,
+   "pool_like_after": 187,
+   "pool_like_directories": 189,
+   "pool_like_positives": 1186,
+   "pool_like_positives_after": 1175,
+   "repositories": 145,
+   "repositories_with_a_dropped_directory": 3,
+   "repositories_with_every_directory_dropped": 2,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": true,
+    "floor": 20,
+    "positives": "non_test"
+   }
+  },
+  "positives_all": {
+   "directories": 200,
+   "dropped": 1,
+   "dropped_by_a": 1,
+   "dropped_by_b_only": 0,
+   "flagged": 2,
+   "pool_like_after": 188,
+   "pool_like_directories": 189,
+   "pool_like_positives": 1186,
+   "pool_like_positives_after": 1177,
+   "repositories": 145,
+   "repositories_with_a_dropped_directory": 1,
+   "repositories_with_every_directory_dropped": 1,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 20,
+    "positives": "all"
+   }
+  },
+  "primary": {
+   "directories": 200,
+   "dropped": 1,
+   "dropped_by_a": 1,
+   "dropped_by_b_only": 0,
+   "flagged": 2,
+   "pool_like_after": 188,
+   "pool_like_directories": 189,
+   "pool_like_positives": 1186,
+   "pool_like_positives_after": 1177,
+   "repositories": 145,
+   "repositories_with_a_dropped_directory": 1,
+   "repositories_with_every_directory_dropped": 1,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 20,
+    "positives": "non_test"
+   }
+  }
+ },
+ "corpus_matches": {
+  "by_heldout_repository": {
+   "ansible/ansible": 773,
+   "astropy/astropy": 617,
+   "aws-cloudformation/cfn-lint": 14,
+   "conan-io/conan": 199,
+   "deepset-ai/haystack": 115,
+   "django/django": 607,
+   "ibm/mcp-context-forge": 113,
+   "internetarchive/openlibrary": 55,
+   "jlowin/fastmcp": 19,
+   "jupyterlab/jupyter-ai": 35,
+   "matplotlib/matplotlib": 245,
+   "mwaskom/seaborn": 16,
+   "pallets/flask": 6,
+   "pdm-project/pdm": 29,
+   "psf/black": 28,
+   "psf/requests": 321,
+   "pydata/xarray": 206,
+   "pylint-dev/pylint": 364,
+   "pyomo/pyomo": 475,
+   "pytest-dev/pytest": 143,
+   "python-control/python-control": 42,
+   "qutebrowser/qutebrowser": 103,
+   "scikit-learn/scikit-learn": 398,
+   "sphinx-doc/sphinx": 81,
+   "streamlink/streamlink": 86,
+   "sympy/sympy": 494
+  },
+  "by_size": {
+   "20 to 49": 183,
+   "50 and up": 161,
+   "under 20": 1881
+  },
+  "matched_functions": 2225
+ },
+ "directories": 200,
+ "floor_sensitivity": {
+  "10": {
+   "directories": 200,
+   "dropped": 2,
+   "dropped_by_a": 2,
+   "dropped_by_b_only": 0,
+   "flagged": 2,
+   "pool_like_after": 187,
+   "pool_like_directories": 189,
+   "pool_like_positives": 1186,
+   "pool_like_positives_after": 981,
+   "repositories": 145,
+   "repositories_with_a_dropped_directory": 2,
+   "repositories_with_every_directory_dropped": 2,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 10,
+    "positives": "non_test"
+   }
+  },
+  "20": {
+   "directories": 200,
+   "dropped": 1,
+   "dropped_by_a": 1,
+   "dropped_by_b_only": 0,
+   "flagged": 2,
+   "pool_like_after": 188,
+   "pool_like_directories": 189,
+   "pool_like_positives": 1186,
+   "pool_like_positives_after": 1177,
+   "repositories": 145,
+   "repositories_with_a_dropped_directory": 1,
+   "repositories_with_every_directory_dropped": 1,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 20,
+    "positives": "non_test"
+   }
+  },
+  "50": {
+   "directories": 200,
+   "dropped": 0,
+   "dropped_by_a": 0,
+   "dropped_by_b_only": 0,
+   "flagged": 2,
+   "pool_like_after": 189,
+   "pool_like_directories": 189,
+   "pool_like_positives": 1186,
+   "pool_like_positives_after": 1186,
+   "repositories": 145,
+   "repositories_with_a_dropped_directory": 0,
+   "repositories_with_every_directory_dropped": 0,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 50,
+    "positives": "non_test"
+   }
+  }
+ },
+ "line_hash_reading": {
+  "directories_at_or_above": 4,
+  "of_which_also_flagged_by_ast": 2,
+  "share": 0.05
+ },
+ "positive_matches_all": {
+  "by_heldout_repository": {
+   "ansible/ansible": 2,
+   "astropy/astropy": 2,
+   "psf/requests": 4,
+   "sympy/sympy": 1
+  },
+  "by_size": {
+   "20 to 49": 3,
+   "50 and up": 0,
+   "under 20": 4
+  },
+  "directories_with_a_match": 3,
+  "matches": 7,
+  "reading": "all"
+ },
+ "positive_matches_non_test": {
+  "by_heldout_repository": {
+   "ansible/ansible": 2,
+   "astropy/astropy": 2,
+   "psf/requests": 4,
+   "sympy/sympy": 1
+  },
+  "by_size": {
+   "20 to 49": 3,
+   "50 and up": 0,
+   "under 20": 4
+  },
+  "directories_with_a_match": 3,
+  "matches": 7,
+  "reading": "non_test"
+ },
+ "positives_without_row": 0,
+ "version": "overlap-audit/v1"
+}

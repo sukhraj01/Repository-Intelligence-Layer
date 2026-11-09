@@ -241,13 +241,18 @@ def test_cache_bytes_do_not_depend_on_the_clock(tmp_path) -> None:
 
 
 def test_streamed_summary_and_shared_strings_agree_with_the_plain_reader(tmp_path) -> None:
-    from ril.training.pool_reader import read_cache_shared
+    from ril.training.pool_reader import read_cache_plain
     from tests.unit._training_fixtures import synthetic_examples
 
     exs = synthetic_examples(repos=2, prs=3)
     path = str(tmp_path / "c.jsonl.gz")
     write_cache(path, exs)
-    assert read_cache_shared(path) == read_cache(path) == exs
+    assert read_cache_plain(path) == read_cache(path) == exs
+    # the default reader holds one string object per distinct text, the plain one does not
+    a, b = read_cache(path), read_cache_plain(path)
+    texts = [t for e in a for t in e.candidate_texts]
+    assert len({id(t) for t in texts}) <= len(set(texts))
+    assert len({id(t) for e in b for t in e.candidate_texts}) >= len({id(t) for t in texts})
     got = full_prep.cache_summary(path)
     assert got["examples"] == len(exs)
     assert got["positives"] == sum(len(e.positive_ids) for e in exs)
@@ -297,6 +302,35 @@ def test_projection_is_linear_and_names_its_basis() -> None:
         full_prep.project_stage(1.0, 0, 5)
 
 
+def test_quarter_table_charges_a_repository_to_its_first_quarter() -> None:
+    rows = [
+        {"key": "A/x#1", "status": "mined", "counters": {"corpus_units": 10, "positives": 2}},
+        {"key": "a/x#2", "status": "quarantined"},
+        {"key": "b/y#1", "status": "mined", "counters": {"corpus_units": 30, "positives": 4}},
+        {"key": "a/x#3", "status": "mined", "counters": {"corpus_units": 20, "positives": 0}},
+    ]
+    table = full_prep.quarter_table(rows, {"a__x": 100, "b__y": 50}, quarters=2)
+    assert [q["new_repositories"] for q in table] == [1, 1]
+    assert [q["new_distinct_row_bytes"] for q in table] == [100, 50]
+    assert table[0]["quarantined"] == 1 and table[1]["mean_corpus_units"] == 25.0
+
+
+def test_two_factor_reading_through_two_runs() -> None:
+    # seconds = 2 * distinct_row_MB + 5 * million_slots
+    fit = full_prep.fit_two_factor((2 * 100 + 5 * 1, 100, 1), (2 * 10 + 5 * 8, 10, 8))
+    assert fit is not None and fit == pytest.approx((2.0, 5.0))
+    assert full_prep.fit_two_factor((1.0, 10, 2), (2.0, 20, 4)) is None  # collinear
+    assert full_prep.fit_two_factor((0.0, 100, 1), (50.0, 1, 100)) is None  # negative coefficient
+    rows = [{"stage": "x", "step_seconds": 205.0, "maxrss_kb": 1, "bytes_written": 1}]
+    probe = [{"stage": "x", "step_seconds": 60.0}]
+    out = full_prep.project_chain(
+        rows, trial_directories=1, full_directories=2, trial_units=[1e6], full_units=[2e6, 2e6],
+        probe_rows=probe, trial_x=(100.0, 1.0), probe_x=(10.0, 8.0), full_x=(1000.0, 30.0),
+    )  # fmt: skip
+    two = out["stages"][0]["two_factor"]
+    assert two["full_seconds"] == pytest.approx(2.0 * 1000 + 5.0 * 30)
+
+
 def test_runner_select_and_drop_write_the_manifest_without_touching_the_store(tmp_path) -> None:
     root, state = _store(tmp_path)
     before = full_prep.sha256_file(state)
@@ -341,6 +375,67 @@ def test_a_named_subset_replaces_the_first_n_and_must_be_final(tmp_path) -> None
     names.write_text("acme__nowhere-1\n")
     with pytest.raises(RuntimeError, match="not final"):
         Runner(cfg).do_select()
+
+
+def _finished_run(tmp_path: Path, *, limit: int | None, held: int = 0, dropped_in: int = 0) -> Path:
+    from ril.data_mining import full_prep_run as fr
+
+    out = tmp_path / "run"
+    (out / "non_test").mkdir(parents=True)
+    (out / "drop_manifest.json").write_text(
+        json.dumps({"drop_list_sha256": "ab" * 32, "dropped": 3})
+    )
+    sel = {"state_rows": 10, "directories": 6, "names_sha256": "cd" * 32, "limit": limit}
+    (out / "selection.json").write_text(json.dumps(sel))
+    (out / "non_test" / "features_mined.csv").write_text(
+        f"instance_id,positive_key,held_out\na-1,k1,0\na-1,k2,{held}\n"
+    )
+    (out / "non_test" / "cache.json").write_text(json.dumps({"cache_sha256": "ef" * 32}))
+    (out / "non_test" / "mined.jsonl.gz").write_bytes(b"cache")
+    (out / "non_test" / "mined.jsonl.gz.json").write_text("{}")
+    (out / "non_test" / "filter_size.json").write_text(
+        json.dumps({"examples_kept": 4, "positives_kept": 9, "teacher": "bm25", "k": 20,
+                    "level": "positive"})
+    )  # fmt: skip
+    counts = {"cache_examples": 6, "held_out_in_cache": 0, "dropped_in_cache": dropped_in,
+              "dropped_in_manifest": 0}  # fmt: skip
+    fr.prep_summary(
+        str(out), "non_test", counts,
+        json.loads((out / "drop_manifest.json").read_text()), sel,
+    )  # fmt: skip
+    return out
+
+
+def test_prep_summary_is_what_the_launch_preflight_reads(tmp_path) -> None:
+    out = _finished_run(tmp_path, limit=None)
+    doc = json.loads((out / "non_test" / "prep_summary.json").read_text())
+    assert doc["scope"] == "full" and doc["examples"] == 6 and doc["filter_size"] == 4
+    assert doc["held_out_rows"] == 0 and doc["drop_list_applied"] is True
+    trial = _finished_run(tmp_path / "t", limit=200)
+    assert json.loads((trial / "non_test" / "prep_summary.json").read_text())["scope"] == "trial"
+    held = _finished_run(tmp_path / "h", limit=None, held=1)
+    assert json.loads((held / "non_test" / "prep_summary.json").read_text())["held_out_rows"] == 1
+    leaked = _finished_run(tmp_path / "d", limit=None, dropped_in=1)
+    flag = json.loads((leaked / "non_test" / "prep_summary.json").read_text())
+    assert flag["drop_list_applied"] is False
+
+
+def test_linking_outputs_refuses_a_trial_and_never_replaces(tmp_path) -> None:
+    from ril.data_mining import full_prep_run as fr
+
+    trial = _finished_run(tmp_path / "t", limit=200)
+    with pytest.raises(RuntimeError, match="trial"):
+        fr.link_outputs(str(trial), str(tmp_path / "work"), "non_test")
+    full = _finished_run(tmp_path / "f", limit=None)
+    work = tmp_path / "work"
+    res = fr.link_outputs(str(full), str(work), "non_test")
+    assert sorted(res["linked"]) == [
+        "features_mined.csv", "mined.jsonl.gz", "mined.jsonl.gz.json", "prep_summary.json",
+    ]  # fmt: skip
+    assert (work / "mined.jsonl.gz").read_bytes() == b"cache"
+    with pytest.raises(RuntimeError, match="nothing replaced"):
+        fr.link_outputs(str(full), str(work), "non_test")
+    assert fr.link_outputs(str(trial), str(tmp_path / "w2"), "non_test", allow_trial=True)
 
 
 def test_a_failing_step_stops_the_stage_and_names_the_log(tmp_path) -> None:

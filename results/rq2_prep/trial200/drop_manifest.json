@@ -1,0 +1,11 @@
+{
+ "drop_list": "drop_f20_non_test.txt",
+ "drop_list_given": false,
+ "drop_list_sha256": "919dfc8766edbfa8acd623f288b5bdd4720d9ed10fbd80cf80d3c70c18ea55cc",
+ "dropped": 1,
+ "kept": 199,
+ "names_in": 200,
+ "names_in_sha256": "7de9e92ad40a816f3b9155b4a8dfe7f1ca16ff82f18198abf56f9f0f54e55db3",
+ "names_kept_sha256": "fb512833970320503f26642aefb06392a5b4cda4117c69ef455c47c0efe82fb8",
+ "store_modified": false
+}
