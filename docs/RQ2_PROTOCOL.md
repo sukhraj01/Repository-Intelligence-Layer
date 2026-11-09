@@ -458,6 +458,23 @@ Settled by the lead (D68 to D82), on academic advice, each with its reason. Noth
 
 A to D evaluate the same dev set and differ in cells and seeds, not in repositories. Only E adds repositories (36 runs x (0.40 + 8 x 0.06) = 31.7, plus 7.2 for the Verified look = 38.9). E has strictly the most, so there is no tie and the rule picks exactly one: **option E, 38.9 GPU-hours**: 12 cells (6 on the mined set, 6 injected at r = 0.4) x 3 seeds = 36 runs, each evaluated on the dev repositories and 8 more. Under O2 the confirmatory cells are the mined-set RAW, subsample and FILTER-BM25; the other cells are exploratory. The cap for the final RQ2 stage is **38.9 x 1.2 = 46.7 GPU-hours** (`docs/COMPUTE.md`). Not inside the 38.9: teacher scoring of the mined set (about 2.2 per 5,000 directories for a dense teacher; BM25 is CPU) and the M3 rank measurement (limit 2); these must fit in the 20% margin (7.8), or the cap must be raised again. The inputs 0.4 per Verified look and 0.06 per extra repository are placeholders; the first measured value replaces them and is reported.
 
+**Where the analysis rules live in code (added 2026-11-09, `docs/experiments/B.md` E-RQ2-ANALYSIS).** `ril/analysis/rq2_final.py` takes the per-query rows of the final runs and implements, without choosing anything the protocol leaves open, the rules below; `ril/analysis/rq2_final_tables.py` renders the report tables from its summary, and `scripts/rq2_analysis.py` is the command line. Every rule is a named constant or function, fixed before any final row exists. Where the protocol is silent the module takes the narrowest reading, lists it in `ASSUMPTIONS`, and the entry lists the question.
+
+| Rule | Source | In code |
+|---|---|---|
+| Mean over queries, repository-clustered bootstrap (2,000 draws, seed 0), query-level below three repositories, the other interval beside | D17, section 4 | `estimate`, `cell_summaries`, `DRAWS`, `BOOT_SEED`, `MIN_CLUSTERS` (the bootstrap is `ril.evaluation.stats.Boot`) |
+| Paired differences per seed and pooled over seeds, seed SD beside | section 4 | `estimate` (`per_seed`, `seed_sd_of_difference`) |
+| Two confirmatory contrasts, FILTER (BM25 teacher) against RAW and against the size-matched subsample, both levels | D69 | `FINAL_CONTRASTS`, family `confirmatory` |
+| L3 metric Recall@100 with nDCG@10 beside it | D71 | `PRIMARY_METRIC`, `METRICS` |
+| Holm within each family, uncorrected intervals beside | D72, section 4 | `holm_group`, `holm_adjust` |
+| delta = 1.5 points: reported effect, estimate with bounds, inconclusive | D73, section 6 | `DELTA`, `classify` |
+| Positive, level-specific, dev sign, leave-largest-repository-out rule | section 6, rule 3 | `arm_claims`, `_leave_out` |
+| Sanity before reading, dose-response | section 6, rules 1 and 2 | `calibration_sanity`, `dose_response` |
+| Which RQ3 contrast is primary (fallback when the arms do not separate) | D80, rule 7 | `fallback` |
+| Fresh noise realisations | D82 | a property of the runs, not of the analysis (`distinct_directories_seen` and the config hashes are carried through) |
+| Final evaluation sets read only after the dev analysis, id recorded | D100 | `require_dev_analysis`, `check_sealed`, `SEALED_SETS` |
+| Distinct directories seen per cell in every table | matching rule, section 3 | `diagnostics` |
+
 ---
 
 Not claimed here: any result of the final experiment; any number not traced above; any effect for another language, encoder or

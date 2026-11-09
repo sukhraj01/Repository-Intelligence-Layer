@@ -135,9 +135,11 @@ still complete and defensible.
 - [ ] Final cell configurations and run script for the 36 runs (cache, noise scores, retention directory, 30 GB, dev set, the eight repositories, Verified look as a separate job after the dev analysis); needs decisions 1 to 4 and 6 of the plan
 - [ ] Full-store prep job (materialise with a names file, `non_test` reading, BM25 ranks, feature table, cache, FILTER size) with the overlap drop list applied; run at 200 directories first
 - [ ] Overlap audit on the full store and its drop list (about 2 h; stage the held-out index and code on the account holding the store)
-- [ ] Final analysis module: Holm within families, paired bootstrap, delta 1.5, verdict rules, seed spread, sanity rules, report tables; tested on the pilot rows
+- [x] Final analysis module (built 2026-11-09, E-RQ2-ANALYSIS, `ril/analysis/rq2_final.py`; scope in `docs/RQ2_LAUNCH_PLAN.md` 9.5; reproduces the stored pilot summaries, not yet run on final rows; its test of the family-wise error rate failed, see the entry): `ril/analysis/` module reading per-query run rows; paired bootstrap per contrast and level, Holm within the two families of 8, delta 1.5 verdicts, seed mean and SD, sanity and dose-response rules, report tables; tested on the pilot rows and constructed cases; CPU
 - [ ] Dense teacher cost on the mined store: per-repository de-duplicated pass on 100 directories (about 0.4 GPU-hours) before deciding the FILTER-SweRankEmbed-Small mined cell
 - [ ] Decide the Verified look set (six folders with stores, the executable subset of 377, or build the other six) and record the departure if it is not the protocol's 12 folders
 - [ ] Encoding of the 377 executable instances with a retained model directory and trained-arm contexts (0.377 GPU-hours per checkpoint, Block 4)
-- [ ] Alias for the archive account and the copy of retained models; retention directory on the account with space (account A has 5.1 GB free)
+- [ ] Alias for the archive account and the copy of retained models; retention directory on the account with space (account A has 5.1 GB free); account B has no SSH alias (`ada` and `adac` only), so the archive script cannot run until the engineer adds one
+- [ ] Decide the FILTER-pool rule (common visit count from the smallest pool, repeats identical across arms, or a larger pool; `docs/RQ2_LAUNCH_PLAN.md` 9.2) and apply it from the prep job's `filter-size` output before the first run
+- [ ] Decide retention against the test role of the eight (all 36, in-job sealed scoring, or the 18 mined; 9.4) and where mined cells train (split `mined=C injected=A`; the eight repositories, 480 MB, to C first)
 - [ ] Return of the pilot label sheets from two readers who are not the lead; decide pilot sample or new draw
