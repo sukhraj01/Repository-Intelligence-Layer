@@ -212,3 +212,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-09,C,66006,RQ2F,"plan-only validation, second pass (CPU, separate from the mining and prep allocations)",u22,4,0,00:00:42,0.0,COMPLETED
 2026-11-09,A,66009,RQ2F,"plan-only validation of the 36 configurations, plan, evaluation sets, preflight (real and rehearsal), submit refusals (CPU)",u22,4,0,00:00:49,0.0,COMPLETED
 2026-11-09,C,66010,RQ2F,"plan-only validation of the 36 configurations, plan, evaluation sets, preflight (real and rehearsal), submit refusals (CPU, separate from the prep allocation)",u22,4,0,00:00:55,0.0,COMPLETED
+2026-11-09,A,66036,RQ2F,"plan-only validation of the 36 configurations on the merged final code: plan, evaluation sets, preflight (real and rehearsal), submit refusals (CPU)",u22,4,0,00:00:47,0.0,COMPLETED
+2026-11-09,A,66037,RQ2F,"torch-marked tests and leakage tests on the merged final code: 41 passed",u22,2,0,00:00:19,0.0,COMPLETED
+2026-11-09,C,66038,RQ2F,"plan-only validation on the merged final code (CPU, separate from the prep allocation)",u22,4,0,00:00:55,0.0,COMPLETED

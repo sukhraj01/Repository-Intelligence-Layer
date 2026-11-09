@@ -553,7 +553,7 @@ runs) is 28.73 measured and 38.88 protocol (margin 7.82, 1.42 after the conditio
 | 5 | evaluation sets ready | **done** on A and C (0 missing for the dev set, the eight and the three parts of the 377) |
 | 6 | space, retention directory, memory 30 GB | **checked** (A 5.3 GB free for 3.0 needed; C 26.0 GB for 10.0 needed; request 30,720 MB under 32,000); final space check at launch |
 | 7 | CUDA gate inside each run; one GPU job per account | in the code; the submit script refuses a run already queued |
-| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the final code (job 66005); `scripts/rq2_record.py leakage` writes the record the preflight needs; open until run on the launch commit |
+| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the final code (job 66037; first on the earlier code 66005); `scripts/rq2_record.py leakage` writes the record the preflight needs; open until run on the launch commit |
 | 9 | registration fixed before the first run | open: the engineer runs `scripts/rq2_record.py registration` |
 | 10 | seeds outside the waves, hashes, commit in `RIL_COMMIT` | **done** in the plan and the preflight; the commit is the launch commit |
 
