@@ -17,6 +17,7 @@ import csv
 import hashlib
 import json
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -953,14 +954,25 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def write_all(root: Path, out_dir: Path) -> list[Table]:
-    """Write one ``.tex`` fragment per table and ``SOURCES.csv``; return the tables."""
+def write_all(root: Path, out_dir: Path, extra: Sequence[str] = ()) -> list[Table]:
+    """Write one ``.tex`` fragment per table and ``SOURCES.csv``; return the tables.
+
+    ``extra`` names optional table sets that the report does not input yet: ``rq1_ladder`` adds
+    the RQ1 ladder fragments (``ril.analysis.rq1_ladder_tables``), built only from stored tables.
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
     from ril.analysis import (
         rq2_final_tables,
     )  # after the tables above: nothing is built before the final rows exist
 
     tables = build_all(root) + rq2_final_tables.build_if_present(root)
+    if "rq1_ladder" in extra:
+        from ril.analysis import rq1_ladder_tables
+
+        tables += rq1_ladder_tables.build_if_present(root)
+    unknown = set(extra) - {"rq1_ladder"}
+    if unknown:
+        raise ValueError(f"unknown table sets: {sorted(unknown)}")
     lines = ["fragment,source,sha256"]
     for t in tables:
         (out_dir / f"{t.name}.tex").write_text(t.render(), encoding="utf-8")

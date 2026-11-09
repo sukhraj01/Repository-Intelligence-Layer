@@ -55,7 +55,8 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 5–8 — Person A: RQ1
 
-- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense, dense+BM25 and the graph on a fused first stage measured zero-shot with latency rows, E-DENSE-FUSION 2026-10-25; the frozen-configuration ablation still to run)
+- [x] Ablation on the development set with latency columns from stored rows (2026-11-09, E-RQ1-LADDER, D145: dense, plus BM25 by RRF, plus same-file expansion, plus typed expansion against the same-file and chance controls, plus recency prior; rerank not built, three stages without a latency row)
+- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense, dense+BM25 and the graph on a fused first stage measured zero-shot with latency rows, E-DENSE-FUSION 2026-10-25; the frozen-configuration ablation still to run; the freeze proposal is in E-RQ1-LADDER)
 - [ ] Latency distribution measured; rerank decision informed (ADR-009)
 
 ## Before week 6 — freeze
