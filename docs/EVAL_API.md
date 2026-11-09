@@ -289,26 +289,36 @@ fixture discordance. These are arithmetic smoke checks. `real_instances=0` and
 `scientific_cost_discordance_mde=null` prevent their promotion to RQ3 empirical power evidence.
 C4 owns the full paired/resumable/idempotent/spend-capped orchestration and failure reports.
 
-## Scaffold options: unverified reading, no selection
+## Scaffold options: reading of the five papers, no selection
 
-The earlier claim of five full-paper readings and its page total is **unverified**. The
-complete set of corresponding versioned notes is absent from the tracked tree. No paper was
-read in full during this correction; historical validation records do not establish that it was.
-The candidates below are reading leads. No historical price, numerical result, page-specific
-claim or current software guarantee is established here.
+The five scaffold papers (Agentless v2, SWE-agent v3, OpenHands v3, LocAgent v2, CoSIL v3) were
+read in full and have checked notes in `knowledge/papers/` (`agentless-2407.01489.md`,
+`swe-agent-2405.15793.md`, `openhands-2407.16741.md`, `locagent-2503.09089.md`,
+`cosil-2503.22424.md`); the SWE-agent note excepts only the numbered source listings inside its
+appendix trajectories (pp. 45 to 116), and nothing below rests on them. The scaffold the study
+uses is called **retrieval-supplied one-shot repair**: one repair call at temperature 0, a fixed
+edit format, up to two follow-ups after an unusable reply, no candidate selection. "Agentless"
+names that paper's pipeline only. The table lists what each paper does and does not describe. An
+item marked "not described in the paper" stays here as a requirement of this project, not as a
+property of the paper. A scripted fixture establishes apparatus behaviour only.
 
-| Candidate / version to verify | Controlled intervention to check | Reproducibility and accounting to check |
-|---|---|---|
-| SWE-agent v3 | One replaceable retrieval tool; audit alternative shell/search paths | Fixed source, seed/temperature support, complete trajectories, failures and spend caps |
-| OpenHands v3 | Pin one agent and test its retrieval extension and bypass policy | Same repair settings and context; retry, usage and termination records |
-| Agentless v2 | Specify and test the localization or repair-stage adapter | Fixed sampling/selection policy; all-attempt cost and complete failure logs |
-| LocAgent v2 | Separate localization tools from a fixed downstream repair scaffold | Count localization and repair together; repeat matched dev pairs |
-| CoSIL v3 | Specify graph/localization intervention and fixed downstream repair | Verify decoding, retry and usage contracts; distinguish partial and whole-repair costs |
+| Paper (version) | Project requirement (kept) | Described in the paper | Not described in the paper |
+|---|---|---|---|
+| SWE-agent v3 | One replaceable retrieval tool; audit of alternative shell and search paths; seed and temperature support, complete trajectories, failures and spend caps | Temperature is configurable and trajectories are released (Sec. E.2, p.117); a per-instance spend limit exists (Sec. 4, p.5); three search commands plus an unrestricted shell (Sec. 3, p.3) | A seed. A single replaceable retrieval tool: shell search is part of the agent's normal behaviour (Sec. 5.1, p.5), so an audit of alternative search paths would be new work |
+| OpenHands v3 | Pin one agent and test a retrieval extension and a bypass policy; same repair settings and context; retry, usage and termination records | Accumulated cost is kept in the agent state (Sec. 2.1, p.3) | A retrieval extension and a policy for bypassing search; retry and termination rules (Sec. 2.1, p.3) |
+| Agentless v2 | Fixed sampling and selection policy; all-attempt cost and complete failure logs | The sampling and selection policy (Sec. 4, p.9; Tables 3 and 4, pp.13 and 14) | Whether the average inference cost (Sec. 4, p.10) covers every sampled attempt, the reproduction-test generation or the localization stage |
+| LocAgent v2 | Localization tools separated from a fixed downstream repair scaffold; localization and repair counted together; matched dev pairs repeated | Localization cost per instance (Table 5, p.9) | Cost of the repair stage; repeated matched pairs |
+| CoSIL v3 | Graph and localization intervention with a fixed downstream repair; decoding, retry and usage contracts; partial and whole-repair costs distinguished | Localization cost (Table VII, p.9) | Cost of the repair stage (whole-repair cost) |
 
-Reasoned recommendation pending the lead: retain the existing provisional ADR-007 candidate
-until full-paper notes and a pinned-source boundary audit exist. Then repeat an authorized
-paired dev subset to measure cost, discordance and run noise. Model selection and spend remain
-ADR-008 questions. Scripted fixtures establish apparatus behavior only.
+None of the five papers states a seed, a number of runs or an interval for resolved rate. The one
+measurement of run-to-run spread is SWE-agent's six runs (Table 10, p.35), and the one
+reproduction gap is the pair of Agentless runs reported in CoSIL (Table IX, p.10). The study
+repeats each arm k times for that reason.
+
+The decisions that govern this table are recorded in `docs/RQ3_PILOT.md` (D111 to D114, D120,
+D121): held-out slice and model rule, the scaffold with k repeats per arm and one primary
+contrast, the spend guard, pseudonymised prompts and the secondary any-of-k reading. Model
+selection and spend remain ADR-008 questions.
 
 ## Durable paired runner (C4 apparatus)
 
