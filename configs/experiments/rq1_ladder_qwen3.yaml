@@ -1,0 +1,24 @@
+experiment_id: E-RQ1-LADDER (RQ1 signals ladder on the development set, Qwen3-Embedding-0.6B)
+stage: 'stated cell on the development role only (labelled secondary, the encoder is not the working default of D30)'
+status: exploratory
+date: '2026-11-09'
+seed: 0
+roles:
+- dev
+note: >-
+  As rq1_ladder_cre.yaml with the settings E-GRAPH-ROLE stated for Qwen3-Embedding-0.6B at 512
+  tokens (RRF k 20, score-level alpha 0.2). Read only where an entry already holds this encoder's
+  stored dense scores; labelled secondary.
+graph:
+  variant: qwen3-embedding-0.6b__t512
+  k: 20
+  alpha: 0.2
+  seeds: 5
+  gamma: 0.7
+  hops: 2
+  weight: 0.5
+  cap: 50
+  draws: 3
+recency:
+  lam: 0.2
+  tau_days: 30

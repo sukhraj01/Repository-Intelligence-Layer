@@ -1,0 +1,31 @@
+experiment_id: E-RQ1-LADDER (RQ1 signals ladder on the development set, CodeRankEmbed)
+stage: stated cell on the development role only (no sweep, no test instance)
+status: exploratory
+date: '2026-11-09'
+seed: 0
+roles:
+- dev
+note: >-
+  Stated before any score of this configuration was read. First stage and cell are those of
+  E-GRAPH-ROLE for CodeRankEmbed (1,024 tokens, RRF k 100, score-level alpha 0.4, C 5, gamma 0.7,
+  2 hops, graph weight 0.5, cap 50), no new tuning. The expansion is blended into the RRF score
+  divided by its best value (stage p), into the same score plus the recency prior (stage r, lam
+  0.2 and tau 30 days as stated for E-RECENCY on dev) and, as the regression control of the earlier
+  entry, into the score-level fusion (stage s). Edge sets b (stored graph) and e (non-contain
+  edges only). Sources per edge set: graph, same-file by first-stage score, same files in random
+  order (3 draws), next best units without a file constraint, each size-matched to the graph
+  expansion and taking its graph-score values in order. Primary reading units_all_nomod (D18),
+  units_all beside it. Metrics: nDCG@10 and Recall@100, L2 and L3.
+graph:
+  variant: coderankembed__t1024
+  k: 100
+  alpha: 0.4
+  seeds: 5
+  gamma: 0.7
+  hops: 2
+  weight: 0.5
+  cap: 50
+  draws: 3
+recency:
+  lam: 0.2
+  tau_days: 30
