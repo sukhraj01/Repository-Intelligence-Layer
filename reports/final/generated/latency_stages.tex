@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\small
+\caption{Per-stage latency of the query path. Evidence class: \emph{measured, exploratory (one query set per stage, mixed hardware)}. Warm-cache per-query latency at batch size one, in milliseconds, with the warm-up calls discarded, from the latest logged row of each stage. The query encoder and dense search rows use the working code encoder (the encoder does not depend on the repository); every other row and the dense index use the largest of the three first repositories and its stored graph. Rows come from different machines and commits and are not summed; the end-to-end row is lexical retrieval plus assembly, not the full pipeline. Entry \entry{E-LAT-STAGES}.}
+\label{tab:latency_stages}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+\toprule
+Stage & Hardware & Queries & p50 & p95 & p99 \\
+\midrule
+query\_\allowbreak encode & GPU node & 100 & 18.48 & 19.53 & 20.59 \\
+query\_\allowbreak encode & CPU node & 100 & 377.63 & 937.20 & 956.73 \\
+bm25 & laptop CPU & 200 & 0.20 & 0.27 & 0.31 \\
+dense\_\allowbreak search & GPU node & 100 & 0.27 & 0.27 & 0.28 \\
+dense\_\allowbreak search & CPU node & 100 & 4.96 & 5.12 & 5.26 \\
+graph\_\allowbreak expansion & laptop CPU & 200 & 1.14 & 2.14 & 2.85 \\
+assemble & laptop CPU & 200 & 10.98 & 17.01 & 23.04 \\
+end\_\allowbreak to\_\allowbreak end & laptop CPU & 200 & 11.44 & 17.28 & 23.65 \\
+\bottomrule
+\end{tabular}
+\end{table*}

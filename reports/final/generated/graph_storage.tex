@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering\small
+\caption{Graph storage options: size, load time and expansion latency. Evidence class: \emph{measured, exploratory (two repositories, one node)}. Size on disk of the stored graph of two repositories, and for the larger one the time to load it and the warm two-hop expansion latency at batch size one (p50 and p99, not the mean), per storage backend. One cluster node, CPU only; the expansion workload is the set of queries of the graph pilot, and the number of units reached is the same for every backend. Nothing here chooses a backend. Entry \entry{E-GRAPH-BUILD}.}
+\label{tab:graph_storage}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedleft\arraybackslash}p{0.13\linewidth}>{\raggedleft\arraybackslash}p{0.13\linewidth}>{\raggedleft\arraybackslash}p{0.11\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}}
+\toprule
+Backend & Size, small repository (MB) & Size, large repository (MB) & Load (s) & Two-hop p50 (ms) & Two-hop p99 (ms) \\
+\midrule
+jsonl & 1.45 & 81.4 & 1.15 & 0.15 & 0.42 \\
+kuzu & 4.71 & 15.4 & 0.12 & 34.69 & 45.71 \\
+networkx & 0.16 & 10.8 & 0.24 & 0.17 & 0.47 \\
+parquet & 0.08 & 2.9 & 0.19 & 0.22 & 0.69 \\
+rustworkx & 0.16 & 10.8 & 0.16 & 0.23 & 0.76 \\
+sidecar & 1.35 & 76.7 & 1.59 & 0.15 & 0.46 \\
+sqlite & 1.43 & 92.8 & 0.00 & 5.10 & 24.96 \\
+sqlite\_\allowbreak cache & 1.43 & 92.8 & 0.42 & 0.15 & 0.39 \\
+\bottomrule
+\end{tabular}
+\end{table}
