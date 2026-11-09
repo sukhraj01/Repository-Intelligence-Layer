@@ -1,0 +1,21 @@
+{
+ "bytes": 405251310,
+ "files": 1236,
+ "manifest_sha256": "fe8ea399a0bddf7b3bf51d3df78fb36451aa3f455d3da9b5ca4b9c6de56a4152",
+ "repositories": 145,
+ "selection": {
+  "directories": 200,
+  "last_row": 310,
+  "names_sha256": "7de9e92ad40a816f3b9155b4a8dfe7f1ca16ff82f18198abf56f9f0f54e55db3",
+  "prefix_sha256": "1fdc2c73d877ad164c4321755547d8dcaaba05c8ca698c11ea13f3823735a29c",
+  "skipped_open": 0,
+  "state_rows": 10000,
+  "status_in_prefix": {
+   "mined": 200,
+   "no_positive": 31,
+   "no_python_change": 72,
+   "quarantined": 7
+  },
+  "used_rows_sha256": "bcbe0ff66606e9df688585dda5694a9cea774ee96162391306af8fbaa2f4cb81"
+ }
+}

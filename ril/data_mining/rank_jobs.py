@@ -187,13 +187,17 @@ def estimate(
     }
 
 
-def reproduces(new_paths: Sequence[str], old_path: str) -> dict[str, Any]:
+def reproduces(
+    new_paths: Sequence[str], old_path: str, *, common_only: bool = False
+) -> dict[str, Any]:
     """Compare rank rows with an earlier rank file, directory by directory (exact equality).
 
     Implements ``docs/experiments/B.md`` E-MINED-PILOT (teacher ranks, D90): the BM25 ranks of the
     directories that an earlier stage already measured must come out identical. A row is
     identical when the teacher, the number of functions and every positive's ``rank`` and
     ``rank_all`` are equal. ``missing`` are directories of the old file that no new file has.
+    With ``common_only`` only the directories both sides hold are compared (a trial that covers
+    part of the earlier run); ``exact`` then needs at least one common directory and no difference.
     """
     new: dict[str, Mapping[str, Any]] = {}
     for path in new_paths:
@@ -209,11 +213,12 @@ def reproduces(new_paths: Sequence[str], old_path: str) -> dict[str, Any]:
 
     missing = sorted(d for d in old if d not in new)
     differing = sorted(d for d in old if d in new and key(old[d]) != key(new[d]))
+    compared = len(old) - len(missing)
     return {
         "old_directories": len(old),
-        "compared": len(old) - len(missing),
-        "identical": len(old) - len(missing) - len(differing),
+        "compared": compared,
+        "identical": compared - len(differing),
         "missing": missing,
         "differing": differing,
-        "exact": not missing and not differing and bool(old),
+        "exact": not differing and (compared > 0 if common_only else (not missing and bool(old))),
     }

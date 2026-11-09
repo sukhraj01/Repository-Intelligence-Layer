@@ -81,6 +81,7 @@ each job builds its own venv keyed by the interpreter version.
 | Script | What | Exact command (from `$HOME`) |
 |---|---|---|
 | `trace_flask_suite.sbatch` + `trace_pytest.py` | flask test suite at the pallets__flask-5014 base commit under the function-level tracer, and again under coverage.py | `sbatch ril_p/scripts/ada/trace_flask_suite.sbatch` (writes `ril_p/out/flask_trace.json`, `flask_coverage.json`) |
+| `rq2_full_prep.sbatch` | the chain from the finished mined store to the mined example cache: select, overlap audit (shards), drop list, materialise, rank inputs, BM25 ranks, features, cache, check; `LIMIT=N` for a trial | `sbatch --export=ALL,STORE=$HOME/ril_mine/store/full,RUN=<name>[,LIMIT=N] ril_prep/code/scripts/ada/rq2_full_prep.sbatch` (from `$HOME`; `docs/RQ2_LAUNCH_PLAN.md` section 10.8) |
 | `clone_django.sbatch` | full clone of django/django, checkout of the django__django-16145 base commit | `sbatch ril_p/scripts/ada/clone_django.sbatch` |
 | `graph_measure.sbatch` | statistics of the three graphs (`parse_repo.py`), then the storage and expansion measurement, determinism rerun, through the latency harness | `sbatch --export=ALL,RIL_COMMIT=<hash>,RIL_DIRTY=1 ril_p/scripts/ada/graph_measure.sbatch` |
 | `configures_pool.sbatch` + `configures_pool.py` | shallow fetch of four more Verified base commits (parsing only) and rendering of every exploratory `configures` edge for the precision sample | `sbatch ril_p/scripts/ada/configures_pool.sbatch` |

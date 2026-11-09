@@ -1,0 +1,115 @@
+{
+ "quarters": [
+  {
+   "mean_corpus_units": 4992.3,
+   "mined": 1558,
+   "new_distinct_row_bytes": 946776691,
+   "new_distinct_row_bytes_per_mined": 607687,
+   "new_repositories": 567,
+   "positives_per_mined": 10.06,
+   "quarantined": 31,
+   "quarter": 1,
+   "rows": 2500
+  },
+  {
+   "mean_corpus_units": 4454.8,
+   "mined": 1574,
+   "new_distinct_row_bytes": 61076385,
+   "new_distinct_row_bytes_per_mined": 38803,
+   "new_repositories": 235,
+   "positives_per_mined": 6.83,
+   "quarantined": 36,
+   "quarter": 2,
+   "rows": 2500
+  },
+  {
+   "mean_corpus_units": 4969.7,
+   "mined": 1534,
+   "new_distinct_row_bytes": 18877923,
+   "new_distinct_row_bytes_per_mined": 12306,
+   "new_repositories": 124,
+   "positives_per_mined": 8.88,
+   "quarantined": 28,
+   "quarter": 3,
+   "rows": 2500
+  },
+  {
+   "mean_corpus_units": 4863.9,
+   "mined": 1564,
+   "new_distinct_row_bytes": 8708142,
+   "new_distinct_row_bytes_per_mined": 5568,
+   "new_repositories": 87,
+   "positives_per_mined": 9.37,
+   "quarantined": 28,
+   "quarter": 4,
+   "rows": 2500
+  }
+ ],
+ "state_sha256": "4982251f706d55e383b8456ee81d2f6a22ec3bf735809493bb7113fa449cecd2",
+ "store_bytes": {
+  "cas": 1035439141,
+  "listing": 723774819,
+  "pr": 103192444
+ },
+ "yield": {
+  "attempted": 10000,
+  "g2_pilot_directories_met": true,
+  "largest_repositories": [
+   [
+    "open-metadata/openmetadata",
+    397
+   ],
+   [
+    "apache/airflow",
+    315
+   ],
+   [
+    "project-chip/connectedhomeip",
+    257
+   ],
+   [
+    "policyengine/policyengine-us",
+    171
+   ],
+   [
+    "jupyterlab/jupyterlab",
+    161
+   ]
+  ],
+  "mined_share": 0.623,
+  "mined_with_positive": 6230,
+  "positives_per_mined": 8.78,
+  "positives_unrestricted": 54700,
+  "projection": {
+   "basis": "linear in the rows so far (seeded hash order: a prefix is a sample)",
+   "g2_met_unrestricted": true,
+   "g2_positives": 10000,
+   "mined": 6230,
+   "positives_unrestricted": 54700,
+   "target_attempted": 10000
+  },
+  "quarantine_by_reason": {
+   "changed_file_unparseable:mixed-tabs-spaces": 1,
+   "changed_file_unparseable:python2-except": 7,
+   "changed_file_unparseable:python2-long-literal": 2,
+   "changed_file_unparseable:python2-octal": 1,
+   "changed_file_unparseable:python2-print": 11,
+   "changed_file_unparseable:syntax-other": 26,
+   "compare_not_found": 1,
+   "corpus_unit_id_rejected": 8,
+   "diff_truncated": 14,
+   "old_file_missing_at_base": 26,
+   "patch_missing": 23,
+   "snapshot_unavailable": 3
+  },
+  "quarantined_share": 0.0123,
+  "repositories_seen": 1102,
+  "status": {
+   "mined": 6230,
+   "no_positive": 1040,
+   "no_python_change": 2607,
+   "quarantined": 123
+  },
+  "timeout_quarantined": 0
+ }
+}

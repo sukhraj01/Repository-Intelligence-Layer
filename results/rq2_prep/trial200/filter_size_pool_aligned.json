@@ -1,0 +1,17 @@
+{
+ "examples_in": 159,
+ "examples_kept": 117,
+ "k": 20,
+ "level": "positive",
+ "positives_in": 877,
+ "positives_kept": 295,
+ "report": {
+  "examples_in": 159,
+  "examples_kept_share": 0.7358490566037735,
+  "examples_out": 117,
+  "positives_in": 877,
+  "positives_kept_share": 0.3363740022805017,
+  "positives_out": 295
+ },
+ "teacher": "bm25"
+}
