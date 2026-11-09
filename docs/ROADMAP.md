@@ -132,14 +132,14 @@ still complete and defensible.
 ## RQ2 final launch (audit of 2026-11-08, `docs/RQ2_LAUNCH_PLAN.md`)
 
 - [x] Readiness audit of the chain from the mined store to the final tables; plan-only launcher, evaluation-set check, yield from the state log; dry run at minimal scale (E-RQ2-READINESS, D115)
-- [ ] Final cell configurations and run script for the 36 runs (cache, noise scores, retention directory, 30 GB, dev set, the eight repositories, Verified look as a separate job after the dev analysis); needs decisions 1 to 4 and 6 of the plan
+- [x] Final cell configurations and run scripts for the 36 runs (2026-11-09, E-RQ2-FINAL-CELLS, D124 to D134): committed configurations, per-run job scripts per account family, submit and preflight scripts, evaluation by set, sealed order of the final sets; plan-only validated on accounts A and C, nothing submitted
 - [ ] Full-store prep job (materialise with a names file, `non_test` reading, BM25 ranks, feature table, cache, FILTER size) with the overlap drop list applied; run at 200 directories first
 - [ ] Overlap audit on the full store and its drop list (about 2 h; stage the held-out index and code on the account holding the store)
 - [x] Final analysis module (built 2026-11-09, E-RQ2-ANALYSIS, `ril/analysis/rq2_final.py`; scope in `docs/RQ2_LAUNCH_PLAN.md` 9.5; reproduces the stored pilot summaries, not yet run on final rows; its test of the family-wise error rate failed, see the entry): `ril/analysis/` module reading per-query run rows; paired bootstrap per contrast and level, Holm within the two families of 8, delta 1.5 verdicts, seed mean and SD, sanity and dose-response rules, report tables; tested on the pilot rows and constructed cases; CPU
-- [ ] Dense teacher cost on the mined store: per-repository de-duplicated pass on 100 directories (about 0.4 GPU-hours) before deciding the FILTER-SweRankEmbed-Small mined cell
-- [ ] Decide the Verified look set (six folders with stores, the executable subset of 377, or build the other six) and record the departure if it is not the protocol's 12 folders
-- [ ] Encoding of the 377 executable instances with a retained model directory and trained-arm contexts (0.377 GPU-hours per checkpoint, Block 4)
+- [ ] Dense teacher cost on the mined store: per-repository de-duplicated pass on 100 directories (about 0.4 GPU-hours); rule fixed by D125: run the cell only if the full-store pass costs at most 6.0 GPU-hours
+- [x] Verified look set decided: the 377 executable instances (D127, DEV-038)
+- [ ] Trained-arm contexts for the 377 executable instances from a retained model directory (the final-sets scoring already encodes the 377 for RQ2's look; RQ3's contexts need the model-directory encoding and the context build, Block 4)
 - [ ] Alias for the archive account and the copy of retained models; retention directory on the account with space (account A has 5.1 GB free); account B has no SSH alias (`ada` and `adac` only), so the archive script cannot run until the engineer adds one
-- [ ] Decide the FILTER-pool rule (common visit count from the smallest pool, repeats identical across arms, or a larger pool; `docs/RQ2_LAUNCH_PLAN.md` 9.2) and apply it from the prep job's `filter-size` output before the first run
-- [ ] Decide retention against the test role of the eight (all 36, in-job sealed scoring, or the 18 mined; 9.4) and where mined cells train (split `mined=C injected=A`; the eight repositories, 480 MB, to C first)
+- [x] FILTER-pool rule decided (D133): 100 updates for every arm, each arm cycles its own pool in a fresh seeded order per pass, distinct examples seen stored beside every result, no change of the visits; the prep job's `filter-size` output states whether FILTER repeats
+- [x] Retention against the test role of the eight and where the mined cells train decided (D124, D129): the 18 mined models retained on C, the eight and the executable 377 scored once from them after the dev analysis, mined cells on C and injected cells on A (eight repositories and built parts of the 377 copied to C, verified)
 - [ ] Return of the pilot label sheets from two readers who are not the lead; decide pilot sample or new draw

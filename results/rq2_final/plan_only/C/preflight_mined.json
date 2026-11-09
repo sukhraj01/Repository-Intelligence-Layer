@@ -1,0 +1,66 @@
+{
+ "account": "C",
+ "checks": [
+  {
+   "detail": "RIL_COMMIT=b704289",
+   "id": "commit_recorded",
+   "ok": true
+  },
+  {
+   "detail": "work/registration.json is missing (registration is fixed before the first run)",
+   "id": "cell_table_registered",
+   "ok": false
+  },
+  {
+   "detail": "seeds are outside the exploratory waves; no noise draw is reused",
+   "id": "seeds_fresh",
+   "ok": true
+  },
+  {
+   "detail": "work/prep_summary.json is missing or incomplete (examples, filter_size, held_out_rows == 0, drop_list_applied)",
+   "id": "prep_summary",
+   "ok": false
+  },
+  {
+   "detail": "15 configurations conform to the registered design and reproduce the planned hashes",
+   "id": "configs_conform",
+   "ok": true
+  },
+  {
+   "detail": "missing: ['mined.jsonl.gz', 'features_mined.csv']",
+   "id": "inputs_present",
+   "ok": false
+  },
+  {
+   "detail": "scripts/ada/rq2f_mined_run.sbatch asks 30720 MB; plan 30720 MB; per-user ceiling 32000 MB",
+   "id": "memory_request",
+   "ok": true
+  },
+  {
+   "detail": "25.9 GB free on the account home; 10.0 GB needed",
+   "id": "space",
+   "ok": true
+  },
+  {
+   "detail": "retained models (4.9 GB) go to retained",
+   "id": "retain_dir",
+   "ok": true
+  },
+  {
+   "detail": "dev stores present",
+   "id": "dev_set_ready",
+   "ok": true
+  },
+  {
+   "detail": "work/leakage_ok.json is missing (make test-all on the cluster, then record it)",
+   "id": "leakage_tests",
+   "ok": false
+  }
+ ],
+ "commit": "b704289",
+ "created_utc": "2026-11-09T07:43:15Z",
+ "family": "mined",
+ "include_conditional": false,
+ "ready": false,
+ "version": "rq2-preflight/v1"
+}

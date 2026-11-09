@@ -7,6 +7,7 @@ a GPU job starts. Implements ``docs/RQ2_PROTOCOL.md`` section 4 and ``docs/RQ2_L
 
 from __future__ import annotations
 
+import gzip
 import json
 import os
 from collections.abc import Mapping, Sequence
@@ -27,10 +28,13 @@ class EvalSet:
     prep_dir: str
     roles: tuple[str, ...]
     e3_cache: str
+    compressed_texts: bool = False
+    """Unit texts are stored gzipped (``texts_units_gz``), as in the executable-subset builds."""
 
 
 def _lines(path: str) -> int:
-    with open(path, "rb") as handle:
+    opener = gzip.open if path.endswith(".gz") else open
+    with opener(path, "rb") as handle:
         return sum(1 for _ in handle)
 
 
@@ -43,7 +47,8 @@ def _distinct_texts(files: Sequence[str]) -> int:
     """
     seen: set[str] = set()
     for path in files:
-        with open(path, encoding="utf-8") as handle:
+        opener = gzip.open if path.endswith(".gz") else open
+        with opener(path, "rt", encoding="utf-8") as handle:
             for line in handle:
                 line = line.strip()
                 if not line:
@@ -53,6 +58,18 @@ def _distinct_texts(files: Sequence[str]) -> int:
                 except (ValueError, KeyError, TypeError):
                     seen.add(line)
     return len(seen)
+
+
+def _gz_unit_stores(s: EvalSet, repos: Sequence[str]) -> dict[str, list[str]]:
+    """Unit-text stores of a build whose texts are gzipped: ``{units__<repo>: [gz files]}``."""
+    out: dict[str, list[str]] = {}
+    tdir = os.path.join(s.prep_dir, "texts_units_gz")
+    if os.path.isdir(tdir):
+        for f in sorted(os.listdir(tdir)):
+            repo = f.split(".s")[0]
+            if f.endswith(".gz") and repo in repos:
+                out.setdefault(f"units__{repo}", []).append(os.path.join(tdir, f))
+    return out
 
 
 def plan_set(
@@ -78,6 +95,8 @@ def plan_set(
         }
     )
     stores = stores_for(s.e1_config, s.prep_dir, list(s.roles), chunks)
+    if s.compressed_texts:
+        stores = {**stores, **_gz_unit_stores(s, wanted_repos)}
     unit_texts = 0
     unit_lines = 0
     queries = 0

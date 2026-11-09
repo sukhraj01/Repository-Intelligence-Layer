@@ -1,0 +1,3 @@
+scripts/ada/rq2f_injected_run.sbatch:10:#SBATCH --mem=24G
+scripts/ada/rq2f_mined_run.sbatch:10:#SBATCH --mem=30G
+scripts/ada/rq2f_final_sets.sbatch:10:#SBATCH --mem=16G

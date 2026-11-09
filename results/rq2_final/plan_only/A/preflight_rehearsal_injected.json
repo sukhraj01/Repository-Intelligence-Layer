@@ -1,0 +1,61 @@
+{
+ "account": "A",
+ "checks": [
+  {
+   "detail": "RIL_COMMIT=b704289",
+   "id": "commit_recorded",
+   "ok": true
+  },
+  {
+   "detail": "work/registration.json holds the digest of the current cell table",
+   "id": "cell_table_registered",
+   "ok": true
+  },
+  {
+   "detail": "seeds are outside the exploratory waves; no noise draw is reused",
+   "id": "seeds_fresh",
+   "ok": true
+  },
+  {
+   "detail": "18 configurations conform to the registered design and reproduce the planned hashes",
+   "id": "configs_conform",
+   "ok": true
+  },
+  {
+   "detail": "cache, feature table / score stores are in place",
+   "id": "inputs_present",
+   "ok": true
+  },
+  {
+   "detail": "scripts/ada/rq2f_injected_run.sbatch asks 24576 MB; plan 24576 MB; per-user ceiling 32000 MB",
+   "id": "memory_request",
+   "ok": true
+  },
+  {
+   "detail": "5.3 GB free on the account home; 3.0 GB needed",
+   "id": "space",
+   "ok": true
+  },
+  {
+   "detail": "injected-noise models are not retained (D129)",
+   "id": "retain_dir",
+   "ok": true
+  },
+  {
+   "detail": "dev stores present",
+   "id": "dev_set_ready",
+   "ok": true
+  },
+  {
+   "detail": "leakage tests passed on this commit",
+   "id": "leakage_tests",
+   "ok": true
+  }
+ ],
+ "commit": "b704289",
+ "created_utc": "2026-11-09T07:43:10Z",
+ "family": "injected",
+ "include_conditional": false,
+ "ready": true,
+ "version": "rq2-preflight/v1"
+}
