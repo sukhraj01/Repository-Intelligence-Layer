@@ -96,10 +96,20 @@ def test_captions_state_evidence_class_n_and_entry() -> None:
             "reasoned",
             "synthetic",
         )
-        assert any(w in cap for w in ("queries", "folder", "directories", "instances")), t.name
+        assert any(
+            w in cap
+            for w in ("queries", "folder", "directories", "instances", "call sites", "repositories")
+        ), t.name
         for entry in t.entries:
             assert f"| {entry} " in index, (t.name, entry)
-        if t.name not in ("bm25_repro", "rq3_subset"):
+        if t.name not in (
+            "bm25_repro",
+            "rq3_subset",
+            "graph_recovery",
+            "graph_storage",
+            "latency_stages",
+            "eval_stores",
+        ):
             assert "exploratory" in t.evidence, t.name
 
 
@@ -160,3 +170,36 @@ def test_report_keeps_the_claim_discipline() -> None:
         assert phrase not in text, phrase
     assert "matched optimization budgets" in text
     assert "our literature audit did not identify a study that systematically evaluates" in text
+
+
+def test_new_tables_equal_the_stored_files() -> None:
+    with open(ROOT / "results/tables/eval_repo_build_measured.csv", encoding="utf-8") as h:
+        evals = list(csv.DictReader(h))
+    text = _read(GENERATED / "eval_stores.tex")
+    assert f"{sum(int(r['l2_queries']) for r in evals)}" in text
+    assert f"{sum(int(r['distinct_unit_texts_full_measured']) for r in evals)}" in text
+    with open(ROOT / "results/tables/p_recovery_summary.csv", encoding="utf-8") as h:
+        rec = [
+            r
+            for r in csv.DictReader(h)
+            if r["definition"] == "a"
+            and r["scope"] == "flask (ada)"
+            and r["quantity"] == "resolved / non-external"
+        ]
+    assert len(rec) == 1
+    assert f"{float(rec[0]['value']) * 100:.1f}" in _read(GENERATED / "graph_recovery.tex")
+    with open(ROOT / "results/latency/latency_log.csv", encoding="utf-8") as h:
+        log = [
+            r
+            for r in csv.DictReader(h)
+            if r["query_set_id"] == "retrieval-django-v1"
+            and r["stage"] == "bm25"
+            and r["cache_state"] == "warm"
+        ]
+    assert f"{float(log[-1]['p99_ms']):.2f}" in _read(GENERATED / "latency_stages.tex")
+
+
+def test_latency_rows_are_never_summed_or_averaged() -> None:
+    text = _read(GENERATED / "latency_stages.tex").lower()
+    assert "mean" not in text.replace("not the mean", "")
+    assert "not summed" in text

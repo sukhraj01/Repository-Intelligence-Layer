@@ -1,0 +1,27 @@
+\begin{table*}[t]
+\centering\small
+\caption{Edge recovery of the stored graph under four definitions. Evidence class: \emph{measured, exploratory (three repositories)}. Definition a: share of call sites with a stored resolved edge (and resolved or ambiguous), among sites whose callee is not external, from the graph build of each repository at one commit. Definition b: recall against calls observed in a test suite run, over pairs of units inside the repository (n pairs). Definition c: agreement with an independent static analyser over a sample of call sites (n sites). Definition d: manual inspection of a sample of recorded edges, and the population-weighted recall derived from it. The definitions measure different things and are not averaged. Entry \entry{E-GRAPH-BUILD}.}
+\label{tab:graph_recovery}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.05\linewidth}>{\raggedright\arraybackslash}p{0.3\linewidth}>{\raggedright\arraybackslash}p{0.3\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}}
+\toprule
+Def. & Scope & Quantity & n & Value (\%) \\
+\midrule
+a & flask (ada) & resolved / non-external & 2237 & 50.8 \\
+a & flask (ada) & (resolved + ambiguous) / non-external & 2237 & 94.4 \\
+a & requests (ada) & resolved / non-external & 1246 & 72.4 \\
+a & requests (ada) & (resolved + ambiguous) / non-external & 1246 & 85.5 \\
+a & django (ada) & resolved / non-external & 101411 & 62.1 \\
+a & django (ada) & (resolved + ambiguous) / non-external & 101411 & 93.4 \\
+b & flask: all in-repo pairs & recall, resolved & 1057 & 47.9 \\
+b & flask: all in-repo pairs & recall, resolved or ambiguous & 1057 & 65.8 \\
+b & flask: excluding implicit-protocol dunder callees & recall, resolved & 854 & 59.2 \\
+b & flask: excluding implicit-protocol dunder callees & recall, resolved or ambiguous & 854 & 81.4 \\
+c & flask+requests, all & agreement rate & 300 & 69.0 \\
+d & flask+requests, recorded resolved & claim holds (correct / decided) & 40 & 100.0 \\
+d & flask+requests, recorded ambiguous & claim holds (correct / decided) & 20 & 40.0 \\
+d & flask+requests, recorded unresolved & claim holds (correct / decided) & 20 & 22.2 \\
+d & flask+requests, population-weighted & recall resolved over in repo sites & -- & 77.4 \\
+d & flask+requests, population-weighted & recall resolved or ambiguous over in repo sites & -- & 97.9 \\
+\bottomrule
+\end{tabular}
+\end{table*}
