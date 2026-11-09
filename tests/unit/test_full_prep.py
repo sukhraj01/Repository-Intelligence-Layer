@@ -204,6 +204,23 @@ def test_compare_ignores_timing_and_gzip_time_but_nothing_else(tmp_path) -> None
     write(tmp_path / "a", 1.0, 1, 5)
     write(tmp_path / "b", 2.0, 2, 5)
     assert full_prep.compare_outputs(str(tmp_path / "a"), str(tmp_path / "b"))["identical"]
+    # a run's own paths and the hash of a listing that holds one are not content
+    (tmp_path / "a" / "p.json").write_text(
+        json.dumps({"out": "/x/a", "listing_sha256": "1", "n": 1})
+    )
+    (tmp_path / "b" / "p.json").write_text(
+        json.dumps({"out": "/x/b", "listing_sha256": "2", "n": 1})
+    )
+    assert full_prep.compare_outputs(str(tmp_path / "a"), str(tmp_path / "b"))["identical"]
+    (tmp_path / "b" / "p.json").write_text(
+        json.dumps({"out": "/x/b", "listing_sha256": "2", "n": 2})
+    )
+    assert full_prep.compare_outputs(str(tmp_path / "a"), str(tmp_path / "b"))["differing"] == [
+        "p.json"
+    ]
+    (tmp_path / "b" / "p.json").write_text(
+        json.dumps({"out": "/x/a", "listing_sha256": "1", "n": 1})
+    )
     write(tmp_path / "c", 2.0, 2, 6)
     res = full_prep.compare_outputs(str(tmp_path / "a"), str(tmp_path / "c"))
     assert res["differing"] == ["ranks.jsonl"]
@@ -306,6 +323,24 @@ def test_runner_select_and_drop_write_the_manifest_without_touching_the_store(tm
                         "drop_sha256": "0" * 64})  # fmt: skip
     with pytest.raises(RuntimeError, match="hashes to"):
         Runner(bad).do_drop()
+
+
+def test_a_named_subset_replaces_the_first_n_and_must_be_final(tmp_path) -> None:
+    root, _ = _store(tmp_path)
+    names = tmp_path / "names.txt"
+    names.write_text("acme__three-6\nacme__one-1\n")
+    cfg = PrepConfig(
+        store=root, out=str(tmp_path / "o"), scratch=str(tmp_path / "t"), index="i",
+        held_out="h", rename_cache="r", repo_root=str(tmp_path), names_file=str(names),
+    )  # fmt: skip
+    r = Runner(cfg)
+    r.stage("select", r.do_select, [r.p("names.txt")])
+    assert r.names() == ["acme__three-6", "acme__one-1"]
+    doc = json.loads((tmp_path / "o" / "selection.json").read_text())
+    assert doc["names_file_sha256"] == full_prep.sha256_file(str(names))
+    names.write_text("acme__nowhere-1\n")
+    with pytest.raises(RuntimeError, match="not final"):
+        Runner(cfg).do_select()
 
 
 def test_a_failing_step_stops_the_stage_and_names_the_log(tmp_path) -> None:

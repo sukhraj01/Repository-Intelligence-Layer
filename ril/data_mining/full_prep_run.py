@@ -62,6 +62,7 @@ class PrepConfig:
     repo_root: str = "."
     state: str | None = None
     limit: int | None = None
+    names_file: str | None = None
     shards: int = 1
     readings: tuple[str, ...] = ("non_test",)
     stages: tuple[str, ...] = STAGES
@@ -194,10 +195,27 @@ class Runner:
     # ------------------------------------------------------------------ stages
 
     def do_select(self) -> dict[str, Any]:
-        sel = fp.select_closed(self.cfg.state_path(), self.cfg.store, self.cfg.limit)
-        _write_names(self.p("names.txt"), sel.names)
-        _write_json(self.p("selection.json"), sel.to_dict())
-        return sel.to_dict()
+        if self.cfg.names_file:
+            # a named subset (a scale probe): every name must be a final directory of the store
+            names = fp.read_names(self.cfg.names_file)
+            open_ = [
+                n
+                for n in names
+                if not os.path.exists(os.path.join(self.cfg.store, "pr", n, "pr_meta.json"))
+            ]
+            if open_:
+                raise RuntimeError(f"{len(open_)} named directories are not final: {open_[:3]}")
+            doc: dict[str, Any] = {
+                "directories": len(names),
+                "names_file_sha256": fp.sha256_file(self.cfg.names_file),
+                "names_sha256": fp.sha256_names(names),
+            }
+        else:
+            sel = fp.select_closed(self.cfg.state_path(), self.cfg.store, self.cfg.limit)
+            names, doc = sel.names, sel.to_dict()
+        _write_names(self.p("names.txt"), names)
+        _write_json(self.p("selection.json"), doc)
+        return doc
 
     def do_overlap(self) -> dict[str, Any]:
         names = self.names()
@@ -324,6 +342,11 @@ class Runner:
                 "positives": sum(int(x["positives"]) for x in sample),
                 "repositories": len({str(x["repo"]) for x in sample}),
                 "zip_bytes": os.path.getsize(os.path.join(work, "mined.zip")),
+                "zip_sha256": fp.sha256_file(os.path.join(work, "mined.zip")),
+                "listing_members_sha256": fp.listing_members_sha256(
+                    os.path.join(work, "mined.listing.json")
+                ),
+                "sample_sha256": fp.sha256_file(os.path.join(work, "sample.json")),
             }
             _write_json(self.p(r, "counts.json"), counts)
             info[r] = counts

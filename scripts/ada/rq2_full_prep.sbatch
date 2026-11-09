@@ -17,7 +17,8 @@
 # Submit from $HOME (the log path is relative):
 #   sbatch --export=ALL,STORE=<store>,RUN=<name>[,LIMIT=N][,STAGES=a,b][,SHARDS=n][,READINGS=non_test:pool_aligned] \
 #          [--mem=..G] ril_prep/code/scripts/ada/rq2_full_prep.sbatch
-# Options (environment): LIMIT (the first N final mined directories; the trial), STAGES (default all),
+# Options (environment): LIMIT (the first N final mined directories; the trial), NAMES_FILE (a named
+# subset, for scale probes), STAGES (default all),
 # SHARDS (audit shards, default from configs/rq2_prep/full.yaml), READINGS (colon-separated, default
 # non_test; pool_aligned is the sensitivity reading), DROP_LIST + DROP_SHA256 (a tracked, hashed drop list instead of this run's own
 # audit), CLEAN_SCRATCH=1 (remove this job's scratch at the end; off by default), FORCE=1 (rerun finished
@@ -49,6 +50,7 @@ ARGS=(run --config configs/rq2_prep/full.yaml --store "$STORE" --out "$OUT" --sc
       --index "$INDEX" --held-out "$HELD" --rename-cache "$REN" --python "$PY"
       --stages "${STAGES:-all}")
 [ -n "${LIMIT:-}" ] && ARGS+=(--limit "$LIMIT")
+[ -n "${NAMES_FILE:-}" ] && ARGS+=(--names-file "$NAMES_FILE")
 [ -n "${SHARDS:-}" ] && ARGS+=(--shards "$SHARDS")
 [ -n "${READINGS:-}" ] && ARGS+=(--readings ${READINGS//:/ })
 [ -n "${DROP_LIST:-}" ] && ARGS+=(--drop-list "$DROP_LIST" --drop-sha256 "${DROP_SHA256:?set DROP_SHA256 with DROP_LIST}")

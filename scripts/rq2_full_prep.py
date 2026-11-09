@@ -62,6 +62,7 @@ def cmd_run(a: argparse.Namespace) -> dict[str, object]:
         repo_root=str(Path(__file__).resolve().parents[1]),
         state=a.state,
         limit=a.limit,
+        names_file=a.names_file,
         shards=int(a.shards or d.get("shards", 1)),  # type: ignore[call-overload]
         readings=tuple(a.readings or d.get("readings", ("non_test",))),  # type: ignore[call-overload]
         stages=fr.main_stage_list(a.stages),
@@ -143,6 +144,7 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--state")
     r.add_argument("--python")
     r.add_argument("--limit", type=int)
+    r.add_argument("--names-file", help="a named subset instead of the first N (scale probes)")
     r.add_argument("--shards", type=int)
     r.add_argument("--readings", nargs="+")
     r.add_argument("--stages", default="all")

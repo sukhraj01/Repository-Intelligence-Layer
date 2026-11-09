@@ -24,6 +24,10 @@ from ril.data_mining import cas
 
 TIMING_KEYS: tuple[str, ...] = ("seconds",)
 """Fields of rank rows that hold wall-clock time: the only values allowed to differ between runs."""
+PATH_KEYS: tuple[str, ...] = ("out", "zip", "listing_sha256")
+"""Fields of stage records that name a run's own paths (or hash a file that holds one): the
+listing's ``url`` is the archive's path, so its hash differs with the scratch directory. The
+listing's content apart from that path is hashed separately (``listing_members_sha256``)."""
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -416,11 +420,19 @@ def _strip_timing(doc: Any, keys: Sequence[str]) -> Any:
         return {
             k: _strip_timing(v, keys)
             for k, v in doc.items()
-            if k not in keys and k not in ("host", "hardware")
+            if k not in keys and k not in ("host", "hardware", *PATH_KEYS)
         }
     if isinstance(doc, list):
         return [_strip_timing(v, keys) for v in doc]
     return doc
+
+
+def listing_members_sha256(listing_path: str) -> str:
+    """Hash of a zip listing without its ``url`` (the archive's path): the members and offsets."""
+    with open(listing_path, encoding="utf-8") as handle:
+        doc = json.load(handle)
+    doc.pop("url", None)
+    return sha256_bytes(json.dumps(doc, sort_keys=True).encode("utf-8"))
 
 
 def cache_summary(path: str) -> dict[str, Any]:
