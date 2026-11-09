@@ -1,0 +1,25 @@
+label,level,metric,key,what,stored_name,stored_queries,queries,stored,recomputed,abs_diff,reproduces
+cre,L2,ndcg10,ref|bm25,BM25 alone,bm25,351,351,21.17,21.1704,0.0004,True
+cre,L2,ndcg10,r1|dense,dense alone,dense|coderankembed__t1024,351,351,18.24,18.2427,0.0027,True
+cre,L2,ndcg10,p|first,RRF of BM25 and dense,rrf|coderankembed__t1024|k100,351,351,24.04,24.0359,0.0041,True
+cre,L2,ndcg10,s|first,score-level first stage (a_none),a_none,351,351,25.1,25.0985,0.0015,True
+cre,L2,ndcg10,s|graph|b,"stored graph, score level",graph|b,351,351,27.05,27.0504,0.0004,True
+cre,L2,ndcg10,s|sfscore|b,"same-file by score, score level",sfscore|b,351,351,26.33,26.3289,0.0011,True
+cre,L3,recall100,ref|bm25,BM25 alone,bm25,155,155,37.47,37.473,0.003,True
+cre,L3,recall100,r1|dense,dense alone,dense|coderankembed__t1024,155,155,34.0,34.0024,0.0024,True
+cre,L3,recall100,p|first,RRF of BM25 and dense,rrf|coderankembed__t1024|k100,155,155,43.0,42.996,0.004,True
+cre,L3,recall100,s|first,score-level first stage (a_none),a_none,155,155,42.08,42.0836,0.0036,True
+cre,L3,recall100,s|graph|b,"stored graph, score level",graph|b,155,155,54.31,54.3065,0.0035,True
+cre,L3,recall100,s|sfscore|b,"same-file by score, score level",sfscore|b,155,155,55.28,55.2829,0.0029,True
+qwen3,L2,ndcg10,ref|bm25,BM25 alone,bm25,351,351,21.17,21.1704,0.0004,True
+qwen3,L2,ndcg10,r1|dense,dense alone,dense|qwen3-embedding-0.6b__t512,351,351,24.66,24.6597,0.0003,True
+qwen3,L2,ndcg10,p|first,RRF of BM25 and dense,rrf|qwen3-embedding-0.6b__t512|k20,351,351,28.32,28.3215,0.0015,True
+qwen3,L2,ndcg10,s|first,score-level first stage (a_none),a_none,351,351,28.51,28.5076,0.0024,True
+qwen3,L2,ndcg10,s|graph|b,"stored graph, score level",graph|b,351,351,30.19,30.1876,0.0024,True
+qwen3,L2,ndcg10,s|sfscore|b,"same-file by score, score level",sfscore|b,351,351,29.61,29.6146,0.0046,True
+qwen3,L3,recall100,ref|bm25,BM25 alone,bm25,155,155,37.47,37.473,0.003,True
+qwen3,L3,recall100,r1|dense,dense alone,dense|qwen3-embedding-0.6b__t512,155,155,46.71,46.709,0.001,True
+qwen3,L3,recall100,p|first,RRF of BM25 and dense,rrf|qwen3-embedding-0.6b__t512|k20,155,155,47.08,47.0785,0.0015,True
+qwen3,L3,recall100,s|first,score-level first stage (a_none),a_none,155,155,47.56,47.5648,0.0048,True
+qwen3,L3,recall100,s|graph|b,"stored graph, score level",graph|b,155,155,57.82,57.8153,0.0047,True
+qwen3,L3,recall100,s|sfscore|b,"same-file by score, score level",sfscore|b,155,155,58.82,58.8228,0.0028,True

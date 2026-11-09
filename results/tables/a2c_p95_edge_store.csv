@@ -1,0 +1,5 @@
+repo_id,nodes,edges,raw_jsonl_bytes,store_bytes,write_s,load_fast_p50_s,load_verify_p50_s,load_deep_p50_s,adjacency_p50_s,load_fast_p95_s,load_verify_p95_s,load_deep_p95_s,adjacency_p95_s,round_trip_equal
+psf/requests,684,3775,975895,61220,0.1913,0.0375,0.0381,0.1191,0.0033,0.0471,0.0458,0.1293,0.0052,True
+pallets/flask,1001,5749,1517899,88735,0.2892,0.0571,0.0562,0.1837,0.0048,0.0657,0.0672,0.1944,0.0056,True
+django/django,36506,224155,85322563,4076308,12.2253,2.9607,2.962,8.3561,0.5182,3.0876,3.079,8.5446,0.5494,True
+pytest-dev/pytest,5063,27856,7898364,456399,1.3216,0.2944,0.3005,0.8927,0.0279,0.3113,0.3105,0.9473,0.0508,True

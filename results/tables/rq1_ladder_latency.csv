@@ -1,0 +1,24 @@
+scale,index_units,rung,stage,role,measured,query_set_id,host,gpu,cpu,cache_state,commit,config_hash,timestamp_utc,p50_ms,p95_ms,p99_ms,n,rows_matched
+django,35860,R1,query_encode,query encoder,True,qenc-coderankembed-t1024-v1,gnode044,NVIDIA GeForce RTX 2080 Ti,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,warm,928edb7,2f7d0ce69ddaea86722f6b116f29ac9d6a710f2a30fdc52507303b75ed2f12aa,2026-10-23T13:07:28Z,18.0691,19.2836,22.1453,295,1
+django,35860,R1,dense_search,flat exact search,True,dsearch-coderankembed-django-torch-v1,gnode044,NVIDIA GeForce RTX 2080 Ti,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,warm,928edb7,8b90845f349bd64ca8a8406471656ee1255d4237a3b918978da9f97aeed806cd,2026-10-23T13:07:37Z,0.267,0.2683,0.2781,295,2
+django,35860,R2,bm25,BM25 search,True,retrieval-django-v1,Sukhraj.local,none,Apple M3,warm,bba24b0,97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610,2026-10-17T22:31:47Z,0.202,0.269,0.3074,595,1
+django,35860,R2,rrf_fusion,rank fusion,False,-,-,,,,,,,,,,,
+django,35860,R3,same_file_expansion,same-file expansion,False,-,-,,,,,,,,,,,
+django,35860,R4,graph_expansion,"graph expansion (stored graph, all families)",True,retrieval-django-v1,Sukhraj.local,none,Apple M3,warm,bba24b0,97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610,2026-10-17T22:31:47Z,1.1395,2.1353,2.854,595,1
+django,35860,R5,recency_prior,recency prior,False,-,-,,,,,,,,,,,
+django,35860,ctx,assemble,"context assembly (BM25 first stage, budget 8,000)",True,assembly-django-b8000-v1,Sukhraj.local,none,Apple M3,warm,527c625,92148a25f79aa271cc29803d16b285e106de95a6a73d3747ea09af2df8ed36ff,2026-11-05T23:38:30Z,10.9763,17.0085,23.0422,595,1
+django,35860,ctx,end_to_end,BM25 query to assembled context (stored end to end),True,assembly-django-b8000-v1,Sukhraj.local,none,Apple M3,warm,527c625,92148a25f79aa271cc29803d16b285e106de95a6a73d3747ea09af2df8ed36ff,2026-11-05T23:38:30Z,11.4419,17.2814,23.6517,595,1
+django_cpu,35860,R1,query_encode,query encoder,True,qenc-coderankembed-t1024-v1,gnode006,none,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,warm,928edb7,2f7d0ce69ddaea86722f6b116f29ac9d6a710f2a30fdc52507303b75ed2f12aa,2026-10-24T18:29:05Z,411.4684,1265.1825,2555.2351,295,1
+django_cpu,35860,R1,dense_search,flat exact search,True,dsearch-coderankembed-django-v1,gnode006,none,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,warm,928edb7,01afeed96c9d992662c04e2c97bd8d9879359c0fa84344e055b225feb7c4fe60,2026-10-24T18:33:33Z,4.9558,5.1225,5.2555,295,2
+django_cpu,35860,R2,bm25,BM25 search,True,retrieval-django-v1,Sukhraj.local,none,Apple M3,warm,bba24b0,97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610,2026-10-17T22:31:47Z,0.202,0.269,0.3074,595,1
+django_cpu,35860,R2,rrf_fusion,rank fusion,False,-,-,,,,,,,,,,,
+django_cpu,35860,R3,same_file_expansion,same-file expansion,False,-,-,,,,,,,,,,,
+django_cpu,35860,R4,graph_expansion,"graph expansion (stored graph, all families)",True,retrieval-django-v1,Sukhraj.local,none,Apple M3,warm,bba24b0,97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610,2026-10-17T22:31:47Z,1.1395,2.1353,2.854,595,1
+django_cpu,35860,R5,recency_prior,recency prior,False,-,-,,,,,,,,,,,
+small,974,R1,query_encode,query encoder,True,qenc-coderankembed-t1024-v1,gnode044,NVIDIA GeForce RTX 2080 Ti,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,warm,928edb7,2f7d0ce69ddaea86722f6b116f29ac9d6a710f2a30fdc52507303b75ed2f12aa,2026-10-23T13:07:28Z,18.0691,19.2836,22.1453,295,1
+small,974,R1,dense_search,flat exact search,True,dsearch-coderankembed-dev-torch-v1,gnode044,NVIDIA GeForce RTX 2080 Ti,Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz,warm,928edb7,a76428f77f0949d0b04b0670d8462a90e284aca4bfce75f33610065293216aa1,2026-10-23T13:07:37Z,0.113,0.1169,0.1308,295,2
+small,974,R2,bm25,BM25 search,True,retrieval-flask-v1,Sukhraj.local,none,Apple M3,warm,bba24b0,f50286d3662c8f5a1bfeb6264dd370f5c035048f2ebc8c5877c0c55b012237fa,2026-10-17T22:31:31Z,0.0398,0.0452,0.0468,595,1
+small,974,R2,rrf_fusion,rank fusion,False,-,-,,,,,,,,,,,
+small,974,R3,same_file_expansion,same-file expansion,False,-,-,,,,,,,,,,,
+small,974,R4,graph_expansion,"graph expansion (stored graph, all families)",True,retrieval-flask-v1,Sukhraj.local,none,Apple M3,warm,bba24b0,f50286d3662c8f5a1bfeb6264dd370f5c035048f2ebc8c5877c0c55b012237fa,2026-10-17T22:31:31Z,0.1494,0.2592,0.5605,595,1
+small,974,R5,recency_prior,recency prior,False,-,-,,,,,,,,,,,

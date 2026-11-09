@@ -55,7 +55,8 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 5–8 — Person A: RQ1
 
-- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense, dense+BM25 and the graph on a fused first stage measured zero-shot with latency rows, E-DENSE-FUSION 2026-10-25; the frozen-configuration ablation still to run)
+- [x] Ablation on the development set with latency columns from stored rows (2026-11-09, E-RQ1-LADDER, D145: dense, plus BM25 by RRF, plus same-file expansion, plus typed expansion against the same-file and chance controls, plus recency prior; rerank not built, three stages without a latency row)
+- [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense, dense+BM25 and the graph on a fused first stage measured zero-shot with latency rows, E-DENSE-FUSION 2026-10-25; the frozen-configuration ablation still to run; the freeze proposal is in E-RQ1-LADDER)
 - [ ] Latency distribution measured; rerank decision informed (ADR-009)
 
 ## Before week 6 — freeze
@@ -85,6 +86,7 @@ Design of record: option E, 12 cells x 3 seeds, 8 extra evaluation repositories,
 ## Weeks 7–10 — Person A: graph extension
 
 - [x] Test and configuration node types, `tests` / `configures` edges (built and off by default; precision sampled, `ril/parsing/exploratory_edges.py`, `RESULTS.md` rows `p-*`; census of 2026-10-23 over 540 Python L3 instances: test units are 20.5% of L3 positives and 44% of those outside the L2 files; non-Python positives 1.7%)
+- [x] Edge sets on L3 and stacked expansion against the same-file control, dev only (2026-11-09, E-A-OWNER-ITEMS, exploratory: no edge set beats same-file; ansible lacks dense scores; Verified-six not read)
 - [ ] CORE-Bench L3 evaluation
 
 ## Week 12 — go / no-go
