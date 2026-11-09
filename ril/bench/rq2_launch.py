@@ -92,7 +92,8 @@ def compute_updates(work: str) -> Record:
     Reads ``work/prep_summary.json`` (the prep job's output: ``filter_size`` is F, the FILTER pool
     after the held-out and overlap drops), applies ``rp.mined_updates`` and records F, N, the
     visits per arm and the sha256 of the summary it was computed from. Refuses a summary that is
-    missing, has no usable ``filter_size``, or still holds held-out rows or an unapplied drop list.
+    missing, has no usable ``filter_size``, still holds held-out rows or an unapplied drop list, or
+    belongs to a trial run (``scope`` other than ``full``, as the full-store prep job writes it).
     """
     path = os.path.join(work, "prep_summary.json")
     prep = _read_json(path)
@@ -100,6 +101,8 @@ def compute_updates(work: str) -> Record:
         raise UpdatesError(f"{path} is missing: the prep job has not run")
     if prep.get("held_out_rows") != 0 or not prep.get("drop_list_applied"):
         raise UpdatesError("prep summary: held-out rows must be 0 and the drop list applied")
+    if prep.get("scope", "full") != "full":
+        raise UpdatesError(f"prep summary is of a {prep['scope']!r} run, not of the whole store")
     try:
         pool = int(prep["filter_size"])
     except (KeyError, TypeError, ValueError) as err:

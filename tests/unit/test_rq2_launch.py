@@ -171,6 +171,22 @@ def test_n_must_come_from_a_prepared_store(tmp_path: Path) -> None:
         rl.compute_updates(str(work))
 
 
+def test_a_trial_prep_summary_cannot_fix_n(tmp_path: Path) -> None:
+    # the 200-directory trial of the full-store prep chain has the same keys as the real summary
+    trial = ROOT / "results/rq2_prep/trial200/prep_summary_non_test.json"
+    if not trial.exists():
+        pytest.skip("trial summary not present")
+    work = tmp_path / "w"
+    work.mkdir()
+    (work / "prep_summary.json").write_text(trial.read_text())
+    with pytest.raises(rl.UpdatesError, match="trial"):
+        rl.compute_updates(str(work))
+    doc = json.loads(trial.read_text())
+    (work / "prep_summary.json").write_text(json.dumps({**doc, "scope": "full"}))
+    rec = rl.compute_updates(str(work))  # same keys: F = 134 gives N = 4 (134 // 32)
+    assert rec["filter_pool"] == 134 and rec["updates"] == 4 and rec["visits_per_arm"] == 128
+
+
 def test_a_mined_launch_without_computed_n_fails_the_check_and_builds_no_jobs(
     tmp_path: Path,
 ) -> None:
