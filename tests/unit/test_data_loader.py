@@ -76,3 +76,27 @@ def test_planner_refuses_bad_inputs() -> None:
         BatchPlanner(exs, [1.0], RandomOrder(), RandomRepoLocal(), BatchSpec(2, 1, 1), 0)
     with pytest.raises(ValueError):
         BatchPlanner(exs, [1.0, -1.0, 1.0], RandomOrder(), RandomRepoLocal(), BatchSpec(2, 1, 1), 0)
+
+
+def test_small_pool_is_cycled_in_a_fresh_seeded_order_per_pass() -> None:
+    """D131: an arm with a pool smaller than its visits cycles it, one fresh shuffle per pass.
+
+    Every example is seen before any is repeated, passes differ, the order is a function of the seed
+    alone, and the stored diagnostic reports how many distinct examples the arm saw.
+    """
+    exs = synthetic_examples(repos=2, prs=4)  # 8 examples
+    spec = BatchSpec(2, 1, 1)
+    p = _planner(exs, spec, seed=100)
+    stream = [i for bt in p.batches(12) for i in bt.instance_ids]  # 24 visits = 3 passes
+    first, second, third = (stream[k * 8 : (k + 1) * 8] for k in range(3))
+    assert sorted(first) == sorted(second) == sorted(third) == sorted(e.instance_id for e in exs)
+    assert len({tuple(first), tuple(second), tuple(third)}) == 3
+    again = [i for bt in _planner(exs, spec, seed=100).batches(12) for i in bt.instance_ids]
+    other = [i for bt in _planner(exs, spec, seed=101).batches(12) for i in bt.instance_ids]
+    assert again == stream and other != stream
+    c = p.counts.to_dict()
+    assert c["unique_examples_seen"] == 8 and c["examples_seen"] == 24
+    assert c["effective_epochs"] == pytest.approx(3.0)
+    short = _planner(exs, spec, seed=100)
+    list(short.batches(2))  # 4 visits of a pool of 8: no repeat, diagnostic equals the visits
+    assert short.counts.to_dict()["unique_examples_seen"] == 4

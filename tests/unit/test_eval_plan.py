@@ -62,3 +62,18 @@ def test_missing_path_is_reported_not_raised(tmp_path: Path) -> None:
         ]
     )
     assert not plan["ready"] and len(plan["sets"][0]["missing"]) == 3
+
+
+def test_gzipped_unit_texts_are_found_and_counted(tmp_path: Path) -> None:
+    import gzip
+
+    s = _fixture(tmp_path, with_texts=False)
+    gz = Path(s.prep_dir) / "texts_units_gz"
+    gz.mkdir()
+    with gzip.open(gz / "o__r.s1.jsonl.gz", "wt", encoding="utf-8") as h:
+        h.write('{"h": "a"}\n{"h": "b"}\n{"h": "a"}\n')
+    plain = plan_sets([s])
+    assert not plain["ready"]  # without the flag the gzipped stores are not looked for
+    packed = plan_sets([EvalSet(s.name, s.e1_config, s.prep_dir, s.roles, s.e3_cache, True)])
+    assert packed["ready"] and packed["sets"][0]["unit_texts"] == 2
+    assert packed["sets"][0]["unit_lines"] == 3
