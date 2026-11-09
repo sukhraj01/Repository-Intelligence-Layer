@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import csv
 import gzip
+import io
 import json
 import os
 from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
@@ -266,7 +267,12 @@ def write_cache(path: str, examples: Iterable[PoolExample]) -> int:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     n = 0
     tmp = f"{path}.tmp"
-    with gzip.open(tmp, "wt", encoding="utf-8") as handle:
+    # a fixed header time and no file name: the same examples give the same bytes on any run
+    with (
+        open(tmp, "wb") as raw,
+        gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as gz,
+        io.TextIOWrapper(gz, encoding="utf-8") as handle,
+    ):
         for ex in examples:
             handle.write(json.dumps(asdict(ex), sort_keys=True) + "\n")
             n += 1
@@ -276,6 +282,25 @@ def write_cache(path: str, examples: Iterable[PoolExample]) -> int:
 
 def read_cache(path: str) -> list[PoolExample]:
     """Examples back from :func:`write_cache`, in file order."""
+    return _read_cache(path, None)
+
+
+def read_cache_shared(path: str) -> list[PoolExample]:
+    """The same examples as :func:`read_cache`, with one copy of each distinct id and text.
+
+    A repository's snapshot repeats most of its functions from one pull request to the next, so
+    the plain reader holds the same text many times. Every value compares equal to the plain
+    reader's; only the number of string objects in memory differs.
+    """
+    return _read_cache(path, {})
+
+
+def _read_cache(path: str, pool: dict[str, str] | None) -> list[PoolExample]:
+    def one(value: str) -> str:
+        if pool is None:
+            return value
+        return pool.setdefault(value, value)
+
     out: list[PoolExample] = []
     with gzip.open(path, "rt", encoding="utf-8") as handle:
         for line in handle:
@@ -288,11 +313,11 @@ def read_cache(path: str) -> list[PoolExample]:
                     repo=str(r["repo"]),
                     pr=int(r["pr"]),
                     query=str(r["query"]),
-                    positive_ids=tuple(r["positive_ids"]),
-                    positive_texts=tuple(r["positive_texts"]),
-                    candidate_ids=tuple(r["candidate_ids"]),
-                    candidate_texts=tuple(r["candidate_texts"]),
-                    masked_ids=tuple(r.get("masked_ids", ())),
+                    positive_ids=tuple(one(x) for x in r["positive_ids"]),
+                    positive_texts=tuple(one(x) for x in r["positive_texts"]),
+                    candidate_ids=tuple(one(x) for x in r["candidate_ids"]),
+                    candidate_texts=tuple(one(x) for x in r["candidate_texts"]),
+                    masked_ids=tuple(one(x) for x in r.get("masked_ids", ())),
                 )
             )
     return out
