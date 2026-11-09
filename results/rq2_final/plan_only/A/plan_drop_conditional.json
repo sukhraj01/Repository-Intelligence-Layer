@@ -1,0 +1,1455 @@
+{
+ "budget": {
+  "measured_option_e": {
+   "basis": "measured",
+   "block3_cap": 46.7,
+   "conditional_dense_teacher_at_most": 6.4,
+   "eight_repositories": 5.87,
+   "margin": 20.97,
+   "margin_with_conditional": 14.57,
+   "retained_models": null,
+   "runs": 33,
+   "scope": "option_e",
+   "sensitivity_1000": 0.0,
+   "total": 25.73,
+   "train_and_dev_eval": 13.86,
+   "verified_look": 6.0
+  },
+  "measured_rulings": {
+   "basis": "measured",
+   "block3_cap": 46.7,
+   "conditional_dense_teacher_at_most": 6.4,
+   "eight_repositories": 2.67,
+   "margin": 19.97,
+   "margin_with_conditional": 13.57,
+   "retained_models": 15,
+   "runs": 33,
+   "scope": "rulings",
+   "sensitivity_1000": 0.0,
+   "total": 26.73,
+   "train_and_dev_eval": 13.86,
+   "verified_look": 10.2
+  },
+  "protocol_option_e": {
+   "basis": "protocol",
+   "block3_cap": 46.7,
+   "conditional_dense_teacher_at_most": 6.4,
+   "eight_repositories": 15.84,
+   "margin": 11.66,
+   "margin_with_conditional": 5.26,
+   "retained_models": null,
+   "runs": 33,
+   "scope": "option_e",
+   "sensitivity_1000": 0.0,
+   "total": 35.04,
+   "train_and_dev_eval": 13.2,
+   "verified_look": 6.0
+  },
+  "protocol_rulings": {
+   "basis": "protocol",
+   "block3_cap": 46.7,
+   "conditional_dense_teacher_at_most": 6.4,
+   "eight_repositories": 7.2,
+   "margin": 20.3,
+   "margin_with_conditional": 13.9,
+   "retained_models": 15,
+   "runs": 33,
+   "scope": "rulings",
+   "sensitivity_1000": 0.0,
+   "total": 26.4,
+   "train_and_dev_eval": 13.2,
+   "verified_look": 6.0
+  }
+ },
+ "cell_table_sha256": "40605eaff79cda64bddbff3883597ec7f4a8491395f71bc4ea98640ad414ff1f",
+ "critical_path_hours": 25.0,
+ "jobs": [
+  {
+   "account": "C",
+   "after": [],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.0,
+   "job_id": "report",
+   "kind": "cpu",
+   "note": "",
+   "stage": "mining report",
+   "wall_hours": 0.1
+  },
+  {
+   "account": "C",
+   "after": [
+    "report"
+   ],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.0,
+   "job_id": "overlap",
+   "kind": "cpu",
+   "note": "about 2 h linear from the pilot (1,445 s for 0.44 GB); 13 min if the index is built",
+   "stage": "overlap audit and drop list",
+   "wall_hours": 2.0
+  },
+  {
+   "account": "C",
+   "after": [
+    "overlap"
+   ],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.0,
+   "job_id": "prep",
+   "kind": "cpu",
+   "note": "reasoned: pilot 695 s materialise and 1,036 s BM25 for 1,286 directories, scaled to about 5,800 and rounded up with the cache build",
+   "stage": "materialise, rank inputs, BM25 teacher, feature table, cache",
+   "wall_hours": 3.0
+  },
+  {
+   "account": "C",
+   "after": [
+    "prep"
+   ],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.0,
+   "job_id": "filter_size",
+   "kind": "cpu",
+   "note": "",
+   "stage": "FILTER size for the subsample",
+   "wall_hours": 0.1
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_raw_u100_s100",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_raw, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_raw_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_sub_u100_s100",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_sub, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_sub_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_filter_bm25_u100_s100",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_filter_bm25, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_filter_bm25_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_weight_u100_s100",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_weight, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_weight_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_curriculum_u100_s100",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_curriculum, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_raw_u100_s100",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_raw, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_raw_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_oracle_u100_s100",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_oracle, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_oracle_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_sub_u100_s100",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_sub, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_sub_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_filter_bm25_u100_s100",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_filter_bm25, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_filter_bm25_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_filter_srs_u100_s100",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_filter_srs, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_filter_srs_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_weight_u100_s100",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_weight, seed 100",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_curriculum_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_raw_u100_s101",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_raw, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_raw_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_sub_u100_s101",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_sub, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_sub_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_filter_bm25_u100_s101",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_filter_bm25, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_filter_bm25_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_weight_u100_s101",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_weight, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_weight_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_curriculum_u100_s101",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_curriculum, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_weight_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_raw_u100_s101",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_raw, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_raw_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_oracle_u100_s101",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_oracle, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_oracle_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_sub_u100_s101",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_sub, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_sub_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_filter_bm25_u100_s101",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_filter_bm25, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_filter_bm25_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_filter_srs_u100_s101",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_filter_srs, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_filter_srs_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_weight_u100_s101",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_weight, seed 101",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_curriculum_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_raw_u100_s102",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_raw, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_raw_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_sub_u100_s102",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_sub, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_sub_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_filter_bm25_u100_s102",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_filter_bm25, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_filter_bm25_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_weight_u100_s102",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_weight, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "filter_size"
+   ],
+   "chain_after": [
+    "run_mined_weight_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_mined_curriculum_u100_s102",
+   "kind": "gpu",
+   "note": "retains the final model",
+   "stage": "train and score dev: mined mined_curriculum, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_weight_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_raw_u100_s102",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_raw, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_raw_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_oracle_u100_s102",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_oracle, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_oracle_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_sub_u100_s102",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_sub, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_sub_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_filter_bm25_u100_s102",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_filter_bm25, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_filter_bm25_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_filter_srs_u100_s102",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_filter_srs, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "A",
+   "after": [],
+   "chain_after": [
+    "run_inj_filter_srs_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.42,
+   "job_id": "run_inj_weight_u100_s102",
+   "kind": "gpu",
+   "note": "",
+   "stage": "train and score dev: injected inj_weight, seed 102",
+   "wall_hours": 0.42
+  },
+  {
+   "account": "C",
+   "after": [
+    "run_mined_raw_u100_s100",
+    "run_mined_sub_u100_s100",
+    "run_mined_filter_bm25_u100_s100",
+    "run_mined_weight_u100_s100",
+    "run_mined_curriculum_u100_s100",
+    "run_inj_raw_u100_s100",
+    "run_inj_oracle_u100_s100",
+    "run_inj_sub_u100_s100",
+    "run_inj_filter_bm25_u100_s100",
+    "run_inj_filter_srs_u100_s100",
+    "run_inj_weight_u100_s100",
+    "run_mined_raw_u100_s101",
+    "run_mined_sub_u100_s101",
+    "run_mined_filter_bm25_u100_s101",
+    "run_mined_weight_u100_s101",
+    "run_mined_curriculum_u100_s101",
+    "run_inj_raw_u100_s101",
+    "run_inj_oracle_u100_s101",
+    "run_inj_sub_u100_s101",
+    "run_inj_filter_bm25_u100_s101",
+    "run_inj_filter_srs_u100_s101",
+    "run_inj_weight_u100_s101",
+    "run_mined_raw_u100_s102",
+    "run_mined_sub_u100_s102",
+    "run_mined_filter_bm25_u100_s102",
+    "run_mined_weight_u100_s102",
+    "run_mined_curriculum_u100_s102",
+    "run_inj_raw_u100_s102",
+    "run_inj_oracle_u100_s102",
+    "run_inj_sub_u100_s102",
+    "run_inj_filter_bm25_u100_s102",
+    "run_inj_filter_srs_u100_s102",
+    "run_inj_weight_u100_s102"
+   ],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.0,
+   "job_id": "collect_results",
+   "kind": "manual",
+   "note": "needed only if the families trained on different accounts: A",
+   "stage": "copy the injected family's result directories to the analysis account (small named set, byte-verified, never overwrite)",
+   "wall_hours": 0.1
+  },
+  {
+   "account": "C",
+   "after": [
+    "collect_results"
+   ],
+   "chain_after": [],
+   "conditional": null,
+   "gpu_hours": 0.0,
+   "job_id": "dev_analysis",
+   "kind": "cpu",
+   "note": "",
+   "stage": "dev analysis: paired contrasts, Holm, decision rules (the final sets follow it)",
+   "wall_hours": 0.5
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "run_mined_curriculum_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_raw_u100_s100",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_raw, seed 100",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_raw_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_sub_u100_s100",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_sub, seed 100",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_sub_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_filter_bm25_u100_s100",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_filter_bm25, seed 100",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_filter_bm25_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_weight_u100_s100",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_weight, seed 100",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_weight_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_curriculum_u100_s100",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_curriculum, seed 100",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_curriculum_u100_s100"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_raw_u100_s101",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_raw, seed 101",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_raw_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_sub_u100_s101",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_sub, seed 101",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_sub_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_filter_bm25_u100_s101",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_filter_bm25, seed 101",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_filter_bm25_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_weight_u100_s101",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_weight, seed 101",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_weight_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_curriculum_u100_s101",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_curriculum, seed 101",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_curriculum_u100_s101"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_raw_u100_s102",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_raw, seed 102",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_raw_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_sub_u100_s102",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_sub, seed 102",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_sub_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_filter_bm25_u100_s102",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_filter_bm25, seed 102",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_filter_bm25_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_weight_u100_s102",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_weight, seed 102",
+   "wall_hours": 0.858
+  },
+  {
+   "account": "C",
+   "after": [
+    "dev_analysis"
+   ],
+   "chain_after": [
+    "final_mined_weight_u100_s102"
+   ],
+   "conditional": null,
+   "gpu_hours": 0.858,
+   "job_id": "final_mined_curriculum_u100_s102",
+   "kind": "gpu",
+   "note": "eight repositories and executable 377, role test, once",
+   "stage": "final sets from the retained model: mined_curriculum, seed 102",
+   "wall_hours": 0.858
+  }
+ ],
+ "reused_noise_seeds": [],
+ "runs": [
+  {
+   "account": "C",
+   "cell": "mined_raw",
+   "conditional": null,
+   "config_hash": "ee5c8cb076930a5f1f42fadc1c987eda3031aa7350d24ef17a1ffee2c187e539",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_raw_u100_s100",
+   "seed": 100,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "account": "C",
+   "cell": "mined_raw",
+   "conditional": null,
+   "config_hash": "701006e6c67fdf547de5335494070e760386227cee365f8c13d0f597317cce44",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_raw_u100_s101",
+   "seed": 101,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "account": "C",
+   "cell": "mined_raw",
+   "conditional": null,
+   "config_hash": "ebf4478c35c41a3264c7bdffb00fe0ed06aee35e46603603568a805d07c547e6",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_raw_u100_s102",
+   "seed": 102,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "account": "C",
+   "cell": "mined_sub",
+   "conditional": null,
+   "config_hash": "3a490695b322b8802a964d3e9d6eb348ebe08ccf115d09310e6a8594877c26e1",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_sub_u100_s100",
+   "seed": 100,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "account": "C",
+   "cell": "mined_sub",
+   "conditional": null,
+   "config_hash": "c59379d450ad68010982370408b333465c183bdf3fa8b3ec980d4ad25bded68d",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_sub_u100_s101",
+   "seed": 101,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "account": "C",
+   "cell": "mined_sub",
+   "conditional": null,
+   "config_hash": "12618b0fe44863c9e241daeecb01004143158bc553f61bb12612030a11bb4da1",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_sub_u100_s102",
+   "seed": 102,
+   "status": "confirmatory",
+   "teacher": null
+  },
+  {
+   "account": "C",
+   "cell": "mined_filter_bm25",
+   "conditional": null,
+   "config_hash": "cfa819c44a09cf320796ec40ce563fb6bc116bcdccddac76e22604f9fc6b14be",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_bm25_u100_s100",
+   "seed": 100,
+   "status": "confirmatory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_filter_bm25",
+   "conditional": null,
+   "config_hash": "68f9a1e695e6a94208985afda52cee4beeb96379e204cd4f8ee98f9693ebf6c4",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_bm25_u100_s101",
+   "seed": 101,
+   "status": "confirmatory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_filter_bm25",
+   "conditional": null,
+   "config_hash": "9e09f20356bb710a5408c51ac54fe066604295ece0141eab643333969287f58b",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_filter_bm25_u100_s102",
+   "seed": 102,
+   "status": "confirmatory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_weight",
+   "conditional": null,
+   "config_hash": "08d9846313d8e4efdf2ff6bd33ad26fe52f15d78aa8edbb3876c302a64d439be",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_weight_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_weight",
+   "conditional": null,
+   "config_hash": "6d790b20325ae838ed47cbd9f5a44c99e8544c37e89e63f4d8ae841935729b07",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_weight_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_weight",
+   "conditional": null,
+   "config_hash": "2cf1514370ba39dd7b57e7df8248740329ef0fef0021c1bf48a323f6b84f7854",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_weight_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_curriculum",
+   "conditional": null,
+   "config_hash": "399c565e0694e178c5134e7ce280182da0b9b21fd96b439a8829c94cd5987bf4",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_curriculum_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_curriculum",
+   "conditional": null,
+   "config_hash": "f4609d7bca6f7767d589d150f6364683c87f406b452c6625329b6980018fbef5",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_curriculum_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "C",
+   "cell": "mined_curriculum",
+   "conditional": null,
+   "config_hash": "8c70f0e263a0aa4c3fe644874d97ecfa68488519450a4ed172b50152576fb1b2",
+   "example_visits": 3200,
+   "family": "mined",
+   "hash_final": true,
+   "memory_mb": 30720,
+   "optimizer_updates": 100,
+   "retain_final": true,
+   "run_id": "mined_curriculum_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "A",
+   "cell": "inj_raw",
+   "conditional": null,
+   "config_hash": "7397d9418b810ee4d4afa68fda9fb21108ec303c764b505e3410bc57ff21a434",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_raw_u100_s100",
+   "seed": 100,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_raw",
+   "conditional": null,
+   "config_hash": "cf8acf37a9542c99e9d8046448cd6a4e30fa0139b43584a17248b544c2de9c39",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_raw_u100_s101",
+   "seed": 101,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_raw",
+   "conditional": null,
+   "config_hash": "25e51cc9df9dd3b3de8d19e612dd5dc624fc8a64ca6d706603a01d8220a7b5f1",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_raw_u100_s102",
+   "seed": 102,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_oracle",
+   "conditional": null,
+   "config_hash": "fadfd4953c0856e53b9a24d88ecdad36529907b03ef3c39dc98cb80175dcf8ff",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_oracle_u100_s100",
+   "seed": 100,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_oracle",
+   "conditional": null,
+   "config_hash": "2ee65109f6b89498c7d74288fccf028bcbf0b8ccdb57650134998a9c158ed1bc",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_oracle_u100_s101",
+   "seed": 101,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_oracle",
+   "conditional": null,
+   "config_hash": "9f408103754d244070652124277ef5d5712b4986758690efc1d481f4a5e76810",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_oracle_u100_s102",
+   "seed": 102,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_sub",
+   "conditional": null,
+   "config_hash": "0dcf847edff2718927b14993c26aadc49482124eeb5687b6e79751ff1bc99159",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_sub_u100_s100",
+   "seed": 100,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_sub",
+   "conditional": null,
+   "config_hash": "d6d5280b00f5f3ef7683d594c5dc3603a51b43d3dc93789616a33c05e9f1a662",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_sub_u100_s101",
+   "seed": 101,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_sub",
+   "conditional": null,
+   "config_hash": "33701fd24e8fd908c8698e9e887fdc6133f654a02a5cb39f17e5e60194c59ead",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_sub_u100_s102",
+   "seed": 102,
+   "status": "control",
+   "teacher": null
+  },
+  {
+   "account": "A",
+   "cell": "inj_filter_bm25",
+   "conditional": null,
+   "config_hash": "55de72721b8c4cb331bba25463f511e33ccebcf46c451b1663467d64a0ef3017",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_filter_bm25_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "A",
+   "cell": "inj_filter_bm25",
+   "conditional": null,
+   "config_hash": "8948e2e8ec5d023190db08333b175950402e6aa1e26dbd4d5bf93f0cc0ca7611",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_filter_bm25_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "A",
+   "cell": "inj_filter_bm25",
+   "conditional": null,
+   "config_hash": "d29c76d229477da495c1943f30529123a467cc690ba7d585adce734c2deba1d0",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_filter_bm25_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "bm25"
+  },
+  {
+   "account": "A",
+   "cell": "inj_filter_srs",
+   "conditional": null,
+   "config_hash": "c44a91436f11a75eaa177dece07a35d97df2d17c8b27fd2013bf36624189adb5",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_filter_srs_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "account": "A",
+   "cell": "inj_filter_srs",
+   "conditional": null,
+   "config_hash": "7a254a75daafd258625d73b96dcf627927f3d4248203a2c0e57ac868e5c09f0e",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_filter_srs_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "account": "A",
+   "cell": "inj_filter_srs",
+   "conditional": null,
+   "config_hash": "062daabf7d0c0c012516192a7decaffbad98deb451078cdba4c32fcc33dd6984",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_filter_srs_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "account": "A",
+   "cell": "inj_weight",
+   "conditional": null,
+   "config_hash": "b49314b2f1aaf5c6abcdbd6e8d74a0366b0b7b3aab0bb4f4bdce73160122ca4f",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_weight_u100_s100",
+   "seed": 100,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "account": "A",
+   "cell": "inj_weight",
+   "conditional": null,
+   "config_hash": "ac102deb6b123136b9bec7886e7000951f402613f65de313584a20bc18c643b8",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_weight_u100_s101",
+   "seed": 101,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  },
+  {
+   "account": "A",
+   "cell": "inj_weight",
+   "conditional": null,
+   "config_hash": "b654a44a484e9b825bf0e7297801934e4313dea2fb415619c6112ee3e3f4beb9",
+   "example_visits": 3200,
+   "family": "injected",
+   "hash_final": true,
+   "memory_mb": 24576,
+   "optimizer_updates": 100,
+   "retain_final": false,
+   "run_id": "inj_weight_u100_s102",
+   "seed": 102,
+   "status": "exploratory",
+   "teacher": "swerankembed-small"
+  }
+ ],
+ "seeds": [
+  100,
+  101,
+  102
+ ],
+ "unique_examples": {
+  "filter_passes": 0.93,
+  "filter_reaches_unique": true,
+  "raw_passes": 0.55,
+  "raw_reaches_unique": true,
+  "shortfall_filter": 0,
+  "visits": 3200
+ },
+ "version": "rq2-plan/v1"
+}

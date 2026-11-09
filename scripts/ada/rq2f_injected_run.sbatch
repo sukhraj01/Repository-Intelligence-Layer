@@ -14,7 +14,7 @@
 # inj_raw_u100_s100), 100 updates of the 3,000-update schedule on the 5,000-directory pool with the pairs noised at
 # r = 0.4 under a fresh realisation (the noise draw is keyed on the run's seed, D82; seeds 100 to 102 are outside the
 # exploratory waves), K-ranks of FILTER and WEIGHT recomputed on the noised positives from the stored score stores,
-# scored on the dev set only (D129). These models are not retained (D127). Resumable as the mined script: DATE
+# scored on the dev set only (D131). These models are not retained (D129). Resumable as the mined script: DATE
 # fixes the result directory name and run-batch skips a finished run. Checkpoints, float16 copies and encoded
 # stores live in node-local space and are removed. $HOME receives the result directory and the logs.
 # The pool caches (symbolic links into the earlier pilot directories) and the score stores are read in

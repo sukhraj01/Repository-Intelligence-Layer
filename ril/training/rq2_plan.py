@@ -9,7 +9,7 @@ Every unit cost carries its source and evidence class; a changed cost is a chang
 never an edit to a result. The cell list is the protocol's option E (section 5): 6 cells on the
 mined set and 6 on the pool with injected noise at r = 0.4, three seeds each.
 
-Placement, retention, the evaluation scope and the job graph follow the launch rulings D122 to D131
+Placement, retention, the evaluation scope and the job graph follow the launch rulings D124 to D133
 (``docs/RQ2_LAUNCH_PLAN.md`` section 9): mined-set cells train on account C, the injected-noise
 family on account A; the 18 mined-set models are retained; training jobs score the dev set only and
 the eight repositories and the executable 377 are scored once, from the retained models, after the
@@ -51,7 +51,7 @@ BLOCK3_CAP = 46.7
 OPTION_E_TOTAL = 38.9
 
 FAMILY_ACCOUNTS: dict[str, str] = {"mined": "C", "injected": "A"}
-"""Where each data condition trains (D122): the mined store and its cache live on C, the injected
+"""Where each data condition trains (D124): the mined store and its cache live on C, the injected
 pool and its score stores on A."""
 MEM_REQUEST_MB: dict[str, int] = {"mined": 30 * 1024, "injected": 24 * 1024}
 """Per-job memory request. Mined: 26 GB projected peak (17 GB decoded cache, 3 GB training, 6 GB
@@ -60,7 +60,7 @@ MEM_CEILING_MB = 32000
 DENSE_TEACHER_MEASURE_GPU_H = 0.4
 DENSE_TEACHER_CAP_GPU_H = 6.0
 """FILTER-SweRankEmbed-Small on the mined set runs only if the measured full-store teacher pass
-costs at most this (D123): the headroom under the cap is 46.7 - 28.7 = 18.0."""
+costs at most this (D125): the headroom under the cap is 46.7 - 28.7 = 18.0."""
 
 
 @dataclass(frozen=True)
@@ -116,11 +116,11 @@ class Cell:
     arm_config: Mapping[str, Any]
     verified_look: bool
     conditional: str | None = None
-    """Decision that gates the cell (``D123``): the cell is planned but not launched until met."""
+    """Decision that gates the cell (``D125``): the cell is planned but not launched until met."""
 
     @property
     def retain(self) -> bool:
-        """Mined-set models are retained (D127); injected-noise models are not."""
+        """Mined-set models are retained (D129); injected-noise models are not."""
         return self.family == "mined"
 
 
@@ -155,7 +155,7 @@ CELLS: tuple[Cell, ...] = (
         None,
         _filter(_SRS),
         True,
-        conditional="D123",
+        conditional="D125",
     ),
     Cell(
         "mined_weight",
@@ -215,7 +215,7 @@ CELLS: tuple[Cell, ...] = (
 )
 
 OPEN_CELL_CHOICES: tuple[str, ...] = ()
-"""Settled by D124 (BM25 teacher for WEIGHT and CURRICULUM on the mined set) and D126 (no
+"""Settled by D126 (BM25 teacher for WEIGHT and CURRICULUM on the mined set) and D128 (no
 1,000-update sensitivity on the mined set); nothing is left open in the cell table."""
 
 
@@ -298,7 +298,7 @@ def render_config(
     _template_*.yaml``). ``filter_size`` fills the size-matched subsample of the mined set (the
     number of examples FILTER keeps, from ``train.py filter-size``); ``symbolic_size`` instead
     leaves the token ``"filter_size"`` in place (the committed form, resolved by the run job).
-    ``retain_final`` defaults to the cell's rule (mined set only, D127).
+    ``retain_final`` defaults to the cell's rule (mined set only, D129).
     """
     cfg: Record = copy.deepcopy(dict(template))
     cell = run.cell
@@ -330,8 +330,8 @@ def check_protocol(cfg: Mapping[str, Any], run: Run) -> list[str]:
 
     Held-identical block against ``PROTOCOL_HELD``; seed outside the exploratory waves (D82); FILTER
     at K = 20, positive level, with a teacher that is not the base encoder (leakage check c); BM25
-    for WEIGHT and CURRICULUM on the mined set (D124); retention only on the mined set (D127); the
-    dev set is the only evaluation a training job runs (D125, D100).
+    for WEIGHT and CURRICULUM on the mined set (D126); retention only on the mined set (D129); the
+    dev set is the only evaluation a training job runs (D127, D100).
     """
     bad: list[str] = []
     for key, want in PROTOCOL_HELD.items():
@@ -358,7 +358,7 @@ def check_protocol(cfg: Mapping[str, Any], run: Run) -> list[str]:
     if cell.family == "mined" and arm.get("name") in ("WEIGHT", "CURRICULUM"):
         t = (arm.get("weight") or arm.get("ordering") or {}).get("teacher")
         if t != "bm25":
-            bad.append(f"{arm['name']} on the mined set uses the BM25 teacher (D124), not {t}")
+            bad.append(f"{arm['name']} on the mined set uses the BM25 teacher (D126), not {t}")
     if cell.teacher is not None and teacher_equals_base(cfg):
         bad.append("the quality-signal teacher is the encoder being trained")
     return bad
@@ -487,11 +487,11 @@ def cell_table_digest(cells: Sequence[Cell] = CELLS) -> str:
 def unique_example_check(
     visits: int, pool_examples: int, filter_kept: int | None
 ) -> dict[str, Any]:
-    """Whether each arm can reach ``visits`` distinct examples without repeating (G5, D42, D131).
+    """Whether each arm can reach ``visits`` distinct examples without repeating (G5, D42, D133).
 
     ``pool_examples``: directories with a positive after the held-out filter and the overlap drop;
     ``filter_kept``: examples FILTER keeps (the size-matched subsample draws the same number).
-    Where an arm cannot, it cycles its own pool in a fresh seeded order per pass (D131) and the
+    Where an arm cannot, it cycles its own pool in a fresh seeded order per pass (D133) and the
     number of distinct examples it saw is stored with the result.
     """
     kept = filter_kept if filter_kept is not None else pool_examples
@@ -506,12 +506,12 @@ def unique_example_check(
 
 
 def retained_runs(runs: Sequence[Run]) -> list[Run]:
-    """Runs whose final model is retained (the mined set, D127)."""
+    """Runs whose final model is retained (the mined set, D129)."""
     return [r for r in runs if r.cell.retain]
 
 
 def look_cost_per_checkpoint(basis: str) -> float:
-    """GPU-hours to score one checkpoint on the executable 377 (D125).
+    """GPU-hours to score one checkpoint on the executable 377 (D127).
 
     Measured basis: the 341 built instances (0.377, measured) plus, conservatively, the whole
     six-folder store for the 36 earlier ones (0.292, projected upper bound). Protocol basis: the
@@ -534,10 +534,10 @@ def budget(
     ``basis``: ``protocol`` (the reasoned unit costs of section 5) or ``measured`` (this project's
     measured unit costs; the stored part of the 377 stays a projected upper bound).
     ``scope``: ``option_e`` (the registered design: the eight repositories for every run, one
-    look per mined run, reproduces 38.9 on the protocol basis) or ``rulings`` (D125, D127: the
+    look per mined run, reproduces 38.9 on the protocol basis) or ``rulings`` (D127, D129: the
     eight repositories and the executable 377 are scored from the 18 retained mined models only;
     training jobs score the dev set).
-    The conditional dense teacher (D123) is reported apart, never inside the total.
+    The conditional dense teacher (D125) is reported apart, never inside the total.
     """
     run_dev = COSTS["run_dev_protocol" if basis == "protocol" else "run_dev"].value
     eight = COSTS["eight_repos_protocol" if basis == "protocol" else "eight_repos"].value
@@ -606,12 +606,12 @@ def job_graph(
     """Jobs from the finished mining store to the final-sets results, one GPU job per run.
 
     CPU stages are single jobs on the account that holds the store (``store_account``). Each run is
-    one GPU job on its family's account (D122); jobs of one account are ordered by ``chain_after``.
+    one GPU job on its family's account (D124); jobs of one account are ordered by ``chain_after``.
     Injected-noise jobs wait for nothing. Mined jobs wait for the FILTER size (and the conditional
-    FILTER-SweRankEmbed-Small run for the dense teacher's pass, D123). After all training and a
+    FILTER-SweRankEmbed-Small run for the dense teacher's pass, D125). After all training and a
     manual collection of the injected results (small files, byte-verified copy) comes the dev
     analysis, then one final-sets job per retained model (the eight repositories and the executable
-    377, D125, D127), ordered on the account that holds the models. ``queue_wait_hours`` is unused
+    377, D127, D129), ordered on the account that holds the models. ``queue_wait_hours`` is unused
     here and kept for the signature of :func:`critical_path_hours` callers.
     """
     del queue_wait_hours
@@ -654,7 +654,7 @@ def job_graph(
     def chain(acct: str) -> tuple[str, ...]:
         return (last_on[acct],) if acct in last_on else ()
 
-    srs = any(r.cell.conditional == "D123" for r in use)
+    srs = any(r.cell.conditional == "D125" for r in use)
     acct_m = fam_acct["mined"]
     if srs:  # the measurement is cheap and decides the cell: it goes first on the mined account
         last_on[acct_m] = add(
@@ -665,9 +665,9 @@ def job_graph(
             (prep,),
             DENSE_TEACHER_MEASURE_GPU_H,
             DENSE_TEACHER_MEASURE_GPU_H,
-            "D123: measures the full-store cost before anything else is spent",
+            "D125: measures the full-store cost before anything else is spent",
             chain(acct_m),
-            "D123",
+            "D125",
         )
 
     def add_run(r: Run, extra: tuple[str, ...] = ()) -> None:
@@ -700,12 +700,12 @@ def job_graph(
             ("teacher_measure",),
             DENSE_TEACHER_CAP_GPU_H,
             DENSE_TEACHER_CAP_GPU_H,
-            "launched only if the measured full-store cost is at most 6.0 GPU-hours (D123)",
+            "launched only if the measured full-store cost is at most 6.0 GPU-hours (D125)",
             chain(acct_m),
-            "D123",
+            "D125",
         )
         for r in ordered:
-            if r.cell.conditional == "D123":
+            if r.cell.conditional == "D125":
                 add_run(r, ("teacher_pass",))
     train_ids = tuple(j.job_id for j in jobs if j.job_id.startswith("run_"))
     inj_accts = {fam_acct["injected"]} - {fam_acct["mined"]}

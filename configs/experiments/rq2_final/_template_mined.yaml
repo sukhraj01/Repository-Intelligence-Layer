@@ -1,5 +1,5 @@
 # RQ2 final experiment, mined-set cells (design of record option E, docs/RQ2_PROTOCOL.md section 11; launch rulings
-# D122 to D131, docs/RQ2_LAUNCH_PLAN.md). Template of the runs of scripts/rq2_plan.py: the cell, seed, arm and labels
+# D124 to D133, docs/RQ2_LAUNCH_PLAN.md). Template of the runs of scripts/rq2_plan.py: the cell, seed, arm and labels
 # are set per run, everything else is held identical across cells and equals the pilots' settings (batch 32 x (1+1),
 # CodeRankEmbed at 512 tokens, 100 updates of the 3,000-update schedule, random repository-local negatives, dev set
 # only). Every value is provisional (ADR-001, ADR-002, ADR-006) until the launch; never in configs/frozen/.

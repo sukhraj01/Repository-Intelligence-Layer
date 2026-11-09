@@ -79,7 +79,7 @@ def test_planner_refuses_bad_inputs() -> None:
 
 
 def test_small_pool_is_cycled_in_a_fresh_seeded_order_per_pass() -> None:
-    """D131: an arm with a pool smaller than its visits cycles it, one fresh shuffle per pass.
+    """D133: an arm with a pool smaller than its visits cycles it, one fresh shuffle per pass.
 
     Every example is seen before any is repeated, passes differ, the order is a function of the seed
     alone, and the stored diagnostic reports how many distinct examples the arm saw.

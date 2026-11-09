@@ -1,6 +1,6 @@
 """Scoring the retained models on the final sets, after the dev analysis and not before.
 
-Implements the sealed order of D100 and D125 (``docs/RQ2_LAUNCH_PLAN.md`` section 9): the eight
+Implements the sealed order of D100 and D127 (``docs/RQ2_LAUNCH_PLAN.md`` section 9): the eight
 evaluation repositories and the executable 377 of Verified are evaluated once, from the retained
 models, after the dev analysis is complete. Three guards live in code, not in a procedure:
 
@@ -35,7 +35,8 @@ from ril.training import retention
 FINAL_SETS_VERSION = "final-sets/v1"
 DEV_RECORD_VERSION = "dev-analysis-record/v1"
 INDEX_NAME = "final_sets_index.jsonl"
-ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$")
+ID_PATTERN = re.compile(r"^E-[A-Z0-9]+(?:-[A-Z0-9]+)*$")
+"""The form of an experiment entry id, the same rule as the analysis module's sealed-order guard."""
 Record = dict[str, Any]
 
 

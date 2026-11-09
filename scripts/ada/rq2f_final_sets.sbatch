@@ -11,7 +11,7 @@
 #SBATCH --time=03:00:00
 #SBATCH --output=ril_rq2f/logs/%x_%j.out
 # GPU. Final sets of the RQ2 experiment for one retained model (account C): the eight evaluation repositories (D100)
-# and the executable 377 of Verified (D125), role test, scored once, after the dev analysis. The script refuses to
+# and the executable 377 of Verified (D127), role test, scored once, after the dev analysis. The script refuses to
 # start without FOLLOWS (the id of the dev-analysis entry) and a matching complete record that covers the run
 # (scripts/rq2_final_sets.py, ril/evaluation/final_sets.py); every score row is written next to that id. A finished
 # (model, part) pair is skipped on a rerun. Unit texts of the built parts are stored gzipped and are unpacked to

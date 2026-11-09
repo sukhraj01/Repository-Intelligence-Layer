@@ -1,6 +1,6 @@
 """Evaluation-set selector and the sealed order of the final sets (no torch).
 
-``ril.evaluation.eval_sets`` and ``ril.evaluation.final_sets``; implements D100 and D125.
+``ril.evaluation.eval_sets`` and ``ril.evaluation.final_sets``; implements D100 and D127.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 def test_training_jobs_may_score_the_dev_set_only() -> None:
     assert es.for_training("dev").stage == es.TRAINING
-    for name in ("eight", "verified377"):
+    for name in ("eight", "exec377"):
         with pytest.raises(es.EvalSetRefused, match="final set"):
             es.for_training(name)
     with pytest.raises(es.EvalSetRefused, match="unknown"):
@@ -32,11 +32,11 @@ def test_training_jobs_may_score_the_dev_set_only() -> None:
 
 def test_final_sets_carry_a_test_label_and_the_executable_377_has_three_parts() -> None:
     assert es.get("dev").deliberate_test is None and es.get("dev").roles == ("dev",)
-    for name in ("eight", "verified377"):
+    for name in ("eight", "exec377"):
         spec = es.get(name)
         assert spec.roles == ("test",) and spec.deliberate_test
-    assert [p.part for p in es.get("verified377").parts] == ["stored36", "built337", "built_xarray"]
-    assert [p.compressed_texts for p in es.get("verified377").parts] == [False, True, True]
+    assert [p.part for p in es.get("exec377").parts] == ["stored36", "built337", "built_xarray"]
+    assert [p.compressed_texts for p in es.get("exec377").parts] == [False, True, True]
     for spec in es.SETS.values():
         for p in spec.parts:
             assert (ROOT / p.e1_config).is_file(), p.e1_config
@@ -118,12 +118,12 @@ def test_run_id_and_plan_of_a_retained_folder(tmp_path: Path) -> None:
     folder = _retained(tmp_path)
     m = fs.read_manifest(folder)
     assert fs.retained_run_id(m) == "mined_raw_u100_s100"
-    entries = fs.plan([folder], ["eight", "verified377"], str(tmp_path / "out"))
+    entries = fs.plan([folder], ["eight", "exec377"], str(tmp_path / "out"))
     assert [(e["set"], e["part"]) for e in entries] == [
         ("eight", "eight"),
-        ("verified377", "stored36"),
-        ("verified377", "built337"),
-        ("verified377", "built_xarray"),
+        ("exec377", "stored36"),
+        ("exec377", "built337"),
+        ("exec377", "built_xarray"),
     ]
     assert all(e["run_id"] == "mined_raw_u100_s100" for e in entries)
 

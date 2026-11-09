@@ -1,7 +1,7 @@
 """Named evaluation sets of the RQ2 final experiment and the stage each may be used in.
 
 One run cannot score every set (``docs/RQ2_LAUNCH_PLAN.md`` gap 2): the training jobs score the
-development set only, and the eight repositories (D100) and the executable 377 of Verified (D125)
+development set only, and the eight repositories (D100) and the executable 377 of Verified (D127)
 are scored once, from the retained models, after the dev analysis (the sealed order of D100).
 This module names the sets, says where each lives under an account's home, and refuses a set
 outside its stage. Nothing here imports torch; the paths are the layout of the stored builds
@@ -67,7 +67,7 @@ DEV = EvalSetSpec(
         ),
     ),
     None,
-    "D129",
+    "D131",
 )
 """The pilots' five repositories (ansible not added): the instance cache is the dev subset of the
 E3 cache, linked by ``scripts/curve_subset_cache.py`` as in the pilots."""
@@ -90,7 +90,7 @@ EIGHT = EvalSetSpec(
 )
 
 VERIFIED_377 = EvalSetSpec(
-    "verified377",
+    "exec377",
     FINAL,
     ("test",),
     (
@@ -119,7 +119,7 @@ VERIFIED_377 = EvalSetSpec(
         ),
     ),
     "RQ2 final: executable 377 of Verified, scored once after the dev analysis",
-    "D125",
+    "D127",
 )
 
 SETS: dict[str, EvalSetSpec] = {s.name: s for s in (DEV, EIGHT, VERIFIED_377)}
@@ -136,12 +136,12 @@ def get(name: str) -> EvalSetSpec:
 
 
 def for_training(name: str) -> EvalSetSpec:
-    """The set a training job may score: the dev set only (D125). Final sets are refused."""
+    """The set a training job may score: the dev set only (D127). Final sets are refused."""
     spec = get(name)
     if spec.stage != TRAINING:
         raise EvalSetRefused(
             f"{name!r} is a final set: it is scored once, from a retained model, by "
-            "scripts/rq2_final_sets.py after the dev analysis (D100, D125)"
+            "scripts/rq2_final_sets.py after the dev analysis (D100, D127)"
         )
     return spec
 

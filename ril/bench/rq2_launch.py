@@ -3,8 +3,8 @@
 Implements the checklist of ``docs/RQ2_LAUNCH_PLAN.md`` section 5 for the items a program can verify
 (commit, registration of the cell table, fresh seeds, configurations that conform to the registered
 design and reproduce the planned hashes, inputs present, prep summary, memory request, free space,
-retention directory, evaluation stores, leakage record, the dense-teacher gate of D123) and the
-submission of a family's runs on its account (D122). The submit step refuses without an explicit
+retention directory, evaluation stores, leakage record, the dense-teacher gate of D125) and the
+submission of a family's runs on its account (D124). The submit step refuses without an explicit
 confirmation and a preflight file that passed, was written for the same account, family and commit,
 and is not stale; it prints the job graph first and never submits a run already queued.
 
@@ -176,7 +176,7 @@ def run_checks(
                 else (
                     f"; FILTER and the subsample repeat examples "
                     f"(shortfall {u['shortfall_filter']}): "
-                    "the FILTER-against-RAW comparison carries the stated caveat (D131)"
+                    "the FILTER-against-RAW comparison carries the stated caveat (D133)"
                 )
             )
             add(
@@ -258,7 +258,7 @@ def run_checks(
         except ValueError as err:
             add("retain_dir", False, str(err))
     else:
-        add("retain_dir", not retain_dir, "injected-noise models are not retained (D127)")
+        add("retain_dir", not retain_dir, "injected-noise models are not retained (D129)")
 
     from ril.evaluation.eval_plan import EvalSet, plan_sets
 
@@ -398,7 +398,7 @@ def preflight_refusals(
     if not commit or rec.get("commit") != commit:
         out.append("preflight was written for another commit than RIL_COMMIT")
     if include_conditional and not rec.get("include_conditional"):
-        out.append("preflight did not check the conditional cells (D123)")
+        out.append("preflight did not check the conditional cells (D125)")
     failed = [c["id"] for c in rec.get("checks", []) if not c.get("ok")]
     if failed or not rec.get("ready"):
         out.append(f"preflight checks not passed: {failed}")

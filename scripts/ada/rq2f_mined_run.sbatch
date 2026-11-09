@@ -13,7 +13,7 @@
 # GPU. One run of the RQ2 final experiment on the mined set (account C): the cell RUN_ID (for example
 # mined_raw_u100_s100), 100 updates of the 3,000-update schedule on the full mined store's non_test
 # directories (cache and BM25 feature table of the prep job), scored on the dev set only (the five repositories
-# without ansible, D129). The final model is retained under RETAIN_DIR (D127); the eight repositories and the
+# without ansible, D131). The final model is retained under RETAIN_DIR (D129); the eight repositories and the
 # executable 377 are scored later, from the retained models, by rq2f_final_sets.sbatch after the dev analysis.
 # Resumable: run-batch skips a run whose results.json holds the evaluation, DATE fixes the result directory
 # name, and a failed or node-lost job is simply submitted again. The CUDA gate runs inside the training and
@@ -33,7 +33,7 @@ E=$HOME/ril_e
 RUN_ID=${RUN_ID:?set RUN_ID}
 DATE=${DATE:?set DATE}
 RIL_COMMIT=${RIL_COMMIT:?set RIL_COMMIT}
-RETAIN_DIR=${RETAIN_DIR:?set RETAIN_DIR (mined-set models are retained, D127)}
+RETAIN_DIR=${RETAIN_DIR:?set RETAIN_DIR (mined-set models are retained, D129)}
 case "$RUN_ID" in mined_*) ;; *) echo "RUN_ID $RUN_ID is not a mined-set run"; exit 4;; esac
 case "$RETAIN_DIR" in /*) ;; *) echo "RETAIN_DIR must be absolute"; exit 4;; esac
 PYV=$(python3 -c 'import sys; print("%d%d" % sys.version_info[:2])')

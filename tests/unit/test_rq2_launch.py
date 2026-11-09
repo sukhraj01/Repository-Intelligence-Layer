@@ -1,6 +1,6 @@
 """Preflight, submit refusals and the job graph the submit script prints (no torch, no cluster).
 
-``ril.bench.rq2_launch`` and ``scripts/rq2_{preflight,submit}.py``; implements D122 and the
+``ril.bench.rq2_launch`` and ``scripts/rq2_{preflight,submit}.py``; implements D124 and the
 launch checklist of ``docs/RQ2_LAUNCH_PLAN.md``.
 """
 
@@ -123,7 +123,7 @@ def test_injected_inputs_are_read_in_place_from_the_noise_pilot_directory(tmp_pa
 
 def test_a_short_filter_pool_is_stated_not_blocked(tmp_path: Path) -> None:
     c = _checks(tmp_path, "mined", examples=3000, size=2000)
-    assert c["distinct_examples_stated"].ok and "D131" in c["distinct_examples_stated"].detail
+    assert c["distinct_examples_stated"].ok and "D133" in c["distinct_examples_stated"].detail
     assert "shortfall 1200" in c["distinct_examples_stated"].detail
 
 
@@ -253,7 +253,7 @@ def test_graph_is_one_job_per_run_chained_and_printed() -> None:
     assert len(subs) == 15 and all(
         s.export["RETAIN_DIR"] == "/r" and s.export["DATE"] == "2026-11-12" for s in subs
     )
-    assert not any("filter_srs" in s.run_id for s in subs)  # conditional cells wait for D123
+    assert not any("filter_srs" in s.run_id for s in subs)  # conditional cells wait for D125
     assert (
         len(
             rl.submissions(

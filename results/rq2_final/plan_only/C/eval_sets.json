@@ -1,0 +1,77 @@
+{
+ "encode_gpu_hours_per_checkpoint": 1.266,
+ "note": "repository names omitted from this copy; counts are of distinct unit texts and queries",
+ "ready": true,
+ "sets": [
+  {
+   "encode_gpu_hours_at_rate": 0.233,
+   "encode_seconds_at_rate": 837.8,
+   "instance_cache_files": 521,
+   "missing": [],
+   "query_texts": 510,
+   "roles": [
+    "dev"
+   ],
+   "set": "dev",
+   "unit_lines": 315585,
+   "unit_text_stores": 5,
+   "unit_texts": 91324
+  },
+  {
+   "encode_gpu_hours_at_rate": 0.178,
+   "encode_seconds_at_rate": 641.8,
+   "instance_cache_files": 179,
+   "missing": [],
+   "query_texts": 224,
+   "roles": [
+    "test"
+   ],
+   "set": "eight",
+   "unit_lines": 233064,
+   "unit_text_stores": 8,
+   "unit_texts": 69961
+  },
+  {
+   "encode_gpu_hours_at_rate": 0.292,
+   "encode_seconds_at_rate": 1050.5,
+   "instance_cache_files": 521,
+   "missing": [],
+   "query_texts": 734,
+   "roles": [
+    "test"
+   ],
+   "set": "verified_stored36",
+   "unit_lines": 364006,
+   "unit_text_stores": 6,
+   "unit_texts": 114503
+  },
+  {
+   "encode_gpu_hours_at_rate": 0.546,
+   "encode_seconds_at_rate": 1965.9,
+   "instance_cache_files": 337,
+   "missing": [],
+   "query_texts": 337,
+   "roles": [
+    "test"
+   ],
+   "set": "verified_built337",
+   "unit_lines": 759765,
+   "unit_text_stores": 5,
+   "unit_texts": 214285
+  },
+  {
+   "encode_gpu_hours_at_rate": 0.017,
+   "encode_seconds_at_rate": 61.4,
+   "instance_cache_files": 4,
+   "missing": [],
+   "query_texts": 4,
+   "roles": [
+    "test"
+   ],
+   "set": "verified_xarray",
+   "unit_lines": 18811,
+   "unit_text_stores": 1,
+   "unit_texts": 6689
+  }
+ ]
+}

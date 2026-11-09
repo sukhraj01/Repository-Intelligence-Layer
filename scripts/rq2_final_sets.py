@@ -1,13 +1,13 @@
 """Score retained RQ2 models on the final sets (the eight repositories, the executable 377).
 
-  plan  --retained-root DIR [--set eight verified377] --out DIR
+  plan  --retained-root DIR [--set eight exec377] --out DIR
         list the (model, set part) pairs that would be scored; scores nothing, needs no id
   run   --retained-root DIR --follows-dev-analysis ID --dev-record PATH --out DIR --home DIR
         --work DIR [--set ...] [--only RUN_ID ...] [--device cuda]
         score the retained models once; refuses to start without the id of the dev-analysis entry
         it follows, a matching complete record that covers the runs, and verified model folders
 
-Logic in ``ril/evaluation/final_sets.py`` (D100, D125). Every stage prints JSON. A GPU job.
+Logic in ``ril/evaluation/final_sets.py`` (D100, D127). Every stage prints JSON. A GPU job.
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     for name in ("plan", "run"):
         q = sub.add_parser(name)
         q.add_argument("--retained-root", required=True)
-        q.add_argument("--set", nargs="+", default=["eight", "verified377"])
+        q.add_argument("--set", nargs="+", default=["eight", "exec377"])
         q.add_argument("--only", nargs="*")
         q.add_argument("--out", required=True)
     r = sub.choices["run"]

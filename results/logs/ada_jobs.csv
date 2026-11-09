@@ -204,3 +204,11 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-08,A,64671,A1T,"E-A1-FUSED: default and two split variants alone and inside RRF(BM25, dense) from stored chunk vectors",u22,4,0,00:01:26,0.0,COMPLETED
 2026-11-08,A,65086,RQ3P,"prompts of the 377 x 3 arms at 8,000 tokens, pseudonymised before the screen (1,131 written, 0 rejected)",u22,4,0,00:00:32,0.0,COMPLETED
 2026-11-08,A,65087,RQ3P,"round trips on the 244 touched prompts and replay of 10 touched instances on the real executor (20 of 20 as expected)",u22,4,0,00:09:44,0.0,COMPLETED
+2026-11-09,A,65991,RQ2F,"plan-only validation of the final cell configurations, first pass (CPU; preflight crashed on a Python 3.10 incompatibility, fixed)",u22,4,0,00:00:54,0.0,COMPLETED
+2026-11-09,C,65992,RQ2F,"plan-only validation of the final cell configurations, first pass (CPU; same crash)",u22,4,0,00:00:53,0.0,COMPLETED
+2026-11-09,A,65995,RQ2F,"torch-marked tests and leakage tests on the first commit of the final-cell code: 1 failed (leakage check d: the launch module sat in the training package and reached evaluation modules; moved to bench)",u22,2,0,00:00:52,0.0,FAILED (leakage check d)
+2026-11-09,A,66004,RQ2F,"plan-only validation, second pass (CPU; real preflight, injected inputs found in place)",u22,4,0,00:00:43,0.0,COMPLETED
+2026-11-09,A,66005,RQ2F,"torch-marked tests and leakage tests after moving the launch module to bench: 41 passed",u22,2,0,00:00:42,0.0,COMPLETED
+2026-11-09,C,66006,RQ2F,"plan-only validation, second pass (CPU, separate from the mining and prep allocations)",u22,4,0,00:00:42,0.0,COMPLETED
+2026-11-09,A,66009,RQ2F,"plan-only validation of the 36 configurations, plan, evaluation sets, preflight (real and rehearsal), submit refusals (CPU)",u22,4,0,00:00:49,0.0,COMPLETED
+2026-11-09,C,66010,RQ2F,"plan-only validation of the 36 configurations, plan, evaluation sets, preflight (real and rehearsal), submit refusals (CPU, separate from the prep allocation)",u22,4,0,00:00:55,0.0,COMPLETED

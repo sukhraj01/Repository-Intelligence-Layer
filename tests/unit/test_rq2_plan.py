@@ -159,7 +159,7 @@ def test_conditional_dense_teacher_is_measured_first_and_gates_its_cell() -> Non
     assert ids["teacher_pass"].after == ("teacher_measure",)
     srs = [j for j in jobs if "mined_filter_srs" in j.job_id and j.job_id.startswith("run_")]
     assert len(srs) == 3 and all("teacher_pass" in j.after for j in srs)
-    assert all(j.conditional == "D123" for j in srs)
+    assert all(j.conditional == "D125" for j in srs)
     mined_gpu = [j for j in jobs if j.kind == "gpu" and j.account == "C"]
     assert mined_gpu[0].job_id == "teacher_measure"  # the cheap decision comes first
     dropped = rp.job_graph(rp.plan_runs(), include_conditional=False)

@@ -7,7 +7,7 @@ Always prints the job graph first. Without ``--confirm-launch`` it submits nothi
 it, it first checks the preflight file (passed, same account, family and RIL_COMMIT, under 48 hours
 old) and that none of the jobs is already queued, then calls ``sbatch`` for each run (``afterany``
 chain, one GPU job at a time per account). ``--print-graph`` prints and exits 0. Logic in
-``ril/bench/rq2_launch.py``. Submitting is the engineer's action (D122).
+``ril/bench/rq2_launch.py``. Submitting is the engineer's action (D124).
 """
 
 from __future__ import annotations

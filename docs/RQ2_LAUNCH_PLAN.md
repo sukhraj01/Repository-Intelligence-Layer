@@ -2,6 +2,10 @@
 
 Audit of 2026-11-08 (entry E-RQ2-READINESS in `docs/experiments/B.md`). The protocol is `docs/RQ2_PROTOCOL.md`
 (section 11 where it differs); this page covers what stands between a finished mining run and the final tables.
+**Update 2026-11-09:** the launch rulings (D124 to D134) are recorded and the final cell configurations and run scripts exist;
+section 9 holds the placement, cells, costs, job graph, the status of the gaps and the checklist. Sections 1 to 8 are the audit as
+written on 2026-11-08 and are not rewritten.
+
 Nothing here is a result of the experiment and nothing was trained: the audit read code, stored logs and the cluster's
 accounting, ran every stage that has a plan-only form at minimal scale, and wrote plan-only forms for the stages that had
 none. **No design choice is made here**: where one is needed the options are listed with their cost, and a
@@ -342,3 +346,102 @@ Each decision lists the options with cost; the **recommendation** is mine, reaso
 6. **Archive alias and copy.** What: the SSH alias for account B, the copy script run by the engineer. Where: the engineer's
    machine. Needs: retained models.
 7. **Launch.** What: the checklist of section 5 and the job graph of section 4. Where: A and C. Needs: 1 to 3, mining finished.
+
+## 9. Final cells and run scripts (2026-11-09; decisions D124 to D134, DEV-038, DEV-039; entry E-RQ2-FINAL-CELLS)
+
+Evidence classes as above. Nothing was trained and no GPU job was submitted; the plan-only checks ran on the CPU of accounts A and C
+(`results/rq2_final/plan_only/`). All settings are `provisional` until launch and none is in `configs/frozen/`.
+
+### 9.1 Rulings recorded (section 7 of this plan is settled)
+
+| Section-7 item | Ruling | D |
+|---|---|---|
+| 1 where the mined cells train | mined set on C, injected-noise family on A, B unused; the eight repositories and the built parts of the executable 377 copied to C (done, verified) | D124 |
+| 2 FILTER with SweRankEmbed-Small on the mined set | exploratory and conditional: measure on 100 directories (about 0.4 GPU-hours), run only if the full-store pass costs at most 6.0 GPU-hours | D125 |
+| 3 teacher of WEIGHT and CURRICULUM | BM25 | D126 |
+| 4 which Verified set | the 377 executable instances; departure recorded as DEV-038 (432 L2 queries become 320, 302 L3 become 224, minimum detectable difference about 16% larger) | D127 |
+| 5 1,000-update sensitivity | not run on the mined set; DEV-039; optional on the injected family | D128 |
+| 6 models to retain | the 18 mined-set models on C (15 without the dense-teacher cell); injected models not retained; the final sets are scored once, after the dev analysis | D129 |
+| 7 label-audit sample | the pilot sample first | D130 |
+| 8 dev set | the pilots' five repositories | D131 |
+| 9 where the overlap audit runs | C; the held-out index is copied there (done, verified) | D132 |
+| gap 10 and G5 pool smaller than the visits | 100 updates for every arm, each arm cycles its own pool in a fresh seeded order per pass, distinct examples seen stored beside every result | D133 |
+
+### 9.2 The 36 runs
+
+Twelve cells x seeds 100, 101, 102 (outside the exploratory waves, D82), 100 updates of the 3,000-update schedule, batch 32, K = 20
+positive level, BM25 teacher for the confirmatory cell, configurations in `configs/experiments/rq2_final/<cell>_u100_s<seed>.yaml`,
+rendered by `scripts/rq2_plan.py render` and checked against the registered design (`check_protocol`).
+
+| Account | Runs | GPU-hours (0.42 each, measured) | Final sets afterwards |
+|---|---|---|---|
+| A | 18 injected-noise runs (inj_raw, inj_oracle, inj_sub, inj_filter_bm25, inj_filter_srs, inj_weight) | 7.56 | none (dev only, not retained) |
+| C | 15 mined-set runs (mined_raw, mined_sub, mined_filter_bm25, mined_weight, mined_curriculum) | 6.30 | 15 retained models, 12.87 |
+| C | 3 mined_filter_srs runs, conditional on D125 | 1.26 | 3 retained models, 2.57 |
+| C | dense teacher: measurement (0.4) and pass (at most 6.0), conditional | at most 6.4 | |
+
+Cell table, roles and teachers: `docs/experiments/B.md` E-RQ2-FINAL-CELLS.
+
+### 9.3 Evaluation by set and the sealed order
+
+| Set | Stage | Scored by | Per checkpoint (GPU-hours) |
+|---|---|---|---|
+| dev, five repositories | training | each run, `train.py run-batch --eval-set dev` | in the 0.42 per run |
+| the eight repositories (D100) | final | `scripts/rq2_final_sets.py run`, retained model, role test | 0.178 measured |
+| executable 377 of Verified (D127) | final | the same, three stored parts | 0.388 measured (341 built) plus up to 0.292 projected (36 earlier) |
+
+The final-sets script refuses to start without `--follows-dev-analysis ID` and a complete dev-analysis record naming that id and
+covering the run (`write_dev_analysis_record`); each score row carries the id and the record's digest; `read_final_sets` returns rows
+only for that id. The job graph puts the final sets after the dev analysis.
+
+### 9.4 Job graph (per-run jobs) and critical path
+
+CPU stages on C (report, overlap audit, prep, FILTER size) first; the injected jobs on A wait for nothing and chain on A; the mined
+jobs on C wait for the FILTER size and chain on C; the conditional teacher measurement is first on C, the pass after the unconditional
+runs and before the three dependent runs; then a manual collection of the injected results to the analysis account (small named
+set, byte-verified), the dev analysis, and one final-sets job per retained model on C. Critical path in wall hours, GPU-hours as wall:
+26.1 h (1.1 days) at the median queue wait with the conditional cell dropped, 36.4 h (1.5 days) with it; 124 h and 153 h if every
+job drew the 90th-percentile wait of account A (a tail applied to each of 48 or 56 jobs: pessimistic). Section 3's option 3 gave 1.0
+day with six-run jobs; the difference is the per-job queue wait (see pushback in the entry).
+
+Budget against Block 3 (46.7): **30.56 GPU-hours** on measured costs for the rulings' evaluation scope (margin 16.14; 9.74 after the
+conditional teacher), 30.24 on the protocol's reasoned costs for the same scope; the registered design's own scope (eight for all 36
+runs) is 28.73 measured and 38.88 protocol (margin 7.82, 1.42 after the conditional teacher).
+
+### 9.5 Gap status (section 6)
+
+| # | Gap | State now |
+|---|---|---|
+| 1 | final cell configurations and run script | **done** (36 configurations, two run scripts, submit and preflight scripts); memory request 30 GB (mined), 24 GB (injected) |
+| 2 | one run cannot score three sets; order not enforced | **done** (set selector, final-sets script, sealed order in code, recorded in each row) |
+| 3 | full-scale prep script and drop-list step | open (a later prompt); the preflight reads the prep summary file (JSON, in the run's work directory) that the prep job will write |
+| 4 | mined cache does not fit A | **decided** (D124); not yet built |
+| 5 | memory about 26 GB against 32,000 MB | request set to 30 GB and checked by the preflight; MaxRSS of the first job still to read |
+| 6 | final analysis module | open (another branch) |
+| 7 | dense teacher unmeasured | rule fixed (D125); measurement is a later prompt |
+| 8 | Verified look covers six of twelve folders | **decided** (D127, DEV-038) |
+| 9 | retained-model space and archive | **decided** (D129: retain on C); the alias for B stays open |
+| 10 | 1,000-update sensitivity | **decided** (D128, DEV-039) |
+| 11 | encoding with a retained model for the 377 | built for the final sets (`final_sets.evaluate_retained`); RQ3's trained-arm contexts still need the same model-directory encoding for the 377 contexts |
+| 12 | label audit | open (readers) |
+
+### 9.6 Preflight checklist (section 5), status 2026-11-09
+
+| # | Item | State |
+|---|---|---|
+| 1 | `yield` on the final state log | **done** (read-only): 10,000 attempted, 6,230 mined, 123 quarantined (1.23%), 0 timeouts, 54,700 positives unrestricted |
+| 2 | overlap audit on the full store, drop list applied | open (index copied to C; audit job is a later prompt) |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | open (the preflight checks the prep summary file) |
+| 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
+| 5 | evaluation sets ready | **done** on A and C (0 missing for the dev set, the eight and the three parts of the 377) |
+| 6 | space, retention directory, memory 30 GB | **checked** (A 5.3 GB free for 3.0 needed; C 26.0 GB for 10.0 needed; request 30,720 MB under 32,000); final space check at launch |
+| 7 | CUDA gate inside each run; one GPU job per account | in the code; the submit script refuses a run already queued |
+| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the final code (job 66005); `scripts/rq2_record.py leakage` writes the record the preflight needs; open until run on the launch commit |
+| 9 | registration fixed before the first run | open: the engineer runs `scripts/rq2_record.py registration` |
+| 10 | seeds outside the waves, hashes, commit in `RIL_COMMIT` | **done** in the plan and the preflight; the commit is the launch commit |
+
+### 9.7 Next work packages
+
+Full-store prep and overlap job scripts (decision 9 settled: on C); the dense-teacher measurement on 100 directories; the final
+analysis module that writes the dev-analysis record; then the launch: `rq2_record.py` (registration, leakage), `rq2_preflight.py` and
+`rq2_submit.py --confirm-launch` on C (mined) and A (injected), by the engineer.
