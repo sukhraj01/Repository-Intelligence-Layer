@@ -600,7 +600,7 @@ Add `READINGS=non_test:pool_aligned` for the sensitivity reading. Check `sacct` 
 
 ## 11. Rulings applied before any final run (2026-11-09; decisions D136 to D143, DEV-040, DEV-041; entries E-RQ2-ANALYSIS and E-RQ2-FINAL-CELLS, addenda)
 
-Nothing was trained and no GPU job was submitted. Plan-only checks ran on the CPU of accounts A and C (`results/rq2_final/plan_only/`, jobs 66474 and 66475); the torch and leakage tests ran on account A (job 66476, 41 of 41). All settings stay `provisional` until launch.
+Nothing was trained and no GPU job was submitted. Plan-only checks ran on the CPU of accounts A and C (`results/rq2_final/plan_only/`, jobs 66505 and 66506); the torch and leakage tests ran on account A (job 66507, 41 of 41). All settings stay `provisional` until launch.
 
 ### 11.1 Rulings recorded
 
@@ -656,7 +656,7 @@ The launch step is `python3 -I scripts/rq2_plan.py resolve --work DIR`: it reads
 | 5 | evaluation sets ready | done on A and C |
 | 6 | space, retention directory, memory | checked on both accounts in the rehearsal; final check at launch |
 | 7 | CUDA gate in each job; one GPU job per account; no seed job submitted twice | in the code |
-| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the code of this section (job 66476); open until run on the launch commit |
+| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the code of this section (job 66507); open until run on the launch commit |
 | 9 | registration fixed before the first run | open (the cell table changed: the digest is new); the engineer runs `scripts/rq2_record.py registration` |
 | 10 | seeds outside the waves, hashes, commit in `RIL_COMMIT` | done in the plan and the preflight |
 | 11 | converter from the dev results and the final-sets results to the analysis rows | **done** (`scripts/rq2_rows.py`, `ril/evaluation/final_rows.py`; refuses without the dev-analysis id; tested on a synthetic final-sets result and on the stored pilot rows) |

@@ -2,11 +2,11 @@ plan rc=0 seconds=0
 plan_drop_conditional rc=0 seconds=0
 render rc=0 seconds=1
 render vs committed diff rc=0 (0 = identical)
-eval_sets rc=0 seconds=41
+eval_sets rc=0 seconds=32
 preflight rc=1 seconds=3
 rehearsal_registration rc=0 seconds=0
-rehearsal_leakage rc=0 seconds=0
-rehearsal_preflight rc=0 seconds=4
+rehearsal_leakage rc=0 seconds=1
+rehearsal_preflight rc=0 seconds=3
 submit_graph rc=0 seconds=0
 submit without preflight rc=2 (2 = refused)
 submit without --confirm-launch rc=2 (2 = refused)

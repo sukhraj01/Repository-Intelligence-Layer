@@ -1305,7 +1305,7 @@ All five sets are ready on A and on C (0 missing) after the copy. Rows of the st
 
 ### Addendum 2026-11-09 (later): rulings on the cell table, the pool rule and the job batching (decisions D136 to D143, DEV-040, DEV-041)
 
-Evidence classes: measured (counts, budget arithmetic from stored unit costs, plan-only checks on two accounts), reasoned. Nothing was trained; no GPU job; no cluster job except CPU checks (jobs 66474 on A, 66475 on C) and the torch and leakage tests (66476 on A, 41 of 41).
+Evidence classes: measured (counts, budget arithmetic from stored unit costs, plan-only checks on two accounts), reasoned. Nothing was trained; no GPU job; no cluster job except CPU checks (jobs 66505 on A, 66506 on C) and the torch and leakage tests (66507 on A, 41 of 41).
 
 | D | Decision | Evidence class | Cheapest experiment that could flip it | Time-box |
 |---|---|---|---|---|

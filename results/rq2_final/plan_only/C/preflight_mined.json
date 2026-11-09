@@ -7,7 +7,7 @@
    "ok": false
   },
   {
-   "detail": "RIL_COMMIT=f7f753b",
+   "detail": "RIL_COMMIT=dab970c",
    "id": "commit_recorded",
    "ok": true
   },
@@ -37,7 +37,7 @@
    "ok": false
   },
   {
-   "detail": "scripts/ada/rq2f_mined_run.sbatch asks 30720 MB; plan 30720 MB; per-user ceiling 32000 MB",
+   "detail": "scripts/ada/rq2f_mined_run.sbatch asks 30000 MB; plan 30000 MB; per-user ceiling 32000 MB; allocated 10 CPUs at 3000 MB per CPU against 10",
    "id": "memory_request",
    "ok": true
   },
@@ -62,8 +62,8 @@
    "ok": false
   }
  ],
- "commit": "f7f753b",
- "created_utc": "2026-11-09T13:06:25Z",
+ "commit": "dab970c",
+ "created_utc": "2026-11-09T13:25:37Z",
  "family": "mined",
  "include_conditional": false,
  "ready": false,

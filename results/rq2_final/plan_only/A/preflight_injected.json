@@ -2,7 +2,7 @@
  "account": "A",
  "checks": [
   {
-   "detail": "RIL_COMMIT=f7f753b",
+   "detail": "RIL_COMMIT=dab970c",
    "id": "commit_recorded",
    "ok": true
   },
@@ -27,7 +27,7 @@
    "ok": true
   },
   {
-   "detail": "scripts/ada/rq2f_injected_run.sbatch asks 24576 MB; plan 24576 MB; per-user ceiling 32000 MB",
+   "detail": "scripts/ada/rq2f_injected_run.sbatch asks 24576 MB; plan 24576 MB; per-user ceiling 32000 MB; allocated 9 CPUs at 3000 MB per CPU against 10",
    "id": "memory_request",
    "ok": true
   },
@@ -52,8 +52,8 @@
    "ok": false
   }
  ],
- "commit": "f7f753b",
- "created_utc": "2026-11-09T13:06:32Z",
+ "commit": "dab970c",
+ "created_utc": "2026-11-09T13:25:37Z",
  "family": "injected",
  "include_conditional": false,
  "ready": false,
