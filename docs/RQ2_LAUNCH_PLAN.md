@@ -2,7 +2,7 @@
 
 Audit of 2026-11-08 (entry E-RQ2-READINESS in `docs/experiments/B.md`). The protocol is `docs/RQ2_PROTOCOL.md`
 (section 11 where it differs); this page covers what stands between a finished mining run and the final tables.
-Nothing here is a result of the experiment and nothing was trained: the audit read code, stored logs and the cluster's
+Section 9 (2026-11-09) supersedes the mining-store size, adds the FILTER-pool rule, retention options, data location and disk. Nothing here is a result of the experiment and nothing was trained: the audit read code, stored logs and the cluster's
 accounting, ran every stage that has a plan-only form at minimal scale, and wrote plan-only forms for the stages that had
 none. **No design choice is made here**: where one is needed the options are listed with their cost, and a
 *recommendation* is marked as such.
@@ -312,9 +312,10 @@ Each decision lists the options with cost; the **recommendation** is mine, reaso
    set, because its stores exist (no new CPU build), it costs about the placeholder per checkpoint, and one encoding pass per
    checkpoint then serves both the look and RQ3 (a second pass of 0.377 per checkpoint avoided); the population change is
    stated and recorded as a departure.
-5. **1,000-update sensitivity.** Skip, or three mined cells at one seed (3.7 GPU-hours, repeats flagged because 32,000 visits exceed
+5. **FILTER-pool rule (new, section 9.2).** Options (a) common visit count from the smallest pool, (b) keep 100 and let FILTER repeat, (c) enlarge the pool; recommendation (a), a rule fixed before the first run.
+5b. **1,000-update sensitivity.** Skip, or three mined cells at one seed (3.7 GPU-hours, repeats flagged because 32,000 visits exceed
    about 5,800 examples). *Recommendation:* skip; it cannot meet the matching rule on any store this project can mine.
-6. **Which models to retain.** 9 confirmatory (2.5 GB), the 18 mined (4.9 GB), all 36 (9.9 GB). *Recommendation:* the 18 mined (the
+6. **Which models to retain.** (Options (i) to (iii) with disk, archive and the D100 rule: section 9.4.) 9 confirmatory (2.5 GB), the 18 mined (4.9 GB), all 36 (9.9 GB). *Recommendation:* the 18 mined (the
    Verified look and RQ3 need them), on C, archive to B afterwards.
 7. **Label audit sample.** Report the pilot sample's rate as the estimate for the miner's construction, or draw a new 400 from the
    full store (needs stage 3 ranks and about 5 hours per reader again). *Recommendation:* the pilot sample first; a new draw only
@@ -342,3 +343,114 @@ Each decision lists the options with cost; the **recommendation** is mine, reaso
 6. **Archive alias and copy.** What: the SSH alias for account B, the copy script run by the engineer. Where: the engineer's
    machine. Needs: retained models.
 7. **Launch.** What: the checklist of section 5 and the job graph of section 4. Where: A and C. Needs: 1 to 3, mining finished.
+
+## 9. Reconciliation of 2026-11-09
+
+Read-only checks made after the mining jobs ended, and additions to sections 3, 4, 7 and 8. Evidence classes as above. Where this
+section and an earlier one differ, this section is later. Nothing was run on a GPU and nothing on the mining account was changed.
+
+### 9.1 Mining on C, final state (measured)
+
+Jobs 64593 (6 h 05 min) and 64594 (3 h 43 min) COMPLETED; no `HALT` file; `state.jsonl` has 10,000 rows: mined 6,230 (62.3%), no
+Python change 2,607 (26.1%), no positive 1,040 (10.4%), quarantined 123 (1.2%). `pr/` holds 6,230 directories (350 MB); the whole store is
+**1.8 GB** (the 3.7 GB of section 2 was a linear projection from 1.1 GB at 2,985 rows and was too high by a factor of two; the plan's own
+2 GB figure was close). Yield against G2, quarantine classes and the overlap audit are the job of the next session; not read here.
+
+### 9.2 The FILTER pool against the visits of a run (projected from stored numbers)
+
+An example is a directory: a batch holds 32 distinct directories, each contributing up to `max_positives` positives
+(`ril/training/data_loader.py`, read; verified). The protocol's G5 line ("32 x N distinct pairs", 3,232 at N = 100, about 32,000 at
+N = 1,000) counts visits, that is directories; read as positive rows it would overstate what is available by about 5.5 (the pilot has 7,081
+positives in 1,286 directories). The protocol's wording is ambiguous; the code is not.
+
+| Quantity | Value | Source |
+|---|---|---|
+| mined directories | 6,230 | state log, 9.1 |
+| `non_test` share | 92.45% (1,286 of 1,391) | pilot, `docs/experiments/B.md` E-MINED-PILOT; **not measured at full scale** |
+| `non_test` directories | about 5,760 | 6,230 x 0.9245 |
+| FILTER K = 20 (BM25) keeps | 59.5% (765 of 1,286) | E-MINED-PILOT; pilot only |
+| FILTER pool | about **3,430** | 5,760 x 0.595 |
+| visits of a 100-update run | **3,200** | 100 x 32 |
+| margin | about 7% (230 directories), before the held-out and overlap drops (pilot: 3 of 1,391, 0.2%) | |
+| share of FILTER at which the pool equals the visits | 55.6% | 3,200 / 5,760 |
+| binomial interval of the pilot share | 56.8 to 62.2% (n = 1,286, standard error 1.4 points; directories cluster by repository, so wider in fact) | reasoned |
+| passes at 100 updates | RAW 0.56, FILTER 0.93 (`rq2_plan.py plan --filter-size 3427 --pool-examples 5760`) | plan tool |
+| passes at 1,000 updates | RAW 5.6, FILTER 9.3 | 32,000 / pool |
+
+The 7% margin is smaller than the uncertainty of the kept share carried over from one pilot (200 repositories) to 10,000 attempts; with
+a FILTER pool of 3,000 the plan tool reports a shortfall of 200 visits (1.07 passes). The size-matched subsample draws as many directories
+as FILTER keeps, so it repeats exactly when FILTER does; RAW, which draws from the whole pool, does not.
+
+**The rule the protocol needs.** All arms of the comparison must make the same number of visits, and the handling of repeats must be the
+same for every arm; otherwise a difference between FILTER and RAW is a difference in distinct examples seen as much as in supervision
+(G5, D42). Options, none chosen:
+
+| Option | What it is | Cost | Effect on the contrasts |
+|---|---|---|---|
+| (a) **Common visit count from the smallest pool** *(recommended, reasoned)* | rule fixed now: N = min(100, floor(F / 32)) for every arm and cell, F the FILTER pool after drops; nothing changes if F >= 3,200; the schedule is untouched (`budget.stop_after`) | none in GPU (a shorter run, at most 7% fewer updates at F of 3,000); a DEV entry if the rule triggers (O1's 100 changes) | both confirmatory contrasts stay clean: no arm repeats, RAW sees a subset of its pool |
+| (b) Keep 100 updates, let FILTER and the subsample repeat | report distinct examples seen per cell; FILTER against the subsample is the clean contrast (same F, same repeats) | none | FILTER against RAW is confounded by distinct count and flagged as such; one of the two confirmatory contrasts weakens |
+| (c) Make F large enough | lower K until F >= 3,200 plus a margin, or mine more attempts (listing beyond 10,000: cost not measured) | K is part of the arm definition, so this is a design change; mining time unmeasured | contrasts clean, but the arm differs from the pilots' FILTER K = 20 |
+
+Cheapest check that settles the trigger: the prep job's `filter-size` output on the real store (CPU, minutes, already in the plan graph);
+the rule is then applied before the first run. The 1,000-update sensitivity (decision 5) cannot satisfy any option: it needs 9.3 visits per directory.
+
+### 9.3 Data location, disk and calendar days
+
+- **Account C lacks the eight evaluation repositories**: `~/ril_eval` is absent on C and is 480 MB on A (measured today). Everything else
+  checked is on C and equal to A: `ril_x2/prep` (616 files, 2,454,199,616 bytes, path-and-size manifests equal), `ril_t1/work/e3_cache`
+  (521 files, 74,873,170 bytes, manifests equal), and the injected-noise pool files `pool_A`, `pool_T3x`, the BM25 and SweRankEmbed-Small
+  score files for the 5,000 directories and the feature table (sha256 equal for all five; on A two of them are links, hashed through
+  the link). No content hash of the original staging was recorded (only its size and duration in `docs/COMPUTE.md`); the comparison above
+  was made now, content-hashed for those five files and by size for the two directories. The dev dense encoder outputs (`ril_x2/enc`) are
+  on A only and were not compared; training does not need them.
+- **Copy time** at the recorded staging rate (about 10 GB in 85 minutes, 7.1 GB per hour, `docs/COMPUTE.md`): the eight repositories
+  (480 MB) about 4 minutes; the 1.8 GB mined store about 15 minutes if it were moved (it is not, under the split).
+- **Disk.** A: 5.1 GB free (90% used, `df` today). The mined cache is projected at 5.6 GB (1.25 GB for 1,286 directories, scaled by
+  5,760 / 1,286), so it cannot live on A. C: 26 GB free (49% used). Under `mined=C injected=A` C holds the store 1.8 GB, the cache
+  5.6 GB and the 18 mined models 4.9 GB: 12.3 GB, leaving about 14 GB. A could hold at most one retained model group of 4.9 GB (the 18
+  injected-cell models) with 0.2 GB spare: effectively none.
+- **Calendar days** (`rq2_plan.py plan ... --queue-wait-hours H [--accounts X | --family-accounts mined=C injected=A]`; wait applied to each
+  job on the critical path, from "mining finished", copy time not included, the dense-teacher pass and the sensitivity excluded):
+
+| Layout | p50 wait (0.03 h) | p90 wait (2.75 h) |
+|---|---|---|
+| all on A, or all on C | 34.9 h, 1.5 days | 72.9 h, 3.0 days |
+| mined on C, injected on A (`mined=C injected=A`) | 24.0 h, 1.0 day | 53.9 h, 2.2 days |
+
+  GPU use on the measured basis 28.7 hours (36 runs) against the Block 3 cap of 46.7; on the protocol's costs 38.9. The queue figures are
+  account A's GPU waits (44 jobs); C has one GPU job on record, so its p90 is not known.
+
+### 9.4 Retention against the test role of the eight repositories (decision, options only)
+
+D100 gives the eight repositories the test role: no tuning, no look at their results to choose or replace them, evaluated once after the
+dev analysis (as stated in the brief of this work and in the build entry E-EVAL-REPOS-BUILD; the decision's own text was not located
+beyond those). The protocol says the same of Verified ("looked at exactly once", after the dev analysis). All 36 models are therefore needed after the dev analysis unless the
+eight, and for the 18 mined models Verified, are scored inside each training job. A model is about 274 MB (137M parameters at two bytes).
+
+| Option | Disk | Archive | Keeps D100's rule | Risk |
+|---|---|---|---|---|
+| (i) retain all 36 and evaluate after the dev analysis | 9.9 GB; **does not fit on A (5.1 GB free)**, so the 18 injected-cell models must be written on C or moved | needed (C to B, no alias for B; or through the engineer's machine) | yes, by construction: the numbers do not exist before the dev analysis | disk and moves; a technical fault is repaired by re-scoring a retained model |
+| (ii) score the eight and Verified inside each job, seal the results unread until the dev analysis is finished; retain only what feeds RQ3 and the report | 2.5 to 4.9 GB (9 confirmatory or the 18 mined) | small | by discipline only: the numbers exist from the first job; the seal is procedural (result files written and not opened, their hashes entered in the ledger) | a fault in an in-job evaluation of a model not retained needs a retrain (0.38 GPU-hours plus evaluation); the eight must be on every account that trains |
+| (iii) retain a subset: the 18 mined models on C; score the 18 injected-cell controls inside their jobs, sealed *(recommended, reasoned)* | 4.9 GB on C | small | yes for the confirmatory (mined) cells; procedural seal for the controls | as (ii) for the controls only; the controls are not the confirmatory contrasts |
+
+GPU hours are the same in all three (the encoding is done once per model either way). The recommendation keeps the earlier one (retain the
+18 mined models, on C) and says what happens to the other 18.
+
+### 9.5 Not in the repository
+
+- **Final analysis module (gap 6, severity B).** `grep` finds no Holm, delta or verdict code outside documents; the one hit in the code is a
+  label string in `ril/training/rq2_plan.py` (the name of a planned job). Scope: one module under `ril/analysis/` reading the per-query
+  rows of the run directories (the format `stored_rows.py` reads), producing per contrast and per level (L2 repository-clustered, L3 query
+  level) the paired bootstrap interval (2,000 draws), Holm step-down within the primary family of 8 and the secondary family of 8 with
+  uncorrected intervals beside, the verdict of section 6 (positive, negative with a bound, inconclusive at delta = 1.5), seed mean and SD
+  (three seeds), the injected-noise sanity rules and the dose-response reading, and the tables listed under stage 9; tests on the pilot rows
+  (t5, mp) and on constructed cases for each verdict; CPU only. About one work package.
+- **Account B has no SSH alias** (`~/.ssh/config` defines `ada` and `adac` only), so the archive script cannot run. The engineer must add an
+  alias for B (key-based, `BatchMode`) before the first copy; or choose to archive to the engineer's machine instead; the numbered copy script
+  refuses to run without an alias.
+
+### 9.6 What was and was not run before launch
+
+Earlier dry runs on account A, jobs 64656 and 64658, passed all 11 steps and the evaluation-set check (section 2). The retention plan was
+checked against an empty directory and the archive script's syntax; there has been no GPU run of the retention switch. `--family-accounts` was
+already in the plan tool and its tests (14 tests pass locally).
