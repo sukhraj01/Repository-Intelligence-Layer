@@ -417,9 +417,12 @@ def test_shard_of_partitions_without_overlap() -> None:
         shard_of(items, 3, 3)  # type: ignore[arg-type]
 
 
-def test_run_shard_is_resumable(tmp_path: Path, synthetic: dict[str, str]) -> None:
+def test_run_shard_is_resumable(
+    tmp_path: Path, synthetic: dict[str, str], monkeypatch: pytest.MonkeyPatch
+) -> None:
     from ril.evaluation.executor import jobs
 
+    monkeypatch.setattr(jobs, "MIN_FREE_GB", 0.0)  # independent of the free space of the machine
     cfg = _config(tmp_path, synthetic)
     spec = _spec(synthetic)
     gold = {spec.instance_id: synthetic["gold"]}
@@ -430,6 +433,21 @@ def test_run_shard_is_resumable(tmp_path: Path, synthetic: dict[str, str]) -> No
     assert again.done == 0 and again.skipped == 1
     rows = [x for x in (run_dir / jobs.RESULT_FILE).read_text().splitlines()]
     assert len(rows) == 2
+
+
+def test_run_shard_stops_when_free_space_is_below_the_threshold(
+    tmp_path: Path, synthetic: dict[str, str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from ril.evaluation.executor import jobs
+
+    monkeypatch.setattr(jobs, "MIN_FREE_GB", float("inf"))  # no real disk can satisfy this
+    cfg = _config(tmp_path, synthetic)
+    spec = _spec(synthetic)
+    gold = {spec.instance_id: synthetic["gold"]}
+    run_dir = tmp_path / "run"
+    stats = jobs.run_shard([spec], gold, run_dir, cfg, runs=2, builder=FakeBuilder())
+    assert stats.stopped_disk and stats.done == 0
+    assert (run_dir / jobs.STOP_FILE).exists()
 
 
 def test_percentiles_use_nearest_rank() -> None:
