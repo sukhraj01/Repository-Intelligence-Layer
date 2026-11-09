@@ -22,21 +22,18 @@ import gzip
 import hashlib
 import json
 import os
-import re
 import shutil
 import tempfile
 import time
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from ril.evaluation import eval_sets
+from ril.evaluation import eval_sets, sealed
 from ril.training import retention
 
 FINAL_SETS_VERSION = "final-sets/v1"
 DEV_RECORD_VERSION = "dev-analysis-record/v1"
 INDEX_NAME = "final_sets_index.jsonl"
-ID_PATTERN = re.compile(r"^E-[A-Z0-9]+(?:-[A-Z0-9]+)*$")
-"""The form of an experiment entry id, the same rule as the analysis module's sealed-order guard."""
 Record = dict[str, Any]
 
 
@@ -53,12 +50,14 @@ def _sha256_file(path: str) -> str:
 
 
 def check_id(analysis_id: str | None) -> str:
-    if not analysis_id or not ID_PATTERN.match(analysis_id):
+    """The id of the dev analysis this scoring follows, through the shared guard (D100)."""
+    try:
+        return sealed.require_dev_analysis(analysis_id)
+    except sealed.SealedOrderError as err:
         raise FinalSetsRefused(
             "the final sets are scored only after the dev analysis: give the id of the "
             "dev-analysis entry they follow (--follows-dev-analysis ID)"
-        )
-    return analysis_id
+        ) from err
 
 
 def write_dev_analysis_record(

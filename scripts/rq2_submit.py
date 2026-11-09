@@ -1,9 +1,13 @@
 """Submit the RQ2 final runs of one family on its account: one GPU job per run, chained.
 
-  python3 -I scripts/rq2_submit.py --family mined --account C --preflight PATH [--retain-dir DIR]
-      --date YYYY-MM-DD [--include-conditional] [--print-graph] [--confirm-launch]
+  python3 -I scripts/rq2_submit.py --family mined --account C --work DIR --preflight PATH
+      [--retain-dir DIR] --date YYYY-MM-DD [--include-conditional] [--print-graph]
+      [--confirm-launch]
 
-Always prints the job graph first. Without ``--confirm-launch`` it submits nothing and exits 2; with
+One GPU job per seed (all arms of the seed in order, D141). The mined family refuses to build or
+submit anything unless N, its update count, was computed from the prepared store (``--work`` holds
+``rq2_updates.json`` written by ``scripts/rq2_plan.py resolve``; D140). Always prints the job graph
+first. Without ``--confirm-launch`` it submits nothing and exits 2; with
 it, it first checks the preflight file (passed, same account, family and RIL_COMMIT, under 48 hours
 old) and that none of the jobs is already queued, then calls ``sbatch`` for each run (``afterany``
 chain, one GPU job at a time per account). ``--print-graph`` prints and exits 0. Logic in
@@ -43,6 +47,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--family", choices=sorted(rp.MEM_REQUEST_MB), required=True)
     p.add_argument("--account", required=True)
     p.add_argument("--preflight")
+    p.add_argument("--work", help="run work directory holding prep_summary.json (mined family)")
     p.add_argument("--retain-dir", default=os.environ.get("RETAIN_DIR"))
     p.add_argument("--include-conditional", action="store_true")
     p.add_argument("--date", required=True, help="YYYY-MM-DD naming the result directories")
@@ -50,12 +55,22 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confirm-launch", action="store_true")
     a = p.parse_args(argv)
     commit = os.environ.get("RIL_COMMIT", "")
+    mined_n = None
+    if a.family == "mined":
+        try:
+            if not a.work:
+                raise rl.UpdatesError("N has not been computed from a prepared store: no --work")
+            mined_n = rl.read_updates(a.work)
+        except rl.UpdatesError as err:
+            sys.stderr.write(f"refused: {err}\n")
+            return 2
     subs = rl.submissions(
         a.family,
         commit=commit,
         retain_dir=a.retain_dir,
         date=a.date,
         include_conditional=a.include_conditional,
+        mined_n=mined_n,
     )
     sys.stdout.write(rl.render_graph(subs, a.account, a.family) + "\n")
     if a.print_graph:
@@ -72,6 +87,7 @@ def main(argv: list[str] | None = None) -> int:
         family=a.family,
         commit=commit,
         include_conditional=a.include_conditional,
+        updates=mined_n,
     )
     if reasons:
         sys.stderr.write("refused: " + "; ".join(reasons) + "\n")

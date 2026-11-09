@@ -92,9 +92,12 @@ def _compare(
             assert c["ci_cluster"] == pytest.approx(
                 (float(r["d_c_lo"]), float(r["d_c_hi"])), abs=TOL
             )
-            assert c["ci_uncorrected"] == pytest.approx(c["ci_cluster"])
+            assert c["ci_boot_uncorrected"] == pytest.approx(c["ci_cluster"])
         else:
-            assert c["ci_uncorrected"] == pytest.approx(c["ci_query"])
+            assert c["ci_boot_uncorrected"] == pytest.approx(c["ci_query"])
+        # the decision interval (D136) is a different, t-based one around the same estimate
+        lo, hi = c["ci_uncorrected"]
+        assert lo < c["d"] < hi
         n += 1
     return n
 

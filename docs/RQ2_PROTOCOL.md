@@ -445,6 +445,11 @@ Settled by the lead (D68 to D82), on academic advice, each with its reason. Noth
 | O13 | D80 | Declared before any final run: if the arms do not separate, RQ3 contrasts RAW with the untrained encoder, labelled as measuring "does training help", not "does supervision quality help" | a fallback must be declared in advance | DEV-022, `docs/ROADMAP.md` |
 | O14 | D81 | DEV entries for every departure listed at O14 | | DEV-019 to DEV-023 (DEV-012 and DEV-013 already exist) |
 | O15 | D82 | Confirmatory runs use **fresh noise realisations** (same rule, new draws); the Wave 7 and 8 realisations are not reused | confirmatory runs share nothing with exploratory ones | section 2 |
+| O5a | D136 | **Amends O5 and D17 (2026-11-09, before any final row):** the interval a decision is read from is the cluster-robust t interval over repositories with R - 1 degrees of freedom (every query its own cluster below three repositories); Holm is unchanged (same families, same step-down, contrasts ordered by the t p-value); the percentile bootstrap over whole repositories stays beside it in every table | simulated under no effect, the bootstrap rejects any contrast of a Holm family in 0.08 to 0.19 of cases at 8 to 20 repositories against 0.05; the t interval in 0.03 to 0.05 (`results/logs/rq2_analysis_fwer_2026-11-09.json`) | DEV-040 |
+| O1a | D140 | **Amends O1 for the mined family only if needed:** every arm of the mined family makes N = min(100, floor(F / 32)) updates, F the FILTER pool after the held-out and overlap drops, so every arm makes the same number of directory visits and no arm repeats an example; N = 100 when F is at least 3,200; the injected family keeps 100; the distinct-examples-per-arm diagnostic stays in every table. Replaces the cycling rule of D133 | removes the repeated-example confound from FILTER against RAW | DEV-041 |
+| O2a | D137, D138 | The injected design carries a clean RAW cell (rate 0) for sanity rule 1 and RAW and FILTER-BM25 at r = 0.1 (fresh draws), so the dose-response has three points (0, 0.1, 0.4); secondary and exploratory (D69 keeps two confirmatory contrasts) | the final design shows a rise without leaning on pilots | `docs/RQ2_LAUNCH_PLAN.md` section 11 |
+| O12a | D141 | One GPU job per account and per seed, all arms of the seed in a fixed interleaved order, resumable | six queue waits instead of 36 | `docs/RQ2_LAUNCH_PLAN.md` section 11 |
+| O5b | D139 | As coded and accepted: Holm family = one family on one set; family grouping of section 4 with D69; only the confirmatory FILTER-BM25 against RAW decides the RQ3 contrast; the final L3 claim needs the executable 377 at both levels; "indistinguishable" = absolute difference below the pooled seed SD; the leave-out check compares the sign; a dev sign that disagrees makes the claim inconclusive with the reason written | recorded as read | |
 
 **Design of record (O12), with the derivation.** Rule: among the designs of section 5, take the one with the most evaluation repositories whose total is at most 60 GPU-hours; if two tie, the one with fewer GPU-hours.
 
@@ -462,7 +467,7 @@ A to D evaluate the same dev set and differ in cells and seeds, not in repositor
 
 | Rule | Source | In code |
 |---|---|---|
-| Mean over queries, repository-clustered bootstrap (2,000 draws, seed 0), query-level below three repositories, the other interval beside | D17, section 4 | `estimate`, `cell_summaries`, `DRAWS`, `BOOT_SEED`, `MIN_CLUSTERS` (the bootstrap is `ril.evaluation.stats.Boot`) |
+| Mean over queries; decision interval = cluster-robust t over repositories with R - 1 degrees of freedom (query-level below three repositories); repository-clustered percentile bootstrap (2,000 draws, seed 0) beside it | D17, D136, section 4 | `estimate`, `cell_summaries`, `ril.analysis.cluster_t`, `INTERVAL_RULE`, `DRAWS`, `BOOT_SEED`, `MIN_CLUSTERS` (the bootstrap is `ril.evaluation.stats.Boot`) |
 | Paired differences per seed and pooled over seeds, seed SD beside | section 4 | `estimate` (`per_seed`, `seed_sd_of_difference`) |
 | Two confirmatory contrasts, FILTER (BM25 teacher) against RAW and against the size-matched subsample, both levels | D69 | `FINAL_CONTRASTS`, family `confirmatory` |
 | L3 metric Recall@100 with nDCG@10 beside it | D71 | `PRIMARY_METRIC`, `METRICS` |
@@ -472,7 +477,7 @@ A to D evaluate the same dev set and differ in cells and seeds, not in repositor
 | Sanity before reading, dose-response | section 6, rules 1 and 2 | `calibration_sanity`, `dose_response` |
 | Which RQ3 contrast is primary (fallback when the arms do not separate) | D80, rule 7 | `fallback` |
 | Fresh noise realisations | D82 | a property of the runs, not of the analysis (`distinct_directories_seen` and the config hashes are carried through) |
-| Final evaluation sets read only after the dev analysis, id recorded | D100 | `require_dev_analysis`, `check_sealed`, `SEALED_SETS` |
+| Final evaluation sets read only after the dev analysis, id recorded; one guard shared by the analysis, the final-sets scoring and the row converter | D100 | `ril.evaluation.sealed.require_dev_analysis`, `check_sealed`, `SEALED_SETS` |
 | Distinct directories seen per cell in every table | matching rule, section 3 | `diagnostics` |
 
 ---

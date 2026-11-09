@@ -1,9 +1,9 @@
-plan rc=0 seconds=1
+plan rc=0 seconds=0
 plan_drop_conditional rc=0 seconds=0
 render rc=0 seconds=1
 render vs committed diff rc=0 (0 = identical)
-eval_sets rc=0 seconds=33
-preflight rc=1 seconds=4
+eval_sets rc=0 seconds=32
+preflight rc=1 seconds=3
 rehearsal_registration rc=0 seconds=0
 rehearsal_leakage rc=0 seconds=1
 rehearsal_preflight rc=0 seconds=3

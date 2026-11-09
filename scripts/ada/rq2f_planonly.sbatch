@@ -8,12 +8,13 @@
 #SBATCH --time=00:30:00
 #SBATCH --output=ril_rq2f/logs/rq2f_planonly_%j.out
 # CPU only, no GPU, nothing deleted, nothing submitted. Plan-only validation of the RQ2 final configurations and
-# launch scripts on one account (docs/RQ2_LAUNCH_PLAN.md section 9): the 36 configurations are re-rendered and
+# launch scripts on one account (docs/RQ2_LAUNCH_PLAN.md section 9): the 45 configurations are re-rendered and
 # compared with the committed files, the plan (hashes, budget on both bases, job graph) is printed, the
 # preflight is run for the account's family against the real directories (it is expected to report the items
 # that wait for the prep job), the evaluation sets are checked against the stores on the account, and the
 # script headers are read for the memory request; a rehearsal on a synthetic work directory passes every check,
-# and the submit script is run twice to show its refusals (no preflight file, no confirmation): nothing is submitted. Memory estimate: a plan of 36 configurations, the evaluation
+# and the submit script is run to show its refusals (no preflight file, no confirmation, N not computed from a
+# prepared store, D140): nothing is submitted. Memory estimate: a plan of 45 configurations, the evaluation
 # store check reads unit-text shards line by line (gzipped parts too): under 2 GB peak; 6 GB asked.
 #   sbatch --export=ALL,ACCT=A,FAMILY=injected,RIL_COMMIT=<hash> ril_rq2f/scripts/ada/rq2f_planonly.sbatch
 set -uo pipefail
@@ -61,16 +62,30 @@ echo "..........
 step rehearsal_leakage "$PY" -I scripts/rq2_record.py leakage --work "$T/work" --pytest-output "$T/pytest_output.txt"
 echo '{"examples": 5800, "filter_size": 3450, "held_out_rows": 0, "drop_list_applied": true}' > "$T/work/prep_summary.json"
 touch "$T/work/mined.jsonl.gz" "$T/work/features_mined.csv"
+# the launch step (D140): N from the prepared store, resolved configurations and their hashes (mined family)
+if [ "$FAMILY" = mined ]; then
+  step rehearsal_resolve "$PY" -I scripts/rq2_plan.py resolve --work "$T/work"
+fi
 step rehearsal_preflight "$PY" -I scripts/rq2_preflight.py --family "$FAMILY" --account "$ACCT" --work "$T/work" \
   --home "$HOME" --out "$OUT/preflight_rehearsal_${FAMILY}.json" "${RETAIN[@]}"
-step submit_graph "$PY" -I scripts/rq2_submit.py --family "$FAMILY" --account "$ACCT" --date 2026-11-10 --print-graph
+WORKARG=()
+[ "$FAMILY" = mined ] && WORKARG=(--work "$T/work")
+step submit_graph "$PY" -I scripts/rq2_submit.py --family "$FAMILY" --account "$ACCT" --date 2026-11-10 \
+  --print-graph "${WORKARG[@]}"
 # the refusal without a preflight file: exits 2 before any sbatch call (nothing is ever submitted here)
 "$PY" -I scripts/rq2_submit.py --family "$FAMILY" --account "$ACCT" --date 2026-11-10 --confirm-launch \
-  > "$OUT/submit_refusal.out" 2> "$OUT/submit_refusal.err"
+  "${WORKARG[@]}" > "$OUT/submit_refusal.out" 2> "$OUT/submit_refusal.err"
 echo "submit without preflight rc=$? (2 = refused)" | tee -a "$OUT/steps.txt"
-"$PY" -I scripts/rq2_submit.py --family "$FAMILY" --account "$ACCT" --date 2026-11-10 \
+"$PY" -I scripts/rq2_submit.py --family "$FAMILY" --account "$ACCT" --date 2026-11-10 "${WORKARG[@]}" \
   > /dev/null 2> "$OUT/submit_no_confirm.err"
 echo "submit without --confirm-launch rc=$? (2 = refused)" | tee -a "$OUT/steps.txt"
+if [ "$FAMILY" = mined ]; then
+  # N not computed from a prepared store: an empty work directory has no rq2_updates.json
+  mkdir -p "$T/empty"
+  "$PY" -I scripts/rq2_submit.py --family mined --account "$ACCT" --date 2026-11-10 --print-graph --work "$T/empty" \
+    > /dev/null 2> "$OUT/submit_no_updates.err"
+  echo "submit with N not computed rc=$? (2 = refused)" | tee -a "$OUT/steps.txt"
+fi
 rm -rf "$T"
 grep -n "mem=" scripts/ada/rq2f_*_run.sbatch scripts/ada/rq2f_final_sets.sbatch > "$OUT/mem_requests.txt"
 quota -s > "$OUT/quota.txt" 2>&1 || true

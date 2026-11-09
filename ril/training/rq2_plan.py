@@ -6,14 +6,19 @@ functions the training run uses), and the cost and job graph are computed from s
 Implements ``docs/RQ2_PROTOCOL.md`` section 11 (O2, O7, O12, O15) and ``docs/RQ2_LAUNCH_PLAN.md``.
 
 Every unit cost carries its source and evidence class; a changed cost is a changed constant here,
-never an edit to a result. The cell list is the protocol's option E (section 5): 6 cells on the
-mined set and 6 on the pool with injected noise at r = 0.4, three seeds each.
+never an edit to a result. The cell list is the protocol's option E (section 5), 6 cells on the
+mined set and 6 on the pool with injected noise at r = 0.4, plus the three cells of the rulings
+D137 and D138: a clean RAW cell and RAW and FILTER-BM25 at r = 0.1 (the dose-response curve has
+three points). Three seeds each: 45 runs.
 
 Placement, retention, the evaluation scope and the job graph follow the launch rulings D124 to D133
 (``docs/RQ2_LAUNCH_PLAN.md`` section 9): mined-set cells train on account C, the injected-noise
 family on account A; the 18 mined-set models are retained; training jobs score the dev set only and
 the eight repositories and the executable 377 are scored once, from the retained models, after the
-dev analysis; one GPU job per run.
+dev analysis. Since D141 a GPU job is one account's one seed: all arms of the seed in a fixed
+interleaved order, resumable. Since D140 the number of updates N of the mined family is
+``min(100, floor(F / 32))`` for every arm, F the FILTER pool after the held-out and overlap drops,
+computed from the prepared store (``mined_updates``).
 """
 
 from __future__ import annotations
@@ -34,7 +39,7 @@ from ril.training.config_io import (
     teacher_equals_base,
 )
 
-PLAN_VERSION = "rq2-plan/v1"
+PLAN_VERSION = "rq2-plan/v2"
 
 PRIMARY_UPDATES = 100
 SENSITIVITY_UPDATES = 1000
@@ -45,6 +50,9 @@ DEFAULT_SEEDS = (100, 101, 102)
 """Three seeds disjoint from the exploratory waves, so every noise draw is fresh (D82). The values
 are a tactical choice under D82; the count (three) is O7."""
 
+UPDATE_VISITS = BATCH_SIZE
+"""Pool directories one optimizer update visits (batch size 32, one positive each)."""
+
 PREP_HOURS = 3.0
 OVERLAP_HOURS = 2.0
 BLOCK3_CAP = 46.7
@@ -53,10 +61,24 @@ OPTION_E_TOTAL = 38.9
 FAMILY_ACCOUNTS: dict[str, str] = {"mined": "C", "injected": "A"}
 """Where each data condition trains (D124): the mined store and its cache live on C, the injected
 pool and its score stores on A."""
-MEM_REQUEST_MB: dict[str, int] = {"mined": 30 * 1024, "injected": 24 * 1024}
+MEM_REQUEST_MB: dict[str, int] = {"mined": 30000, "injected": 24 * 1024}
 """Per-job memory request. Mined: 26 GB projected peak (17 GB decoded cache, 3 GB training, 6 GB
-evaluation) against the 32,000 MB per-user limit; injected: the pilots' 24 GB (18 GB measured)."""
+evaluation; less with the shared-string cache reader, not yet measured at full scale) against the
+32,000 MB per-user limit, and 30,000 MB because partition u22 grants 3,000 MB per CPU: a request
+above 30,000 MB is allocated 11 CPUs against the account's 10 and never starts (measured, job
+66022, E-RQ2-FULL-PREP); injected: the pilots' 24 GB (18 GB measured), 9 CPUs."""
 MEM_CEILING_MB = 32000
+MEM_PER_CPU_MB = 3000
+"""Largest memory Slurm grants per CPU on partition u22 (``MaxMemPerCPU``)."""
+CPU_LIMIT = 10
+"""CPUs one account may hold at a time (QOS low)."""
+
+
+def cpus_for_request(mem_mb: int) -> int:
+    """CPUs Slurm allocates for a memory request: one per 3,000 MB, rounded up."""
+    return -(-mem_mb // MEM_PER_CPU_MB)
+
+
 DENSE_TEACHER_MEASURE_GPU_H = 0.4
 DENSE_TEACHER_CAP_GPU_H = 6.0
 """FILTER-SweRankEmbed-Small on the mined set runs only if the measured full-store teacher pass
@@ -134,6 +156,9 @@ _WEIGHT = {"form": "power", "k": 20, "param": 1.0, "floor": 0.1}
 CELLS: tuple[Cell, ...] = (
     Cell("mined_raw", "mined", "RAW", None, "confirmatory", None, {"name": "RAW"}, True),
     Cell(
+        "mined_filter_bm25", "mined", "FILTER", "bm25", "confirmatory", None, _filter("bm25"), True
+    ),
+    Cell(
         "mined_sub",
         "mined",
         "RAW_SUBSAMPLE",
@@ -142,20 +167,6 @@ CELLS: tuple[Cell, ...] = (
         None,
         {"name": "RAW_SUBSAMPLE", "subsample": {"size": "filter_size", "draw": 0}},
         True,
-    ),
-    Cell(
-        "mined_filter_bm25", "mined", "FILTER", "bm25", "confirmatory", None, _filter("bm25"), True
-    ),
-    Cell(
-        "mined_filter_srs",
-        "mined",
-        "FILTER",
-        _SRS,
-        "exploratory",
-        None,
-        _filter(_SRS),
-        True,
-        conditional="D125",
     ),
     Cell(
         "mined_weight",
@@ -177,7 +188,21 @@ CELLS: tuple[Cell, ...] = (
         {"name": "CURRICULUM", "ordering": {"teacher": "bm25", "buckets": 4}},
         True,
     ),
+    Cell(
+        "mined_filter_srs",
+        "mined",
+        "FILTER",
+        _SRS,
+        "exploratory",
+        None,
+        _filter(_SRS),
+        True,
+        conditional="D125",
+    ),
     Cell("inj_raw", "injected", "RAW", None, "control", 0.4, {"name": "RAW"}, False),
+    Cell(
+        "inj_filter_bm25", "injected", "FILTER", "bm25", "exploratory", 0.4, _filter("bm25"), False
+    ),
     Cell(
         "inj_oracle",
         "injected",
@@ -198,9 +223,7 @@ CELLS: tuple[Cell, ...] = (
         {"name": "RAW_SUBSAMPLE", "subsample": {"size": "match_clean", "draw": 0}},
         False,
     ),
-    Cell(
-        "inj_filter_bm25", "injected", "FILTER", "bm25", "exploratory", 0.4, _filter("bm25"), False
-    ),
+    Cell("inj_clean_raw", "injected", "RAW", None, "control", 0.0, {"name": "RAW"}, False),
     Cell("inj_filter_srs", "injected", "FILTER", _SRS, "exploratory", 0.4, _filter(_SRS), False),
     Cell(
         "inj_weight",
@@ -212,7 +235,27 @@ CELLS: tuple[Cell, ...] = (
         {"name": "WEIGHT", "weight": {"teacher": _SRS, **_WEIGHT}},
         False,
     ),
+    Cell("inj_raw_r01", "injected", "RAW", None, "exploratory", 0.1, {"name": "RAW"}, False),
+    Cell(
+        "inj_filter_bm25_r01",
+        "injected",
+        "FILTER",
+        "bm25",
+        "exploratory",
+        0.1,
+        _filter("bm25"),
+        False,
+    ),
 )
+"""The cell table in the order a seed's job runs it (D141). Paired contrasts sit next to each other
+(RAW then FILTER-BM25 first, the clean and oracle references of the calibration before the
+secondary cells), so a job that dies part-way leaves complete pairs for the earlier seeds and the
+confirmatory pairs of the current one first. The conditional cell is last. ``inj_clean_raw`` is the
+rate-0 reference of sanity rule 1 (D137); the ``_r01`` cells are the second noise rate of the
+dose-response (D138), exploratory by protocol (D69)."""
+
+NOISE_RATES: tuple[float, ...] = (0.0, 0.1, 0.4)
+"""The three points of the dose-response."""
 
 OPEN_CELL_CHOICES: tuple[str, ...] = ()
 """Settled by D126 (BM25 teacher for WEIGHT and CURRICULUM on the mined set) and D128 (no
@@ -230,15 +273,39 @@ class Run:
         return f"{self.cell.cell_id}_u{self.updates}_s{self.seed}"
 
 
+def mined_updates(filter_pool: int) -> int:
+    """Optimizer updates of every arm of the mined family: ``min(100, floor(F / 32))`` (D140).
+
+    ``F`` is the FILTER pool after the held-out and overlap drops, 32 directories per update, so
+    every arm makes the same number of directory visits and none repeats an example. 100 when F is
+    at least 3,200 (nothing changes); fewer for every arm alike below that.
+    """
+    if filter_pool < UPDATE_VISITS:
+        raise ValueError(f"FILTER pool {filter_pool} is below one update ({UPDATE_VISITS})")
+    return min(PRIMARY_UPDATES, filter_pool // UPDATE_VISITS)
+
+
 def plan_runs(
     seeds: Sequence[int] = DEFAULT_SEEDS,
     updates: int = PRIMARY_UPDATES,
     cells: Sequence[Cell] = CELLS,
+    *,
+    mined_n: int | None = None,
 ) -> list[Run]:
-    """The 36 runs of option E at the primary update count (cells x seeds)."""
+    """The 45 runs (cells x seeds) at the primary update count.
+
+    ``mined_n`` is the update count of the mined family once the launch step has computed it from
+    the prepared store (:func:`mined_updates`); the injected family always runs ``updates``.
+    """
     if len(set(seeds)) != len(seeds):
         raise ValueError("duplicate seeds")
-    return [Run(c, int(s), updates) for c in cells for s in seeds]
+    if mined_n is not None and not 1 <= mined_n <= PRIMARY_UPDATES:
+        raise ValueError(f"mined updates {mined_n} outside 1..{PRIMARY_UPDATES}")
+    return [
+        Run(c, int(s), mined_n if (mined_n is not None and c.family == "mined") else updates)
+        for c in cells
+        for s in seeds
+    ]
 
 
 def fresh_noise_check(runs: Sequence[Run]) -> list[str]:
@@ -335,6 +402,8 @@ def check_protocol(cfg: Mapping[str, Any], run: Run) -> list[str]:
     """
     bad: list[str] = []
     for key, want in PROTOCOL_HELD.items():
+        if key == "budget":
+            want = {**want, "stop_after": run.updates}
         section = cfg["checkpoint" if key == "checkpoint_fixed" else key]
         have: dict[str, Any] = {k: section.get(k) for k in want}
         if have != want:
@@ -342,14 +411,20 @@ def check_protocol(cfg: Mapping[str, Any], run: Run) -> list[str]:
     cell = run.cell
     if run.seed in WAVE_SEEDS:
         bad.append(f"seed {run.seed} is an exploratory-wave seed")
-    if cfg["budget"].get("stop_after") != PRIMARY_UPDATES:
-        bad.append("primary runs stop at 100 updates")
+    if cfg["budget"].get("stop_after") != run.updates:
+        bad.append(f"stop_after {cfg['budget'].get('stop_after')} != the run's {run.updates}")
+    if cell.family == "injected" and run.updates != PRIMARY_UPDATES:
+        bad.append("the injected family keeps 100 updates (D140)")
+    if cell.family == "mined" and not 1 <= run.updates <= PRIMARY_UPDATES:
+        bad.append(f"mined updates {run.updates} outside 1..{PRIMARY_UPDATES} (D140)")
     if bool(cfg["checkpoint"].get("retain_final")) != cell.retain:
         bad.append("retain_final must be on for the mined set and off for the injected family")
     if cell.family == "mined" and "noise" in cfg:
         bad.append("the mined set carries no injected noise")
-    if cell.family == "injected" and (cfg.get("noise") or {}).get("rate") != 0.4:
-        bad.append("injected cells use noise rate 0.4 (D82 fresh draws, same rule)")
+    if cell.family == "injected" and (cfg.get("noise") or {}).get("rate") != cell.noise_rate:
+        bad.append(f"the cell {cell.cell_id} uses noise rate {cell.noise_rate} (D82, D137, D138)")
+    if cell.family == "injected" and cell.noise_rate not in NOISE_RATES:
+        bad.append(f"noise rate {cell.noise_rate} is not one of {NOISE_RATES}")
     arm = cfg["arm"]
     if arm.get("name") == "FILTER":
         f = arm["filter"]
@@ -380,15 +455,24 @@ def validate_runs(
     """
     out: list[Record] = []
     by_family: dict[str, list[Record]] = {}
+    for fam in ("mined", "injected"):
+        counts = {r.updates for r in runs if r.cell.family == fam}
+        if len(counts) > 1:
+            raise ValueError(
+                f"{fam}: arms differ in updates {sorted(counts)}: every arm must match"
+            )
     for run in runs:
         size = FILTER_SIZE_PLACEHOLDER if filter_size is None else filter_size
         cfg = render_config(templates[run.cell.family], run, filter_size=size)
         problems = check_protocol(cfg, run)
         if problems:
             raise ValueError(f"{run.run_id} departs from the registered design: {problems}")
-        by_family.setdefault(run.cell.family, []).append(
-            {k: v for k, v in cfg.items() if k != "seed"}
-        )
+        # the noise rate is a data-condition parameter of the dose-response (D137, D138), checked
+        # against the cell's own rate by check_protocol; every other noise setting must match
+        comparable = {k: v for k, v in cfg.items() if k != "seed"}
+        if "noise" in comparable:
+            comparable["noise"] = {k: v for k, v in comparable["noise"].items() if k != "rate"}
+        by_family.setdefault(run.cell.family, []).append(comparable)
         end = planned_end(cfg)
         sized = "subsample" in run.cell.arm_config and (
             run.cell.arm_config["subsample"]["size"] == FILTER_SIZE_TOKEN
@@ -587,12 +671,26 @@ class Job:
     """Order on one account (``afterany``): one GPU job at a time, a failed run does not stop the
     chain (a rerun resumes, finished runs are skipped)."""
     conditional: str | None = None
+    runs: tuple[str, ...] = ()
+    """Run ids a batched job trains in order (a seed's arms, D141), or models it scores."""
+
+
+def _cell_position(cell_id: str) -> int:
+    pos = {c.cell_id: i for i, c in enumerate(CELLS)}
+    return pos.get(cell_id, len(pos))
 
 
 def _run_order(runs: Sequence[Run]) -> list[Run]:
-    """Seed first, then the cell table's order: a whole seed is done before the next starts."""
-    pos = {c.cell_id: i for i, c in enumerate(CELLS)}
-    return sorted(runs, key=lambda r: (r.seed, pos.get(r.cell.cell_id, len(pos))))
+    """Seed first, then the cell table's interleaved order: a whole seed is done before the next."""
+    return sorted(runs, key=lambda r: (r.seed, _cell_position(r.cell.cell_id)))
+
+
+def seed_jobs(runs: Sequence[Run], family: str) -> dict[int, list[Run]]:
+    """A family's runs grouped by seed, each group in the cell table's interleaved order (D141)."""
+    groups: dict[int, list[Run]] = {}
+    for r in _run_order([r for r in runs if r.cell.family == family]):
+        groups.setdefault(r.seed, []).append(r)
+    return groups
 
 
 def job_graph(
@@ -603,16 +701,20 @@ def job_graph(
     include_conditional: bool = True,
     queue_wait_hours: float = 0.0,
 ) -> list[Job]:
-    """Jobs from the finished mining store to the final-sets results, one GPU job per run.
+    """Jobs from the finished mining store to the final-sets results, one GPU job per seed.
 
-    CPU stages are single jobs on the account that holds the store (``store_account``). Each run is
-    one GPU job on its family's account (D124); jobs of one account are ordered by ``chain_after``.
-    Injected-noise jobs wait for nothing. Mined jobs wait for the FILTER size (and the conditional
-    FILTER-SweRankEmbed-Small run for the dense teacher's pass, D125). After all training and a
-    manual collection of the injected results (small files, byte-verified copy) comes the dev
-    analysis, then one final-sets job per retained model (the eight repositories and the executable
-    377, D127, D129), ordered on the account that holds the models. ``queue_wait_hours`` is unused
-    here and kept for the signature of :func:`critical_path_hours` callers.
+    CPU stages are single jobs on the account that holds the store (``store_account``). Each
+    family trains on its account (D124) in one GPU job per seed that runs every arm of the seed in
+    the cell table's interleaved order, resumable and skipping finished runs (D141): three jobs for
+    the mined family (five arms, six with the conditional cell) and three for the injected family
+    (nine arms). Per-run records, hashes and ledger rows stay per run. Jobs of one account are
+    ordered by ``chain_after``. Injected-noise jobs wait for nothing. Mined jobs wait for the FILTER
+    size and, with the conditional cell, for the measurement and the full-store pass of the dense
+    teacher (D125), so all three mined jobs then carry six arms. After training and a manual
+    collection of the injected results (small files, byte-verified copy) comes the dev analysis,
+    then one final-sets job per seed over that seed's retained models (the eight repositories and
+    the executable 377, D127, D129), on the account that holds the models. ``queue_wait_hours`` is
+    unused here and kept for the signature of :func:`critical_path_hours` callers.
     """
     del queue_wait_hours
     fam_acct = dict(family_accounts or FAMILY_ACCOUNTS)
@@ -647,7 +749,14 @@ def job_graph(
         "about 5,800 and rounded up with the cache build",
     )
     fs = add(
-        "filter_size", "FILTER size for the subsample", "cpu", store_account, (prep,), 0.0, 0.1
+        "filter_size",
+        "FILTER pool F, updates N = min(100, F // 32), run configurations and hashes",
+        "cpu",
+        store_account,
+        (prep,),
+        0.0,
+        0.1,
+        "D140: N is computed from the prepared store before any submission",
     )
     last_on: dict[str, str] = {}
 
@@ -669,29 +778,6 @@ def job_graph(
             chain(acct_m),
             "D125",
         )
-
-    def add_run(r: Run, extra: tuple[str, ...] = ()) -> None:
-        acct = fam_acct[r.cell.family]
-        after: list[str] = [fs] if r.cell.family == "mined" else []
-        after.extend(extra)
-        last_on[acct] = add(
-            f"run_{r.run_id}",
-            f"train and score dev: {r.cell.family} {r.cell.cell_id}, seed {r.seed}",
-            "gpu",
-            acct,
-            tuple(after),
-            COSTS["run_dev"].value,
-            COSTS["run_dev"].value,
-            "retains the final model" if r.cell.retain else "",
-            chain(acct),
-            r.cell.conditional,
-        )
-
-    ordered = _run_order(use)
-    for r in ordered:
-        if r.cell.conditional is None:
-            add_run(r)
-    if srs:  # the pass runs only after the unconditional runs, and only if the measurement allows
         last_on[acct_m] = add(
             "teacher_pass",
             "dense teacher over the mined store (SweRankEmbed-Small)",
@@ -700,14 +786,33 @@ def job_graph(
             ("teacher_measure",),
             DENSE_TEACHER_CAP_GPU_H,
             DENSE_TEACHER_CAP_GPU_H,
-            "launched only if the measured full-store cost is at most 6.0 GPU-hours (D125)",
+            "launched only if the measured full-store cost is at most 6.0 GPU-hours (D125); "
+            "with it every mined seed job carries six arms (D141)",
             chain(acct_m),
             "D125",
         )
-        for r in ordered:
-            if r.cell.conditional == "D125":
-                add_run(r, ("teacher_pass",))
-    train_ids = tuple(j.job_id for j in jobs if j.job_id.startswith("run_"))
+    for family in ("injected", "mined"):
+        acct = fam_acct[family]
+        for seed, group in seed_jobs(use, family).items():
+            after: list[str] = []
+            if family == "mined":
+                after.append(fs)
+                if srs:
+                    after.append("teacher_pass")
+            last_on[acct] = add(
+                f"seed_{family}_s{seed}",
+                f"train and score dev: {family}, seed {seed}, {len(group)} arms in order",
+                "gpu",
+                acct,
+                tuple(after),
+                round(len(group) * COSTS["run_dev"].value, 3),
+                round(len(group) * COSTS["run_dev"].value, 3),
+                "retains the final models" if group[0].cell.retain else "",
+                chain(acct),
+                None,
+                tuple(r.run_id for r in group),
+            )
+    train_ids = tuple(j.job_id for j in jobs if j.job_id.startswith("seed_"))
     inj_accts = {fam_acct["injected"]} - {fam_acct["mined"]}
     collect = add(
         "collect_results",
@@ -732,20 +837,20 @@ def job_graph(
     )
     acct = fam_acct["mined"]
     per_model = COSTS["eight_repos"].value + look_cost_per_checkpoint("measured")
-    for r in _run_order(retained_runs(use)):
-        jid = add(
-            f"final_{r.run_id}",
-            f"final sets from the retained model: {r.cell.cell_id}, seed {r.seed}",
+    for seed, group in seed_jobs([r for r in use if r.cell.retain], "mined").items():
+        last_on[acct] = add(
+            f"final_mined_s{seed}",
+            f"final sets from the retained models of seed {seed} ({len(group)} models)",
             "gpu",
             acct,
             (da,),
-            round(per_model, 3),
-            round(per_model, 3),
-            "eight repositories and executable 377, role test, once",
+            round(per_model * len(group), 3),
+            round(per_model * len(group), 3),
+            "eight repositories and executable 377, role test, once per model",
             chain(acct),
-            r.cell.conditional,
+            None,
+            tuple(r.run_id for r in group),
         )
-        last_on[acct] = jid
     return jobs
 
 

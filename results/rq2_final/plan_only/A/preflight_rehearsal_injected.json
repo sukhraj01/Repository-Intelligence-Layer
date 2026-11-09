@@ -2,7 +2,7 @@
  "account": "A",
  "checks": [
   {
-   "detail": "RIL_COMMIT=b704289",
+   "detail": "RIL_COMMIT=dab970c",
    "id": "commit_recorded",
    "ok": true
   },
@@ -17,7 +17,7 @@
    "ok": true
   },
   {
-   "detail": "18 configurations conform to the registered design and reproduce the planned hashes",
+   "detail": "27 configurations conform to the registered design and reproduce the planned hashes",
    "id": "configs_conform",
    "ok": true
   },
@@ -27,7 +27,7 @@
    "ok": true
   },
   {
-   "detail": "scripts/ada/rq2f_injected_run.sbatch asks 24576 MB; plan 24576 MB; per-user ceiling 32000 MB",
+   "detail": "scripts/ada/rq2f_injected_run.sbatch asks 24576 MB; plan 24576 MB; per-user ceiling 32000 MB; allocated 9 CPUs at 3000 MB per CPU against 10",
    "id": "memory_request",
    "ok": true
   },
@@ -52,10 +52,11 @@
    "ok": true
   }
  ],
- "commit": "b704289",
- "created_utc": "2026-11-09T07:43:10Z",
+ "commit": "dab970c",
+ "created_utc": "2026-11-09T13:25:41Z",
  "family": "injected",
  "include_conditional": false,
  "ready": true,
- "version": "rq2-preflight/v1"
+ "updates": null,
+ "version": "rq2-preflight/v2"
 }

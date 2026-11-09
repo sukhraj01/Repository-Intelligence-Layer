@@ -1,14 +1,19 @@
 """Plan-only launcher of the RQ2 final experiment: no GPU, no model, no torch.
 
-  plan    [--seeds S ...] [--filter-size N] [--pool-examples N]
+  plan    [--seeds S ...] [--filter-size N] [--updates N] [--pool-examples N]
           [--family-accounts mined=C injected=A]
           [--queue-wait-hours H] [--drop-conditional] [--mined-template P] [--injected-template P]
-          render the 36 configurations in memory, check the held-identical block and the registered
+          render the 45 configurations in memory, check the held-identical block and the registered
           design, hash them, account the budget on both bases and both evaluation scopes, check
           distinct examples, print the job graph and its critical path
-  render  --out DIR [--filter-size N] [--seeds S ...]
+  render  --out DIR [--filter-size N] [--updates N] [--seeds S ...]
           write the configurations (``<run_id>.yaml``); without --filter-size the size-matched
-          subsample keeps the symbolic token (committed form), with it the size is resolved
+          subsample keeps the symbolic token (committed form), with it the size is resolved;
+          --updates N sets the mined family's update count (D140), the injected family keeps 100
+  resolve --work DIR [--out DIR] [--seeds S ...]
+          the launch step (D140): read the prepared store's summary, compute F and
+          N = min(100, F // 32), write DIR/rq2_updates.json and the resolved configurations and
+          their hashes (default OUT = DIR/configs_resolved). Nothing is submitted
   eval    --set NAME=E1_CONFIG:PREP:ROLES:E3_CACHE[:gz] [...]  (gz: unit texts stored gzipped)
           list the stores and the cost of the evaluation sets a checkpoint is scored on
 
@@ -44,7 +49,7 @@ def _templates(a: argparse.Namespace) -> dict[str, dict[str, object]]:
 def cmd_plan(a: argparse.Namespace) -> int:
     from ril.training import rq2_plan as rp
 
-    runs = rp.plan_runs(a.seeds)
+    runs = rp.plan_runs(a.seeds, mined_n=a.updates)
     if a.drop_conditional:
         runs = [r for r in runs if r.cell.conditional is None]
     rows = rp.validate_runs(runs, _templates(a), filter_size=a.filter_size)
@@ -78,8 +83,31 @@ def cmd_plan(a: argparse.Namespace) -> int:
 def cmd_render(a: argparse.Namespace) -> int:
     from ril.training import rq2_plan as rp
 
-    rows = rp.write_configs(rp.plan_runs(a.seeds), _templates(a), a.out, filter_size=a.filter_size)
+    rows = rp.write_configs(
+        rp.plan_runs(a.seeds, mined_n=a.updates), _templates(a), a.out, filter_size=a.filter_size
+    )
     sys.stdout.write(json.dumps({"written": len(rows), "runs": rows}, indent=1) + "\n")
+    return 0
+
+
+def cmd_resolve(a: argparse.Namespace) -> int:
+    from ril.bench import rq2_launch as rl
+    from ril.training import rq2_plan as rp
+
+    try:
+        rec = rl.compute_updates(a.work)
+    except rl.UpdatesError as err:
+        sys.stderr.write(f"refused: {err}\n")
+        return 2
+    out = a.out or str(Path(a.work) / "configs_resolved")
+    rows = rp.write_configs(
+        rp.plan_runs(a.seeds, mined_n=rec["updates"]),
+        _templates(a),
+        out,
+        filter_size=rec["filter_pool"],
+    )
+    summary = {"updates_record": rec, "written": len(rows), "runs": rows}
+    sys.stdout.write(json.dumps(summary, indent=1, sort_keys=True) + "\n")
     return 0
 
 
@@ -101,11 +129,16 @@ def main(argv: list[str] | None = None) -> int:
     sub = p.add_subparsers(dest="cmd", required=True)
     pl = sub.add_parser("plan")
     rd = sub.add_parser("render")
-    for q in (pl, rd):
+    rs = sub.add_parser("resolve")
+    for q in (pl, rd, rs):
         q.add_argument("--seeds", type=int, nargs="+", default=[100, 101, 102])
-        q.add_argument("--filter-size", type=int)
         q.add_argument("--mined-template", default=TEMPLATES["mined"])
         q.add_argument("--injected-template", default=TEMPLATES["injected"])
+    rs.add_argument("--work", required=True)
+    rs.add_argument("--out")
+    for q in (pl, rd):
+        q.add_argument("--filter-size", type=int)
+        q.add_argument("--updates", type=int, help="mined-family updates (D140); default 100")
     pl.add_argument("--pool-examples", type=int)
     pl.add_argument("--family-accounts", nargs="*", default=[], metavar="FAMILY=ACCOUNT")
     pl.add_argument("--queue-wait-hours", type=float, default=0.0)
@@ -114,7 +147,9 @@ def main(argv: list[str] | None = None) -> int:
     ev = sub.add_parser("eval")
     ev.add_argument("--set", nargs="+", required=True)
     a = p.parse_args(argv)
-    return {"plan": cmd_plan, "render": cmd_render, "eval": cmd_eval}[a.cmd](a)
+    return {"plan": cmd_plan, "render": cmd_render, "resolve": cmd_resolve, "eval": cmd_eval}[
+        a.cmd
+    ](a)
 
 
 if __name__ == "__main__":

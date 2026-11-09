@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import csv
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -31,7 +32,9 @@ from ril.training.config_io import config_hash, load_train_config
 from ril.training.retention import check_retain_dir
 
 UTC = dt.timezone.utc  # noqa: UP017  (the cluster interpreter is Python 3.10: no datetime.UTC)
-PREFLIGHT_VERSION = "rq2-preflight/v1"
+PREFLIGHT_VERSION = "rq2-preflight/v2"
+UPDATES_VERSION = "rq2-updates/v1"
+UPDATES_FILE = "rq2_updates.json"
 MAX_AGE_HOURS = 48.0
 JOB_PREFIX = "rq2f_"
 SCRIPTS = {
@@ -39,8 +42,9 @@ SCRIPTS = {
     "injected": "scripts/ada/rq2f_injected_run.sbatch",
 }
 CONFIG_DIR = "configs/experiments/rq2_final"
-RUN_TIME = "02:00:00"
-"""Wall request of one run job (0.42 GPU-hours measured; cache load and queueing margin)."""
+RUN_HOURS = 2
+"""Wall hours requested per arm of a seed job (0.42 GPU-hours measured; cache load and queueing
+margin). A seed job asks for this times its number of arms (D141), well under the 4-day limit."""
 MIN_FREE_GB = {"mined": 10.0, "injected": 3.0}
 """Free space asked of the account home before launch: results and logs, and for the mined family
 the 18 retained models (4.9 GB at 274 MB each) with margin."""
@@ -78,13 +82,84 @@ def _read_json(path: str) -> Record | None:
     return data if isinstance(data, dict) else None
 
 
+class UpdatesError(ValueError):
+    """The mined family's update count was not computed from a prepared store (D140)."""
+
+
+def compute_updates(work: str) -> Record:
+    """Compute N from the prepared store and write ``work/rq2_updates.json`` (the launch step).
+
+    Reads ``work/prep_summary.json`` (the prep job's output: ``filter_size`` is F, the FILTER pool
+    after the held-out and overlap drops), applies ``rp.mined_updates`` and records F, N, the
+    visits per arm and the sha256 of the summary it was computed from. Refuses a summary that is
+    missing, has no usable ``filter_size``, still holds held-out rows or an unapplied drop list, or
+    belongs to a trial run (``scope`` other than ``full``, as the full-store prep job writes it).
+    """
+    path = os.path.join(work, "prep_summary.json")
+    prep = _read_json(path)
+    if prep is None:
+        raise UpdatesError(f"{path} is missing: the prep job has not run")
+    if prep.get("held_out_rows") != 0 or not prep.get("drop_list_applied"):
+        raise UpdatesError("prep summary: held-out rows must be 0 and the drop list applied")
+    if prep.get("scope", "full") != "full":
+        raise UpdatesError(f"prep summary is of a {prep['scope']!r} run, not of the whole store")
+    try:
+        pool = int(prep["filter_size"])
+    except (KeyError, TypeError, ValueError) as err:
+        raise UpdatesError("prep summary has no filter_size") from err
+    n = rp.mined_updates(pool)
+    with open(path, "rb") as handle:
+        digest = hashlib.sha256(handle.read()).hexdigest()
+    rec: Record = {
+        "version": UPDATES_VERSION,
+        "filter_pool": pool,
+        "updates": n,
+        "visits_per_arm": n * rp.UPDATE_VISITS,
+        "rule": "N = min(100, floor(F / 32)) for every arm of the mined family (D140)",
+        "prep_summary_sha256": digest,
+    }
+    with open(os.path.join(work, UPDATES_FILE), "w", encoding="utf-8") as handle:
+        json.dump(rec, handle, indent=1, sort_keys=True)
+        handle.write("\n")
+    return rec
+
+
+def read_updates(work: str) -> int:
+    """N from ``work/rq2_updates.json``, only if it was computed from the prepared store there.
+
+    Refuses a missing file, a different version, a prep summary that has changed since, or an N
+    that is not ``min(100, F // 32)`` of the recorded F (a hand-edited file).
+    """
+    rec = _read_json(os.path.join(work, UPDATES_FILE))
+    if rec is None or rec.get("version") != UPDATES_VERSION:
+        raise UpdatesError(
+            f"N has not been computed from a prepared store: {UPDATES_FILE} is missing or "
+            "of another version (run scripts/rq2_plan.py resolve)"
+        )
+    path = os.path.join(work, "prep_summary.json")
+    try:
+        with open(path, "rb") as handle:
+            digest = hashlib.sha256(handle.read()).hexdigest()
+    except OSError as err:
+        raise UpdatesError("prep summary is missing; N cannot be checked against it") from err
+    if rec.get("prep_summary_sha256") != digest:
+        raise UpdatesError("prep summary changed since N was computed; run resolve again")
+    n = rp.mined_updates(int(rec["filter_pool"]))
+    if rec.get("updates") != n:
+        raise UpdatesError(f"recorded N {rec.get('updates')} is not min(100, F // 32) = {n}")
+    return n
+
+
 def family_runs(
-    family: str, seeds: Sequence[int] = rp.DEFAULT_SEEDS, include_conditional: bool = False
+    family: str,
+    seeds: Sequence[int] = rp.DEFAULT_SEEDS,
+    include_conditional: bool = False,
+    mined_n: int | None = None,
 ) -> list[rp.Run]:
-    """The runs of one data condition, in launch order."""
-    runs = [r for r in rp.plan_runs(seeds) if r.cell.family == family]
+    """The runs of one data condition, in launch order (seed, then the interleaved cell order)."""
+    runs = [r for r in rp.plan_runs(seeds, mined_n=mined_n) if r.cell.family == family]
     runs = [r for r in runs if include_conditional or r.cell.conditional is None]
-    return sorted(runs, key=lambda r: (r.seed, [c.cell_id for c in rp.CELLS].index(r.cell.cell_id)))
+    return rp._run_order(runs)
 
 
 def _templates(repo: str) -> dict[str, Any]:
@@ -121,8 +196,19 @@ def run_checks(
     def add(cid: str, ok: bool, detail: str) -> None:
         checks.append(Check(cid, bool(ok), detail))
 
-    runs = family_runs(family, seeds, include_conditional)
-    all_runs = rp.plan_runs(seeds)
+    mined_n: int | None = None
+    if family == "mined":
+        try:
+            mined_n = read_updates(work)
+            add(
+                "updates_computed",
+                True,
+                f"N = {mined_n} updates for every arm, computed from the prepared store (D140)",
+            )
+        except (UpdatesError, ValueError) as err:
+            add("updates_computed", False, str(err))
+    runs = family_runs(family, seeds, include_conditional, mined_n)
+    all_runs = rp.plan_runs(seeds, mined_n=mined_n)
     add(
         "commit_recorded",
         bool(commit) and (head_commit is None or head_commit == commit),
@@ -167,16 +253,14 @@ def run_checks(
         )
         if ok and prep is not None:
             size = int(prep["filter_size"])
-            u = rp.unique_example_check(
-                rp.PRIMARY_UPDATES * rp.BATCH_SIZE, int(prep["examples"]), size
-            )
+            visits = (mined_n or rp.PRIMARY_UPDATES) * rp.BATCH_SIZE
+            u = rp.unique_example_check(visits, int(prep["examples"]), size)
             caveat = (
                 ""
                 if u["filter_reaches_unique"]
                 else (
-                    f"; FILTER and the subsample repeat examples "
-                    f"(shortfall {u['shortfall_filter']}): "
-                    "the FILTER-against-RAW comparison carries the stated caveat (D133)"
+                    f"; FILTER and the subsample repeat examples (shortfall "
+                    f"{u['shortfall_filter']}): N does not follow the FILTER pool (D140)"
                 )
             )
             add(
@@ -192,10 +276,23 @@ def run_checks(
         for r in rp.validate_runs(all_runs, templates, filter_size=size)
     }
     final_hashes = family == "injected" or size is not None
+    if family == "mined" and mined_n is None:
+        bad.append("updates not computed: configurations cannot be matched to the plan")
     for r in runs:
-        path = os.path.join(repo, CONFIG_DIR, f"{r.run_id}.yaml")
+        if family == "mined" and mined_n is None:
+            break  # the update count is not computed: nothing to compare, the check above fails
+        resolved = family == "mined"
+        path = (
+            os.path.join(work, "configs_resolved", f"{r.run_id}.yaml")
+            if resolved
+            else os.path.join(repo, CONFIG_DIR, f"{r.run_id}.yaml")
+        )
         if not os.path.isfile(path):
-            bad.append(f"{r.run_id}: no file")
+            bad.append(
+                f"{r.run_id}: not resolved (run scripts/rq2_plan.py resolve)"
+                if resolved
+                else f"{r.run_id}: no file"
+            )
             continue
         cfg = load_train_config(path)
         sub = cfg["arm"].get("subsample")
@@ -232,10 +329,13 @@ def run_checks(
     except OSError:
         mem = None
     want = rp.MEM_REQUEST_MB[family]
+    cpus = rp.cpus_for_request(mem) if mem else None
     add(
         "memory_request",
-        mem == want and want <= rp.MEM_CEILING_MB,
-        f"{SCRIPTS[family]} asks {mem} MB; plan {want} MB; per-user ceiling {rp.MEM_CEILING_MB} MB",
+        mem == want and want <= rp.MEM_CEILING_MB and cpus is not None and cpus <= rp.CPU_LIMIT,
+        f"{SCRIPTS[family]} asks {mem} MB; plan {want} MB; "
+        f"per-user ceiling {rp.MEM_CEILING_MB} MB; allocated {cpus} CPUs at "
+        f"{rp.MEM_PER_CPU_MB} MB per CPU against {rp.CPU_LIMIT}",
     )
 
     free = free_gb if free_gb is not None else shutil.disk_usage(home).free / 1e9
@@ -357,6 +457,7 @@ def write_preflight(
     commit: str,
     include_conditional: bool,
     checks: Sequence[Check],
+    updates: int | None = None,
     now: dt.datetime | None = None,
 ) -> Record:
     now = now or dt.datetime.now(UTC)
@@ -366,6 +467,7 @@ def write_preflight(
         "family": family,
         "commit": commit,
         "include_conditional": include_conditional,
+        "updates": updates,
         "created_utc": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "checks": [asdict(c) for c in checks],
         "ready": all(c.ok for c in checks),
@@ -384,9 +486,14 @@ def preflight_refusals(
     family: str,
     commit: str,
     include_conditional: bool,
+    updates: int | None = None,
     now: dt.datetime | None = None,
 ) -> list[str]:
-    """Reasons the preflight file does not allow a launch (empty = it does)."""
+    """Reasons the preflight file does not allow a launch (empty = it does).
+
+    For the mined family ``updates`` is the N read from the prepared store at submission time; the
+    preflight must have been written for the same N (D140).
+    """
     if not path:
         return ["no preflight file given (--preflight)"]
     rec = _read_json(path)
@@ -397,6 +504,11 @@ def preflight_refusals(
         out.append(f"preflight is for account {rec.get('account')} / {rec.get('family')}")
     if not commit or rec.get("commit") != commit:
         out.append("preflight was written for another commit than RIL_COMMIT")
+    if family == "mined" and (updates is None or rec.get("updates") != updates):
+        out.append(
+            f"preflight was written for N = {rec.get('updates')}, the prepared store gives "
+            f"{updates}"
+        )
     if include_conditional and not rec.get("include_conditional"):
         out.append("preflight did not check the conditional cells (D125)")
     failed = [c["id"] for c in rec.get("checks", []) if not c.get("ok")]
@@ -416,12 +528,23 @@ def preflight_refusals(
 
 @dataclass(frozen=True)
 class Submission:
-    run_id: str
+    """One GPU job: one account's one seed, every arm of the seed in order (D141)."""
+
+    seed: int
     job_name: str
     script: str
     mem_mb: int
     export: Mapping[str, str]
+    run_ids: tuple[str, ...]
     gpu_hours: float
+
+    @property
+    def time_limit(self) -> str:
+        return f"{RUN_HOURS * len(self.run_ids):02d}:00:00"
+
+
+RUN_IDS_SEPARATOR = ":"
+"""Separates run ids in the ``RUN_IDS`` variable (a comma would split ``--export``)."""
 
 
 def submissions(
@@ -432,27 +555,42 @@ def submissions(
     date: str,
     include_conditional: bool = False,
     seeds: Sequence[int] = rp.DEFAULT_SEEDS,
+    mined_n: int | None = None,
 ) -> list[Submission]:
-    """The ordered jobs of a family: one per run, with the environment its script needs.
+    """The ordered jobs of a family: one per seed, with the environment its script needs.
 
     ``date`` names the result directories (``<date>_<hash prefix>``); it is fixed once for the
-    whole launch so that a resubmitted run finds its finished result and is skipped.
+    whole launch so that a resubmitted run finds its finished result and is skipped. The mined
+    family needs ``mined_n``, the update count computed from the prepared store (D140); without
+    it nothing is built.
     """
     if not DATE_PATTERN.match(date):
         raise ValueError(f"date must be YYYY-MM-DD, got {date!r}")
+    if family == "mined" and mined_n is None:
+        raise UpdatesError("N has not been computed from a prepared store (D140)")
     out: list[Submission] = []
-    for r in family_runs(family, seeds, include_conditional):
-        env = {"RUN_ID": r.run_id, "RIL_COMMIT": commit, "DATE": date}
-        if family == "mined" and retain_dir:
-            env["RETAIN_DIR"] = retain_dir
+    groups = rp.seed_jobs(family_runs(family, seeds, include_conditional, mined_n), family)
+    for seed, group in groups.items():
+        ids = tuple(r.run_id for r in group)
+        env = {
+            "SEED": str(seed),
+            "RUN_IDS": RUN_IDS_SEPARATOR.join(ids),
+            "RIL_COMMIT": commit,
+            "DATE": date,
+        }
+        if family == "mined":
+            if retain_dir:
+                env["RETAIN_DIR"] = retain_dir
+            env["UPDATES"] = str(mined_n)
         out.append(
             Submission(
-                r.run_id,
-                f"{JOB_PREFIX}{r.run_id}",
+                seed,
+                f"{JOB_PREFIX}{family}_s{seed}",
                 SCRIPTS[family],
                 rp.MEM_REQUEST_MB[family],
                 env,
-                rp.COSTS["run_dev"].value,
+                ids,
+                round(len(ids) * rp.COSTS["run_dev"].value, 3),
             )
         )
     return out
@@ -461,12 +599,17 @@ def submissions(
 def render_graph(subs: Sequence[Submission], account: str, family: str) -> str:
     """The job graph a family would submit, as text (printed before anything is submitted)."""
     lines = [
-        f"account {account}, family {family}: {len(subs)} GPU jobs, one at a time "
+        f"account {account}, family {family}: {len(subs)} GPU jobs, one per seed, one at a time "
         f"(each after the previous: afterany), {sum(s.gpu_hours for s in subs):.2f} GPU-hours",
     ]
     prev = "(start)"
     for i, s in enumerate(subs, 1):
-        lines.append(f"{i:3d}. {s.job_name:<46} mem {s.mem_mb // 1024} GB  after {prev}")
+        lines.append(
+            f"{i:3d}. {s.job_name:<24} {len(s.run_ids)} arms  mem {s.mem_mb} MB  "
+            f"wall {s.time_limit}  after {prev}"
+        )
+        for rid in s.run_ids:
+            lines.append(f"       - {rid}")
         prev = s.job_name
     return "\n".join(lines)
 
@@ -476,13 +619,12 @@ def submit(
     *,
     runner: Callable[[list[str]], str],
     queued_names: Callable[[], Sequence[str]],
-    time_limit: str = RUN_TIME,
 ) -> list[tuple[str, str]]:
     """Submit the jobs chained with ``afterany``; return (job name, job id).
 
-    Refuses if any of the jobs is already queued or running on this account (a run is never
-    submitted twice). ``runner`` runs one ``sbatch`` command line and returns its stdout
-    (``--parsable``: the job id).
+    Refuses if any of the jobs is already queued or running on this account (a seed job is never
+    submitted twice; a finished run inside a resubmitted job is skipped by the job itself).
+    ``runner`` runs one ``sbatch`` command line and returns its stdout (``--parsable``: the id).
     """
     already = sorted({s.job_name for s in subs} & set(queued_names()))
     if already:
@@ -495,7 +637,7 @@ def submit(
             "--parsable",
             f"--job-name={s.job_name}",
             f"--mem={s.mem_mb}M",
-            f"--time={time_limit}",
+            f"--time={s.time_limit}",
         ]
         if prev:
             cmd.append(f"--dependency=afterany:{prev}")

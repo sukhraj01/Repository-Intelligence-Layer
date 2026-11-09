@@ -1,8 +1,10 @@
 """Final analysis of the RQ2 experiment: arms, paired contrasts, Holm, delta, verdicts, fallback.
 
-Implements ``docs/RQ2_PROTOCOL.md`` sections 4, 6 and 11: D17 (mean over queries,
-repository-clustered bootstrap), D69 (two confirmatory contrasts), D71 (L3 metric Recall@100 with
-nDCG@10 beside it), D72 (Holm within each family, uncorrected intervals beside), D73 (delta = 1.5
+Implements ``docs/RQ2_PROTOCOL.md`` sections 4, 6 and 11: D17 (mean over queries, repositories as
+clusters), D136 (decisions read from the cluster-robust t interval with R - 1 degrees of freedom,
+the percentile bootstrap of D17 reported beside it; DEV-040), D69 (two confirmatory contrasts),
+D71 (L3 metric Recall@100 with nDCG@10 beside it), D72 (Holm within each family, uncorrected
+intervals beside), D73 (delta = 1.5
 points), D80 (the fallback RQ3 contrast), D82 (fresh noise draws are the caller's data, not a
 choice here) and D100 (sealed order: the final evaluation sets are read only after a named dev
 analysis).
@@ -23,8 +25,7 @@ import csv
 import hashlib
 import json
 import math
-import re
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -32,9 +33,11 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
+from ril.analysis.cluster_t import ClusterT, cluster_t
+from ril.evaluation import sealed
 from ril.evaluation.stats import Boot
 
-ANALYSIS_VERSION = "rq2-final-analysis/v1"
+ANALYSIS_VERSION = "rq2-final-analysis/v2"
 ALPHA = 0.05
 """Two-sided level of every interval and of the Holm family (docs/RQ2_PROTOCOL.md section 4)."""
 DELTA = 1.5
@@ -44,6 +47,25 @@ BOOT_SEED = 0
 """Bootstrap draws and seed of section 4 ("2,000 draws, seed 0")."""
 MIN_CLUSTERS = 3
 """Repository-clustered interval from three repositories up, query-level below (section 4)."""
+INTERVAL_RULE = (
+    "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every "
+    "query its own cluster below three repositories); beside it, in every table, the percentile "
+    "bootstrap over whole repositories (D17)"
+)
+DOSE_RATES: Mapping[float, Mapping[str, str]] = {
+    0.1: {"raw": "inj_raw_r01", "filter_bm25": "inj_filter_bm25_r01"},
+    0.4: {
+        "raw": "inj_raw",
+        "oracle": "inj_oracle",
+        "filter_bm25": "inj_filter_bm25",
+        "filter_srs": "inj_filter_srs",
+        "weight": "inj_weight",
+    },
+}
+"""The noise rates of the final design (D137) and their cells; with ``CLEAN_CELL`` the curve has
+three points (0, 0.1, 0.4). Cell ids are those of ``ril/training/rq2_plan.py`` (a test checks)."""
+CLEAN_CELL = "inj_clean_raw"
+"""RAW on the injected pool at rate 0: the clean reference of sanity rule 1 and the curve."""
 
 LEVELS: tuple[str, ...] = ("L2", "L3")
 METRICS: tuple[str, ...] = ("ndcg10", "recall100")
@@ -84,8 +106,9 @@ ASSUMPTIONS: tuple[str, ...] = (
     "families follow section 4 with D69 applied: confirmatory (FILTER-BM25 against RAW and "
     "against the subsample), then SweRankEmbed-Small, then WEIGHT and CURRICULUM, then the "
     "injected calibration cells; all but the first are exploratory",
-    "the interval a verdict is read from is the Holm-adjusted interval of the contrast's own "
-    "family; the uncorrected interval is reported beside it",
+    "the interval a verdict is read from is the Holm-adjusted cluster-robust t interval of the "
+    "contrast's own family (D136); the uncorrected t interval and the percentile bootstrap "
+    "intervals are reported beside it",
     "the L3 leave-largest-repository-out check (rule 3) compares the sign of the point estimate",
     "arms separate (D80, rule 7) iff FILTER-BM25 against RAW is positive on every final set that "
     "has both levels, and at least one does; exploratory contrasts never decide the fallback",
@@ -93,35 +116,16 @@ ASSUMPTIONS: tuple[str, ...] = (
 )
 
 
-class SealedOrderError(ValueError):
-    """A final evaluation set was read without naming the dev analysis that precedes it (D100)."""
-
-
-_ENTRY_ID = re.compile(r"^E-[A-Z0-9]+(?:-[A-Z0-9]+)*$")
+SealedOrderError = sealed.SealedOrderError
 
 
 def require_dev_analysis(entry_id: str | None, docs_root: Path | None = None) -> str:
-    """The id of the dev-analysis entry that precedes a look at the final sets, validated (D100).
+    """The id of the dev-analysis entry that precedes a look at the final sets (D100).
 
-    The id must have the form of an experiment entry id and, when ``docs_root`` is given, must be a
-    registry row of ``docs/EXPERIMENTS.md`` or ``docs/experiments/*.md``.
+    Delegates to :func:`ril.evaluation.sealed.require_dev_analysis`, the one guard the analysis
+    module and the final-sets scoring share.
     """
-    if not entry_id or not _ENTRY_ID.match(entry_id):
-        raise SealedOrderError(
-            "the final evaluation sets are sealed: give the id of the dev-analysis entry that "
-            "precedes them (D100)"
-        )
-    if docs_root is not None:
-        files = [
-            docs_root / "docs" / "EXPERIMENTS.md",
-            *sorted((docs_root / "docs").glob("experiments/*.md")),
-        ]
-        needle = f"| {entry_id} |"
-        if not any(f.exists() and needle in f.read_text(encoding="utf-8") for f in files):
-            raise SealedOrderError(
-                f"dev-analysis entry {entry_id} is not in the experiment registry"
-            )
-    return entry_id
+    return sealed.require_dev_analysis(entry_id, docs_root)
 
 
 def check_sealed(
@@ -367,9 +371,15 @@ class Estimate:
     repos: int
     d: float
     ci: tuple[float, float]
+    """Decision interval, uncorrected: cluster-robust t (D136)."""
+    ci_boot: tuple[float, float]
+    """Percentile bootstrap of D17 (whole repositories from three up), reported beside."""
     ci_query: tuple[float, float]
     ci_cluster: tuple[float, float] | None
     p: float
+    """Two-sided p-value of the t interval; orders the contrasts for Holm."""
+    p_boot: float
+    t: ClusterT
     per_seed: list[dict[str, float]]
     seed_sd: float | None
     sd_a: float | None
@@ -385,10 +395,12 @@ def _seed_sd(per_seed_means: Arr) -> float | None:
 def estimate(panel: LevelPanel, spec: ContrastSpec, metric: str, boot: Boot) -> Estimate | None:
     """The paired contrast of ``spec`` on one panel, or None when either cell is absent.
 
-    Per query the cell value is the mean over its seeds; the difference is paired on the query and
-    the interval resamples whole repositories (D17) when there are three or more, queries below
-    that. Per-seed differences use the seeds both cells share. The bootstrap carries query and
-    repository sampling, not retraining variance, so the seed spread is reported beside it.
+    Per query the cell value is the mean over its seeds; the difference is paired on the query. The
+    decision interval is the cluster-robust t interval over repositories (D136; every query its
+    own cluster below three repositories); the percentile bootstrap that resamples whole
+    repositories (D17) is reported beside it. Per-seed differences use the seeds both cells share.
+    Both intervals carry query and repository sampling, not retraining variance, so the seed
+    spread is reported beside them.
     """
     if spec.arm not in panel.cells or spec.reference not in panel.cells:
         return None
@@ -399,6 +411,7 @@ def estimate(panel: LevelPanel, spec: ContrastSpec, metric: str, boot: Boot) -> 
     boots = np.asarray(w_main @ diff, dtype=np.float64)
     ci_query = _quantiles(np.asarray(boot.micro @ diff), ALPHA)
     ci_cluster = _quantiles(np.asarray(boot.cluster @ diff), ALPHA) if clustered else None
+    ct = cluster_t(diff, panel.repos)
     shared = sorted(set(a.seeds) & set(b.seeds))
     per_seed = [
         {
@@ -423,10 +436,13 @@ def estimate(panel: LevelPanel, spec: ContrastSpec, metric: str, boot: Boot) -> 
         len(panel.query_ids),
         panel.n_repos,
         float(diff.mean()),
+        ct.interval(ALPHA),
         _quantiles(boots, ALPHA),
         ci_query,
         ci_cluster,
+        ct.p_value(),
         bootstrap_p(boots),
+        ct,
         per_seed,
         pooled,
         sa,
@@ -435,30 +451,30 @@ def estimate(panel: LevelPanel, spec: ContrastSpec, metric: str, boot: Boot) -> 
     )
 
 
-def holm_group(ests: Sequence[Estimate]) -> None:
-    """Holm step-down over one family on one set (D72), decided on the intervals, in place.
+def _step_down(
+    ests: Sequence[Estimate],
+    p: Sequence[float],
+    interval: Callable[[Estimate, float], tuple[float, float]],
+) -> list[dict[str, Any]]:
+    """The Holm step-down of one family decided on ``interval`` at the step levels (D72).
 
-    Contrasts are ordered by bootstrap p-value (ties by name). At step k of m the contrast is
-    rejected when its interval at level ``1 - ALPHA / (m - k + 1)`` excludes zero; the first miss
-    stops the procedure and every later contrast keeps that step's level. The reported interval
-    is the one at the contrast's own step level, so "excludes zero" and "rejected" are the same
-    statement. The adjusted p-value (``holm_adjust`` of the bootstrap p-values) is reported beside.
+    Contrasts are ordered by ``p`` (ties by name). At step k of m the contrast is rejected when its
+    interval at level ``1 - ALPHA / (m - k + 1)`` excludes zero; the first miss stops the procedure
+    and every later contrast keeps that step's level.
     """
     m = len(ests)
-    if m == 0:
-        return
-    order = sorted(range(m), key=lambda i: (ests[i].p, ests[i].spec.name))
-    adjusted = holm_adjust([ests[i].p for i in range(m)])
+    order = sorted(range(m), key=lambda i: (p[i], ests[i].spec.name))
+    adjusted = holm_adjust(list(p))
+    out: list[dict[str, Any]] = [{} for _ in range(m)]
     stopped_at: int | None = None
     for rank, i in enumerate(order, start=1):
-        e = ests[i]
         step = rank if stopped_at is None else stopped_at
         alpha_k = ALPHA / (m - step + 1)
-        lo, hi = _quantiles(e.boots, alpha_k)
+        lo, hi = interval(ests[i], alpha_k)
         rejected = stopped_at is None and (lo > 0 or hi < 0)
         if stopped_at is None and not rejected:
             stopped_at = rank
-        e.holm = {
+        out[i] = {
             "m": m,
             "rank": rank,
             "alpha_step": alpha_k,
@@ -466,6 +482,25 @@ def holm_group(ests: Sequence[Estimate]) -> None:
             "rejected": bool(rejected),
             "p_adjusted": adjusted[i],
         }
+    return out
+
+
+def holm_group(ests: Sequence[Estimate]) -> None:
+    """Holm step-down over one family on one set (D72), decided on the t intervals, in place.
+
+    The decision is the step-down on the cluster-robust t intervals (D136), ordered by the t
+    p-value: at step k of m the contrast is rejected when its interval at level
+    ``1 - ALPHA / (m - k + 1)`` excludes zero. The reported interval is the one at the contrast's
+    own step level, so "excludes zero" and "rejected" are the same statement. The same procedure
+    run on the percentile bootstrap intervals (the rule before D136) is stored under ``boot``
+    beside it, and its rejections are what the pinned old error rate measures.
+    """
+    if not ests:
+        return
+    decided = _step_down(ests, [e.p for e in ests], lambda e, a: e.t.interval(a))
+    beside = _step_down(ests, [e.p_boot for e in ests], lambda e, a: _quantiles(e.boots, a))
+    for e, d, b in zip(ests, decided, beside, strict=True):
+        e.holm = {**d, "boot": b, "ci_boot": b["ci"]}
 
 
 def classify(d: float, lo: float, hi: float, delta: float = DELTA) -> str:
@@ -502,14 +537,15 @@ def _leave_out(
     boot = Boot(repos, seed, draws)
     clustered = len(set(repos)) >= MIN_CLUSTERS
     boots = np.asarray((boot.cluster if clustered else boot.micro) @ diff)
-    lo, hi = _quantiles(boots, ALPHA)
+    ct = cluster_t(diff, repos)
     return {
         "left_out": biggest,
         "queries": int(keep.sum()),
         "repos": len(set(repos)),
         "d": float(diff.mean()),
-        "ci": (lo, hi),
-        "interval": "repository-clustered" if clustered else "query-level",
+        "ci": ct.interval(ALPHA),
+        "ci_boot": _quantiles(boots, ALPHA),
+        "interval": ct.kind,
     }
 
 
@@ -603,20 +639,33 @@ def fallback(claims: Sequence[Mapping[str, Any]]) -> Record:
 # ------------------------------------------------------------------------- dose-response
 
 
+def _both_intervals(
+    w: Arr, diff: Arr, repos: Sequence[str]
+) -> tuple[tuple[float, float], tuple[float, float], str]:
+    """Decision (cluster-robust t) and percentile intervals of a paired per-query difference."""
+    ct = cluster_t(diff, repos)
+    return ct.interval(ALPHA), _quantiles(np.asarray(w @ diff), ALPHA), ct.kind
+
+
 def dose_response(
     panels: Mapping[tuple[str, str], LevelPanel],
     rates: Mapping[float, Mapping[str, str]],
     *,
+    clean: str | None = None,
     seed: int = BOOT_SEED,
     draws: int = DRAWS,
     eval_sets: Sequence[str] | None = None,
 ) -> list[Record]:
     """Rule 2: paired gain over RAW and share of the ORACLE-CLEAN recovery at each noise rate.
 
-    ``rates`` maps a rate to ``{"raw": cell, "oracle": cell, "<method>": cell, ...}``. "Rises with
-    r" is claimed only if the gain at the highest rate exceeds the gain at the next lower one by
-    more than the difference's own interval, i.e. the paired interval of the difference of gains
-    has a lower end above zero. With one rate nothing can be said about a rise.
+    ``rates`` maps a rate to ``{"raw": cell, "oracle": cell, "<method>": cell, ...}``; ``clean`` is
+    the RAW cell on the clean pool (rate 0), the third point of the curve (D137). "Rises with r" is
+    claimed only if the gain at the highest rate exceeds the gain at the next lower one by more
+    than the difference's own interval, i.e. the cluster-robust t interval of the difference of
+    gains has a lower end above zero (D136; the percentile interval is beside it). With one rate
+    nothing can be said about a rise. With a clean cell, ``raw_loss`` rows give RAW minus clean at
+    each rate and a ``loss_rise`` row says whether the loss grows from the lower rate to the
+    higher one. Labelled secondary and exploratory by the protocol (D69).
     """
     out: list[Record] = []
     ordered = sorted(rates)
@@ -637,7 +686,7 @@ def dose_response(
                     continue
                 gains[(r, method)] = 100.0 * (panel.cells[cell].pooled(metric) - raw)
         for (r, method), g in sorted(gains.items()):
-            lo, hi = _quantiles(np.asarray(w @ g), ALPHA)
+            ci, ci_boot, kind = _both_intervals(w, g, panel.repos)
             oracle = gains.get((r, "oracle"))
             share = None
             if method != "oracle" and oracle is not None and oracle.mean() > 0:
@@ -651,8 +700,9 @@ def dose_response(
                     "method": method,
                     "cell": rates[r][method],
                     "gain": float(g.mean()),
-                    "ci": (lo, hi),
-                    "interval": panel.interval_kind,
+                    "ci": ci,
+                    "ci_boot": ci_boot,
+                    "interval": kind,
                     "share_of_oracle": share,
                 }
             )
@@ -670,23 +720,69 @@ def dose_response(
             else:
                 hi_r, lo_r = have[-1], have[-2]
                 dd = gains[(hi_r, method)] - gains[(lo_r, method)]
-                lo, hi = _quantiles(np.asarray(w @ dd), ALPHA)
+                ci, ci_boot, _ = _both_intervals(w, dd, panel.repos)
                 row.update(
                     rate_high=hi_r,
                     rate_low=lo_r,
                     gain_difference=float(dd.mean()),
-                    ci=(lo, hi),
-                    rises_with_r=bool(lo > 0),
+                    ci=ci,
+                    ci_boot=ci_boot,
+                    rises_with_r=bool(ci[0] > 0),
                 )
             out.append(row)
+        if clean is not None and clean in panel.cells:
+            base = panel.cells[clean].pooled(metric)
+            loss: dict[float, Arr] = {}
+            for r in ordered:
+                raw_cell = rates[r]["raw"]
+                if r > 0 and raw_cell in panel.cells:
+                    loss[r] = 100.0 * (base - panel.cells[raw_cell].pooled(metric))
+            for r, g in sorted(loss.items()):
+                ci, ci_boot, kind = _both_intervals(w, g, panel.repos)
+                out.append(
+                    {
+                        "eval_set": eset,
+                        "level": level,
+                        "metric": metric,
+                        "rate": r,
+                        "kind": "raw_loss",
+                        "cell": rates[r]["raw"],
+                        "loss": float(g.mean()),
+                        "ci": ci,
+                        "ci_boot": ci_boot,
+                        "interval": kind,
+                    }
+                )
+            lrow: Record = {
+                "eval_set": eset,
+                "level": level,
+                "metric": metric,
+                "kind": "loss_rise",
+            }
+            if len(loss) < 2:
+                lrow.update(loss_grows_with_r=None, note="not evaluable: fewer than two rates")
+            else:
+                hi_r, lo_r = sorted(loss)[-1], sorted(loss)[-2]
+                dd = loss[hi_r] - loss[lo_r]
+                ci, ci_boot, _ = _both_intervals(w, dd, panel.repos)
+                lrow.update(
+                    rate_high=hi_r,
+                    rate_low=lo_r,
+                    loss_difference=float(dd.mean()),
+                    ci=ci,
+                    ci_boot=ci_boot,
+                    loss_grows_with_r=bool(ci[0] > 0),
+                )
+            out.append(lrow)
     return out
 
 
 def _paired_ci(
     panel: LevelPanel, metric: str, w: Arr, a: str, b: str
-) -> tuple[float, tuple[float, float]]:
+) -> tuple[float, tuple[float, float], tuple[float, float]]:
     d = 100.0 * (panel.cells[a].pooled(metric) - panel.cells[b].pooled(metric))
-    return float(d.mean()), _quantiles(np.asarray(w @ d), ALPHA)
+    ci, ci_boot, _ = _both_intervals(w, d, panel.repos)
+    return float(d.mean()), ci, ci_boot
 
 
 def calibration_sanity(
@@ -700,9 +796,10 @@ def calibration_sanity(
 ) -> list[Record]:
     """Rule 1: RAW must degrade against the clean cell and ORACLE-CLEAN must recover it.
 
-    Both are read on the dev set only (the calibration cells are not evaluated on the final sets).
-    Without a clean cell in the design the first condition cannot be evaluated, and the
-    calibration is then not declared informative.
+    Both are read on the dev set only (the calibration cells are not evaluated on the final sets),
+    from the cluster-robust t interval with the percentile interval beside it (D136). Without a
+    clean cell in the data the first condition cannot be evaluated, and the calibration is then not
+    declared informative; the design carries ``inj_clean_raw`` for it (D137).
     """
     out: list[Record] = []
     for (eset, level), panel in sorted(panels.items()):
@@ -712,18 +809,24 @@ def calibration_sanity(
         boot = Boot(panel.repos, seed, draws)
         w = boot.cluster if panel.n_repos >= MIN_CLUSTERS else boot.micro
 
-        rec_d, rec_ci = _paired_ci(panel, metric, w, oracle, raw)
+        rec_d, rec_ci, rec_boot = _paired_ci(panel, metric, w, oracle, raw)
         row: Record = {
             "eval_set": eset,
             "level": level,
             "interval": panel.interval_kind,
             "oracle_minus_raw": rec_d,
             "oracle_ci": rec_ci,
+            "oracle_ci_boot": rec_boot,
             "oracle_recovers": bool(rec_ci[0] > 0),
         }
         if clean is not None and clean in panel.cells:
-            deg_d, deg_ci = _paired_ci(panel, metric, w, raw, clean)
-            row.update(raw_minus_clean=deg_d, raw_ci=deg_ci, raw_degrades=bool(deg_ci[1] < 0))
+            deg_d, deg_ci, deg_boot = _paired_ci(panel, metric, w, raw, clean)
+            row.update(
+                raw_minus_clean=deg_d,
+                raw_ci=deg_ci,
+                raw_ci_boot=deg_boot,
+                raw_degrades=bool(deg_ci[1] < 0),
+            )
             row["informative"] = bool(row["oracle_recovers"] and row["raw_degrades"])
         else:
             row.update(
@@ -741,7 +844,8 @@ def calibration_sanity(
 def cell_summaries(
     panels: Mapping[tuple[str, str], LevelPanel], seed: int, draws: int
 ) -> list[Record]:
-    """Per cell, set, level, metric: mean over queries, both intervals (D17), seed spread."""
+    """Per cell, set, level, metric: mean over queries, cluster-robust t interval (D136) with the
+    percentile bootstraps (D17) beside it, seed spread."""
     out: list[Record] = []
     for (eset, level), panel in sorted(panels.items()):
         boot = Boot(panel.repos, seed, draws)
@@ -750,6 +854,7 @@ def cell_summaries(
                 v = 100.0 * data.pooled(metric)
                 per_seed = 100.0 * data.values[metric].mean(axis=1)
                 clustered = panel.n_repos >= MIN_CLUSTERS
+                ct = cluster_t(v, panel.repos)
                 out.append(
                     {
                         "cell": cell,
@@ -761,7 +866,8 @@ def cell_summaries(
                         "repos": panel.n_repos,
                         "seeds": data.seeds,
                         "mean": float(v.mean()),
-                        "ci": _quantiles(
+                        "ci": ct.interval(ALPHA),
+                        "ci_boot": _quantiles(
                             np.asarray((boot.cluster if clustered else boot.micro) @ v), ALPHA
                         ),
                         "ci_query": _quantiles(np.asarray(boot.micro @ v), ALPHA),
@@ -841,14 +947,21 @@ def _estimate_record(e: Estimate, leave: Record | None, diag: Mapping[str, Recor
         "queries": e.queries,
         "repos": e.repos,
         "interval": e.interval_kind,
-        "clustering": "whole repositories resampled, per-query mean over seeds, paired on the query"
+        "interval_rule": INTERVAL_RULE,
+        "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on "
+        "the query; percentile bootstrap of whole repositories beside"
         if e.interval_kind == "repository-clustered"
-        else "queries resampled (fewer than three repositories), paired on the query",
+        else "every query its own cluster (fewer than three repositories), paired on the query; "
+        "percentile bootstrap of queries beside",
         "d": e.d,
+        "se": e.t.se,
+        "df": e.t.df,
         "ci_uncorrected": e.ci,
+        "ci_boot_uncorrected": e.ci_boot,
         "ci_query": e.ci_query,
         "ci_cluster": e.ci_cluster,
-        "p_bootstrap": e.p,
+        "p_t": e.p,
+        "p_bootstrap": e.p_boot,
         "per_seed": e.per_seed,
         "seed_sd_of_difference": e.seed_sd,
         "seed_sd_arm": e.sd_a,
@@ -927,6 +1040,7 @@ def analyse(
         "eval_sets": eval_sets,
         "alpha": ALPHA,
         "delta": DELTA,
+        "interval_rule": INTERVAL_RULE,
         "draws": draws,
         "bootstrap_seed": seed,
         "assumptions": list(ASSUMPTIONS),
@@ -941,7 +1055,9 @@ def analyse(
         ],
         "claims": claims,
         "fallback": fallback(claims),
-        "dose_response": dose_response(panels, rates, seed=seed, draws=draws) if rates else [],
+        "dose_response": dose_response(panels, rates, clean=clean_cell, seed=seed, draws=draws)
+        if rates
+        else [],
         "calibration_sanity": calibration_sanity(
             panels, raw="inj_raw", oracle="inj_oracle", clean=clean_cell, seed=seed, draws=draws
         )
@@ -987,15 +1103,8 @@ def analyse_files(
         source_kind=source_kind,
         dev_analysis_id=dev_analysis_id,
         docs_root=docs_root,
-        rates={
-            0.4: {
-                "raw": "inj_raw",
-                "oracle": "inj_oracle",
-                "filter_bm25": "inj_filter_bm25",
-                "filter_srs": "inj_filter_srs",
-                "weight": "inj_weight",
-            }
-        },
+        rates=DOSE_RATES,
+        clean_cell=CLEAN_CELL,
         seed=seed,
         draws=draws,
         inputs=inputs,
