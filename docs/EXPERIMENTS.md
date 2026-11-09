@@ -29,11 +29,11 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | Entry id | Owner | File | Status | Date |
 |---|---|---|---|---|
 | E-LAT-HARNESS | lead | `docs/EXPERIMENTS.md` | planned |  |
-| E-LAT-STAGES | lead | `docs/EXPERIMENTS.md` | planned |  |
-| E-RQ1-DENSE | lead | `docs/EXPERIMENTS.md` | planned |  |
-| E-RQ1-DENSE-BM25 | lead | `docs/EXPERIMENTS.md` | planned |  |
-| E-RQ1-DENSE-STRUCT | lead | `docs/EXPERIMENTS.md` | planned |  |
-| E-RQ1-ALL | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-LAT-STAGES | lead | `docs/EXPERIMENTS.md` | planned (stored rows read in E-RQ1-LADDER; no new stage) |  |
+| E-RQ1-DENSE | lead | `docs/EXPERIMENTS.md` | assembled in E-RQ1-LADDER (dev, 2026-11-09) | 2026-11-09 |
+| E-RQ1-DENSE-BM25 | lead | `docs/EXPERIMENTS.md` | assembled in E-RQ1-LADDER (dev, 2026-11-09) | 2026-11-09 |
+| E-RQ1-DENSE-STRUCT | lead | `docs/EXPERIMENTS.md` | assembled in E-RQ1-LADDER (dev, 2026-11-09) | 2026-11-09 |
+| E-RQ1-ALL | lead | `docs/EXPERIMENTS.md` | assembled in E-RQ1-LADDER (dev, 2026-11-09) | 2026-11-09 |
 | E-GRAPH-BUILD | lead | `docs/EXPERIMENTS.md` | done | 2026-10-17 |
 | E-GRAPH-REACH | lead | `docs/EXPERIMENTS.md` | done | 2026-10-17 |
 | E-BM25-REPRO | lead | `docs/EXPERIMENTS.md` | done | 2026-10-18 |
@@ -78,6 +78,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-LIT-SCAFFOLD | lead | `docs/experiments/B.md` | done; five scaffold papers read in full with checked notes, ADR-007 addendum (D116), no model call; rulings applied by D121 (addendum 2026-11-08) | 2026-11-08 |
 | E-REPORT-DRAFT-1 | lead | `docs/experiments/B.md` | done; settled sections of the final report drafted from stored evidence, three generated tables, a prose checker | 2026-11-08 |
 | E-A1-TAKEOVER | lead | `docs/experiments/B.md` | done; A1-DEV cells reproduced (228 of 228 values equal, control 23.8244 over 510 queries), BM25 variant inside RRF(BM25, dense) on dev (D117 to D119) | 2026-11-08 |
+| E-RQ1-LADDER | lead | `docs/experiments/B.md` | done; RQ1 ladder on the development set with controls and latency from stored rows (D145): 24 of 24 regression values equal, typed rung not a graph gain, rerank not run | 2026-11-09 |
 | E-RQ3-PSEUDONYMISE | lead | `docs/experiments/B.md` | done; prompts pseudonymised and restored (D120, Q70 answered): 1,131 of 1,131 pass the screen, round trips checked, replay 20 of 20; no model call | 2026-11-08 |
 | E-C-CATCHUP | lead | `docs/experiments/B.md` | done; scaffold table of the evaluation API brought to the five-paper reading; Colab C1 dev cells re-run natively on account A, 12 of 12 cells equal (D144, Q64 answered) | 2026-11-09 |
 | E-RQ2-FINAL-CELLS | lead | `docs/experiments/B.md` | done (apparatus, plan-only on accounts A and C); launch rulings D124 to D134, DEV-038, DEV-039; 36 configurations, per-run job scripts, evaluation by set, sealed order of the final sets; nothing trained | 2026-11-09 |
@@ -115,10 +116,10 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 |---|---|---|---|---|---|---|
 | E-LAT-HARNESS | — | — | fixed query set | n/a | p50/p95/p99 per stage per commit | planned |
 | E-LAT-STAGES | RQ1 | pipeline stage | repo, queries, hardware | n/a | per-stage time attribution; rerank share | planned |
-| E-RQ1-DENSE | RQ1 | signals: dense only | encoder, eval set, metric code | n/a | nDCG@10, MRR, Recall@10, latency | planned |
-| E-RQ1-DENSE-BM25 | RQ1 | dense + BM25 | as above | n/a | as above | planned |
-| E-RQ1-DENSE-STRUCT | RQ1 | dense + structural | as above | n/a | as above | planned |
-| E-RQ1-ALL | RQ1 | dense + BM25 + structural | as above | n/a | as above; nDCG per ms (Pareto) | planned |
+| E-RQ1-DENSE | RQ1 | signals: dense only | encoder, eval set, metric code | n/a | nDCG@10, MRR, Recall@10, latency | assembled in E-RQ1-LADDER (dev) |
+| E-RQ1-DENSE-BM25 | RQ1 | dense + BM25 | as above | n/a | as above | assembled in E-RQ1-LADDER (dev) |
+| E-RQ1-DENSE-STRUCT | RQ1 | dense + structural | as above | n/a | as above | assembled in E-RQ1-LADDER (dev) |
+| E-RQ1-ALL | RQ1 | dense + BM25 + structural | as above | n/a | as above; nDCG per ms (Pareto) | assembled in E-RQ1-LADDER (dev) |
 | E-GRAPH-BUILD | RQ1 ext. (apparatus) | repository (flask, requests, django); storage option; recovery definition | Verified base commits, seed 0, resolver `own-ast-resolver/v0` | n/a | per-status edge counts; recovery under definitions (a)-(d); exploratory precision of `tests` and `configures`; build and expansion cost per storage option | done (exploratory, first build of 2026-10-17; `RESULTS.md` rows `p-*`; ADR-011 and ADR-012 addenda) |
 | E-GRAPH-REACH | RQ1 ext. (apparatus) | edge subset (19), control (3: same files, whole repository, whole repository of the same unit kind) | flask, requests, seaborn Verified instances (L2 11, L3 7) at their base commits, seed 0, 200 control draws per positive, 2,000 bootstrap draws, resolver `own-ast-resolver/v0` | n/a | chunk match rate and failure reasons; span categories against the first label sample; L3 positives by kind; share of new L3 positives within 1, 2, 3 hops of the L2 units and unreachable, with chance control and 95% bootstrap intervals | done (exploratory pilot, 2026-10-17; `RESULTS.md` rows `m-*`; ADR-004 and ADR-003 addenda) |
 | E-BM25-REPRO | RQ1 ext. (apparatus) | BM25 granularity (chunk, unit), module unit in or out of the index, protocol reading (cut at 10,000 before the candidate filter, or candidates only), k1/b (dev sweep) | reference tokenisation and scoring, seed 0, 2,000 bootstrap draws; dev and test repositories fixed in the config before the runs | n/a | nDCG@10 and Recall@100 with 95% intervals; agreement with the published BM25 rows | done (exploratory pilot, 2026-10-18; `RESULTS.md` rows `e1-*`; ADR-004 addendum) |
