@@ -956,7 +956,11 @@ def sha256(path: Path) -> str:
 def write_all(root: Path, out_dir: Path) -> list[Table]:
     """Write one ``.tex`` fragment per table and ``SOURCES.csv``; return the tables."""
     out_dir.mkdir(parents=True, exist_ok=True)
-    tables = build_all(root)
+    from ril.analysis import (
+        rq2_final_tables,
+    )  # after the tables above: nothing is built before the final rows exist
+
+    tables = build_all(root) + rq2_final_tables.build_if_present(root)
     lines = ["fragment,source,sha256"]
     for t in tables:
         (out_dir / f"{t.name}.tex").write_text(t.render(), encoding="utf-8")
