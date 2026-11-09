@@ -1,0 +1,16 @@
+account C, family mined: 15 GPU jobs, one at a time (each after the previous: afterany), 6.30 GPU-hours
+  1. rq2f_mined_raw_u100_s100                       mem 30 GB  after (start)
+  2. rq2f_mined_sub_u100_s100                       mem 30 GB  after rq2f_mined_raw_u100_s100
+  3. rq2f_mined_filter_bm25_u100_s100               mem 30 GB  after rq2f_mined_sub_u100_s100
+  4. rq2f_mined_weight_u100_s100                    mem 30 GB  after rq2f_mined_filter_bm25_u100_s100
+  5. rq2f_mined_curriculum_u100_s100                mem 30 GB  after rq2f_mined_weight_u100_s100
+  6. rq2f_mined_raw_u100_s101                       mem 30 GB  after rq2f_mined_curriculum_u100_s100
+  7. rq2f_mined_sub_u100_s101                       mem 30 GB  after rq2f_mined_raw_u100_s101
+  8. rq2f_mined_filter_bm25_u100_s101               mem 30 GB  after rq2f_mined_sub_u100_s101
+  9. rq2f_mined_weight_u100_s101                    mem 30 GB  after rq2f_mined_filter_bm25_u100_s101
+ 10. rq2f_mined_curriculum_u100_s101                mem 30 GB  after rq2f_mined_weight_u100_s101
+ 11. rq2f_mined_raw_u100_s102                       mem 30 GB  after rq2f_mined_curriculum_u100_s101
+ 12. rq2f_mined_sub_u100_s102                       mem 30 GB  after rq2f_mined_raw_u100_s102
+ 13. rq2f_mined_filter_bm25_u100_s102               mem 30 GB  after rq2f_mined_sub_u100_s102
+ 14. rq2f_mined_weight_u100_s102                    mem 30 GB  after rq2f_mined_filter_bm25_u100_s102
+ 15. rq2f_mined_curriculum_u100_s102                mem 30 GB  after rq2f_mined_weight_u100_s102

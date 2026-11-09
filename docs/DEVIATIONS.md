@@ -336,3 +336,19 @@ engineer sign-off — it is a design decision.
 - Reversible: yes.
 - Name: ruled D121 ("retrieval-supplied one-shot repair"; the earlier label is retired).
 - Related: D113, D116, D121, `knowledge/papers/agentless-2407.01489.md`, `docs/RQ3_PILOT.md`
+
+## DEV-038 — The single look at SWE-bench Verified uses the 377 executable instances, not the twelve folders   (2026-11-09 · status: accepted (D127), provisional until launch)
+- Master / protocol say: `docs/RQ2_PROTOCOL.md` section 4 and D32 (ADR-005): Verified is the final test, twelve folders (432 L2 and 302 L3 queries), looked at exactly once after the dev analysis.
+- We do: the Verified look is the executable subset of D106: 377 instances, 320 L2 and 224 L3 queries, scored once from the retained mined-set models after the dev analysis. The eight repositories of D100 are scored in the same step. Matplotlib and scikit-learn have no executable instance and are not in the look.
+- Why: six of the twelve folders have no unit records or stores; the executable subset has unit records, BM25 and untrained dense scores for all 377 (D107); one encoding pass per retained checkpoint serves both this look and RQ3's retrieved contexts. Evidence class: measured (counts), reasoned (the choice).
+- Impact: **lost:** 432 L2 queries become 320 and 302 L3 become 224, so the minimum detectable difference is about 16% larger (reasoned: the square root of 432/320 and of 302/224, both 1.16); two repositories drop out; a result describes the executable subset only and does not carry to the excluded instances. **Gained:** no new CPU build for six folders, the same population as RQ3, and one encoding pass per checkpoint instead of two. Cost per checkpoint: 0.388 GPU-hours measured for the 341 built instances plus up to 0.292 projected for the 36 earlier ones (their six-folder store is encoded whole unless a per-instance restriction is built).
+- Reversible: yes (stores for the other six folders can still be built).
+- Related: D100, D106, D107, D127, `docs/RQ2_LAUNCH_PLAN.md` section 10, `docs/experiments/B.md` E-RQ2-FINAL-CELLS
+
+## DEV-039 — The 1,000-update sensitivity is not run on the mined set   (2026-11-09 · status: accepted (D128), provisional until launch)
+- Master / protocol say: D68 (`docs/RQ2_PROTOCOL.md` section 11, O1): 1,000 updates as a sensitivity check on a subset of cells.
+- We do: no 1,000-update run on the mined set. It may run on the injected-noise family if the ledger has room after the primary runs; that is an option, not a plan.
+- Why: 32,000 example visits against about 5,800 mined examples cannot reach the matched unique-example count (about 5.5 passes for RAW, 9.3 for FILTER); the pilots already show the learning curve flat from 100 to 2,000 updates (E-PILOT-CURVE). Evidence class: measured (curve), projected (example count).
+- Impact: the robustness of the primary contrasts to the update count rests on the pilot curve on the pool, not on a run on the mined set; the report says so.
+- Reversible: yes.
+- Related: D68, D128, `docs/EXPERIMENTS.md` E-PILOT-CURVE, `docs/RQ2_LAUNCH_PLAN.md` section 10

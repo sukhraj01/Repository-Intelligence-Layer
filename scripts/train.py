@@ -203,6 +203,31 @@ def _label(override: str) -> str:
         return str(yaml.safe_load(handle)["label"])
 
 
+def _resolve_eval_args(p: argparse.ArgumentParser, a: argparse.Namespace) -> None:
+    """Fill the evaluation roots from ``--eval-set`` (training-stage sets only) or require them."""
+    import os
+
+    if a.eval_set:
+        from ril.evaluation.eval_sets import EvalSetRefused, for_training, resolve
+
+        if not a.home:
+            p.error("--eval-set needs --home")
+        try:
+            spec = for_training(a.eval_set)
+        except EvalSetRefused as err:
+            p.error(str(err))
+        (part,) = resolve(spec, a.home, work=os.path.join(os.getcwd(), "work"))
+        a.e1_config, a.prep, a.e3_cache, a.data_root = (
+            part.e1_config,
+            part.prep,
+            part.e3_cache,
+            part.data_root,
+        )
+    missing = [k for k in ("e1_config", "prep", "e3_cache", "data_root") if not getattr(a, k)]
+    if missing:
+        p.error(f"give --eval-set or all of --e1-config --prep --e3-cache --data-root ({missing})")
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -276,8 +301,16 @@ def main(argv: list[str] | None = None) -> int:
         help="delete the encoded stores and scores of a run after its evaluation (node-local disk)",
     )
     for q in (e, rb):
-        for a in ("--e1-config", "--prep", "--e3-cache", "--data-root", "--work"):
-            q.add_argument(a, required=True)
+        for a in ("--e1-config", "--prep", "--e3-cache", "--data-root"):
+            q.add_argument(a)
+        q.add_argument("--work", required=True)
+        q.add_argument(
+            "--eval-set",
+            choices=["dev"],
+            help="named training-stage evaluation set (ril.evaluation.eval_sets): fills "
+            "--e1-config/--prep/--e3-cache/--data-root from --home and the work directory",
+        )
+        q.add_argument("--home", help="account home the set's stores live under (with --eval-set)")
         q.add_argument("--device", default="cpu")
         q.add_argument("--baseline", nargs="*", default=[])
         q.add_argument("--dense-root")
@@ -314,6 +347,8 @@ def main(argv: list[str] | None = None) -> int:
     ft.add_argument("--held-out", required=True)
     ft.add_argument("--rename-cache")
     a = p.parse_args(argv)
+    if a.cmd in ("eval", "run-batch"):
+        _resolve_eval_args(p, a)
 
     from ril.data_mining.pack import local_fetch
     from ril.training import pool_ranks as pr
