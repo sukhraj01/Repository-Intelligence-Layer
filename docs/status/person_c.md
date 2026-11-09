@@ -84,6 +84,17 @@ No new fixture outcome, model/provider choice, mining expansion or remote job wa
 | Model/spend? | hosted; pinned-local | measured absence | explicitly capped dev pairs | obtain cost/noise | ADR-008; no calls |
 | Q45 test/estimate? | hypothesis-test; interval-estimate | reasoned | repeated matched dev pairs | state worthwhile effect | unmeasured; no selection |
 
+## Scaffold table update, 2026-11-09 (made on the lead's side while the owner is away)
+
+Rows changed in the scaffold table of `docs/EVAL_API.md`, as asked in the third round of lead notes:
+the opening paragraph now points to the five paper notes; the scaffold is named retrieval-supplied
+one-shot repair; the SWE-agent (seed; one replaceable retrieval tool), OpenHands (retrieval extension
+and bypass policy; retry and termination rules), LocAgent and CoSIL (whole-repair cost) and Agentless
+(all-attempt cost) rows say "not described in the paper" with the section and page cited, and keep the
+ask as a project requirement; one line records that none of the five states a seed, a run count or an
+interval (SWE-agent Table 10, p.35; Agentless pair in CoSIL, Table IX, p.10); one sentence points to
+the later decisions. No code or other page of this file changed. Merge main before the next block.
+
 ## Next work
 
 Engineer pushes corrected branch and sends hand-back for re-review. Export/audit the existing

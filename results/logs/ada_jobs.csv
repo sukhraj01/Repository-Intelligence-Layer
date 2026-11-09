@@ -231,3 +231,5 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-09,C,66058,RQ2P,"equality of the shared-strings reader with the earlier reader on three real caches",u22,4,0,00:00:51,0.0,COMPLETED (3 of 3 equal)
 2026-11-09,C,66081,RQ2P,"pilot comparison of ranks and feature rows on the probe (93 directories shared with the pilot)",u22,2,0,00:00:00,0.0,COMPLETED (93 of 93 equal)
 2026-11-09,C,66093,RQ2P,"list of the node-local scratch directories the trial runs left on gnode006 (sizes for the cleanup script)",u22,2,0,00:00:01,0.0,COMPLETED
+2026-11-09,A,66549,CCU,"native BM25 dev comparison, first attempt: staging and checksum verification passed, the job's own post-check read the provenance file in the wrong layout",u22,4,0,00:02:19,0.0,FAILED (post-check; no run result)
+2026-11-09,A,66556,CCU,"native paired original/Rewrite BM25 dev comparison with query-level rows (E-C-CATCHUP): staging at the pinned revision, run, comparison with the operator summary",u22,4,0,00:02:57,0.0,COMPLETED (12 of 12 cells equal)
