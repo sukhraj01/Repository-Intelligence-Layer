@@ -343,7 +343,7 @@ engineer sign-off — it is a design decision.
 - Why: six of the twelve folders have no unit records or stores; the executable subset has unit records, BM25 and untrained dense scores for all 377 (D107); one encoding pass per retained checkpoint serves both this look and RQ3's retrieved contexts. Evidence class: measured (counts), reasoned (the choice).
 - Impact: **lost:** 432 L2 queries become 320 and 302 L3 become 224, so the minimum detectable difference is about 16% larger (reasoned: the square root of 432/320 and of 302/224, both 1.16); two repositories drop out; a result describes the executable subset only and does not carry to the excluded instances. **Gained:** no new CPU build for six folders, the same population as RQ3, and one encoding pass per checkpoint instead of two. Cost per checkpoint: 0.388 GPU-hours measured for the 341 built instances plus up to 0.292 projected for the 36 earlier ones (their six-folder store is encoded whole unless a per-instance restriction is built).
 - Reversible: yes (stores for the other six folders can still be built).
-- Related: D100, D106, D107, D127, `docs/RQ2_LAUNCH_PLAN.md` section 9, `docs/experiments/B.md` E-RQ2-FINAL-CELLS
+- Related: D100, D106, D107, D127, `docs/RQ2_LAUNCH_PLAN.md` section 10, `docs/experiments/B.md` E-RQ2-FINAL-CELLS
 
 ## DEV-039 — The 1,000-update sensitivity is not run on the mined set   (2026-11-09 · status: accepted (D128), provisional until launch)
 - Master / protocol say: D68 (`docs/RQ2_PROTOCOL.md` section 11, O1): 1,000 updates as a sensitivity check on a subset of cells.
@@ -351,4 +351,4 @@ engineer sign-off — it is a design decision.
 - Why: 32,000 example visits against about 5,800 mined examples cannot reach the matched unique-example count (about 5.5 passes for RAW, 9.3 for FILTER); the pilots already show the learning curve flat from 100 to 2,000 updates (E-PILOT-CURVE). Evidence class: measured (curve), projected (example count).
 - Impact: the robustness of the primary contrasts to the update count rests on the pilot curve on the pool, not on a run on the mined set; the report says so.
 - Reversible: yes.
-- Related: D68, D128, `docs/EXPERIMENTS.md` E-PILOT-CURVE, `docs/RQ2_LAUNCH_PLAN.md` section 9
+- Related: D68, D128, `docs/EXPERIMENTS.md` E-PILOT-CURVE, `docs/RQ2_LAUNCH_PLAN.md` section 10

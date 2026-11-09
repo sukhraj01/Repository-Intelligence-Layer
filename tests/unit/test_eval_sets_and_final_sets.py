@@ -211,3 +211,19 @@ def test_cli_run_refuses_without_an_id(tmp_path: Path, capsys: pytest.CaptureFix
     assert "give the id" in capsys.readouterr().err
     assert rq2_final_sets.main([*args, "--follows-dev-analysis", "E-RQ2-DEV-7"]) == 3
     assert rq2_final_sets.main(["plan", "--retained-root", root, "--out", str(tmp_path / "o")]) == 0
+
+
+def test_set_names_and_id_rule_agree_with_the_analysis_module() -> None:
+    """The scoring step and the analysis module must name the sealed sets and the entry id alike."""
+    from ril.analysis import rq2_final as an
+
+    final = sorted(n for n, s in es.SETS.items() if s.stage == es.FINAL)
+    train = sorted(n for n, s in es.SETS.items() if s.stage == es.TRAINING)
+    assert final == sorted(an.SEALED_SETS) and train == sorted(an.DEV_SETS)
+    for ok in ("E-RQ2-DEV-1", "E-RQ2-FINAL-DEV", "E-X"):
+        assert fs.check_id(ok) == an.require_dev_analysis(ok)
+    for bad in ("", "e-rq2-dev", "RQ2-DEV", "E-rq2", "E-RQ2 DEV", "x" * 5):
+        with pytest.raises(fs.FinalSetsRefused):
+            fs.check_id(bad)
+        with pytest.raises(an.SealedOrderError):
+            an.require_dev_analysis(bad)
