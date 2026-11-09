@@ -49,13 +49,14 @@ PY
 STAGE=(--config "$CFG" --manifest "$SCRATCH/manifest.json" --revision "$REV"
        --max-total-bytes 2147483648 --max-file-bytes 536870912)
 "$PY" scripts/c_stage_rewrite.py manifest "${STAGE[@]}"
-"$PY" scripts/c_stage_rewrite.py plan "${STAGE[@]}"
+"$PY" scripts/c_stage_rewrite.py plan "${STAGE[@]}" | tee "$SCRATCH/plan.json"
 "$PY" scripts/c_stage_rewrite.py fetch "${STAGE[@]}"
 "$PY" scripts/c_stage_rewrite.py verify "${STAGE[@]}"
-"$PY" - "$SCRATCH/manifest.json" "$MANIFEST_SHA" <<'PY'
-import sys, json
-m = json.load(open(sys.argv[1]))
-print("manifest_sha256", m.get("manifest_sha256"), "registered", sys.argv[2], "equal", m.get("manifest_sha256") == sys.argv[2])
+"$PY" - "$SCRATCH/plan.json" "$MANIFEST_SHA" <<'PY'
+import json, sys
+got = json.loads(open(sys.argv[1]).readline())["manifest_sha256"]
+print("manifest_sha256", got, "registered", sys.argv[2], "equal", got == sys.argv[2])
+assert got == sys.argv[2]
 PY
 
 # The original files staged now against the copies already held on this account (E1 dev data).
@@ -65,8 +66,7 @@ from pathlib import Path
 new, old = Path(sys.argv[1]), Path(sys.argv[2])
 prov = json.loads((new / "provenance.json").read_text())
 equal = missing = differ = 0
-for f in prov["files"]:
-    p = f["path"]
+for p, f in prov["completed"].items():
     if p.startswith("data/Rewrite-"):
         continue
     q = old / p
@@ -93,7 +93,7 @@ cat "$SCRATCH/run_stdout.txt" | head -c 600; echo
   --log "$SCRATCH/c1_native_bm25_dev_v1.json" --run-files "$SCRATCH/run"
 
 cp -r "$SCRATCH/run" "$OUT/run_files"
-cp "$SCRATCH/raw/provenance.json" "$SCRATCH/manifest.json" "$SCRATCH/native_bm25.yaml" \
+cp "$SCRATCH/raw/provenance.json" "$SCRATCH/manifest.json" "$SCRATCH/plan.json" "$SCRATCH/native_bm25.yaml" \
    "$SCRATCH/run_stdout.txt" "$SCRATCH/original_equality.txt" "$SCRATCH/c1_native_bm25_dev_query_rows.csv" \
    "$SCRATCH/c1_native_vs_colab_dev_v1.csv" "$SCRATCH/c1_native_bm25_dev_v1.json" "$OUT/"
 mkdir -p "$OUT/rewrite_queries"
