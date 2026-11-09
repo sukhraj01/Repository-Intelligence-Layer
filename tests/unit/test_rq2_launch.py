@@ -50,7 +50,7 @@ def _work(tmp_path: Path, family: str, *, examples: int = 5800, size: int = 3450
         )
     )
     if family == "mined":
-        # the launch step (D139): N from the prepared store, then the resolved configurations
+        # the launch step (D140): N from the prepared store, then the resolved configurations
         import yaml
 
         rec = rl.compute_updates(str(work))
@@ -139,7 +139,7 @@ def test_injected_inputs_are_read_in_place_from_the_noise_pilot_directory(tmp_pa
 
 
 def test_a_short_filter_pool_lowers_n_for_every_arm_and_no_arm_repeats(tmp_path: Path) -> None:
-    # D139 supersedes the cycling rule: F = 2,000 gives N = 62 updates, 1,984 visits per arm
+    # D140 supersedes the cycling rule: F = 2,000 gives N = 62 updates, 1,984 visits per arm
     c = _checks(tmp_path, "mined", examples=3000, size=2000)
     assert all(x.ok for x in c.values()), {k: v.detail for k, v in c.items() if not v.ok}
     assert "N = 62" in c["updates_computed"].detail
@@ -405,7 +405,7 @@ def test_submit_cli_refuses_without_confirmation_and_with_a_bad_preflight(
     ]
     assert rq2_submit.main([*base, "--print-graph"]) == 0
     assert "3 GPU jobs" in capsys.readouterr().out
-    # N not computed from a prepared store: refused before any graph is built (D139)
+    # N not computed from a prepared store: refused before any graph is built (D140)
     (work / UPDATES_NAME).unlink()
     assert rq2_submit.main([*base, "--print-graph"]) == 2
     assert "not been computed" in capsys.readouterr().err

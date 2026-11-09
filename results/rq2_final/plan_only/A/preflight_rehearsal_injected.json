@@ -2,7 +2,7 @@
  "account": "A",
  "checks": [
   {
-   "detail": "RIL_COMMIT=b704289",
+   "detail": "RIL_COMMIT=f7f753b",
    "id": "commit_recorded",
    "ok": true
   },
@@ -17,7 +17,7 @@
    "ok": true
   },
   {
-   "detail": "18 configurations conform to the registered design and reproduce the planned hashes",
+   "detail": "27 configurations conform to the registered design and reproduce the planned hashes",
    "id": "configs_conform",
    "ok": true
   },
@@ -52,10 +52,11 @@
    "ok": true
   }
  ],
- "commit": "b704289",
- "created_utc": "2026-11-09T07:43:10Z",
+ "commit": "f7f753b",
+ "created_utc": "2026-11-09T13:06:36Z",
  "family": "injected",
  "include_conditional": false,
  "ready": true,
- "version": "rq2-preflight/v1"
+ "updates": null,
+ "version": "rq2-preflight/v2"
 }

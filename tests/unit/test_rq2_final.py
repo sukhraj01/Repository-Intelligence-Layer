@@ -187,7 +187,7 @@ def test_both_metrics_reported_and_only_primary_gets_holm() -> None:
 
 def test_the_beside_interval_is_the_stored_clustered_bootstrap() -> None:
     # the percentile interval kept beside the decision interval is the stored D17 bootstrap
-    # (whole repositories, shared draws), unchanged by D135
+    # (whole repositories, shared draws), unchanged by D136
     rows = synthetic_rows(effects={FILTER: 1.5}, seed=9, repos=6)
     panel = R.build_panels(rows)[("dev", "L2")]
     d = 100 * (panel.cells[FILTER].pooled("ndcg10") - panel.cells["mined_raw"].pooled("ndcg10"))
@@ -201,7 +201,7 @@ def test_the_beside_interval_is_the_stored_clustered_bootstrap() -> None:
 
 
 def test_the_decision_interval_is_the_cluster_robust_t_with_r_minus_one_df() -> None:
-    # D135: the interval a decision is read from is mean +- t(R - 1) * cluster-robust se
+    # D136: the interval a decision is read from is mean +- t(R - 1) * cluster-robust se
     rows = synthetic_rows(effects={FILTER: 1.5}, seed=9, repos=6)
     panel = R.build_panels(rows)[("dev", "L2")]
     d = 100 * (panel.cells[FILTER].pooled("ndcg10") - panel.cells["mined_raw"].pooled("ndcg10"))
@@ -651,7 +651,7 @@ def test_coverage_of_the_query_level_interval_with_two_repositories() -> None:
 @pytest.mark.parametrize("tau", [0.0, 1.5])
 @pytest.mark.parametrize("repos", [8, 12, 20])
 def test_false_positive_rate_after_holm_is_nominal(repos: int, tau: float) -> None:
-    # D135: 1,000 simulations of the four confirmatory contrasts under no effect; the chance that
+    # D136: 1,000 simulations of the four confirmatory contrasts under no effect; the chance that
     # Holm on the cluster-robust t intervals rejects any of them (family-wise) must not exceed the
     # nominal 5% by more than 2 points (Monte Carlo standard error 0.7). Measured 0.027 to 0.054
     # over these six cells (seeds 5000 to 5999, 500 draws for the beside interval).
@@ -668,7 +668,7 @@ def test_family_wise_error_rate_of_the_beside_interval_is_pinned(
     repos: int, tau: float, low: float, high: float
 ) -> None:
     # characterisation of the percentile bootstrap run through the same Holm procedure (the rule
-    # before D135): 1,000 simulations, three seeds, 500 draws. Measured 0.187 (8 repositories),
+    # before D136): 1,000 simulations, three seeds, 500 draws. Measured 0.187 (8 repositories),
     # 0.159 (12, tau 0), 0.100 (12, tau 1.5), 0.113 (20). It stays in every table beside the
     # decision interval; this band keeps a change of the beside interval a conscious one.
     _, rej_boot, _ = _fwer(tau, 1000, draws=500, repos=repos)

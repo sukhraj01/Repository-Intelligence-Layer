@@ -4,9 +4,9 @@
       [--retain-dir DIR] --date YYYY-MM-DD [--include-conditional] [--print-graph]
       [--confirm-launch]
 
-One GPU job per seed (all arms of the seed in order, D140). The mined family refuses to build or
+One GPU job per seed (all arms of the seed in order, D141). The mined family refuses to build or
 submit anything unless N, its update count, was computed from the prepared store (``--work`` holds
-``rq2_updates.json`` written by ``scripts/rq2_plan.py resolve``; D139). Always prints the job graph
+``rq2_updates.json`` written by ``scripts/rq2_plan.py resolve``; D140). Always prints the job graph
 first. Without ``--confirm-launch`` it submits nothing and exits 2; with
 it, it first checks the preflight file (passed, same account, family and RIL_COMMIT, under 48 hours
 old) and that none of the jobs is already queued, then calls ``sbatch`` for each run (``afterany``

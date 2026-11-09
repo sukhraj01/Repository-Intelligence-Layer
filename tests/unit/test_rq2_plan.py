@@ -20,7 +20,7 @@ INJECTED = ROOT / "configs/experiments/rq2_final/_template_injected.yaml"
 PILOT_MINED = ROOT / "configs/experiments/mp/mp_raw_s0.yaml"
 PILOT_INJECTED = ROOT / "configs/experiments/n1/n1_r40_raw_s0.yaml"
 ADDED_CELLS = {"inj_clean_raw", "inj_raw_r01", "inj_filter_bm25_r01"}
-"""The three cells of the rulings D136 and D137 on top of the registered option E."""
+"""The three cells of the rulings D137 and D138 on top of the registered option E."""
 
 
 def _registered(runs: list[rp.Run]) -> list[rp.Run]:
@@ -148,7 +148,7 @@ def test_one_gpu_job_per_account_and_seed_with_arms_in_the_interleaved_order() -
     jobs = rp.job_graph(runs)
     ids = {j.job_id: j for j in jobs}
     train = [j for j in jobs if j.job_id.startswith("seed_")]
-    assert len(train) == 6  # three per account: six queue waits, not thirty-six (D140)
+    assert len(train) == 6  # three per account: six queue waits, not thirty-six (D141)
     assert {j.account for j in train if "injected" in j.stage} == {"A"}
     assert {j.account for j in train if "mined" in j.stage} == {"C"}
     for j in train:
@@ -217,7 +217,7 @@ def test_final_sets_follow_the_dev_analysis_and_cover_the_retained_models() -> N
 
 
 def test_mined_updates_follow_the_filter_pool() -> None:
-    # D139: N = min(100, floor(F / 32)) for every arm; unchanged at 3,200 and above
+    # D140: N = min(100, floor(F / 32)) for every arm; unchanged at 3,200 and above
     assert rp.mined_updates(3430) == 100 and rp.mined_updates(3200) == 100
     assert rp.mined_updates(3199) == 99 and rp.mined_updates(2000) == 62
     assert rp.mined_updates(32) == 1

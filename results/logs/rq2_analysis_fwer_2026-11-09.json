@@ -1,0 +1,63 @@
+{
+ "code_commit": "f7f753b",
+ "config": {
+  "alpha": 0.05,
+  "bootstrap_draws": 500,
+  "confirmatory_contrasts": 4,
+  "fixture": "tests/unit/_rq2_final_fixtures.py synthetic_rows(effects={FILTER: 0.0})",
+  "queries_per_repository": 25,
+  "simulation_seeds": "5000 to 5999",
+  "simulations_per_cell": 1000,
+  "training_seeds_per_cell": 3
+ },
+ "entry": "E-RQ2-ANALYSIS",
+ "hardware": "local machine (Apple M3, arm64, 8 GB RAM), no GPU, Python 3.11, numpy only",
+ "kind": "measured (synthetic rows, no effect)",
+ "monte_carlo_standard_error": 0.007,
+ "nominal": 0.05,
+ "reproduced_by": "tests/unit/test_rq2_final.py test_false_positive_rate_after_holm_is_nominal and test_family_wise_error_rate_of_the_beside_interval_is_pinned (slow)",
+ "rows": [
+  {
+   "any_holm_rejection_percentile_bootstrap": 0.187,
+   "any_holm_rejection_t_rule": 0.044,
+   "repo_spread_tau_points": 0.0,
+   "repositories": 8,
+   "simulations": 1000
+  },
+  {
+   "any_holm_rejection_percentile_bootstrap": 0.16,
+   "any_holm_rejection_t_rule": 0.027,
+   "repo_spread_tau_points": 1.5,
+   "repositories": 8,
+   "simulations": 1000
+  },
+  {
+   "any_holm_rejection_percentile_bootstrap": 0.159,
+   "any_holm_rejection_t_rule": 0.054,
+   "repo_spread_tau_points": 0.0,
+   "repositories": 12,
+   "simulations": 1000
+  },
+  {
+   "any_holm_rejection_percentile_bootstrap": 0.1,
+   "any_holm_rejection_t_rule": 0.034,
+   "repo_spread_tau_points": 1.5,
+   "repositories": 12,
+   "simulations": 1000
+  },
+  {
+   "any_holm_rejection_percentile_bootstrap": 0.113,
+   "any_holm_rejection_t_rule": 0.044,
+   "repo_spread_tau_points": 0.0,
+   "repositories": 20,
+   "simulations": 1000
+  },
+  {
+   "any_holm_rejection_percentile_bootstrap": 0.078,
+   "any_holm_rejection_t_rule": 0.035,
+   "repo_spread_tau_points": 1.5,
+   "repositories": 20,
+   "simulations": 1000
+  }
+ ]
+}

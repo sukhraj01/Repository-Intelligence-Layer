@@ -11,9 +11,9 @@
 #SBATCH --time=12:00:00
 #SBATCH --output=ril_rq2f/logs/%x_%j.out
 # GPU. One seed of the RQ2 final experiment on the mined set (account C), all arms of the seed in the fixed
-# interleaved order of the cell table (D140): RUN_IDS lists the run ids joined by colons (for example
+# interleaved order of the cell table (D141): RUN_IDS lists the run ids joined by colons (for example
 # mined_raw_u100_s100:mined_filter_bm25_u100_s100:...), N = UPDATES updates of the 3,000-update schedule for
-# every arm (N = min(100, F // 32), computed from the prepared store by scripts/rq2_plan.py resolve, D139), on
+# every arm (N = min(100, F // 32), computed from the prepared store by scripts/rq2_plan.py resolve, D140), on
 # the full mined store's non_test directories (cache and BM25 feature table of the prep job), scored on the dev set only (the five repositories
 # without ansible, D131). The final model is retained under RETAIN_DIR (D129); the eight repositories and the
 # executable 377 are scored later, from the retained models, by rq2f_final_sets.sbatch after the dev analysis.
@@ -36,7 +36,7 @@ X2=$HOME/ril_x2
 E=$HOME/ril_e
 SEED=${SEED:?set SEED}
 RUN_IDS=${RUN_IDS:?set RUN_IDS (run ids joined by colons)}
-UPDATES=${UPDATES:?set UPDATES (N computed from the prepared store, D139)}
+UPDATES=${UPDATES:?set UPDATES (N computed from the prepared store, D140)}
 DATE=${DATE:?set DATE}
 RIL_COMMIT=${RIL_COMMIT:?set RIL_COMMIT}
 RETAIN_DIR=${RETAIN_DIR:?set RETAIN_DIR (mined-set models are retained, D129)}

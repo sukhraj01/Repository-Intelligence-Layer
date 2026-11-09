@@ -1,6 +1,6 @@
 """Cluster-robust t interval of a mean over queries, clustered over repositories.
 
-Implements the decision interval of ``docs/RQ2_PROTOCOL.md`` section 11 (D135, DEV-040): the point
+Implements the decision interval of ``docs/RQ2_PROTOCOL.md`` section 11 (D136, DEV-040): the point
 estimate is the mean over queries; the variance is the one-way cluster-robust (linearisation)
 estimate over repositories, ``G / (G - 1) * sum_g (sum_{i in g} (x_i - mean))^2 / N^2``; the
 interval is ``mean +- t_{1 - alpha / 2, G - 1} * se``. With fewer than ``MIN_CLUSTERS``

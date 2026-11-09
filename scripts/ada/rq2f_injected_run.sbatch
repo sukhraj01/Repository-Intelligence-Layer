@@ -11,9 +11,9 @@
 #SBATCH --time=18:00:00
 #SBATCH --output=ril_rq2f/logs/%x_%j.out
 # GPU. One seed of the RQ2 final experiment in the injected-noise family (account A), all nine arms of the seed in
-# the fixed interleaved order of the cell table (D140): RUN_IDS lists the run ids joined by colons (for example
+# the fixed interleaved order of the cell table (D141): RUN_IDS lists the run ids joined by colons (for example
 # inj_raw_u100_s100:inj_filter_bm25_u100_s100:...): the three cells at r = 0.4 controls and exploratory, the clean RAW cell
-# (rate 0, D136) and RAW and FILTER-BM25 at r = 0.1 (D137), 100 updates of the 3,000-update schedule on the 5,000-directory pool with the pairs noised at
+# (rate 0, D137) and RAW and FILTER-BM25 at r = 0.1 (D138), 100 updates of the 3,000-update schedule on the 5,000-directory pool with the pairs noised at
 # r = 0.4 under a fresh realisation (the noise draw is keyed on the run's seed, D82; seeds 100 to 102 are outside the
 # exploratory waves), K-ranks of FILTER and WEIGHT recomputed on the noised positives from the stored score stores,
 # scored on the dev set only (D131). These models are not retained (D129). Resumable as the mined script: DATE

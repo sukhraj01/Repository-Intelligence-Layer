@@ -1203,6 +1203,35 @@ Not reproduced because it is not a stored quantity: Holm, delta classes, claims 
 
 **Not claimed.** Any result of RQ2; that synthetic coverage at 12 repositories carries over to the real variance components; anything about repositories beyond the counts simulated (8, 12, 20).
 
+### Addendum 2026-11-09: the lead's rulings on the eight questions, applied before any final row (decisions D136, D137, D138, D139; DEV-040)
+
+Evidence classes: measured (simulation, synthetic rows), reasoned. No cluster job for the analysis; CPU only.
+
+| Question | Ruling | Applied as | Evidence class and what could flip it |
+|---|---|---|---|
+| 1 interval rule | option (b), D136: cluster-robust t with R - 1 degrees of freedom decides; Holm unchanged; the percentile bootstrap beside it in every table | `ril/analysis/cluster_t.py` (t distribution by incomplete beta function, checked against tabulated quantiles; linearised cluster variance, every query a cluster below three repositories); `holm_group` runs the step-down on the t intervals and stores the bootstrap run of the same procedure under `holm.boot`; tables show both; DEV-040 | measured; flip: the same simulation at the real repository counts and variance components once final rows exist (not a reason to change the rule after seeing a row) |
+| 2 Holm family | as coded (one family on one set; never pooling the eight with the 377) | no change | reasoned |
+| 3 families | as coded (section 4 with D69) | no change | reasoned |
+| 4 RQ3 contrast | only the confirmatory FILTER-BM25 against RAW decides (D80 fallback) | no change | reasoned |
+| 5 final L3 | the executable 377 carries both levels; a positive claim needs that set at both levels | no change | reasoned |
+| 6 clean cell | add `inj_clean_raw` (D137); `calibration_sanity` is now evaluable | cell in the plan; `analyse_files` passes `CLEAN_CELL` | reasoned (0.42 GPU-hours per seed) |
+| 7 dose-response | second rate 0.1 (D138): `inj_raw_r01`, `inj_filter_bm25_r01`; curve points 0, 0.1, 0.4; `dose_response` takes the clean cell, reports RAW loss at each rate and whether the loss and the FILTER gain grow, from the t interval of the difference with the bootstrap beside | cells in the plan, `DOSE_RATES`; secondary and exploratory by protocol | reasoned |
+| 8 small readings | as coded (indistinguishable = absolute difference below the pooled seed SD; leave-out compares the sign; a disagreeing dev sign makes the claim inconclusive with the reason) | no change; the shared guard now exists (below) | reasoned |
+
+**Result: the nominal rate of the new rule.** Four confirmatory contrasts under no effect (two contrasts at two levels, FILTER-BM25 effect 0), three training seeds, 25 queries per repository, repository spread of the effect 0 and 1.5 points, **1,000 simulations per cell** (seeds 5000 to 5999, 500 bootstrap draws for the beside interval, `results/logs/rq2_analysis_fwer_2026-11-09.json`, local machine, no GPU). Monte Carlo standard error 0.007. Any Holm rejection:
+
+| Repositories | spread 0 points: t rule | percentile bootstrap | spread 1.5 points: t rule | percentile bootstrap |
+|---|---|---|---|---|
+| 8 | 0.044 | 0.187 | 0.027 | 0.160 |
+| 12 | 0.054 | 0.159 | 0.034 | 0.100 |
+| 20 | 0.044 | 0.113 | 0.035 | 0.078 |
+
+The earlier strict expected-failure test is now an ordinary passing test (`test_false_positive_rate_after_holm_is_nominal`: 1,000 simulations per cell, six cells, tolerance: at most 0.07, that is nominal plus two points, about three Monte Carlo standard errors); the old rate is pinned for the beside interval (`test_family_wise_error_rate_of_the_beside_interval_is_pinned`, bands around 0.187, 0.159, 0.100, 0.113); the coverage of the clustered interval at 12 repositories and the stress case of reported effects at tau 3 still pass (reported effects stay under 0.07). The t rule is conservative at spread 1.5 (0.027 to 0.035), as expected when the repository term is estimated from few clusters.
+
+**One guard for the sealed order.** `ril/evaluation/sealed.py` holds `require_dev_analysis`; the analysis module (`check_sealed`, `read_rows`, `analyse`), the final-sets scoring (`final_sets.check_id`, the record loader and the index reader) and the new row converter all call it, and `tests/unit/test_sealed_order.py` fails if any of them stops calling it or carries its own copy of the id pattern. **The converter** (`ril/evaluation/final_rows.py`, `scripts/rq2_rows.py`): final-sets scoring results and the training runs' dev results to the analysis rows (one per run, cell, seed, set, level, repository, query: nDCG@10 and Recall@100 from the dense column under the primary gold reading; `n_positives` is not recorded per query and stays empty), refuses without the dev-analysis id before opening a file, tested on a synthetic final-sets result and on the stored pilot runs (the converter and the pilot reader give the same per-query values).
+
+**Not claimed.** That the t rule is exact at the real variance components; any RQ2 result; that three noise points show a dose-response (that is read from final rows).
+
 ## E-RQ2-FINAL-CELLS: final cell configurations, per-run job scripts, evaluation by set, sealed order of the final sets; plan-only validation on two accounts. Apparatus, 2026-11-09 (decisions D124 to D134, DEV-038, DEV-039)
 
 Status: **apparatus and plan-only validation; nothing trained, no GPU job, no model call, no change to the mining or prep jobs on account C.** Evidence class: measured (counts, scheduler accounting, free space, plan-only job outputs), projected (linear in a measured rate), reasoned (the rest). Product: `configs/experiments/rq2_final/` (36 run configurations and two templates), `ril/training/rq2_plan.py` (cell table with account, retention and the conditional cell; protocol check; budget on two bases and two evaluation scopes; per-run job graph), `ril/evaluation/eval_sets.py` and `final_sets.py` (named sets, the sealed order), `ril/bench/rq2_launch.py` (preflight, submit, records), `scripts/rq2_{plan,preflight,submit,record,final_sets}.py`, `scripts/ada/rq2f_{mined_run,injected_run,final_sets,planonly}.sbatch`, tests `test_rq2_plan.py`, `test_rq2_launch.py`, `test_eval_sets_and_final_sets.py`, `test_eval_plan.py`, `test_data_loader.py`. Outputs: `results/rq2_final/plan_only/{A,C}/`. Plan and checklist: `docs/RQ2_LAUNCH_PLAN.md` section 10.
@@ -1272,3 +1301,40 @@ All five sets are ready on A and on C (0 missing) after the copy. Rows of the st
 **Pushback (evidence class and the cheapest experiment).** One GPU job per run pays a queue wait per job. Measured wait on A: median 0.03 h, 90th percentile 2.75 h (44 jobs); the critical path of the graph is 26.1 h (1.1 days) at the median with the conditional cell dropped and 36.4 h (1.5 days) with it, but 124 h (5.2 days) and 153 h (6.4 days) if every job drew the 90th percentile (pessimistic: a tail applied to each of 48 or 56 jobs). Six-run jobs (six training jobs) would have paid it six times. `run-batch` already skips a finished run, so a six-run job loses at most the run in flight on a node loss, the same as a per-run job: the isolation of per-run jobs buys little over the resumable batch. Reasoned, not measured on chained jobs (C has one GPU job in its history). Cheapest experiment: read the waits of the first four chained jobs of the launch (`sacct`), one day; if the median passes about 1 h, switch the mined family to one job per seed (a variable `RUN_IDS` in the same script). Not changed: the ruling says one job per run.
 
 **Not done / not known.** The prep, drop-list and dense-teacher measurement scripts (later prompts); the dev analysis and its record (`write_dev_analysis_record` is the contract); the leakage and registration records on the cluster (`scripts/rq2_record.py`); memory at full scale beyond the projected 26 GB (check `sacct` MaxRSS after the first mined job); a per-instance restriction of the stored36 part would cut up to 0.1 GPU-hours per checkpoint; the instance filter of the 377 when rows are read is not written (the analysis module's); account C's prep job was running during this work and was not touched.
+
+### Addendum 2026-11-09 (later): rulings on the cell table, the pool rule and the job batching (decisions D136 to D142, DEV-040, DEV-041)
+
+Evidence classes: measured (counts, budget arithmetic from stored unit costs, plan-only checks on two accounts), reasoned. Nothing was trained; no GPU job; no cluster job except CPU checks (jobs 66474 on A, 66475 on C) and the torch and leakage tests (66476 on A, 41 of 41).
+
+| D | Decision | Evidence class | Cheapest experiment that could flip it | Time-box |
+|---|---|---|---|---|
+| D136 | contrast decisions read from the cluster-robust t interval with R - 1 degrees of freedom; bootstrap beside; DEV-040 | measured | the same simulation at the real counts, after final rows exist (informative only) | not run |
+| D137 | clean RAW cell on the injected pool, three seeds (0.42 GPU-hours each) | reasoned | none cheap | |
+| D138 | second noise rate 0.1: `inj_raw_r01`, `inj_filter_bm25_r01`, fresh draws (seeds 100 to 102), three seeds each; dose-response of three points, secondary and exploratory | reasoned | none cheap | |
+| D139 | rulings 2 to 5 and 8 accepted as coded | reasoned | | |
+| D140 | N = min(100, floor(F / 32)) for every arm of the mined family, computed from the prepared store before submission; supersedes the cycling rule of D133; DEV-041 (conditional, filled at launch); injected family keeps 100 | reasoned | read F from the prep summary (about 3,430 projected: N = 100) | at launch |
+| D141 | one GPU job per account and per seed, all arms of the seed in a fixed interleaved order, resumable | reasoned, tested on the plan | read the queue waits on C after the first jobs | after the first three jobs |
+| D142 | retention as ruled (18 mined models on C; injected models not retained; the eight and the 377 scored once after the dev analysis); account B unused | reasoned | | |
+
+**The 45 runs.** Fifteen cells: six mined (confirmatory RAW, FILTER-BM25, subsample; exploratory WEIGHT, CURRICULUM; conditional FILTER-SweRankEmbed-Small) and nine injected (RAW, FILTER-BM25, ORACLE-CLEAN, subsample, FILTER-SweRankEmbed-Small, WEIGHT at 0.4; clean RAW at 0; RAW and FILTER-BM25 at 0.1), seeds 100 to 102. The cell table is in the order a seed's job runs it; its digest changed, so the registration is made after this change. Account A: 27 runs (11.34 GPU-hours, of which the nine added runs 3.78). Account C: 18 mined runs (7.56). Hashes: 45 distinct.
+
+| Basis and scope | Training and dev | Eight | Executable 377 | Total | Margin to 46.7 | Margin after the conditional teacher (6.4) |
+|---|---|---|---|---|---|---|
+| measured, rulings (D127, D129) | 18.90 | 3.20 | 12.24 | **34.34** | 12.36 | 5.96 |
+| protocol, rulings | 18.00 | 8.64 | 7.20 | 33.84 | 12.86 | 6.46 |
+| measured, registered scope (the eight for every run) | 18.90 | 8.01 | 7.20 | 34.11 | 12.59 | 6.19 |
+| protocol, registered scope | 18.00 | 21.60 | 7.20 | 46.80 | -0.10 | -6.50 |
+
+The last row is the registered design's own scope with the 45 runs: 0.10 over the cap on the reasoned protocol costs. That scope is not what runs (D127, D129 score the eight from the 18 retained models only), and the first three rows are inside the cap.
+
+**Batched job graph.** Per account and seed: C three mined jobs (five arms; six with the conditional cell, which then waits for the dense-teacher pass), A three injected jobs (nine arms: raw, filter_bm25, oracle, sub, clean_raw, filter_srs, weight, raw at 0.1, filter_bm25 at 0.1), three final-sets jobs on C (one per seed, six models each). Calendar estimate (critical path, one wait per job from account A's measured waits: p50 0.03 h, p90 2.75 h, max 8.25 h): 25.3 h (1.1 days), 58.0 h (2.4 days) and 124.0 h (5.2 days) with the conditional cell dropped; 35.5 h (1.5 days), 70.9 h (3.0 days) and 142.4 h (5.9 days) with it. Training waits are drawn six times instead of 36.
+
+**What was built.** `rq2_plan.py`: three cells, interleaved order, `mined_updates`, `plan_runs(mined_n=)`, the noise rate of a cell checked against the configuration, equal updates across the arms of a family enforced, per-seed `job_graph`; `scripts/rq2_plan.py resolve` (the launch step: an updates record with F, N and the SHA-256 of the prep summary, resolved configurations and hashes); `ril/bench/rq2_launch.py`: `compute_updates`, `read_updates`, per-seed `submissions` (`SEED`, `RUN_IDS`, `UPDATES` exported; wall two hours per arm), `updates_computed` in the preflight, the preflight records N and the submit script refuses a mismatch, refuses without `--work` and a valid record; run scripts loop over the seed's arms through one `run-batch` call; the final-sets script takes the seed's models. Tests: plan, launch, cluster t, converter, sealed order.
+
+**Rehearsal (CPU, nothing submitted, nothing deleted).** Re-rendered configurations equal the committed ones on both accounts (diff empty); plan, preflight against the real directories (fails exactly the prep, record and N items), preflight on a synthetic work directory (passes, N = 100), submit script: no preflight file (exit 2), no confirmation (exit 2), N not computed (exit 2). Files in `results/rq2_final/plan_only/`.
+
+**Dead end and slip recorded.** A first loop to copy the rehearsal outputs into `results/rq2_final/plan_only/` removed the tracked files of that directory in the working folder (an unset shell variable, zsh does not split a variable on spaces); they were restored from the repository and replaced by the new outputs; no file outside the working folder was touched.
+
+**Pushback.** (1) D141 puts the conditional cell inside the three mined jobs, so with it the mined jobs wait for the dense-teacher pass (up to 6.0 GPU-hours plus a queue wait) before any mined arm trains; the alternative is five-arm jobs now and three single-arm jobs for the conditional cell later, which costs three more waits but starts the confirmatory arms 6 hours earlier (evidence: reasoned; cheapest check: the measurement on 100 directories, which decides whether the cell runs at all). (2) A seed job holds the mined cache in memory across its arms: the MaxRSS of the first seed job against the 26 GB projection is the check. (3) The final-sets jobs are batched per seed by the same rule (not asked for): three waits instead of eighteen.
+
+**Not done / not known.** The prep, overlap and dense-teacher scripts' outputs (F and N are not known: DEV-041 is conditional and its fill is the launch step's); the registration record on the launch commit; MaxRSS of a seed job; the dev analysis and its record; an alias for account B.

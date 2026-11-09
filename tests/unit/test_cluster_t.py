@@ -1,4 +1,4 @@
-"""The Student t distribution and the cluster-robust t interval (D135, DEV-040)."""
+"""The Student t distribution and the cluster-robust t interval (D136, DEV-040)."""
 
 from __future__ import annotations
 

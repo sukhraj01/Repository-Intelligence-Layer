@@ -2,7 +2,12 @@
  "account": "C",
  "checks": [
   {
-   "detail": "RIL_COMMIT=b704289",
+   "detail": "N = 100 updates for every arm, computed from the prepared store (D140)",
+   "id": "updates_computed",
+   "ok": true
+  },
+  {
+   "detail": "RIL_COMMIT=f7f753b",
    "id": "commit_recorded",
    "ok": true
   },
@@ -42,7 +47,7 @@
    "ok": true
   },
   {
-   "detail": "25.9 GB free on the account home; 10.0 GB needed",
+   "detail": "25.4 GB free on the account home; 10.0 GB needed",
    "id": "space",
    "ok": true
   },
@@ -62,10 +67,11 @@
    "ok": true
   }
  ],
- "commit": "b704289",
- "created_utc": "2026-11-09T07:43:19Z",
+ "commit": "f7f753b",
+ "created_utc": "2026-11-09T13:06:29Z",
  "family": "mined",
  "include_conditional": false,
  "ready": true,
- "version": "rq2-preflight/v1"
+ "updates": 100,
+ "version": "rq2-preflight/v2"
 }

@@ -1,7 +1,7 @@
 """Final analysis of the RQ2 experiment: arms, paired contrasts, Holm, delta, verdicts, fallback.
 
 Implements ``docs/RQ2_PROTOCOL.md`` sections 4, 6 and 11: D17 (mean over queries, repositories as
-clusters), D135 (decisions read from the cluster-robust t interval with R - 1 degrees of freedom,
+clusters), D136 (decisions read from the cluster-robust t interval with R - 1 degrees of freedom,
 the percentile bootstrap of D17 reported beside it; DEV-040), D69 (two confirmatory contrasts),
 D71 (L3 metric Recall@100 with nDCG@10 beside it), D72 (Holm within each family, uncorrected
 intervals beside), D73 (delta = 1.5
@@ -62,7 +62,7 @@ DOSE_RATES: Mapping[float, Mapping[str, str]] = {
         "weight": "inj_weight",
     },
 }
-"""The noise rates of the final design (D136) and their cells; with ``CLEAN_CELL`` the curve has
+"""The noise rates of the final design (D137) and their cells; with ``CLEAN_CELL`` the curve has
 three points (0, 0.1, 0.4). Cell ids are those of ``ril/training/rq2_plan.py`` (a test checks)."""
 CLEAN_CELL = "inj_clean_raw"
 """RAW on the injected pool at rate 0: the clean reference of sanity rule 1 and the curve."""
@@ -107,7 +107,7 @@ ASSUMPTIONS: tuple[str, ...] = (
     "against the subsample), then SweRankEmbed-Small, then WEIGHT and CURRICULUM, then the "
     "injected calibration cells; all but the first are exploratory",
     "the interval a verdict is read from is the Holm-adjusted cluster-robust t interval of the "
-    "contrast's own family (D135); the uncorrected t interval and the percentile bootstrap "
+    "contrast's own family (D136); the uncorrected t interval and the percentile bootstrap "
     "intervals are reported beside it",
     "the L3 leave-largest-repository-out check (rule 3) compares the sign of the point estimate",
     "arms separate (D80, rule 7) iff FILTER-BM25 against RAW is positive on every final set that "
@@ -371,7 +371,7 @@ class Estimate:
     repos: int
     d: float
     ci: tuple[float, float]
-    """Decision interval, uncorrected: cluster-robust t (D135)."""
+    """Decision interval, uncorrected: cluster-robust t (D136)."""
     ci_boot: tuple[float, float]
     """Percentile bootstrap of D17 (whole repositories from three up), reported beside."""
     ci_query: tuple[float, float]
@@ -396,7 +396,7 @@ def estimate(panel: LevelPanel, spec: ContrastSpec, metric: str, boot: Boot) -> 
     """The paired contrast of ``spec`` on one panel, or None when either cell is absent.
 
     Per query the cell value is the mean over its seeds; the difference is paired on the query. The
-    decision interval is the cluster-robust t interval over repositories (D135; every query its
+    decision interval is the cluster-robust t interval over repositories (D136; every query its
     own cluster below three repositories); the percentile bootstrap that resamples whole
     repositories (D17) is reported beside it. Per-seed differences use the seeds both cells share.
     Both intervals carry query and repository sampling, not retraining variance, so the seed
@@ -488,11 +488,11 @@ def _step_down(
 def holm_group(ests: Sequence[Estimate]) -> None:
     """Holm step-down over one family on one set (D72), decided on the t intervals, in place.
 
-    The decision is the step-down on the cluster-robust t intervals (D135), ordered by the t
+    The decision is the step-down on the cluster-robust t intervals (D136), ordered by the t
     p-value: at step k of m the contrast is rejected when its interval at level
     ``1 - ALPHA / (m - k + 1)`` excludes zero. The reported interval is the one at the contrast's
     own step level, so "excludes zero" and "rejected" are the same statement. The same procedure
-    run on the percentile bootstrap intervals (the rule before D135) is stored under ``boot``
+    run on the percentile bootstrap intervals (the rule before D136) is stored under ``boot``
     beside it, and its rejections are what the pinned old error rate measures.
     """
     if not ests:
@@ -659,10 +659,10 @@ def dose_response(
     """Rule 2: paired gain over RAW and share of the ORACLE-CLEAN recovery at each noise rate.
 
     ``rates`` maps a rate to ``{"raw": cell, "oracle": cell, "<method>": cell, ...}``; ``clean`` is
-    the RAW cell on the clean pool (rate 0), the third point of the curve (D136). "Rises with r" is
+    the RAW cell on the clean pool (rate 0), the third point of the curve (D137). "Rises with r" is
     claimed only if the gain at the highest rate exceeds the gain at the next lower one by more
     than the difference's own interval, i.e. the cluster-robust t interval of the difference of
-    gains has a lower end above zero (D135; the percentile interval is beside it). With one rate
+    gains has a lower end above zero (D136; the percentile interval is beside it). With one rate
     nothing can be said about a rise. With a clean cell, ``raw_loss`` rows give RAW minus clean at
     each rate and a ``loss_rise`` row says whether the loss grows from the lower rate to the
     higher one. Labelled secondary and exploratory by the protocol (D69).
@@ -797,9 +797,9 @@ def calibration_sanity(
     """Rule 1: RAW must degrade against the clean cell and ORACLE-CLEAN must recover it.
 
     Both are read on the dev set only (the calibration cells are not evaluated on the final sets),
-    from the cluster-robust t interval with the percentile interval beside it (D135). Without a
+    from the cluster-robust t interval with the percentile interval beside it (D136). Without a
     clean cell in the data the first condition cannot be evaluated, and the calibration is then not
-    declared informative; the design carries ``inj_clean_raw`` for it (D136).
+    declared informative; the design carries ``inj_clean_raw`` for it (D137).
     """
     out: list[Record] = []
     for (eset, level), panel in sorted(panels.items()):
@@ -844,7 +844,7 @@ def calibration_sanity(
 def cell_summaries(
     panels: Mapping[tuple[str, str], LevelPanel], seed: int, draws: int
 ) -> list[Record]:
-    """Per cell, set, level, metric: mean over queries, cluster-robust t interval (D135) with the
+    """Per cell, set, level, metric: mean over queries, cluster-robust t interval (D136) with the
     percentile bootstraps (D17) beside it, seed spread."""
     out: list[Record] = []
     for (eset, level), panel in sorted(panels.items()):

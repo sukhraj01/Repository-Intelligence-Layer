@@ -14,7 +14,7 @@
 # that wait for the prep job), the evaluation sets are checked against the stores on the account, and the
 # script headers are read for the memory request; a rehearsal on a synthetic work directory passes every check,
 # and the submit script is run to show its refusals (no preflight file, no confirmation, N not computed from a
-# prepared store, D139): nothing is submitted. Memory estimate: a plan of 45 configurations, the evaluation
+# prepared store, D140): nothing is submitted. Memory estimate: a plan of 45 configurations, the evaluation
 # store check reads unit-text shards line by line (gzipped parts too): under 2 GB peak; 6 GB asked.
 #   sbatch --export=ALL,ACCT=A,FAMILY=injected,RIL_COMMIT=<hash> ril_rq2f/scripts/ada/rq2f_planonly.sbatch
 set -uo pipefail
@@ -62,7 +62,7 @@ echo "..........
 step rehearsal_leakage "$PY" -I scripts/rq2_record.py leakage --work "$T/work" --pytest-output "$T/pytest_output.txt"
 echo '{"examples": 5800, "filter_size": 3450, "held_out_rows": 0, "drop_list_applied": true}' > "$T/work/prep_summary.json"
 touch "$T/work/mined.jsonl.gz" "$T/work/features_mined.csv"
-# the launch step (D139): N from the prepared store, resolved configurations and their hashes (mined family)
+# the launch step (D140): N from the prepared store, resolved configurations and their hashes (mined family)
 if [ "$FAMILY" = mined ]; then
   step rehearsal_resolve "$PY" -I scripts/rq2_plan.py resolve --work "$T/work"
 fi

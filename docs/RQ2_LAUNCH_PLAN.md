@@ -469,6 +469,10 @@ already in the plan tool and its tests (14 tests pass locally).
 Evidence classes as above. Nothing was trained and no GPU job was submitted; the plan-only checks ran on the CPU of accounts A and C
 (`results/rq2_final/plan_only/`). All settings are `provisional` until launch and none is in `configs/frozen/`.
 
+> **Superseded in places by section 11 (2026-11-09, later):** 45 runs (three cells added), one GPU job per account and seed, the mined
+> family's update count computed from the prepared store, the interval rule of the decisions. Where a number in this section differs
+> from section 11, section 11 is current. Section 10.2 to 10.4 and 10.6 are kept as the record of the first cell table.
+
 ### 10.1 Rulings recorded (section 7 of this plan is settled; the options of 9.2 and 9.4 are settled by D133 and D129)
 
 | Section-7 item | Ruling | D |
@@ -564,3 +568,72 @@ The plan tool no longer takes `--accounts` (section 9.3 quotes the old call): pl
 Full-store prep and overlap job scripts (decision 9 settled: on C); the dense-teacher measurement on 100 directories; the final
 analysis module that writes the dev-analysis record; then the launch: `rq2_record.py` (registration, leakage), `rq2_preflight.py` and
 `rq2_submit.py --confirm-launch` on C (mined) and A (injected), by the engineer.
+
+## 11. Rulings applied before any final run (2026-11-09; decisions D136 to D142, DEV-040, DEV-041; entries E-RQ2-ANALYSIS and E-RQ2-FINAL-CELLS, addenda)
+
+Nothing was trained and no GPU job was submitted. Plan-only checks ran on the CPU of accounts A and C (`results/rq2_final/plan_only/`, jobs 66474 and 66475); the torch and leakage tests ran on account A (job 66476, 41 of 41). All settings stay `provisional` until launch.
+
+### 11.1 Rulings recorded
+
+| # | Ruling | D | Record |
+|---|---|---|---|
+| 1 | contrasts are decided on the cluster-robust t interval with R - 1 degrees of freedom (clustering over repositories), same Holm procedure; the percentile bootstrap beside it in every table | D136 | DEV-040 |
+| 2, 3, 4, 5, 8 | Holm family = one family on one evaluation set (never pooling the eight with the 377); family grouping of section 4 with D69; only the confirmatory FILTER-BM25 against RAW decides the RQ3 contrast; the final L3 claim needs the executable 377 at both levels; "indistinguishable" = absolute difference below the pooled seed SD, the leave-out check compares the sign of the point estimate, a dev sign that disagrees makes the claim inconclusive with the reason written. All accepted as coded | D139 | none (as coded) |
+| 6 | clean RAW cell on the injected pool (`inj_clean_raw`, rate 0), three seeds, account A | D137 | |
+| 7 | second noise rate: `inj_raw_r01` and `inj_filter_bm25_r01` at r = 0.1 (fresh draws, seeds 100 to 102), three seeds each, account A; dose-response has three points (0, 0.1, 0.4), secondary and exploratory (D69) | D138 | |
+| 9 | pool rule replaced (supersedes D133's cycling rule): N = min(100, floor(F / 32)) for every arm of the mined family, F the FILTER pool after the held-out and overlap drops; computed by the launch step from the prepared store, written into the configurations and their hashes before submission; the submit script refuses otherwise | D140 | DEV-041 (conditional) |
+| 10 | one GPU job per account and per seed, all arms of the seed in a fixed interleaved order, resumable, skipping finished runs | D141 | |
+| 11 | retention as ruled: 18 mined models retained on C; injected-noise models scored on dev inside their jobs and not retained; the eight and the 377 scored once from the retained models after the dev analysis; account B unused | D142 | |
+
+### 11.2 The cell table and the budget (45 runs)
+
+| Account | Cell | Arm | Role | Runs | GPU-h at 0.42 |
+|---|---|---|---|---|---|
+| C | mined_raw, mined_filter_bm25, mined_sub | RAW; FILTER-BM25; RAW on a FILTER-sized subsample | confirmatory | 9 | 3.78 |
+| C | mined_weight, mined_curriculum | WEIGHT; CURRICULUM (BM25 teacher) | exploratory | 6 | 2.52 |
+| C | mined_filter_srs | FILTER with SweRankEmbed-Small | exploratory, conditional (D125) | 3 | 1.26 |
+| A | inj_raw, inj_oracle, inj_sub | r = 0.4 controls | controls | 9 | 3.78 |
+| A | inj_filter_bm25, inj_filter_srs, inj_weight | r = 0.4 | exploratory | 9 | 3.78 |
+| A | inj_clean_raw | RAW, rate 0 | control (D137) | 3 | 1.26 |
+| A | inj_raw_r01, inj_filter_bm25_r01 | RAW; FILTER-BM25 at r = 0.1 | exploratory (D138) | 6 | 2.52 |
+
+Account A: 27 runs, 11.34 GPU-hours (the 9 added runs are 3.78 of it). Account C: 18 runs, 7.56, plus the final sets of the 18 retained models (15.44) and the conditional dense teacher (at most 6.4). Budget against Block 3 (46.7), measured costs, rulings scope (D127, D129): **34.34 GPU-hours** (training and dev 18.90, the eight 3.20, the executable 377 12.24), margin 12.36; with the conditional teacher 40.74, margin 5.96 (expected about 34.3 and about 40.7). On the protocol's reasoned costs the same scope is 33.84 (margin 12.86; 6.46 with the teacher). The registered design's own scope (the eight for every one of the 45 runs) would be 34.11 measured and 46.80 on the protocol basis, 0.10 over the cap: that scope is not what runs, and the cap holds with the rulings' scope.
+
+### 11.3 Job graph (one job per account and seed) and calendar days
+
+CPU stages on C (report, overlap audit, prep, the launch step that computes F and N and renders the run configurations) first. Training: three jobs on C (mined, seeds 100 to 102; five arms each, six with the conditional cell, which then waits for the dense-teacher pass) and three on A (injected, nine arms each, nothing to wait for), one GPU job at a time per account. Arm order inside a seed job: mined RAW, FILTER-BM25, subsample, WEIGHT, CURRICULUM, (FILTER-SweRankEmbed-Small); injected RAW, FILTER-BM25, ORACLE-CLEAN, subsample, clean RAW, FILTER-SweRankEmbed-Small, WEIGHT, RAW at 0.1, FILTER-BM25 at 0.1: the confirmatory pair first, paired references adjacent, so a job that dies part-way leaves complete pairs for the earlier seeds and the pairs that matter first for the current one. Then the manual collection of the injected results, the dev analysis, and three final-sets jobs on C (one per seed, six retained models each). Per-run records, hashes, result directories and ledger rows stay per run. Wall request: two hours per arm (12 and 18 hours per job).
+
+Critical path in wall hours (GPU-hours as wall), measured waits of account A's GPU jobs (p50 0.03 h, p90 2.75 h, max 8.25 h, section 3), one wait per job on the path:
+
+| Conditional cell | Jobs on the graph | p50 | p90 | max |
+|---|---|---|---|---|
+| dropped | 15 (6 training, 3 final sets) | 25.3 h (1.1 days) | 58.0 h (2.4 days) | 124.0 h (5.2 days) |
+| included | 17 | 35.5 h (1.5 days) | 70.9 h (3.0 days) | 142.4 h (5.9 days) |
+
+Training waits are drawn six times (not 36); the final-sets jobs add three more (the final sets were per-model jobs before: batching them per seed is the same rule and is one change in the graph). Against the per-run graph of section 10.4 the p90 estimate falls from 124 h and 153 h to 58 h and 71 h.
+
+### 11.4 The update count (D140)
+
+The launch step is `python3 -I scripts/rq2_plan.py resolve --work DIR`: it reads the prep summary, takes F = `filter_size`, writes the updates record (F, N, visits per arm, the SHA-256 of the summary it read) and renders all configurations with N and the resolved subsample size into `DIR/configs_resolved`, each hashed. N = 100 if F is at least 3,200 (nothing changes, the projected F is about 3,430), otherwise floor(F / 32) for every arm alike. The preflight checks `updates_computed` and that the resolved configurations match the plan; the submit script refuses to build a mined job graph without a valid updates record (missing, edited, or computed from a summary that has changed since), and the preflight file records N and must match it. The injected family keeps 100.
+
+### 11.5 Checklist (section 10.6 as amended)
+
+| # | Item | State |
+|---|---|---|
+| 1 | `yield` on the final state log | done |
+| 2 | overlap audit on the full store, drop list applied | open |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | open; then the launch step (`resolve`) computes F, N and the resolved configurations (new, open) |
+| 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary and N (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
+| 5 | evaluation sets ready | done on A and C |
+| 6 | space, retention directory, memory | checked on both accounts in the rehearsal; final check at launch |
+| 7 | CUDA gate in each job; one GPU job per account; no seed job submitted twice | in the code |
+| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the code of this section (job 66476); open until run on the launch commit |
+| 9 | registration fixed before the first run | open (the cell table changed: the digest is new); the engineer runs `scripts/rq2_record.py registration` |
+| 10 | seeds outside the waves, hashes, commit in `RIL_COMMIT` | done in the plan and the preflight |
+| 11 | converter from the dev results and the final-sets results to the analysis rows | **done** (`scripts/rq2_rows.py`, `ril/evaluation/final_rows.py`; refuses without the dev-analysis id; tested on a synthetic final-sets result and on the stored pilot rows) |
+| 12 | the dev-analysis record writer (`write_dev_analysis_record`) is called by the analysis step | open: the analysis module reads rows; writing the record is the engineer's step after the dev analysis |
+| 13 | an SSH alias for B (optional copy of the 18 retained models) | open, optional, a later step |
+
+### 11.6 What the rehearsal found
+
+Both rehearsals passed on a synthetic work directory (every check true, N = 100 on C), and the real directories fail exactly the items that wait for the prep job and the records (registration, leakage record, prep summary, inputs, `updates_computed`). The submit script refused three ways: no preflight file (exit 2), no confirmation (exit 2), N not computed from a prepared store (exit 2); nothing was submitted. Findings: (a) the registered design's scope on the protocol basis is 0.10 GPU-hours over the cap with 45 runs (section 11.2): no action, that scope does not run; (b) a panel with fewer than two queries has no interval; the analysis refuses it with an error; (c) the per-seed job loads the mined cache once for its arms, so the memory estimate of section 10 (26 GB projected, 30 GB requested) is unchanged only if the evaluation stores are released between arms (`--drop-eval-stores` is set): the MaxRSS of the first seed job is the check; (d) the FILTER-SweRankEmbed-Small cell can have a different pool size from FILTER-BM25's; N follows the BM25 pool (the confirmatory one) and the distinct-examples diagnostic reports the other if it repeats.

@@ -44,7 +44,7 @@ SCRIPTS = {
 CONFIG_DIR = "configs/experiments/rq2_final"
 RUN_HOURS = 2
 """Wall hours requested per arm of a seed job (0.42 GPU-hours measured; cache load and queueing
-margin). A seed job asks for this times its number of arms (D140), well under the 4-day limit."""
+margin). A seed job asks for this times its number of arms (D141), well under the 4-day limit."""
 MIN_FREE_GB = {"mined": 10.0, "injected": 3.0}
 """Free space asked of the account home before launch: results and logs, and for the mined family
 the 18 retained models (4.9 GB at 274 MB each) with margin."""
@@ -83,7 +83,7 @@ def _read_json(path: str) -> Record | None:
 
 
 class UpdatesError(ValueError):
-    """The mined family's update count was not computed from a prepared store (D139)."""
+    """The mined family's update count was not computed from a prepared store (D140)."""
 
 
 def compute_updates(work: str) -> Record:
@@ -112,7 +112,7 @@ def compute_updates(work: str) -> Record:
         "filter_pool": pool,
         "updates": n,
         "visits_per_arm": n * rp.UPDATE_VISITS,
-        "rule": "N = min(100, floor(F / 32)) for every arm of the mined family (D139)",
+        "rule": "N = min(100, floor(F / 32)) for every arm of the mined family (D140)",
         "prep_summary_sha256": digest,
     }
     with open(os.path.join(work, UPDATES_FILE), "w", encoding="utf-8") as handle:
@@ -200,7 +200,7 @@ def run_checks(
             add(
                 "updates_computed",
                 True,
-                f"N = {mined_n} updates for every arm, computed from the prepared store (D139)",
+                f"N = {mined_n} updates for every arm, computed from the prepared store (D140)",
             )
         except (UpdatesError, ValueError) as err:
             add("updates_computed", False, str(err))
@@ -257,7 +257,7 @@ def run_checks(
                 if u["filter_reaches_unique"]
                 else (
                     f"; FILTER and the subsample repeat examples (shortfall "
-                    f"{u['shortfall_filter']}): N does not follow the FILTER pool (D139)"
+                    f"{u['shortfall_filter']}): N does not follow the FILTER pool (D140)"
                 )
             )
             add(
@@ -486,7 +486,7 @@ def preflight_refusals(
     """Reasons the preflight file does not allow a launch (empty = it does).
 
     For the mined family ``updates`` is the N read from the prepared store at submission time; the
-    preflight must have been written for the same N (D139).
+    preflight must have been written for the same N (D140).
     """
     if not path:
         return ["no preflight file given (--preflight)"]
@@ -522,7 +522,7 @@ def preflight_refusals(
 
 @dataclass(frozen=True)
 class Submission:
-    """One GPU job: one account's one seed, every arm of the seed in order (D140)."""
+    """One GPU job: one account's one seed, every arm of the seed in order (D141)."""
 
     seed: int
     job_name: str
@@ -555,13 +555,13 @@ def submissions(
 
     ``date`` names the result directories (``<date>_<hash prefix>``); it is fixed once for the
     whole launch so that a resubmitted run finds its finished result and is skipped. The mined
-    family needs ``mined_n``, the update count computed from the prepared store (D139); without
+    family needs ``mined_n``, the update count computed from the prepared store (D140); without
     it nothing is built.
     """
     if not DATE_PATTERN.match(date):
         raise ValueError(f"date must be YYYY-MM-DD, got {date!r}")
     if family == "mined" and mined_n is None:
-        raise UpdatesError("N has not been computed from a prepared store (D139)")
+        raise UpdatesError("N has not been computed from a prepared store (D140)")
     out: list[Submission] = []
     groups = rp.seed_jobs(family_runs(family, seeds, include_conditional, mined_n), family)
     for seed, group in groups.items():

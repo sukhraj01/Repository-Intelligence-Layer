@@ -9,9 +9,9 @@
   render  --out DIR [--filter-size N] [--updates N] [--seeds S ...]
           write the configurations (``<run_id>.yaml``); without --filter-size the size-matched
           subsample keeps the symbolic token (committed form), with it the size is resolved;
-          --updates N sets the mined family's update count (D139), the injected family keeps 100
+          --updates N sets the mined family's update count (D140), the injected family keeps 100
   resolve --work DIR [--out DIR] [--seeds S ...]
-          the launch step (D139): read the prepared store's summary, compute F and
+          the launch step (D140): read the prepared store's summary, compute F and
           N = min(100, F // 32), write DIR/rq2_updates.json and the resolved configurations and
           their hashes (default OUT = DIR/configs_resolved). Nothing is submitted
   eval    --set NAME=E1_CONFIG:PREP:ROLES:E3_CACHE[:gz] [...]  (gz: unit texts stored gzipped)
@@ -138,7 +138,7 @@ def main(argv: list[str] | None = None) -> int:
     rs.add_argument("--out")
     for q in (pl, rd):
         q.add_argument("--filter-size", type=int)
-        q.add_argument("--updates", type=int, help="mined-family updates (D139); default 100")
+        q.add_argument("--updates", type=int, help="mined-family updates (D140); default 100")
     pl.add_argument("--pool-examples", type=int)
     pl.add_argument("--family-accounts", nargs="*", default=[], metavar="FAMILY=ACCOUNT")
     pl.add_argument("--queue-wait-hours", type=float, default=0.0)

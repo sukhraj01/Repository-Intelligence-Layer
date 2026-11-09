@@ -8,15 +8,15 @@ Implements ``docs/RQ2_PROTOCOL.md`` section 11 (O2, O7, O12, O15) and ``docs/RQ2
 Every unit cost carries its source and evidence class; a changed cost is a changed constant here,
 never an edit to a result. The cell list is the protocol's option E (section 5), 6 cells on the
 mined set and 6 on the pool with injected noise at r = 0.4, plus the three cells of the rulings
-D136 and D137: a clean RAW cell and RAW and FILTER-BM25 at r = 0.1 (the dose-response curve has
+D137 and D138: a clean RAW cell and RAW and FILTER-BM25 at r = 0.1 (the dose-response curve has
 three points). Three seeds each: 45 runs.
 
 Placement, retention, the evaluation scope and the job graph follow the launch rulings D124 to D133
 (``docs/RQ2_LAUNCH_PLAN.md`` section 9): mined-set cells train on account C, the injected-noise
 family on account A; the 18 mined-set models are retained; training jobs score the dev set only and
 the eight repositories and the executable 377 are scored once, from the retained models, after the
-dev analysis. Since D140 a GPU job is one account's one seed: all arms of the seed in a fixed
-interleaved order, resumable. Since D139 the number of updates N of the mined family is
+dev analysis. Since D141 a GPU job is one account's one seed: all arms of the seed in a fixed
+interleaved order, resumable. Since D140 the number of updates N of the mined family is
 ``min(100, floor(F / 32))`` for every arm, F the FILTER pool after the held-out and overlap drops,
 computed from the prepared store (``mined_updates``).
 """
@@ -233,12 +233,12 @@ CELLS: tuple[Cell, ...] = (
         False,
     ),
 )
-"""The cell table in the order a seed's job runs it (D140). Paired contrasts sit next to each other
+"""The cell table in the order a seed's job runs it (D141). Paired contrasts sit next to each other
 (RAW then FILTER-BM25 first, the clean and oracle references of the calibration before the
 secondary cells), so a job that dies part-way leaves complete pairs for the earlier seeds and the
 confirmatory pairs of the current one first. The conditional cell is last. ``inj_clean_raw`` is the
-rate-0 reference of sanity rule 1 (D136); the ``_r01`` cells are the second noise rate of the
-dose-response (D137), exploratory by protocol (D69)."""
+rate-0 reference of sanity rule 1 (D137); the ``_r01`` cells are the second noise rate of the
+dose-response (D138), exploratory by protocol (D69)."""
 
 NOISE_RATES: tuple[float, ...] = (0.0, 0.1, 0.4)
 """The three points of the dose-response."""
@@ -260,7 +260,7 @@ class Run:
 
 
 def mined_updates(filter_pool: int) -> int:
-    """Optimizer updates of every arm of the mined family: ``min(100, floor(F / 32))`` (D139).
+    """Optimizer updates of every arm of the mined family: ``min(100, floor(F / 32))`` (D140).
 
     ``F`` is the FILTER pool after the held-out and overlap drops, 32 directories per update, so
     every arm makes the same number of directory visits and none repeats an example. 100 when F is
@@ -400,15 +400,15 @@ def check_protocol(cfg: Mapping[str, Any], run: Run) -> list[str]:
     if cfg["budget"].get("stop_after") != run.updates:
         bad.append(f"stop_after {cfg['budget'].get('stop_after')} != the run's {run.updates}")
     if cell.family == "injected" and run.updates != PRIMARY_UPDATES:
-        bad.append("the injected family keeps 100 updates (D139)")
+        bad.append("the injected family keeps 100 updates (D140)")
     if cell.family == "mined" and not 1 <= run.updates <= PRIMARY_UPDATES:
-        bad.append(f"mined updates {run.updates} outside 1..{PRIMARY_UPDATES} (D139)")
+        bad.append(f"mined updates {run.updates} outside 1..{PRIMARY_UPDATES} (D140)")
     if bool(cfg["checkpoint"].get("retain_final")) != cell.retain:
         bad.append("retain_final must be on for the mined set and off for the injected family")
     if cell.family == "mined" and "noise" in cfg:
         bad.append("the mined set carries no injected noise")
     if cell.family == "injected" and (cfg.get("noise") or {}).get("rate") != cell.noise_rate:
-        bad.append(f"the cell {cell.cell_id} uses noise rate {cell.noise_rate} (D82, D136, D137)")
+        bad.append(f"the cell {cell.cell_id} uses noise rate {cell.noise_rate} (D82, D137, D138)")
     if cell.family == "injected" and cell.noise_rate not in NOISE_RATES:
         bad.append(f"noise rate {cell.noise_rate} is not one of {NOISE_RATES}")
     arm = cfg["arm"]
@@ -453,7 +453,7 @@ def validate_runs(
         problems = check_protocol(cfg, run)
         if problems:
             raise ValueError(f"{run.run_id} departs from the registered design: {problems}")
-        # the noise rate is a data-condition parameter of the dose-response (D136, D137), checked
+        # the noise rate is a data-condition parameter of the dose-response (D137, D138), checked
         # against the cell's own rate by check_protocol; every other noise setting must match
         comparable = {k: v for k, v in cfg.items() if k != "seed"}
         if "noise" in comparable:
@@ -658,7 +658,7 @@ class Job:
     chain (a rerun resumes, finished runs are skipped)."""
     conditional: str | None = None
     runs: tuple[str, ...] = ()
-    """Run ids a batched job trains in order (a seed's arms, D140), or models it scores."""
+    """Run ids a batched job trains in order (a seed's arms, D141), or models it scores."""
 
 
 def _cell_position(cell_id: str) -> int:
@@ -672,7 +672,7 @@ def _run_order(runs: Sequence[Run]) -> list[Run]:
 
 
 def seed_jobs(runs: Sequence[Run], family: str) -> dict[int, list[Run]]:
-    """A family's runs grouped by seed, each group in the cell table's interleaved order (D140)."""
+    """A family's runs grouped by seed, each group in the cell table's interleaved order (D141)."""
     groups: dict[int, list[Run]] = {}
     for r in _run_order([r for r in runs if r.cell.family == family]):
         groups.setdefault(r.seed, []).append(r)
@@ -691,7 +691,7 @@ def job_graph(
 
     CPU stages are single jobs on the account that holds the store (``store_account``). Each
     family trains on its account (D124) in one GPU job per seed that runs every arm of the seed in
-    the cell table's interleaved order, resumable and skipping finished runs (D140): three jobs for
+    the cell table's interleaved order, resumable and skipping finished runs (D141): three jobs for
     the mined family (five arms, six with the conditional cell) and three for the injected family
     (nine arms). Per-run records, hashes and ledger rows stay per run. Jobs of one account are
     ordered by ``chain_after``. Injected-noise jobs wait for nothing. Mined jobs wait for the FILTER
@@ -742,7 +742,7 @@ def job_graph(
         (prep,),
         0.0,
         0.1,
-        "D139: N is computed from the prepared store before any submission",
+        "D140: N is computed from the prepared store before any submission",
     )
     last_on: dict[str, str] = {}
 
@@ -773,7 +773,7 @@ def job_graph(
             DENSE_TEACHER_CAP_GPU_H,
             DENSE_TEACHER_CAP_GPU_H,
             "launched only if the measured full-store cost is at most 6.0 GPU-hours (D125); "
-            "with it every mined seed job carries six arms (D140)",
+            "with it every mined seed job carries six arms (D141)",
             chain(acct_m),
             "D125",
         )
