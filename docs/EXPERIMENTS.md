@@ -97,7 +97,8 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-DEV-ANSIBLE | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
 | E-DENSE-FUSION (was E-GRAPH-FUSION) | lead | `docs/EXPERIMENTS.md` | done | 2026-10-23 |
 | E-ENCODER-NUMBERS | lead | `docs/EXPERIMENTS.md` | done | 2026-10-29 |
-| E-GRAPH-L3 | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-GRAPH-L3 | lead | `docs/EXPERIMENTS.md` | done in E-A-OWNER-ITEMS (entry in docs/experiments/B.md) (dev, two of three repositories; ansible lacks dense scores) | 2026-11-09 |
+| E-A-OWNER-ITEMS | lead | `docs/experiments/B.md` | done; stored graph, tests and configures, stacked expansion and recency against same-file and chance controls on dev: no edge set beats same-file (items 1 to 3; item 4 not run) | 2026-11-09 |
 | E-RQ2-RAW | lead | `docs/EXPERIMENTS.md` | planned |  |
 | E-RQ2-FILTER | lead | `docs/EXPERIMENTS.md` | planned |  |
 | E-RQ2-WEIGHT | lead | `docs/EXPERIMENTS.md` | planned |  |
@@ -144,7 +145,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-DEV-ANSIBLE | RQ2 (dev tables), D32 / Q47 | none (apparatus: a third dev L3 repository) | Pro ansible, L2 and L3, unit level, role dev | n/a | cache, text stores and gold readings for the dev evaluation | done 2026-10-29 (no metric computed) |
 | E-DENSE-FUSION (was E-GRAPH-FUSION) | RQ1 ext. (apparatus), ADR-006, Q30 | encoder (CodeRankEmbed, Qwen3-Embedding-0.6B; `provisional: ADR-006`), cut (512, 1024 tokens; dev only), first stage (BM25, dense, RRF(BM25, dense) with k swept on dev, score-level BM25+dense), graph on top of the strongest first stage (edited list, graph as a third RRF list, score-level with weight swept on dev; core families and each family alone) | units and gold of the pilot-E3 cache, class form `full`, ambiguous sites `drop`, seeds are retrieved units, expansion at most 50 units, seed 0, dev repositories for every sweep, one stated setting on the Verified-six | n/a | nDCG@10 (L2) and Recall@100 (L3) at unit level (both D18 readings) and chunk level, query-level and repository-clustered intervals; graph cells against the first stage and size-matched chance controls; query-encode and flat-search latency p50/p95/p99 (CPU, GPU), encoding throughput and peak memory | done (exploratory, 2026-10-23 to 2026-10-25; rows `x2-*`; ADR-006 and ADR-003 addenda) |
 | E-ENCODER-NUMBERS | RQ1 ext. / RQ2 (apparatus), ADR-006, D25, D31 | encoder (CodeRankEmbed 1,024 tokens k 100, Qwen3-Embedding-0.6B 512 tokens k 20, both as selected on dev; `provisional: ADR-006`), class-unit text (`full`, `header`; dev) | everything of E-DENSE-FUSION; for the training-step measurement the D31 batch shape (32 x (1+1), float16 autocast, gradient checkpointing, 512 tokens) | n/a (one measurement, seed 0) | paired RRF difference with query-level and repository-clustered intervals (dev; Verified-six as a final-test-style reading), header against full, training-step throughput and peak memory, query-encode and flat-search latency p50/p95/p99 | done (exploratory, 2026-10-29; rows `e7-*`; ADR-006 addendum) |
-| E-GRAPH-L3 | RQ1 ext. | + test/config node and edge types | L3 eval set | n/a | L3 metrics; edge-recovery coverage | planned |
+| E-GRAPH-L3 | RQ1 ext. | + test/config node and edge types | L3 eval set | n/a | L3 metrics; edge-recovery coverage | done on dev in E-A-OWNER-ITEMS (not a graph gain) |
 | E-RQ2-RAW | RQ2 | arm = RAW | everything in the held-identical block | 3 | retrieval metrics + budget table | planned |
 | E-RQ2-FILTER | RQ2 | arm = FILTER (K-rank threshold) | as above | 3 | as above | planned |
 | E-RQ2-WEIGHT | RQ2 | arm = WEIGHT (K-rank soft weight) | as above | 3 | as above | planned |

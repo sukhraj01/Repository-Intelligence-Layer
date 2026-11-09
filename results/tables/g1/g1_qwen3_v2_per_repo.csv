@@ -1,0 +1,316 @@
+group,level,metric,contrast,family,repo,queries,d
+dev,L2,ndcg10,plain: graph - same-file,core,conan-io/conan,87,2.323
+dev,L2,ndcg10,plain: graph - same-file,core,deepset-ai/haystack,72,0.669
+dev,L2,ndcg10,plain: graph - same-file,core,internetarchive/openlibrary,80,-0.882
+dev,L2,ndcg10,plain: graph - same-file,core,qutebrowser/qutebrowser,75,0.612
+dev,L2,ndcg10,plain: graph - same-file,core,streamlink/streamlink,37,-0.66
+dev,L2,ndcg10,plain: graph - topm,core,conan-io/conan,87,0.988
+dev,L2,ndcg10,plain: graph - topm,core,deepset-ai/haystack,72,1.176
+dev,L2,ndcg10,plain: graph - topm,core,internetarchive/openlibrary,80,1.115
+dev,L2,ndcg10,plain: graph - topm,core,qutebrowser/qutebrowser,75,2.609
+dev,L2,ndcg10,plain: graph - topm,core,streamlink/streamlink,37,4.26
+dev,L2,ndcg10,plain: graph - random same-file,core,conan-io/conan,87,2.515
+dev,L2,ndcg10,plain: graph - random same-file,core,deepset-ai/haystack,72,-1.288
+dev,L2,ndcg10,plain: graph - random same-file,core,internetarchive/openlibrary,80,0.894
+dev,L2,ndcg10,plain: graph - random same-file,core,qutebrowser/qutebrowser,75,2.995
+dev,L2,ndcg10,plain: graph - random same-file,core,streamlink/streamlink,37,-1.784
+dev,L2,ndcg10,plain: same-file - topm,core,conan-io/conan,87,-1.334
+dev,L2,ndcg10,plain: same-file - topm,core,deepset-ai/haystack,72,0.507
+dev,L2,ndcg10,plain: same-file - topm,core,internetarchive/openlibrary,80,1.997
+dev,L2,ndcg10,plain: same-file - topm,core,qutebrowser/qutebrowser,75,1.997
+dev,L2,ndcg10,plain: same-file - topm,core,streamlink/streamlink,37,4.92
+dev,L2,ndcg10,plain: graph - first stage,core,conan-io/conan,87,0.423
+dev,L2,ndcg10,plain: graph - first stage,core,deepset-ai/haystack,72,1.688
+dev,L2,ndcg10,plain: graph - first stage,core,internetarchive/openlibrary,80,0.674
+dev,L2,ndcg10,plain: graph - first stage,core,qutebrowser/qutebrowser,75,3.481
+dev,L2,ndcg10,plain: graph - first stage,core,streamlink/streamlink,37,3.142
+dev,L2,ndcg10,plain: same-file - first stage,core,conan-io/conan,87,-1.899
+dev,L2,ndcg10,plain: same-file - first stage,core,deepset-ai/haystack,72,1.019
+dev,L2,ndcg10,plain: same-file - first stage,core,internetarchive/openlibrary,80,1.556
+dev,L2,ndcg10,plain: same-file - first stage,core,qutebrowser/qutebrowser,75,2.87
+dev,L2,ndcg10,plain: same-file - first stage,core,streamlink/streamlink,37,3.802
+dev,L2,ndcg10,plain: graph - same-file,coretc,conan-io/conan,87,2.137
+dev,L2,ndcg10,plain: graph - same-file,coretc,deepset-ai/haystack,72,0.669
+dev,L2,ndcg10,plain: graph - same-file,coretc,internetarchive/openlibrary,80,-0.882
+dev,L2,ndcg10,plain: graph - same-file,coretc,qutebrowser/qutebrowser,75,0.6
+dev,L2,ndcg10,plain: graph - same-file,coretc,streamlink/streamlink,37,-0.445
+dev,L2,ndcg10,plain: graph - topm,coretc,conan-io/conan,87,0.906
+dev,L2,ndcg10,plain: graph - topm,coretc,deepset-ai/haystack,72,1.176
+dev,L2,ndcg10,plain: graph - topm,coretc,internetarchive/openlibrary,80,1.195
+dev,L2,ndcg10,plain: graph - topm,coretc,qutebrowser/qutebrowser,75,2.597
+dev,L2,ndcg10,plain: graph - topm,coretc,streamlink/streamlink,37,4.475
+dev,L2,ndcg10,plain: graph - random same-file,coretc,conan-io/conan,87,1.732
+dev,L2,ndcg10,plain: graph - random same-file,coretc,deepset-ai/haystack,72,-1.435
+dev,L2,ndcg10,plain: graph - random same-file,coretc,internetarchive/openlibrary,80,1.097
+dev,L2,ndcg10,plain: graph - random same-file,coretc,qutebrowser/qutebrowser,75,2.691
+dev,L2,ndcg10,plain: graph - random same-file,coretc,streamlink/streamlink,37,-1.579
+dev,L2,ndcg10,plain: same-file - topm,coretc,conan-io/conan,87,-1.231
+dev,L2,ndcg10,plain: same-file - topm,coretc,deepset-ai/haystack,72,0.507
+dev,L2,ndcg10,plain: same-file - topm,coretc,internetarchive/openlibrary,80,2.077
+dev,L2,ndcg10,plain: same-file - topm,coretc,qutebrowser/qutebrowser,75,1.997
+dev,L2,ndcg10,plain: same-file - topm,coretc,streamlink/streamlink,37,4.92
+dev,L2,ndcg10,plain: graph - first stage,coretc,conan-io/conan,87,0.342
+dev,L2,ndcg10,plain: graph - first stage,coretc,deepset-ai/haystack,72,1.688
+dev,L2,ndcg10,plain: graph - first stage,coretc,internetarchive/openlibrary,80,0.674
+dev,L2,ndcg10,plain: graph - first stage,coretc,qutebrowser/qutebrowser,75,3.469
+dev,L2,ndcg10,plain: graph - first stage,coretc,streamlink/streamlink,37,3.357
+dev,L2,ndcg10,plain: same-file - first stage,coretc,conan-io/conan,87,-1.796
+dev,L2,ndcg10,plain: same-file - first stage,coretc,deepset-ai/haystack,72,1.019
+dev,L2,ndcg10,plain: same-file - first stage,coretc,internetarchive/openlibrary,80,1.556
+dev,L2,ndcg10,plain: same-file - first stage,coretc,qutebrowser/qutebrowser,75,2.87
+dev,L2,ndcg10,plain: same-file - first stage,coretc,streamlink/streamlink,37,3.802
+dev,L2,ndcg10,plain: graph - same-file,tc,conan-io/conan,87,-0.027
+dev,L2,ndcg10,plain: graph - same-file,tc,deepset-ai/haystack,72,-4.419
+dev,L2,ndcg10,plain: graph - same-file,tc,internetarchive/openlibrary,80,-3.058
+dev,L2,ndcg10,plain: graph - same-file,tc,qutebrowser/qutebrowser,75,-3.808
+dev,L2,ndcg10,plain: graph - same-file,tc,streamlink/streamlink,37,-3.585
+dev,L2,ndcg10,plain: graph - topm,tc,conan-io/conan,87,-1.056
+dev,L2,ndcg10,plain: graph - topm,tc,deepset-ai/haystack,72,-3.594
+dev,L2,ndcg10,plain: graph - topm,tc,internetarchive/openlibrary,80,-2.712
+dev,L2,ndcg10,plain: graph - topm,tc,qutebrowser/qutebrowser,75,-1.776
+dev,L2,ndcg10,plain: graph - topm,tc,streamlink/streamlink,37,-0.75
+dev,L2,ndcg10,plain: graph - random same-file,tc,conan-io/conan,87,-0.457
+dev,L2,ndcg10,plain: graph - random same-file,tc,deepset-ai/haystack,72,-4.927
+dev,L2,ndcg10,plain: graph - random same-file,tc,internetarchive/openlibrary,80,-1.491
+dev,L2,ndcg10,plain: graph - random same-file,tc,qutebrowser/qutebrowser,75,-1.425
+dev,L2,ndcg10,plain: graph - random same-file,tc,streamlink/streamlink,37,-3.83
+dev,L2,ndcg10,plain: same-file - topm,tc,conan-io/conan,87,-1.028
+dev,L2,ndcg10,plain: same-file - topm,tc,deepset-ai/haystack,72,0.825
+dev,L2,ndcg10,plain: same-file - topm,tc,internetarchive/openlibrary,80,0.346
+dev,L2,ndcg10,plain: same-file - topm,tc,qutebrowser/qutebrowser,75,2.032
+dev,L2,ndcg10,plain: same-file - topm,tc,streamlink/streamlink,37,2.836
+dev,L2,ndcg10,plain: graph - first stage,tc,conan-io/conan,87,-1.464
+dev,L2,ndcg10,plain: graph - first stage,tc,deepset-ai/haystack,72,-2.81
+dev,L2,ndcg10,plain: graph - first stage,tc,internetarchive/openlibrary,80,-2.907
+dev,L2,ndcg10,plain: graph - first stage,tc,qutebrowser/qutebrowser,75,-0.696
+dev,L2,ndcg10,plain: graph - first stage,tc,streamlink/streamlink,37,-1.972
+dev,L2,ndcg10,plain: same-file - first stage,tc,conan-io/conan,87,-1.437
+dev,L2,ndcg10,plain: same-file - first stage,tc,deepset-ai/haystack,72,1.609
+dev,L2,ndcg10,plain: same-file - first stage,tc,internetarchive/openlibrary,80,0.151
+dev,L2,ndcg10,plain: same-file - first stage,tc,qutebrowser/qutebrowser,75,3.112
+dev,L2,ndcg10,plain: same-file - first stage,tc,streamlink/streamlink,37,1.613
+dev,L2,ndcg10,recency: prior - first stage,recency,conan-io/conan,87,-5.324
+dev,L2,ndcg10,recency: prior - first stage,recency,deepset-ai/haystack,72,1.622
+dev,L2,ndcg10,recency: prior - first stage,recency,internetarchive/openlibrary,80,-1.295
+dev,L2,ndcg10,recency: prior - first stage,recency,qutebrowser/qutebrowser,75,1.086
+dev,L2,ndcg10,recency: prior - first stage,recency,streamlink/streamlink,37,-0.296
+dev,L2,ndcg10,recency: prior - shuffled ages,recency,conan-io/conan,87,-0.764
+dev,L2,ndcg10,recency: prior - shuffled ages,recency,deepset-ai/haystack,72,4.292
+dev,L2,ndcg10,recency: prior - shuffled ages,recency,internetarchive/openlibrary,80,4.364
+dev,L2,ndcg10,recency: prior - shuffled ages,recency,qutebrowser/qutebrowser,75,5.314
+dev,L2,ndcg10,recency: prior - shuffled ages,recency,streamlink/streamlink,37,3.911
+dev,L2,ndcg10,recency: prior - same-file,recency,conan-io/conan,87,-3.424
+dev,L2,ndcg10,recency: prior - same-file,recency,deepset-ai/haystack,72,0.603
+dev,L2,ndcg10,recency: prior - same-file,recency,internetarchive/openlibrary,80,-2.851
+dev,L2,ndcg10,recency: prior - same-file,recency,qutebrowser/qutebrowser,75,-1.783
+dev,L2,ndcg10,recency: prior - same-file,recency,streamlink/streamlink,37,-4.098
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nc,deepset-ai/haystack,72,0.036
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nc,internetarchive/openlibrary,80,-0.096
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nc,qutebrowser/qutebrowser,75,0.086
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nc,deepset-ai/haystack,72,0.295
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nc,internetarchive/openlibrary,80,0.41
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nc,qutebrowser/qutebrowser,75,0.032
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nc,streamlink/streamlink,37,0.469
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nc,conan-io/conan,87,-0.0
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nc,deepset-ai/haystack,72,-0.378
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nc,internetarchive/openlibrary,80,0.238
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nc,qutebrowser/qutebrowser,75,-0.107
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nc,deepset-ai/haystack,72,-0.259
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nc,internetarchive/openlibrary,80,-0.505
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nc,qutebrowser/qutebrowser,75,0.054
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nc,streamlink/streamlink,37,-0.469
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nctc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nctc,deepset-ai/haystack,72,0.036
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nctc,internetarchive/openlibrary,80,-0.096
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nctc,qutebrowser/qutebrowser,75,0.086
+dev,L2,ndcg10,stacked N=10: stacked - same-file,nctc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nctc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nctc,deepset-ai/haystack,72,0.295
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nctc,internetarchive/openlibrary,80,0.41
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nctc,qutebrowser/qutebrowser,75,0.032
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,nctc,streamlink/streamlink,37,0.469
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nctc,conan-io/conan,87,-0.0
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nctc,deepset-ai/haystack,72,-0.345
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nctc,internetarchive/openlibrary,80,0.237
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nctc,qutebrowser/qutebrowser,75,-0.107
+dev,L2,ndcg10,stacked N=10: stacked - random swap,nctc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nctc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nctc,deepset-ai/haystack,72,-0.259
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nctc,internetarchive/openlibrary,80,-0.505
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nctc,qutebrowser/qutebrowser,75,0.054
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,nctc,streamlink/streamlink,37,-0.469
+dev,L2,ndcg10,stacked N=10: stacked - same-file,tc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: stacked - same-file,tc,deepset-ai/haystack,72,0.071
+dev,L2,ndcg10,stacked N=10: stacked - same-file,tc,internetarchive/openlibrary,80,-0.157
+dev,L2,ndcg10,stacked N=10: stacked - same-file,tc,qutebrowser/qutebrowser,75,0.097
+dev,L2,ndcg10,stacked N=10: stacked - same-file,tc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,tc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,tc,deepset-ai/haystack,72,0.33
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,tc,internetarchive/openlibrary,80,0.348
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,tc,qutebrowser/qutebrowser,75,0.043
+dev,L2,ndcg10,stacked N=10: stacked - topm swap,tc,streamlink/streamlink,37,0.469
+dev,L2,ndcg10,stacked N=10: stacked - random swap,tc,conan-io/conan,87,-0.0
+dev,L2,ndcg10,stacked N=10: stacked - random swap,tc,deepset-ai/haystack,72,-0.341
+dev,L2,ndcg10,stacked N=10: stacked - random swap,tc,internetarchive/openlibrary,80,0.175
+dev,L2,ndcg10,stacked N=10: stacked - random swap,tc,qutebrowser/qutebrowser,75,-0.096
+dev,L2,ndcg10,stacked N=10: stacked - random swap,tc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,tc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,tc,deepset-ai/haystack,72,-0.259
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,tc,internetarchive/openlibrary,80,-0.505
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,tc,qutebrowser/qutebrowser,75,0.054
+dev,L2,ndcg10,stacked N=10: topm swap - same-file,tc,streamlink/streamlink,37,-0.469
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nc,conan-io/conan,87,-0.236
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nc,deepset-ai/haystack,72,0.014
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nc,internetarchive/openlibrary,80,-0.233
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nc,qutebrowser/qutebrowser,75,-0.188
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nc,conan-io/conan,87,-0.596
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nc,deepset-ai/haystack,72,0.295
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nc,internetarchive/openlibrary,80,0.248
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nc,qutebrowser/qutebrowser,75,0.211
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nc,streamlink/streamlink,37,0.182
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nc,conan-io/conan,87,-0.0
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nc,deepset-ai/haystack,72,-1.318
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nc,internetarchive/openlibrary,80,0.179
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nc,qutebrowser/qutebrowser,75,-0.38
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nc,conan-io/conan,87,0.36
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nc,deepset-ai/haystack,72,-0.281
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nc,internetarchive/openlibrary,80,-0.481
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nc,qutebrowser/qutebrowser,75,-0.399
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nc,streamlink/streamlink,37,-0.182
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nctc,conan-io/conan,87,-0.236
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nctc,deepset-ai/haystack,72,0.014
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nctc,internetarchive/openlibrary,80,-0.233
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nctc,qutebrowser/qutebrowser,75,-0.195
+dev,L2,ndcg10,stacked N=25: stacked - same-file,nctc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nctc,conan-io/conan,87,-0.596
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nctc,deepset-ai/haystack,72,0.295
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nctc,internetarchive/openlibrary,80,0.248
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nctc,qutebrowser/qutebrowser,75,0.203
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,nctc,streamlink/streamlink,37,0.182
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nctc,conan-io/conan,87,-0.0
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nctc,deepset-ai/haystack,72,-1.331
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nctc,internetarchive/openlibrary,80,0.17
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nctc,qutebrowser/qutebrowser,75,-0.388
+dev,L2,ndcg10,stacked N=25: stacked - random swap,nctc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nctc,conan-io/conan,87,0.36
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nctc,deepset-ai/haystack,72,-0.281
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nctc,internetarchive/openlibrary,80,-0.481
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nctc,qutebrowser/qutebrowser,75,-0.399
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,nctc,streamlink/streamlink,37,-0.182
+dev,L2,ndcg10,stacked N=25: stacked - same-file,tc,conan-io/conan,87,0.0
+dev,L2,ndcg10,stacked N=25: stacked - same-file,tc,deepset-ai/haystack,72,0.071
+dev,L2,ndcg10,stacked N=25: stacked - same-file,tc,internetarchive/openlibrary,80,-0.158
+dev,L2,ndcg10,stacked N=25: stacked - same-file,tc,qutebrowser/qutebrowser,75,-0.189
+dev,L2,ndcg10,stacked N=25: stacked - same-file,tc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,tc,conan-io/conan,87,-0.36
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,tc,deepset-ai/haystack,72,0.352
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,tc,internetarchive/openlibrary,80,0.323
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,tc,qutebrowser/qutebrowser,75,0.21
+dev,L2,ndcg10,stacked N=25: stacked - topm swap,tc,streamlink/streamlink,37,0.182
+dev,L2,ndcg10,stacked N=25: stacked - random swap,tc,conan-io/conan,87,0.236
+dev,L2,ndcg10,stacked N=25: stacked - random swap,tc,deepset-ai/haystack,72,-1.306
+dev,L2,ndcg10,stacked N=25: stacked - random swap,tc,internetarchive/openlibrary,80,0.262
+dev,L2,ndcg10,stacked N=25: stacked - random swap,tc,qutebrowser/qutebrowser,75,-0.382
+dev,L2,ndcg10,stacked N=25: stacked - random swap,tc,streamlink/streamlink,37,0.0
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,tc,conan-io/conan,87,0.36
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,tc,deepset-ai/haystack,72,-0.281
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,tc,internetarchive/openlibrary,80,-0.481
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,tc,qutebrowser/qutebrowser,75,-0.399
+dev,L2,ndcg10,stacked N=25: topm swap - same-file,tc,streamlink/streamlink,37,-0.182
+dev,L3,recall100,plain: graph - same-file,core,internetarchive/openlibrary,81,0.691
+dev,L3,recall100,plain: graph - same-file,core,qutebrowser/qutebrowser,74,-2.867
+dev,L3,recall100,plain: graph - topm,core,internetarchive/openlibrary,81,11.266
+dev,L3,recall100,plain: graph - topm,core,qutebrowser/qutebrowser,74,8.892
+dev,L3,recall100,plain: graph - random same-file,core,internetarchive/openlibrary,81,3.734
+dev,L3,recall100,plain: graph - random same-file,core,qutebrowser/qutebrowser,74,0.152
+dev,L3,recall100,plain: same-file - topm,core,internetarchive/openlibrary,81,10.574
+dev,L3,recall100,plain: same-file - topm,core,qutebrowser/qutebrowser,74,11.759
+dev,L3,recall100,plain: graph - first stage,core,internetarchive/openlibrary,81,11.148
+dev,L3,recall100,plain: graph - first stage,core,qutebrowser/qutebrowser,74,9.268
+dev,L3,recall100,plain: same-file - first stage,core,internetarchive/openlibrary,81,10.457
+dev,L3,recall100,plain: same-file - first stage,core,qutebrowser/qutebrowser,74,12.135
+dev,L3,recall100,plain: graph - same-file,coretc,internetarchive/openlibrary,81,0.53
+dev,L3,recall100,plain: graph - same-file,coretc,qutebrowser/qutebrowser,74,-2.833
+dev,L3,recall100,plain: graph - topm,coretc,internetarchive/openlibrary,81,11.216
+dev,L3,recall100,plain: graph - topm,coretc,qutebrowser/qutebrowser,74,8.927
+dev,L3,recall100,plain: graph - random same-file,coretc,internetarchive/openlibrary,81,3.86
+dev,L3,recall100,plain: graph - random same-file,coretc,qutebrowser/qutebrowser,74,1.002
+dev,L3,recall100,plain: same-file - topm,coretc,internetarchive/openlibrary,81,10.686
+dev,L3,recall100,plain: same-file - topm,coretc,qutebrowser/qutebrowser,74,11.759
+dev,L3,recall100,plain: graph - first stage,coretc,internetarchive/openlibrary,81,11.099
+dev,L3,recall100,plain: graph - first stage,coretc,qutebrowser/qutebrowser,74,9.302
+dev,L3,recall100,plain: same-file - first stage,coretc,internetarchive/openlibrary,81,10.569
+dev,L3,recall100,plain: same-file - first stage,coretc,qutebrowser/qutebrowser,74,12.135
+dev,L3,recall100,plain: graph - same-file,tc,internetarchive/openlibrary,81,-0.104
+dev,L3,recall100,plain: graph - same-file,tc,qutebrowser/qutebrowser,74,-3.137
+dev,L3,recall100,plain: graph - topm,tc,internetarchive/openlibrary,81,0.755
+dev,L3,recall100,plain: graph - topm,tc,qutebrowser/qutebrowser,74,-0.303
+dev,L3,recall100,plain: graph - random same-file,tc,internetarchive/openlibrary,81,-0.348
+dev,L3,recall100,plain: graph - random same-file,tc,qutebrowser/qutebrowser,74,-3.046
+dev,L3,recall100,plain: same-file - topm,tc,internetarchive/openlibrary,81,0.859
+dev,L3,recall100,plain: same-file - topm,tc,qutebrowser/qutebrowser,74,2.834
+dev,L3,recall100,plain: graph - first stage,tc,internetarchive/openlibrary,81,0.842
+dev,L3,recall100,plain: graph - first stage,tc,qutebrowser/qutebrowser,74,-0.453
+dev,L3,recall100,plain: same-file - first stage,tc,internetarchive/openlibrary,81,0.946
+dev,L3,recall100,plain: same-file - first stage,tc,qutebrowser/qutebrowser,74,2.684
+dev,L3,recall100,recency: prior - first stage,recency,internetarchive/openlibrary,81,4.05
+dev,L3,recall100,recency: prior - first stage,recency,qutebrowser/qutebrowser,74,3.065
+dev,L3,recall100,recency: prior - shuffled ages,recency,internetarchive/openlibrary,81,7.037
+dev,L3,recall100,recency: prior - shuffled ages,recency,qutebrowser/qutebrowser,74,6.349
+dev,L3,recall100,recency: prior - same-file,recency,internetarchive/openlibrary,81,-6.407
+dev,L3,recall100,recency: prior - same-file,recency,qutebrowser/qutebrowser,74,-9.07
+dev,L3,recall100,stacked N=10: stacked - same-file,nc,internetarchive/openlibrary,81,1.292
+dev,L3,recall100,stacked N=10: stacked - same-file,nc,qutebrowser/qutebrowser,74,-1.357
+dev,L3,recall100,stacked N=10: stacked - topm swap,nc,internetarchive/openlibrary,81,2.683
+dev,L3,recall100,stacked N=10: stacked - topm swap,nc,qutebrowser/qutebrowser,74,1.321
+dev,L3,recall100,stacked N=10: stacked - random swap,nc,internetarchive/openlibrary,81,3.331
+dev,L3,recall100,stacked N=10: stacked - random swap,nc,qutebrowser/qutebrowser,74,1.822
+dev,L3,recall100,stacked N=10: topm swap - same-file,nc,internetarchive/openlibrary,81,-1.391
+dev,L3,recall100,stacked N=10: topm swap - same-file,nc,qutebrowser/qutebrowser,74,-2.678
+dev,L3,recall100,stacked N=10: stacked - same-file,nctc,internetarchive/openlibrary,81,1.197
+dev,L3,recall100,stacked N=10: stacked - same-file,nctc,qutebrowser/qutebrowser,74,-1.323
+dev,L3,recall100,stacked N=10: stacked - topm swap,nctc,internetarchive/openlibrary,81,2.588
+dev,L3,recall100,stacked N=10: stacked - topm swap,nctc,qutebrowser/qutebrowser,74,1.355
+dev,L3,recall100,stacked N=10: stacked - random swap,nctc,internetarchive/openlibrary,81,3.261
+dev,L3,recall100,stacked N=10: stacked - random swap,nctc,qutebrowser/qutebrowser,74,1.832
+dev,L3,recall100,stacked N=10: topm swap - same-file,nctc,internetarchive/openlibrary,81,-1.391
+dev,L3,recall100,stacked N=10: topm swap - same-file,nctc,qutebrowser/qutebrowser,74,-2.678
+dev,L3,recall100,stacked N=10: stacked - same-file,tc,internetarchive/openlibrary,81,0.533
+dev,L3,recall100,stacked N=10: stacked - same-file,tc,qutebrowser/qutebrowser,74,-0.663
+dev,L3,recall100,stacked N=10: stacked - topm swap,tc,internetarchive/openlibrary,81,1.924
+dev,L3,recall100,stacked N=10: stacked - topm swap,tc,qutebrowser/qutebrowser,74,2.015
+dev,L3,recall100,stacked N=10: stacked - random swap,tc,internetarchive/openlibrary,81,2.637
+dev,L3,recall100,stacked N=10: stacked - random swap,tc,qutebrowser/qutebrowser,74,2.505
+dev,L3,recall100,stacked N=10: topm swap - same-file,tc,internetarchive/openlibrary,81,-1.391
+dev,L3,recall100,stacked N=10: topm swap - same-file,tc,qutebrowser/qutebrowser,74,-2.678
+dev,L3,recall100,stacked N=25: stacked - same-file,nc,internetarchive/openlibrary,81,-0.557
+dev,L3,recall100,stacked N=25: stacked - same-file,nc,qutebrowser/qutebrowser,74,-5.485
+dev,L3,recall100,stacked N=25: stacked - topm swap,nc,internetarchive/openlibrary,81,5.017
+dev,L3,recall100,stacked N=25: stacked - topm swap,nc,qutebrowser/qutebrowser,74,1.859
+dev,L3,recall100,stacked N=25: stacked - random swap,nc,internetarchive/openlibrary,81,6.527
+dev,L3,recall100,stacked N=25: stacked - random swap,nc,qutebrowser/qutebrowser,74,3.775
+dev,L3,recall100,stacked N=25: topm swap - same-file,nc,internetarchive/openlibrary,81,-5.574
+dev,L3,recall100,stacked N=25: topm swap - same-file,nc,qutebrowser/qutebrowser,74,-7.345
+dev,L3,recall100,stacked N=25: stacked - same-file,nctc,internetarchive/openlibrary,81,-0.557
+dev,L3,recall100,stacked N=25: stacked - same-file,nctc,qutebrowser/qutebrowser,74,-5.45
+dev,L3,recall100,stacked N=25: stacked - topm swap,nctc,internetarchive/openlibrary,81,5.017
+dev,L3,recall100,stacked N=25: stacked - topm swap,nctc,qutebrowser/qutebrowser,74,1.894
+dev,L3,recall100,stacked N=25: stacked - random swap,nctc,internetarchive/openlibrary,81,6.778
+dev,L3,recall100,stacked N=25: stacked - random swap,nctc,qutebrowser/qutebrowser,74,3.886
+dev,L3,recall100,stacked N=25: topm swap - same-file,nctc,internetarchive/openlibrary,81,-5.574
+dev,L3,recall100,stacked N=25: topm swap - same-file,nctc,qutebrowser/qutebrowser,74,-7.345
+dev,L3,recall100,stacked N=25: stacked - same-file,tc,internetarchive/openlibrary,81,0.115
+dev,L3,recall100,stacked N=25: stacked - same-file,tc,qutebrowser/qutebrowser,74,-2.727
+dev,L3,recall100,stacked N=25: stacked - topm swap,tc,internetarchive/openlibrary,81,5.689
+dev,L3,recall100,stacked N=25: stacked - topm swap,tc,qutebrowser/qutebrowser,74,4.617
+dev,L3,recall100,stacked N=25: stacked - random swap,tc,internetarchive/openlibrary,81,7.346
+dev,L3,recall100,stacked N=25: stacked - random swap,tc,qutebrowser/qutebrowser,74,6.626
+dev,L3,recall100,stacked N=25: topm swap - same-file,tc,internetarchive/openlibrary,81,-5.574
+dev,L3,recall100,stacked N=25: topm swap - same-file,tc,qutebrowser/qutebrowser,74,-7.345
