@@ -61,10 +61,24 @@ OPTION_E_TOTAL = 38.9
 FAMILY_ACCOUNTS: dict[str, str] = {"mined": "C", "injected": "A"}
 """Where each data condition trains (D124): the mined store and its cache live on C, the injected
 pool and its score stores on A."""
-MEM_REQUEST_MB: dict[str, int] = {"mined": 30 * 1024, "injected": 24 * 1024}
+MEM_REQUEST_MB: dict[str, int] = {"mined": 30000, "injected": 24 * 1024}
 """Per-job memory request. Mined: 26 GB projected peak (17 GB decoded cache, 3 GB training, 6 GB
-evaluation) against the 32,000 MB per-user limit; injected: the pilots' 24 GB (18 GB measured)."""
+evaluation; less with the shared-string cache reader, not yet measured at full scale) against the
+32,000 MB per-user limit, and 30,000 MB because partition u22 grants 3,000 MB per CPU: a request
+above 30,000 MB is allocated 11 CPUs against the account's 10 and never starts (measured, job
+66022, E-RQ2-FULL-PREP); injected: the pilots' 24 GB (18 GB measured), 9 CPUs."""
 MEM_CEILING_MB = 32000
+MEM_PER_CPU_MB = 3000
+"""Largest memory Slurm grants per CPU on partition u22 (``MaxMemPerCPU``)."""
+CPU_LIMIT = 10
+"""CPUs one account may hold at a time (QOS low)."""
+
+
+def cpus_for_request(mem_mb: int) -> int:
+    """CPUs Slurm allocates for a memory request: one per 3,000 MB, rounded up."""
+    return -(-mem_mb // MEM_PER_CPU_MB)
+
+
 DENSE_TEACHER_MEASURE_GPU_H = 0.4
 DENSE_TEACHER_CAP_GPU_H = 6.0
 """FILTER-SweRankEmbed-Small on the mined set runs only if the measured full-store teacher pass

@@ -1,0 +1,9 @@
+# Defaults of scripts/rq2_full_prep.py (E-RQ2-FULL-PREP). The chain's parameters that are not choices of
+# the experiment: they set the size of the job, not what is measured.
+shards: 8                    # audit shards (by repository hash); a shard is the resumable unit
+readings: [non_test]         # primary reading (D96); add pool_aligned for the sensitivity reading
+k: 20                        # FILTER size count: K = 20, positive level (the teacher is BM25)
+seed: 0                      # order of the held-out selection, as in the pilot
+guard_bytes: 1073741824      # free space that must remain in the output directory after the cache
+cache_bytes_per_directory: 1000000 # guard only: projected cache bytes per kept directory
+                             # (0.32 MB measured on the 200-directory trial, 1.18 MB on three large repositories)

@@ -1,0 +1,9 @@
+{
+ "directories": 200,
+ "one_shard_records_sha256": "76634e211693b0f28a53d6206ceafbf623ae31cab63c8e66d64b5142ef1fb92c",
+ "records_equal": true,
+ "seconds_one_shard": 371.2,
+ "seconds_three_shards_summed": 372.7,
+ "summary_equal": true,
+ "three_shards_records_sha256": "76634e211693b0f28a53d6206ceafbf623ae31cab63c8e66d64b5142ef1fb92c"
+}

@@ -7,7 +7,7 @@
 #SBATCH --constraint=2080ti
 #SBATCH --exclude=gnode004,gnode044
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=30G
+#SBATCH --mem=30000M
 #SBATCH --time=12:00:00
 #SBATCH --output=ril_rq2f/logs/%x_%j.out
 # GPU. One seed of the RQ2 final experiment on the mined set (account C), all arms of the seed in the fixed
@@ -24,7 +24,8 @@
 # are removed after the evaluation. $HOME receives the result directory, the retained model and the logs.
 # Memory estimate (projected from the pilot's measured per-unit numbers, docs/RQ2_LAUNCH_PLAN.md stage 3): the
 # cache of about 5,800 directories is 5.6 GB compressed and 17 GB decoded; training process 3 GB; evaluation
-# 6 GB: about 26 GB peak against the 32,000 MB per-user limit; 30 GB requested. Check sacct MaxRSS after the
+# 6 GB: about 26 GB peak against the 32,000 MB per-user limit; 30,000 MB requested (3,000 MB per CPU on u22:
+# a larger request is allocated 11 CPUs against the limit of 10 and never starts, job 66022). Check sacct MaxRSS after the
 # first job. GPU 6.9 GB for the shape. Time: 100 x 2.65 s of updates plus one dev evaluation, 0.42 GPU-hours
 # measured per arm; the wall request is two hours per arm (set by scripts/rq2_submit.py), 12 hours here is the
 # six-arm default.

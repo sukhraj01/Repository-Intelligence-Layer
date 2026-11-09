@@ -326,10 +326,13 @@ def run_checks(
     except OSError:
         mem = None
     want = rp.MEM_REQUEST_MB[family]
+    cpus = rp.cpus_for_request(mem) if mem else None
     add(
         "memory_request",
-        mem == want and want <= rp.MEM_CEILING_MB,
-        f"{SCRIPTS[family]} asks {mem} MB; plan {want} MB; per-user ceiling {rp.MEM_CEILING_MB} MB",
+        mem == want and want <= rp.MEM_CEILING_MB and cpus is not None and cpus <= rp.CPU_LIMIT,
+        f"{SCRIPTS[family]} asks {mem} MB; plan {want} MB; "
+        f"per-user ceiling {rp.MEM_CEILING_MB} MB; allocated {cpus} CPUs at "
+        f"{rp.MEM_PER_CPU_MB} MB per CPU against {rp.CPU_LIMIT}",
     )
 
     free = free_gb if free_gb is not None else shutil.disk_usage(home).free / 1e9
@@ -599,7 +602,7 @@ def render_graph(subs: Sequence[Submission], account: str, family: str) -> str:
     prev = "(start)"
     for i, s in enumerate(subs, 1):
         lines.append(
-            f"{i:3d}. {s.job_name:<24} {len(s.run_ids)} arms  mem {s.mem_mb // 1024} GB  "
+            f"{i:3d}. {s.job_name:<24} {len(s.run_ids)} arms  mem {s.mem_mb} MB  "
             f"wall {s.time_limit}  after {prev}"
         )
         for rid in s.run_ids:

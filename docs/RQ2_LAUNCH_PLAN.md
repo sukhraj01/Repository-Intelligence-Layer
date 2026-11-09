@@ -18,9 +18,9 @@ interval), **reasoned** (arithmetic or argument).
 
 | # | Stage | State |
 |---|---|---|
-| 1 | Mining report, yield against G2, quarantine summary | report step needs a finished session's summary; **yield from the state log added**; G2 met by projection |
-| 2 | Content-overlap audit on the full store | built, run on the pilot and on 20 directories now; **not run at full scale**; location open |
-| 3 | Materialise, rank inputs, BM25 teacher, feature table, cache | built and run at pilot scale; **no full-scale job script**; the cache does not fit account A |
+| 1 | Mining report, yield against G2, quarantine summary | **done** (E-RQ2-FULL-PREP): the run finished, 6,230 mined, 123 quarantined, 0 timeouts, G2 met (54,700 positives unrestricted) |
+| 2 | Content-overlap audit on the full store | **job script built** (sharded, resumable), run on 200 directories and on a 210-directory probe on C; not run on the whole store (a later prompt) |
+| 3 | Materialise, rank inputs, BM25 teacher, feature table, cache | **job script built** (one entry point, explicit stages, `LIMIT`), run end to end on 200 directories; the mined cache is about 2.3 GB and fits C |
 | 4 | Arms, cell table, budget, job graph | **plan-only form added**; no final cell configuration files and no run script exist |
 | 5 | Evaluation on the dev set, the eight repositories, Verified | stores exist for the first two and for six of twelve Verified folders; **one run script cannot score three sets** |
 | 6 | Checkpoint retention and archive | switch built, plan runs; **no GPU run yet**; no alias for the archive account; space on A |
@@ -35,57 +35,73 @@ Costs are GPU-hours or CPU-hours as labelled; "plan-only" is the stage's dry-run
 
 ### Stage 1. Mining report, yield and gate G2 (CPU, account C, minutes)
 
-- **Purpose.** Report attempted, mined and quarantined pull requests, yield against G2 (D77: at least 10,000 positives at
-  full scale; 100 pilot directories with a positive was the pilot gate), both readings (`non_test` primary, D96;
-  `pool_aligned` sensitivity), quarantine by reason (the limitation for the paper, timeout class apart).
-- **Code.** `scripts/mine_pilot.py report` (reads `summary.json`, written when a session ends), new
-  `scripts/mine_pilot.py yield` (`ril/data_mining/state_yield.py`, reads `state.jsonl` only); readings by `rank-prepare --reading`.
-- **Plan-only / pilot.** Both read-only. `report` renders the tracked pilot summary after a one-line fix (it raised `KeyError:
-  'per_repo'` on the stored copy, which omits that key; test added). `yield` ran on the running store's state log.
-- **Measured now** (state log, 2,835 of 10,000 attempted, linear projection, no interval): mined 62.6% (pilot 69.55%), no
-  Python change 25.6%, no positive 10.6%, quarantined 1.2% (34 rows; none a snapshot timeout in this window). Quarantine classes:
-  changed file unparseable 17 (Python 2 syntax 7, other syntax 10), patch missing 6, old file missing at base 5, diff
-  truncated 4, unit id rejected 3. Projected at 10,000 attempted: about 6,257 mined directories and about 61,000 positives
-  **unrestricted** (G2 needs 10,000; the count includes test-file positives, so the `non_test` figure is lower: the pilot kept
-  1,286 of 1,391 directories and 7,081 positives under it). Store size now 1.1 GB at 2,985 rows: projected **3.7 GB** at
-  10,000 (the plan said 2 GB or less; rows are 0.37 MB each against 0.285 MB in the pilot).
-- **Pace** (measured): 771 rows in 67.5 minutes after the relaunch (11.4 rows per minute). Session 1 stops 5,000 attempts after
-  its start (about 18:30 IST on 2026-11-08 at this pace), session 2 continues to 10,000 (about 4 hours more after a queue wait).
-- **Untested at full scale.** `non_test` and `pool_aligned` counts for the whole store (needs materialised directories);
-  `report` on a store with a fault-stopped session (no summary).
-- **Depends on.** Session 1 finished.
+**State 2026-11-09 (E-RQ2-FULL-PREP, measured, read only): the run has finished** (jobs 64593 and 64594 COMPLETED, last summary
+2026-11-08 20:54 IST, no `HALT` file); the earlier projections in this stage are superseded by these numbers.
 
-### Stage 2. Content-overlap audit and drop list (CPU, 2 h projected, D105, Q68)
+- **Code.** `scripts/mine_pilot.py report` (reads `summary.json`), `scripts/mine_pilot.py yield` (`ril/data_mining/state_yield.py`, reads
+  `state.jsonl` only), `scripts/rq2_full_prep.py progress STATE STORE` (the same yield plus the store's growth by quarter of the log);
+  readings by `rank-prepare --reading`.
+- **Result.** 10,000 attempted: mined 6,230 (62.3%; pilot 69.55%), no Python change 2,607, no positive 1,040, quarantined 123 (1.23%;
+  changed file unparseable 48, old file missing at base 26, patch missing 23, diff truncated 14, unit id rejected 8, snapshot unavailable
+  3, compare not found 1), **0 snapshot timeouts**. 54,700 positives unrestricted (G2 needs 10,000; 8.78 per mined directory), 1,102
+  repositories seen. Mining time 9.55 h in two sessions. `non_test` and `pool_aligned` counts of the whole store are not measured yet
+  (projected from the 200-directory trial, stage 3).
+- **Store.** `pr` 0.103 GB, `cas` 1.035 GB, `listing` 0.724 GB (1.87 GB). The 3.7 GB projection counted the listing directory, which was
+  complete at 2,985 rows, as growing; the distinct-row store grows by quarter of the log by 947, 61, 19 and 9 MB (567, 235, 124, 87 new
+  repositories), so it saturates and a linear projection of it overstates. The snapshot size per mined directory is flat across the
+  quarters (4,992, 4,455, 4,970, 4,864 functions on average; the first 200 mined directories 3,783).
+- **Depends on.** Nothing further. `scripts/mine_pilot.py report` still needs a session summary (present).
 
-- **Code.** `scripts/mine_overlap_audit.py index|audit|apply`, `scripts/ada/overlap_audit.sbatch`. Held-out index (27 MB)
-  exists on account A only; the store is on C.
-- **Pilot / dry run.** Pilot: 1,445 s for 0.44 GB, 3 of 1,391 directories dropped. Dry run: 20 directories audited in 24 s,
-  `apply` at floor 20 dropped 0, flagged 0 (job 64656, reproduces the pipeline end to end on current main).
-- **Projected.** About 2 h for 3.7 GB (linear), 13 min if the index is rebuilt; peak memory decided by the largest repository
-  (4.84 GB on the pilot, 12 GB asked).
-- **Untested at full scale.** Everything above 1,391 directories. Coverage limit Q68 stays: 26 of 605 held-out repositories
-  are visible to the audit.
-- **Where.** On C needs the index and code staged there (a small copy); on A needs the store copied (3.7 GB of 5.1 GB free).
-  Option list in section 3.
-- **Applying the drop list.** No new code: `materialise --names FILE` takes the names; the list is `ls pr` minus
-  `drop_f20_non_test.txt` (one `comm -23`). It is a line in the prep job script, not yet written.
+### Stage 2. Content-overlap audit and drop list (CPU, D105, Q68)
+
+- **Code.** `scripts/mine_overlap_audit.py index|audit|merge|apply`; the audit is now run by the stage `overlap` of
+  `scripts/ada/rq2_full_prep.sbatch` in resumable shards (the repository name's hash picks the shard; default 8; a finished shard is
+  skipped on a resubmission), merged into the records an unsharded audit writes, then `apply` at floors 10, 20, 50, positives `all`
+  and drop-flagged. The held-out index (27 MB) and the pilot's reference files were copied from A to C through the engineer's machine
+  with a SHA-256 manifest (5 files, verified on C, nothing overwritten): `$HOME/ril_prep/inputs`.
+- **Measured.** 200 directories of the full store: 377 s in 3 shards (peak 1.2 GB), 1 dropped and 2 flagged at floor 20; merged
+  records equal an unsharded audit (same SHA-256, summary and lists at every floor). 210 directories of three large repositories:
+  184 s (peak 1.2 GB). Pilot: 1,445 s for 0.44 GB, 3 of 1,391 dropped.
+- **Projected for the 6,230 directories.** 1,578 s (0.44 h; two-point reading through the trial and the probe, the audit costs 0.9 s per
+  MB of distinct rows plus 21 s per million snapshot functions) up to 14,967 s (4.2 h; linear per function, a bound); the largest
+  repository (google-cloud-python, 870,248 distinct rows) decides the peak (4.8 GB on the pilot's 946,825-row repository).
+- **Coverage.** Q68 stays: the audit sees 26 of 605 held-out repositories.
+- **Applying the drop list.** Done by the stage `drop`: the training manifest is the final directories minus `drop_f20_non_test.txt`
+  (the store is not touched, `drop_manifest.json` records both hashes); a tracked, hashed list can be supplied instead
+  (`DROP_LIST` and `DROP_SHA256`); the launch preflight reads `drop_list_applied` and `held_out_rows` from the prep summary file.
 
 ### Stage 3. Materialise, pool-rank inputs, BM25 teacher, feature table, cache (CPU)
 
-- **Code.** `mine_pilot.py materialise | rank-prepare | rank-bm25`, `train.py features | select | cache | filter-size`.
-  The only job script is `scripts/ada/mp_prep.sbatch`, **pilot-specific** (fixed pilot run root, `--drop-tests`, a 300-directory
-  reproduction check, a 1 GiB space guard on `$HOME`).
-- **Dry run** (20 directories, node-local scratch, job 64656): materialise 13 s (921 MB peak), rank-prepare 7 s (18
-  `non_test` directories), BM25 ranks 6 s, features 1 s, selection 1 s, cache 4 s, FILTER size 1 s (K = 20 keeps 15 of 18 examples
-  and 70 of 110 positives). All eight steps return 0 on current main.
-- **Projected at about 5,800 `non_test` directories** (pilot rates times 4.5): materialise 53 min, BM25 ranks 1.4 h, the rest
-  under 30 min; **3 hours, CPU, node-local disk** (the plan graph uses 3.0). Peak memory 3.4 GB (materialise) and under 12 GB.
-- **Cache size and memory (projected from measured).** The pilot cache is 1.25 GB for 1,286 directories (decoded about 4 GB);
-  at 5,800 directories it is about **5.6 GB compressed, 17 GB decoded**. A run-batch process holds the cache plus training 3 GB
-  plus evaluation 6 GB: **about 26 GB peak against the 32,000 MB per-user limit** (the pilot job asked 20 GB for about 13 GB).
-  The job must ask 30 GB. `$HOME` of account A has 5.1 GB free, so the cache cannot be kept there; node-local disk is lost between
-  jobs, so every training job would rebuild it (3 CPU-hours before the GPU is used). **Account C has 27 GB free.**
-- **Depends on.** Stage 2.
+- **Code.** One entry point, `scripts/ada/rq2_full_prep.sbatch` over `scripts/rq2_full_prep.py` (`ril/data_mining/full_prep_run.py`),
+  with the stages `select, overlap, drop, materialise, inputs, teacher, features, cache, check`, `LIMIT=N` for a trial, `NAMES_FILE`
+  for a probe, `READINGS` (default `non_test`; `pool_aligned` is the sensitivity reading), resumable (finished stages are skipped,
+  ranks are appended per directory, a resubmission rebuilds the node-local view it needs), 12 GB, 8 h. Outputs under
+  `$HOME/ril_prep/runs/<RUN>`; `rq2_full_prep.py link RUN WORK` links the cache, feature table and the prep summary file into a launch work
+  directory (refuses a trial and never replaces a path). the prep summary file carries `examples`, `filter_size`, `held_out_rows`,
+  `drop_list_applied` and `scope` (`full` or `trial`), the fields `ril/bench/rq2_launch.py` reads.
+- **Measured on 200 directories** (`non_test`, 2 CPUs, per stage seconds: materialise and byte check 73, rank inputs 36, BM25 41,
+  feature table 0.6, cache and FILTER size 36, check 5; peaks 0.9, 0.3, 0.7, 0.04, 0.6, 0.2 GB): 188 of 199 directories, 1,177
+  positives; `pool_aligned` 159 directories, 877 positives; FILTER K = 20 keeps 134 of 188 examples and 356 of 1,177 positives;
+  0 held-out rows; second run equal on 65 of 65 files and byte-identical caches; ranks and feature rows equal the pilot's on 119
+  shared directories. **Measured on a probe of 210 directories of airflow, openmetadata and azure-cli:** 13 min 9 s, cache 238 MB,
+  FILTER size step peak 1.7 GB.
+- **Projected for the 6,230 directories** (linear, no interval): materialise and check 0.4 to 0.8 h, rank inputs 0.4 h, BM25 0.45 h,
+  cache and FILTER size 0.35 to 0.4 h; **the `non_test` chain 2.0 h (two-point audit) to 6.3 h (everything linear), `pool_aligned` about
+  0.7 h more**. About 5,860 `non_test` directories (5,600 to 6,010 on the trial's Wilson interval) and about 4,950 `pool_aligned`.
+- **Cache size and memory.** Two caches give 157 to 158 bytes per candidate row compressed and 1.12 to 1.25 KB per row decoded;
+  the 5,860 directories carry about 14.7 M candidate rows, so the mined cache is **about 2.3 GB compressed** (this page said 5.6 GB) and
+  **17 GB decoded with the earlier reader** (the page's figure, now reproduced from a count). The reader now keeps one copy of each
+  distinct text and id (equal values, 3 of 3 real caches compare equal): 1,712 MB against 295 MB on the probe's cache, 476 against
+  352 MB on the trial's; projected **3 to 6 GB** for the whole cache (5.28 M distinct rows in the store; not measured at that size). A
+  run process then needs about 12 to 15 GB (cache 3 to 6, training 3, evaluation 6) instead of 26 GB. **A 30 GB memory request cannot
+  start on this cluster:** the partition grants at most 3,000 MB per CPU, 30 GB is 11 CPUs, the account's limit is 10 (job 66022
+  waited on `QOSMaxCpuPerUserLimit` with an empty queue); the most one job can ask is 30,000 MB, holding all 10 CPUs; 12 and 14 GB were
+  allocated 6 CPUs. The run scripts of section 10 ask 30G for the mined family (gap 5).
+- **Disk on C (24 GB free).** Cache about 2.3 GB (`non_test`) plus about 1.8 GB (`pool_aligned`), node-local view about 4.4 GB and
+  archive about 2.5 GB (lost with the node); the store is not copied.
+- **Untested at full scale.** Peak memory and wall time of the audit and the cache read; the shared reader's saving at 5,860 examples;
+  `non_test` and `pool_aligned` counts of the whole store.
+- **Depends on.** Stage 2 (it is a stage of the same job).
 
 ### Stage 4. Arms, cell table, budget and job graph (plan-only form: `scripts/rq2_plan.py plan`)
 
@@ -535,9 +551,9 @@ runs) is 28.73 measured and 38.88 protocol (margin 7.82, 1.42 after the conditio
 |---|---|---|
 | 1 | final cell configurations and run script | **done** (36 configurations, two run scripts, submit and preflight scripts); memory request 30 GB (mined), 24 GB (injected) |
 | 2 | one run cannot score three sets; order not enforced | **done** (set selector, final-sets script, sealed order in code, recorded in each row) |
-| 3 | full-scale prep script and drop-list step | open (a later prompt); the preflight reads the prep summary file (JSON, in the run's work directory) that the prep job will write |
+| 3 | full-scale prep script and drop-list step | **done** (E-RQ2-FULL-PREP): `scripts/ada/rq2_full_prep.sbatch`, run on 200 directories; it writes the the prep summary file the preflight reads; the run on the whole store is a later prompt |
 | 4 | mined cache does not fit A | **decided** (D124); not yet built |
-| 5 | memory about 26 GB against 32,000 MB | request set to 30 GB and checked by the preflight; MaxRSS of the first job still to read |
+| 5 | memory about 26 GB against 32,000 MB | **blocker found**: a 30 GB request is 11 CPUs (3,000 MB per CPU) against the limit of 10 and never starts (job 66022); the 26 GB is the cache read whole by training (17 GB decoded), reduced to a projected 3 to 6 GB by the shared-string reader (run about 12 to 15 GB). The mined run script and `MEM_REQUEST_MB` still say 30G: set `--mem=30000M` or about 16G and move the preflight constant with it; MaxRSS of the first job still to read |
 | 6 | final analysis module | open (another branch) |
 | 7 | dense teacher unmeasured | rule fixed (D125); measurement is a later prompt |
 | 8 | Verified look covers six of twelve folders | **decided** (D127, DEV-038) |
@@ -551,11 +567,11 @@ runs) is 28.73 measured and 38.88 protocol (margin 7.82, 1.42 after the conditio
 | # | Item | State |
 |---|---|---|
 | 1 | `yield` on the final state log | **done** (read-only): 10,000 attempted, 6,230 mined, 123 quarantined (1.23%), 0 timeouts, 54,700 positives unrestricted |
-| 2 | overlap audit on the full store, drop list applied | open (index copied to C; audit job is a later prompt) |
-| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | open (the preflight checks the prep summary file) |
+| 2 | overlap audit on the full store, drop list applied | script ready and tried on 200 directories (index on C); the run is `sbatch ... rq2_full_prep.sbatch` below |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | script ready (same job as item 2); the preflight reads the prep summary file, linked by `rq2_full_prep.py link` |
 | 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
 | 5 | evaluation sets ready | **done** on A and C (0 missing for the dev set, the eight and the three parts of the 377) |
-| 6 | space, retention directory, memory 30 GB | **checked** (A 5.3 GB free for 3.0 needed; C 26.0 GB for 10.0 needed; request 30,720 MB under 32,000); final space check at launch |
+| 6 | space, retention directory, memory (30 GB cannot start, see gap 5) | **checked** (A 5.3 GB free for 3.0 needed; C 26.0 GB for 10.0 needed; request 30,720 MB under 32,000); final space check at launch |
 | 7 | CUDA gate inside each run; one GPU job per account | in the code; the submit script refuses a run already queued |
 | 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the final code (job 66037; first on the earlier code 66005); `scripts/rq2_record.py leakage` writes the record the preflight needs; open until run on the launch commit |
 | 9 | registration fixed before the first run | open: the engineer runs `scripts/rq2_record.py registration` |
@@ -569,7 +585,20 @@ Full-store prep and overlap job scripts (decision 9 settled: on C); the dense-te
 analysis module that writes the dev-analysis record; then the launch: `rq2_record.py` (registration, leakage), `rq2_preflight.py` and
 `rq2_submit.py --confirm-launch` on C (mined) and A (injected), by the engineer.
 
-## 11. Rulings applied before any final run (2026-11-09; decisions D136 to D142, DEV-040, DEV-041; entries E-RQ2-ANALYSIS and E-RQ2-FINAL-CELLS, addenda)
+### 10.8 Command sequence for the whole-store prep (account C, after E-RQ2-FULL-PREP)
+
+From the repository root at the launch commit, then on C from `$HOME` (the held-out index and pilot files are already in `$HOME/ril_prep/inputs`):
+
+    rsync -a --exclude __pycache__ ril scripts configs <C>:ril_prep/code/
+    sbatch --export=ALL,STORE=$HOME/ril_mine/store/full,RUN=full_v1,READINGS=non_test,RIL_COMMIT=<hash> ril_prep/code/scripts/ada/rq2_full_prep.sbatch
+    # read $HOME/ril_prep/runs/full_v1/check.json and non_test/prep summary file: scope full, held_out_rows 0, drop_list_applied true
+    # copy overlap/drop_f20_non_test.txt into the repository with its SHA-256 (tracked, hashed list)
+    python3 -I ril_prep/code/scripts/rq2_full_prep.py link $HOME/ril_prep/runs/full_v1 $HOME/ril_rq2f/work --reading non_test
+    # then rq2_plan.py plan --filter-size <summary.filter_size> --pool-examples <summary.examples>, registration, preflight
+
+Add `READINGS=non_test:pool_aligned` for the sensitivity reading. Check `sacct` MaxRSS and elapsed afterwards; a failed job is resubmitted with the same `RUN`.
+
+## 11. Rulings applied before any final run (2026-11-09; decisions D136 to D143, DEV-040, DEV-041; entries E-RQ2-ANALYSIS and E-RQ2-FINAL-CELLS, addenda)
 
 Nothing was trained and no GPU job was submitted. Plan-only checks ran on the CPU of accounts A and C (`results/rq2_final/plan_only/`, jobs 66474 and 66475); the torch and leakage tests ran on account A (job 66476, 41 of 41). All settings stay `provisional` until launch.
 
@@ -636,4 +665,4 @@ The launch step is `python3 -I scripts/rq2_plan.py resolve --work DIR`: it reads
 
 ### 11.6 What the rehearsal found
 
-Both rehearsals passed on a synthetic work directory (every check true, N = 100 on C), and the real directories fail exactly the items that wait for the prep job and the records (registration, leakage record, prep summary, inputs, `updates_computed`). The submit script refused three ways: no preflight file (exit 2), no confirmation (exit 2), N not computed from a prepared store (exit 2); nothing was submitted. Findings: (a) the registered design's scope on the protocol basis is 0.10 GPU-hours over the cap with 45 runs (section 11.2): no action, that scope does not run; (b) a panel with fewer than two queries has no interval; the analysis refuses it with an error; (c) the per-seed job loads the mined cache once for its arms, so the memory estimate of section 10 (26 GB projected, 30 GB requested) is unchanged only if the evaluation stores are released between arms (`--drop-eval-stores` is set): the MaxRSS of the first seed job is the check; (d) the FILTER-SweRankEmbed-Small cell can have a different pool size from FILTER-BM25's; N follows the BM25 pool (the confirmatory one) and the distinct-examples diagnostic reports the other if it repeats.
+Both rehearsals passed on a synthetic work directory (every check true, N = 100 on C), and the real directories fail exactly the items that wait for the prep job and the records (registration, leakage record, prep summary, inputs, `updates_computed`). The submit script refused three ways: no preflight file (exit 2), no confirmation (exit 2), N not computed from a prepared store (exit 2); nothing was submitted. Findings: (a) the registered design's scope on the protocol basis is 0.10 GPU-hours over the cap with 45 runs (section 11.2): no action, that scope does not run; (b) a panel with fewer than two queries has no interval; the analysis refuses it with an error; (c) the per-seed job loads the mined cache once for its arms, so the memory estimate of section 10 (26 GB projected) is unchanged only if the evaluation stores are released between arms (`--drop-eval-stores` is set): the MaxRSS of the first seed job is the check; (c2) **the 30 GB request of section 10 cannot start** (found by the full-store prep trial, job 66022: partition u22 grants 3,000 MB per CPU, so 30,720 MB is allocated 11 CPUs against the account's 10): the mined request is now 30,000 MB (10 CPUs, the largest that can start; D143, tactical), the injected request stays 24,576 MB (9 CPUs), and the preflight checks the allocated CPUs against the limit; (d) the FILTER-SweRankEmbed-Small cell can have a different pool size from FILTER-BM25's; N follows the BM25 pool (the confirmatory one) and the distinct-examples diagnostic reports the other if it repeats.

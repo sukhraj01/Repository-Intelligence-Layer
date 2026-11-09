@@ -1,0 +1,20 @@
+{
+ "compared": 65,
+ "differing": [
+  "check.json",
+  "non_test/counts.json",
+  "overlap/run.json",
+  "overlap/shard_0/run.json",
+  "overlap/shard_1/run.json",
+  "overlap/shard_2/run.json",
+  "pool_aligned/counts.json",
+  "selection.json"
+ ],
+ "equal": 57,
+ "identical": false,
+ "only_in_first": [],
+ "only_in_second": [
+  "non_test/prep_summary.json",
+  "pool_aligned/prep_summary.json"
+ ]
+}

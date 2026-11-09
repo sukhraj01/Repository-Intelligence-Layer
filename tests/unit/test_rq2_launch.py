@@ -282,6 +282,18 @@ def test_memory_request_is_read_from_the_script_and_below_the_ceiling() -> None:
         )
 
 
+def test_every_memory_request_can_start_on_this_cluster() -> None:
+    # u22 grants 3,000 MB per CPU and an account holds 10 CPUs: 30 GB (30,720 MB) was allocated 11
+    # CPUs and waited forever (job 66022); the largest request that can start is 30,000 MB
+    assert rp.cpus_for_request(30 * 1024) == 11 and rp.cpus_for_request(30000) == 10
+    assert rp.cpus_for_request(24 * 1024) == 9 and rp.cpus_for_request(12 * 1024) == 5
+    for fam, mem in rp.MEM_REQUEST_MB.items():
+        assert rp.cpus_for_request(mem) <= rp.CPU_LIMIT, fam
+    for script in rl.SCRIPTS.values():
+        asked = rl._mem_mb((ROOT / script).read_text())
+        assert asked is not None and rp.cpus_for_request(asked) <= rp.CPU_LIMIT
+
+
 UPDATES_NAME = rl.UPDATES_FILE
 
 
@@ -353,7 +365,7 @@ def test_graph_is_one_job_per_seed_chained_and_printed() -> None:
     assert (
         "3 GPU jobs" in text
         and "afterany" in text
-        and sum("mem 30 GB" in ln for ln in text.splitlines()) == 3
+        and sum("mem 30000 MB" in ln for ln in text.splitlines()) == 3
         and "mined_raw_u100_s100" in text
     )
     with pytest.raises(ValueError, match="YYYY-MM-DD"):

@@ -1,0 +1,34 @@
+{
+ "equal_between_runs": true,
+ "node": "gnode006",
+ "rows": [
+  {
+   "listing_members_sha256": "83f9fd469a62ea0fb88b0090d8b0d4c951d99aa4af1ca37fa2c5efaa917364d8",
+   "reading": "non_test",
+   "run": "trial200_r1",
+   "sample_sha256": "e059e46580a64e3fca6871862e8d4aa89e00d7d1fdfaf3ac0dd7323a947fff01",
+   "zip_sha256": "f05585426abe02f3e1225cc2dfd80b789779201aea5377564213425deefe75ef"
+  },
+  {
+   "listing_members_sha256": "03d9a7e4df465d767f2602721c6e7780505c68899dffd317d6b1021b859ad7c7",
+   "reading": "pool_aligned",
+   "run": "trial200_r1",
+   "sample_sha256": "c5cea21bc2224b4cd49726784c6a6c4f21f965bf8a23111cd3b6d57b05d0b9c4",
+   "zip_sha256": "65ed01b366515b1d7d888e51ded69f2152b38b1b8fa23cbe46068b264227b1e4"
+  },
+  {
+   "listing_members_sha256": "83f9fd469a62ea0fb88b0090d8b0d4c951d99aa4af1ca37fa2c5efaa917364d8",
+   "reading": "non_test",
+   "run": "trial200_r2",
+   "sample_sha256": "e059e46580a64e3fca6871862e8d4aa89e00d7d1fdfaf3ac0dd7323a947fff01",
+   "zip_sha256": "f05585426abe02f3e1225cc2dfd80b789779201aea5377564213425deefe75ef"
+  },
+  {
+   "listing_members_sha256": "03d9a7e4df465d767f2602721c6e7780505c68899dffd317d6b1021b859ad7c7",
+   "reading": "pool_aligned",
+   "run": "trial200_r2",
+   "sample_sha256": "c5cea21bc2224b4cd49726784c6a6c4f21f965bf8a23111cd3b6d57b05d0b9c4",
+   "zip_sha256": "65ed01b366515b1d7d888e51ded69f2152b38b1b8fa23cbe46068b264227b1e4"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "note": "pilot ranks_bm25.jsonl (1,286 directories) and features_mined.csv of E-MINED-PILOT, compared on the directories both runs hold; non_test reading, BM25 teacher",
+ "probe_big": {
+  "features": {
+   "common_directories": 93,
+   "equal": true,
+   "rows_differing": 0,
+   "rows_new": 340,
+   "rows_only_in_one": 0,
+   "rows_pilot": 340
+  },
+  "ranks": {
+   "compared": 93,
+   "differing": [],
+   "exact": true,
+   "identical": 93,
+   "old_directories": 1286
+  }
+ },
+ "trial200_r1": {
+  "features": {
+   "common_directories": 26,
+   "equal": true,
+   "rows_differing": 0,
+   "rows_new": 106,
+   "rows_only_in_one": 0,
+   "rows_pilot": 106
+  },
+  "ranks": {
+   "compared": 26,
+   "differing": [],
+   "exact": true,
+   "identical": 26,
+   "old_directories": 1286
+  }
+ }
+}

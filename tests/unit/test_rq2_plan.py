@@ -96,7 +96,7 @@ def test_all_runs_validate_and_hash_apart() -> None:
     assert all(r["retain_final"] == (r["family"] == "mined") for r in rows)
     assert {r["account"] for r in rows if r["family"] == "mined"} == {"C"}
     assert {r["account"] for r in rows if r["family"] == "injected"} == {"A"}
-    assert {r["memory_mb"] for r in rows if r["family"] == "mined"} == {30 * 1024}
+    assert {r["memory_mb"] for r in rows if r["family"] == "mined"} == {30000}
     assert all(r["hash_final"] for r in rows)
     assert all(r["example_visits"] == 3200 for r in rows)
 
