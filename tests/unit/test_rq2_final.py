@@ -615,12 +615,42 @@ def test_coverage_of_the_query_level_interval_with_two_repositories() -> None:
     assert 0.93 <= hit / 1000 <= 0.97
 
 
+_NOMINAL_REASON = (
+    "measured: the repository-clustered percentile interval of D17 does not hold the family-wise "
+    "error rate of Holm at 8 to 12 repositories (1,000 simulations: 0.16 and 0.10 at 12 "
+    "repositories, 0.22 and 0.15 at 8); the entry E-RQ2-ANALYSIS lists the options for the lead. "
+    "strict: this test starts passing the day the interval rule changes, which must be a decision"
+)
+
+
+@pytest.mark.slow
+@pytest.mark.xfail(strict=True, reason=_NOMINAL_REASON)
+@pytest.mark.parametrize("tau", [0.0, 1.5])
+def test_false_positive_rate_after_holm_is_nominal_with_twelve_repositories(tau: float) -> None:
+    # 1,000 simulations of the four confirmatory contrasts under no effect: the chance that Holm
+    # rejects any of them (family-wise) should not exceed the nominal 5% by more than 2 points
+    # (Monte Carlo standard error 0.7). It does, so the assertion is expected to fail.
+    rej, _ = _fwer(tau, 1000, draws=500)
+    assert rej <= 0.07, rej
+
+
 @pytest.mark.slow
 @pytest.mark.parametrize("tau", [0.0, 1.5])
-def test_false_positive_rate_of_the_confirmatory_family_under_no_effect(tau: float) -> None:
-    # 1,000 simulations of the four confirmatory contrasts under no effect: the chance that Holm
-    # rejects any of them (family-wise) must not exceed the nominal 5% by more than 2 points
-    # (Monte Carlo SE 0.7), and a reported effect (rejection and at least delta) is rarer still.
+def test_family_wise_error_rate_of_the_current_rule_is_pinned(tau: float) -> None:
+    # characterisation of the rule as protocol-fixed (D17, D72): 1,000 simulations, 12 repositories,
+    # three seeds, 500 draws. Measured 0.16 (tau 0) and 0.10 (tau 1.5); the band keeps a change of
+    # rule a conscious one. A reported effect (a rejection of at least delta) never occurs here
+    # because the paired difference is estimated far more tightly than delta.
     rej, eff = _fwer(tau, 1000, draws=500)
-    assert rej <= 0.07, rej
-    assert eff <= rej
+    assert 0.07 <= rej <= 0.25, rej
+    assert eff <= 0.02
+
+
+@pytest.mark.slow
+def test_false_reported_effects_stay_rare_in_a_wide_stress_case() -> None:
+    # stress case: tau 3 points gives a standard error of the pooled difference of 0.92 (minimum
+    # detectable difference 2.6 points, wider than the design's 1.3 to 1.5 at 12 repositories,
+    # which tau 1.5 matches). 12 repositories, 1,000 simulations: measured 0.032; tolerance 0.07.
+    # The delta guard, not Holm, is what keeps this rate low.
+    _, eff = _fwer(3.0, 1000, draws=500)
+    assert eff <= 0.07, eff

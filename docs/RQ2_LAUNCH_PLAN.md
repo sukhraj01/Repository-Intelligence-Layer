@@ -22,7 +22,7 @@ interval), **reasoned** (arithmetic or argument).
 | 6 | Checkpoint retention and archive | switch built, plan runs; **no GPU run yet**; no alias for the archive account; space on A |
 | 7 | Noise audit, label sheets | sheet and scorer built; **no reader has returned a sheet** |
 | 8 | RQ3 contexts from trained checkpoints | builder takes another arm; **no way to encode with a retained model** |
-| 9 | Analysis: Holm, paired intervals, delta, decision rules | **not written**: only the protocol text |
+| 9 | Analysis: Holm, paired intervals, delta, decision rules | **built and tested on the pilot rows** (`ril/analysis/rq2_final.py`, E-RQ2-ANALYSIS); not run on final rows; one open finding on its error rate |
 
 ## 2. The chain, stage by stage
 
@@ -186,8 +186,12 @@ Cell table of option E (12 cells x 3 seeds = 36 runs, 100 updates of the 3,000-u
 - **Protocol.** Holm within families (D72), paired bootstrap intervals (2,000 draws, repository-clustered at L2, query-level at
   dev L3), delta = 1.5 (D73), the decision rules of section 6 of the protocol, seed spread, the injected-noise sanity rules.
 - **State.** `ril/analysis/stored_{rows,stats,analysis}.py` and `mp_tables.py` hold the paired bootstrap and the minimum
-  detectable difference for the pilots; **no module applies Holm, delta and the verdict rules** to a final run. It can be written
-  and tested on the pilot rows now.
+  detectable difference for the pilots. **Built 2026-11-09 (E-RQ2-ANALYSIS):** `ril/analysis/rq2_final.py` applies Holm, delta and the
+  verdict rules to per-query rows of final runs, refuses the final evaluation sets without the id of the dev-analysis entry (D100),
+  carries the distinct-directory diagnostics and writes a hashed machine-readable summary; `rq2_final_tables.py` and
+  `scripts/report_tables.py` render the four report tables once a summary built from final rows exists. Tested on the stored pilot
+  rows (the noise, mined-set and learning-curve summaries reproduce to their rounding). Open: the repository-clustered percentile
+  interval does not hold the family-wise error rate at 8 to 12 repositories (entry, question 1).
 - **Tables the report needs** (`docs/REPORT_GAPS.md` rows 1, 2, 4 block the paper): per-contrast table at both levels with
   Holm-adjusted and uncorrected intervals; per-cell seed values; distinct examples seen per cell; dose-response and sanity
   rows; the mined-set K-rank profile; the audit result; the quarantine limitation.
@@ -276,7 +280,7 @@ task of the sequence in section 8).
 | 3 | No full-scale prep script (mined store to cache) and no step applying the overlap drop list | A | lead | 1 | generalise the pilot prep script; drop list through `--names` |
 | 4 | Mined cache (about 5.6 GB) does not fit account A and node-local disk is lost between jobs | A | engineer | decision | train on C (27 GB free) or free space on A; no code |
 | 5 | Memory at full scale about 26 GB peak against a 32,000 MB limit; pilot scripts ask 20 GB | A | lead | in 1 | request 30 GB; check `sacct` MaxRSS on the first job |
-| 6 | Final analysis (Holm, delta, verdict rules, seed spread) not written | B | lead | 1 | module and tests on the pilot rows (CPU, can run now) |
+| 6 | Final analysis (Holm, delta, verdict rules, seed spread): **built 2026-11-09, tested on the pilot rows, not run on final rows** (E-RQ2-ANALYSIS); error-rate finding open | B | lead | 1 | the lead answers the questions of the entry; run on the final rows after the dev analysis |
 | 7 | Dense teacher on the mined store unmeasured; upper bound 21 GPU-hours per teacher | B | engineer | decision plus 0.4 GPU-h measurement | drop the cell or measure a per-repository de-duplicated pass on 100 directories first |
 | 8 | Verified look covers 6 of 12 folders; the other six have no units or stores | B | engineer | decision | options in the next list |
 | 9 | Retained-model space and the archive: A cannot hold them, no alias for B | B | engineer | 0 | retain on C; add the alias; run the numbered copy script |
@@ -331,8 +335,9 @@ Each decision lists the options with cost; the **recommendation** is mine, reaso
 1. **Final configurations and run script.** What: render the 36 configurations from the plan, write the sbatch for one seed and one
    data condition (cache, noise scores, `RETAIN_DIR`, 30 GB), and the evaluation jobs for the eight and for the Verified set. Where:
    local for code, a CPU plan check on the cluster. Needs: decisions 1, 2, 3, 4, 6.
-2. **Final analysis module.** What: Holm within families, paired bootstrap, delta, verdict rules, seed spread, sanity rules, tables
-   for the report, tested on the pilot rows. Where: CPU, local. Needs: nothing.
+2. **Final analysis module (built 2026-11-09, E-RQ2-ANALYSIS).** What: Holm within families, paired bootstrap, delta, verdict rules,
+   seed spread, sanity rules, tables for the report, tested on the pilot rows. Where: CPU, local. Needs: the lead's answers to the
+   entry's questions before the first final row is read.
 3. **Full-store prep and overlap job scripts.** What: generalise the pilot prep script to a store and a names file, add the drop
    list step, a size guard and a memory estimate, run at 200 directories. Where: CPU on the account holding the store. Needs:
    decision 9; the mining jobs may still be running.
