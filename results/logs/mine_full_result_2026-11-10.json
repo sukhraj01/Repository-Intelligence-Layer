@@ -1,0 +1,59 @@
+{
+ "account": "C",
+ "code_commit": "cd85bdf",
+ "date": "2026-11-10",
+ "entry": "E-MINE-FULL-RESULT",
+ "hardware": {
+  "cpus_visible": 40,
+  "mem_total_kb": 131868128,
+  "node_full_run": "gnode006",
+  "node_repeat_runs": "gnode002",
+  "partition": "u22",
+  "platform": "Linux-5.15.0-194-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12"
+ },
+ "inputs": {
+  "held_out_index_manifest_sha256": "e61a4bea2e361ef2043faf1aaeb60a3f648b991700de2441348729f357fb36b8",
+  "names_sha256": "e1c566d34e45687141b1c24511a07034ac1b128d704af815c5b7028fca3440e9",
+  "state_jsonl_sha256": "4982251f706d55e383b8456ee81d2f6a22ec3bf735809493bb7113fa449cecd2",
+  "state_rows": 10000
+ },
+ "jobs": {
+  "66544": {
+   "alloc_cpus": 6,
+   "elapsed": "04:09:57",
+   "maxrss_kb_batch": 12581160,
+   "mem_request": "12G",
+   "what": "full-store preparation, both readings"
+  },
+  "67054": {
+   "elapsed": "00:10:59",
+   "what": "repeat a, 200-directory sample"
+  },
+  "67055": {
+   "elapsed": "00:10:59",
+   "what": "repeat b, same sample"
+  },
+  "67056": {
+   "elapsed": "00:00:01",
+   "what": "pilot comparison"
+  }
+ },
+ "mining_config_hash": "33b7336093995d0722cd41fed36f3f90c561a01b07639fe8dcbf2bc10ff9def4",
+ "outputs": {
+  "drop_list_sha256": "36e3a144d2d7154c3abc0df8fc31e8ec11e3777b07cf5ef030401f63881d9f44",
+  "non_test_cache_sha256": "see non_test/prep_summary.json",
+  "pool_aligned_cache": "see pool_aligned/prep_summary.json",
+  "records_sha256": "1b49b698e973f74186d0b6f4baff4120c406a7e644679acb1009e5749aa69155",
+  "sample_names_sha256_prefix": "88fbe6d6",
+  "sample_size": 200
+ },
+ "overlap_audit_config_hash": "588effda460d97a70979400778f9ced2035fad6756e010210bc9266541f5938c",
+ "seed": 0,
+ "summary_files": [
+  "results/mining/full/report.md",
+  "results/mining/full/yield_report.json",
+  "results/mining/full/check.json",
+  "results/mining/overlap_audit/full/summary.json"
+ ]
+}
