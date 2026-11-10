@@ -88,6 +88,14 @@ def build_stub_registry(seed: int) -> StageRegistry:
                 scores[unit] = scores.get(unit, 0.0) + 1.0 / (_RRF_K + rank)
         return sorted(scores, key=lambda u: (-scores[u], u))
 
+    def same_file(query: str) -> Ints:
+        return np.unique(neighbours[seeds(query)][:_TOP])
+
+    def recency(query: str) -> Ints:
+        scores = corpus @ encode(query)
+        prior = np.exp(-np.arange(_N_UNITS) / 30.0).astype(np.float32)
+        return _top_ids(scores + np.float32(0.2) * prior, _TOP)
+
     def rerank(query: str) -> Ints:
         candidates = corpus[_top_ids(corpus @ encode(query), _TOP)]
         hidden = candidates
@@ -123,6 +131,8 @@ def build_stub_registry(seed: int) -> StageRegistry:
     registry.register("graph_expand_1hop", hop1, reset=reset)
     registry.register("graph_expand_2hop", hop2, reset=reset)
     registry.register("rrf_fusion", rrf, reset=reset)
+    registry.register("same_file_expansion", same_file, reset=reset)
+    registry.register("recency_prior", recency, reset=reset)
     registry.register("cross_encoder_rerank", rerank, reset=reset)
     registry.register("assemble", assemble, reset=reset)
     registry.register("end_to_end", end_to_end, reset=reset)
