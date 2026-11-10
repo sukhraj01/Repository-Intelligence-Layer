@@ -111,9 +111,11 @@ def _git_head(root: str) -> str:
 
 def encoder_record(name: str, max_tokens: int) -> Record:
     spec = ENCODERS[name]
+    owner, _, model = spec.model_id.partition("/")
     return {
         "name": spec.name,
-        "model_id": spec.model_id,
+        "model_owner": owner,
+        "model_name": model,
         "revision": spec.revision,
         "max_tokens": max_tokens,
         "query_template": spec.query_template,
