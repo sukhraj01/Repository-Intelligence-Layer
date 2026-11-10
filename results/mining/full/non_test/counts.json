@@ -1,0 +1,9 @@
+{
+ "directories": 5789,
+ "listing_members_sha256": "4ce2064b01f7e764737fae67df0221adfd196bfb33b824619aa107bc8a79e9fc",
+ "positives": 35804,
+ "repositories": 991,
+ "sample_sha256": "971bf901d0b45452298cdf3b4671fba2f0fe2f8bf3ed2efcb2f70e1782a425a6",
+ "zip_bytes": 2545823872,
+ "zip_sha256": "cc1bcd7a8c273e3f531aab59ca3cad0b2a14db791e9222bce667f19868c51720"
+}

@@ -1,0 +1,20 @@
+{
+ "cache_bytes": 2397015492,
+ "cache_sha256": "e4171e665179bb61648cf6a90612c051941c2b71f71911f6f578a0ece58a3afc",
+ "directories_dropped": 13,
+ "directories_selected": 6230,
+ "drop_list_applied": true,
+ "drop_list_sha256": "36e3a144d2d7154c3abc0df8fc31e8ec11e3777b07cf5ef030401f63881d9f44",
+ "examples": 5789,
+ "feature_table_sha256": "c9b699bb3fa58c522fde50d7814c51bd77d97bf2c68d0e97c5f5c76166273e15",
+ "filter_positives_kept": 11380,
+ "filter_size": 3885,
+ "held_out_rows": 0,
+ "k": 20,
+ "level": "positive",
+ "names_sha256": "e1c566d34e45687141b1c24511a07034ac1b128d704af815c5b7028fca3440e9",
+ "reading": "non_test",
+ "scope": "full",
+ "state_rows": 10000,
+ "teacher": "bm25"
+}

@@ -1,0 +1,726 @@
+{
+ "files": {
+  "provenance.json": "1df547c0f5edbce1e0d7d5de2586139a06b930a0e8f63ab40fd254ff0bd75f52",
+  "run.json": "f84bc25b004aff949f023f3d5852d1a7df52563284e47bf860d771e94c6b3b93",
+  "sessions.jsonl": "97ef0a38a6b1a5e107be2c66a20499ddad4b193b2077a4ae0a0eee3f3ebe5d31",
+  "state.jsonl": "4982251f706d55e383b8456ee81d2f6a22ec3bf735809493bb7113fa449cecd2",
+  "summary.json": "f8c0da11910759f07f2b2a2d4f39f2a9c38f13fa89249715e72ba7765577ad7c"
+ },
+ "marks": {
+  "10000": {
+   "mined": 6230,
+   "mined_share": 0.623,
+   "no_positive": 1040,
+   "no_positive_share": 0.104,
+   "no_python_change": 2607,
+   "no_python_change_share": 0.2607,
+   "positives": 54700,
+   "quarantined": 123,
+   "quarantined_share": 0.0123,
+   "rows": 10000
+  },
+  "1437": {
+   "mined": 905,
+   "mined_share": 0.6298,
+   "no_positive": 156,
+   "no_positive_share": 0.1086,
+   "no_python_change": 353,
+   "no_python_change_share": 0.2457,
+   "positives": 9026,
+   "quarantined": 23,
+   "quarantined_share": 0.016,
+   "rows": 1437
+  },
+  "2000": {
+   "mined": 1249,
+   "mined_share": 0.6245,
+   "no_positive": 215,
+   "no_positive_share": 0.1075,
+   "no_python_change": 506,
+   "no_python_change_share": 0.253,
+   "positives": 12899,
+   "quarantined": 30,
+   "quarantined_share": 0.015,
+   "rows": 2000
+  },
+  "2214": {
+   "mined": 1378,
+   "mined_share": 0.6224,
+   "no_positive": 234,
+   "no_positive_share": 0.1057,
+   "no_python_change": 571,
+   "no_python_change_share": 0.2579,
+   "positives": 14212,
+   "quarantined": 31,
+   "quarantined_share": 0.014,
+   "rows": 2214
+  },
+  "2835": {
+   "mined": 1774,
+   "mined_share": 0.6257,
+   "no_positive": 301,
+   "no_positive_share": 0.1062,
+   "no_python_change": 726,
+   "no_python_change_share": 0.2561,
+   "positives": 17318,
+   "quarantined": 34,
+   "quarantined_share": 0.012,
+   "rows": 2835
+  },
+  "5000": {
+   "mined": 3132,
+   "mined_share": 0.6264,
+   "no_positive": 500,
+   "no_positive_share": 0.1,
+   "no_python_change": 1301,
+   "no_python_change_share": 0.2602,
+   "positives": 26422,
+   "quarantined": 67,
+   "quarantined_share": 0.0134,
+   "rows": 5000
+  }
+ },
+ "mean_units_all_mined": 4818.7,
+ "mix": {
+  "airflow_in_first_1437_rows": 44,
+  "airflow_mined": 227,
+  "airflow_total": 315,
+  "median_attempted_per_repo": 3.0,
+  "repos_with_1_attempt": 264,
+  "repositories_attempted": 1102,
+  "repositories_with_mined": 1013,
+  "share_top1_top5_top10_top20_attempted": [
+   0.0397,
+   0.1301,
+   0.197,
+   0.2685
+  ],
+  "share_top1_top5_top10_top20_positives": [
+   0.0312,
+   0.1162,
+   0.1782,
+   0.2693
+  ],
+  "top10_attempted": [
+   [
+    "open-metadata/openmetadata",
+    397,
+    0.0397
+   ],
+   [
+    "apache/airflow",
+    315,
+    0.0315
+   ],
+   [
+    "project-chip/connectedhomeip",
+    257,
+    0.0257
+   ],
+   [
+    "policyengine/policyengine-us",
+    171,
+    0.0171
+   ],
+   [
+    "jupyterlab/jupyterlab",
+    161,
+    0.0161
+   ],
+   [
+    "gradio-app/gradio",
+    140,
+    0.014
+   ],
+   [
+    "esphome/esphome",
+    140,
+    0.014
+   ],
+   [
+    "phoenix (owner omitted)",
+    135,
+    0.0135
+   ],
+   [
+    "azure/azure-cli",
+    132,
+    0.0132
+   ],
+   [
+    "treeverse/lakefs",
+    122,
+    0.0122
+   ]
+  ],
+  "top10_mined": [
+   [
+    "apache/airflow",
+    227,
+    0.0364
+   ],
+   [
+    "open-metadata/openmetadata",
+    125,
+    0.0201
+   ],
+   [
+    "azure/azure-cli",
+    107,
+    0.0172
+   ],
+   [
+    "policyengine/policyengine-us",
+    94,
+    0.0151
+   ],
+   [
+    "gradio-app/gradio",
+    75,
+    0.012
+   ],
+   [
+    "pantsbuild/pants",
+    71,
+    0.0114
+   ],
+   [
+    "phoenix (owner omitted)",
+    71,
+    0.0114
+   ],
+   [
+    "makepath/xarray-spatial",
+    59,
+    0.0095
+   ],
+   [
+    "napari/napari",
+    58,
+    0.0093
+   ],
+   [
+    "skypilot-org/skypilot",
+    56,
+    0.009
+   ]
+  ],
+  "top10_positives": [
+   [
+    "apache/airflow",
+    1709,
+    0.0312
+   ],
+   [
+    "aesara-devs/aesara",
+    1668,
+    0.0305
+   ],
+   [
+    "holoviz/holoviews",
+    1256,
+    0.023
+   ],
+   [
+    "microsoft/semantic-kernel",
+    907,
+    0.0166
+   ],
+   [
+    "open-metadata/openmetadata",
+    815,
+    0.0149
+   ],
+   [
+    "azure/azure-cli",
+    711,
+    0.013
+   ],
+   [
+    "twisted/twisted",
+    695,
+    0.0127
+   ],
+   [
+    "gradio-app/gradio",
+    677,
+    0.0124
+   ],
+   [
+    "equinor/xtgeo",
+    671,
+    0.0123
+   ],
+   [
+    "sceptre/sceptre",
+    641,
+    0.0117
+   ]
+  ]
+ },
+ "quarantine_by_reason_top_repo": {
+  "changed_file_unparseable:mixed-tabs-spaces": [
+   [
+    "trailofbits/manticore",
+    1
+   ]
+  ],
+  "changed_file_unparseable:python2-except": [
+   [
+    "diracgrid/dirac",
+    1
+   ],
+   [
+    "enthought/comtypes",
+    1
+   ],
+   [
+    "boto/boto",
+    1
+   ]
+  ],
+  "changed_file_unparseable:python2-long-literal": [
+   [
+    "diracgrid/dirac",
+    2
+   ]
+  ],
+  "changed_file_unparseable:python2-octal": [
+   [
+    "metomi/isodatetime",
+    1
+   ]
+  ],
+  "changed_file_unparseable:python2-print": [
+   [
+    "grpc/grpc",
+    4
+   ],
+   [
+    "soco/soco",
+    1
+   ],
+   [
+    "boto/boto",
+    1
+   ]
+  ],
+  "changed_file_unparseable:syntax-other": [
+   [
+    "scverse/scanpy",
+    7
+   ],
+   [
+    "sukramj/hahomematic",
+    5
+   ],
+   [
+    "tox-dev/sphinx-autodoc-typehints",
+    3
+   ]
+  ],
+  "compare_not_found": [
+   [
+    "crowdstrike/falconpy",
+    1
+   ]
+  ],
+  "corpus_unit_id_rejected": [
+   [
+    "microsoft/debugpy",
+    6
+   ],
+   [
+    "pythainlp/pythainlp",
+    2
+   ]
+  ],
+  "diff_truncated": [
+   [
+    "open-metadata/openmetadata",
+    2
+   ],
+   [
+    "embeddings-benchmark/mteb",
+    2
+   ],
+   [
+    "project-chip/connectedhomeip",
+    1
+   ]
+  ],
+  "old_file_missing_at_base": [
+   [
+    "hdmf-dev/hdmf",
+    7
+   ],
+   [
+    "project-chip/connectedhomeip",
+    4
+   ],
+   [
+    "scikit-build/scikit-build-core",
+    3
+   ]
+  ],
+  "patch_missing": [
+   [
+    "azure/azure-cli",
+    2
+   ],
+   [
+    "localstack/localstack",
+    2
+   ],
+   [
+    "gradio-app/gradio",
+    1
+   ]
+  ],
+  "snapshot_unavailable": [
+   [
+    "gradio-app/gradio",
+    1
+   ],
+   [
+    "pyannote/pyannote-audio",
+    1
+   ],
+   [
+    "posit-dev/py-shiny",
+    1
+   ]
+  ]
+ },
+ "quarantine_top_repos": [
+  [
+   "scverse/scanpy",
+   7,
+   0.0569,
+   21
+  ],
+  [
+   "hdmf-dev/hdmf",
+   7,
+   0.0569,
+   20
+  ],
+  [
+   "project-chip/connectedhomeip",
+   6,
+   0.0488,
+   257
+  ],
+  [
+   "microsoft/debugpy",
+   6,
+   0.0488,
+   6
+  ],
+  [
+   "sukramj/hahomematic",
+   5,
+   0.0407,
+   5
+  ],
+  [
+   "diracgrid/dirac",
+   4,
+   0.0325,
+   32
+  ],
+  [
+   "grpc/grpc",
+   4,
+   0.0325,
+   67
+  ],
+  [
+   "tox-dev/sphinx-autodoc-typehints",
+   3,
+   0.0244,
+   11
+  ],
+  [
+   "scikit-build/scikit-build-core",
+   3,
+   0.0244,
+   9
+  ],
+  [
+   "open-metadata/openmetadata",
+   2,
+   0.0163,
+   397
+  ]
+ ],
+ "quarters": [
+  {
+   "mined": 1558,
+   "mined_share": 0.6232,
+   "no_positive": 266,
+   "no_positive_share": 0.1064,
+   "no_python_change": 645,
+   "no_python_change_share": 0.258,
+   "positives": 15671,
+   "quarantined": 31,
+   "quarantined_share": 0.0124,
+   "rows": 2500
+  },
+  {
+   "mined": 1574,
+   "mined_share": 0.6296,
+   "no_positive": 234,
+   "no_positive_share": 0.0936,
+   "no_python_change": 656,
+   "no_python_change_share": 0.2624,
+   "positives": 10751,
+   "quarantined": 36,
+   "quarantined_share": 0.0144,
+   "rows": 2500
+  },
+  {
+   "mined": 1534,
+   "mined_share": 0.6136,
+   "no_positive": 264,
+   "no_positive_share": 0.1056,
+   "no_python_change": 674,
+   "no_python_change_share": 0.2696,
+   "positives": 13623,
+   "quarantined": 28,
+   "quarantined_share": 0.0112,
+   "rows": 2500
+  },
+  {
+   "mined": 1564,
+   "mined_share": 0.6256,
+   "no_positive": 276,
+   "no_positive_share": 0.1104,
+   "no_python_change": 632,
+   "no_python_change_share": 0.2528,
+   "positives": 14655,
+   "quarantined": 28,
+   "quarantined_share": 0.0112,
+   "rows": 2500
+  }
+ ],
+ "repos_accounting_for_half_of_quarantines": 18,
+ "segments": {
+  "rows_1_2214": {
+   "mined": 1378,
+   "mined_share": 0.6224,
+   "no_positive": 234,
+   "no_positive_share": 0.1057,
+   "no_python_change": 571,
+   "no_python_change_share": 0.2579,
+   "positives": 14212,
+   "quarantined": 31,
+   "quarantined_share": 0.014,
+   "rows": 2214
+  },
+  "rows_2215_7214": {
+   "mined": 3114,
+   "mined_share": 0.6228,
+   "no_positive": 491,
+   "no_positive_share": 0.0982,
+   "no_python_change": 1333,
+   "no_python_change_share": 0.2666,
+   "positives": 24105,
+   "quarantined": 62,
+   "quarantined_share": 0.0124,
+   "rows": 5000
+  },
+  "rows_7215_10000": {
+   "mined": 1738,
+   "mined_share": 0.6238,
+   "no_positive": 315,
+   "no_positive_share": 0.1131,
+   "no_python_change": 703,
+   "no_python_change_share": 0.2523,
+   "positives": 16383,
+   "quarantined": 30,
+   "quarantined_share": 0.0108,
+   "rows": 2786
+  }
+ },
+ "sessions": [
+  {
+   "adopted": 0,
+   "api": {
+    "by_endpoint": {
+     "repos/compare": 5039
+    },
+    "calls": 5039,
+    "graphql_calls": 0,
+    "graphql_cost": 0,
+    "not_modified": 0,
+    "rest_calls": 5039,
+    "retries": 0,
+    "sleeps": 923,
+    "slept_seconds": 18.794
+   },
+   "attempted": 5000,
+   "listed_now": 0,
+   "listing_failed": {},
+   "listings_reused": 1473,
+   "outcomes": {
+    "mined": 3114,
+    "no_positive": 491,
+    "no_python_change": 1333,
+    "quarantined": 62
+   },
+   "seconds": {
+    "listing": 21.5,
+    "mining": 21596.2
+   },
+   "skipped": 2214,
+   "stopped": true
+  },
+  {
+   "adopted": 0,
+   "api": {
+    "by_endpoint": {
+     "repos/compare": 2802
+    },
+    "calls": 2802,
+    "graphql_calls": 0,
+    "graphql_cost": 0,
+    "not_modified": 0,
+    "rest_calls": 2802,
+    "retries": 1,
+    "sleeps": 510,
+    "slept_seconds": 11.919
+   },
+   "attempted": 2786,
+   "listed_now": 0,
+   "listing_failed": {},
+   "listings_reused": 1473,
+   "outcomes": {
+    "mined": 1738,
+    "no_positive": 315,
+    "no_python_change": 703,
+    "quarantined": 30
+   },
+   "seconds": {
+    "listing": 19.2,
+    "mining": 12786.5
+   },
+   "skipped": 7214,
+   "stopped": false
+  }
+ ],
+ "size_classes": {
+  "basis": "mean snapshot functions (corpus_units) of the repository's non-quarantined rows that have a corpus; repositories with none are 'unknown'",
+  "table": {
+   "10k-50k": {
+    "mined": 574,
+    "mined_share": 0.7874,
+    "no_positive": 63,
+    "no_python_change": 86,
+    "quarantined": 6,
+    "quarantined_share": 0.0082,
+    "repos": 16,
+    "rows": 729
+   },
+   "2k-10k": {
+    "mined": 2544,
+    "mined_share": 0.5962,
+    "no_positive": 414,
+    "no_python_change": 1265,
+    "quarantined": 44,
+    "quarantined_share": 0.0103,
+    "repos": 172,
+    "rows": 4267
+   },
+   "<2k": {
+    "mined": 3086,
+    "mined_share": 0.6293,
+    "no_positive": 556,
+    "no_python_change": 1205,
+    "quarantined": 57,
+    "quarantined_share": 0.0116,
+    "repos": 869,
+    "rows": 4904
+   },
+   ">=50k": {
+    "mined": 26,
+    "mined_share": 0.7429,
+    "no_positive": 4,
+    "no_python_change": 5,
+    "quarantined_share": 0.0,
+    "repos": 1,
+    "rows": 35
+   },
+   "unknown (no snapshot read)": {
+    "mined_share": 0.0,
+    "no_positive": 3,
+    "no_python_change": 46,
+    "quarantined": 16,
+    "quarantined_share": 0.2462,
+    "repos": 44,
+    "rows": 65
+   }
+  }
+ },
+ "yield": {
+  "attempted": 10000,
+  "g2_pilot_directories_met": true,
+  "largest_repositories": [
+   [
+    "open-metadata/openmetadata",
+    397
+   ],
+   [
+    "apache/airflow",
+    315
+   ],
+   [
+    "project-chip/connectedhomeip",
+    257
+   ],
+   [
+    "policyengine/policyengine-us",
+    171
+   ],
+   [
+    "jupyterlab/jupyterlab",
+    161
+   ]
+  ],
+  "mined_share": 0.623,
+  "mined_with_positive": 6230,
+  "positives_per_mined": 8.78,
+  "positives_unrestricted": 54700,
+  "projection": {
+   "basis": "linear in the rows so far (seeded hash order: a prefix is a sample)",
+   "g2_met_unrestricted": true,
+   "g2_positives": 10000,
+   "mined": 6230,
+   "positives_unrestricted": 54700,
+   "target_attempted": 10000
+  },
+  "quarantine_by_reason": {
+   "changed_file_unparseable:mixed-tabs-spaces": 1,
+   "changed_file_unparseable:python2-except": 7,
+   "changed_file_unparseable:python2-long-literal": 2,
+   "changed_file_unparseable:python2-octal": 1,
+   "changed_file_unparseable:python2-print": 11,
+   "changed_file_unparseable:syntax-other": 26,
+   "compare_not_found": 1,
+   "corpus_unit_id_rejected": 8,
+   "diff_truncated": 14,
+   "old_file_missing_at_base": 26,
+   "patch_missing": 23,
+   "snapshot_unavailable": 3
+  },
+  "quarantined_share": 0.0123,
+  "repositories_seen": 1102,
+  "status": {
+   "mined": 6230,
+   "no_positive": 1040,
+   "no_python_change": 2607,
+   "quarantined": 123
+  },
+  "timeout_quarantined": 0
+ }
+}
