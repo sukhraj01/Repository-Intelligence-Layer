@@ -1,4 +1,4 @@
-experiment_id: E-RQ1-LADDER latency selection (stored rows only, nothing measured for the ladder)
+experiment_id: E-RQ1-LADDER latency selection (stored rows only; the rows of rrf_fusion, same_file_expansion and recency_prior are those of E-FREEZE-AND-LATENCY)
 note: >-
   For each rung and scale the stored latency rows (results/latency/latency_log.csv) that cost its
   added stages: the latest warm row of the named stage, query-set id and host prefix. A stage with
@@ -17,13 +17,13 @@ scales:
       - {stage: dense_search, query_set_id: dsearch-coderankembed-django-torch-v1, host: gnode044, role: 'flat exact search', cache_state: warm}
       R2:
       - {stage: bm25, query_set_id: retrieval-django-v1, host: Sukhraj.local, role: 'BM25 search', cache_state: warm}
-      - {stage: rrf_fusion, query_set_id: '-', host: '-', role: 'rank fusion'}
+      - {stage: rrf_fusion, query_set_id: fusion-django-v1, host: Sukhraj.local, cache_state: warm, role: 'rank fusion'}
       R3:
-      - {stage: same_file_expansion, query_set_id: '-', host: '-', role: 'same-file expansion'}
+      - {stage: same_file_expansion, query_set_id: fusion-django-v1, host: Sukhraj.local, cache_state: warm, role: 'same-file expansion'}
       R4:
       - {stage: graph_expansion, query_set_id: retrieval-django-v1, host: Sukhraj.local, role: 'graph expansion (stored graph, all families)', cache_state: warm}
       R5:
-      - {stage: recency_prior, query_set_id: '-', host: '-', role: 'recency prior'}
+      - {stage: recency_prior, query_set_id: fusion-django-v1, host: Sukhraj.local, cache_state: warm, role: 'recency prior'}
       ctx:
       - {stage: assemble, query_set_id: assembly-django-b8000-v1, host: Sukhraj.local, role: 'context assembly (BM25 first stage, budget 8,000)', cache_state: warm}
       - {stage: end_to_end, query_set_id: assembly-django-b8000-v1, host: Sukhraj.local, role: 'BM25 query to assembled context (stored end to end)', cache_state: warm}
@@ -36,13 +36,13 @@ scales:
       - {stage: dense_search, query_set_id: dsearch-coderankembed-django-v1, host: gnode006, role: 'flat exact search', cache_state: warm}
       R2:
       - {stage: bm25, query_set_id: retrieval-django-v1, host: Sukhraj.local, role: 'BM25 search', cache_state: warm}
-      - {stage: rrf_fusion, query_set_id: '-', host: '-', role: 'rank fusion'}
+      - {stage: rrf_fusion, query_set_id: fusion-django-v1, host: Sukhraj.local, cache_state: warm, role: 'rank fusion'}
       R3:
-      - {stage: same_file_expansion, query_set_id: '-', host: '-', role: 'same-file expansion'}
+      - {stage: same_file_expansion, query_set_id: fusion-django-v1, host: Sukhraj.local, cache_state: warm, role: 'same-file expansion'}
       R4:
       - {stage: graph_expansion, query_set_id: retrieval-django-v1, host: Sukhraj.local, role: 'graph expansion (stored graph, all families)', cache_state: warm}
       R5:
-      - {stage: recency_prior, query_set_id: '-', host: '-', role: 'recency prior'}
+      - {stage: recency_prior, query_set_id: fusion-django-v1, host: Sukhraj.local, cache_state: warm, role: 'recency prior'}
   small:
     description: 'smaller indexes (dense: dev median snapshot 5,195 units; BM25 and graph: flask 974 units); dense stages on the GPU node'
     index_units: 974
@@ -52,10 +52,10 @@ scales:
       - {stage: dense_search, query_set_id: dsearch-coderankembed-dev-torch-v1, host: gnode044, role: 'flat exact search', cache_state: warm}
       R2:
       - {stage: bm25, query_set_id: retrieval-flask-v1, host: Sukhraj.local, role: 'BM25 search', cache_state: warm}
-      - {stage: rrf_fusion, query_set_id: '-', host: '-', role: 'rank fusion'}
+      - {stage: rrf_fusion, query_set_id: fusion-flask-v1, host: Sukhraj.local, cache_state: warm, role: 'rank fusion'}
       R3:
-      - {stage: same_file_expansion, query_set_id: '-', host: '-', role: 'same-file expansion'}
+      - {stage: same_file_expansion, query_set_id: fusion-flask-v1, host: Sukhraj.local, cache_state: warm, role: 'same-file expansion'}
       R4:
       - {stage: graph_expansion, query_set_id: retrieval-flask-v1, host: Sukhraj.local, role: 'graph expansion (stored graph, all families)', cache_state: warm}
       R5:
-      - {stage: recency_prior, query_set_id: '-', host: '-', role: 'recency prior'}
+      - {stage: recency_prior, query_set_id: fusion-flask-v1, host: Sukhraj.local, cache_state: warm, role: 'recency prior'}

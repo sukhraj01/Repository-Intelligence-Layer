@@ -456,6 +456,25 @@ def dump_json(path: str, doc: Record) -> None:
         fh.write("\n")
 
 
+def write_latency(root: str) -> str:
+    """Select the stored latency rows of ``rq1_ladder_latency.yaml`` into the ladder's table.
+
+    Reads ``<root>/results/latency/latency_log.csv`` only; nothing is measured or interpolated, and
+    a stage the configuration cannot match to a row is written as not measured. Returns the path.
+    """
+    import yaml
+
+    from ril.analysis.x2_tables import write_csv
+
+    cfg_path = os.path.join(root, "configs", "experiments", "rq1_ladder_latency.yaml")
+    with open(cfg_path, encoding="utf-8") as fh:
+        lat_cfg: Record = yaml.safe_load(fh)
+    log_path = os.path.join(root, "results", "latency", "latency_log.csv")
+    path = os.path.join(root, "results", "tables", "rq1_ladder_latency.csv")
+    write_csv(path, latency_rows(read_csv_rows(log_path), lat_cfg))
+    return path
+
+
 def write_outputs(
     eval_dirs: dict[str, str],
     root: str,
@@ -470,7 +489,6 @@ def write_outputs(
     ``<root>/results/tables``, the hash record under ``<root>/results/logs``; ``env`` is stored in
     the record (host, commit, job id) as given.
     """
-    import yaml
 
     from ril.analysis.x2_tables import write_csv
 
@@ -504,13 +522,8 @@ def write_outputs(
     write_csv(path, regression)
     written["tables"].append(path)
     cfg_path = os.path.join(root, "configs", "experiments", "rq1_ladder_latency.yaml")
-    with open(cfg_path, encoding="utf-8") as fh:
-        lat_cfg: Record = yaml.safe_load(fh)
     log_path = os.path.join(root, "results", "latency", "latency_log.csv")
-    lat = latency_rows(read_csv_rows(log_path), lat_cfg)
-    path = os.path.join(tables, "rq1_ladder_latency.csv")
-    write_csv(path, lat)
-    written["tables"].append(path)
+    written["tables"].append(write_latency(root))
     record["latency"] = {
         "log_sha256": sha256_file(log_path),
         "config_sha256": sha256_file(cfg_path),
