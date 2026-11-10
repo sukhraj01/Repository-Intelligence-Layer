@@ -50,6 +50,10 @@ Costs are GPU-hours or CPU-hours as labelled; "plan-only" is the stage's dry-run
   complete at 2,985 rows, as growing; the distinct-row store grows by quarter of the log by 947, 61, 19 and 9 MB (567, 235, 124, 87 new
   repositories), so it saturates and a linear projection of it overstates. The snapshot size per mined directory is flat across the
   quarters (4,992, 4,455, 4,970, 4,864 functions on average; the first 200 mined directories 3,783).
+- **Done 2026-11-10 (E-MINE-FULL-RESULT, measured; report `results/mining/full/report.md`).** Both readings pass G2: unrestricted 54,700
+  positives, `non_test` 36,046 (35,804 after the audit's drop list, 5,789 directories), `pool_aligned` 29,473 (4,935 directories). 0 snapshot
+  timeouts, so no partial-fetch pass (D146). Store 1.86 GB (299 KB per mined directory); mining 9.55 h; the three failures cost 21.6 h of failed
+  wall time and 45.9 h of waiting.
 - **Depends on.** Nothing further. `scripts/mine_pilot.py report` still needs a session summary (present).
 
 ### Stage 2. Content-overlap audit and drop list (CPU, D105, Q68)
@@ -65,6 +69,10 @@ Costs are GPU-hours or CPU-hours as labelled; "plan-only" is the stage's dry-run
 - **Projected for the 6,230 directories.** 1,578 s (0.44 h; two-point reading through the trial and the probe, the audit costs 0.9 s per
   MB of distinct rows plus 21 s per million snapshot functions) up to 14,967 s (4.2 h; linear per function, a bound); the largest
   repository (google-cloud-python, 870,248 distinct rows) decides the peak (4.8 GB on the pilot's 946,825-row repository).
+- **Done 2026-11-10 (E-MINE-FULL-RESULT, measured, job 66544).** 6,230 directories audited in 8 shards, 4,366.9 s (the two-point projection was
+  1,578 s, the linear bound 14,967 s), peak 3.5 GB; 13 dropped at floor 20 (floors 10 and 50: 34 and 9; every flagged directory: 138); drop list
+  tracked at `results/mining/overlap_audit/full/drop_f20_non_test.txt`, SHA-256 `36e3a144d2d7154c3abc0df8fc31e8ec11e3777b07cf5ef030401f63881d9f44`,
+  applied to the training manifest only (6,217 of 6,230 kept).
 - **Coverage.** Q68 stays: the audit sees 26 of 605 held-out repositories.
 - **Applying the drop list.** Done by the stage `drop`: the training manifest is the final directories minus `drop_f20_non_test.txt`
   (the store is not touched, `drop_manifest.json` records both hashes); a tracked, hashed list can be supplied instead
@@ -99,7 +107,15 @@ Costs are GPU-hours or CPU-hours as labelled; "plan-only" is the stage's dry-run
   allocated 6 CPUs. The run scripts of section 10 ask 30G for the mined family (gap 5).
 - **Disk on C (24 GB free).** Cache about 2.3 GB (`non_test`) plus about 1.8 GB (`pool_aligned`), node-local view about 4.4 GB and
   archive about 2.5 GB (lost with the node); the store is not copied.
-- **Untested at full scale.** Peak memory and wall time of the audit and the cache read; the shared reader's saving at 5,860 examples;
+- **Done 2026-11-10 (E-MINE-FULL-RESULT, measured, job 66544; both readings; replaces the "untested at full scale" line below).** 4 h 09 m 57 s
+  (12 GB asked, 6 CPUs allocated): audit 4,366.9 s, materialise 1,939.5, rank inputs 2,831.7, BM25 teacher 2,973.9, feature table 2.7, cache and FILTER
+  size 2,671.6, check 208.3; projection was 2.7 to 7.0 h. `non_test`: 5,789 examples, 35,804 positives, 991 repositories, cache 2.40 GB (projected
+  2.3 GB); `pool_aligned`: 4,935 examples, 29,473 positives, cache 1.73 GB. Largest child peak 5.5 GB (cache read with shared strings 5.4 GB, inside
+  the projected 3 to 6 GB); Slurm's `MaxRSS` of the batch step equals the 12 GB request, so a rerun asks 16 GB. Held-out rows 0, drop list applied,
+  scope full. FILTER K = 20 (BM25) keeps 3,885 of 5,789 examples (67.11%, clustered 95% 64.0 to 70.0%): F = 3,885 against 3,200 visits, N = 100 (D147).
+  200-directory repeat equal on every compared file and equal to the full run; 912 of 912 rank rows identical to the pilot's. Link command and
+  `resolve` are the launch step (section 11.4), not done here.
+- **Was untested before the full run (now measured, above).** Peak memory and wall time of the audit and the cache read; the shared reader's saving at 5,860 examples;
   `non_test` and `pool_aligned` counts of the whole store.
 - **Depends on.** Stage 2 (it is a stage of the same job).
 
@@ -406,6 +422,10 @@ The 7% margin is smaller than the uncertainty of the kept share carried over fro
 a FILTER pool of 3,000 the plan tool reports a shortfall of 200 visits (1.07 passes). The size-matched subsample draws as many directories
 as FILTER keeps, so it repeats exactly when FILTER does; RAW, which draws from the whole pool, does not.
 
+**Measured 2026-11-10 (E-MINE-FULL-RESULT, D147).** The keep rate of FILTER K = 20 (BM25) on the full set is 67.11% of the 5,789 `non_test`
+examples (clustered 95% interval 64.0 to 70.0%), not the pilot's 59.5%: the pool is 3,885 against 3,200 visits (margin +685, +21.4%; +505 at the
+interval's lower end), so rule (a) leaves N = 100; passes RAW 0.55, FILTER 0.82. The `pool_aligned` reading has F = 3,320 (+120).
+
 **The rule the protocol needs.** All arms of the comparison must make the same number of visits, and the handling of repeats must be the
 same for every arm; otherwise a difference between FILTER and RAW is a difference in distinct examples seen as much as in supervision
 (G5, D42). Options, none chosen:
@@ -567,8 +587,8 @@ runs) is 28.73 measured and 38.88 protocol (margin 7.82, 1.42 after the conditio
 | # | Item | State |
 |---|---|---|
 | 1 | `yield` on the final state log | **done** (read-only): 10,000 attempted, 6,230 mined, 123 quarantined (1.23%), 0 timeouts, 54,700 positives unrestricted |
-| 2 | overlap audit on the full store, drop list applied | script ready and tried on 200 directories (index on C); the run is `sbatch ... rq2_full_prep.sbatch` below |
-| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | script ready (same job as item 2); the preflight reads the prep summary file, linked by `rq2_full_prep.py link` |
+| 2 | overlap audit on the full store, drop list applied | **done 2026-11-10** (job 66544): 13 of 6,230 dropped, list tracked with its SHA-256 |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | **done 2026-11-10** (same job): 5,789 examples, FILTER size 3,885, held-out rows 0; the link into a launch work directory is the launch step |
 | 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
 | 5 | evaluation sets ready | **done** on A and C (0 missing for the dev set, the eight and the three parts of the 377) |
 | 6 | space, retention directory, memory (30 GB cannot start, see gap 5) | **checked** (A 5.3 GB free for 3.0 needed; C 26.0 GB for 10.0 needed; request 30,720 MB under 32,000); final space check at launch |
@@ -650,8 +670,8 @@ The launch step is `python3 -I scripts/rq2_plan.py resolve --work DIR`: it reads
 | # | Item | State |
 |---|---|---|
 | 1 | `yield` on the final state log | done |
-| 2 | overlap audit on the full store, drop list applied | open |
-| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | open; then the launch step (`resolve`) computes F, N and the resolved configurations (new, open) |
+| 2 | overlap audit on the full store, drop list applied | **done 2026-11-10** (E-MINE-FULL-RESULT: 13 of 6,230 dropped; tracked list, SHA-256 `36e3a144…d9f44`) |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | **done 2026-11-10** (F = 3,885, 5,789 examples, held-out rows 0); `resolve` (F, N, resolved configurations) is the launch step, open |
 | 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary and N (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
 | 5 | evaluation sets ready | done on A and C |
 | 6 | space, retention directory, memory | checked on both accounts in the rehearsal; final check at launch |

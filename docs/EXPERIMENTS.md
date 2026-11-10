@@ -61,7 +61,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-MINE-PILOT | lead | `docs/experiments/B.md` | code built and tested offline; live runs blocked (no token) | 2026-11-02 |
 | E-MINED-PILOT | lead | `docs/experiments/B.md` | done (six runs, two seeds; exploratory) | 2026-11-03 |
 | E-MINE-STORE | lead | `docs/experiments/B.md` | done (pilot; the full run is not started) | 2026-11-05 |
-| E-MINE-FULL | lead | `docs/experiments/B.md` | running (launched 2026-11-05, account C) | 2026-11-05 |
+| E-MINE-FULL | lead | `docs/experiments/B.md` | done 2026-11-08 (result: E-MINE-FULL-RESULT) | 2026-11-05 |
 | E-RETAIN-FINAL | lead | `docs/experiments/B.md` | done (switch built and tested; no GPU run yet) | 2026-11-05 |
 | E-EVAL-REPOS | lead | `docs/experiments/B.md` | done (inventory; nothing chosen) | 2026-11-05 |
 | E-EVAL-REPOS-BUILD | lead | `docs/experiments/B.md` | done (build measured; nothing evaluated) | 2026-11-06 |
@@ -85,6 +85,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-C-CATCHUP | lead | `docs/experiments/B.md` | done; scaffold table of the evaluation API brought to the five-paper reading; Colab C1 dev cells re-run natively on account A, 12 of 12 cells equal (D144, Q64 answered) | 2026-11-09 |
 | E-RQ2-FINAL-CELLS | lead | `docs/experiments/B.md` | done (apparatus, plan-only on accounts A and C); launch rulings D124 to D134, DEV-038, DEV-039; 36 configurations, per-run job scripts, evaluation by set, sealed order of the final sets; nothing trained | 2026-11-09 |
 | E-RQ2-FULL-PREP | lead | `docs/experiments/B.md` | done; full-store preparation chain as job scripts with a trial limit, run on 200 directories and on a 210-directory probe (second run equal, sharded audit equal to unsharded, 119 directories equal to the pilot's stored ranks); the 30 GB request of the run scripts cannot start (D135); no GPU job | 2026-11-09 |
+| E-MINE-FULL-RESULT | lead | `docs/experiments/B.md` | done; yield 6,230 of 10,000 mined (62.3%), 0 snapshot timeouts, G2 passes at all readings (54,700 / 35,804 `non_test` / 29,473 `pool_aligned`), audit dropped 13 directories (tracked list), full-store preparation done on C (job 66544), FILTER pool 3,885 against 3,200 visits | 2026-11-10 |
 | E-STORED-ANALYSIS | B | `docs/experiments/B.md` | done | 2026-11-02 |
 | E-C1-EVAL | C | `docs/experiments/C.md` | done (apparatus; synthetic fixtures only) | 2026-10-30 |
 | E-C2-RAW-PR | C | `docs/experiments/C.md` | done (synthetic plumbing; harness superseded by the lead's miner, D97) | 2026-10-30 |

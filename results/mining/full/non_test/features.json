@@ -1,0 +1,10 @@
+{
+ "directories_complete": 5789,
+ "directories_ranked": 5789,
+ "out": "features_mined.csv",
+ "positive_rows": 35804,
+ "sha256": "c9b699bb3fa58c522fde50d7814c51bd77d97bf2c68d0e97c5f5c76166273e15",
+ "teachers": [
+  "bm25"
+ ]
+}

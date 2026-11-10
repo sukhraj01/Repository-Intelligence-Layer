@@ -1,0 +1,238 @@
+{
+ "cells": {
+  "drop_flagged": {
+   "directories": 6230,
+   "dropped": 138,
+   "dropped_by_a": 13,
+   "dropped_by_b_only": 125,
+   "flagged": 0,
+   "pool_like_after": 5685,
+   "pool_like_directories": 5802,
+   "pool_like_positives": 36046,
+   "pool_like_positives_after": 35348,
+   "repositories": 1013,
+   "repositories_with_a_dropped_directory": 58,
+   "repositories_with_every_directory_dropped": 19,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": true,
+    "floor": 20,
+    "positives": "non_test"
+   }
+  },
+  "positives_all": {
+   "directories": 6230,
+   "dropped": 16,
+   "dropped_by_a": 16,
+   "dropped_by_b_only": 0,
+   "flagged": 124,
+   "pool_like_after": 5786,
+   "pool_like_directories": 5802,
+   "pool_like_positives": 36046,
+   "pool_like_positives_after": 35714,
+   "repositories": 1013,
+   "repositories_with_a_dropped_directory": 14,
+   "repositories_with_every_directory_dropped": 2,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 20,
+    "positives": "all"
+   }
+  },
+  "primary": {
+   "directories": 6230,
+   "dropped": 13,
+   "dropped_by_a": 13,
+   "dropped_by_b_only": 0,
+   "flagged": 125,
+   "pool_like_after": 5789,
+   "pool_like_directories": 5802,
+   "pool_like_positives": 36046,
+   "pool_like_positives_after": 35804,
+   "repositories": 1013,
+   "repositories_with_a_dropped_directory": 11,
+   "repositories_with_every_directory_dropped": 2,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 20,
+    "positives": "non_test"
+   }
+  }
+ },
+ "corpus_matches": {
+  "by_heldout_repository": {
+   "ansible/ansible": 20498,
+   "astropy/astropy": 16907,
+   "aws-cloudformation/cfn-lint": 486,
+   "conan-io/conan": 6108,
+   "deepset-ai/haystack": 2352,
+   "django/django": 19155,
+   "ibm/mcp-context-forge": 4297,
+   "internetarchive/openlibrary": 2509,
+   "jlowin/fastmcp": 698,
+   "jupyterlab/jupyter-ai": 1661,
+   "matplotlib/matplotlib": 9861,
+   "mwaskom/seaborn": 1577,
+   "pallets/flask": 475,
+   "pdm-project/pdm": 860,
+   "psf/black": 1371,
+   "psf/requests": 7793,
+   "pydata/xarray": 9560,
+   "pylint-dev/pylint": 12636,
+   "pyomo/pyomo": 15806,
+   "pytest-dev/pytest": 5620,
+   "python-control/python-control": 1873,
+   "qutebrowser/qutebrowser": 3571,
+   "scikit-learn/scikit-learn": 14970,
+   "sphinx-doc/sphinx": 3159,
+   "streamlink/streamlink": 3168,
+   "sympy/sympy": 17210
+  },
+  "by_size": {
+   "20 to 49": 6089,
+   "50 and up": 6960,
+   "under 20": 58545
+  },
+  "matched_functions": 71594
+ },
+ "directories": 6230,
+ "floor_sensitivity": {
+  "10": {
+   "directories": 6230,
+   "dropped": 34,
+   "dropped_by_a": 34,
+   "dropped_by_b_only": 0,
+   "flagged": 141,
+   "pool_like_after": 5768,
+   "pool_like_directories": 5802,
+   "pool_like_positives": 36046,
+   "pool_like_positives_after": 33091,
+   "repositories": 1013,
+   "repositories_with_a_dropped_directory": 29,
+   "repositories_with_every_directory_dropped": 4,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 10,
+    "positives": "non_test"
+   }
+  },
+  "20": {
+   "directories": 6230,
+   "dropped": 13,
+   "dropped_by_a": 13,
+   "dropped_by_b_only": 0,
+   "flagged": 125,
+   "pool_like_after": 5789,
+   "pool_like_directories": 5802,
+   "pool_like_positives": 36046,
+   "pool_like_positives_after": 35804,
+   "repositories": 1013,
+   "repositories_with_a_dropped_directory": 11,
+   "repositories_with_every_directory_dropped": 2,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 20,
+    "positives": "non_test"
+   }
+  },
+  "50": {
+   "directories": 6230,
+   "dropped": 9,
+   "dropped_by_a": 9,
+   "dropped_by_b_only": 0,
+   "flagged": 115,
+   "pool_like_after": 5793,
+   "pool_like_directories": 5802,
+   "pool_like_positives": 36046,
+   "pool_like_positives_after": 35932,
+   "repositories": 1013,
+   "repositories_with_a_dropped_directory": 7,
+   "repositories_with_every_directory_dropped": 1,
+   "rule": {
+    "corpus_share": 0.05,
+    "drop_flagged": false,
+    "floor": 50,
+    "positives": "non_test"
+   }
+  }
+ },
+ "line_hash_reading": {
+  "directories_at_or_above": 144,
+  "of_which_also_flagged_by_ast": 99,
+  "share": 0.05
+ },
+ "positive_matches_all": {
+  "by_heldout_repository": {
+   "ansible/ansible": 46,
+   "astropy/astropy": 32,
+   "aws-cloudformation/cfn-lint": 3,
+   "conan-io/conan": 12,
+   "deepset-ai/haystack": 4,
+   "django/django": 33,
+   "ibm/mcp-context-forge": 15,
+   "internetarchive/openlibrary": 1,
+   "jupyterlab/jupyter-ai": 1,
+   "matplotlib/matplotlib": 20,
+   "psf/black": 3,
+   "psf/requests": 26,
+   "pydata/xarray": 21,
+   "pylint-dev/pylint": 24,
+   "pyomo/pyomo": 27,
+   "pytest-dev/pytest": 9,
+   "python-control/python-control": 2,
+   "qutebrowser/qutebrowser": 5,
+   "scikit-learn/scikit-learn": 40,
+   "sphinx-doc/sphinx": 8,
+   "streamlink/streamlink": 9,
+   "sympy/sympy": 25
+  },
+  "by_size": {
+   "20 to 49": 8,
+   "50 and up": 17,
+   "under 20": 112
+  },
+  "directories_with_a_match": 75,
+  "matches": 137,
+  "reading": "all"
+ },
+ "positive_matches_non_test": {
+  "by_heldout_repository": {
+   "ansible/ansible": 44,
+   "astropy/astropy": 30,
+   "aws-cloudformation/cfn-lint": 3,
+   "conan-io/conan": 12,
+   "deepset-ai/haystack": 3,
+   "django/django": 31,
+   "ibm/mcp-context-forge": 14,
+   "internetarchive/openlibrary": 1,
+   "jupyterlab/jupyter-ai": 1,
+   "matplotlib/matplotlib": 18,
+   "psf/black": 3,
+   "psf/requests": 25,
+   "pydata/xarray": 20,
+   "pylint-dev/pylint": 23,
+   "pyomo/pyomo": 26,
+   "pytest-dev/pytest": 9,
+   "python-control/python-control": 1,
+   "qutebrowser/qutebrowser": 4,
+   "scikit-learn/scikit-learn": 35,
+   "sphinx-doc/sphinx": 8,
+   "streamlink/streamlink": 8,
+   "sympy/sympy": 25
+  },
+  "by_size": {
+   "20 to 49": 6,
+   "50 and up": 14,
+   "under 20": 105
+  },
+  "directories_with_a_match": 68,
+  "matches": 125,
+  "reading": "non_test"
+ },
+ "positives_without_row": 0,
+ "version": "overlap-audit/v1"
+}
