@@ -1,0 +1,7 @@
+level,metric,key,ladder_key,ladder_queries,queries,ladder,recomputed,abs_diff,reproduces
+L2,ndcg10,bm25|control,ref|bm25,351,351,21.1704,21.1704,0.0,True
+L2,ndcg10,rrf|control,p|first,351,351,24.0359,24.0359,0.0,True
+L2,ndcg10,dense,r1|dense,351,351,18.2427,18.2427,0.0,True
+L3,recall100,bm25|control,ref|bm25,155,155,37.473,37.473,0.0,True
+L3,recall100,rrf|control,p|first,155,155,42.996,42.996,0.0,True
+L3,recall100,dense,r1|dense,155,155,34.0024,34.0024,0.0,True

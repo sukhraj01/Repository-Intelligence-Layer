@@ -57,6 +57,8 @@ LATENCY_STAGES: tuple[str, ...] = (
     "graph_expand_1hop",
     "graph_expand_2hop",
     "rrf_fusion",
+    "same_file_expansion",
+    "recency_prior",
     "cross_encoder_rerank",
     "assemble",
     "end_to_end",

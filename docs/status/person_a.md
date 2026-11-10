@@ -45,3 +45,9 @@ None yet.
 
 Own cluster account (course allocation: 1 job, 6 h, 10 CPU, 1 GPU, 25 GB) configured 2026-11-05; three CPU jobs so far
 (`results/logs/ada_jobs_a.csv`), 0 GPU-hours of the 16. Dev folders under the account's `ril_a/raw` (0.8 GB).
+
+## Closed by the lead while the owner is away (dated lines)
+
+- 2026-11-10 (E-FREEZE-AND-LATENCY, D148): item 1 of "Not done yet" for the development set: unit-level BM25 variants and field weights, one factor at a time with the E1 default as control (508 of 508 levels reproduce the stored scores), alone and inside RRF with the stored dense scores. Identifier splitting is the best variant by the rule and does not change the fusion on L2 nDCG@10 (-0.29 [-1.74, +1.16]); the path field and the pilot weights raise L2 Recall@100 inside the fusion (+2.93 [+0.88, +4.98], +2.64 [+0.82, +4.45]); at L3 (two repositories, query level) splitting is +2.75 [+1.59, +3.90] at Recall@100. Still open: one Verified reading of the final setting, only after the lead says so.
+- 2026-11-10 (same entry): item 3, the stages of the ablation table that had no latency row, measured on the M3 at django and flask size: rank fusion 5.04 ms p50 at django size, same-file expansion 0.41, recency prior 2.04; the ladder's latency column is rebuilt from the log. A5 (rerank) and A6 (end-to-end latency profile) stay open.
+- 2026-11-10 (same entry): the retrieval settings are recorded per consumer in `configs/frozen/` (RQ2 evaluation k 60, RQ3 contexts and dev selection k 100; nothing unified); a test fails when a record changes.

@@ -4,6 +4,7 @@ Usage:
   rq1_ladder.py eval CONFIG E3_CACHE DENSE_ROOT OUT_DIR
   rq1_ladder.py inventory E3_CACHE DENSE_ROOT VARIANT [VARIANT ...]
   rq1_ladder.py tables ROOT DATE LABEL=EVAL_DIR [LABEL=EVAL_DIR ...] [--env KEY=VALUE ...]
+  rq1_ladder.py latency ROOT
 """
 
 from __future__ import annotations
@@ -23,7 +24,7 @@ from ril.util.seed import set_seed  # noqa: E402
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("stage", choices=["eval", "inventory", "tables"])
+    ap.add_argument("stage", choices=["eval", "inventory", "tables", "latency"])
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--env", nargs="*", default=[])
@@ -42,6 +43,10 @@ def main() -> int:
         cache, dense_root, *variants = args.paths
         inv = inventory(cache, {v: dense_root for v in variants})
         sys.stdout.write(json.dumps(inv, indent=2, sort_keys=True) + "\n")
+    elif args.stage == "latency":
+        from ril.analysis.rq1_ladder import write_latency
+
+        log.info("%s", write_latency(args.paths[0]))
     else:
         from ril.analysis.rq1_ladder import write_outputs
 
