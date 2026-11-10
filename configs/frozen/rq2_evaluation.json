@@ -1,0 +1,366 @@
+{
+ "assembly": "not part of the RQ2 evaluation (retrieval metrics only)",
+ "bm25": {
+  "b": 0.75,
+  "k1": 1.5,
+  "provisional": [
+   "ADR-004"
+  ],
+  "stop_words": 33,
+  "unit_level_variants": "none frozen (D119 dev run: E-FREEZE-AND-LATENCY)",
+  "variant": "reference form (Lucene-variant scoring, stemmed, stop list)"
+ },
+ "budgets": "none (rank metrics: nDCG@10, Recall@100)",
+ "code_commit": "70855db",
+ "configuration": {
+  "evaluation": {
+   "baselines": [],
+   "batch_size": 64,
+   "chunks": false,
+   "roles": [
+    "dev"
+   ],
+   "rrf_k": 60,
+   "seed": 0
+  },
+  "expansion": "off",
+  "fusion": "reciprocal rank fusion over whole rankings (rank-based, not a score sum)",
+  "held_identical_training_sections": {
+   "batch": {
+    "batch_size": 32,
+    "max_positives": 1,
+    "negatives_per_example": 1
+   },
+   "budget": {
+    "stop_after": 100,
+    "updates": 3000
+   },
+   "loss": {
+    "form": "sum_in_numerator",
+    "normaliser": "batch",
+    "temperature": 0.05
+   },
+   "model": {
+    "encoder": "coderankembed",
+    "gradient_checkpointing": true,
+    "kind": "sentence_transformers",
+    "max_tokens": 512
+   },
+   "negatives": {
+    "name": "random_repo"
+   },
+   "optimizer": {
+    "grad_clip": 1.0,
+    "lr": 2e-05,
+    "name": "adamw",
+    "precision": "amp_fp16",
+    "schedule": "linear",
+    "warmup_updates": 7,
+    "weight_decay": 0.01
+   }
+  },
+  "index": "flat exact (no approximate index)",
+  "recency_prior": "off",
+  "roles": [
+   "dev"
+  ],
+  "rrf_k": 60
+ },
+ "consumer": "rq2_evaluation",
+ "consumer_hashes": {
+  "cell_table_digest": "f441e76574a90bf199ee5d634a64fd41904a76505dad044e33f06ce9e1f16f90",
+  "evaluation_section_identical_in_all_runs": true,
+  "kind": "training.config_io.config_hash of each rendered run configuration",
+  "runs": {
+   "configs/experiments/rq2_final/inj_clean_raw_u100_s100.yaml": "d32c7df45fbc239c5eede167169764aac3f6297b7df7f471328cda1fe4686dbd",
+   "configs/experiments/rq2_final/inj_clean_raw_u100_s101.yaml": "ed9a4e462492217b762917515ddf03801c437a2fc542a9e99f2130cf0b085277",
+   "configs/experiments/rq2_final/inj_clean_raw_u100_s102.yaml": "0c9e00af64737f5546e129e1cb865c92d9b0eaea1dcffb2963bc5c1c71e05d7f",
+   "configs/experiments/rq2_final/inj_filter_bm25_r01_u100_s100.yaml": "71d8c88b8163f39e5b26749fffdc7ceff84575028feec6d90f8790153904bfcd",
+   "configs/experiments/rq2_final/inj_filter_bm25_r01_u100_s101.yaml": "55522eef08a69b800eb32b9bea0d40676af8d1b35278bb415b065b277d649458",
+   "configs/experiments/rq2_final/inj_filter_bm25_r01_u100_s102.yaml": "7534338138091a6d399cfadc5296e4e3145d6879d3f614ae8c6f16b739f2fcd9",
+   "configs/experiments/rq2_final/inj_filter_bm25_u100_s100.yaml": "55de72721b8c4cb331bba25463f511e33ccebcf46c451b1663467d64a0ef3017",
+   "configs/experiments/rq2_final/inj_filter_bm25_u100_s101.yaml": "8948e2e8ec5d023190db08333b175950402e6aa1e26dbd4d5bf93f0cc0ca7611",
+   "configs/experiments/rq2_final/inj_filter_bm25_u100_s102.yaml": "d29c76d229477da495c1943f30529123a467cc690ba7d585adce734c2deba1d0",
+   "configs/experiments/rq2_final/inj_filter_srs_u100_s100.yaml": "c44a91436f11a75eaa177dece07a35d97df2d17c8b27fd2013bf36624189adb5",
+   "configs/experiments/rq2_final/inj_filter_srs_u100_s101.yaml": "7a254a75daafd258625d73b96dcf627927f3d4248203a2c0e57ac868e5c09f0e",
+   "configs/experiments/rq2_final/inj_filter_srs_u100_s102.yaml": "062daabf7d0c0c012516192a7decaffbad98deb451078cdba4c32fcc33dd6984",
+   "configs/experiments/rq2_final/inj_oracle_u100_s100.yaml": "fadfd4953c0856e53b9a24d88ecdad36529907b03ef3c39dc98cb80175dcf8ff",
+   "configs/experiments/rq2_final/inj_oracle_u100_s101.yaml": "2ee65109f6b89498c7d74288fccf028bcbf0b8ccdb57650134998a9c158ed1bc",
+   "configs/experiments/rq2_final/inj_oracle_u100_s102.yaml": "9f408103754d244070652124277ef5d5712b4986758690efc1d481f4a5e76810",
+   "configs/experiments/rq2_final/inj_raw_r01_u100_s100.yaml": "e4284436872e45b0e92d20fb63ff2d221d0ff7f14ac45c8c8a96db37ac1a8cff",
+   "configs/experiments/rq2_final/inj_raw_r01_u100_s101.yaml": "0b6a64947182383d4328af16d6524f77118fd60326e02f96f3a702c867800247",
+   "configs/experiments/rq2_final/inj_raw_r01_u100_s102.yaml": "65bc26f339760f65f3c9b1ec002206253f976bf567f5885062956dcd2f71a28b",
+   "configs/experiments/rq2_final/inj_raw_u100_s100.yaml": "7397d9418b810ee4d4afa68fda9fb21108ec303c764b505e3410bc57ff21a434",
+   "configs/experiments/rq2_final/inj_raw_u100_s101.yaml": "cf8acf37a9542c99e9d8046448cd6a4e30fa0139b43584a17248b544c2de9c39",
+   "configs/experiments/rq2_final/inj_raw_u100_s102.yaml": "25e51cc9df9dd3b3de8d19e612dd5dc624fc8a64ca6d706603a01d8220a7b5f1",
+   "configs/experiments/rq2_final/inj_sub_u100_s100.yaml": "0dcf847edff2718927b14993c26aadc49482124eeb5687b6e79751ff1bc99159",
+   "configs/experiments/rq2_final/inj_sub_u100_s101.yaml": "d6d5280b00f5f3ef7683d594c5dc3603a51b43d3dc93789616a33c05e9f1a662",
+   "configs/experiments/rq2_final/inj_sub_u100_s102.yaml": "33701fd24e8fd908c8698e9e887fdc6133f654a02a5cb39f17e5e60194c59ead",
+   "configs/experiments/rq2_final/inj_weight_u100_s100.yaml": "b49314b2f1aaf5c6abcdbd6e8d74a0366b0b7b3aab0bb4f4bdce73160122ca4f",
+   "configs/experiments/rq2_final/inj_weight_u100_s101.yaml": "ac102deb6b123136b9bec7886e7000951f402613f65de313584a20bc18c643b8",
+   "configs/experiments/rq2_final/inj_weight_u100_s102.yaml": "b654a44a484e9b825bf0e7297801934e4313dea2fb415619c6112ee3e3f4beb9",
+   "configs/experiments/rq2_final/mined_curriculum_u100_s100.yaml": "399c565e0694e178c5134e7ce280182da0b9b21fd96b439a8829c94cd5987bf4",
+   "configs/experiments/rq2_final/mined_curriculum_u100_s101.yaml": "f4609d7bca6f7767d589d150f6364683c87f406b452c6625329b6980018fbef5",
+   "configs/experiments/rq2_final/mined_curriculum_u100_s102.yaml": "8c70f0e263a0aa4c3fe644874d97ecfa68488519450a4ed172b50152576fb1b2",
+   "configs/experiments/rq2_final/mined_filter_bm25_u100_s100.yaml": "cfa819c44a09cf320796ec40ce563fb6bc116bcdccddac76e22604f9fc6b14be",
+   "configs/experiments/rq2_final/mined_filter_bm25_u100_s101.yaml": "68f9a1e695e6a94208985afda52cee4beeb96379e204cd4f8ee98f9693ebf6c4",
+   "configs/experiments/rq2_final/mined_filter_bm25_u100_s102.yaml": "9e09f20356bb710a5408c51ac54fe066604295ece0141eab643333969287f58b",
+   "configs/experiments/rq2_final/mined_filter_srs_u100_s100.yaml": "59131ec317c8da2b658c9a4969b71397afd04b4bbe386e3f882c89cac3092e70",
+   "configs/experiments/rq2_final/mined_filter_srs_u100_s101.yaml": "2de7e4c28e607a54ba1b667511e5a9faf4644ad8af33ed418a644d10ca741fe6",
+   "configs/experiments/rq2_final/mined_filter_srs_u100_s102.yaml": "c1be5a2d0483012d8e3ab1ab63f7975de7c1cee40f7416f4420318645bc0d5bc",
+   "configs/experiments/rq2_final/mined_raw_u100_s100.yaml": "ee5c8cb076930a5f1f42fadc1c987eda3031aa7350d24ef17a1ffee2c187e539",
+   "configs/experiments/rq2_final/mined_raw_u100_s101.yaml": "701006e6c67fdf547de5335494070e760386227cee365f8c13d0f597317cce44",
+   "configs/experiments/rq2_final/mined_raw_u100_s102.yaml": "ebf4478c35c41a3264c7bdffb00fe0ed06aee35e46603603568a805d07c547e6",
+   "configs/experiments/rq2_final/mined_sub_u100_s100.yaml": "ecb411c5c3f64411bdff582203cfef7408fa7a957e879c975203d032b1b6bb7a",
+   "configs/experiments/rq2_final/mined_sub_u100_s101.yaml": "f1f2811e3e17a8f2b58af74403d6f38a79e6e3f54d715e0d0b89db58792234be",
+   "configs/experiments/rq2_final/mined_sub_u100_s102.yaml": "d31e9f5a1b7af14e2ee8030638705e3bbf61a105a0e2f48dad1630aa14b73c56",
+   "configs/experiments/rq2_final/mined_weight_u100_s100.yaml": "08d9846313d8e4efdf2ff6bd33ad26fe52f15d78aa8edbb3876c302a64d439be",
+   "configs/experiments/rq2_final/mined_weight_u100_s101.yaml": "6d790b20325ae838ed47cbd9f5a44c99e8544c37e89e63f4d8ae841935729b07",
+   "configs/experiments/rq2_final/mined_weight_u100_s102.yaml": "2cf1514370ba39dd7b57e7df8248740329ef0fef0021c1bf48a323f6b84f7854"
+  },
+  "training_version": "training/v1"
+ },
+ "description": "Checkpoint evaluation of the RQ2 final runs (ril.evaluation.checkpoint_eval on the X2 machinery): dense alone and RRF(BM25, dense), dev role, flat exact index, no expansion and no recency prior, query-time encoding at the training truncation.",
+ "encoder": {
+  "max_tokens": 512,
+  "model_name": "CodeRankEmbed",
+  "name": "coderankembed",
+  "query_template": "Represent this query for searching relevant code: {query}",
+  "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1"
+ },
+ "frozen_on": "2026-11-10",
+ "latency": {
+  "kind": "stored rows copied in; stages are timed on different hosts and are not additive",
+  "not_measured": [],
+  "rows": [
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "ad04357c940178aec13a51fc354a2b5735820a9b62d5fba303e2bdb9d3a870a9",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 35860,
+    "n": 295,
+    "p50_ms": 18.4832,
+    "p95_ms": 19.5332,
+    "p99_ms": 20.5899,
+    "query_set_id": "qenc-coderankembed-t512-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "query_encode",
+    "timestamp_utc": "2026-10-23T13:07:08Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "bba24b0",
+    "config_hash": "97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 0.202,
+    "p95_ms": 0.269,
+    "p99_ms": 0.3074,
+    "query_set_id": "retrieval-django-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "bm25",
+    "timestamp_utc": "2026-10-17T22:31:47Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "8b90845f349bd64ca8a8406471656ee1255d4237a3b918978da9f97aeed806cd",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 35860,
+    "n": 295,
+    "p50_ms": 0.267,
+    "p95_ms": 0.2683,
+    "p99_ms": 0.2781,
+    "query_set_id": "dsearch-coderankembed-django-torch-v1",
+    "rows_matched": 2,
+    "scale": "django",
+    "stage": "dense_search",
+    "timestamp_utc": "2026-10-23T13:07:37Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "90a609f",
+    "config_hash": "560ce0a99e536e3ae585c292f17cc3e4fa640ed76accd3dfce0c8d15bfb27609",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 5.0444,
+    "p95_ms": 5.3593,
+    "p99_ms": 5.5644,
+    "query_set_id": "fusion-django-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "rrf_fusion",
+    "timestamp_utc": "2026-11-10T00:06:54Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "ad04357c940178aec13a51fc354a2b5735820a9b62d5fba303e2bdb9d3a870a9",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 974,
+    "n": 295,
+    "p50_ms": 18.4832,
+    "p95_ms": 19.5332,
+    "p99_ms": 20.5899,
+    "query_set_id": "qenc-coderankembed-t512-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "query_encode",
+    "timestamp_utc": "2026-10-23T13:07:08Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "bba24b0",
+    "config_hash": "f50286d3662c8f5a1bfeb6264dd370f5c035048f2ebc8c5877c0c55b012237fa",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 0.0398,
+    "p95_ms": 0.0452,
+    "p99_ms": 0.0468,
+    "query_set_id": "retrieval-flask-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "bm25",
+    "timestamp_utc": "2026-10-17T22:31:31Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "a76428f77f0949d0b04b0670d8462a90e284aca4bfce75f33610065293216aa1",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 974,
+    "n": 295,
+    "p50_ms": 0.113,
+    "p95_ms": 0.1169,
+    "p99_ms": 0.1308,
+    "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+    "rows_matched": 2,
+    "scale": "flask",
+    "stage": "dense_search",
+    "timestamp_utc": "2026-10-23T13:07:37Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "90a609f",
+    "config_hash": "e3d3ddfb05667d9cbc1cb9f49d65d9cc1af43bccdcd78d03c69c5ff934e4bbd5",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 0.1244,
+    "p95_ms": 0.1338,
+    "p99_ms": 0.139,
+    "query_set_id": "fusion-flask-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "rrf_fusion",
+    "timestamp_utc": "2026-11-10T00:06:38Z"
+   }
+  ],
+  "source": "results/latency/latency_log.csv"
+ },
+ "not_found": [],
+ "parsing": {
+  "codeunit_schema": "v1",
+  "parser": "ast-parser/v0",
+  "resolver": "own-ast-resolver/v0",
+  "resolver_note": "D117: becomes v0.1 at the next cache rebuild, none forced",
+  "unit_granularity": "function, method, class, one residual module unit per file (D6)"
+ },
+ "provisional_in_consumer": [
+  "ADR-001",
+  "ADR-002",
+  "ADR-006"
+ ],
+ "record_version": "freeze-record/v1",
+ "sensitivity": {
+  "difference_to_other_consumers": [
+   {
+    "L2_ndcg10_points": 0.48,
+    "L3_recall100_points": 0.37,
+    "other_consumer": "rq1_dev_selection",
+    "other_setting": {
+     "max_tokens": 1024,
+     "rrf_k": 100
+    }
+   },
+   {
+    "L2_ndcg10_points": -0.11,
+    "L3_recall100_points": 0.09,
+    "other_consumer": "rq3_contexts",
+    "other_setting": {
+     "max_tokens": 512,
+     "rrf_k": 100
+    }
+   }
+  ],
+  "largest_difference_to_other_consumers_points": 0.48,
+  "largest_k60_vs_k100_difference_points": 0.34,
+  "own_setting": {
+   "max_tokens": 512,
+   "rrf_k": 60
+  },
+  "reading": "dev, units_all_nomod, CodeRankEmbed, RRF with BM25 (E-DENSE-FUSION)",
+  "source": {
+   "path": "results/tables/x2_first_dev.csv",
+   "sha256": "f7bb5fa933a4e0e213a6fcf6234465285554c5da295b7ce92811116a3b46b383"
+  },
+  "values": {
+   "t1024_k100": {
+    "L2_ndcg10": 24.04,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 43.0
+   },
+   "t1024_k60": {
+    "L2_ndcg10": 24.03,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.66
+   },
+   "t512_k100": {
+    "L2_ndcg10": 23.45,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.72
+   },
+   "t512_k60": {
+    "L2_ndcg10": 23.56,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.63
+   }
+  }
+ },
+ "sources": [
+  {
+   "path": "configs/experiments/rq2_final/_template_injected.yaml",
+   "sha256": "12b197276bb538c5745395931aeb9a10704161c3c4782bbaf147977b6c2494e9"
+  },
+  {
+   "path": "configs/experiments/rq2_final/_template_mined.yaml",
+   "sha256": "ec9dea006b6d442cce08fe8acbc1fd69db6cf5a73e225a1594824e305d70b3aa"
+  }
+ ]
+}
