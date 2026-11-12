@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\centering\small
+\caption{Full mined set: yield, counts after the overlap audit, and the filter pool. Evidence class: \emph{measured, exploratory (data)}. Full mined set, built by the rule fixed before the run. Counts are pull requests for the yield rows and directories (one per mined pull request) below them; positives are edited units of the base commit. Share is of attempted pull requests, of mined directories for the audit row, and of the directories offered to the filter for the filter rows. Nothing was trained on it. Entry \entry{E-MINE-FULL-RESULT}.}
+\label{tab:mined_full}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.4\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}}
+\toprule
+Quantity & Count & Positives & Share (\%) \\
+\midrule
+Attempted pull requests & 10000 & -- & -- \\
+Mined, with positives & 6230 & 54700 & 62.3 \\
+No Python change & 2607 & -- & 26.1 \\
+No positive & 1040 & -- & 10.4 \\
+Quarantined & 123 & -- & 1.2 \\
+Snapshot time-outs & 0 & -- & 0.0 \\
+\midrule
+non\_test reading, before the audit & 5802 & 36046 & -- \\
+Dropped by the overlap audit & 13 & 242 & 0.21 \\
+non\_test reading, after the audit (primary) & 5789 & 35804 & -- \\
+pool\_aligned reading, after the audit & 4935 & 29473 & -- \\
+\midrule
+FILTER (BM25, K=20) keeps, primary & 3885 & 11380 & 67.1 \\
+FILTER (BM25, K=20) keeps, pool\_aligned & 3320 & 9739 & 67.3 \\
+\bottomrule
+\end{tabular}
+\end{table*}

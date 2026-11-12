@@ -259,13 +259,20 @@ reading that also drops \texttt{async} functions and positives that gained lines
 share on a 300-directory subset (53.3\%), and the second drops a fifth of the directories, which is why the primary reading was kept. % E-MINE-FULL D96 docs/experiments/B.md
 That share is 53.3\% against 23.2\% for the pool (Table~\ref{tab:mined_vs_pool_ranks}), so the mined set holds pairs the BM25 teacher cannot find, which
 is what a filter would act on. The pilot's \texttt{non\_test} reading has 1,286 directories and 7,081 positives. % E-MINED-PILOT results/mining/m3_ranks.md
-\todo{Size, yield and quarantine of the full mined set; the full run is in progress and none of its numbers is
-stored as a result: \entry{E-MINE-FULL}.}
-Known limits of the construction: about one pilot pull request in ten has a corpus file that does not parse (Python~2 syntax),
-so those units are absent; % 133 of 1,391, E-MINE-PILOT results/mining/m2_report.md
-changed files with non-ASCII identifiers are not yet representable in unit identifiers (the identifier schema
-is frozen), and a pull request whose base-commit fetch exceeds the time limit is quarantined and counted, not retried
-indefinitely; quarantined pull requests are a stated limitation of the set, not a random subsample.
+The full run attempted 10,000 pull requests from 1,102 repositories (Table~\ref{tab:mined_full}): 6,230 (62.3\%) were mined with at least one positive, 2,607 (26.1\%) changed no Python,
+1,040 (10.4\%) had no positive and 123 (1.2\%) were quarantined; the pilot's mined share was 69.6\%, and the gap is the share with no Python change, as the full run reaches more repositories (1,102 against 200). % E-MINE-FULL-RESULT results/mining/full/yield_report.json
+The mined share does not drift inside the run (62.2\%, 62.3\% and 62.4\% over its three segments). % E-MINE-FULL-RESULT results/mining/full/yield_report.json
+The 6,230 directories hold 54,700 positives unrestricted, 36,046 in the primary reading before the audit and 35,804 after it, in 5,789 directories of 991 repositories, and 29,473 in the sensitivity reading's 4,935 directories;
+the plan's floor of 10,000 positives is passed 5.5, 3.6 and 2.9 times on the three counts. % E-MINE-FULL-RESULT results/mining/full/non_test/counts.json D96
+The repository mix is flat: the largest repository holds 3.97\% of attempts and the largest five 13.0\%, against a pilot in which one repository supplied 319 of the first 1,437 attempts; the median repository contributes 3 attempts and 1,013 repositories have a mined pull request. % E-MINE-FULL-RESULT results/mining/full/yield_report.json docs/experiments/B.md
+The store takes 1.86 GB. % E-MINE-FULL-RESULT docs/experiments/B.md
+Known limits of the construction (Table~\ref{tab:mined_quarantine}): 21 of the 10,000 attempts were lost to Python~2 syntax in a changed file, 26 to a file absent at the base commit, 14 to a diff too large to read, 8 to non-ASCII identifiers (the identifier schema
+is frozen), and 26 to another syntax error; no attempt was lost to a snapshot time-out, so the rule that would have scoped a second fetch pass (more than 2\% time-outs concentrated in five repositories) is not triggered (D146). % E-MINE-FULL-RESULT results/mining/full/yield_report.json D146
+Quarantine by repository size shows no gradient that under-represents large repositories (1.16\%, 1.03\% and 0.82\% from the smallest class upward, and none of 35 attempts above 50,000 functions). % E-MINE-FULL-RESULT docs/experiments/B.md
+Quarantined pull requests are a stated limitation of the set, not a random subsample.
+
+\input{generated/mined_full}
+\input{generated/mined_quarantine}
 
 \paragraph{Content-overlap audit.} Matching repository names does not catch a held-out function that was
 vendored into another repository. The audit hashes each function's syntax tree (docstring, comments and layout
@@ -274,8 +281,11 @@ corpus-level overlap alone only flags the directory. % E-OVERLAP-AUDIT docs/expe
 On the pilot store it drops 3 of 1,286 pool-like directories (0.2\%) and 85 of 7,081 positives (1.2\%), and flags 33 more; a hand reading of the five
 matched positives at the floor finds code copied or adapted from one held-out library. % E-OVERLAP-AUDIT results/mining/overlap_audit/pilot/summary.json
 The audit sees 26 of the 605 held-out repositories (stored function records exist for no others), so a leak
-into the remaining ones is undetectable by it; it has not been run on the full store. % E-OVERLAP-AUDIT docs/experiments/B.md
-\todo{Surviving counts of the full mined set after the audit: \entry{E-MINE-FULL}, \entry{E-OVERLAP-AUDIT}.}
+into the remaining 579 is undetectable by it. % E-OVERLAP-AUDIT docs/experiments/B.md
+On the full store the audit drops 13 of 6,230 directories (0.21\%) in 11 repositories and 242 of 36,046 non-test positives (0.67\%), leaving 5,789 directories and 35,804 positives;
+the dropped positives match scikit-learn (six directories, mostly a vendored copy of one library, as in the pilot), ansible, matplotlib, requests, astropy, sphinx, xarray and django. % E-MINE-FULL-RESULT results/mining/overlap_audit/full/summary.json
+The count moves little with the choices: a floor of 10 drops 34 directories, a floor of 50 drops 9, counting all positives at floor 20 drops 16, and dropping every flagged directory drops 138. % E-MINE-FULL-RESULT results/mining/overlap_audit/full/summary.json
+The drop list is applied to the training manifest only; the store is unchanged. % E-MINE-FULL-RESULT results/mining/full/drop_manifest.json
 
 \paragraph{Label audit.} Whether mined positives are wrong is measured, not assumed. Positives of the pilot's 1,286 directories are
 the sampled population. A pair's K-rank is the rank of its best-ranked positive when a base retriever ranks the
@@ -365,12 +375,13 @@ discarded, GPU sections synchronised and cold and warm cache separated. Indexing
 throughput, in separate tables, and numbers are never compared across hardware without saying so.
 Table~\ref{tab:latency_stages} gives the stages that have a row in the log. On the machines used, a query is encoded in a p50 of 18.48 ms on a GPU node and 377.63 ms on a CPU node, where the
 p95 reaches 937.20 ms; searching the flat exact index of the largest first repository takes 0.27 ms on the GPU node and 4.96 ms on the CPU node; lexical retrieval takes 0.20 ms,
-graph expansion 1.14 ms and assembly 10.98 ms on a laptop CPU. % E-LAT-STAGES results/latency/latency_log.csv
-Query encoding is therefore the largest single stage of the dense path and assembly the largest of the lexical path, and the cheap stages are far below both.
+graph expansion 1.14 ms and assembly 10.98 ms on a laptop CPU; reciprocal rank fusion of two whole rankings of the same 35,860 units takes 5.04 ms (it sorts both), same-file expansion 0.41 ms with a p99 of 3.08 ms,
+and the recency prior 2.04 ms. % E-LAT-STAGES E-FREEZE-AND-LATENCY results/latency/latency_log.csv
+Query encoding is therefore the largest single stage of the dense path, and assembly and then fusion the largest of the lexical path, and the cheap stages are far below them.
 The rows come from different machines and commits, so they are not summed into a pipeline latency, and the end-to-end row is lexical retrieval plus assembly only.
-Reciprocal rank fusion has been measured at score level but has no stage row, the reranker has none, and no row exists for the frozen configuration. Nothing is said here about nDCG per millisecond.
-\todo{Latency of fusion and rerank, one end-to-end row of the whole pipeline on one machine, the frozen configuration's benchmark snapshot, and nDCG per
-millisecond: \entry{E-LAT-STAGES}, \entry{E-RQ1-ALL}.}
+Fusion could be made cheaper by selecting instead of sorting, but that changes how ties break and is not done here. The reranker has no row and the frozen settings are recorded per consumer, not as one snapshot (D148). % E-FREEZE-AND-LATENCY docs/experiments/B.md
+\todo{Latency of the reranker, one end-to-end row of the whole pipeline on one machine, and nDCG per
+millisecond for the ladder: \entry{E-LAT-STAGES}, \entry{E-RQ1-ALL}.}
 
 \input{generated/latency_stages}
 
@@ -582,7 +593,11 @@ and unadjusted intervals, verdict by the rules above: \entry{E-RQ2-FILTER}, \ent
 counts of every cell: \entry{E-RQ2-CTRL-SUBRAW}.}
 \todo{Exploratory arms (second teacher, \textsc{Weight}, \textsc{Curriculum}) and the dose-response
 at fresh draws: \entry{E-RQ2-WEIGHT}, \entry{E-RQ2-CURRICULUM}.}
-\todo{Mined-set size after the full mining run, yield and surviving counts: \entry{E-MINE-FULL}.}
+The mined set the cells train on is the one of Table~\ref{tab:mined_full}. Filtering with the BM25 teacher at $K=20$ keeps 3,885 of the 5,789 primary directories (67.1\%, repository-clustered interval 64.0 to 70.0 over 991 repositories) and 11,380 of the 35,804 positives; the pilot's keep rate (59.5\%) lay outside that interval,
+so the pilot understated the pool. % E-MINE-FULL-RESULT D147 results/mining/full/non_test/filter_size.json
+A pool of 3,885 exceeds the 3,200 examples that 100 updates visit, so the update rule gives $N=100$ for every arm, with passes of 0.82 for \textsc{Filter} and the subsample and 0.55 for \textsc{Raw}, and no arm repeats an example. % D147 D140 E-MINE-FULL-RESULT
+The sensitivity reading's pool is 3,320, which also leaves $N=100$. % D147 results/mining/full/pool_aligned/filter_size.json
+The pool of the second teacher's filter is unmeasured. % E-MINE-FULL-RESULT docs/experiments/B.md
 \todo{Longer-schedule sensitivity cells and the quantity--quality curve if the core completes:
 \entry{E-RQ2-SEC-QQ}.}
 
@@ -704,7 +719,7 @@ T9 & Multiplicity and analytic flexibility: many contrasts were run in the pilot
 T10 & Single language, single encoder; Level~3 labels are judged by models & Claims scoped to Python and to the CodeRankEmbed base; Level~3 is secondary evidence for the context question \\
 T11 & Level~3 rests on at most fifteen repositories; the final look is the executable subset, which drops two of the twelve Verified projects and cuts the queries from 432 to 320 at Level~2 and from 302 to 224 at Level~3 (\entry{E-RQ2-FINAL-CELLS}) & The Level~3 statement names its repositories; Level~2 carries the repository-count argument; the minimum detectable difference is restated for the smaller set \\
 T12 & Executable-subset skew: more than half of the instances come from one project, two projects are absent, and Level~3 labels exist for 224 of 377 (\entry{E-RQ3-EXEC}) & The subset is fixed before any patch and listed with its exclusions; results are by repository; the claim is stated for the subset only \\
-T13 & Quarantine in the mined set: pull requests with Python~2 files, non-ASCII identifiers or a fetch time-out are dropped, not sampled at random (\entry{E-MINE-PILOT}, \entry{E-MINE-FULL}) & Quarantined counts and reasons are reported with the set; a share above a stated limit halts the run; the drop is a stated limit of the set \\
+T13 & Quarantine in the mined set: pull requests with Python~2 files, non-ASCII identifiers or a fetch time-out are dropped, not sampled at random (\entry{E-MINE-PILOT}, \entry{E-MINE-FULL-RESULT}); in the full run 123 of 10,000 attempts (1.2\%) were quarantined and none to a time-out & Quarantined counts and reasons are reported with the set (Table~\ref{tab:mined_quarantine}); a share above a stated limit halts the run; the drop is a stated limit of the set, with no gradient by repository size \\ % E-MINE-FULL-RESULT results/mining/full/yield_report.json
 T14 & The overlap audit covers 26 of 605 held-out repositories, and misses renamed or edited copies (\entry{E-OVERLAP-AUDIT}) & Stated with the counts; the contamination scan is a separate measurement; extension to more repositories is open \\
 T15 & Difficulty and transfer: the mined set holds more pairs the lexical teacher cannot find than the pool does, RAW's gain on it differs from its gain on the pool, and the pilot's development instances have an easier context mix than the executable subset (\entry{E-MINED-PILOT}, \entry{E-RQ3-PATCHAPPLY}) & Both sets are reported beside each other; pilot rates of unusable replies and applied edits are not carried to the executable subset \\
 T16 & Power: between 4.4 and 9.7 points at 327 instances, from assumed baseline rate and heterogeneity (\entry{E-RQ3-DRIVER}); the label audit and the confirmatory runs have no result yet & A null is reported as a bound, never as no effect; the power table is rerun from graded runs \\

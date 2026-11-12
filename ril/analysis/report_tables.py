@@ -76,9 +76,9 @@ class Trace:
             return "$-$" + body
         return ("+" if sign else "") + body
 
-    def count(self, value: float | str) -> str:
-        """An integer count read from a file."""
-        body = str(int(float(value)))
+    def count(self, value: object) -> str:
+        """An integer count read from a file (a JSON value is typed as an object)."""
+        body = str(int(float(str(value))))
         self.numbers.add(body)
         return body
 
@@ -1055,7 +1055,10 @@ LATENCY_ROWS = (
     ("retrieval-django-v1", "bm25", "Sukhraj", "laptop CPU"),
     ("dsearch-coderankembed-django-torch-v1", "dense_search", "gnode044", "GPU node"),
     ("dsearch-coderankembed-django-v1", "dense_search", "gnode006", "CPU node"),
+    ("fusion-django-v1", "rrf_fusion", "Sukhraj", "laptop CPU"),
     ("retrieval-django-v1", "graph_expansion", "Sukhraj", "laptop CPU"),
+    ("fusion-django-v1", "same_file_expansion", "Sukhraj", "laptop CPU"),
+    ("fusion-django-v1", "recency_prior", "Sukhraj", "laptop CPU"),
     ("assembly-django-b8000-v1", "assemble", "Sukhraj", "laptop CPU"),
     ("assembly-django-b8000-v1", "end_to_end", "Sukhraj", "laptop CPU"),
 )
@@ -1102,7 +1105,7 @@ def latency_stages(root: Path) -> Table:
         title="Per-stage latency of the query path",
         evidence="measured, exploratory (one query set per stage, mixed hardware)",
         facts=facts,
-        entries=["E-LAT-STAGES"],
+        entries=["E-LAT-STAGES", "E-FREEZE-AND-LATENCY"],
         colspec=_L(0.22) + _L(0.18) + _R(0.12) + _R(0.10) + _R(0.10) + _R(0.10),
         header=[
             tr.lit("Stage"),
@@ -1166,6 +1169,157 @@ def eval_stores(root: Path) -> Table:
     )
 
 
+def mined_full(root: Path) -> Table:
+    """Yield, positives by reading, overlap-audit drops and FILTER pool of the full mined set."""
+    tr = Trace()
+    y = _json(root, "results/mining/full/yield_report.json", tr)["yield"]
+    assert isinstance(y, dict)
+    nt = _json(root, "results/mining/full/non_test/counts.json", tr)
+    pa = _json(root, "results/mining/full/pool_aligned/counts.json", tr)
+    fnt = _json(root, "results/mining/full/non_test/filter_size.json", tr)
+    fpa = _json(root, "results/mining/full/pool_aligned/filter_size.json", tr)
+    au = _json(root, "results/mining/overlap_audit/full/summary.json", tr)["cells"]
+    assert isinstance(au, dict)
+    prim = au["primary"]
+    assert isinstance(prim, dict)
+    st = y["status"]
+    att = float(y["attempted"])
+
+    def share(n: object, d: object, nd: int = 1) -> str:
+        return tr.num(100 * float(str(n)) / float(str(d)), nd)
+
+    dash = tr.lit("--")
+    out: list[list[str]] = [
+        [tr.lit("Attempted pull requests"), tr.count(y["attempted"]), dash, dash],
+        [
+            tr.lit("Mined, with positives"),
+            tr.count(st["mined"]),
+            tr.count(y["positives_unrestricted"]),
+            share(st["mined"], att),
+        ],
+        [
+            tr.lit("No Python change"),
+            tr.count(st["no_python_change"]),
+            dash,
+            share(st["no_python_change"], att),
+        ],
+        [tr.lit("No positive"), tr.count(st["no_positive"]), dash, share(st["no_positive"], att)],
+        [tr.lit("Quarantined"), tr.count(st["quarantined"]), dash, share(st["quarantined"], att)],
+        [
+            tr.lit("Snapshot time-outs"),
+            tr.count(y["timeout_quarantined"]),
+            dash,
+            share(y["timeout_quarantined"], att),
+        ],
+        [],
+        [
+            tr.label("non_test reading, before the audit"),
+            tr.count(prim["pool_like_directories"]),
+            tr.count(prim["pool_like_positives"]),
+            dash,
+        ],
+        [
+            tr.lit("Dropped by the overlap audit"),
+            tr.count(prim["dropped"]),
+            tr.count(float(prim["pool_like_positives"]) - float(prim["pool_like_positives_after"])),
+            share(prim["dropped"], prim["directories"], 2),
+        ],
+        [
+            tr.label("non_test reading, after the audit (primary)"),
+            tr.count(nt["directories"]),
+            tr.count(nt["positives"]),
+            dash,
+        ],
+        [
+            tr.label("pool_aligned reading, after the audit"),
+            tr.count(pa["directories"]),
+            tr.count(pa["positives"]),
+            dash,
+        ],
+        [],
+        [
+            tr.label("FILTER (BM25, K=20) keeps, primary"),
+            tr.count(fnt["examples_kept"]),
+            tr.count(fnt["positives_kept"]),
+            share(fnt["examples_kept"], fnt["examples_in"]),
+        ],
+        [
+            tr.label("FILTER (BM25, K=20) keeps, pool_aligned"),
+            tr.count(fpa["examples_kept"]),
+            tr.count(fpa["positives_kept"]),
+            share(fpa["examples_kept"], fpa["examples_in"]),
+        ],
+    ]
+    facts = (
+        "Full mined set, built by the rule fixed before the run. Counts are pull requests for the "
+        "yield rows and directories (one per mined pull request) below them; positives are edited "
+        "units of the base commit. "
+        "Share is of attempted pull requests, of mined directories for the audit row, and of the "
+        "directories offered to the filter for the filter rows. Nothing was trained on it"
+    )
+    return Table(
+        name="mined_full",
+        title="Full mined set: yield, counts after the overlap audit, and the filter pool",
+        evidence="measured, exploratory (data)",
+        facts=facts,
+        entries=["E-MINE-FULL-RESULT"],
+        colspec=_L(0.40) + _R(0.14) + _R(0.14) + _R(0.14),
+        header=[tr.lit("Quantity"), tr.lit("Count"), tr.lit("Positives"), tr.lit("Share (%)")],
+        rows=out,
+        trace=tr,
+        wide=True,
+    )
+
+
+QUARANTINE_NAMES = (
+    ("changed_file_unparseable:python2-print", "Python 2 print statement"),
+    ("changed_file_unparseable:python2-except", "Python 2 except clause"),
+    ("changed_file_unparseable:python2-long-literal", "Python 2 long literal"),
+    ("changed_file_unparseable:python2-octal", "Python 2 octal literal"),
+    ("changed_file_unparseable:mixed-tabs-spaces", "Mixed tabs and spaces"),
+    ("changed_file_unparseable:syntax-other", "Other syntax error in a changed file"),
+    ("old_file_missing_at_base", "Edited file absent at the base commit"),
+    ("patch_missing", "Patch missing"),
+    ("diff_truncated", "Diff truncated (very large change)"),
+    ("corpus_unit_id_rejected", "Non-ASCII identifier in a unit"),
+    ("snapshot_unavailable", "Snapshot unavailable"),
+    ("compare_not_found", "Comparison not found"),
+)
+
+
+def mined_quarantine(root: Path) -> Table:
+    """Quarantined pull requests of the full mined set by reason."""
+    tr = Trace()
+    y = _json(root, "results/mining/full/yield_report.json", tr)["yield"]
+    assert isinstance(y, dict)
+    by = y["quarantine_by_reason"]
+    assert isinstance(by, dict)
+    if sorted(by) != sorted(k for k, _ in QUARANTINE_NAMES):
+        raise KeyError("quarantine reasons changed; update QUARANTINE_NAMES")
+    total = float(y["status"]["quarantined"])
+    out: list[list[str]] = []
+    for key, name in QUARANTINE_NAMES:
+        out.append([tr.label(name), tr.count(by[key]), tr.num(100 * float(by[key]) / total, 1)])
+    out.append([])
+    out.append([tr.lit("All quarantined"), tr.count(total), tr.num(100.0, 1)])
+    facts = (
+        "Pull requests that were attempted and set aside, by reason, of the full run. They are "
+        "dropped, not sampled at random, and are a stated limitation of the set. No pull request "
+        "was lost to a snapshot time-out. Share is of the quarantined pull requests"
+    )
+    return Table(
+        name="mined_quarantine",
+        title="Quarantined pull requests of the full mined set by reason",
+        evidence="measured, exploratory (data)",
+        facts=facts,
+        entries=["E-MINE-FULL-RESULT"],
+        colspec=_L(0.55) + _R(0.14) + _R(0.14),
+        header=[tr.lit("Reason"), tr.lit("Count"), tr.lit("Share (%)")],
+        rows=out,
+        trace=tr,
+    )
+
+
 BUILDERS = (
     bm25_repro,
     dense_fusion,
@@ -1182,6 +1336,8 @@ BUILDERS = (
     graph_storage,
     latency_stages,
     eval_stores,
+    mined_full,
+    mined_quarantine,
 )
 
 
