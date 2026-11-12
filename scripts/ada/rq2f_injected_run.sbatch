@@ -27,7 +27,7 @@
 # Submitted by scripts/rq2_submit.py (never by hand):
 #   sbatch --export=ALL,SEED=<s>,RUN_IDS=<id:id:...>,RIL_COMMIT=<hash>,DATE=<YYYY-MM-DD> scripts/ada/rq2f_injected_run.sbatch
 set -euo pipefail
-W=$HOME/ril_rq2f
+W=${W:-$HOME/ril_rq2f}
 POOLW=$HOME/ril_n7/work  # pool caches and noise score stores of the noise pilots, already on the account
 X2=$HOME/ril_x2
 E=$HOME/ril_e
@@ -54,11 +54,21 @@ nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "out/nvid
 { echo "host=$(hostname)"; echo "ril_commit=$RIL_COMMIT"; echo "seed=$SEED"; echo "run_ids=$RUN_IDS"; df -h "${TMPDIR:-/tmp}" "$HOME" | tail -2; } \
   > "out/env_injected_s${SEED}_${SLURM_JOB_ID}.txt"
 # the injected family has no size to resolve: the committed configuration is the one that trains
+CFGDIR=configs/experiments/rq2_final
+if [ -n "${SMOKE_STOP_AFTER:-}" ]; then  # seed 99 has no committed configuration: render it
+  CFGDIR=work/configs_smoke
+  "$PY" scripts/rq2_plan.py render --out "$CFGDIR" --seeds "$SEED" > "out/render_${SLURM_JOB_ID}.json"
+fi
 CONFIGS=""
 for RID in $IDS; do
-  [ -f "configs/experiments/rq2_final/${RID}.yaml" ] || { echo "no configuration for $RID"; exit 4; }
-  CONFIGS="$CONFIGS configs/experiments/rq2_final/${RID}.yaml"
+  [ -f "$CFGDIR/${RID}.yaml" ] || { echo "no configuration for $RID"; exit 4; }
+  CONFIGS="$CONFIGS $CFGDIR/${RID}.yaml"
 done
+# GPU smoke (seed 99 only, never a result): SMOKE_STOP_AFTER shortens the run to that many updates
+if [ -n "${SMOKE_STOP_AFTER:-}" ]; then
+  [ "$SEED" = "99" ] || { echo "SMOKE_STOP_AFTER is only for seed 99"; exit 4; }
+  for C in $CONFIGS; do sed -i "s/^  stop_after: .*/  stop_after: $SMOKE_STOP_AFTER/" "$C"; done
+fi
 # dev evaluation set: the five dev repositories of the E3 cache without ansible, as links (no data copied)
 "$PY" scripts/curve_subset_cache.py "$HOME/ril_t1/work/e3_cache" work/e3_cache_dev5 \
   internetarchive__openlibrary qutebrowser__qutebrowser streamlink__streamlink conan-io__conan deepset-ai__haystack
