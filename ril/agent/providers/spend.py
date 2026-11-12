@@ -35,10 +35,22 @@ class Price:
     output_per_m: float
     verified: bool
     as_of: str
+    cached_input_per_m: float | None = None
+    """Price of input tokens served from the provider's cache; ``None`` = no discount known, so
+    cached tokens are priced like any input (never cheaper than reported)."""
 
-    def cost(self, input_tokens: int, output_tokens: int) -> float:
-        """Dollars for billed tokens (``output_tokens`` includes thought tokens)."""
-        return (input_tokens * self.input_per_m + output_tokens * self.output_per_m) / 1e6
+    def cost(self, input_tokens: int, output_tokens: int, cached_tokens: int = 0) -> float:
+        """Dollars for billed tokens (``output_tokens`` includes thought tokens).
+
+        ``input_tokens`` is the provider's prompt token count; ``cached_tokens`` of them (as the
+        provider reports) are priced at the cached-input price when one is known."""
+        cached = min(max(cached_tokens, 0), input_tokens)
+        rate = self.input_per_m if self.cached_input_per_m is None else self.cached_input_per_m
+        return (
+            (input_tokens - cached) * self.input_per_m
+            + cached * rate
+            + output_tokens * self.output_per_m
+        ) / 1e6
 
 
 def load_prices(path: str | Path) -> dict[str, Price]:
@@ -74,6 +86,14 @@ def price_from_limits(path: str | Path, model: str) -> Price | None:
         float(entry["output_per_m"]),
         bool(source) and as_of != "UNSET" and source != "UNSET",
         as_of,
+        float(entry["cached_input_per_m"]) if "cached_input_per_m" in entry else None,
+    )
+
+
+def price_for_run(limits_path: str | Path | None, model: str, stored: Mapping[str, Price]) -> Price:
+    """The price of a run: the limits entry's (D155) if it has one, else the stored table's."""
+    return (price_from_limits(limits_path, model) if limits_path else None) or price_of(
+        stored, model
     )
 
 
@@ -119,14 +139,16 @@ class SpendGuard:
     def record(self, res: CallResult) -> None:
         self.calls += 1
         if res.input_tokens or res.output_tokens:
-            self.spent += self.price.cost(res.input_tokens, res.output_tokens)
+            self.spent += self.price.cost(res.input_tokens, res.output_tokens, res.cached_tokens)
         else:
             self._unbilled += 1
 
     def add_logged(self, rows: Iterable[Mapping[str, Any]]) -> None:
         """Count the cost of calls already in a call log (a resumed run)."""
         for r in rows:
-            self.spent += self.price.cost(int(r["input_tokens"]), int(r["output_tokens"]))
+            self.spent += self.price.cost(
+                int(r["input_tokens"]), int(r["output_tokens"]), int(r.get("cached_tokens", 0))
+            )
 
 
 class GuardedClient:
@@ -146,7 +168,10 @@ class GuardedClient:
 
 
 def logged_cost(rows: Iterable[Mapping[str, Any]], price: Price) -> float:
-    return sum(price.cost(int(r["input_tokens"]), int(r["output_tokens"])) for r in rows)
+    return sum(
+        price.cost(int(r["input_tokens"]), int(r["output_tokens"]), int(r.get("cached_tokens", 0)))
+        for r in rows
+    )
 
 
 def dump(path: str | Path, obj: Mapping[str, Any]) -> None:

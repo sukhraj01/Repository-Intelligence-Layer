@@ -15,23 +15,33 @@
 # Required environment: MODEL, CAP_USD, LIMITS (file with the billed-tier limits of MODEL), PREPARED (the prepared
 # directory that holds the arm's prompts: the untrained set of prepare.sbatch for bm25, dense and rrf, or
 # $W/out/prepared_trained_b8000_<job>/<run id> of rq3_trained_prepare.sbatch for tr_<run id>), ARM, RUN_INDEX,
-# UV_BIN_DIR. Optional: INSTANCES (ids file, default the confirmatory list beside the prepared directory; the
+# UV_BIN_DIR. Optional: RUN_INDICES (space-separated, e.g. "0 1 2": the k repeats of one prompt are sent back to
+# back, order instance, arm, run, so the provider's prompt cache can serve runs 2 to k, D158; replaces RUN_INDEX in
+# the call and is recorded in meta.json; the result dir is then ${ARM}_runs<first>-<last>),  INSTANCES (ids file, default the confirmatory list beside the prepared directory; the
 # trained set of each model has its own copy of the same list), THINKING (JSON for thinkingConfig; the same for
 # every arm of the study, recorded in meta.json), RQ3_OUT (result root, default $W/out/arms).
 set -u
 W=$HOME/ril_rq3_driver
 X=$HOME/ril_rq3_exec
 PY=$HOME/ril_e/venv_ril310/bin/python
-: "${MODEL:?}" "${CAP_USD:?}" "${LIMITS:?}" "${PREPARED:?}" "${ARM:?}" "${RUN_INDEX:?}"
+: "${MODEL:?}" "${CAP_USD:?}" "${LIMITS:?}" "${PREPARED:?}" "${ARM:?}"
+if [ -n "${RUN_INDICES:-}" ]; then
+  # shellcheck disable=SC2206
+  IDX=($RUN_INDICES); RUN_TAG="runs${IDX[0]}-${IDX[${#IDX[@]}-1]}"
+  RUN_ARGS=(--run-indices "${IDX[@]}" --adjacent-repeats)
+else
+  : "${RUN_INDEX:?RUN_INDEX or RUN_INDICES}"
+  RUN_TAG="run${RUN_INDEX}"; RUN_ARGS=(--run-index "$RUN_INDEX")
+fi
 INSTANCES=${INSTANCES:-$PREPARED/ids_confirmatory.txt}
 LOCAL=${TMPDIR:-/tmp}/ril_rq3_driver_${SLURM_JOB_ID}
-RUN=${RQ3_OUT:-$W/out/arms}/${MODEL}/${ARM}_run${RUN_INDEX}
+RUN=${RQ3_OUT:-$W/out/arms}/${MODEL}/${ARM}_${RUN_TAG}
 mkdir -p "$LOCAL/work" "$LOCAL/cache" "$LOCAL/mirrors" "$RUN"
 export PATH="${UV_BIN_DIR:?directory that holds the uv binary}:$PATH"
 THINK=()
 [ -n "${THINKING:-}" ] && THINK=(--thinking-config "$THINKING")
 "$PY" -I "$W/code/scripts/rq3_driver.py" run "$PREPARED" "$RUN/log" "$RUN/results" \
-  --arm "$ARM" --run-index "$RUN_INDEX" --instances "$INSTANCES" --model "$MODEL" \
+  --arm "$ARM" "${RUN_ARGS[@]}" --instances "$INSTANCES" --model "$MODEL" \
   --cap-usd "$CAP_USD" --limits "$LIMITS" "${THINK[@]}" \
   --specs "$X/data/specs_v1.jsonl" --work-root "$LOCAL/work" --cache-root "$LOCAL/cache" \
   --mirror-dir "$LOCAL/mirrors" --local-mirrors "$HOME/ril_e/repo_cache" \
