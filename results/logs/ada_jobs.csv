@@ -259,3 +259,9 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-12,C,72490,RQ2LAUNCH,"smoke repeat (seed 99, excluded): mined RAW, 5 updates, retained model, dev scoring; in-job folder comparison void; gnode050",u22,10,1,00:21:25,0.36,COMPLETED
 2026-11-12,C,73022,RQ2LAUNCH,"retention check (seed 99 smoke model, excluded): retained model loaded back and scored on dev, 508 of 508 dense rows equal; compare script fixed and rerun on the stored rows; gnode055",u22,4,1,00:17:11,0.29,COMPLETED
 2026-11-12,A,73700,RQ3T,"E-RQ3-TRAINED-ARMS CPU dry run of the trained-arm path (smoke model, dev set, five instances); pending on QOSMaxCpuPerUserLimit when recorded, not started",u22,2,0,00:00:00,0.0,PENDING (not started when recorded)
+2026-11-12,C,73578,RQ2LAUNCH,"RQ2 final, mined family seed 100 (five arms, no SweRank cell), commit c2a8db6; running when recorded (12:13 IST, 3 of 5 arms done, no CUDA or memory error, MaxRSS 12.8 GB of 30,000 MB); GPU-hours added on completion",u22,10,1,01:00:00,0.0,RUNNING when recorded
+2026-11-12,C,73579,RQ2LAUNCH,"RQ2 final, mined family seed 101, waits on 73578 (dependency)",u22,10,1,00:00:00,0.0,PENDING when recorded
+2026-11-12,C,73580,RQ2LAUNCH,"RQ2 final, mined family seed 102, waits on 73579 (dependency)",u22,10,1,00:00:00,0.0,PENDING when recorded
+2026-11-12,A,73581,RQ2LAUNCH,"RQ2 final, injected family seed 100 (nine arms), commit c2a8db6; running when recorded (12:13 IST, 3 of 9 arms done, no CUDA or memory error, MaxRSS 7.8 GB); GPU-hours added on completion",u22,9,1,00:57:00,0.0,RUNNING when recorded
+2026-11-12,A,73582,RQ2LAUNCH,"RQ2 final, injected family seed 101, waits on 73581 (dependency)",u22,9,1,00:00:00,0.0,PENDING when recorded
+2026-11-12,A,73583,RQ2LAUNCH,"RQ2 final, injected family seed 102, waits on 73582 (dependency)",u22,9,1,00:00:00,0.0,PENDING when recorded
