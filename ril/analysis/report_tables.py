@@ -1251,14 +1251,15 @@ def mined_full(root: Path) -> Table:
         ],
     ]
     facts = (
-        "Full mined set, built by the rule fixed before the run. Counts are pull requests for the yield rows and directories "
-        "(one per mined pull request) below them; positives are edited units of the base commit. "
+        "Full mined set, built by the rule fixed before the run. Counts are pull requests for the "
+        "yield rows and directories (one per mined pull request) below them; positives are edited "
+        "units of the base commit. "
         "Share is of attempted pull requests, of mined directories for the audit row, and of the "
         "directories offered to the filter for the filter rows. Nothing was trained on it"
     )
     return Table(
         name="mined_full",
-        title="Full mined set: yield, surviving counts after the overlap audit, and the filter's pool",
+        title="Full mined set: yield, counts after the overlap audit, and the filter pool",
         evidence="measured, exploratory (data)",
         facts=facts,
         entries=["E-MINE-FULL-RESULT"],
