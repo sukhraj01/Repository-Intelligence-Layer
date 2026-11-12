@@ -98,7 +98,15 @@ def test_captions_state_evidence_class_n_and_entry() -> None:
         )
         assert any(
             w in cap
-            for w in ("queries", "folder", "directories", "instances", "call sites", "repositories")
+            for w in (
+                "queries",
+                "folder",
+                "directories",
+                "instances",
+                "call sites",
+                "repositories",
+                "pull requests",
+            )
         ), t.name
         for entry in t.entries:
             assert f"| {entry} " in index, (t.name, entry)
@@ -109,6 +117,8 @@ def test_captions_state_evidence_class_n_and_entry() -> None:
             "graph_storage",
             "latency_stages",
             "eval_stores",
+            "mined_full",
+            "mined_quarantine",
         ):
             assert "exploratory" in t.evidence, t.name
 
@@ -203,3 +213,14 @@ def test_latency_rows_are_never_summed_or_averaged() -> None:
     text = _read(GENERATED / "latency_stages.tex").lower()
     assert "mean" not in text.replace("not the mean", "")
     assert "not summed" in text
+
+
+def test_full_mined_tables_equal_the_stored_files() -> None:
+    import json
+
+    y = json.loads((ROOT / "results/mining/full/yield_report.json").read_text())["yield"]
+    text = _read(GENERATED / "mined_full.tex")
+    assert str(y["status"]["mined"]) in text and str(y["positives_unrestricted"]) in text
+    q = _read(GENERATED / "mined_quarantine.tex")
+    assert str(y["status"]["quarantined"]) in q
+    assert sum(y["quarantine_by_reason"].values()) == y["status"]["quarantined"]
