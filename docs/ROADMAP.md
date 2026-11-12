@@ -61,7 +61,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Before week 6 — freeze
 
-- [x] Retrieval settings recorded per consumer in `configs/frozen/` (RQ2 evaluation k 60, RQ3 contexts and dev selection k 100; hashed, manifest, latency snapshot from stored rows; 2026-11-10, E-FREEZE-AND-LATENCY, D148); not unified, provisional labels carried, the lead decides whether they stand until the ADRs close
+- [x] Retrieval settings recorded per consumer in `configs/frozen/` (RQ2 evaluation k 60, RQ3 contexts and dev selection k 100; hashed, manifest, latency snapshot from stored rows; 2026-11-10, E-FREEZE-AND-LATENCY, D148); not unified; ruled 2026-11-12 (D149, E-FREEZE-RULING-REPORT-3): RQ2 evaluation frozen at launch, RQ3 contexts frozen, the dev selection is a provenance record in `configs/records/`
 - [ ] All latency optimisation landed (rank fusion sorts two whole rankings: 5.04 ms at django size, a selection-based fusion is a candidate; the query encoder dominates on both nodes)
 
 ## RQ2 final-experiment tasks (added 2026-11-03; decisions O1 to O15 in `docs/RQ2_PROTOCOL.md` section 11)
@@ -112,6 +112,7 @@ still complete and defensible.
 - [x] Rulings on that reading applied (2026-11-08, D121, E-LIT-SCAFFOLD addendum): qualified header for a partly read note (check and test), scaffold renamed retrieval-supplied one-shot repair, any-of-k secondary reading in `ril/analysis/rq3_results.py`, report paragraphs on scaffolds and two threats
 - [x] RQ3 prompt pseudonymisation (2026-11-08, D120, E-RQ3-PSEUDONYMISE; Q70 answered): 1,131 of 1,131 prompts pass the screen, restore in the driver, round trips and replay checked, no model call
 - [x] Workstream C catch-up (2026-11-09, D144, E-C-CATCHUP): scaffold table of the evaluation API brought to the five-paper reading; Colab C1 dev BM25 comparison re-run natively on account A (12 of 12 cells equal, query-level rows stored, Q64 answered)
+- [x] RQ3 trained-arm pipeline (2026-11-12, D150, D151, E-RQ3-TRAINED-ARMS; `scripts/rq3_trained_arm.py`, `scripts/ada/rq3_trained_*.sbatch`): plan with cost against Block 4 (eight of 18 retained models fit), encode stage under the sealed order, contexts and prompts through the untrained path (byte equality and determinism tested), analysis plan for the trained arms; CPU only, nothing encoded, no model call; encoding and the graded runs wait for the RQ2 models and the lead
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
 

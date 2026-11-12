@@ -258,3 +258,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-12,A,72150,RQ2LAUNCH,"smoke (seed 99, excluded from every analysis): injected RAW, 5 updates, dev scoring; gnode071",u22,9,1,00:19:30,0.33,COMPLETED
 2026-11-12,C,72490,RQ2LAUNCH,"smoke repeat (seed 99, excluded): mined RAW, 5 updates, retained model, dev scoring; in-job folder comparison void; gnode050",u22,10,1,00:21:25,0.36,COMPLETED
 2026-11-12,C,73022,RQ2LAUNCH,"retention check (seed 99 smoke model, excluded): retained model loaded back and scored on dev, 508 of 508 dense rows equal; compare script fixed and rerun on the stored rows; gnode055",u22,4,1,00:17:11,0.29,COMPLETED
+2026-11-12,A,73700,RQ3T,"E-RQ3-TRAINED-ARMS CPU dry run of the trained-arm path (smoke model, dev set, five instances); pending on QOSMaxCpuPerUserLimit when recorded, not started",u22,2,0,00:00:00,0.0,PENDING (not started when recorded)

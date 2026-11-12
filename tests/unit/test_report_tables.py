@@ -135,9 +135,17 @@ def test_every_source_exists_and_is_hashed() -> None:
 REPORT = ROOT / "reports" / "final" / "final_report.tex"
 
 
+# Built with every report build and read from the stored tables, but not input: the second encoder
+# of the ladder and its per-stage latency table (the report states their content in prose).
+BUILT_NOT_INPUT = {"rq1_ladder_qwen3", "rq1_ladder_pairs_qwen3", "rq1_ladder_latency"}
+
+
 def test_report_inputs_every_fragment_and_every_slot_names_an_entry() -> None:
     text = _read(REPORT)
     for p in GENERATED.glob("*.tex"):
+        if p.stem in BUILT_NOT_INPUT:
+            assert f"\\input{{generated/{p.stem}}}" not in text, p.name
+            continue
         assert f"\\input{{generated/{p.stem}}}" in text, p.name
     index = "\n".join(_read(ROOT / p) for p in INDEX_FILES)
     slots = re.findall(r"\\todo\{((?:[^{}]|\{[^{}]*\})*)\}", text)

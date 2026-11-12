@@ -356,14 +356,13 @@ def test_stored_ladder_rows_reproduce_the_earlier_entries() -> None:
     assert all(len(h) == 64 for h in rec["cre"]["files"].values())
 
 
-def test_ladder_fragments_are_opt_in_and_hashed(tmp_path: Path) -> None:
-    """The default report build is unchanged; ``--include rq1_ladder`` adds the five fragments."""
+def test_ladder_fragments_are_in_the_normal_build_and_hashed(tmp_path: Path) -> None:
+    """The default report build includes the five ladder fragments; ``extra`` stays accepted."""
     from ril.analysis import report_tables as rt
 
     plain = rt.write_all(ROOT, tmp_path / "plain")
-    assert not any(t.name.startswith("rq1_ladder") for t in plain)
     more = rt.write_all(ROOT, tmp_path / "more", extra=("rq1_ladder",))
-    added = [t.name for t in more if t.name.startswith("rq1_ladder")]
+    added = [t.name for t in plain if t.name.startswith("rq1_ladder")]
     assert added == [
         "rq1_ladder",
         "rq1_ladder_pairs",
@@ -371,6 +370,7 @@ def test_ladder_fragments_are_opt_in_and_hashed(tmp_path: Path) -> None:
         "rq1_ladder_pairs_qwen3",
         "rq1_ladder_latency",
     ]
+    assert [t.name for t in more] == [t.name for t in plain]
     with open(tmp_path / "more" / "SOURCES.csv", encoding="utf-8") as fh:
         rows = [r for r in fh.read().splitlines()[1:] if r.startswith("rq1_ladder")]
     assert rows and all(len(r.split(",")[2]) == 64 for r in rows)
