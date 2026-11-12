@@ -7,8 +7,12 @@
 #SBATCH --mem=12G
 #SBATCH --time=06:00:00
 #SBATCH --output=ril_rq3t/logs/%x_%j.out
-# CPU only. Contexts of the trained arms (E-RQ3-TRAINED-ARMS) for every model whose scores are finished (or the
-# models named in MODELS, run ids joined by colons), at budgets 8,000 and 16,000, by the path of E-RQ3-CONTEXTS: each
+# CPU only. Contexts of the trained arms (E-RQ3-TRAINED-ARMS, E-RQ3-SCORE-RETENTION) for every model whose scores
+# exist (or the models named in MODELS, run ids joined by colons), at budgets 8,000 and 16,000. Each trained arm is
+# RRF of the stored BM25 scores and the model's scores at the spec's constant, like the untrained arm (D152). The
+# scores are those kept by the final-sets job when they verify (RETAIN_DIR/exec377_scores: checkpoint hash and
+# SHA-256 per file; DEV-042), else the output of the encode stage under $W/scores; the source of each model is
+# written to $W/ctx/<run id>/scores_source.json. By the path of E-RQ3-CONTEXTS: each
 # of the 377 instances is checked out at its base commit on node-local disk and parsed once for all models,
 # assembly unchanged. Resumable per (model, instance): a file that carries the build's spec hash is kept. With
 # CHECK=1 it first rebuilds 30 stored instances with the untrained arms through the same path and compares the
@@ -16,7 +20,9 @@
 # build stops if any differ. Nothing is deleted; node-local scratch is removed at exit.
 # Memory estimate (measured in E-RQ3-CONTEXTS, same code path: 4 shards, 12 GB, 8.8 CPU-hours summed for 341
 # instances): the same request; a model adds one score array of at most 36,000 floats per instance.
-#   sbatch --export=ALL,RIL_COMMIT=<hash>[,MODELS=<id:id>][,CHECK=1] ril_rq3t/scripts/ada/rq3_trained_contexts.sbatch
+#   sbatch --export=ALL,RIL_COMMIT=<hash>,RETAIN_DIR=<abs dir of the retained models>[,MODELS=<id:id>][,CHECK=1] \
+#     ril_rq3t/scripts/ada/rq3_trained_contexts.sbatch
+# RETAIN_DIR is optional: without it only the encode stage's output is read.
 set -euo pipefail
 W=${RQ3T_DIR:-$HOME/ril_rq3t}
 E=$HOME/ril_e
@@ -33,7 +39,7 @@ TMPW=$(mktemp -d "${TMPDIR:-/tmp}/ril_rq3t_ctx.XXXXXX")
 trap 'rm -rf "$TMPW"' EXIT
 mkdir -p "$W/logs" "$W/out" "$W/ctx"
 { echo "host=$(hostname)"; echo "python=$($PY -V)"; echo "cpus=$(nproc)"; echo "mem=$(grep MemTotal /proc/meminfo)"; \
-  echo "ril_commit=${RIL_COMMIT:-none}"; echo "job=${SLURM_JOB_ID:-none}"; echo "models=${MODELS:-all finished}"; } \
+  echo "ril_commit=${RIL_COMMIT:-none}"; echo "job=${SLURM_JOB_ID:-none}"; echo "models=${MODELS:-all with scores}"; echo "retain_dir=${RETAIN_DIR:-none}"; } \
   > "$W/out/env_contexts_${SLURM_JOB_ID:-0}.txt"
 sha256sum "$W/$CFG" > "$W/out/config_hash_contexts_${SLURM_JOB_ID:-0}.txt"
 cd "$W"
@@ -54,12 +60,14 @@ if [ "${CHECK:-0}" = "1" ]; then
 fi
 MODELS_ARG=()
 [ -z "${MODELS:-}" ] || MODELS_ARG=(--models ${MODELS//:/ })
+RETAIN_ARG=()
+[ -z "${RETAIN_DIR:-}" ] || RETAIN_ARG=(--retained-root "$RETAIN_DIR" --retained-scores "$RETAIN_DIR/exec377_scores")
 K=4
 rc=0
 pids=()
 for i in $(seq 0 $((K-1))); do
   $PY scripts/rq3_trained_arm.py contexts "$CFG" "$W/scores" "$TMPW/repo_cache" "$TMPW/work_s$i" "$W/ctx" \
-    ${MODELS_ARG[@]+"${MODELS_ARG[@]}"} --shard $i $K > "$W/logs/contexts_s${i}_${SLURM_JOB_ID:-0}.log" 2>&1 &
+    ${MODELS_ARG[@]+"${MODELS_ARG[@]}"} ${RETAIN_ARG[@]+"${RETAIN_ARG[@]}"} --shard $i $K > "$W/logs/contexts_s${i}_${SLURM_JOB_ID:-0}.log" 2>&1 &
   pids+=($!)
 done
 for p in "${pids[@]}"; do wait "$p" || rc=$?; done
