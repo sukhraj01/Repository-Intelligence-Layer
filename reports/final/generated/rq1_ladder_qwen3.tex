@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering\small
+\caption{RQ1 ladder: each signal added to the dense retriever, with latency. Evidence class: \emph{measured on the development set, exploratory}. Development set only: 351 L2 queries in 5 repositories and 155 L3 queries in 2 repositories; encoder Qwen3-Embedding-0.6B; the interval is the cluster-robust t interval over repositories, $^q$ marks query level (fewer than three repositories); latency from stored rows at an index of 35860 units, dense stages on one host and BM25 and graph rows on another, so the path is a sum of stage p50 values and not an end-to-end percentile. Rungs two to five share queries, candidate set (every unit of the snapshot) and expansion budget; the typed-graph rung is read against the same-file control in the next table; points per added ms is the paired gain over the rung before it on the stage path (the typed rung branches from the second rung) divided by the p50 of the stages it adds; a stage without a stored row is not measured and the path is then partial. Entry \entry{E-RQ1-LADDER}.}
+\label{tab:rq1_ladder_qwen3}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+\toprule
+Rung & L2 nDCG@10 [t interval] & L3 Recall@100 [t interval] & L3 nDCG@10 & p50 ms, path & L2 points per added ms & L3 points per added ms \\
+\midrule
+BM25 alone (reference) & 21.2 [9.5, 32.9] & 37.5 [33.9, 41.0]$^q$ & 36.5 & -- & -- & -- \\
+\midrule
+R1 dense alone & 24.7 [14.9, 34.4] & 46.7 [43.1, 50.3]$^q$ & 45.2 & 18.34 & -- & -- \\
+R2 plus BM25 by RRF & 28.3 [15.5, 41.1] & 47.1 [43.5, 50.7]$^q$ & 48.1 & 23.58 & +0.7 & +0.1 \\
+R3 plus same-file expansion & 29.5 [15.8, 43.3] & 58.7 [54.3, 63.0]$^q$ & 51.9 & 23.99 & +2.9 & +28.1 \\
+R4 plus typed graph expansion (non-contain edges) & 28.6 [15.0, 42.1] & 51.0 [47.2, 54.8]$^q$ & 50.6 & 24.72 & +0.2 & +3.4 \\
+R5 plus recency prior & 29.5 [15.0, 44.0] & 53.4 [49.4, 57.3]$^q$ & 52.0 & 26.76 & +0.5 & +1.2 \\
+\bottomrule
+\end{tabular}
+\end{table*}

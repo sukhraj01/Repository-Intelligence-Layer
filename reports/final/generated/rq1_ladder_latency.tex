@@ -1,0 +1,36 @@
+\begin{table*}[t]
+\centering\small
+\caption{RQ1 ladder: per-stage latency from stored rows. Evidence class: \emph{measured, per hardware spec}. Index units per scale: django 35860, django\_cpu 35860, small 974 (the small scale mixes a dense row at the development median snapshot with BM25 and graph rows of a smaller repository); host names are those of the stored rows; each stage is the latest warm row of its query set; a stage without a stored row is not measured and nothing is interpolated. Entry \entry{E-LAT-STAGES}, \entry{E-RQ1-LADDER}.}
+\label{tab:rq1_ladder_latency}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{0.04\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.06\linewidth}>{\raggedleft\arraybackslash}p{0.06\linewidth}>{\raggedleft\arraybackslash}p{0.06\linewidth}>{\raggedleft\arraybackslash}p{0.04\linewidth}>{\raggedright\arraybackslash}p{0.04\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}}
+\toprule
+Scale & Rung & Stage & Host & p50 ms & p95 ms & p99 ms & Calls & Cache & Query set \\
+\midrule
+django & R1 & query\_encode & gnode044 & 18.069 & 19.284 & 22.145 & 295 & warm & qenc-coderankembed-t1024-v1 \\
+django & R1 & dense\_search & gnode044 & 0.267 & 0.268 & 0.278 & 295 & warm & dsearch-coderankembed-django-torch-v1 \\
+django & R2 & bm25 & Sukhraj.local & 0.202 & 0.269 & 0.307 & 595 & warm & retrieval-django-v1 \\
+django & R2 & rrf\_fusion & Sukhraj.local & 5.044 & 5.359 & 5.564 & 595 & warm & fusion-django-v1 \\
+django & R3 & same\_file\_expansion & Sukhraj.local & 0.412 & 1.919 & 3.079 & 595 & warm & fusion-django-v1 \\
+django & R4 & graph\_expansion & Sukhraj.local & 1.139 & 2.135 & 2.854 & 595 & warm & retrieval-django-v1 \\
+django & R5 & recency\_prior & Sukhraj.local & 2.039 & 2.099 & 2.163 & 595 & warm & fusion-django-v1 \\
+django & ctx & assemble & Sukhraj.local & 10.976 & 17.009 & 23.042 & 595 & warm & assembly-django-b8000-v1 \\
+django & ctx & end\_to\_end & Sukhraj.local & 11.442 & 17.281 & 23.652 & 595 & warm & assembly-django-b8000-v1 \\
+\midrule
+django\_cpu & R1 & query\_encode & gnode006 & 411.468 & 1265.182 & 2555.235 & 295 & warm & qenc-coderankembed-t1024-v1 \\
+django\_cpu & R1 & dense\_search & gnode006 & 4.956 & 5.122 & 5.255 & 295 & warm & dsearch-coderankembed-django-v1 \\
+django\_cpu & R2 & bm25 & Sukhraj.local & 0.202 & 0.269 & 0.307 & 595 & warm & retrieval-django-v1 \\
+django\_cpu & R2 & rrf\_fusion & Sukhraj.local & 5.044 & 5.359 & 5.564 & 595 & warm & fusion-django-v1 \\
+django\_cpu & R3 & same\_file\_expansion & Sukhraj.local & 0.412 & 1.919 & 3.079 & 595 & warm & fusion-django-v1 \\
+django\_cpu & R4 & graph\_expansion & Sukhraj.local & 1.139 & 2.135 & 2.854 & 595 & warm & retrieval-django-v1 \\
+django\_cpu & R5 & recency\_prior & Sukhraj.local & 2.039 & 2.099 & 2.163 & 595 & warm & fusion-django-v1 \\
+\midrule
+small & R1 & query\_encode & gnode044 & 18.069 & 19.284 & 22.145 & 295 & warm & qenc-coderankembed-t1024-v1 \\
+small & R1 & dense\_search & gnode044 & 0.113 & 0.117 & 0.131 & 295 & warm & dsearch-coderankembed-dev-torch-v1 \\
+small & R2 & bm25 & Sukhraj.local & 0.040 & 0.045 & 0.047 & 595 & warm & retrieval-flask-v1 \\
+small & R2 & rrf\_fusion & Sukhraj.local & 0.124 & 0.134 & 0.139 & 595 & warm & fusion-flask-v1 \\
+small & R3 & same\_file\_expansion & Sukhraj.local & 0.063 & 0.144 & 0.161 & 595 & warm & fusion-flask-v1 \\
+small & R4 & graph\_expansion & Sukhraj.local & 0.149 & 0.259 & 0.560 & 595 & warm & retrieval-flask-v1 \\
+small & R5 & recency\_prior & Sukhraj.local & 0.066 & 0.070 & 0.074 & 595 & warm & fusion-flask-v1 \\
+\bottomrule
+\end{tabular}
+\end{table*}

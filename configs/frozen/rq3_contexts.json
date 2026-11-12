@@ -10,7 +10,7 @@
  "bm25": {
   "b": 0.75,
   "k1": 1.5,
-  "provisional": [
+  "labels_before_ruling": [
    "ADR-004"
   ],
   "stop_words": 33,
@@ -52,6 +52,12 @@
   "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1"
  },
  "frozen_on": "2026-11-10",
+ "labels_in_consumer_before_ruling": [
+  "D102",
+  "D103",
+  "ADR-006",
+  "ADR-014 (Proposed)"
+ ],
  "latency": {
   "kind": "stored rows copied in; stages are timed on different hosts and are not additive",
   "not_measured": [],
@@ -247,14 +253,9 @@
   "resolver_note": "D117: becomes v0.1 at the next cache rebuild, none forced",
   "unit_granularity": "function, method, class, one residual module unit per file (D6)"
  },
- "provisional_in_consumer": [
-  "D102",
-  "D103",
-  "ADR-006",
-  "ADR-014 (Proposed)"
- ],
  "record_version": "freeze-record/v1",
  "sensitivity": {
+  "correction": "Correction 2026-11-12: an earlier statement gave the largest difference between the settings as at most 0.5 points. Measured on dev (L2 nDCG@10): at most 0.59 points for the RQ3 contexts against the dev selection, 0.48 for the RQ2 evaluation against either other setting.",
   "difference_to_other_consumers": [
    {
     "L2_ndcg10_points": 0.59,
@@ -322,5 +323,12 @@
    "path": "results/rq3_contexts/config_hash_63792.txt",
    "sha256": "48fa47c51e382a51d6492a506c6cf5313fdb53db74a4b901f26d77920d6a43b8"
   }
- ]
+ ],
+ "status": {
+  "built_contexts": "E-RQ3-CONTEXTS (job 63792, 377 instances, 2,262 contexts)",
+  "configuration_sha256": "e2f011c3a31348c9041e4ebca5ac6bc2a80304118339fbdda4ee34637e8b4d4c",
+  "context_manifest_sha256": "9784f5ae1ca4f5bf014afb1691a0f94ccbc0f0d183fbc198f5f5875ef2fb0fb7",
+  "ruling": "2026-11-12; a change after this date invalidates the RQ3 pilot and the built contexts and needs a new decision",
+  "state": "frozen"
+ }
 }

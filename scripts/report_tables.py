@@ -1,8 +1,9 @@
 """Final-report tables: command line over ``ril.analysis.report_tables``.
 
-[--results-root DIR] [--out-dir DIR] [--include rq1_ladder]. Reads ``results/`` and writes the
-LaTeX fragments that ``reports/final/final_report.tex`` inputs (``--include`` adds table sets the
-report does not input yet); every number comes from a stored file.
+[--results-root DIR] [--out-dir DIR]. Reads ``results/`` and writes the
+LaTeX fragments that ``reports/final/final_report.tex`` inputs (the RQ1 ladder fragments are part of
+the normal build; ``--include rq1_ladder`` is accepted and changes nothing); every number comes from
+a stored file.
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ def main(argv: list[str] | None = None) -> int:
         "--include",
         nargs="*",
         default=[],
-        help="optional table sets the report does not input yet (rq1_ladder)",
+        help="accepted for compatibility (rq1_ladder is always built)",
     )
     a = p.parse_args(argv)
     from ril.analysis import report_tables

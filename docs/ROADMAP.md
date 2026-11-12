@@ -61,7 +61,7 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Before week 6 — freeze
 
-- [x] Retrieval settings recorded per consumer in `configs/frozen/` (RQ2 evaluation k 60, RQ3 contexts and dev selection k 100; hashed, manifest, latency snapshot from stored rows; 2026-11-10, E-FREEZE-AND-LATENCY, D148); not unified, provisional labels carried, the lead decides whether they stand until the ADRs close
+- [x] Retrieval settings recorded per consumer in `configs/frozen/` (RQ2 evaluation k 60, RQ3 contexts and dev selection k 100; hashed, manifest, latency snapshot from stored rows; 2026-11-10, E-FREEZE-AND-LATENCY, D148); not unified; ruled 2026-11-12 (D149, E-FREEZE-RULING-REPORT-3): RQ2 evaluation frozen at launch, RQ3 contexts frozen, the dev selection is a provenance record in `configs/records/`
 - [ ] All latency optimisation landed (rank fusion sorts two whole rankings: 5.04 ms at django size, a selection-based fusion is a candidate; the query encoder dominates on both nodes)
 
 ## RQ2 final-experiment tasks (added 2026-11-03; decisions O1 to O15 in `docs/RQ2_PROTOCOL.md` section 11)

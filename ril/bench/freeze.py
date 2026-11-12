@@ -17,7 +17,9 @@ unifying would invalidate the registered RQ2 hashes and the contexts already bui
 * a latency snapshot: the stored rows (host, commit, configuration hash, p50, p95, p99) of the
   stages of the consumer's path, copied in, with the stages that have no row listed.
 
-``write_records`` writes ``configs/frozen/*.json`` and ``MANIFEST.json`` (SHA-256 of every record);
+``write_records`` writes ``configs/frozen/*.json`` and ``MANIFEST.json`` (SHA-256 of every record)
+and, for the setting that no final run consumes, ``configs/records/*.json`` (provenance, outside the
+manifest and outside ``verify``; ruling of 2026-11-12);
 ``verify`` returns the problems found: a record that differs from the manifest, a consumer file that
 no longer hashes to what the record says, a latency row that is no longer in the log. A consumer
 whose stored configuration cannot be located is listed in the record (``not_found``), not guessed.
@@ -50,10 +52,16 @@ from ril.training.rq2_plan import cell_table_digest
 
 RECORD_VERSION = "freeze-record/v1"
 FROZEN_DIR = "configs/frozen"
+RECORDS_DIR = "configs/records"
 MANIFEST = "MANIFEST.json"
 LATENCY_LOG = "results/latency/latency_log.csv"
 SENSITIVITY_TABLE = "results/tables/x2_first_dev.csv"
 RQ2_DIR = "configs/experiments/rq2_final"
+LAUNCH_COMMIT = "c2a8db6"
+LAUNCH_CELL_TABLE_SHA256 = "f441e76574a90bf199ee5d634a64fd41904a76505dad044e33f06ce9e1f16f90"
+RQ3_BUILD_MANIFEST_SHA256 = "9784f5ae1ca4f5bf014afb1691a0f94ccbc0f0d183fbc198f5f5875ef2fb0fb7"
+"""Facts the ruling of 2026-11-12 cites: the commit the RQ2 runs were submitted from, the digest of
+the registered cell table, and the SHA-256 of the manifest of the built RQ3 contexts."""
 RQ3_CONFIG = "configs/experiments/rq3_contexts_v1.yaml"
 RQ3_HASH_FILE = "results/rq3_contexts/config_hash_63792.txt"
 LADDER_CONFIG = "configs/experiments/rq1_ladder_cre.yaml"
@@ -396,11 +404,10 @@ def build_dev_selection(root: str) -> Record:
     }
 
 
-BUILDERS = {
-    "rq2_evaluation": build_rq2_evaluation,
-    "rq3_contexts": build_rq3_contexts,
-    "rq1_dev_selection": build_dev_selection,
-}
+BUILDERS = {"rq2_evaluation": build_rq2_evaluation, "rq3_contexts": build_rq3_contexts}
+"""Frozen records: a registered or built artefact depends on each of them."""
+RECORD_BUILDERS = {"rq1_dev_selection": build_dev_selection}
+"""Provenance records (``configs/records/``): settings recorded, no final run consumes them."""
 
 
 # --------------------------------------------------------------------------- write and verify
@@ -452,6 +459,43 @@ def _cross_sensitivity(docs: dict[str, Record]) -> None:
         )
 
 
+def apply_status(name: str, doc: Record) -> None:
+    """Replace the consumer's provisional labels by the status the ruling of 2026-11-12 gives.
+
+    ``rq2_evaluation``: frozen at launch (the 45 runs were submitted on it). ``rq3_contexts``:
+    frozen (the contexts of the executable subset are built on it). ``rq1_dev_selection``: a
+    record kept for provenance, not a frozen configuration. The ADR and decision labels the
+    consumer carried before are kept under a name that does not say "provisional".
+    """
+    labels = doc.pop("provisional_in_consumer", [])
+    doc["labels_in_consumer_before_ruling"] = labels
+    if isinstance(doc.get("bm25"), dict) and "provisional" in doc["bm25"]:
+        doc["bm25"]["labels_before_ruling"] = doc["bm25"].pop("provisional")
+    if name == "rq2_evaluation":
+        doc["status"] = {
+            "state": "frozen at launch",
+            "launch_commit": LAUNCH_COMMIT,
+            "cell_table_sha256": LAUNCH_CELL_TABLE_SHA256,
+            "runs": 45,
+            "ruling": "2026-11-12; a change needs a new decision and invalidates the run hashes",
+        }
+    elif name == "rq3_contexts":
+        doc["status"] = {
+            "state": "frozen",
+            "built_contexts": "E-RQ3-CONTEXTS (job 63792, 377 instances, 2,262 contexts)",
+            "configuration_sha256": doc["consumer_hashes"]["stored"],
+            "context_manifest_sha256": RQ3_BUILD_MANIFEST_SHA256,
+            "ruling": "2026-11-12; a change after this date invalidates the RQ3 pilot and the "
+            "built contexts and needs a new decision",
+        }
+    else:
+        doc["status"] = {
+            "state": "recorded for provenance, not a frozen configuration",
+            "reason": "the setting the RQ1 development selected on dev; no final run consumes it",
+            "ruling": "2026-11-12",
+        }
+
+
 def write_records(root: str, date: str) -> list[str]:
     """Write every record and the manifest; refuses to overwrite a record that already exists."""
     out_dir = os.path.join(root, FROZEN_DIR)
@@ -460,16 +504,21 @@ def write_records(root: str, date: str) -> list[str]:
     written: list[str] = []
     manifest: Record = {"record_version": RECORD_VERSION, "date": date, "code_commit": commit}
     files: dict[str, str] = {}
-    docs = {name: build(root) for name, build in BUILDERS.items()}
+    docs = {name: build(root) for name, build in {**BUILDERS, **RECORD_BUILDERS}.items()}
     _cross_sensitivity(docs)
+    rec_dir = os.path.join(root, RECORDS_DIR)
+    os.makedirs(rec_dir, exist_ok=True)
     for name, doc in docs.items():
-        path = os.path.join(out_dir, f"{name}.json")
+        frozen = name in BUILDERS
+        path = os.path.join(out_dir if frozen else rec_dir, f"{name}.json")
         if os.path.exists(path):
-            raise FileExistsError(f"{path} exists; a frozen record is never rewritten")
-        doc["frozen_on"] = date
+            raise FileExistsError(f"{path} exists; a record is never rewritten")
+        apply_status(name, doc)
+        doc["frozen_on" if frozen else "recorded_on"] = date
         doc["code_commit"] = commit
         _dump(path, doc)
-        files[f"{name}.json"] = sha256_file(path)
+        if frozen:
+            files[f"{name}.json"] = sha256_file(path)
         written.append(path)
     manifest["files"] = files
     mpath = os.path.join(out_dir, MANIFEST)

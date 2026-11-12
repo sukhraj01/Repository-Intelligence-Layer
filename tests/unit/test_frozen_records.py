@@ -16,8 +16,8 @@ import pytest
 from ril.bench import freeze
 
 ROOT = Path(__file__).resolve().parents[2]
-PINNED_MANIFEST_SHA256 = "b2b48b4acb8b34732895ffb2f62ad8e559e92e376edb303de3d71caf58738829"
-CONSUMERS = ("rq2_evaluation", "rq3_contexts", "rq1_dev_selection")
+PINNED_MANIFEST_SHA256 = "97d58d058e24decd9fdd7da43359b39297143fd22da170e85da3e42bce2baaa2"
+CONSUMERS = ("rq2_evaluation", "rq3_contexts")
 
 
 def test_frozen_files_are_as_recorded() -> None:
@@ -40,6 +40,32 @@ def test_every_consumer_was_found_and_ties_to_its_stored_hash() -> None:
     rq3 = json.loads((ROOT / "configs/frozen/rq3_contexts.json").read_text(encoding="utf-8"))
     assert rq3["configuration"]["rrf_k"] == 100
     assert rq3["assembly"]["version"] == "assembly/v1"
+
+
+def test_status_follows_the_ruling() -> None:
+    rq2 = json.loads((ROOT / "configs/frozen/rq2_evaluation.json").read_text(encoding="utf-8"))
+    assert rq2["status"]["state"] == "frozen at launch"
+    assert rq2["status"]["cell_table_sha256"] == freeze.LAUNCH_CELL_TABLE_SHA256
+    assert rq2["consumer_hashes"]["cell_table_digest"] == freeze.LAUNCH_CELL_TABLE_SHA256
+    rq3 = json.loads((ROOT / "configs/frozen/rq3_contexts.json").read_text(encoding="utf-8"))
+    assert rq3["status"]["state"] == "frozen"
+    assert rq3["status"]["configuration_sha256"] == rq3["consumer_hashes"]["stored"]
+    for name in CONSUMERS:
+        text = (ROOT / f"configs/frozen/{name}.json").read_text(encoding="utf-8")
+        assert '"provisional' not in text
+    rec = json.loads((ROOT / "configs/records/rq1_dev_selection.json").read_text(encoding="utf-8"))
+    assert rec["status"]["state"].startswith("recorded for provenance")
+    assert not (ROOT / "configs/frozen/rq1_dev_selection.json").exists()
+    manifest = json.loads((ROOT / "configs/frozen/MANIFEST.json").read_text(encoding="utf-8"))
+    assert sorted(manifest["files"]) == ["rq2_evaluation.json", "rq3_contexts.json"]
+
+
+def test_records_directory_is_outside_the_guard(copy_root: Path) -> None:
+    rec = copy_root / "configs/records"
+    rec.mkdir()
+    (rec / "anything.json").write_text("{}")
+    assert freeze.verify(str(copy_root)) == []
+    assert not (copy_root / "configs/frozen/anything.json").exists()
 
 
 def test_latency_snapshot_lists_what_it_lacks() -> None:

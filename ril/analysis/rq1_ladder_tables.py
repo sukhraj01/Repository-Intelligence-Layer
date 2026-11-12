@@ -147,7 +147,7 @@ def ladder_table(root: Path, label: str) -> Table:
             "partial"
         ),
         entries=[ENTRY],
-        colspec=_L(0.25) + _R(0.17) + _R(0.17) + _R(0.07) + _R(0.1) + _R(0.1) + _R(0.1),
+        colspec=_L(0.2) + _R(0.14) + _R(0.14) + _R(0.09) + _R(0.1) + _R(0.1) + _R(0.1),
         wide=True,
         header=hdr,
         rows=rows,
@@ -220,7 +220,7 @@ def pairs_table(root: Path, label: str) -> Table:
             "same-file rung"
         ),
         entries=[ENTRY],
-        colspec=_L(0.22) + (_R(0.13) + _R(0.11) + _R(0.1)) * 2,
+        colspec=_L(0.2) + (_R(0.12) + _R(0.1) + _R(0.1)) * 2,
         wide=True,
         header=hdr,
         rows=rows,
@@ -282,14 +282,14 @@ def latency_table(root: Path) -> Table:
             "stage without a stored row is not measured and nothing is interpolated"
         ),
         entries=["E-LAT-STAGES", ENTRY],
-        colspec=_L(0.08)
-        + _L(0.05)
-        + _L(0.1)
-        + _L(0.1)
-        + _R(0.07) * 3
-        + _R(0.05)
-        + _L(0.05)
-        + _L(0.3),
+        colspec=_L(0.07)
+        + _L(0.04)
+        + _L(0.09)
+        + _L(0.09)
+        + _R(0.06) * 3
+        + _R(0.04)
+        + _L(0.04)
+        + _L(0.25),
         wide=True,
         header=hdr,
         rows=rows,
