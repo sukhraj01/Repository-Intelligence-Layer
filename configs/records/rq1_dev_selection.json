@@ -3,7 +3,7 @@
  "bm25": {
   "b": 0.75,
   "k1": 1.5,
-  "provisional": [
+  "labels_before_ruling": [
    "ADR-004"
   ],
   "stop_words": 33,
@@ -47,7 +47,10 @@
   "query_template": "Represent this query for searching relevant code: {query}",
   "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1"
  },
- "frozen_on": "2026-11-10",
+ "labels_in_consumer_before_ruling": [
+  "ADR-004",
+  "ADR-006"
+ ],
  "latency": {
   "kind": "stored rows copied in; stages are timed on different hosts and are not additive",
   "not_measured": [],
@@ -207,12 +210,10 @@
   "resolver_note": "D117: becomes v0.1 at the next cache rebuild, none forced",
   "unit_granularity": "function, method, class, one residual module unit per file (D6)"
  },
- "provisional_in_consumer": [
-  "ADR-004",
-  "ADR-006"
- ],
  "record_version": "freeze-record/v1",
+ "recorded_on": "2026-11-10",
  "sensitivity": {
+  "correction": "Correction 2026-11-12: an earlier statement gave the largest difference between the settings as at most 0.5 points. Measured on dev (L2 nDCG@10): at most 0.59 points for the RQ3 contexts against the dev selection, 0.48 for the RQ2 evaluation against either other setting.",
   "difference_to_other_consumers": [
    {
     "L2_ndcg10_points": -0.48,
@@ -280,5 +281,10 @@
    "path": "results/logs/rq1_ladder_run_files_2026-11-09.json",
    "sha256": "d54ff24a9d0897b7183788cf2d085b3ab342f5ea7769c75899db1dfe43c00afc"
   }
- ]
+ ],
+ "status": {
+  "reason": "the setting the RQ1 development selected on dev; no final run consumes it",
+  "ruling": "2026-11-12",
+  "state": "recorded for provenance, not a frozen configuration"
+ }
 }

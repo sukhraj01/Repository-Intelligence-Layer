@@ -1356,22 +1356,24 @@ def sha256(path: Path) -> str:
 def write_all(root: Path, out_dir: Path, extra: Sequence[str] = ()) -> list[Table]:
     """Write one ``.tex`` fragment per table and ``SOURCES.csv``; return the tables.
 
-    ``extra`` names optional table sets that the report does not input yet: ``rq1_ladder`` adds
-    the RQ1 ladder fragments (``ril.analysis.rq1_ladder_tables``), built only from stored tables.
+    The RQ1 ladder fragments (``ril.analysis.rq1_ladder_tables``) are part of the normal build;
+    they are built only from stored tables and are absent when those do not exist. ``extra`` is
+    kept for callers that still pass ``rq1_ladder``; any other name is an error.
     """
-    out_dir.mkdir(parents=True, exist_ok=True)
-    from ril.analysis import (
-        rq2_final_tables,
-    )  # after the tables above: nothing is built before the final rows exist
-
-    tables = build_all(root) + rq2_final_tables.build_if_present(root)
-    if "rq1_ladder" in extra:
-        from ril.analysis import rq1_ladder_tables
-
-        tables += rq1_ladder_tables.build_if_present(root)
     unknown = set(extra) - {"rq1_ladder"}
     if unknown:
         raise ValueError(f"unknown table sets: {sorted(unknown)}")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    from ril.analysis import (
+        rq1_ladder_tables,
+        rq2_final_tables,
+    )  # after the tables above: nothing is built before the final rows exist
+
+    tables = (
+        build_all(root)
+        + rq2_final_tables.build_if_present(root)
+        + rq1_ladder_tables.build_if_present(root)
+    )
     lines = ["fragment,source,sha256"]
     for t in tables:
         (out_dir / f"{t.name}.tex").write_text(t.render(), encoding="utf-8")
