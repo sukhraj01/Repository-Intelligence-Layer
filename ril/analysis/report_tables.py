@@ -927,6 +927,65 @@ def rq3_power(root: Path) -> Table:
     )
 
 
+def rq3_power_small(root: Path) -> Table:
+    """Power of a 4-point difference and the size of the test, from the stored simulation rows.
+
+    Implements ``docs/RQ3_PILOT.md`` (D113); reads the per-effect rows that ``rq3_power`` reduces
+    to a minimum detectable difference, so the statement that 4 points or less is not detectable
+    in any cell of the grid has a table behind it.
+    """
+    tr = Trace()
+    rows_in = _csv(root, "results/rq3_driver/rq3_power_run_noise.csv", tr)
+    out: list[list[str]] = []
+    for rate in ("0.1", "0.2", "0.3"):
+        for kappa in ("1.0", "4.0"):
+            cells = [
+                _pick(rows_in, n="327", rate=rate, kappa=kappa, runs=k, effect_points="4.0")[
+                    "power"
+                ]
+                for k in ("1", "2", "3")
+            ]
+            out.append(
+                [
+                    tr.num(float(rate) * 100, 0),
+                    tr.num(kappa, 0),
+                    *[tr.num(float(c) * 100, 0) for c in cells],
+                ]
+            )
+    size = [
+        float(r["power"]) * 100 for r in rows_in if r["n"] == "327" and r["effect_points"] == "0.0"
+    ]
+    best = max(
+        float(r["power"]) * 100 for r in rows_in if r["n"] == "327" and r["effect_points"] == "4.0"
+    )
+    facts = (
+        "Power of the primary paired contrast to detect a difference of "
+        f"{tr.num('4.0', 0)} points at {tr.count('327')} confirmatory instances, in percent, "
+        "from the same simulation as the minimum detectable difference. The highest power in "
+        f"any cell is {tr.num(best, 0)} percent, below the target of {tr.num('80', 0)}; "
+        "the rejection rate when there is no difference (the size of the test) lies between "
+        f"{tr.num(min(size), 1)} and {tr.num(max(size), 1)} percent. "
+        "The baseline rate and the heterogeneity are assumptions"
+    )
+    return Table(
+        name="rq3_power_small",
+        title="Power to detect a four-point resolved-rate difference with run-to-run noise",
+        evidence="reasoned, exploratory (assumed inputs)",
+        facts=facts,
+        entries=["E-POWER", "E-RQ3-DRIVER"],
+        colspec=_R(0.17) + _R(0.24) + _R(0.13) + _R(0.13) + _R(0.13),
+        header=[
+            tr.lit("Baseline rate (%)"),
+            tr.lit("Heterogeneity"),
+            tr.lit("One run"),
+            tr.lit("Two runs"),
+            tr.lit("Three runs"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
 def graph_recovery(root: Path) -> Table:
     """Edge recovery of the stored graph under the four stated definitions (ADR-012)."""
     tr = Trace()
@@ -1332,6 +1391,7 @@ BUILDERS = (
     contamination,
     rq3_subset,
     rq3_power,
+    rq3_power_small,
     graph_recovery,
     graph_storage,
     latency_stages,

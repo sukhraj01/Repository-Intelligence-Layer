@@ -17,7 +17,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from ril.util.report_check import slots, unresolved, untraced_numbers  # noqa: E402
+from ril.util.report_check import (  # noqa: E402
+    missing_sources,
+    slots,
+    unresolved,
+    untraced_numbers,
+)
 
 REPORT = ROOT / "reports" / "final" / "final_report.tex"
 
@@ -27,7 +32,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--slots", action="store_true", help="list the open slots with their entries")
     a = p.parse_args(argv)
     text = REPORT.read_text(encoding="utf-8")
-    findings = untraced_numbers(text) + unresolved(text)
+    findings = untraced_numbers(text) + unresolved(text) + missing_sources(text, ROOT)
     for f in findings:
         print(f.render())
     open_slots = slots(text)

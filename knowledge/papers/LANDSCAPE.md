@@ -172,6 +172,28 @@ Gap, stated flat: no source in hand reports a learning curve (metric against num
 
 Search tools return summaries; those are leads. Every paper named in the table above was fetched as a PDF, page counts checked and read in full.
 
+### Refresh of 2026-11-12 (report pass 4): citations, related work, executable subsets
+
+Scope: the three topics of the report's related-work refresh (repository context for coding agents and benchmarks; retriever training with noisy or mined supervision; evaluations on executable subsets of the human-validated benchmark subset) and every open citation of the report. Tool: a general web search (standard mode, summaries are leads only), three queries on 2026-11-12, plus direct PDF fetches from the papers' own arXiv pages. The arXiv listing search was not rerun in this pass, so the window of 2026-10-23 is not extended; absence of a paper here is not absence in the literature.
+
+| # | Query (2026-11-12) | Result |
+|---|---|---|
+| R1 | SWE-bench Verified human-validated subset 500 instances source paper or announcement | the release is a web announcement of 13 August 2024, not a paper; the live page answered HTTP 403 to every fetch tool; an archived capture of 31 December 2024 was read in full (`swe-bench-verified-announcement-2024.md`, header NOT READ because the reading rule is defined on PDFs) |
+| R2 | SWE-bench Verified executable subset instances environment reproducible gold patch validation subset evaluation arXiv | no paper defining an executable or gold-patch-validated subset was returned (summary pages only); the lead named by the first query's results, UTBoost (test augmentation and the harness's log parser), was fetched and read in full |
+| R3 | Skip the Compressor whole-file selection retrieval token budget coding agents (lead from 2026-10-29) | found; fetched and read in full |
+
+Read in full in this pass (PDF fetched from the paper's own arXiv page; `scripts/check_paper_note.py` PASS on each; page counts equal `pdfinfo`):
+
+| Paper | arXiv | Pages | Note |
+|---|---|---|---|
+| Skip the Compressor — Yang et al. | 2610.21073v1 | 24 | `skip-the-compressor-2610.21073.md` |
+| UTBoost — Yu et al. (ACL 2025) | 2506.09289v1 | 13 | `utboost-2506.09289.md` |
+| Contrastive confidence regularization — Wang et al. (AAAI 2024) | 2401.00165v2 | 14 | `contrastive-confidence-reg-2401.00165.md` |
+
+Leads named by these three papers (not fetched, nothing quoted): SWE-bench+ (2410.06992) and a patch-pattern study (2410.12468) on weak tests; SWE-rebench (NeurIPS 2025) as a decontaminated task collection; a study of memorisation on the benchmark (ICSE-SEIP 2026); SWE-Pruner (2601.16746) and SWEzze (2603.28119) as trained context compressors for issue resolution; the other leads of the fifth pass remain unread. The one earlier loss-level lead (2401.00165) is now read; the second supervision-side paper of the report's row 19 is still open (Hidden Positives, listing only).
+
+Papers with existing notes now cited in the report's related work (no new reading): SWE-Explore, GREPO, LARGER, Exploration Structure, MM-IssueLoc, Promptagator, GloFND, self-distillation with adaptive margins, the fine-tuning-failure study.
+
 ## What the scan found, by topic (neutral; evidence from notes)
 
 1. **Graph-structured retrieval for issue localization.** Seven of the papers in hand use the graph or a resolver as a tool an LLM agent calls (LocAgent, CoSIL, ARISE, GraphLocator, SemNav, RepoNavigator through a language server, and LogicLoc through Datalog queries over AST facts), three use it as a signal or to expand a retrieval list (KGCompass, SpIDER, LARGER), and one learns over it (GREPO). Edge-type ablations exist only in SpIDER and GREPO (R2 notes); GraphLocator ablates tools, not edges; SemNav ablates online edge resolution (-7.00 points of File Hit@10, one run, 4B model). Resolution coverage as a rate is reported by none of them. RepoNavigator supplies every method with an entry function (normally a test) per issue, which changes the task; LogicLoc reports that over 50% of SWE-bench Lite issues name the gold location (method not given) and is below a trained retrieve-and-rerank system on that benchmark. The 2026-10-23 refresh found no graph-aware reranking of dense results for issue localization beyond SpIDER.

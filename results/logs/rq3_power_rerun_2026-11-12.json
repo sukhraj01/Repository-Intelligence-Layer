@@ -1,0 +1,35 @@
+{
+ "command": "scripts/rq3_driver.py power OUT --n 327 232 --sims 500 --permutations 2000 --seed 0",
+ "config": {
+  "n": [
+   327,
+   232
+  ],
+  "permutations": 2000,
+  "same_reply": 0.635,
+  "seed": 0,
+  "sims": 500
+ },
+ "config_sha256": "9cd561dd54f87ba498d11b1fefd31e08787c5813faf3d30009c13cf23978a0a0",
+ "entry": "E-POWER update 2026-11-12, E-REPORT-DRAFT-4",
+ "equal": true,
+ "hardware": {
+  "cpu": "Apple M3",
+  "gpu": "none",
+  "machine": "arm64",
+  "os": "macOS-15.7.1-arm64-arm-64bit-Mach-O",
+  "ram_gb": 8
+ },
+ "id": "rq3-power-rerun-2026-11-12",
+ "outputs_rerun_sha256": {
+  "rq3_power_run_noise.csv": "efab8f2f5491dacda10bc0d963084ce4bd197a1008f11fe0aa5c02434a8a19b8",
+  "rq3_power_run_noise_assumptions.json": "1784b3ff4ecc6b6b58c4489bed734b5df85c776d82845be01b5dd24b81c70722",
+  "rq3_power_run_noise_mdd.csv": "2b2130c9fed1bd1557e412270a2051fa782a650ffb5b640c084f64460c092363"
+ },
+ "outputs_stored_sha256": {
+  "rq3_power_run_noise.csv": "efab8f2f5491dacda10bc0d963084ce4bd197a1008f11fe0aa5c02434a8a19b8",
+  "rq3_power_run_noise_assumptions.json": "1784b3ff4ecc6b6b58c4489bed734b5df85c776d82845be01b5dd24b81c70722",
+  "rq3_power_run_noise_mdd.csv": "2b2130c9fed1bd1557e412270a2051fa782a650ffb5b640c084f64460c092363"
+ },
+ "wall_seconds": 20.1
+}
