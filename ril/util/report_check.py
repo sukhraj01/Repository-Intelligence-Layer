@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 SOURCE_COMMENT = re.compile(
     r"(?<!\\)%.*?(paper_reported|E-[A-Z0-9]+(?:-[A-Z0-9]+)*|docs/|results/|data/|specs/|knowledge/|ADR-\d+|DEV-\d+|\bD\d+\b)"
@@ -130,4 +131,27 @@ def unresolved(text: str) -> list[Finding]:
         for group in re.findall(r"\\(?:ref|cref)\{([^}]+)\}", code):
             if group not in labels and not group.startswith("tab:"):
                 findings.append(Finding(n, "undefined reference", group))
+    return findings
+
+
+STORED_PATH = re.compile(
+    r"(?:results|knowledge|docs|specs|data|configs)/[A-Za-z0-9_./\-]*[A-Za-z0-9_]"
+    r"\.(?:csv|json|md|txt|yaml)"
+)
+
+
+def missing_sources(text: str, root: Path) -> list[Finding]:
+    """Stored files named in a ``%`` source comment that do not exist under ``root``.
+
+    A comment that names a file which is not there is a number nobody can trace; the existence of
+    the named path is the cheapest check that the comment was written from the file.
+    """
+    findings: list[Finding] = []
+    for n, line in enumerate(text.splitlines(), start=1):
+        parts = re.split(r"(?<!\\)%", line, maxsplit=1)
+        if len(parts) < 2:
+            continue
+        for path in sorted(set(STORED_PATH.findall(parts[1]))):
+            if not (root / path).exists():
+                findings.append(Finding(n, "source file not found", path))
     return findings

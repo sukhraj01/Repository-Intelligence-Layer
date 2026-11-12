@@ -84,4 +84,13 @@ Fifth reading pass (2026-10-29; supervision quality: noisy or weighted supervisi
 | Promptagator — Dai et al. | 2209.11755 (ICLR 2023) | Round-trip filter judged by a retriever trained on the same data | full, 21 pp, v1, 2026-10-29 | `promptagator-2209.11755.md` |
 | When fine-tuning fails — Pande et al. 2025 | 2506.18535 | Fine-tuning an already strong small encoder (weak evidence) | full, 7 pp, v1, 2026-10-29 | `finetuning-fails-msmarco-2506.18535.md` |
 
+Sixth reading pass (2026-11-12; report citations and related-work refresh; queries in `LANDSCAPE.md`, section "Refresh of 2026-11-12"):
+
+| Paper | arXiv / venue | Role in this project | Read depth | Note file |
+|---|---|---|---|---|
+| Skip the Compressor — Yang et al. 2026 | 2610.21073 | Fixed-budget, test-graded comparison of context methods; patch-sample noise | full, 24 pp, v1, 2026-11-12 | `skip-the-compressor-2610.21073.md` |
+| UTBoost — Yu et al. | 2506.09289 (ACL 2025) | Weak tests and log-parser defects on the human-validated subset; description of the subset | full, 13 pp, v1, 2026-11-12 | `utboost-2506.09289.md` |
+| Contrastive confidence regularization — Wang et al. | 2401.00165 (AAAI 2024) | Loss-level handling of false negatives; assumes no false positives | full, 14 pp, v2, 2026-11-12 | `contrastive-confidence-reg-2401.00165.md` |
+| Introducing SWE-bench Verified (web announcement, 13 Aug 2024) | none (web page) | Source of the subset's construction; not citable under the paper rule | NOT READ as a paper (archived capture read in full; no PDF) | `swe-bench-verified-announcement-2024.md` |
+
 Full citations: `docs/11_references.md` (identifiers, titles, first authors and years audited against arXiv and Crossref on 2026-10-23; corrections and the list of mismatches in `docs/DEVIATIONS.md`, DEV-011).

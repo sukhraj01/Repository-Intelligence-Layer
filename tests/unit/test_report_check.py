@@ -59,3 +59,16 @@ def test_the_report_has_no_untraced_number_and_resolves_every_reference() -> Non
     text = REPORT.read_text(encoding="utf-8")
     assert [f.render() for f in rc.untraced_numbers(text)] == []
     assert [f.render() for f in rc.unresolved(text)] == []
+
+
+def test_a_source_comment_naming_a_missing_file_is_found(tmp_path: Path) -> None:
+    (tmp_path / "results").mkdir()
+    (tmp_path / "results" / "there.csv").write_text("a\n")
+    text = _doc("Seven. % results/there.csv and results/gone.csv and E-FOO\n")
+    found = rc.missing_sources(text, tmp_path)
+    assert [f.text for f in found] == ["results/gone.csv"]
+
+
+def test_every_file_named_in_a_report_comment_exists() -> None:
+    text = REPORT.read_text(encoding="utf-8")
+    assert [f.render() for f in rc.missing_sources(text, ROOT)] == []
