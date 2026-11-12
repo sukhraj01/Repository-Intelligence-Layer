@@ -1,0 +1,643 @@
+{
+ "batch_size": 64,
+ "cache_hits": 69223,
+ "cache_misses": 160358,
+ "cell_on": true,
+ "cuda_gate": {
+  "capability": [
+   7,
+   5
+  ],
+  "cuda": "12.1",
+  "device": "NVIDIA GeForce RTX 2080 Ti",
+  "matmul_max_abs_error": 0.0001220703125,
+  "torch": "2.4.1+cu121"
+ },
+ "cut": 1024,
+ "full": {
+  "directories": 5789,
+  "distinct_texts": 2263190,
+  "function_rows": 14913533,
+  "queries": 5789,
+  "repositories": 991
+ },
+ "per_directory": [
+  {
+   "dir": "activeloopai__deeplake-1668",
+   "encoded": 1537,
+   "functions": 1559,
+   "seconds": 4.4572
+  },
+  {
+   "dir": "allenai__allennlp-4305",
+   "encoded": 1156,
+   "functions": 1200,
+   "seconds": 4.6199
+  },
+  {
+   "dir": "apache__airflow-20807",
+   "encoded": 7293,
+   "functions": 7491,
+   "seconds": 24.7679
+  },
+  {
+   "dir": "apache__airflow-37293",
+   "encoded": 11724,
+   "functions": 12836,
+   "seconds": 45.2888
+  },
+  {
+   "dir": "arize-ai__openinference-2555",
+   "encoded": 1486,
+   "functions": 1740,
+   "seconds": 5.8838
+  },
+  {
+   "dir": "arize-ai__openinference-3221",
+   "encoded": 1089,
+   "functions": 2449,
+   "seconds": 5.1547
+  },
+  {
+   "dir": "arize-ai__phoenix-3846",
+   "encoded": 1283,
+   "functions": 1332,
+   "seconds": 4.3032
+  },
+  {
+   "dir": "asottile__pyupgrade-308",
+   "encoded": 109,
+   "functions": 109,
+   "seconds": 1.0588
+  },
+  {
+   "dir": "astropy__astroquery-2857",
+   "encoded": 1409,
+   "functions": 1446,
+   "seconds": 7.3317
+  },
+  {
+   "dir": "azure__azure-cli-17778",
+   "encoded": 8278,
+   "functions": 8570,
+   "seconds": 31.405
+  },
+  {
+   "dir": "azure__azure-cli-18622",
+   "encoded": 830,
+   "functions": 8636,
+   "seconds": 7.5225
+  },
+  {
+   "dir": "azure__azure-cli-22745",
+   "encoded": 3618,
+   "functions": 10493,
+   "seconds": 20.3045
+  },
+  {
+   "dir": "azure__azure-cli-24899",
+   "encoded": 2245,
+   "functions": 15158,
+   "seconds": 16.3962
+  },
+  {
+   "dir": "azure__azure-cli-32784",
+   "encoded": 8949,
+   "functions": 34385,
+   "seconds": 55.364
+  },
+  {
+   "dir": "azure__azure-cli-6724",
+   "encoded": 1846,
+   "functions": 4018,
+   "seconds": 9.7396
+  },
+  {
+   "dir": "biolab__orange3-6661",
+   "encoded": 7259,
+   "functions": 7431,
+   "seconds": 17.1897
+  },
+  {
+   "dir": "chanzuckerberg__cellxgene-census-716",
+   "encoded": 273,
+   "functions": 277,
+   "seconds": 1.6093
+  },
+  {
+   "dir": "common-workflow-language__cwltool-1972",
+   "encoded": 447,
+   "functions": 447,
+   "seconds": 2.6521
+  },
+  {
+   "dir": "conda__conda-11036",
+   "encoded": 1764,
+   "functions": 1817,
+   "seconds": 5.8554
+  },
+  {
+   "dir": "conda__conda-16823",
+   "encoded": 2379,
+   "functions": 2729,
+   "seconds": 8.8353
+  },
+  {
+   "dir": "crossbario__autobahn-python-1862",
+   "encoded": 3408,
+   "functions": 3889,
+   "seconds": 6.9335
+  },
+  {
+   "dir": "delta-io__delta-rs-4336",
+   "encoded": 130,
+   "functions": 131,
+   "seconds": 1.1175
+  },
+  {
+   "dir": "diaoul__subliminal-1242",
+   "encoded": 376,
+   "functions": 381,
+   "seconds": 1.8158
+  },
+  {
+   "dir": "diracgrid__dirac-8217",
+   "encoded": 7899,
+   "functions": 7986,
+   "seconds": 30.7899
+  },
+  {
+   "dir": "django-cms__django-cms-3357",
+   "encoded": 1187,
+   "functions": 1271,
+   "seconds": 3.3487
+  },
+  {
+   "dir": "dwavesystems__dwave-inspector-63",
+   "encoded": 53,
+   "functions": 53,
+   "seconds": 0.8129
+  },
+  {
+   "dir": "elastic__apm-agent-python-1388",
+   "encoded": 766,
+   "functions": 776,
+   "seconds": 2.4281
+  },
+  {
+   "dir": "equinor__xtgeo-1062",
+   "encoded": 1328,
+   "functions": 1346,
+   "seconds": 6.1837
+  },
+  {
+   "dir": "esphome__esphome-15844",
+   "encoded": 4734,
+   "functions": 4946,
+   "seconds": 16.0718
+  },
+  {
+   "dir": "fsspec__gcsfs-471",
+   "encoded": 129,
+   "functions": 144,
+   "seconds": 1.1293
+  },
+  {
+   "dir": "getsentry__sentry-python-2657",
+   "encoded": 1085,
+   "functions": 1102,
+   "seconds": 3.4552
+  },
+  {
+   "dir": "getsentry__sentry-python-418",
+   "encoded": 264,
+   "functions": 388,
+   "seconds": 1.3355
+  },
+  {
+   "dir": "globus__globus-sdk-python-382",
+   "encoded": 238,
+   "functions": 238,
+   "seconds": 1.4851
+  },
+  {
+   "dir": "googleapis__python-firestore-219",
+   "encoded": 541,
+   "functions": 578,
+   "seconds": 2.52
+  },
+  {
+   "dir": "googleapis__python-ndb-388",
+   "encoded": 789,
+   "functions": 827,
+   "seconds": 2.4825
+  },
+  {
+   "dir": "googleapis__python-ndb-527",
+   "encoded": 282,
+   "functions": 979,
+   "seconds": 1.4494
+  },
+  {
+   "dir": "holoviz__datashader-681",
+   "encoded": 348,
+   "functions": 353,
+   "seconds": 1.5392
+  },
+  {
+   "dir": "huggingface__optimum-2081",
+   "encoded": 1115,
+   "functions": 1197,
+   "seconds": 6.2512
+  },
+  {
+   "dir": "huggingface__text-generation-inference-3193",
+   "encoded": 1811,
+   "functions": 2760,
+   "seconds": 9.5586
+  },
+  {
+   "dir": "hvac__hvac-1120",
+   "encoded": 564,
+   "functions": 565,
+   "seconds": 3.0202
+  },
+  {
+   "dir": "jackdewinter__pymarkdown-624",
+   "encoded": 1387,
+   "functions": 1411,
+   "seconds": 5.9147
+  },
+  {
+   "dir": "jasonacox__tinytuya-714",
+   "encoded": 548,
+   "functions": 566,
+   "seconds": 2.1982
+  },
+  {
+   "dir": "jschneier__django-storages-564",
+   "encoded": 179,
+   "functions": 190,
+   "seconds": 0.6526
+  },
+  {
+   "dir": "jupyter__notebook-6946",
+   "encoded": 23,
+   "functions": 23,
+   "seconds": 0.3585
+  },
+  {
+   "dir": "jupyterhub__jupyterhub-1926",
+   "encoded": 629,
+   "functions": 638,
+   "seconds": 2.032
+  },
+  {
+   "dir": "jupyterlab__jupyterlab-15946",
+   "encoded": 351,
+   "functions": 378,
+   "seconds": 1.6845
+  },
+  {
+   "dir": "keras-team__keras-cv-1508",
+   "encoded": 1230,
+   "functions": 1474,
+   "seconds": 5.4213
+  },
+  {
+   "dir": "kivy__kivy-2808",
+   "encoded": 2988,
+   "functions": 3091,
+   "seconds": 6.6045
+  },
+  {
+   "dir": "kserve__kserve-4384",
+   "encoded": 2190,
+   "functions": 2568,
+   "seconds": 5.8288
+  },
+  {
+   "dir": "kserve__kserve-5757",
+   "encoded": 509,
+   "functions": 2983,
+   "seconds": 2.6559
+  },
+  {
+   "dir": "localstack__localstack-7816",
+   "encoded": 7799,
+   "functions": 7894,
+   "seconds": 18.354
+  },
+  {
+   "dir": "macbre__sql-metadata-617",
+   "encoded": 103,
+   "functions": 103,
+   "seconds": 0.5837
+  },
+  {
+   "dir": "michaelhly__solana-py-89",
+   "encoded": 331,
+   "functions": 340,
+   "seconds": 1.6939
+  },
+  {
+   "dir": "microsoft__botbuilder-python-1037",
+   "encoded": 1238,
+   "functions": 1262,
+   "seconds": 4.3428
+  },
+  {
+   "dir": "mitmproxy__mitmproxy-2411",
+   "encoded": 1868,
+   "functions": 1948,
+   "seconds": 4.0386
+  },
+  {
+   "dir": "mondeja__mkdocs-include-markdown-plugin-173",
+   "encoded": 37,
+   "functions": 37,
+   "seconds": 0.6075
+  },
+  {
+   "dir": "niklasrosenstein__pydoc-markdown-289",
+   "encoded": 178,
+   "functions": 183,
+   "seconds": 1.1162
+  },
+  {
+   "dir": "open-metadata__openmetadata-26675",
+   "encoded": 6033,
+   "functions": 6353,
+   "seconds": 20.8191
+  },
+  {
+   "dir": "open-mmlab__mmdetection-2170",
+   "encoded": 824,
+   "functions": 849,
+   "seconds": 4.2841
+  },
+  {
+   "dir": "open-telemetry__opentelemetry-python-contrib-2935",
+   "encoded": 1074,
+   "functions": 1149,
+   "seconds": 3.259
+  },
+  {
+   "dir": "opendatateam__udata-2740",
+   "encoded": 1280,
+   "functions": 1311,
+   "seconds": 2.7258
+  },
+  {
+   "dir": "pennylaneai__pennylane-5725",
+   "encoded": 3817,
+   "functions": 3997,
+   "seconds": 19.2819
+  },
+  {
+   "dir": "ploomber__jupysql-1061",
+   "encoded": 364,
+   "functions": 369,
+   "seconds": 1.5129
+  },
+  {
+   "dir": "ploomber__jupysql-126",
+   "encoded": 65,
+   "functions": 106,
+   "seconds": 0.9841
+  },
+  {
+   "dir": "ploomber__jupysql-493",
+   "encoded": 87,
+   "functions": 181,
+   "seconds": 1.0244
+  },
+  {
+   "dir": "policyengine__policyengine-us-6062",
+   "encoded": 2074,
+   "functions": 2081,
+   "seconds": 5.8004
+  },
+  {
+   "dir": "policyengine__policyengine-us-8531",
+   "encoded": 2871,
+   "functions": 4007,
+   "seconds": 9.3888
+  },
+  {
+   "dir": "powerline__powerline-2111",
+   "encoded": 983,
+   "functions": 1001,
+   "seconds": 2.7535
+  },
+  {
+   "dir": "pycontribs__jira-1133",
+   "encoded": 288,
+   "functions": 288,
+   "seconds": 1.5264
+  },
+  {
+   "dir": "pycord-development__pycord-356",
+   "encoded": 2566,
+   "functions": 2659,
+   "seconds": 6.3246
+  },
+  {
+   "dir": "pydantic__pydantic-settings-1049",
+   "encoded": 241,
+   "functions": 242,
+   "seconds": 1.532
+  },
+  {
+   "dir": "pyo3__setuptools-rust-216",
+   "encoded": 47,
+   "functions": 48,
+   "seconds": 0.7399
+  },
+  {
+   "dir": "pyro-ppl__numpyro-127",
+   "encoded": 436,
+   "functions": 458,
+   "seconds": 1.3549
+  },
+  {
+   "dir": "python-poetry__cleo-285",
+   "encoded": 572,
+   "functions": 583,
+   "seconds": 1.3557
+  },
+  {
+   "dir": "python-trio__trio-378",
+   "encoded": 576,
+   "functions": 589,
+   "seconds": 1.8161
+  },
+  {
+   "dir": "pytorch__ignite-616",
+   "encoded": 339,
+   "functions": 369,
+   "seconds": 1.4498
+  },
+  {
+   "dir": "pytorch__ignite-69",
+   "encoded": 48,
+   "functions": 53,
+   "seconds": 0.555
+  },
+  {
+   "dir": "pytorch__rl-1835",
+   "encoded": 2695,
+   "functions": 3155,
+   "seconds": 9.9216
+  },
+  {
+   "dir": "pytorch__serve-851",
+   "encoded": 407,
+   "functions": 409,
+   "seconds": 1.6536
+  },
+  {
+   "dir": "pytorch__tensordict-2283",
+   "encoded": 2548,
+   "functions": 2654,
+   "seconds": 9.3484
+  },
+  {
+   "dir": "qutip__qutip-2830",
+   "encoded": 1444,
+   "functions": 1453,
+   "seconds": 6.1713
+  },
+  {
+   "dir": "rnag__dataclass-wizard-225",
+   "encoded": 636,
+   "functions": 652,
+   "seconds": 2.1646
+  },
+  {
+   "dir": "schemathesis__schemathesis-151",
+   "encoded": 92,
+   "functions": 92,
+   "seconds": 0.9818
+  },
+  {
+   "dir": "scikit-hep__awkward-460",
+   "encoded": 1030,
+   "functions": 1120,
+   "seconds": 4.0296
+  },
+  {
+   "dir": "scikit-image__scikit-image-314",
+   "encoded": 447,
+   "functions": 450,
+   "seconds": 2.2126
+  },
+  {
+   "dir": "scylladb__python-driver-1134",
+   "encoded": 2422,
+   "functions": 2497,
+   "seconds": 5.9334
+  },
+  {
+   "dir": "seldonio__seldon-core-1368",
+   "encoded": 446,
+   "functions": 536,
+   "seconds": 1.9446
+  },
+  {
+   "dir": "semgrep__semgrep-3310",
+   "encoded": 477,
+   "functions": 482,
+   "seconds": 1.7898
+  },
+  {
+   "dir": "single-cell-data__tiledb-soma-1405",
+   "encoded": 265,
+   "functions": 266,
+   "seconds": 1.4341
+  },
+  {
+   "dir": "skorch-dev__skorch-515",
+   "encoded": 384,
+   "functions": 387,
+   "seconds": 1.5119
+  },
+  {
+   "dir": "skypilot-org__skypilot-1183",
+   "encoded": 1187,
+   "functions": 1203,
+   "seconds": 5.1768
+  },
+  {
+   "dir": "slidoapp__dbt-coverage-69",
+   "encoded": 43,
+   "functions": 43,
+   "seconds": 0.4867
+  },
+  {
+   "dir": "sparckles__robyn-623",
+   "encoded": 206,
+   "functions": 206,
+   "seconds": 0.7676
+  },
+  {
+   "dir": "sunpy__sunpy-2922",
+   "encoded": 1135,
+   "functions": 1163,
+   "seconds": 4.4304
+  },
+  {
+   "dir": "textualize__rich-901",
+   "encoded": 595,
+   "functions": 604,
+   "seconds": 2.0693
+  },
+  {
+   "dir": "treeverse__lakefs-6851",
+   "encoded": 549,
+   "functions": 735,
+   "seconds": 5.5375
+  },
+  {
+   "dir": "voxel51__fiftyone-1793",
+   "encoded": 4403,
+   "functions": 4892,
+   "seconds": 13.728
+  },
+  {
+   "dir": "zarr-developers__numcodecs-412",
+   "encoded": 106,
+   "functions": 108,
+   "seconds": 0.9659
+  },
+  {
+   "dir": "zeromq__pyzmq-516",
+   "encoded": 487,
+   "functions": 498,
+   "seconds": 1.7217
+  },
+  {
+   "dir": "zopefoundation__zope.schema-52",
+   "encoded": 160,
+   "functions": 161,
+   "seconds": 0.5749
+  }
+ ],
+ "projection": {
+  "dedup_gpu_hours": 2.482636649515708,
+  "per_directory_gpu_hours": 9.97959051179272,
+  "seconds_per_distinct_text": 0.003844627530761424,
+  "seconds_per_query": 0.0408307750755921
+ },
+ "rule_max_gpu_hours": 6.0,
+ "sample": {
+  "directories": 100,
+  "distinct_texts": 160358,
+  "function_rows": 229581,
+  "queries": 100,
+  "repositories": 85
+ },
+ "sample_seconds": 620.6,
+ "seed": 0,
+ "teacher": "swerankembed-small"
+}
