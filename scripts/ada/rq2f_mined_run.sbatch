@@ -83,15 +83,6 @@ fi
   --results-root "$W/results" --work-root "$CK/ckpt" --date "$DATE" --device cuda --drop-eval-stores \
   --eval-set dev --home "$HOME" --work "$CK/eval" \
   > "out/run_mined_s${SEED}_${SLURM_JOB_ID}.json"
-if [ -n "${SMOKE_STOP_AFTER:-}" ]; then  # smoke: retained model against the run's own final folder, before scratch goes
-  for RID in $IDS; do
-    EXP=rq2f_${RID%_u${UPDATES}_s${SEED}}  # exp_id of the configuration
-    FINAL=$(find "$CK/ckpt/$EXP" -type d -name final | head -1)
-    RET=$(ls -d "$RETAIN_DIR"/${EXP}__s${SEED}__* | grep -v '\.tmp$' | head -1)
-    "$PY" scripts/rq2_retention_roundtrip.py "$RET" "$FINAL" "out/roundtrip_${RID}_${SLURM_JOB_ID}.json" --device cuda \
-      || echo "roundtrip failed for $RID"
-  done
-fi
 du -sh "$CK" >> "out/env_mined_s${SEED}_${SLURM_JOB_ID}.txt" || true
 rm -rf "$CK"
 echo done
