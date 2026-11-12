@@ -1055,7 +1055,10 @@ LATENCY_ROWS = (
     ("retrieval-django-v1", "bm25", "Sukhraj", "laptop CPU"),
     ("dsearch-coderankembed-django-torch-v1", "dense_search", "gnode044", "GPU node"),
     ("dsearch-coderankembed-django-v1", "dense_search", "gnode006", "CPU node"),
+    ("fusion-django-v1", "rrf_fusion", "Sukhraj", "laptop CPU"),
     ("retrieval-django-v1", "graph_expansion", "Sukhraj", "laptop CPU"),
+    ("fusion-django-v1", "same_file_expansion", "Sukhraj", "laptop CPU"),
+    ("fusion-django-v1", "recency_prior", "Sukhraj", "laptop CPU"),
     ("assembly-django-b8000-v1", "assemble", "Sukhraj", "laptop CPU"),
     ("assembly-django-b8000-v1", "end_to_end", "Sukhraj", "laptop CPU"),
 )
@@ -1102,7 +1105,7 @@ def latency_stages(root: Path) -> Table:
         title="Per-stage latency of the query path",
         evidence="measured, exploratory (one query set per stage, mixed hardware)",
         facts=facts,
-        entries=["E-LAT-STAGES"],
+        entries=["E-LAT-STAGES", "E-FREEZE-AND-LATENCY"],
         colspec=_L(0.22) + _L(0.18) + _R(0.12) + _R(0.10) + _R(0.10) + _R(0.10),
         header=[
             tr.lit("Stage"),
