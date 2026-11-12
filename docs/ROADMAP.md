@@ -113,6 +113,7 @@ still complete and defensible.
 - [x] RQ3 prompt pseudonymisation (2026-11-08, D120, E-RQ3-PSEUDONYMISE; Q70 answered): 1,131 of 1,131 prompts pass the screen, restore in the driver, round trips and replay checked, no model call
 - [x] Workstream C catch-up (2026-11-09, D144, E-C-CATCHUP): scaffold table of the evaluation API brought to the five-paper reading; Colab C1 dev BM25 comparison re-run natively on account A (12 of 12 cells equal, query-level rows stored, Q64 answered)
 - [x] RQ3 trained-arm pipeline (2026-11-12, D150, D151, E-RQ3-TRAINED-ARMS; `scripts/rq3_trained_arm.py`, `scripts/ada/rq3_trained_*.sbatch`): plan with cost against Block 4 (eight of 18 retained models fit), encode stage under the sealed order, contexts and prompts through the untrained path (byte equality and determinism tested), analysis plan for the trained arms; CPU only, nothing encoded, no model call; encoding and the graded runs wait for the RQ2 models and the lead
+- [x] RQ3 model check across providers, apparatus (2026-11-12, D152, E-RQ3-MODEL-CHECK-PLAN; `ril/agent/providers/{messages_api,model_check}.py`, limits-file template): four candidates of two providers, rule fixed in code before any call, tested without network; the check itself (billing, keys, prices, four runs of 50) waits for the lead
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
 

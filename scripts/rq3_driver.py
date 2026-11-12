@@ -14,7 +14,10 @@ Usage:
   rq3_driver.py analyse OUT.json RESULT_DIR [RESULT_DIR ...] --subset SUBSET.json
                 --heldout HELD.json --arms A B ... --primary A B [--estimate A B ...]
                 --runs 0 1 --out-dir DIR   (or --plan FILE from rq3_trained_arm.py analysis-plan)
-  rq3_driver.py model-check OUT.json NAME=RESULT_DIR [NAME=RESULT_DIR ...]
+  rq3_driver.py model-check OUT.json NAME=RESULT_DIR [NAME=RESULT_DIR ...]   (D112; see D152)
+  rq3_driver.py model-check-limits LIMITS.yaml       (validate the filled limits file, D152)
+  rq3_driver.py model-check-select OUT.json RUNS_DIR --limits LIMITS.yaml [--expected-n 50]
+                (the D152 rule on RUNS_DIR/<candidate>/{results.jsonl,meta.json}; no model call)
   rq3_driver.py power OUT_DIR [--n 327 ...] [--sims 400] [--seed 0]
   rq3_driver.py cost OUT_DIR --pilot-cost results/rq3_pilot/analysis/rq3_pilot_cost.csv
 
@@ -213,8 +216,20 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
     if not items:
         log.error("no prepared item matches arm %s and the instance list", args.arm)
         return 2
-    prices = load_prices(PRICES_FILE)
-    price = price_of(prices, args.model)
+    from ril.agent.providers.model_check import (
+        limits_entry,
+        provider_for,
+        run_config_sha256,
+    )
+    from ril.agent.providers.patch_format import TEMPLATE_VERSION
+    from ril.agent.providers.spend import price_from_limits
+
+    limits_path = getattr(args, "limits", None)
+    entry = limits_entry(limits_path, args.model) if limits_path else {}
+    price = (price_from_limits(limits_path, args.model) if limits_path else None) or price_of(
+        load_prices(PRICES_FILE), args.model
+    )
+    provider = provider_for(args.model, entry, getattr(args, "provider", None))
     run_cfg = RunConfig(
         model=args.model,
         seed=args.seed,
@@ -229,7 +244,11 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
     client: Any = None
     guard: SpendGuard | None = None
     day_of = None
-    thinking = json.loads(args.thinking_config) if getattr(args, "thinking_config", None) else None
+    thinking = (
+        json.loads(args.thinking_config)
+        if getattr(args, "thinking_config", None)
+        else (entry.get("thinking") or None)
+    )
     if live:
         from ril.agent.providers.gemini import (
             ApiKeyError,
@@ -238,25 +257,48 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
             load_api_key,
         )
         from ril.agent.providers.limiter import PersistentLimiter, load_limits
+        from ril.agent.providers.messages_api import (
+            MessagesClient,
+            MessagesConfig,
+            connection_from_entry,
+        )
 
         limits = load_limits(args.limits, model=args.model)
         try:
-            key = load_api_key()
-        except ApiKeyError as err:
+            conn = connection_from_entry(entry) if provider == "messages" else {}
+            key = (
+                load_api_key(variable=str(entry["key_variable"]))
+                if provider == "messages"
+                else load_api_key()
+            )
+        except (ApiKeyError, KeyError) as err:
             log.error("%s", err)
             return 2
         limiter = PersistentLimiter(limits, Path(args.log_dir) / "limiter.jsonl")
-        inner = GeminiClient(
-            GeminiConfig(
-                model=args.model,
-                temperature=0.0,
-                seed=args.seed,
-                max_output_tokens=args.max_output_tokens,
-                thinking_config=thinking,
-            ),
-            key,
-            limiter,
-        )
+        if provider == "messages":
+            inner: Any = MessagesClient(
+                MessagesConfig(
+                    model=args.model,
+                    **conn,
+                    temperature=0.0,
+                    max_output_tokens=args.max_output_tokens,
+                    thinking_config=thinking,
+                ),
+                key,
+                limiter,
+            )
+        else:
+            inner = GeminiClient(
+                GeminiConfig(
+                    model=args.model,
+                    temperature=0.0,
+                    seed=args.seed,
+                    max_output_tokens=args.max_output_tokens,
+                    thinking_config=thinking,
+                ),
+                key,
+                limiter,
+            )
         guard = SpendGuard(args.cap_usd, price, args.max_output_tokens)
         guard.add_logged(call_log.rows())
         client = GuardedClient(inner, guard)
@@ -272,6 +314,19 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         "prices_verified": price.verified,
         "thinking_config": thinking if thinking is not None else "provider default (none sent)",
         "max_output_tokens": getattr(args, "max_output_tokens", None),
+        "provider": provider,
+        "config_sha256": run_config_sha256(
+            {
+                "provider": provider,
+                "model": args.model,
+                "temperature": 0.0,
+                "thinking": thinking,
+                "max_output_tokens": getattr(args, "max_output_tokens", None),
+                "max_reasks": run_cfg.max_reasks,
+                "template_version": TEMPLATE_VERSION,
+                "arm": args.arm,
+            }
+        ),
         "exec_config_hash_latest": hash_latest,
         "exec_config_hash_era": hash_era,
         "seed": args.seed,
@@ -546,6 +601,74 @@ def cmd_model_check(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_model_check_limits(args: argparse.Namespace) -> int:
+    """Validate the filled limits file (no key read, no call); prints the caps of each candidate."""
+    from ril.agent.providers.model_check import load_spec, validate_limits
+
+    problems = validate_limits(args.limits)
+    for p in problems:
+        log.error("%s", p)
+    if problems:
+        return 2
+    spec = load_spec(args.limits)
+    for name, m in spec.models.items():
+        log.info(
+            "%s: %s, %s, caps %s USD, thinking %s",
+            name,
+            m.provider,
+            m.tier,
+            list(m.caps_usd),
+            dict(m.thinking) if m.thinking else "none sent",
+        )
+    log.info(
+        "study budget %.2f USD%s, %d arm-runs, N %d",
+        spec.budget_usd,
+        " (default, key absent)" if spec.budget_defaulted else "",
+        spec.arm_runs,
+        spec.confirmatory_n,
+    )
+    return 0
+
+
+def cmd_model_check_select(args: argparse.Namespace) -> int:
+    """Apply the D152 rule to the finished check runs; makes no model call."""
+    from ril.agent.providers.driver import latest_rows
+    from ril.agent.providers.model_check import (
+        load_spec,
+        power_context,
+        render_table,
+        select_model,
+        summarise,
+    )
+
+    spec = load_spec(args.limits)
+    base = Path(args.runs_dir)
+    summaries = []
+    for name in spec.models:
+        run = base / name
+        results = run / "results.jsonl"
+        if not results.exists():
+            log.error("%s: no results.jsonl under %s", name, run)
+            return 2
+        meta = json.loads((run / "meta.json").read_text(encoding="utf-8"))
+        rows = list(latest_rows(results).values())
+        summaries.append(summarise(name, rows, meta, spec.models[name], spec, args.expected_n))
+    result = select_model(summaries, spec.budget_usd)
+    result["budget_defaulted"] = spec.budget_defaulted
+    result["study_arm_runs"] = spec.arm_runs
+    result["confirmatory_n"] = spec.confirmatory_n
+    result["evidence_class"] = "exploratory, 50 held-out instances (D111, D152)"
+    if result["chosen"] is not None:
+        result["power_context"] = power_context(args.power, result["rate"], spec.confirmatory_n)
+    _write_json(Path(args.out), result)
+    sys.stdout.write(render_table(result) + "\n")
+    if "power_context" in result:
+        sys.stdout.write(
+            f"power context (assumed grid, N={spec.confirmatory_n}): {result['power_context']}\n"
+        )
+    return 0 if result["status"] == "selected" else 3
+
+
 def cmd_power(args: argparse.Namespace) -> int:
     from ril.analysis import rq3_power, rq3_power_noise
 
@@ -651,6 +774,11 @@ def main(argv: list[str] | None = None) -> int:
             p.add_argument("--max-output-tokens", type=int, default=4096)
             p.add_argument("--max-calls", type=int)
             p.add_argument("--limits", default=str(LIMITS_FILE))
+            p.add_argument(
+                "--provider",
+                choices=["gemini", "messages"],
+                help="default: the limits entry's provider, else from the model name",
+            )
             p.add_argument("--wait-for-daily", action="store_true")
         p.set_defaults(fn=cmd_run_or_grade)
     p = sub.add_parser("replay")
@@ -686,6 +814,20 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("out")
     p.add_argument("candidates", nargs="+")
     p.set_defaults(fn=cmd_model_check)
+    p = sub.add_parser("model-check-limits")
+    p.add_argument("limits")
+    p.set_defaults(fn=cmd_model_check_limits)
+    p = sub.add_parser("model-check-select")
+    p.add_argument("out")
+    p.add_argument(
+        "runs_dir", help="directory with one folder per candidate (results.jsonl, meta.json)"
+    )
+    p.add_argument("--limits", required=True)
+    p.add_argument("--expected-n", type=int, default=50)
+    p.add_argument(
+        "--power", default=str(ROOT / "results" / "rq3_driver" / "rq3_power_run_noise_mdd.csv")
+    )
+    p.set_defaults(fn=cmd_model_check_select)
     p = sub.add_parser("power")
     p.add_argument("out_dir")
     p.add_argument("--n", type=int, nargs="+", default=[327])

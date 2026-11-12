@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from ril.agent.providers.calllog import CallLog, Row, Unit, sha256_text
-from ril.agent.providers.gemini import CallResult, canonical
+from ril.agent.providers.gemini import CallResult, InsufficientBalance, canonical
 from ril.agent.providers.limiter import DailyCapReached
 from ril.agent.providers.patch_format import (
     TEMPLATE_VERSION,
@@ -196,6 +196,10 @@ def run_unit(
         except SpendCapReached as stop:
             summary.stopped = "spend_cap"
             summary.errors.append(str(stop))
+            return False
+        except InsufficientBalance as stop:
+            summary.stopped = "insufficient_balance"
+            summary.errors.append(f"{unit}: {stop}"[:300])
             return False
         summary.calls += 1
         prompt_sha = log.store("prompts", canonical(contents))
