@@ -13,7 +13,7 @@ Usage:
   rq3_driver.py replay SPECS GOLD DRAW OUT_DIR --subset SUBSET.json [exec options]
   rq3_driver.py analyse OUT.json RESULT_DIR [RESULT_DIR ...] --subset SUBSET.json
                 --heldout HELD.json --arms A B ... --primary A B [--estimate A B ...]
-                --runs 0 1 --out-dir DIR
+                --runs 0 1 --out-dir DIR   (or --plan FILE from rq3_trained_arm.py analysis-plan)
   rq3_driver.py model-check OUT.json NAME=RESULT_DIR [NAME=RESULT_DIR ...]
   rq3_driver.py power OUT_DIR [--n 327 ...] [--sims 400] [--seed 0]
   rq3_driver.py cost OUT_DIR --pilot-cost results/rq3_pilot/analysis/rq3_pilot_cost.csv
@@ -492,13 +492,20 @@ def cmd_analyse(args: argparse.Namespace) -> int:
     _, conf = split(executable, json.loads(Path(args.heldout).read_text(encoding="utf-8")))
     repo_of = {str(r["instance_id"]): str(r["repo"]) for r in executable}
     rows = _read_results(args.result_dirs)
-    plan = Plan(
-        arms=tuple(args.arms),
-        primary=(args.primary[0], args.primary[1]),
-        estimates=tuple(zip(args.estimate[::2], args.estimate[1::2], strict=True)),
-        runs=tuple(args.runs),
-        seed=args.seed,
-    )
+    if args.plan:
+        from ril.agent.providers.trained_arms import read_plan
+
+        plan = read_plan(args.plan)
+    else:
+        if not (args.arms and args.primary and args.runs):
+            raise SystemExit("give --plan FILE, or --arms, --primary and --runs")
+        plan = Plan(
+            arms=tuple(args.arms),
+            primary=(args.primary[0], args.primary[1]),
+            estimates=tuple(zip(args.estimate[::2], args.estimate[1::2], strict=True)),
+            runs=tuple(args.runs),
+            seed=args.seed,
+        )
     tables = analyse(rows, conf, repo_of, plan)
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -668,10 +675,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("result_dirs", nargs="+")
     p.add_argument("--subset", required=True)
     p.add_argument("--heldout", required=True)
-    p.add_argument("--arms", nargs="+", required=True)
-    p.add_argument("--primary", nargs=2, required=True)
+    p.add_argument("--arms", nargs="+")
+    p.add_argument("--primary", nargs=2)
     p.add_argument("--estimate", nargs="*", default=[])
-    p.add_argument("--runs", nargs="+", type=int, required=True)
+    p.add_argument("--runs", nargs="+", type=int)
+    p.add_argument("--plan", help="plan file of scripts/rq3_trained_arm.py analysis-plan")
     p.add_argument("--out-dir", required=True)
     p.set_defaults(fn=cmd_analyse)
     p = sub.add_parser("model-check")

@@ -249,3 +249,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-10,C,67056,POSTMINE,"E-MINE-FULL-RESULT pilot comparison of ranks and features on directories common with the pilot (non_test 912 of 912 identical)",u22,2,0,00:00:01,0.0,COMPLETED
 2026-11-10,C,67067,POSTMINE,"E-MINE-FULL-RESULT list of node-local scratch directories on gnode006 (sizes for the cleanup script)",u22,2,0,00:00:12,0.0,COMPLETED
 2026-11-10,C,67068,POSTMINE,"E-MINE-FULL-RESULT list of node-local scratch directories on gnode002 (sizes for the cleanup script)",u22,2,0,00:00:00,0.0,COMPLETED
+2026-11-12,A,73700,RQ3T,"E-RQ3-TRAINED-ARMS CPU dry run of the trained-arm path (smoke model, dev set, five instances); pending on QOSMaxCpuPerUserLimit when recorded, not started",u22,2,0,00:00:00,0.0,PENDING (not started when recorded)

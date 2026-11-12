@@ -364,6 +364,22 @@ adapter, the format and the log work end to end. The smoke calls used 3 of the d
 directory that is not the pilot's, so a pilot run the same day may exceed the day's count by up to 3
 (the margin of 10% absorbs it).
 
+## Trained arms (D150, D151, `E-RQ3-TRAINED-ARMS`, 2026-11-12)
+
+The retained mined models of RQ2 (D142) enter RQ3 as arms of the same driver: every (cell, seed) is its own arm, named
+`tr_<run id>`, ranked by that model's unit scores alone (the shape of the untrained `dense` arm, so the two are paired like for
+like). Everything else is the untrained path: the instance caches and unit records of the 377, the assembly of ADR-014
+(budgets 8,000 primary and 16,000 secondary, cap 1,000, 200 candidates), the prompt builder, pseudonymisation and screen of D120,
+the driver and the analysis of D113 and D121; the held-out slice of 50 stays out of the confirmatory analysis (D111).
+`provisional: ADR-007` for the dense-only form of the arm and for the primary seed (the smallest seed with a RAW model).
+
+The apparatus (`scripts/rq3_trained_arm.py`, `scripts/ada/rq3_trained_*.sbatch`): `plan` prints the jobs and their cost
+against Block 4; `encode` (GPU, one model per job, refuses to start without the id of the finished dev analysis, D100 and D127)
+writes the per-instance scores of the 377 with a model record; `contexts` (CPU, one pass for all models) builds the contexts;
+`prepare` builds the pseudonymised prompts through the driver's own `prepare`; `analysis-plan` names the arms, the primary pair
+(RAW at the primary seed against the untrained encoder) and the estimates. The cost is 0.68 GPU-hours per model (planning
+constant); Block 4 (cap 6.0, 0.377 spent) covers eight of the 18 retained models. Nothing was encoded or called.
+
 ## Open points (design questions, not decided here)
 
 - **Tokens of the budget.** The assembly counts approximate tokens (`approx-words-v1`); the model's own
