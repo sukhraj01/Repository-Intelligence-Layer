@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering\small
+\caption{Quarantined pull requests of the full mined set by reason. Evidence class: \emph{measured, exploratory (data)}. Pull requests that were attempted and set aside, by reason, of the full run. They are dropped, not sampled at random, and are a stated limitation of the set. No pull request was lost to a snapshot time-out. Share is of the quarantined pull requests. Entry \entry{E-MINE-FULL-RESULT}.}
+\label{tab:mined_quarantine}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}}
+\toprule
+Reason & Count & Share (\%) \\
+\midrule
+Python 2 print statement & 11 & 8.9 \\
+Python 2 except clause & 7 & 5.7 \\
+Python 2 long literal & 2 & 1.6 \\
+Python 2 octal literal & 1 & 0.8 \\
+Mixed tabs and spaces & 1 & 0.8 \\
+Other syntax error in a changed file & 26 & 21.1 \\
+Edited file absent at the base commit & 26 & 21.1 \\
+Patch missing & 23 & 18.7 \\
+Diff truncated (very large change) & 14 & 11.4 \\
+Non-ASCII identifier in a unit & 8 & 6.5 \\
+Snapshot unavailable & 3 & 2.4 \\
+Comparison not found & 1 & 0.8 \\
+\midrule
+All quarantined & 123 & 100.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
