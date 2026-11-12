@@ -76,9 +76,9 @@ class Trace:
             return "$-$" + body
         return ("+" if sign else "") + body
 
-    def count(self, value: float | str) -> str:
-        """An integer count read from a file."""
-        body = str(int(float(value)))
+    def count(self, value: object) -> str:
+        """An integer count read from a file (a JSON value is typed as an object)."""
+        body = str(int(float(str(value))))
         self.numbers.add(body)
         return body
 
@@ -1185,8 +1185,8 @@ def mined_full(root: Path) -> Table:
     st = y["status"]
     att = float(y["attempted"])
 
-    def share(n: float, d: float, nd: int = 1) -> str:
-        return tr.num(100 * n / d, nd)
+    def share(n: object, d: object, nd: int = 1) -> str:
+        return tr.num(100 * float(str(n)) / float(str(d)), nd)
 
     dash = tr.lit("--")
     out: list[list[str]] = [
