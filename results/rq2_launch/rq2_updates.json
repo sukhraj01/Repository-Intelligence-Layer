@@ -1,0 +1,8 @@
+{
+ "filter_pool": 3885,
+ "prep_summary_sha256": "83d762b93001d4868509e5f9602df99e5a6515de1d72cde4e98eee5cc480cb13",
+ "rule": "N = min(100, floor(F / 32)) for every arm of the mined family (D140)",
+ "updates": 100,
+ "version": "rq2-updates/v1",
+ "visits_per_arm": 3200
+}
