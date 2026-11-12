@@ -444,6 +444,14 @@ repositories. (c) "Lowest fixed thinking setting" is the same setting, not the s
 check measures each model as the scaffold uses it. (d) The candidates differ in tokenizer, so the same 8,000-token context is a
 different input size; costs are priced from the tokens the provider bills.
 
+**Amendment D158 (2026-11-12, `E-RQ3-MODEL-CHECK-AMEND`).** A single provider and a single candidate are allowed only when the
+limits file says so (`single_provider_ok: true`, `single_candidate_ok: true`); the selection of one candidate is the two filters
+(budget, floor) and no weaker fallback is added; the entry states the single-provider limitation and the D155 candidates that
+were not run. The whole-study cost prices the first run of each arm uncached and runs 2 to k at the cached-input price times the
+cache-hit fraction measured by a probe (10 held-out prompts sent twice back to back, cached tokens read from usage), never an
+assumed fraction; without a probe the projection is uncached. The k repeats of an arm may be sent consecutively (adjacent
+repeats; same units, requests, outputs and hashes, recorded in `meta.json`). `gemini-3.6-flash` is not a candidate.
+
 ## Open points (design questions, not decided here)
 
 - **Tokens of the budget.** The assembly counts approximate tokens (`approx-words-v1`); the model's own

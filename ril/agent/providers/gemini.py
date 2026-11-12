@@ -150,6 +150,9 @@ class CallResult:
     latency_s: float
     error: str | None
     request_sha256: str
+    cached_tokens: int = 0
+    """Prompt tokens the provider reports as served from its cache (``cachedContentTokenCount``);
+    part of ``input_tokens``, billed at the cached-input price."""
 
 
 class ProviderError(Exception):
@@ -179,6 +182,15 @@ def request_body(config: GeminiConfig, contents: Sequence[Mapping[str, Any]]) ->
     if config.thinking_config is not None:
         generation["thinkingConfig"] = dict(config.thinking_config)
     return {"contents": list(contents), "generationConfig": generation}
+
+
+def cached_tokens_of(body: str) -> int:
+    """Cached prompt tokens a 200 response reports (0 when absent or unreadable)."""
+    try:
+        usage = json.loads(body).get("usageMetadata") or {}
+        return max(0, int(usage.get("cachedContentTokenCount", 0) or 0))
+    except (ValueError, TypeError, AttributeError):
+        return 0
 
 
 def parse_response(body: str) -> tuple[str, str, int, int, int, str | None]:
@@ -267,6 +279,7 @@ class GeminiClient:
                         t1 - t0,
                         error,
                         sha,
+                        min(cached_tokens_of(resp.body), inp),
                     )
                 self.limiter.settle(grant, est)
                 detail = self._scrub(resp.body[:300])

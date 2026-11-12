@@ -15,6 +15,7 @@ Usage:
                 --heldout HELD.json --arms A B ... --primary A B [--estimate A B ...]
                 --runs 0 1 --out-dir DIR   (or --plan FILE from rq3_trained_arm.py analysis-plan)
   rq3_driver.py model-check OUT.json NAME=RESULT_DIR [NAME=RESULT_DIR ...]   (D112; see D155)
+  rq3_driver.py cache-probe ITEMS_DIR OUT_DIR --arm A --instances IDS --model M --cap-usd C  (D158)
   rq3_driver.py model-check-limits LIMITS.yaml       (validate the filled limits file, D155)
   rq3_driver.py model-check-select OUT.json RUNS_DIR --limits LIMITS.yaml [--expected-n 50]
                 (the D155 rule on RUNS_DIR/<candidate>/{results.jsonl,meta.json}; no model call)
@@ -206,11 +207,92 @@ def _selected_items(args: argparse.Namespace) -> tuple[list[dict[str, Any]], set
     return items, ids
 
 
+def _run_indices(args: argparse.Namespace) -> tuple[int, ...]:
+    """The run indices of a command: ``--run-indices`` if given, else the single ``--run-index``."""
+    many = getattr(args, "run_indices", None)
+    if many:
+        return tuple(many)
+    if args.run_index is None:
+        raise SystemExit("give --run-index K or --run-indices K ...")
+    return (args.run_index,)
+
+
+def _live_client(
+    args: argparse.Namespace,
+    entry: dict[str, Any],
+    provider: str,
+    thinking: Any,
+    price: Any,
+    call_log: Any,
+) -> tuple[Any, Any, Any] | None:
+    """The guarded client of a paid run, or ``None`` when the key cannot be read (logged, no call).
+
+    The guard starts from the cost of the calls already in ``call_log`` and of every file given
+    with ``--count-spent`` (calls of the same authorisation made elsewhere, such as the probe)."""
+    from ril.agent.providers.gemini import ApiKeyError, GeminiClient, GeminiConfig, load_api_key
+    from ril.agent.providers.limiter import PersistentLimiter, load_limits
+    from ril.agent.providers.messages_api import (
+        MessagesClient,
+        MessagesConfig,
+        connection_from_entry,
+    )
+    from ril.agent.providers.spend import GuardedClient, SpendGuard
+
+    limits = load_limits(args.limits, model=args.model)
+    try:
+        conn = connection_from_entry(entry) if provider == "messages" else {}
+        key = (
+            load_api_key(variable=str(entry["key_variable"]))
+            if provider == "messages"
+            else load_api_key()
+        )
+    except (ApiKeyError, KeyError) as err:
+        log.error("%s", err)
+        return None
+    limiter = PersistentLimiter(limits, Path(args.log_dir) / "limiter.jsonl")
+    if provider == "messages":
+        inner: Any = MessagesClient(
+            MessagesConfig(
+                model=args.model,
+                **conn,
+                temperature=0.0,
+                max_output_tokens=args.max_output_tokens,
+                thinking_config=thinking,
+            ),
+            key,
+            limiter,
+        )
+    else:
+        inner = GeminiClient(
+            GeminiConfig(
+                model=args.model,
+                temperature=0.0,
+                seed=args.seed,
+                max_output_tokens=args.max_output_tokens,
+                thinking_config=thinking,
+            ),
+            key,
+            limiter,
+        )
+    guard = SpendGuard(args.cap_usd, price, args.max_output_tokens)
+    if call_log is not None:
+        guard.add_logged(call_log.rows())
+    for extra in getattr(args, "count_spent", None) or []:
+        guard.add_logged(_jsonl_rows(Path(extra)))
+    return GuardedClient(inner, guard), guard, limiter.day_of
+
+
+def _jsonl_rows(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    return [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines() if x.strip()]
+
+
 def cmd_run_or_grade(args: argparse.Namespace) -> int:
     from ril.agent.providers.calllog import CallLog
     from ril.agent.providers.driver import DriverConfig, LoggedReplies, drive
     from ril.agent.providers.pilot_run import RunConfig
-    from ril.agent.providers.spend import GuardedClient, SpendGuard, load_prices, price_of
+    from ril.agent.providers.spend import SpendGuard, load_prices, price_of
 
     items, ids = _selected_items(args)
     if not items:
@@ -237,7 +319,7 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         runs=1,
         max_calls=getattr(args, "max_calls", None),
         wait_for_daily=getattr(args, "wait_for_daily", False),
-        run_indices=(args.run_index,),
+        run_indices=_run_indices(args),
     )
     call_log = CallLog(Path(args.log_dir))
     live = args.cmd == "run"
@@ -250,64 +332,17 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         else (entry.get("thinking") or None)
     )
     if live:
-        from ril.agent.providers.gemini import (
-            ApiKeyError,
-            GeminiClient,
-            GeminiConfig,
-            load_api_key,
-        )
-        from ril.agent.providers.limiter import PersistentLimiter, load_limits
-        from ril.agent.providers.messages_api import (
-            MessagesClient,
-            MessagesConfig,
-            connection_from_entry,
-        )
-
-        limits = load_limits(args.limits, model=args.model)
-        try:
-            conn = connection_from_entry(entry) if provider == "messages" else {}
-            key = (
-                load_api_key(variable=str(entry["key_variable"]))
-                if provider == "messages"
-                else load_api_key()
-            )
-        except (ApiKeyError, KeyError) as err:
-            log.error("%s", err)
+        built = _live_client(args, entry, provider, thinking, price, call_log)
+        if built is None:
             return 2
-        limiter = PersistentLimiter(limits, Path(args.log_dir) / "limiter.jsonl")
-        if provider == "messages":
-            inner: Any = MessagesClient(
-                MessagesConfig(
-                    model=args.model,
-                    **conn,
-                    temperature=0.0,
-                    max_output_tokens=args.max_output_tokens,
-                    thinking_config=thinking,
-                ),
-                key,
-                limiter,
-            )
-        else:
-            inner = GeminiClient(
-                GeminiConfig(
-                    model=args.model,
-                    temperature=0.0,
-                    seed=args.seed,
-                    max_output_tokens=args.max_output_tokens,
-                    thinking_config=thinking,
-                ),
-                key,
-                limiter,
-            )
-        guard = SpendGuard(args.cap_usd, price, args.max_output_tokens)
-        guard.add_logged(call_log.rows())
-        client = GuardedClient(inner, guard)
-        day_of = limiter.day_of
+        client, guard, day_of = built
     source = LoggedReplies(call_log, run_cfg, client, day_of)
     executor, readers, hash_latest, hash_era = _exec_wiring(args, ids, args.subset)
     meta = {
         "arm": args.arm,
         "run_index": args.run_index,
+        "run_indices": list(_run_indices(args)),
+        "adjacent_repeats": bool(getattr(args, "adjacent_repeats", False)),
         "instances": len(ids),
         "cap_usd": getattr(args, "cap_usd", None),
         "prices_as_of": price.as_of,
@@ -333,7 +368,8 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
     }
     cfg = DriverConfig(
         model=args.model,
-        run_indices=(args.run_index,),
+        run_indices=_run_indices(args),
+        adjacent_repeats=bool(getattr(args, "adjacent_repeats", False)),
         mode="live" if live else "logged",
         workers=args.workers,
         meta=meta,
@@ -360,6 +396,59 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
 
 
 # ---------------------------------------------------------------------------- replay
+
+
+def cmd_cache_probe(args: argparse.Namespace) -> int:
+    """Send 10 held-out prompts twice back to back and record the provider's cached-token share.
+
+    MAKES PAID MODEL CALLS (a few cents) under the spend guard. Writes ``cache_probe.json`` (hash
+    and token counts only) and ``cache_probe_calls.jsonl`` (the billed rows, counted by the run)."""
+    from ril.agent.providers.cache_probe import run_probe, write_probe
+    from ril.agent.providers.model_check import limits_entry, provider_for
+    from ril.agent.providers.spend import load_prices, price_for_run
+
+    items, _ = _selected_items(args)
+    if not items:
+        log.error("no prepared item matches arm %s and the instance list", args.arm)
+        return 2
+    entry = limits_entry(args.limits, args.model)
+    price = price_for_run(args.limits, args.model, load_prices(PRICES_FILE))
+    provider = provider_for(args.model, entry, getattr(args, "provider", None))
+    out = Path(args.out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    target = out / "cache_probe.json"
+    if target.exists() and not args.force:
+        log.error(
+            "%s exists; the probe is run once (use --force to repeat it, it is billed)", target
+        )
+        return 2
+    thinking = (
+        json.loads(args.thinking_config)
+        if getattr(args, "thinking_config", None)
+        else (entry.get("thinking") or None)
+    )
+    args.log_dir = str(out)
+    built = _live_client(args, entry, provider, thinking, price, None)
+    if built is None:
+        return 2
+    client, guard, _ = built
+    result = run_probe(items, client, price, args.model, args.n)
+    result["cap_usd"] = args.cap_usd
+    result["guard_spent_usd"] = round(guard.spent, 6)
+    write_probe(target, result)
+    with (out / "cache_probe_calls.jsonl").open("w", encoding="utf-8") as fh:
+        for r in result["rows"]:
+            fh.write(json.dumps({**r, "model": args.model}, sort_keys=True) + "\n")
+    log.info(
+        "probe %s: %d of %d pairs, hit fraction %.3f, billed %.4f USD, stopped: %s",
+        args.model,
+        result["pairs"],
+        result["pairs_planned"],
+        result["hit_fraction"],
+        result["billed_cost_usd"],
+        result["stopped"],
+    )
+    return 0 if result["usable"] else 3
 
 
 def cmd_replay(args: argparse.Namespace) -> int:
@@ -620,11 +709,16 @@ def cmd_model_check_limits(args: argparse.Namespace) -> int:
             list(m.caps_usd),
             dict(m.thinking) if m.thinking else "none sent",
         )
+    if spec.single_provider:
+        log.info("single provider allowed by the limits file (single_provider_ok)")
+    if spec.single_candidate:
+        log.info("single candidate allowed by the limits file (single_candidate_ok)")
     log.info(
-        "study budget %.2f USD%s, %d arm-runs, N %d",
+        "study budget %.2f USD%s, %d arm-runs (%d runs per arm), N %d",
         spec.budget_usd,
         " (default, key absent)" if spec.budget_defaulted else "",
         spec.arm_runs,
+        spec.runs_per_arm,
         spec.confirmatory_n,
     )
     return 0
@@ -652,8 +746,14 @@ def cmd_model_check_select(args: argparse.Namespace) -> int:
             return 2
         meta = json.loads((run / "meta.json").read_text(encoding="utf-8"))
         rows = list(latest_rows(results).values())
-        summaries.append(summarise(name, rows, meta, spec.models[name], spec, args.expected_n))
-    result = select_model(summaries, spec.budget_usd)
+        probe_path = run / "cache_probe.json"
+        hit = (
+            float(json.loads(probe_path.read_text(encoding="utf-8"))["hit_fraction"])
+            if probe_path.exists()
+            else None
+        )
+        summaries.append(summarise(name, rows, meta, spec.models[name], spec, args.expected_n, hit))
+    result = select_model(summaries, spec.budget_usd, single_provider=spec.single_provider)
     result["budget_defaulted"] = spec.budget_defaulted
     result["study_arm_runs"] = spec.arm_runs
     result["confirmatory_n"] = spec.confirmatory_n
@@ -764,7 +864,18 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("log_dir")
         p.add_argument("out_dir")
         p.add_argument("--arm", required=True)
-        p.add_argument("--run-index", type=int, required=True)
+        p.add_argument("--run-index", type=int)
+        p.add_argument(
+            "--run-indices",
+            type=int,
+            nargs="+",
+            help="several run indices in one invocation (replaces --run-index)",
+        )
+        p.add_argument(
+            "--adjacent-repeats",
+            action="store_true",
+            help="send the repeats of one prompt consecutively (order instance, arm, run; D158)",
+        )
         p.add_argument("--instances", required=True)
         p.add_argument("--model", required=True)
         _exec_args(p)
@@ -780,7 +891,27 @@ def main(argv: list[str] | None = None) -> int:
                 help="default: the limits entry's provider, else from the model name",
             )
             p.add_argument("--wait-for-daily", action="store_true")
+            p.add_argument(
+                "--count-spent",
+                nargs="+",
+                default=[],
+                help="jsonl files of calls billed under the same cap (the cache probe's rows)",
+            )
         p.set_defaults(fn=cmd_run_or_grade)
+    p = sub.add_parser("cache-probe")
+    p.add_argument("items_dir")
+    p.add_argument("out_dir")
+    p.add_argument("--arm", required=True)
+    p.add_argument("--instances", required=True)
+    p.add_argument("--model", required=True)
+    p.add_argument("--n", type=int, default=10)
+    p.add_argument("--cap-usd", type=float, required=True)
+    p.add_argument("--thinking-config")
+    p.add_argument("--max-output-tokens", type=int, default=4096)
+    p.add_argument("--limits", default=str(LIMITS_FILE))
+    p.add_argument("--provider", choices=["gemini", "messages"])
+    p.add_argument("--force", action="store_true")
+    p.set_defaults(fn=cmd_cache_probe)
     p = sub.add_parser("replay")
     p.add_argument("specs")
     p.add_argument("gold")

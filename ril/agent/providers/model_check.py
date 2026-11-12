@@ -12,6 +12,12 @@ is fixed before any result exists, and it is applied mechanically to the finishe
    name;
 5. if nothing passes 2 and 3, nothing is chosen.
 
+D158 amends this: one provider and one candidate are allowed only when the limits file says so
+(``single_provider_ok``, ``single_candidate_ok``); with one candidate the selection is the two
+filters (2 and 3) and nothing else; a candidate that is not a candidate (``NOT_CANDIDATES``) is
+refused; the projection of 2 prices runs 2 to k of an arm at the cached-input price times the
+cache-hit fraction measured by the probe of ``cache_probe.py``, never an assumed fraction.
+
 The projected whole-study cost is the measured tokens per instance (input, and output including
 thinking tokens, over every call and follow-up) times the confirmatory N, priced from the limits
 file, times the number of arm-runs of the analysis plan. ``model_choice.choose`` (D112, cheapest
@@ -42,6 +48,15 @@ DEFAULT_ARM_RUNS = 12
 CONFIRMATORY_N = 327
 SLICE_N = 50
 UNSET = "UNSET"
+DEFAULT_RUNS_PER_ARM = 3
+NOT_CANDIDATES = {
+    "gemini-3.6-flash": "previous generation at the same price as gemini-3.8-flash (D158)",
+}
+D155_GEMINI_CANDIDATES = ("gemini-3.5-flash-lite", "gemini-3.8-flash")
+SINGLE_PROVIDER_NOTE = (
+    "single-provider limitation: only one provider was run (the second provider's billing was "
+    "unavailable); the model is a fixed instrument and the claim concerns the retrievers"
+)
 
 
 def limits_entry(path: str | Path, model: str) -> dict[str, Any]:
@@ -87,6 +102,8 @@ class CheckModel:
     price_source: str
     thinking: Mapping[str, Any] | None
     caps_usd: tuple[float, ...]
+    cache_hit_fraction: float | None = None
+    """Measured by the probe, ``None`` without one (the projection is then uncached)."""
 
 
 @dataclass(frozen=True)
@@ -97,6 +114,9 @@ class CheckSpec:
     arm_runs: int
     confirmatory_n: int
     as_of: str
+    runs_per_arm: int = DEFAULT_RUNS_PER_ARM
+    single_provider: bool = False
+    single_candidate: bool = False
 
 
 def validate_limits(path: str | Path) -> list[str]:
@@ -110,12 +130,21 @@ def validate_limits(path: str | Path) -> list[str]:
     if str(data.get("as_of", UNSET)) == UNSET:
         problems.append("as_of is unset")
     models = data.get("models") or {}
-    if len(models) < 2:
-        problems.append("fewer than two candidate models")
-    if len({(m or {}).get("provider") for m in models.values()}) < 2:
-        problems.append("candidates must come from at least two providers")
+    single_candidate_ok = data.get("single_candidate_ok") is True
+    single_provider_ok = data.get("single_provider_ok") is True
+    if not models:
+        problems.append("no candidate model")
+    elif len(models) < 2 and not single_candidate_ok:
+        problems.append("fewer than two candidate models (single_candidate_ok is not true)")
+    if models and len({(m or {}).get("provider") for m in models.values()}) < 2:
+        if not single_provider_ok:
+            problems.append(
+                "candidates must come from at least two providers (single_provider_ok is not true)"
+            )
     for name, m in models.items():
         m = m or {}
+        if name in NOT_CANDIDATES:
+            problems.append(f"{name}: not a candidate: {NOT_CANDIDATES[name]}")
         if m.get("provider") not in PROVIDERS:
             problems.append(f"{name}: provider must be one of {', '.join(PROVIDERS)}")
         if m.get("provider") == "messages":
@@ -132,6 +161,13 @@ def validate_limits(path: str | Path) -> list[str]:
         for key in ("price_as_of", "price_source", "tier"):
             if str(m.get(key, UNSET)).strip() in ("", UNSET):
                 problems.append(f"{name}: {key} is unset")
+        cp = m.get("cached_input_per_m")
+        if cp is not None and (
+            not isinstance(cp, int | float)
+            or isinstance(cp, bool)
+            or not 0 < cp <= m.get("input_per_m", 0)
+        ):
+            problems.append(f"{name}: cached_input_per_m must be positive and at most input_per_m")
         caps = m.get("caps_usd")
         if (
             not isinstance(caps, list)
@@ -142,9 +178,13 @@ def validate_limits(path: str | Path) -> list[str]:
             problems.append(
                 f"{name}: caps_usd must be a non-empty ascending list of positive numbers"
             )
-    for key in ("study_budget_usd", "study_arm_runs"):
+    for key in ("study_budget_usd", "study_arm_runs", "study_runs_per_arm"):
         if key in data and (not isinstance(data[key], int | float) or data[key] <= 0):
             problems.append(f"{key} must be positive")
+    k = data.get("study_runs_per_arm", DEFAULT_RUNS_PER_ARM)
+    n = data.get("study_arm_runs", DEFAULT_ARM_RUNS)
+    if isinstance(k, int) and isinstance(n, int) and k > 0 and n % k:
+        problems.append("study_arm_runs must be a multiple of study_runs_per_arm")
     return problems
 
 
@@ -164,7 +204,12 @@ def load_spec(path: str | Path) -> CheckSpec:
             tpm=int(m["tpm"]),
             rpd=int(m["rpd"]),
             price=Price(
-                name, float(m["input_per_m"]), float(m["output_per_m"]), True, str(m["price_as_of"])
+                name,
+                float(m["input_per_m"]),
+                float(m["output_per_m"]),
+                True,
+                str(m["price_as_of"]),
+                float(m["cached_input_per_m"]) if m.get("cached_input_per_m") is not None else None,
             ),
             price_source=str(m["price_source"]),
             thinking=dict(m["thinking"]) if m.get("thinking") else None,
@@ -177,6 +222,9 @@ def load_spec(path: str | Path) -> CheckSpec:
         arm_runs=int(data.get("study_arm_runs", DEFAULT_ARM_RUNS)),
         confirmatory_n=int(data.get("confirmatory_n", CONFIRMATORY_N)),
         as_of=str(data["as_of"]),
+        runs_per_arm=int(data.get("study_runs_per_arm", DEFAULT_RUNS_PER_ARM)),
+        single_provider=len({m.provider for m in models.values()}) < 2,
+        single_candidate=len(models) < 2,
     )
 
 
@@ -194,6 +242,33 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
     return (max(0.0, centre - half), min(1.0, centre + half))
 
 
+def project_study_cost(
+    price: Price,
+    input_tokens: int,
+    output_tokens: int,
+    n: int,
+    spec: CheckSpec,
+    hit_fraction: float | None,
+) -> float:
+    """Projected whole-study cost from the measured tokens of ``n`` instances (D158).
+
+    The first run of each arm is priced uncached; runs 2 to k of the same prompt price a
+    ``hit_fraction`` of their input at the cached-input price (output unchanged). ``None`` means no
+    measured fraction: every run is priced uncached."""
+    if n == 0:
+        return 0.0
+    scale = spec.confirmatory_n / n
+    first = price.cost(input_tokens, output_tokens) * scale
+    if hit_fraction is None or price.cached_input_per_m is None:
+        return first * spec.arm_runs
+    if not 0.0 <= hit_fraction <= 1.0:
+        raise ValueError("cache hit fraction must be in [0, 1]")
+    cached = round(input_tokens * hit_fraction)
+    repeat = price.cost(input_tokens, output_tokens, cached) * scale
+    arms = spec.arm_runs // spec.runs_per_arm
+    return arms * (first + (spec.runs_per_arm - 1) * repeat)
+
+
 def summarise(
     model: str,
     rows: Sequence[Mapping[str, Any]],
@@ -201,8 +276,13 @@ def summarise(
     check: CheckModel,
     spec: CheckSpec,
     expected_n: int = SLICE_N,
+    cache_hit_fraction: float | None = None,
 ) -> dict[str, Any]:
-    """Counts, tokens, realised cost and the projections of one candidate from its result rows."""
+    """Counts, tokens, realised cost and the projections of one candidate from its result rows.
+
+    ``cache_hit_fraction`` is the probe's measured fraction of the input of a repeated prompt that
+    the provider served from its cache; without it (or without a cached-input price) the whole
+    study is priced uncached."""
     final = [r for r in rows if not str(r["outcome"]).startswith("exec_error")]
     n = len(final)
     resolved = sum(1 for r in final if r["resolved"])
@@ -213,6 +293,10 @@ def summarise(
     per_arm_run_slice = price.cost(inp, out)
     per_instance = per_arm_run_slice / n if n else 0.0
     arm_run = per_instance * spec.confirmatory_n
+    study_uncached = arm_run * spec.arm_runs
+    study = project_study_cost(
+        price, inp, out, n, spec, cache_hit_fraction if check.price.cached_input_per_m else None
+    )
     lo, hi = wilson(resolved, n)
     return {
         "model": model,
@@ -234,7 +318,11 @@ def summarise(
         "thought_tokens": thought,
         "slice_cost_usd": per_arm_run_slice,
         "arm_run_usd": arm_run,
-        "study_usd": arm_run * spec.arm_runs,
+        "study_usd": study,
+        "study_uncached_usd": study_uncached,
+        "cache_hit_fraction": cache_hit_fraction,
+        "cached_price_per_m": price.cached_input_per_m,
+        "runs_per_arm": spec.runs_per_arm,
         "stopped": str(meta.get("stopped", "")),
         "thinking_config": meta.get("thinking_config"),
         "config_sha256": meta.get("config_sha256"),
@@ -250,6 +338,7 @@ def select_model(
     budget_usd: float,
     floor: float = FLOOR,
     tie_instances: int = TIE_INSTANCES,
+    single_provider: bool = False,
 ) -> dict[str, Any]:
     """Apply the rule of D155 to candidate summaries; return the decision and the table."""
     if not summaries:
@@ -268,6 +357,18 @@ def select_model(
         "budget_usd": budget_usd,
         "tie_instances": tie_instances,
         "candidates": rows,
+        "single_candidate": len(rows) == 1,
+        "limitations": [SINGLE_PROVIDER_NOTE] if single_provider else [],
+        "not_run": [
+            f"{m}: not run, not available at the time"
+            for m in D155_GEMINI_CANDIDATES
+            if m not in {r["model"] for r in rows}
+        ]
+        + (
+            ["second provider's models: not run, not available at the time"]
+            if single_provider
+            else []
+        ),
     }
     if unfinished:
         return {
@@ -342,6 +443,10 @@ def render_table(result: Mapping[str, Any]) -> str:
     lines = [head, "-" * len(head)]
     for r in result["candidates"]:
         flags = []
+        if r.get("cache_hit_fraction") is not None:
+            flags.append(f"cache hit {r['cache_hit_fraction']:.0%}")
+        else:
+            flags.append("uncached projection")
         if not r["complete"]:
             flags.append(f"INCOMPLETE n={r['n']}/{r['expected_n']}")
         if r["exec_error_rows"]:
@@ -367,4 +472,6 @@ def render_table(result: Mapping[str, Any]) -> str:
         f"{result['tie_instances']} instances; status: {result['status']}; "
         f"chosen: {result['chosen']}; {result['note']}"
     )
+    for text in (*result.get("limitations", []), *result.get("not_run", [])):
+        lines.append(text)
     return "\n".join(lines)

@@ -83,6 +83,7 @@ class Reply:
     output_tokens: int = 0
     thought_tokens: int = 0
     call_wall_s: float = 0.0
+    cached_tokens: int = 0
 
 
 class ReplySource(Protocol):
@@ -116,6 +117,7 @@ def reply_from_rows(rows: Sequence[Row], log_: CallLog) -> Reply | None:
         output_tokens=sum(int(r["output_tokens"]) for r in rows),
         thought_tokens=sum(int(r["thought_tokens"]) for r in rows),
         call_wall_s=sum(float(r["latency_s"]) for r in rows),
+        cached_tokens=sum(int(r.get("cached_tokens", 0)) for r in rows),
     )
 
 
@@ -173,6 +175,7 @@ class DriverConfig:
     run_indices: tuple[int, ...] | None = None
     mode: str = "live"
     workers: int = 1
+    adjacent_repeats: bool = False
     env_retries: int = ENV_RETRIES
     env_backoff_s: float = ENV_BACKOFF_S
     meta: Mapping[str, Any] = field(default_factory=dict)
@@ -249,7 +252,12 @@ def process_unit(
         "input_tokens": reply.input_tokens,
         "output_tokens": reply.output_tokens,
         "thought_tokens": reply.thought_tokens,
-        "cost_usd": round(price.cost(reply.input_tokens, reply.output_tokens), 6) if price else 0.0,
+        "cached_tokens": reply.cached_tokens,
+        "cost_usd": (
+            round(price.cost(reply.input_tokens, reply.output_tokens, reply.cached_tokens), 6)
+            if price
+            else 0.0
+        ),
         "call_wall_s": round(reply.call_wall_s, 3),
         "usable": reply.usable,
         "parse_error": reply.parse_error,
@@ -409,7 +417,7 @@ def drive(
 
     futures: list[Future[None]] = []
     with ThreadPoolExecutor(max_workers=max(1, cfg.workers)) as pool:
-        for unit, item in plan_units(items, cfg.runs, cfg.run_indices):
+        for unit, item in plan_units(items, cfg.runs, cfg.run_indices, cfg.adjacent_repeats):
             if unit in done:
                 summary.skipped += 1
                 continue
@@ -436,6 +444,7 @@ def drive(
                 "mode": cfg.mode,
                 "runs": cfg.runs,
                 "run_indices": list(cfg.run_indices) if cfg.run_indices is not None else None,
+                "schedule": "adjacent_repeats" if cfg.adjacent_repeats else "run_major",
                 "stopped": summary.stopped,
                 "written_this_session": summary.written,
             },

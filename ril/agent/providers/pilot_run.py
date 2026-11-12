@@ -138,12 +138,21 @@ class RunSummary:
 
 
 def plan_units(
-    items: Sequence[Mapping[str, Any]], runs: int, run_indices: Sequence[int] | None = None
+    items: Sequence[Mapping[str, Any]],
+    runs: int,
+    run_indices: Sequence[int] | None = None,
+    adjacent_repeats: bool = False,
 ) -> list[tuple[Unit, Mapping[str, Any]]]:
     """Units in the fixed order (run index, instance, arm); ``run_indices`` names the runs
-    explicitly (default ``range(runs)``)."""
+    explicitly (default ``range(runs)``).
+
+    With ``adjacent_repeats`` the order is (instance, arm, run index): the repeats of one prompt
+    are sent back to back so the provider's prompt cache can serve runs 2 to k. The set of units
+    is the same; only the sequence differs (D158)."""
     ordered = sorted(items, key=lambda r: (r["instance_id"], r["arm"]))
     indices = list(run_indices) if run_indices is not None else list(range(runs))
+    if adjacent_repeats:
+        return [((r["instance_id"], r["arm"], k), r) for r in ordered for k in indices]
     return [((r["instance_id"], r["arm"], k), r) for k in indices for r in ordered]
 
 
@@ -216,6 +225,7 @@ def run_unit(
             "input_tokens": res.input_tokens,
             "output_tokens": res.output_tokens,
             "thought_tokens": res.thought_tokens,
+            "cached_tokens": res.cached_tokens,
             "latency_s": round(res.latency_s, 3),
             "finish_reason": res.finish_reason,
             "http_status": res.status,
