@@ -393,6 +393,57 @@ models) builds the contexts; `prepare` builds the pseudonymised prompts through 
 the arms, the primary pair and the estimates. Block 4 (cap 6.0, 0.377 spent) covers eight models in the fallback; with retention
 it need not be spent. Nothing was encoded or called.
 
+## Model check across providers (D155, `E-RQ3-MODEL-CHECK-PLAN`, 2026-11-12)
+
+Fixed before any model output of the check exists. `provisional: ADR-008`, as D112, which it amends (the cheapest-first selection
+of D112 is replaced; the 15% floor, the slice of D111 and the spend guard of D114 stay). Evidence class: reasoned (the rule); no
+price, rate limit or resolved rate has been measured. Cheapest experiment that could flip it: the check itself, on the 50
+held-out instances, a few dollars per candidate (time-box: one working day of queue and calls). The check is **exploratory**: the
+50 are excluded from the confirmatory analysis (D111), and no number of the check enters a headline table.
+
+The model is a fixed instrument in a paired comparison of retrievers. It must (a) resolve enough instances to give the comparison
+power, (b) stay within budget for k repeats of every arm, (c) follow the edit format reliably and (d) be reproducible and
+acceptable on data terms. The earlier candidate list was one provider's catalogue; the check now covers two providers, so the
+choice rests on measurements on the study's own slice and not on one vendor's range.
+
+1. **Candidates (closed; none is added after results are seen):** `gemini-3.5-flash-lite` (the pilot model, for continuity),
+   `gemini-3.8-flash` and two models of a second provider (the smaller and the larger of its current stable coding models; their
+   exact strings are in the lead's local limits file, untracked, until the lead allowlists them for tracked text). They are the current stable, coding-capable models of two major
+   providers at costs the study can bear; a larger flagship model is not a candidate because the
+   whole-study cost would exceed any reasonable budget. Prices are read by the lead from each provider's own pricing page at run
+   time and written, with the date and the page, into the limits file (`configs/agent/model_check_limits.template.yaml`); the
+   third-party figures of `prices.yaml` are not used for this check, and a candidate whose price or rate limits are unset is refused
+   before any call. (`gemini-3.6-flash` of D112 is dropped from the list; no result for it exists.)
+2. **Selection rule (mechanical, `ril/agent/providers/model_check.py`; capability first, cost as a constraint).** Let B be the
+   study budget in the limits file (`study_budget_usd`, 150 USD if the key is absent; the entry states which applied). For each
+   candidate: the projected whole-study cost is the measured tokens of its 50 instances (input, and output including thinking
+   tokens, over every call and follow-up) scaled to the 327 confirmatory instances, priced from the limits file, times the number of
+   arm-runs of the analysis plan (`study_arm_runs`, default 12 = 4 arms x k = 3, the largest grid of the cost model). Then:
+   (i) discard a candidate whose projected whole-study cost exceeds B; (ii) discard a candidate below 15% resolved on the 50 (the
+   floor of D112, exact reading); (iii) of the rest take the highest resolved fraction on the 50; candidates within 2 instances
+   (4 points) of that top are indistinguishable on 50 instances, and among those the cheaper (lower projected whole-study cost) is
+   taken, ties by name; (iv) if none passes (i) and (ii), nothing is chosen and the table is reported. A candidate that has not
+   finished all 50 instances (cap reached, provider stop, environment-error rows left) is not compared on a partial denominator:
+   the aggregation reports the table and names what to finish. The entry states the projected whole-study cost of the chosen
+   model, its base resolved rate and what that implies for power (the minimum detectable differences of
+   `results/rq3_driver/rq3_power_run_noise_mdd.csv` at the nearest assumed rate), and, as context only, which candidates appear on
+   public SWE-bench leaderboards, with the caveat that those scaffolds differ and the numbers are not comparable to this study; no
+   score is quoted.
+3. **The instrument stays fixed across providers:** the same one-shot repair prompt and edit format, temperature 0, the same
+   follow-up rule (up to two), the same pseudonymise-and-restore (D120), the same spend guard (`--cap-usd` required, D114). Any
+   reasoning or thinking setting is pinned per candidate to the provider's lowest fixed setting that the scaffold works with,
+   written in the limits file, recorded in the run configuration and its hash (`meta.json`), thinking tokens logged separately where
+   the provider reports them. A provider without a seed parameter is not a reason to drop it: run noise is handled by the k repeats.
+   The insufficient-balance error (HTTP 402 or the provider's credit-balance message) is a hard stop of the run, never a retry.
+4. **Evidence class:** exploratory on the 50 held-out instances (above).
+
+Pushback recorded with the rule (the rule stands): (a) the 4-point tie band is narrower than the sampling noise of a resolved rate
+on 50 instances (about 6 points of standard error near 30%), so "highest" is a weak statement; the band makes the tie explicit and
+sends a near-tie to the cheaper model. (b) The slice is 30 django and 10 sympy instances of 50, so the rate is dominated by two
+repositories. (c) "Lowest fixed thinking setting" is the same setting, not the same reasoning effort across providers; the
+check measures each model as the scaffold uses it. (d) The candidates differ in tokenizer, so the same 8,000-token context is a
+different input size; costs are priced from the tokens the provider bills.
+
 ## Open points (design questions, not decided here)
 
 - **Tokens of the budget.** The assembly counts approximate tokens (`approx-words-v1`); the model's own

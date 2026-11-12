@@ -57,6 +57,26 @@ def load_prices(path: str | Path) -> dict[str, Price]:
     }
 
 
+def price_from_limits(path: str | Path, model: str) -> Price | None:
+    """The price written next to a model's limits (D155), or ``None`` if the entry has none.
+
+    ``verified`` is true when the entry names the provider page it was read from and a date, which
+    is what D155 requires of a price used for the model check."""
+    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    entry = (data.get("models") or {}).get(model) or {}
+    if "input_per_m" not in entry or "output_per_m" not in entry:
+        return None
+    as_of = str(entry.get("price_as_of", "UNSET"))
+    source = str(entry.get("price_source", "")).strip()
+    return Price(
+        model,
+        float(entry["input_per_m"]),
+        float(entry["output_per_m"]),
+        bool(source) and as_of != "UNSET" and source != "UNSET",
+        as_of,
+    )
+
+
 def price_of(prices: Mapping[str, Price], model: str) -> Price:
     if model not in prices:
         raise KeyError(f"no price stored for model {model!r}; add it to configs/agent/prices.yaml")

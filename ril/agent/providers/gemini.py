@@ -61,24 +61,27 @@ class ApiKey:
 
 
 def load_api_key(
-    env: Mapping[str, str] | None = None, path: str | Path = DEFAULT_KEY_FILE
+    env: Mapping[str, str] | None = None,
+    path: str | Path = DEFAULT_KEY_FILE,
+    variable: str = KEY_VARIABLE,
 ) -> ApiKey:
-    """The environment variable if set, else the key file (refused unless it is mode 600)."""
+    """The provider's environment variable if set, else its line in the key file (refused unless
+    the file is mode 600). ``variable`` names the provider's variable; the file may hold several."""
     environ = os.environ if env is None else env
-    if environ.get(KEY_VARIABLE, "").strip():
-        return ApiKey(environ[KEY_VARIABLE])
+    if environ.get(variable, "").strip():
+        return ApiKey(environ[variable])
     p = Path(path).expanduser()
     if not p.exists():
-        raise ApiKeyError(f"no {KEY_VARIABLE} in the environment and no key file at {p}")
+        raise ApiKeyError(f"no {variable} in the environment and no key file at {p}")
     if p.stat().st_mode & (stat.S_IRWXG | stat.S_IRWXO):
         raise ApiKeyError(f"key file {p} is readable by others; run: chmod 600 {p}")
     for line in p.read_text(encoding="utf-8").splitlines():
         s = line.strip()
         if s.startswith("export "):
             s = s[len("export ") :].strip()
-        if s.startswith(f"{KEY_VARIABLE}="):
+        if s.startswith(f"{variable}="):
             return ApiKey(s.split("=", 1)[1].strip().strip("'\""))
-    raise ApiKeyError(f"key file {p} has no line 'export {KEY_VARIABLE}=...'")
+    raise ApiKeyError(f"key file {p} has no line 'export {variable}=...'")
 
 
 @dataclass(frozen=True)
@@ -155,6 +158,12 @@ class ProviderError(Exception):
     def __init__(self, status: int, detail: str) -> None:
         super().__init__(f"HTTP {status}: {detail}")
         self.status = status
+
+
+class InsufficientBalance(ProviderError):
+    """The account has no credit left (HTTP 402 or the provider's credit-balance message).
+
+    A hard stop of the run, never retried; the driver ends cleanly and the log stays resumable."""
 
 
 def canonical(obj: Any) -> str:
@@ -265,6 +274,8 @@ class GeminiClient:
                     n429 += 1
                 elif resp.status >= 500:
                     n5xx += 1
+                elif resp.status == 402:
+                    raise InsufficientBalance(resp.status, detail)
                 else:
                     raise ProviderError(resp.status, detail)
                 ra = {k.lower(): v for k, v in resp.headers.items()}.get("retry-after", "")
