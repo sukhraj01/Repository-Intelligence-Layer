@@ -1,0 +1,27 @@
+\begin{table*}[t]
+\centering\small
+\caption{RQ1 ladder: paired differences between rungs and against the controls. Evidence class: \emph{measured on the development set, exploratory}. Development set only: 351 L2 and 155 L3 queries in 5 and 2 repositories; encoder CodeRankEmbed; differences are paired on the query; decisions read from the cluster-robust t interval over repositories, the percentile bootstrap over whole repositories beside it; $^q$ marks query level (fewer than three repositories). A typed-graph gain that does not exceed the same-file control is not a graph gain; the typed rung is an alternative expansion of the same budget, not stacked on the same-file rung. Entry \entry{E-RQ1-LADDER}.}
+\label{tab:rq1_ladder_pairs}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+\toprule
+Paired difference & L2 nDCG@10, t interval & bootstrap beside & reading & L3 Recall@100, t interval & bootstrap beside & reading \\
+\midrule
+R2 minus R1 & +5.8 [2.0, 9.6] & [3.3, 7.8] & gain & +9.0 [6.6, 11.4]$^q$ & [6.7, 11.3]$^q$ & gain \\
+R3 minus R2 & +1.8 [0.1, 3.5] & [0.7, 2.8] & gain & +12.2 [9.9, 14.5]$^q$ & [10.1, 14.5]$^q$ & gain \\
+R4 minus R3 & $-$0.5 [$-$1.9, 0.9] & [$-$1.6, 0.2] & not distinguishable & $-$7.0 [$-$9.4, $-$4.6]$^q$ & [$-$9.4, $-$4.7]$^q$ & loss \\
+R4 minus R2 & +1.3 [$-$0.3, 2.8] & [0.2, 2.2] & not distinguishable & +5.2 [3.5, 6.9]$^q$ & [3.6, 6.8]$^q$ & gain \\
+R5 minus R4 & $-$0.1 [$-$1.6, 1.4] & [$-$1.0, 0.7] & not distinguishable & +1.5 [0.4, 2.6]$^q$ & [0.5, 2.6]$^q$ & gain \\
+\midrule
+R4 minus same-file control & $-$0.5 [$-$2.0, 0.9] & [$-$1.6, 0.2] & not distinguishable & $-$5.6 [$-$8.0, $-$3.3]$^q$ & [$-$7.9, $-$3.5]$^q$ & loss \\
+R4 minus same-file chance & $-$0.5 [$-$2.5, 1.6] & [$-$1.8, 0.6] & not distinguishable & $-$3.6 [$-$5.9, $-$1.3]$^q$ & [$-$5.8, $-$1.4]$^q$ & loss \\
+R4 minus top-M control & +1.3 [$-$0.3, 2.8] & [0.2, 2.2] & not distinguishable & +5.2 [3.5, 6.9]$^q$ & [3.6, 6.8]$^q$ & gain \\
+stored graph minus same-file control & +0.6 [0.1, 1.1] & [0.2, 0.9] & gain & $-$0.6 [$-$2.7, 1.5]$^q$ & [$-$2.7, 1.4]$^q$ & not distinguishable \\
+\midrule
+recency on RRF & +0.4 [$-$1.5, 2.3] & [$-$0.9, 1.4] & not distinguishable & +2.0 [1.1, 2.8]$^q$ & [1.2, 2.8]$^q$ & gain \\
+recency on typed graph & $-$0.1 [$-$1.6, 1.4] & [$-$1.0, 0.7] & not distinguishable & +1.5 [0.4, 2.6]$^q$ & [0.5, 2.6]$^q$ & gain \\
+recency on same-file & $-$0.1 [$-$1.9, 1.7] & [$-$1.2, 1.0] & not distinguishable & +0.4 [$-$1.1, 2.0]$^q$ & [$-$1.1, 2.0]$^q$ & not distinguishable \\
+\midrule
+RRF minus BM25 & +2.9 [$-$1.9, 7.6] & [0.3, 6.3] & not distinguishable & +5.5 [3.9, 7.1]$^q$ & [4.0, 7.2]$^q$ & gain \\
+\bottomrule
+\end{tabular}
+\end{table*}

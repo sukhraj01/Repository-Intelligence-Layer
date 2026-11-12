@@ -378,10 +378,9 @@ p95 reaches 937.20 ms; searching the flat exact index of the largest first repos
 graph expansion 1.14 ms and assembly 10.98 ms on a laptop CPU; reciprocal rank fusion of two whole rankings of the same 35,860 units takes 5.04 ms (it sorts both), same-file expansion 0.41 ms with a p99 of 3.08 ms,
 and the recency prior 2.04 ms. % E-LAT-STAGES E-FREEZE-AND-LATENCY results/latency/latency_log.csv
 Query encoding is therefore the largest single stage of the dense path, and assembly and then fusion the largest of the lexical path, and the cheap stages are far below them.
-The rows come from different machines and commits, so they are not summed into a pipeline latency, and the end-to-end row is lexical retrieval plus assembly only.
-Fusion could be made cheaper by selecting instead of sorting, but that changes how ties break and is not done here. The reranker has no row and the frozen settings are recorded per consumer, not as one snapshot (D148). % E-FREEZE-AND-LATENCY docs/experiments/B.md
-\todo{Latency of the reranker, one end-to-end row of the whole pipeline on one machine, and nDCG per
-millisecond for the ladder: \entry{E-LAT-STAGES}, \entry{E-RQ1-ALL}.}
+The rows come from different machines and commits, so no end-to-end percentile of a dense pipeline exists; the ladder of Section~\ref{sec:rq1} reports path sums of stage p50 values instead, with their caveats, and the stored end-to-end row is lexical retrieval plus assembly only.
+Fusion could be made cheaper by selecting instead of sorting, but that changes how ties break and is not done here. The reranker has no row, and the frozen settings are recorded per consumer, not as one snapshot (D148, D149). % E-FREEZE-AND-LATENCY docs/experiments/B.md
+\todo{Latency of the reranker (not built, ADR-009 open) and one end-to-end row of a dense pipeline on one machine: \entry{E-LAT-STAGES}.}
 
 \input{generated/latency_stages}
 
@@ -398,7 +397,7 @@ labels are approximate targets (reasoned): a bug can be fixed somewhere other th
 historically, and edited documentation and imports are not positives.
 
 \paragraph{Roles.} Every choice (K, teacher, weight form, update count, fusion constant, assembly
-cap) is made on development repositories only: five at Level~2 and two to three at Level~3. SWE-bench
+cap) is made on development repositories only: five at Level~2 and two at Level~3 (the third Level~3 repository has no dense scores). SWE-bench
 Verified is the final test and is looked at once, after the protocol, the cell list and the
 decision rules are registered and the development analysis is complete. To raise the number of
 repositories, which seeds cannot buy, eight further repositories take the test role under a rule
@@ -437,12 +436,21 @@ $2.8016\sqrt{s^2_{\mathrm{repo}}/R + s^2_{\mathrm{query}}/n + (s^2_{\mathrm{seed
 s^2_{\mathrm{seed}})/k}$ with variance components estimated from stored runs; seeds divide only the
 last bracket, so repositories, not seeds, reduce the repository term. % docs/RQ2_PROTOCOL.md section 5
 
+\paragraph{Frozen settings.} The retrieval setting is not the same in every consumer: the rank-fusion constant is 60 in the RQ2 checkpoint evaluation and 100 in the RQ3 contexts and in the development selection, and the truncation is 512 tokens in the first two and 1,024 in the third. Unifying them would change the hash of the registered RQ2 run configurations and re-make the built contexts, for a gain that no stored row shows, so each consumer's setting is recorded as its own record and nothing is unified.
+On the development set the three settings differ by at most 0.59 points of nDCG@10 at Level~2 and 0.37 of Recall@100 at Level~3.
+% D148 D149 E-FREEZE-AND-LATENCY configs/frozen/rq3_contexts.json
+Two records are frozen, because a registered or built artefact depends on each: the RQ2 evaluation (frozen at launch, the 45 rendered run configurations and the cell table are registered on it) and the RQ3 contexts (the contexts of the executable subset are built and the pilot ran on them; a change would invalidate both and needs a new decision).
+% D149 configs/frozen/MANIFEST.json
+The development selection is kept as a record for provenance only, because no final run consumes it. No record has expansion or the recency prior on, and a test fails when a frozen record, its source configuration, a run configuration or a recorded latency row changes.
+% D149 configs/records/README.md
+
 \paragraph{Evidence classes.} Every number carries one: \emph{measured} (a run in this project, with
 log, configuration hash, seed and hardware), \emph{operator\_reported}, \emph{reasoned} (arithmetic
 without new data) or \emph{synthetic}; numbers quoted from a paper are \emph{paper\_reported}.
 
 % =============================================================================================
 \section{RQ1: which signals matter}
+\label{sec:rq1}
 
 Table~\ref{tab:dense_fusion} gives the zero-shot signals on the final-test-style reading, and
 Table~\ref{tab:graph_role} the graph against the same-file control: expansion over typed edges is
@@ -454,15 +462,67 @@ tables are exploratory, with settings chosen on the development repositories.
 \input{generated/dense_fusion}
 \input{generated/graph_role}
 
-\paragraph{Reading.} \todo{One paragraph per table once the RQ1 ladder exists: the contribution of
-BM25 over dense, and of structure over the same-file control, at both levels, with the interval
-and the latency column; \entry{E-RQ1-DENSE}, \entry{E-RQ1-DENSE-BM25}, \entry{E-RQ1-DENSE-STRUCT},
-\entry{E-RQ1-ALL}.}
+Tables~\ref{tab:rq1_ladder} and~\ref{tab:rq1_ladder_pairs} assemble the ladder on the development set: dense alone,
+then BM25 by rank fusion, same-file expansion, typed graph expansion over the edges that leave a file, and the recency prior,
+all on the same queries, the same candidate set and the same expansion budget, with no tuning inside the ladder.
+Each added signal is read as a paired difference against the rung before it, and the typed rung against the same-file control, a size-matched random choice inside the same files and the first stage itself.
+Intervals are cluster-robust $t$ intervals over repositories; at Level~3, where the development set has two repositories, they are query-level and marked.
+Everything in this section is exploratory: development set only, zero-shot encoders, one stated cell, Python only.
+
+\input{generated/rq1_ladder}
+\input{generated/rq1_ladder_pairs}
+
+\paragraph{Reading: BM25 and same-file expansion.} Adding BM25 to the dense retriever by rank fusion is a gain at both levels (+5.8 points of nDCG@10 at Level~2 and +9.0 of Recall@100 at Level~3, intervals above zero);
+% E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+adding same-file expansion on top is a gain of 12.2 at Level~3 and a small one at Level~2 (+1.8, the interval only just excludes zero).
+% E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+At Level~3 that interval is query-level over two repositories: it says the effect is not query noise in those repositories, not that it holds across repositories.
+The BM25 here is the reference form. A tokenizer that splits identifiers raises BM25 alone by about 5 points at Level~2 on chunks, but by only about 1 point once fused with the dense signal, with repository-clustered intervals that include zero;
+% E-A1-TAKEOVER docs/experiments/B.md
+at unit level, the same variant is +3.0 alone and $-$0.3 fused, and the best of nine variants by a rule fixed before the run does not change the fusion at Level~2 (Section~\ref{sec:setup}, frozen settings).
+% E-FREEZE-AND-LATENCY results/tables/unit_bm25_variants_dev.csv
+We therefore do not list the tokenizer as a rung.
+
+\paragraph{Reading: typed edges.} The typed rung is not a gain over same-file expansion. At Level~3 it is below the size-matched same-file control ($-$5.6 points of Recall@100) and below the random choice inside the same files ($-$3.6), and above only the top-$M$ control (+5.2), which is the first stage itself;
+% E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+at Level~2 it is level with the control ($-$0.5, interval including zero).
+% E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+The stored graph, which includes contain edges that never leave a file, is level with the control at Level~3 and above it by 0.6 at Level~2 for one encoder only, a difference that did not repeat with the second encoder and is not read as a graph gain.
+% E-RQ1-LADDER E-A-OWNER-ITEMS docs/experiments/B.md
+Two further tests point the same way: replacing the last 10 or 25 units of the same-file list by the best non-contain neighbours of the seeds does not help (Level~3: $-$0.35 and $-$2.46 points of Recall@100, the second with an interval below zero), and adding test and configuration edges to the stored graph moves nothing (the stacked variants differ by under 0.01 point).
+% E-A-OWNER-ITEMS docs/experiments/B.md results/tables/g1
+This is the absence of evidence that typed edges add beyond same-file expansion, with the intervals shown, and not a proof that they add nothing: the Level~3 reading rests on two repositories, the expansion cell was tuned on the same development set, and the Verified projects were not read for the ladder.
+
+\paragraph{Reading: recency prior.} The prior adds about 1.5 to 2 points of Recall@100 at Level~3 on the fused and typed rungs (query-level, two repositories), nothing distinguishable at Level~2, and nothing on the same-file rung (+0.4, interval including zero).
+% E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+Its two parameters were chosen on this same development set for a BM25 first stage, so the development number is optimistic; it is a candidate signal for one look after the configuration is fixed, not a result.
+% E-RECENCY E-RQ1-LADDER
+
+\paragraph{Reading: latency per rung.} The path column of Table~\ref{tab:rq1_ladder} is a sum of stage p50 values at an index of 35,860 units, 18.34, 23.58, 23.99, 24.72 and 26.76 ms for the five rungs.
+% E-FREEZE-AND-LATENCY results/tables/rq1_ladder_latency.csv
+It is not an end-to-end percentile: the dense stages were timed on a GPU node and the lexical, fusion and expansion stages on a laptop CPU, and the stored graph-expansion row times BM25 followed by the expansion, so BM25 is counted at rungs two and again at rungs four and five (the expansion alone takes 0.46 ms, so those two sums are about 0.2 ms high).
+% E-FREEZE-AND-LATENCY docs/experiments/B.md
+Per added millisecond, same-file expansion is the cheapest gain of the ladder (+4.4 points at Level~2 and +29.6 at Level~3 for 0.41 ms), and fusion is the largest cost of the lexical side (5.04 ms, because it sorts two whole rankings); the recency prior costs 2.04 ms for no distinguishable gain at Level~2.
+% E-FREEZE-AND-LATENCY results/tables/rq1_ladder_latency.csv
+A cheaper top-$k$ fusion would change how ties break, so it was not made, and the ladder reports the measured cost.
+% E-FREEZE-AND-LATENCY docs/experiments/B.md
+The small-scale rows (the flask size) were taken on a machine whose BM25 control read 15\% (6 microseconds) above the stored row of an earlier day, and are read with that offset in mind.
+% E-FREEZE-AND-LATENCY docs/experiments/B.md
+
+\paragraph{Reading: unit-level BM25 and field weights.} Nothing changes inside the fusion at the primary metric: no variant (identifier splitting, $k_1$ and $b$ at the ends of the grid, and three field-weight forms) has a fused Level~2 nDCG@10 interval above zero, the nearest being the combined field weights (name, signature and path) at +1.8 [$-$0.1, +3.7].
+% E-FREEZE-AND-LATENCY results/tables/unit_bm25_variants_dev.csv
+At Recall@100 on Level~2, adding the path field gains +2.9 and the pilot weights +2.6 with intervals above zero, and identifier splitting and the path field raise candidate recall at Level~3; with nine variants against one control and two levels, these are read as exploratory, because they matter for contexts that draw 200 candidates under a token budget more than for the ranking at ten.
+% E-FREEZE-AND-LATENCY results/tables/unit_bm25_variants_dev.csv
+
+\paragraph{Limits of the ladder.} Reranking is not a rung: no reranker is built and the decision on it is open (ADR-009), so the ladder has no reranker row and no nDCG-per-millisecond figure for it.
+% ADR-009 E-RQ1-LADDER
+The third development Level~3 repository (ansible) has no dense scores, so Level~3 on development has two repositories; the six Verified projects with units were not read for the ladder.
+% E-A-OWNER-ITEMS E-RQ1-LADDER
 
 \paragraph{Open graph question.} Typed edges that leave a file are tested against the control in
-Table~\ref{tab:graph_role}; whether training-time structure or an agent-tool role adds anything is
-unmeasured. \todo{Stacked expansion at the same budget on development, Verified-six and the third
-development Level~3 repository: \entry{E-GRAPH-L3}.}
+Tables~\ref{tab:graph_role} and~\ref{tab:rq1_ladder_pairs}; whether training-time structure or an agent-tool role adds anything is
+unmeasured. \todo{Stacked expansion at the same budget on Verified-six and on the third
+development Level~3 repository (it has no dense scores yet): \entry{E-GRAPH-L3}.}
 
 % =============================================================================================
 \section{RQ2: supervision under matched budgets}
@@ -710,7 +770,7 @@ T3 & Injected noise is a proxy; a neighbouring-function kind failed its sanity c
 (\entry{E-PILOT-NOISE-SIB}) & Noise audit of the mined set; ``findable'' is measured, not assumed; the dose-response is a calibration, not a model of real labels \\
 T4 & No trained checkpoint of a pilot result run is retained, and RQ3 needs the models & Retention switch in
 the training jobs; final models of runs that feed RQ3 archived (\entry{E-RETAIN-FINAL}) \\
-T5 & Few repositories: five at Level~2 and two to three at Level~3 on development; one Verified project dominates its Level~3 labels & Repository-clustered intervals
+T5 & Few repositories: five at Level~2 and two at Level~3 on development (the third has no dense scores); one Verified project dominates its Level~3 labels & Repository-clustered intervals
 where possible, the repository term beside every query-level interval, a leave-one-project-out sensitivity, eight added Level~2 repositories \\
 T6 & Short training: the pilots run a small fraction of the master schedule and could miss an effect that appears later & The primary budget is 100 updates; the 1,000-update sensitivity is not run on the mined set, so a longer-schedule effect there is untested (DEV-039) \\
 T7 & Data-budget confound: filtering sees fewer distinct examples at equal updates; a pool smaller than the visits lowers the update count for every arm (\entry{E-RQ2-FINAL-CELLS}) & The size-matched subsample is in every comparison, one draw per seed, distinct-example counts reported; the update count is one rule applied to all arms and written into the configurations before submission \\
@@ -727,6 +787,9 @@ T17 & Model limits: the pilot model ran on a free tier with a daily request cap,
 T18 & Label approximation: a patch-derived location is an approximation of where an issue is fixed, and no pair of the mined set has been read (\entry{E-LABEL-AUDIT-SHEET}) & The audit's rates are reported three ways and as judgements of readers, not as ground truth \\
 T19 & Analysis rule changed after the protocol: the decision interval became a cluster-robust $t$ interval after a simulation showed the registered bootstrap rejecting at 0.10 to 0.19 against 0.05 (\entry{E-RQ2-ANALYSIS}) & The change was made before any final row existed and is a recorded deviation; the bootstrap is reported beside it; the simulation uses synthetic rows and does not carry to the real variance components \\
 T20 & Sealed order is procedural for some sets: injected-noise controls are scored on development inside their jobs, and the guard that keeps the eight and the executable subset unread until the development analysis is code, not a physical seal (\entry{E-RQ2-FINAL-CELLS}) & One guard in code is called by every reader and a test fails if one stops calling it; the final-set rows record the analysis identifier \\
+T21 & Recency prior and graph expansion cell tuned on the development set they are then read on, so the development gains of the ladder are optimistic (\entry{E-RECENCY}, \entry{E-RQ1-LADDER}) & Neither is in any frozen record; the typed rung is read against controls on the same set and is not a gain; the recency prior waits for one look after the configuration is fixed \\
+T22 & Latency from two machines: dense stages on a GPU node, lexical, fusion and expansion on a laptop CPU, with one stage counted twice in two rungs, so a path sum is not an end-to-end percentile (\entry{E-FREEZE-AND-LATENCY}) & The path is stated as a sum of stage p50 values with the caveats; every row carries its host and cache state; no end-to-end claim is made for a dense pipeline \\
+T23 & Unit-level BM25 variants were evaluated on texts rebuilt for the development instances only; the Verified instances and the executable subset were not rebuilt (\entry{E-FREEZE-AND-LATENCY}) & The rule was fixed before the run and the control had to reproduce the stored scores bit for bit on every level; no variant is frozen; the result is read as exploratory \\
 \bottomrule
 \end{tabular}
 \end{table*}
