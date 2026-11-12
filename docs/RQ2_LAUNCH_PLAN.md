@@ -671,17 +671,17 @@ The launch step is `python3 -I scripts/rq2_plan.py resolve --work DIR`: it reads
 |---|---|---|
 | 1 | `yield` on the final state log | done |
 | 2 | overlap audit on the full store, drop list applied | **done 2026-11-10** (E-MINE-FULL-RESULT: 13 of 6,230 dropped; tracked list, SHA-256 `36e3a144…d9f44`) |
-| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | **done 2026-11-10** (F = 3,885, 5,789 examples, held-out rows 0); `resolve` (F, N, resolved configurations) is the launch step, open |
-| 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary and N (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | **done 2026-11-10** (F = 3,885, 5,789 examples, held-out rows 0); **`resolve` run 2026-11-12:** F = 3,885, N = 100 (`results/rq2_launch/rq2_updates.json`, `resolve_summary.json`), DEV-041 filled (not triggered) |
+| 4 | plan with the real FILTER size and example count; distinct-example statement | **done 2026-11-12** (preflight: RAW 0.55 passes, FILTER 0.82 passes; no arm repeats an example) |
 | 5 | evaluation sets ready | done on A and C |
-| 6 | space, retention directory, memory | checked on both accounts in the rehearsal; final check at launch |
+| 6 | space, retention directory, memory | **done 2026-11-12** (preflight on both accounts; GPU smoke MaxRSS 12.2 GB mined, 7.6 GB injected against the requests) |
 | 7 | CUDA gate in each job; one GPU job per account; no seed job submitted twice | in the code |
-| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the code of this section (job 66507); open until run on the launch commit |
-| 9 | registration fixed before the first run | open (the cell table changed: the digest is new); the engineer runs `scripts/rq2_record.py registration` |
+| 8 | leakage tests on the cluster | **done 2026-11-12:** 41 of 41 on the launch commit on both accounts (jobs 73496, 73539), records `results/rq2_launch/leakage_ok_{A,C}.json` |
+| 9 | registration fixed before the first run | **done 2026-11-12:** cell-table digest `f441e765…1f90` on both accounts (`results/rq2_launch/registration.json`), written with the lead's authorization in the launch prompt |
 | 10 | seeds outside the waves, hashes, commit in `RIL_COMMIT` | done in the plan and the preflight |
 | 11 | converter from the dev results and the final-sets results to the analysis rows | **done** (`scripts/rq2_rows.py`, `ril/evaluation/final_rows.py`; refuses without the dev-analysis id; tested on a synthetic final-sets result and on the stored pilot rows) |
-| 12 | the dev-analysis record writer (`write_dev_analysis_record`) is called by the analysis step | open: the analysis module reads rows; writing the record is the engineer's step after the dev analysis |
-| 13 | an SSH alias for B (optional copy of the 18 retained models) | open, optional, a later step |
+| 12 | the dev-analysis record writer (`write_dev_analysis_record`) is called by the analysis step | not a launch item: written after the dev analysis |
+| 13 | an SSH alias for B (optional copy of the 18 retained models) | not a launch item (optional, a later step) |
 
 ### 11.6 What the rehearsal found
 
