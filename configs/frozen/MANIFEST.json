@@ -2,9 +2,9 @@
  "code_commit": "70855db",
  "date": "2026-11-10",
  "files": {
-  "rq1_dev_selection.json": "d0849ba144ec2145bda22061e817d274195a60107d0b8fcd33fa94e148ca4ff4",
-  "rq2_evaluation.json": "ef0cb19b3cbcd99c5591c52f6f8f5d9f7ca12b10f1b174d6477cee77182b8e62",
-  "rq3_contexts.json": "a2746af6c6395bd931f46f0fba544da935ab46ec7861616fcd554e19ef1fb315"
+  "rq2_evaluation.json": "fba11731ce1f53a3aca66d1767dea25da69b4b7c6632f603ca570859e5c71318",
+  "rq3_contexts.json": "9a16e5edfa373c087023c86aca133f021d7d6cda015d15924a13aa1573de9722"
  },
- "record_version": "freeze-record/v1"
+ "record_version": "freeze-record/v1",
+ "ruling": "2026-11-12"
 }
