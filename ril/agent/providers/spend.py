@@ -58,10 +58,10 @@ def load_prices(path: str | Path) -> dict[str, Price]:
 
 
 def price_from_limits(path: str | Path, model: str) -> Price | None:
-    """The price written next to a model's limits (D152), or ``None`` if the entry has none.
+    """The price written next to a model's limits (D155), or ``None`` if the entry has none.
 
     ``verified`` is true when the entry names the provider page it was read from and a date, which
-    is what D152 requires of a price used for the model check."""
+    is what D155 requires of a price used for the model check."""
     data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     entry = (data.get("models") or {}).get(model) or {}
     if "input_per_m" not in entry or "output_per_m" not in entry:

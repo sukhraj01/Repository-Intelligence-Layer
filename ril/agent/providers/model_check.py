@@ -1,6 +1,6 @@
-"""The model check across providers: limits file, per-candidate summary, and the rule of D152.
+"""The model check across providers: limits file, per-candidate summary, and the rule of D155.
 
-Implements ``docs/RQ3_PILOT.md`` ("Model check across providers", D152). The rule is code so that it
+Implements ``docs/RQ3_PILOT.md`` ("Model check across providers", D155). The rule is code so that it
 is fixed before any result exists, and it is applied mechanically to the finished runs:
 
 1. a candidate that has not finished all instances of the slice is not compared (the table is
@@ -61,7 +61,7 @@ def provider_for(model: str, entry: Mapping[str, Any], explicit: str | None = No
 
 
 def run_config_sha256(config: Mapping[str, Any]) -> str:
-    """Hash of the run configuration that D152 pins (provider, model, temperature, thinking,
+    """Hash of the run configuration that D155 pins (provider, model, temperature, thinking,
     output allowance, follow-up rule, template version); recorded in ``meta.json``."""
     import hashlib
     import json
@@ -102,7 +102,7 @@ class CheckSpec:
 def validate_limits(path: str | Path) -> list[str]:
     """Problems that make the file unusable for the check (empty list = usable). Reads no key.
 
-    The candidates are the models of the file (D152 fixes the list in the decision; the lead's
+    The candidates are the models of the file (D155 fixes the list in the decision; the lead's
     local file carries the exact model strings): at least two models, from at least two
     providers, none with an unset value."""
     data = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
@@ -251,7 +251,7 @@ def select_model(
     floor: float = FLOOR,
     tie_instances: int = TIE_INSTANCES,
 ) -> dict[str, Any]:
-    """Apply the rule of D152 to candidate summaries; return the decision and the table."""
+    """Apply the rule of D155 to candidate summaries; return the decision and the table."""
     if not summaries:
         raise ValueError("no candidates")
     rows = [dict(s) for s in summaries]
@@ -263,7 +263,7 @@ def select_model(
         r["selected"] = False
     unfinished = [r["model"] for r in rows if not r["complete"]]
     base: dict[str, Any] = {
-        "rule": "D152",
+        "rule": "D155",
         "floor": floor,
         "budget_usd": budget_usd,
         "tie_instances": tie_instances,

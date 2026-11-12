@@ -1,4 +1,4 @@
-# Limits, prices and caps of the model check across providers (D152). NOT filled in.
+# Limits, prices and caps of the model check across providers (D155). NOT filled in.
 # Copy it, fill in every UNSET value from the provider's own console and pricing page on the day of the
 # run, and validate it with `scripts/rq3_driver.py model-check-limits FILE` (no key read, no call).
 # A candidate with an unset value is refused before any call. Third-party price lists are not used.
@@ -13,7 +13,7 @@ confirmatory_n: 327            # instances per arm-run
 models:
   # provider: gemini | messages (a messages-style chat API; then api_url, key_variable, key_header and
   # extra_headers, for example a version header, are required: they are the provider's own, from its documentation).
-  # The two `second-provider-model-*` keys are placeholders: replace them with the two model strings of D152.
+  # The two `second-provider-model-*` keys are placeholders: replace them with the two model strings of D155.
   # rpm / tpm / rpd: the billed tier's limits (use a large rpd where the
   # provider has no daily request limit).  input_per_m / output_per_m: USD per million tokens (billed
   # output includes thinking tokens).  thinking: the provider's lowest fixed setting that the scaffold

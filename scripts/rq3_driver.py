@@ -14,10 +14,10 @@ Usage:
   rq3_driver.py analyse OUT.json RESULT_DIR [RESULT_DIR ...] --subset SUBSET.json
                 --heldout HELD.json --arms A B ... --primary A B [--estimate A B ...]
                 --runs 0 1 --out-dir DIR   (or --plan FILE from rq3_trained_arm.py analysis-plan)
-  rq3_driver.py model-check OUT.json NAME=RESULT_DIR [NAME=RESULT_DIR ...]   (D112; see D152)
-  rq3_driver.py model-check-limits LIMITS.yaml       (validate the filled limits file, D152)
+  rq3_driver.py model-check OUT.json NAME=RESULT_DIR [NAME=RESULT_DIR ...]   (D112; see D155)
+  rq3_driver.py model-check-limits LIMITS.yaml       (validate the filled limits file, D155)
   rq3_driver.py model-check-select OUT.json RUNS_DIR --limits LIMITS.yaml [--expected-n 50]
-                (the D152 rule on RUNS_DIR/<candidate>/{results.jsonl,meta.json}; no model call)
+                (the D155 rule on RUNS_DIR/<candidate>/{results.jsonl,meta.json}; no model call)
   rq3_driver.py power OUT_DIR [--n 327 ...] [--sims 400] [--seed 0]
   rq3_driver.py cost OUT_DIR --pilot-cost results/rq3_pilot/analysis/rq3_pilot_cost.csv
 
@@ -631,7 +631,7 @@ def cmd_model_check_limits(args: argparse.Namespace) -> int:
 
 
 def cmd_model_check_select(args: argparse.Namespace) -> int:
-    """Apply the D152 rule to the finished check runs; makes no model call."""
+    """Apply the D155 rule to the finished check runs; makes no model call."""
     from ril.agent.providers.driver import latest_rows
     from ril.agent.providers.model_check import (
         load_spec,
@@ -657,7 +657,7 @@ def cmd_model_check_select(args: argparse.Namespace) -> int:
     result["budget_defaulted"] = spec.budget_defaulted
     result["study_arm_runs"] = spec.arm_runs
     result["confirmatory_n"] = spec.confirmatory_n
-    result["evidence_class"] = "exploratory, 50 held-out instances (D111, D152)"
+    result["evidence_class"] = "exploratory, 50 held-out instances (D111, D155)"
     if result["chosen"] is not None:
         result["power_context"] = power_context(args.power, result["rate"], spec.confirmatory_n)
     _write_json(Path(args.out), result)

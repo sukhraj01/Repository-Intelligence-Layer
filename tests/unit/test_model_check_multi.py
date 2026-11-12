@@ -1,4 +1,4 @@
-"""The D152 selection rule, the limits file and the aggregation command, on synthetic rows only."""
+"""The D155 selection rule, the limits file and the aggregation command, on synthetic rows only."""
 
 from __future__ import annotations
 

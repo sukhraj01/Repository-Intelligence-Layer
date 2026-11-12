@@ -380,7 +380,7 @@ writes the per-instance scores of the 377 with a model record; `contexts` (CPU, 
 (RAW at the primary seed against the untrained encoder) and the estimates. The cost is 0.68 GPU-hours per model (planning
 constant); Block 4 (cap 6.0, 0.377 spent) covers eight of the 18 retained models. Nothing was encoded or called.
 
-## Model check across providers (D152, `E-RQ3-MODEL-CHECK-PLAN`, 2026-11-12)
+## Model check across providers (D155, `E-RQ3-MODEL-CHECK-PLAN`, 2026-11-12)
 
 Fixed before any model output of the check exists. `provisional: ADR-008`, as D112, which it amends (the cheapest-first selection
 of D112 is replaced; the 15% floor, the slice of D111 and the spend guard of D114 stay). Evidence class: reasoned (the rule); no

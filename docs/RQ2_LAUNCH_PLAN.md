@@ -551,6 +551,18 @@ The final-sets script refuses to start without `--follows-dev-analysis ID` and a
 covering the run (`write_dev_analysis_record`); each score row carries the id and the record's digest; `read_final_sets` returns rows
 only for that id. The job graph puts the final sets after the dev analysis.
 
+**Retained scores of the executable 377 (2026-11-12, D152, DEV-042, `E-RQ3-SCORE-RETENTION`).** The final-sets job encodes the same 377
+instances for the same retained models that the agent study later needs, and used to delete the per-instance unit scores with its
+node-local work directory. It now copies them, for the executable 377 only, to `<RETAIN_DIR>/exec377_scores/<run id>/dense_scores/`
+(`--no-retain-scores` turns it off, `--scores-root` moves it): the byte copies of the score files of the 377, a record with the
+checkpoint hash of the model, the configuration hash, the dev-analysis id, one SHA-256 per file and a digest of the whole set, and one
+file per stored part. The scoring row of each part carries the digest of the part and the hash of the record file. The copy runs after
+the metrics are computed and written and touches none of them (a test compares the result file and the two metric tables of
+all three parts byte for byte with and without retention); the sealed order is unchanged (the guard still demands the dev-analysis
+record before any scoring, and no score is read before it); the eight repositories are not retained. The agent study's context pass
+reads these scores in place of its own encode stage (section 11 and `docs/RQ3_PILOT.md`, "Trained arms"). Space: 377 files of a few
+hundred kilobytes each per model (estimate to be replaced by the first measured size).
+
 ### 10.4 Job graph (per-run jobs) and critical path
 
 CPU stages on C (report, overlap audit, prep, FILTER size) first; the injected jobs on A wait for nothing and chain on A; the mined
@@ -671,18 +683,22 @@ The launch step is `python3 -I scripts/rq2_plan.py resolve --work DIR`: it reads
 |---|---|---|
 | 1 | `yield` on the final state log | done |
 | 2 | overlap audit on the full store, drop list applied | **done 2026-11-10** (E-MINE-FULL-RESULT: 13 of 6,230 dropped; tracked list, SHA-256 `36e3a144…d9f44`) |
-| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | **done 2026-11-10** (F = 3,885, 5,789 examples, held-out rows 0); `resolve` (F, N, resolved configurations) is the launch step, open |
-| 4 | plan with the real FILTER size and example count; distinct-example statement | open; the preflight prints it from the prep summary and N (illustrative at 5,800 and 3,450: RAW 0.55 passes, FILTER 0.93) |
+| 3 | prep: `non_test` directories, ranks, feature table, cache, FILTER size | **done 2026-11-10** (F = 3,885, 5,789 examples, held-out rows 0); **`resolve` run 2026-11-12:** F = 3,885, N = 100 (`results/rq2_launch/rq2_updates.json`, `resolve_summary.json`), DEV-041 filled (not triggered) |
+| 4 | plan with the real FILTER size and example count; distinct-example statement | **done 2026-11-12** (preflight: RAW 0.55 passes, FILTER 0.82 passes; no arm repeats an example) |
 | 5 | evaluation sets ready | done on A and C |
-| 6 | space, retention directory, memory | checked on both accounts in the rehearsal; final check at launch |
+| 6 | space, retention directory, memory | **done 2026-11-12** (preflight on both accounts; GPU smoke MaxRSS 12.2 GB mined, 7.6 GB injected against the requests) |
 | 7 | CUDA gate in each job; one GPU job per account; no seed job submitted twice | in the code |
-| 8 | leakage tests on the cluster | 41 of 41 torch and leakage tests passed on the code of this section (job 66507); open until run on the launch commit |
-| 9 | registration fixed before the first run | open (the cell table changed: the digest is new); the engineer runs `scripts/rq2_record.py registration` |
+| 8 | leakage tests on the cluster | **done 2026-11-12:** 41 of 41 on the launch commit on both accounts (jobs 73496, 73539), records `results/rq2_launch/leakage_ok_{A,C}.json` |
+| 9 | registration fixed before the first run | **done 2026-11-12:** cell-table digest `f441e765…1f90` on both accounts (`results/rq2_launch/registration.json`), written with the lead's authorization in the launch prompt |
 | 10 | seeds outside the waves, hashes, commit in `RIL_COMMIT` | done in the plan and the preflight |
 | 11 | converter from the dev results and the final-sets results to the analysis rows | **done** (`scripts/rq2_rows.py`, `ril/evaluation/final_rows.py`; refuses without the dev-analysis id; tested on a synthetic final-sets result and on the stored pilot rows) |
-| 12 | the dev-analysis record writer (`write_dev_analysis_record`) is called by the analysis step | open: the analysis module reads rows; writing the record is the engineer's step after the dev analysis |
-| 13 | an SSH alias for B (optional copy of the 18 retained models) | open, optional, a later step |
+| 12 | the dev-analysis record writer (`write_dev_analysis_record`) is called by the analysis step | not a launch item: written after the dev analysis |
+| 13 | an SSH alias for B (optional copy of the 18 retained models) | not a launch item (optional, a later step) |
 
 ### 11.6 What the rehearsal found
 
 Both rehearsals passed on a synthetic work directory (every check true, N = 100 on C), and the real directories fail exactly the items that wait for the prep job and the records (registration, leakage record, prep summary, inputs, `updates_computed`). The submit script refused three ways: no preflight file (exit 2), no confirmation (exit 2), N not computed from a prepared store (exit 2); nothing was submitted. Findings: (a) the registered design's scope on the protocol basis is 0.10 GPU-hours over the cap with 45 runs (section 11.2): no action, that scope does not run; (b) a panel with fewer than two queries has no interval; the analysis refuses it with an error; (c) the per-seed job loads the mined cache once for its arms, so the memory estimate of section 10 (26 GB projected) is unchanged only if the evaluation stores are released between arms (`--drop-eval-stores` is set): the MaxRSS of the first seed job is the check; (c2) **the 30 GB request of section 10 cannot start** (found by the full-store prep trial, job 66022: partition u22 grants 3,000 MB per CPU, so 30,720 MB is allocated 11 CPUs against the account's 10): the mined request is now 30,000 MB (10 CPUs, the largest that can start; D143, tactical), the injected request stays 24,576 MB (9 CPUs), and the preflight checks the allocated CPUs against the limit; (d) the FILTER-SweRankEmbed-Small cell can have a different pool size from FILTER-BM25's; N follows the BM25 pool (the confirmatory one) and the distinct-examples diagnostic reports the other if it repeats.
+
+### 11.7 Launch record (2026-11-12; entry E-RQ2-LAUNCH, decisions D153, D154)
+
+Submitted 11:13 IST on the launch commit c2a8db6 with the confirmation flag and the same-commit preflight: account C jobs 73578, 73579, 73580 (mined, seeds 100 to 102, five arms each, no SweRank cell), account A jobs 73581, 73582, 73583 (injected, seeds 100 to 102, nine arms each); seeds 101 and 102 wait on the previous seed of the same account. Resolved: F = 3,885, N = 100 (DEV-041 not triggered); registration digest `f441e765...1f90`; dense-teacher projection 2.48 GPU-hours de-duplicated, so the conditional SweRank cell is on and runs afterwards as three single-arm jobs under its own authorization (the first launch authorization covers the 34.34 GPU-hours of the cell table only). GPU smoke MaxRSS 11.2 GB (mined, request 30,000 MB) and 7.6 GB (injected); retained-model round trip 508 of 508 dense dev rows equal. At 12:13 IST seed 100 of each family was training without a CUDA or memory error. Next: monitor the seed jobs, SweRank cell, dev analysis and its record, sealed final-sets scoring.

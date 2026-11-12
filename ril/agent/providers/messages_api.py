@@ -1,6 +1,6 @@
 """Client for a messages-style chat API (a list of role/content turns), for the RQ3 model check.
 
-Implements ``docs/RQ3_PILOT.md`` (D152). Same interface as ``GeminiClient``
+Implements ``docs/RQ3_PILOT.md`` (D155). Same interface as ``GeminiClient``
 (``generate(contents, wait_for_daily=...)`` giving a ``CallResult``), so the driver, the follow-up
 policy, the spend guard and the call log are shared. Callers keep the one conversation format of the
 pilot (``role`` ``user`` / ``model`` with text ``parts``); this module turns it into message turns.

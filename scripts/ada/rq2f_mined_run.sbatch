@@ -32,7 +32,7 @@
 # Submitted by scripts/rq2_submit.py (never by hand):
 #   sbatch --export=ALL,SEED=<s>,RUN_IDS=<id:id:...>,UPDATES=<N>,RIL_COMMIT=<hash>,DATE=<YYYY-MM-DD>,RETAIN_DIR=<abs dir> scripts/ada/rq2f_mined_run.sbatch
 set -euo pipefail
-W=$HOME/ril_rq2f
+W=${W:-$HOME/ril_rq2f}
 X2=$HOME/ril_x2
 E=$HOME/ril_e
 SEED=${SEED:?set SEED}
@@ -64,12 +64,17 @@ nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "out/nvid
 "$PY" -c 'import json, sys; r = json.load(open("work/rq2_updates.json")); sys.exit(0 if r["updates"] == int(sys.argv[1]) else 1)' "$UPDATES" \
   || { echo "UPDATES $UPDATES does not match work/rq2_updates.json: run scripts/rq2_plan.py resolve"; exit 4; }
 FSIZE=$("$PY" -c 'import json; print(json.load(open("work/prep_summary.json"))["filter_size"])')
-"$PY" scripts/rq2_plan.py render --out work/configs_resolved --filter-size "$FSIZE" --updates "$UPDATES" > "out/render_${SLURM_JOB_ID}.json"
+"$PY" scripts/rq2_plan.py render --out work/configs_resolved --seeds "$SEED" --filter-size "$FSIZE" --updates "$UPDATES" > "out/render_${SLURM_JOB_ID}.json"
 CONFIGS=""
 for RID in $IDS; do
   [ -f "work/configs_resolved/${RID}.yaml" ] || { echo "no configuration for $RID"; exit 4; }
   CONFIGS="$CONFIGS work/configs_resolved/${RID}.yaml"
 done
+# GPU smoke (seed 99 only, never a result): SMOKE_STOP_AFTER shortens the run to that many updates
+if [ -n "${SMOKE_STOP_AFTER:-}" ]; then
+  [ "$SEED" = "99" ] || { echo "SMOKE_STOP_AFTER is only for seed 99"; exit 4; }
+  for C in $CONFIGS; do sed -i "s/^  stop_after: .*/  stop_after: $SMOKE_STOP_AFTER/" "$C"; done
+fi
 # dev evaluation set: the five dev repositories of the E3 cache without ansible, as links (no data copied)
 "$PY" scripts/curve_subset_cache.py "$HOME/ril_t1/work/e3_cache" work/e3_cache_dev5 \
   internetarchive__openlibrary qutebrowser__qutebrowser streamlink__streamlink conan-io__conan deepset-ai__haystack

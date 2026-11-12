@@ -1,0 +1,77 @@
+{
+ "account": "C",
+ "checks": [
+  {
+   "detail": "N = 100 updates for every arm, computed from the prepared store (D140)",
+   "id": "updates_computed",
+   "ok": true
+  },
+  {
+   "detail": "RIL_COMMIT=c2a8db6",
+   "id": "commit_recorded",
+   "ok": true
+  },
+  {
+   "detail": "work/registration.json holds the digest of the current cell table",
+   "id": "cell_table_registered",
+   "ok": true
+  },
+  {
+   "detail": "seeds are outside the exploratory waves; no noise draw is reused",
+   "id": "seeds_fresh",
+   "ok": true
+  },
+  {
+   "detail": "examples, FILTER size, 0 held-out rows and the applied drop list are recorded",
+   "id": "prep_summary",
+   "ok": true
+  },
+  {
+   "detail": "RAW 0.55 passes, FILTER 0.82 passes",
+   "id": "distinct_examples_stated",
+   "ok": true
+  },
+  {
+   "detail": "15 configurations conform to the registered design and reproduce the planned hashes",
+   "id": "configs_conform",
+   "ok": true
+  },
+  {
+   "detail": "cache, feature table / score stores are in place",
+   "id": "inputs_present",
+   "ok": true
+  },
+  {
+   "detail": "scripts/ada/rq2f_mined_run.sbatch asks 30000 MB; plan 30000 MB; per-user ceiling 32000 MB; allocated 10 CPUs at 3000 MB per CPU against 10",
+   "id": "memory_request",
+   "ok": true
+  },
+  {
+   "detail": "20.8 GB free on the account home; 10.0 GB needed",
+   "id": "space",
+   "ok": true
+  },
+  {
+   "detail": "retained models (4.9 GB) go to retained_final",
+   "id": "retain_dir",
+   "ok": true
+  },
+  {
+   "detail": "dev stores present",
+   "id": "dev_set_ready",
+   "ok": true
+  },
+  {
+   "detail": "leakage tests passed on this commit",
+   "id": "leakage_tests",
+   "ok": true
+  }
+ ],
+ "commit": "c2a8db6",
+ "created_utc": "2026-11-12T05:41:17Z",
+ "family": "mined",
+ "include_conditional": false,
+ "ready": true,
+ "updates": 100,
+ "version": "rq2-preflight/v2"
+}
