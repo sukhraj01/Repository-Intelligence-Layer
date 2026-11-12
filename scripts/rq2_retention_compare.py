@@ -23,7 +23,7 @@ def _dense(path: str) -> dict[tuple[str, str], dict[str, float]]:
             name = str(row["name"])
             if not name.startswith("dense:"):
                 continue
-            metrics = {k: float(v) for k, v in row.items() if ":" in k}
+            metrics = {k: float(v) for k, v in row.items() if ":" in k and v != ""}
             out[(row["instance"], row["level"])] = metrics
     return out
 
@@ -42,7 +42,10 @@ def main() -> int:
         if k not in x or k not in y:
             differing += 1
             continue
-        d = max(abs(x[k][m] - y[k][m]) for m in x[k])
+        if set(x[k]) != set(y[k]):
+            differing += 1
+            continue
+        d = max((abs(x[k][m] - y[k][m]) for m in x[k]), default=0.0)
         worst = max(worst, d)
         differing += d > 1e-9
     out = {

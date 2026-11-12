@@ -252,3 +252,9 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-12,C,71752,RQ2LAUNCH,"dense-teacher measurement, stopped by the CUDA gate on node gnode057 (no usable CUDA device)",u22,6,1,00:00:09,0.0,FAILED
 2026-11-12,C,71755,RQ2LAUNCH,"dense-teacher measurement, stopped by the CUDA gate on node gnode060 (no usable CUDA device)",u22,6,1,00:00:07,0.0,FAILED
 2026-11-12,C,71759,RQ2LAUNCH,"dense-teacher measurement (D125): 100 seeded directories, SweRankEmbed-Small 1024 tokens, projection over 5789 directories; gnode070",u22,6,1,00:13:54,0.23,COMPLETED
+2026-11-12,C,72143,RQ2LAUNCH,"smoke, mined RAW seed 99: stopped at start, stale scripts on the cluster copy (no GPU use)",u22,10,1,00:00:01,0.0,FAILED
+2026-11-12,A,72144,RQ2LAUNCH,"smoke, injected RAW seed 99: stopped at start, stale scripts on the cluster copy (no GPU use)",u22,9,1,00:00:00,0.0,FAILED
+2026-11-12,C,72149,RQ2LAUNCH,"smoke (seed 99, excluded from every analysis): mined RAW, 5 updates, retained model, dev scoring; gnode071",u22,10,1,00:22:21,0.37,COMPLETED
+2026-11-12,A,72150,RQ2LAUNCH,"smoke (seed 99, excluded from every analysis): injected RAW, 5 updates, dev scoring; gnode071",u22,9,1,00:19:30,0.33,COMPLETED
+2026-11-12,C,72490,RQ2LAUNCH,"smoke repeat (seed 99, excluded): mined RAW, 5 updates, retained model, dev scoring; in-job folder comparison void; gnode050",u22,10,1,00:21:25,0.36,COMPLETED
+2026-11-12,C,73022,RQ2LAUNCH,"retention check (seed 99 smoke model, excluded): retained model loaded back and scored on dev, 508 of 508 dense rows equal; compare script fixed and rerun on the stored rows; gnode055",u22,4,1,00:17:11,0.29,COMPLETED
