@@ -42,10 +42,20 @@ def main() -> int:
     problems = rt.verify_retained(a.retained)
     spec = ENCODERS["coderankembed"].with_max_tokens(512)
     dtype = "float16" if a.device.startswith("cuda") else "float32"
+    retained_model = str(Path(a.retained) / rt.MODEL_SUBDIR)
+    ra = {r["path"]: r["sha256"] for r in rt.tree_files(retained_model)}
+    rb = {r["path"]: r["sha256"] for r in rt.tree_files(a.final)}
+    files_equal = ra == rb
+    differing = sorted(k for k in set(ra) | set(rb) if ra.get(k) != rb.get(k))
     vecs = []
-    for folder in (str(Path(a.retained) / rt.MODEL_SUBDIR), a.final):
+    again = None
+    for i, folder in enumerate((retained_model, a.final)):
         enc = DenseEncoder.load(spec, device=a.device, dtype=dtype, local_dir=folder)
         vecs.append(np.asarray(enc.encode_documents(SNIPPETS, 8), dtype=np.float32))
+        if i == 0:  # the same model twice: run-to-run difference of the encoder itself
+            again = np.asarray(enc.encode_documents(SNIPPETS, 8), dtype=np.float32)
+    assert again is not None
+    self_diff = float(np.abs(vecs[0] - again).max())
     diff = float(np.abs(vecs[0] - vecs[1]).max())
     cos = [
         float(x @ y / (np.linalg.norm(x) * np.linalg.norm(y)))
@@ -57,11 +67,14 @@ def main() -> int:
         "max_abs_difference": diff,
         "min_cosine": min(cos),
         "equal": diff == 0.0,
+        "files_equal": files_equal,
+        "files_differing": differing,
+        "same_model_twice_max_abs_difference": self_diff,
         "retained": a.retained,
     }
     Path(a.out).write_text(json.dumps(out, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     sys.stdout.write(json.dumps(out, indent=1, sort_keys=True) + "\n")
-    return 0 if not problems and diff < 1e-3 else 1
+    return 0 if not problems and (files_equal or diff < 1e-3) else 1
 
 
 if __name__ == "__main__":
