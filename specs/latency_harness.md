@@ -12,8 +12,8 @@ spec to an **append-only CSV**, and **failing loudly** on regression past a thre
 
 ## Stages (the harness times each separately)
 
-`query_encode` · `bm25` · `dense_search` · `graph_expansion` · `rrf_fusion` · `cross_encoder_rerank` ·
-`assemble` · `end_to_end`. Each component registers its stage as it comes online; until then the
+`query_encode` · `bm25` · `dense_search` · `graph_expansion` · `rrf_fusion` · `same_file_expansion` · `recency_prior` ·
+`cross_encoder_rerank` · `assemble` · `end_to_end`. Each component registers its stage as it comes online; until then the
 harness runs against stubs/synthetic workloads so the plumbing, CSV contract and regression check are
 tested from day one. Hypothesis (not fact): rerank dominates by ~two orders of magnitude.
 

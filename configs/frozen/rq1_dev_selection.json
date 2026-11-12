@@ -1,0 +1,284 @@
+{
+ "assembly": "not part of the ladder (retrieval metrics only)",
+ "bm25": {
+  "b": 0.75,
+  "k1": 1.5,
+  "provisional": [
+   "ADR-004"
+  ],
+  "stop_words": 33,
+  "unit_level_variants": "none frozen (D119 dev run: E-FREEZE-AND-LATENCY)",
+  "variant": "reference form (Lucene-variant scoring, stemmed, stop list)"
+ },
+ "budgets": "none (rank metrics)",
+ "code_commit": "70855db",
+ "configuration": {
+  "expansion": "off in every frozen setting; same-file expansion by score stays an unfrozen candidate (Q30)",
+  "first_stage_variant": "coderankembed__t1024",
+  "fusion": "reciprocal rank fusion over whole rankings (rank-based, not a score sum)",
+  "index": "flat exact (stored scores of every unit of the snapshot)",
+  "ladder_cell": {
+   "cap": 50,
+   "gamma": 0.7,
+   "hops": 2,
+   "seeds": 5,
+   "weight": 0.5
+  },
+  "recency_prior": "off in every frozen setting",
+  "rrf_k": 100
+ },
+ "consumer": "rq1_dev_selection",
+ "consumer_hashes": {
+  "cache_hashes": [
+   "70b481631de49849dbf639d7459b1c16fb2f047f100bb8d6572932d36fdaa682"
+  ],
+  "equals_file_hash": true,
+  "evaluation_hashes": [
+   "f1c91337065538eee9f302b5e37c858f00c0a3a63522dffb99593c792da9f0da"
+  ],
+  "kind": "SHA-256 of the configuration file, stored in the ladder's run record",
+  "stored": "e4110148259a8bb128dd5ca7b440c7c8c173ef03bd16d3e4deca6539e984f283"
+ },
+ "description": "Dev selection of E-DENSE-FUSION and the RQ1 ladder on the development set (E-RQ1-LADDER): CodeRankEmbed at 1,024 tokens, RRF k 100. Expansion and the recency prior are ladder rungs read against controls, not part of the retrieval setting.",
+ "encoder": {
+  "max_tokens": 1024,
+  "model_name": "CodeRankEmbed",
+  "name": "coderankembed",
+  "query_template": "Represent this query for searching relevant code: {query}",
+  "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1"
+ },
+ "frozen_on": "2026-11-10",
+ "latency": {
+  "kind": "stored rows copied in; stages are timed on different hosts and are not additive",
+  "not_measured": [],
+  "rows": [
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "2f7d0ce69ddaea86722f6b116f29ac9d6a710f2a30fdc52507303b75ed2f12aa",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 35860,
+    "n": 295,
+    "p50_ms": 18.0691,
+    "p95_ms": 19.2836,
+    "p99_ms": 22.1453,
+    "query_set_id": "qenc-coderankembed-t1024-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "query_encode",
+    "timestamp_utc": "2026-10-23T13:07:28Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "bba24b0",
+    "config_hash": "97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 0.202,
+    "p95_ms": 0.269,
+    "p99_ms": 0.3074,
+    "query_set_id": "retrieval-django-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "bm25",
+    "timestamp_utc": "2026-10-17T22:31:47Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "8b90845f349bd64ca8a8406471656ee1255d4237a3b918978da9f97aeed806cd",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 35860,
+    "n": 295,
+    "p50_ms": 0.267,
+    "p95_ms": 0.2683,
+    "p99_ms": 0.2781,
+    "query_set_id": "dsearch-coderankembed-django-torch-v1",
+    "rows_matched": 2,
+    "scale": "django",
+    "stage": "dense_search",
+    "timestamp_utc": "2026-10-23T13:07:37Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "90a609f",
+    "config_hash": "560ce0a99e536e3ae585c292f17cc3e4fa640ed76accd3dfce0c8d15bfb27609",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 5.0444,
+    "p95_ms": 5.3593,
+    "p99_ms": 5.5644,
+    "query_set_id": "fusion-django-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "rrf_fusion",
+    "timestamp_utc": "2026-11-10T00:06:54Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "2f7d0ce69ddaea86722f6b116f29ac9d6a710f2a30fdc52507303b75ed2f12aa",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 974,
+    "n": 295,
+    "p50_ms": 18.0691,
+    "p95_ms": 19.2836,
+    "p99_ms": 22.1453,
+    "query_set_id": "qenc-coderankembed-t1024-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "query_encode",
+    "timestamp_utc": "2026-10-23T13:07:28Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "bba24b0",
+    "config_hash": "f50286d3662c8f5a1bfeb6264dd370f5c035048f2ebc8c5877c0c55b012237fa",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 0.0398,
+    "p95_ms": 0.0452,
+    "p99_ms": 0.0468,
+    "query_set_id": "retrieval-flask-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "bm25",
+    "timestamp_utc": "2026-10-17T22:31:31Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "a76428f77f0949d0b04b0670d8462a90e284aca4bfce75f33610065293216aa1",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 974,
+    "n": 295,
+    "p50_ms": 0.113,
+    "p95_ms": 0.1169,
+    "p99_ms": 0.1308,
+    "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+    "rows_matched": 2,
+    "scale": "flask",
+    "stage": "dense_search",
+    "timestamp_utc": "2026-10-23T13:07:37Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "90a609f",
+    "config_hash": "e3d3ddfb05667d9cbc1cb9f49d65d9cc1af43bccdcd78d03c69c5ff934e4bbd5",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 0.1244,
+    "p95_ms": 0.1338,
+    "p99_ms": 0.139,
+    "query_set_id": "fusion-flask-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "rrf_fusion",
+    "timestamp_utc": "2026-11-10T00:06:38Z"
+   }
+  ],
+  "source": "results/latency/latency_log.csv"
+ },
+ "not_found": [],
+ "parsing": {
+  "codeunit_schema": "v1",
+  "parser": "ast-parser/v0",
+  "resolver": "own-ast-resolver/v0",
+  "resolver_note": "D117: becomes v0.1 at the next cache rebuild, none forced",
+  "unit_granularity": "function, method, class, one residual module unit per file (D6)"
+ },
+ "provisional_in_consumer": [
+  "ADR-004",
+  "ADR-006"
+ ],
+ "record_version": "freeze-record/v1",
+ "sensitivity": {
+  "difference_to_other_consumers": [
+   {
+    "L2_ndcg10_points": -0.48,
+    "L3_recall100_points": -0.37,
+    "other_consumer": "rq2_evaluation",
+    "other_setting": {
+     "max_tokens": 512,
+     "rrf_k": 60
+    }
+   },
+   {
+    "L2_ndcg10_points": -0.59,
+    "L3_recall100_points": -0.28,
+    "other_consumer": "rq3_contexts",
+    "other_setting": {
+     "max_tokens": 512,
+     "rrf_k": 100
+    }
+   }
+  ],
+  "largest_difference_to_other_consumers_points": 0.59,
+  "largest_k60_vs_k100_difference_points": 0.34,
+  "own_setting": {
+   "max_tokens": 1024,
+   "rrf_k": 100
+  },
+  "reading": "dev, units_all_nomod, CodeRankEmbed, RRF with BM25 (E-DENSE-FUSION)",
+  "source": {
+   "path": "results/tables/x2_first_dev.csv",
+   "sha256": "f7bb5fa933a4e0e213a6fcf6234465285554c5da295b7ce92811116a3b46b383"
+  },
+  "values": {
+   "t1024_k100": {
+    "L2_ndcg10": 24.04,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 43.0
+   },
+   "t1024_k60": {
+    "L2_ndcg10": 24.03,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.66
+   },
+   "t512_k100": {
+    "L2_ndcg10": 23.45,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.72
+   },
+   "t512_k60": {
+    "L2_ndcg10": 23.56,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.63
+   }
+  }
+ },
+ "sources": [
+  {
+   "path": "configs/experiments/rq1_ladder_cre.yaml",
+   "sha256": "e4110148259a8bb128dd5ca7b440c7c8c173ef03bd16d3e4deca6539e984f283"
+  },
+  {
+   "path": "results/logs/rq1_ladder_run_files_2026-11-09.json",
+   "sha256": "d54ff24a9d0897b7183788cf2d085b3ab342f5ea7769c75899db1dfe43c00afc"
+  }
+ ]
+}

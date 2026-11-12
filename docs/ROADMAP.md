@@ -55,14 +55,14 @@ Week-1 deliverables, in order (contracts in `specs/`):
 
 ## Weeks 5–8 — Person A: RQ1
 
-- [x] Ablation on the development set with latency columns from stored rows (2026-11-09, E-RQ1-LADDER, D145: dense, plus BM25 by RRF, plus same-file expansion, plus typed expansion against the same-file and chance controls, plus recency prior; rerank not built, three stages without a latency row)
+- [x] Ablation on the development set with latency columns from stored rows (2026-11-09, E-RQ1-LADDER, D145: dense, plus BM25 by RRF, plus same-file expansion, plus typed expansion against the same-file and chance controls, plus recency prior; rerank not built, the three stages without a latency row measured 2026-11-10, E-FREEZE-AND-LATENCY: rank fusion 5.04 ms, same-file expansion 0.41 ms, recency prior 2.04 ms p50 at django size)
 - [ ] Ablation: dense / dense+BM25 / dense+structural / all three — with latency columns (graph-signal and recency pilots on BM25 seeds done, exploratory: E3 to E5; dense, dense+BM25 and the graph on a fused first stage measured zero-shot with latency rows, E-DENSE-FUSION 2026-10-25; the frozen-configuration ablation still to run; the freeze proposal is in E-RQ1-LADDER)
 - [ ] Latency distribution measured; rerank decision informed (ADR-009)
 
 ## Before week 6 — freeze
 
-- [ ] All latency optimisation landed
-- [ ] Retrieval stack frozen; `configs/frozen/` written, hashed, benchmark snapshot recorded
+- [x] Retrieval settings recorded per consumer in `configs/frozen/` (RQ2 evaluation k 60, RQ3 contexts and dev selection k 100; hashed, manifest, latency snapshot from stored rows; 2026-11-10, E-FREEZE-AND-LATENCY, D148); not unified, provisional labels carried, the lead decides whether they stand until the ADRs close
+- [ ] All latency optimisation landed (rank fusion sorts two whole rankings: 5.04 ms at django size, a selection-based fusion is a candidate; the query encoder dominates on both nodes)
 
 ## RQ2 final-experiment tasks (added 2026-11-03; decisions O1 to O15 in `docs/RQ2_PROTOCOL.md` section 11)
 

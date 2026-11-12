@@ -221,8 +221,16 @@ def test_stored_latency_selection_and_unmeasured_stages() -> None:
     lat = lt.latency_rows(log, _latency_cfg())
     costs = lt.rung_costs(lat, "django")
     assert costs["R1"]["complete"] and costs["R1"]["hosts"] == ["gnode044"]
-    assert costs["R2"]["stages_not_measured"] == ["rrf_fusion"] and not costs["R2"]["complete"]
-    assert costs["R3"]["added_p50_ms"] is None and costs["R5"]["added_p50_ms"] is None
+    # the three stages that had no row were measured in E-FREEZE-AND-LATENCY (django size, M3)
+    assert costs["R2"]["stages_not_measured"] == [] and costs["R2"]["complete"]
+    for rung, stage in (
+        ("R2", "rrf_fusion"),
+        ("R3", "same_file_expansion"),
+        ("R5", "recency_prior"),
+    ):
+        assert stage in costs[rung]["stages_measured"]
+        assert costs[rung]["hosts"][-1] == "Sukhraj.local" and costs[rung]["added_p50_ms"] > 0
+    assert costs["R3"]["complete"] and costs["R5"]["complete"]
     assert costs["R4"]["complete"] and costs["R4"]["hosts"] == ["Sukhraj.local"]
     enc = next(r for r in lat if r["scale"] == "django" and r["stage"] == "query_encode")
     assert enc["p50_ms"] == pytest.approx(18.0691, abs=1e-4) and enc["rows_matched"] >= 1
@@ -317,8 +325,9 @@ def test_ladder_tables_build_from_synthetic_stored_files(tmp_path: Path) -> None
     names = [t.name for t in tables]
     assert names == ["rq1_ladder", "rq1_ladder_pairs", "rq1_ladder_latency"]
     text = tables[0].render()
-    assert "R4 plus typed graph expansion" in text and "not measured" in text
-    assert "(partial)" in text
+    assert "R4 plus typed graph expansion" in text
+    # every stage of the ladder has a stored row since E-FREEZE-AND-LATENCY
+    assert "(partial)" not in text and "not measured &" not in text
     assert tb.build_if_present(tmp_path / "empty") == []
 
 

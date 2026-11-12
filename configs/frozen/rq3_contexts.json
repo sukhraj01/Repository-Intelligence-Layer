@@ -1,0 +1,326 @@
+{
+ "assembly": {
+  "class_units": "header form (D103); the index keeps the full form (D25)",
+  "max_unit_tokens": 1000,
+  "max_unit_tokens_default_in_code": 1000,
+  "rule": "first fit in rank order, blocks ordered by file and line (D102, ADR-014)",
+  "tokenizer": "approx",
+  "version": "assembly/v1"
+ },
+ "bm25": {
+  "b": 0.75,
+  "k1": 1.5,
+  "provisional": [
+   "ADR-004"
+  ],
+  "stop_words": 33,
+  "unit_level_variants": "none frozen (D119 dev run: E-FREEZE-AND-LATENCY)",
+  "variant": "reference form (Lucene-variant scoring, stemmed, stop list)"
+ },
+ "budgets": [
+  8000,
+  16000
+ ],
+ "code_commit": "70855db",
+ "configuration": {
+  "arms": [
+   "bm25",
+   "dense",
+   "rrf"
+  ],
+  "candidates": 200,
+  "dense_key": "dense_L2",
+  "expansion": "off",
+  "fusion": "reciprocal rank fusion over whole rankings (rank-based, not a score sum)",
+  "index": "flat exact (stored scores of every unit of the snapshot)",
+  "query_level": "L2",
+  "recency_prior": "off",
+  "rrf_k": 100
+ },
+ "consumer": "rq3_contexts",
+ "consumer_hashes": {
+  "equals_file_hash": true,
+  "kind": "SHA-256 of the configuration file, stored beside the built contexts",
+  "stored": "e2f011c3a31348c9041e4ebca5ac6bc2a80304118339fbdda4ee34637e8b4d4c"
+ },
+ "description": "Retrieved contexts of the executable instances (E-RQ3-CONTEXTS, D108): BM25, the untrained base encoder alone and RRF over both, assembled by the stage of ADR-014.",
+ "encoder": {
+  "max_tokens": 512,
+  "model_name": "CodeRankEmbed",
+  "name": "coderankembed",
+  "query_template": "Represent this query for searching relevant code: {query}",
+  "revision": "3c4b60807d71f79b43f3c4363786d9493691f8b1"
+ },
+ "frozen_on": "2026-11-10",
+ "latency": {
+  "kind": "stored rows copied in; stages are timed on different hosts and are not additive",
+  "not_measured": [],
+  "rows": [
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "ad04357c940178aec13a51fc354a2b5735820a9b62d5fba303e2bdb9d3a870a9",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 35860,
+    "n": 295,
+    "p50_ms": 18.4832,
+    "p95_ms": 19.5332,
+    "p99_ms": 20.5899,
+    "query_set_id": "qenc-coderankembed-t512-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "query_encode",
+    "timestamp_utc": "2026-10-23T13:07:08Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "bba24b0",
+    "config_hash": "97714865085c394501621a075b466d47b7be5ba00ce9e96a8ca0f264bbc63610",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 0.202,
+    "p95_ms": 0.269,
+    "p99_ms": 0.3074,
+    "query_set_id": "retrieval-django-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "bm25",
+    "timestamp_utc": "2026-10-17T22:31:47Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "8b90845f349bd64ca8a8406471656ee1255d4237a3b918978da9f97aeed806cd",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 35860,
+    "n": 295,
+    "p50_ms": 0.267,
+    "p95_ms": 0.2683,
+    "p99_ms": 0.2781,
+    "query_set_id": "dsearch-coderankembed-django-torch-v1",
+    "rows_matched": 2,
+    "scale": "django",
+    "stage": "dense_search",
+    "timestamp_utc": "2026-10-23T13:07:37Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "90a609f",
+    "config_hash": "560ce0a99e536e3ae585c292f17cc3e4fa640ed76accd3dfce0c8d15bfb27609",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 5.0444,
+    "p95_ms": 5.3593,
+    "p99_ms": 5.5644,
+    "query_set_id": "fusion-django-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "rrf_fusion",
+    "timestamp_utc": "2026-11-10T00:06:54Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "527c625",
+    "config_hash": "92148a25f79aa271cc29803d16b285e106de95a6a73d3747ea09af2df8ed36ff",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 35860,
+    "n": 595,
+    "p50_ms": 10.9763,
+    "p95_ms": 17.0085,
+    "p99_ms": 23.0422,
+    "query_set_id": "assembly-django-b8000-v1",
+    "rows_matched": 1,
+    "scale": "django",
+    "stage": "assemble",
+    "timestamp_utc": "2026-11-05T23:38:30Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "ad04357c940178aec13a51fc354a2b5735820a9b62d5fba303e2bdb9d3a870a9",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 974,
+    "n": 295,
+    "p50_ms": 18.4832,
+    "p95_ms": 19.5332,
+    "p99_ms": 20.5899,
+    "query_set_id": "qenc-coderankembed-t512-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "query_encode",
+    "timestamp_utc": "2026-10-23T13:07:08Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "bba24b0",
+    "config_hash": "f50286d3662c8f5a1bfeb6264dd370f5c035048f2ebc8c5877c0c55b012237fa",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 0.0398,
+    "p95_ms": 0.0452,
+    "p99_ms": 0.0468,
+    "query_set_id": "retrieval-flask-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "bm25",
+    "timestamp_utc": "2026-10-17T22:31:31Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "928edb7",
+    "config_hash": "a76428f77f0949d0b04b0670d8462a90e284aca4bfce75f33610065293216aa1",
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "host": "gnode044",
+    "index_units": 974,
+    "n": 295,
+    "p50_ms": 0.113,
+    "p95_ms": 0.1169,
+    "p99_ms": 0.1308,
+    "query_set_id": "dsearch-coderankembed-dev-torch-v1",
+    "rows_matched": 2,
+    "scale": "flask",
+    "stage": "dense_search",
+    "timestamp_utc": "2026-10-23T13:07:37Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "90a609f",
+    "config_hash": "e3d3ddfb05667d9cbc1cb9f49d65d9cc1af43bccdcd78d03c69c5ff934e4bbd5",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 0.1244,
+    "p95_ms": 0.1338,
+    "p99_ms": 0.139,
+    "query_set_id": "fusion-flask-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "rrf_fusion",
+    "timestamp_utc": "2026-11-10T00:06:38Z"
+   },
+   {
+    "cache_state": "warm",
+    "commit": "527c625",
+    "config_hash": "b9155b6e1d77c6fb4a74ed378202e837c67cabe28b194ced50404aaf8c672bee",
+    "cpu": "Apple M3",
+    "gpu": "none",
+    "host": "Sukhraj.local",
+    "index_units": 974,
+    "n": 595,
+    "p50_ms": 14.4239,
+    "p95_ms": 18.8378,
+    "p99_ms": 20.0265,
+    "query_set_id": "assembly-flask-b8000-v1",
+    "rows_matched": 1,
+    "scale": "flask",
+    "stage": "assemble",
+    "timestamp_utc": "2026-11-05T23:36:54Z"
+   }
+  ],
+  "source": "results/latency/latency_log.csv"
+ },
+ "not_found": [],
+ "parsing": {
+  "codeunit_schema": "v1",
+  "parser": "ast-parser/v0",
+  "resolver": "own-ast-resolver/v0",
+  "resolver_note": "D117: becomes v0.1 at the next cache rebuild, none forced",
+  "unit_granularity": "function, method, class, one residual module unit per file (D6)"
+ },
+ "provisional_in_consumer": [
+  "D102",
+  "D103",
+  "ADR-006",
+  "ADR-014 (Proposed)"
+ ],
+ "record_version": "freeze-record/v1",
+ "sensitivity": {
+  "difference_to_other_consumers": [
+   {
+    "L2_ndcg10_points": 0.59,
+    "L3_recall100_points": 0.28,
+    "other_consumer": "rq1_dev_selection",
+    "other_setting": {
+     "max_tokens": 1024,
+     "rrf_k": 100
+    }
+   },
+   {
+    "L2_ndcg10_points": 0.11,
+    "L3_recall100_points": -0.09,
+    "other_consumer": "rq2_evaluation",
+    "other_setting": {
+     "max_tokens": 512,
+     "rrf_k": 60
+    }
+   }
+  ],
+  "largest_difference_to_other_consumers_points": 0.59,
+  "largest_k60_vs_k100_difference_points": 0.34,
+  "own_setting": {
+   "max_tokens": 512,
+   "rrf_k": 100
+  },
+  "reading": "dev, units_all_nomod, CodeRankEmbed, RRF with BM25 (E-DENSE-FUSION)",
+  "source": {
+   "path": "results/tables/x2_first_dev.csv",
+   "sha256": "f7bb5fa933a4e0e213a6fcf6234465285554c5da295b7ce92811116a3b46b383"
+  },
+  "values": {
+   "t1024_k100": {
+    "L2_ndcg10": 24.04,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 43.0
+   },
+   "t1024_k60": {
+    "L2_ndcg10": 24.03,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.66
+   },
+   "t512_k100": {
+    "L2_ndcg10": 23.45,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.72
+   },
+   "t512_k60": {
+    "L2_ndcg10": 23.56,
+    "L2_queries": 351,
+    "L3_queries": 155,
+    "L3_recall100": 42.63
+   }
+  }
+ },
+ "sources": [
+  {
+   "path": "configs/experiments/rq3_contexts_v1.yaml",
+   "sha256": "e2f011c3a31348c9041e4ebca5ac6bc2a80304118339fbdda4ee34637e8b4d4c"
+  },
+  {
+   "path": "results/rq3_contexts/config_hash_63792.txt",
+   "sha256": "48fa47c51e382a51d6492a506c6cf5313fdb53db74a4b901f26d77920d6a43b8"
+  }
+ ]
+}
