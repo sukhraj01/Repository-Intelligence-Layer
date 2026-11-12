@@ -112,6 +112,7 @@ still complete and defensible.
 - [x] Rulings on that reading applied (2026-11-08, D121, E-LIT-SCAFFOLD addendum): qualified header for a partly read note (check and test), scaffold renamed retrieval-supplied one-shot repair, any-of-k secondary reading in `ril/analysis/rq3_results.py`, report paragraphs on scaffolds and two threats
 - [x] RQ3 prompt pseudonymisation (2026-11-08, D120, E-RQ3-PSEUDONYMISE; Q70 answered): 1,131 of 1,131 prompts pass the screen, restore in the driver, round trips and replay checked, no model call
 - [x] Workstream C catch-up (2026-11-09, D144, E-C-CATCHUP): scaffold table of the evaluation API brought to the five-paper reading; Colab C1 dev BM25 comparison re-run natively on account A (12 of 12 cells equal, query-level rows stored, Q64 answered)
+- [x] RQ3 trained-arm pipeline (2026-11-12, D150, D151, E-RQ3-TRAINED-ARMS; `scripts/rq3_trained_arm.py`, `scripts/ada/rq3_trained_*.sbatch`): plan with cost against Block 4 (eight of 18 retained models fit), encode stage under the sealed order, contexts and prompts through the untrained path (byte equality and determinism tested), analysis plan for the trained arms; CPU only, nothing encoded, no model call; encoding and the graded runs wait for the RQ2 models and the lead
 - [ ] Agent integration (fixed scaffold, model, temperature, seed)
 - [ ] Paired per-instance runs; retrieval-vs-reasoning failure log (gold-patch file in context?)
 
