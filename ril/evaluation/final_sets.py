@@ -28,7 +28,7 @@ import time
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from ril.evaluation import eval_sets, sealed
+from ril.evaluation import eval_sets, score_retention, sealed
 from ril.training import retention
 
 FINAL_SETS_VERSION = "final-sets/v1"
@@ -220,12 +220,20 @@ def evaluate_retained(
     record: Mapping[str, Any],
     commit: str,
     device: str = "cuda",
+    retain_scores: str | None = None,
+    subset_ids: Sequence[str] | None = None,
 ) -> list[Record]:
     """Score one retained model on every part of a final set; returns the index rows written.
 
     Needs torch and a GPU (``ril.training.encoders.load_trained``); refuses a model whose files do
     not match its manifest, and a set that is not a final set. A part whose done marker exists is
     skipped.
+
+    ``retain_scores`` (a directory) keeps the per-instance scores of the executable 377 there, with
+    the checkpoint hash and a SHA-256 (``ril.evaluation.score_retention``, DEV-042). It applies to
+    that set only, needs ``subset_ids`` (the executable instance ids), runs after the metrics are
+    computed and written to the result directory, and changes none of them; the row of the part
+    gains a ``retained_scores`` entry. Without it the row and the results are as before.
     """
     spec = eval_sets.get(set_name)
     if spec.stage != eval_sets.FINAL:
@@ -237,6 +245,9 @@ def evaluate_retained(
     rid = retained_run_id(manifest)
     if rid not in record.get("runs", []):
         raise FinalSetsRefused(f"{rid} is not covered by the dev analysis")
+    retaining = retain_scores is not None and spec.name == score_retention.SET_NAME
+    if retaining and not subset_ids:
+        raise FinalSetsRefused("retaining the executable-377 scores needs the executable ids")
 
     from ril.evaluation.checkpoint_eval import eval_checkpoint
     from ril.training.encoders import load_trained
@@ -293,6 +304,20 @@ def evaluate_retained(
             seconds=time.time() - t0,
         )
         row["gate"] = gate
+        if retaining:
+            assert retain_scores is not None and subset_ids is not None
+            row["retained_scores"] = score_retention.retain_part(
+                score_retention.part_scores_dir(work, f"{rid}__{spec.name}__{part.part}"),
+                subset_ids,
+                scores_root=retain_scores,
+                run_id=rid,
+                part=part.part,
+                model_sha256=str(manifest.get("sha256")),
+                config_hash=str(manifest.get("config_hash")),
+                follows=follows,
+                dev_record_sha256=str(record["record_sha256"]),
+                commit=commit,
+            )
         with open(os.path.join(result_dir, "result.json"), "w", encoding="utf-8") as handle:
             json.dump(out, handle, indent=1, sort_keys=True, default=str)
         with open(done, "w", encoding="utf-8") as handle:

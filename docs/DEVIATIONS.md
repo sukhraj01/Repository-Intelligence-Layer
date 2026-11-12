@@ -369,3 +369,11 @@ engineer sign-off — it is a design decision.
 - Impact: none if F is at least 3,200. Below it, every mined arm trains for fewer updates (a stated departure from D68's 100 for the mined family only) and the primary contrasts are read at that N; the pilots' curve (flat from 100 updates) says the loss in absolute level is small, which is evidence from the pool, not from the mined set.
 - Reversible: yes (N is a configuration value and part of each run's hash).
 - Related: D68, D133, D140, `docs/RQ2_LAUNCH_PLAN.md` sections 9 and 10, `docs/experiments/B.md` E-RQ2-FINAL-CELLS
+
+## DEV-042 — The final-sets job keeps the per-instance scores of the executable 377   (2026-11-12 · status: accepted (D152))
+- Master / plan say: the final-sets scoring (D100, D127, `docs/RQ2_LAUNCH_PLAN.md` section 10.3) writes metric tables and removes its node-local work directory at exit, so the per-instance scores of the executable 377 do not outlive the job.
+- We do: the job copies those scores (the executable 377 only, not the eight repositories) to the retention directory with the checkpoint hash and a SHA-256 per file and for the set, and records the hash in the scoring row. What the job computes, the metrics it writes and the sealed order (no scoring without the id and record of the finished dev analysis) are unchanged.
+- Why: the agent study (RQ3, trained arms) needs exactly these scores. Encoding them again costs 0.68 GPU-hours per model, which exceeds the Block 4 cap for the full set of models (the 15 mined models of the five confirmed cells cost 10.2 against 5.623 left); keeping them costs no GPU time. Reading them for RQ3 reveals nothing the sealed scoring has not already produced. Evidence class: reasoned for the cost, tested for the equality of the metrics (byte-identical with and without retention, three parts).
+- Impact: none on any RQ2 number; a few hundred megabytes more on the account that scores (to be measured). The RQ3 encode stage remains as a fallback for a model whose scores are missing, within the cap.
+- Reversible: yes (`--no-retain-scores`; the scores can be re-encoded at the stated cost).
+- Related: D100, D127, D129, D142, D152, `docs/experiments/B.md` E-RQ3-SCORE-RETENTION

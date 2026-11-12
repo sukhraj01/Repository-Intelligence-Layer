@@ -551,6 +551,18 @@ The final-sets script refuses to start without `--follows-dev-analysis ID` and a
 covering the run (`write_dev_analysis_record`); each score row carries the id and the record's digest; `read_final_sets` returns rows
 only for that id. The job graph puts the final sets after the dev analysis.
 
+**Retained scores of the executable 377 (2026-11-12, D152, DEV-042, `E-RQ3-SCORE-RETENTION`).** The final-sets job encodes the same 377
+instances for the same retained models that the agent study later needs, and used to delete the per-instance unit scores with its
+node-local work directory. It now copies them, for the executable 377 only, to `<RETAIN_DIR>/exec377_scores/<run id>/dense_scores/`
+(`--no-retain-scores` turns it off, `--scores-root` moves it): the byte copies of the score files of the 377, a record with the
+checkpoint hash of the model, the configuration hash, the dev-analysis id, one SHA-256 per file and a digest of the whole set, and one
+file per stored part. The scoring row of each part carries the digest of the part and the hash of the record file. The copy runs after
+the metrics are computed and written and touches none of them (a test compares the result file and the two metric tables of
+all three parts byte for byte with and without retention); the sealed order is unchanged (the guard still demands the dev-analysis
+record before any scoring, and no score is read before it); the eight repositories are not retained. The agent study's context pass
+reads these scores in place of its own encode stage (section 11 and `docs/RQ3_PILOT.md`, "Trained arms"). Space: 377 files of a few
+hundred kilobytes each per model (estimate to be replaced by the first measured size).
+
 ### 10.4 Job graph (per-run jobs) and critical path
 
 CPU stages on C (report, overlap audit, prep, FILTER size) first; the injected jobs on A wait for nothing and chain on A; the mined

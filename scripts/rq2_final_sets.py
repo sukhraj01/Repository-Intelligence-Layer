@@ -4,7 +4,10 @@
         list the (model, set part) pairs that would be scored; scores nothing, needs no id
   run   --retained-root DIR --follows-dev-analysis ID --dev-record PATH --out DIR --home DIR
         --work DIR [--set ...] [--only RUN_ID ...] [--device cuda]
-        score the retained models once; refuses to start without the id of the dev-analysis entry
+        [--no-retain-scores] [--scores-root DIR] [--subset FILE]
+        score the retained models once; keeps the per-instance scores of the executable 377 (the
+        eight repositories are not kept) under <retained-root>/exec377_scores unless told not to;
+        refuses to start without the id of the dev-analysis entry
         it follows, a matching complete record that covers the runs, and verified model folders
 
 Logic in ``ril/evaluation/final_sets.py`` (D100, D127). Every stage prints JSON. A GPU job.
@@ -19,6 +22,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+DEFAULT_SUBSET = (
+    Path(__file__).resolve().parents[1] / "results/rq3_exec/executable_instances_v1.json"
+)
 
 
 def _folders(root: str, only: list[str] | None) -> list[str]:
@@ -48,6 +54,14 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--home", required=True)
     r.add_argument("--work", required=True)
     r.add_argument("--device", default="cuda")
+    r.add_argument(
+        "--retain-scores",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="keep the executable-377 scores with the checkpoint hash and a SHA-256 (default on)",
+    )
+    r.add_argument("--scores-root", help="default: <retained-root>/exec377_scores")
+    r.add_argument("--subset", default=str(DEFAULT_SUBSET))
     a = p.parse_args(argv)
     folders = _folders(a.retained_root, a.only)
     if a.cmd == "plan":
@@ -64,6 +78,13 @@ def main(argv: list[str] | None = None) -> int:
     if not commit:
         sys.stderr.write("refused: RIL_COMMIT is not set\n")
         return 3
+    retain: str | None = None
+    subset_ids: list[str] | None = None
+    if a.retain_scores and "exec377" in a.set:
+        from ril.evaluation import score_retention as sr
+
+        retain = a.scores_root or sr.default_scores_root(a.retained_root)
+        subset_ids = sr.read_subset_ids(a.subset)
     rows = []
     for folder in folders:
         for name in a.set:
@@ -77,6 +98,8 @@ def main(argv: list[str] | None = None) -> int:
                 record=record,
                 commit=commit,
                 device=a.device,
+                retain_scores=retain,
+                subset_ids=subset_ids,
             )
     sys.stdout.write(json.dumps({"scored": len(rows), "rows": rows}, indent=1, default=str) + "\n")
     return 0
