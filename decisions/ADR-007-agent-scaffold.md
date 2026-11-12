@@ -124,3 +124,14 @@ candidate model resolves under 5% there, the scaffold, not only the model, is th
 **Trade-offs.** The longer name costs words; it states the claim's scope in the term itself, which the report's limitation (one-shot repair without candidate selection) needs anyway. The any-of-k share can be read as a capability claim; the label and the absence of a test are the guard.
 
 **Conditions to revisit.** If a version of Agentless before v2 is read and explains the 4.7-point difference, record it in the notes. If the graded model check shows a near-zero rate, the revisit condition of D113 applies as before.
+
+## Addendum (2026-11-12, D152): the form of a trained arm
+
+**Context.** D150 built the trained arm as the retained model's scores alone, beside the untrained encoder's `dense` arm, and left the form open as Q74.
+
+**Decision (provisional, with D150).** A trained arm is RRF of the stored BM25 scores and the model's scores, at the constant and assembly of the untrained `rrf` arm (the frozen RQ3 context configuration); the comparator of every trained arm is the untrained `rrf` arm. Reason: the frozen configuration fuses BM25 and dense, and a trained arm that used its scores alone would change the fusion structure as well as the retriever, so a difference could not be attributed to the training supervision. Evidence class: reasoned (the contrast's definition), with an equality test in code (a model with the untrained scores reproduces the untrained arm's contexts and prompts byte for byte). The cheapest experiment that could flip it: build the dense-only contexts of one model beside the fused ones and compare overlap (CPU, no calls); not run, because the choice follows from what the contrast must hold fixed.
+
+**Trade-offs.** The fused form needs the stored BM25 scores for the 377 (they exist with the instance caches); the dense-only form is not built for trained arms. The earlier statement that the primary pair compares with the arm `dense` is superseded: the pair compares with `rrf`.
+
+**Conditions to revisit.** If the lead wants the dense component's effect alone, a dense-only trained arm is one more `Arm` in the same builder (no new stage), with the untrained `dense` arm as its comparator.
+

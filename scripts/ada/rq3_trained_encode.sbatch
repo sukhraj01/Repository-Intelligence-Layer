@@ -10,7 +10,11 @@
 #SBATCH --mem=16G
 #SBATCH --time=03:00:00
 #SBATCH --output=ril_rq3t/logs/%x_%j.out
-# GPU. One retained RQ2 model, encoded against the six-folder store of the executable 377 (E-RQ3-TRAINED-ARMS):
+# GPU, FALLBACK ONLY (E-RQ3-SCORE-RETENTION, D152): the final-sets job keeps the executable-377 scores of every model
+# it scores (DEV-042), and the context pass reads them at no cost. Run this for a model whose retained scores are
+# missing or do not verify, within the Block 4 cap; `rq3_trained_arm.py plan` lists exactly those models (cost 0 for
+# the others) in the order of Q73.
+# One retained RQ2 model, encoded against the six-folder store of the executable 377 (E-RQ3-TRAINED-ARMS):
 # the unit texts of the three stored parts (36 earlier instances, 337 built, 4 xarray) and the issue texts are
 # encoded at 512 tokens, scored per instance in the layout of the stored untrained scores, and the 377 score
 # files are copied to $HOME/ril_rq3t/scores/<run id>/dense_scores with a model record (checkpoint folder,

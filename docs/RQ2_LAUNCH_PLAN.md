@@ -212,10 +212,13 @@ Cell table of option E (12 cells x 3 seeds = 36 runs, 100 updates of the 3,000-u
 
 - **Plug-in point.** `ril/assembly/rq3_contexts.py`: an `Arm` with a dense key per checkpoint is one more arm of the same builder
   (budget 8,000 primary); contexts for BM25, untrained dense and RRF exist for all 377 executable instances.
-- **Missing.** Encoding the 377-instance unit texts with a *retained model directory*: the existing job (`rq3_units_encode.sbatch`)
-  encodes registered encoder names only. The pass per checkpoint costs **0.377 GPU-hours (measured, untrained encoder, 214,285
-  distinct texts)**: three checkpoints 1.1, nine 3.4, against 5.6 left in Block 4. The same encoding would serve a Verified look
-  restricted to the executable subset (section 6, decision 4).
+- **Since 2026-11-12 (D152, DEV-042, `E-RQ3-SCORE-RETENTION`).** The scores come from the sealed final-sets job, which keeps the
+  executable-377 scores it computes (section 10.3), so the context pass costs no GPU-hours. A model whose retained scores are
+  missing or do not verify is encoded by `scripts/ada/rq3_trained_encode.sbatch` (0.68 GPU-hours per model, planning constant;
+  0.377 measured for the 341 built instances) within the Block 4 cap, in the order of Q73: RAW and FILTER-BM25 at all three
+  seeds (6 models, 4.08), then WEIGHT and CURRICULUM at seed 100, then their other seeds, then any other cell; eight models fit
+  (5.44, total 5.817 against 6.0), the ninth does not. A trained arm is RRF of the stored BM25 scores and the model's scores at
+  the frozen constant (k 100, 512 tokens), like the untrained arm; the comparator of every trained arm is the untrained `rrf` arm.
 
 ### Stage 9. Analysis (CPU)
 
@@ -560,8 +563,9 @@ file per stored part. The scoring row of each part carries the digest of the par
 the metrics are computed and written and touches none of them (a test compares the result file and the two metric tables of
 all three parts byte for byte with and without retention); the sealed order is unchanged (the guard still demands the dev-analysis
 record before any scoring, and no score is read before it); the eight repositories are not retained. The agent study's context pass
-reads these scores in place of its own encode stage (section 11 and `docs/RQ3_PILOT.md`, "Trained arms"). Space: 377 files of a few
-hundred kilobytes each per model (estimate to be replaced by the first measured size).
+reads these scores in place of its own encode stage (section 11 and `docs/RQ3_PILOT.md`, "Trained arms"). Space (upper bound, not measured): a score file holds at most
+36,000 float32 values per level (the largest snapshot has 35,860 units) and up to two levels, so at most 377 x 36,000 x 2 x 4 bytes = about 108 MB
+per model before compression, under 2 GB for 18 models; the first job's real size replaces this.
 
 ### 10.4 Job graph (per-run jobs) and critical path
 

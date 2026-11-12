@@ -3,9 +3,11 @@
 Implements ``docs/RQ3_PILOT.md`` ("Trained arms", D113) on top of ``ril.assembly.rq3_contexts``
 (E-RQ3-CONTEXTS, D108): the same instance caches, unit records, ``build_instance``, assembly policy
 (ADR-014, D102, D103), budgets and byte format. A trained arm is an :class:`Arm` that ranks the
-units by the unit scores of one retained model (``dense_L2`` of its score file) alone, which is the
-shape of the untrained encoder's ``dense`` arm, so the two are paired like for like. Only the
-scores differ.
+units by the reciprocal-rank fusion of the stored BM25 scores and the unit scores of one retained
+model (``dense_L2`` of its score file), at the same constant as the untrained ``rrf`` arm
+(``rrf_k`` of the context spec: the frozen RQ3 configuration, ``configs/frozen/rq3_contexts.json``),
+so the two are paired like for like: only the dense component differs (D152, Q74). Using the
+model's scores alone would change the fusion structure as well as the retriever.
 
 A *target* is one output directory with the arms built into it: the untrained arms (reading the
 stored scores of the instance's group, which reproduces the stored files byte for byte) or one
@@ -31,12 +33,12 @@ from ril.assembly.rq3_contexts import (
     Arm,
     ContextSpec,
     InputGroup,
-    _dense_only,
     build_instance,
     decode_record,
     encode_record,
     locate,
     read_dense,
+    rrf_arm_score,
     sha256_file,
     vector_checks,
     write_atomic,
@@ -65,14 +67,19 @@ class Target:
     scores_dir: str | None = None
 
 
-def trained_arm(name: str) -> Arm:
-    """The arm of a retained model: units ranked by that model's dense scores alone."""
-    return Arm(name, DENSE_KEY, _dense_only, ("dense",))
+def trained_arm(name: str, rrf_k: int) -> Arm:
+    """The arm of a retained model: RRF of the stored BM25 scores and that model's dense scores.
+
+    Same score function, constant and signals as the untrained ``rrf`` arm
+    (``ril.assembly.rq3_contexts.default_arms``); only the dense component is the model's. ``rrf_k``
+    has no default so that a build cannot silently use another constant than the spec's.
+    """
+    return Arm(name, DENSE_KEY, rrf_arm_score(rrf_k), ("bm25", "dense"))
 
 
-def trained_target(run_id: str, arm: str, scores_dir: str) -> Target:
+def trained_target(run_id: str, arm: str, scores_dir: str, rrf_k: int) -> Target:
     """A target for one retained model; its directory is named by the run id."""
-    return Target(run_id, (trained_arm(arm),), scores_dir)
+    return Target(run_id, (trained_arm(arm, rrf_k),), scores_dir)
 
 
 def model_scores(scores_dir: str, instance: str) -> Mapping[str, Arr] | None:

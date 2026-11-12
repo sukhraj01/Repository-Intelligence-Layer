@@ -364,21 +364,34 @@ adapter, the format and the log work end to end. The smoke calls used 3 of the d
 directory that is not the pilot's, so a pilot run the same day may exceed the day's count by up to 3
 (the margin of 10% absorbs it).
 
-## Trained arms (D150, D151, `E-RQ3-TRAINED-ARMS`, 2026-11-12)
+## Trained arms (D150, D151, D152, `E-RQ3-TRAINED-ARMS`, `E-RQ3-SCORE-RETENTION`, 2026-11-12)
 
 The retained mined models of RQ2 (D142) enter RQ3 as arms of the same driver: every (cell, seed) is its own arm, named
-`tr_<run id>`, ranked by that model's unit scores alone (the shape of the untrained `dense` arm, so the two are paired like for
-like). Everything else is the untrained path: the instance caches and unit records of the 377, the assembly of ADR-014
-(budgets 8,000 primary and 16,000 secondary, cap 1,000, 200 candidates), the prompt builder, pseudonymisation and screen of D120,
-the driver and the analysis of D113 and D121; the held-out slice of 50 stays out of the confirmatory analysis (D111).
-`provisional: ADR-007` for the dense-only form of the arm and for the primary seed (the smallest seed with a RAW model).
+`tr_<run id>`. **A trained arm is RRF of the stored BM25 scores and that model's unit scores** at the constant of the frozen RQ3
+context configuration (k 100, 512 tokens, `configs/frozen/rq3_contexts.json`), assembled by D102 and D103: it replaces only the
+dense component of the untrained `rrf` arm. The model's scores alone would change the fusion structure as well as the retriever
+and confound the contrast (D152, Q74; D150's first form, the scores alone, is superseded). The comparator of every trained arm is
+therefore the untrained `rrf` arm, and the primary contrast of D113 reads: RAW at the primary seed (the smallest seed with a RAW
+model) in this fused form against the untrained encoder in the same fused form. Equality test: a "trained" model whose dense
+scores equal the untrained encoder's reproduces the untrained arm's contexts and prompts byte for byte (tested).
+Everything else is the untrained path: the instance caches and unit records of the 377, the assembly of ADR-014 (budgets 8,000
+primary and 16,000 secondary, cap 1,000, 200 candidates), the prompt builder, pseudonymisation and screen of D120, the driver and
+the analysis of D113 and D121; the held-out slice of 50 stays out of the confirmatory analysis (D111). `provisional: ADR-007`.
 
-The apparatus (`scripts/rq3_trained_arm.py`, `scripts/ada/rq3_trained_*.sbatch`): `plan` prints the jobs and their cost
-against Block 4; `encode` (GPU, one model per job, refuses to start without the id of the finished dev analysis, D100 and D127)
-writes the per-instance scores of the 377 with a model record; `contexts` (CPU, one pass for all models) builds the contexts;
-`prepare` builds the pseudonymised prompts through the driver's own `prepare`; `analysis-plan` names the arms, the primary pair
-(RAW at the primary seed against the untrained encoder) and the estimates. The cost is 0.68 GPU-hours per model (planning
-constant); Block 4 (cap 6.0, 0.377 spent) covers eight of the 18 retained models. Nothing was encoded or called.
+**Where the scores come from (D152, DEV-042).** The sealed final-sets job encodes the same 377 instances for the same retained
+models and now keeps the per-instance scores (checkpoint hash and SHA-256 per file and for the set;
+`ril/evaluation/score_retention.py`), at no GPU cost; the sealed order is unchanged and the metrics it writes are byte-identical
+with and without the copy. The context pass reads them when they verify (the record names the model's checkpoint hash, is complete
+for the 377 and every file hashes to the record) and records the source of each model next to its contexts. The encode stage is the
+fallback for a model whose scores are missing or damaged, within the Block 4 cap, in the order of Q73 (RAW and FILTER-BM25 at all
+three seeds, then WEIGHT and CURRICULUM at seed 100, then their other seeds, then any other cell).
+
+The apparatus (`scripts/rq3_trained_arm.py`, `scripts/ada/rq3_trained_*.sbatch`): `plan` prints the jobs, 0 GPU-hours for a model
+with verified retained scores and 0.68 (planning constant) for the others against Block 4; `encode` (GPU, one model per job,
+fallback only, refuses to start without the id of the finished dev analysis, D100 and D127); `contexts` (CPU, one pass for all
+models) builds the contexts; `prepare` builds the pseudonymised prompts through the driver's own `prepare`; `analysis-plan` names
+the arms, the primary pair and the estimates. Block 4 (cap 6.0, 0.377 spent) covers eight models in the fallback; with retention
+it need not be spent. Nothing was encoded or called.
 
 ## Open points (design questions, not decided here)
 
