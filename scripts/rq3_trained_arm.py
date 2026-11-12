@@ -1,21 +1,29 @@
 """Trained arms of RQ3: plan, encode, contexts, check, analysis plan. Thin wrapper.
 
 Usage (from the work directory; every stage prints JSON):
-  rq3_trained_arm.py plan --retained-root DIR [--only RUN_ID ...] [--order protocol|primary_first]
-                     [--cap 6.0] [--spent 0.377] [--cost-per-model 0.68]
-      jobs and cost against Block 4; submits and encodes nothing; needs no id
+  rq3_trained_arm.py plan --retained-root DIR [--only RUN_ID ...] [--retained-scores DIR]
+                     [--order pair_seed100|protocol|primary_first] [--cap 6.0] [--spent 0.377]
+                     [--cost-per-model 0.68]
+      jobs and cost against Block 4; a model whose retained scores verify costs nothing (the
+      scores kept by the final-sets job, default <retained-root>/exec377_scores); the others are
+      listed in the order of Q73; submits and encodes nothing; needs no id
   rq3_trained_arm.py encode --retained-root DIR --only RUN_ID --follows-dev-analysis ID
                      --dev-record PATH --out DIR --home DIR --work DIR [--device cuda]
       one retained model: encode the executable 377, write per-instance scores; refuses without
       the id of the finished dev analysis (D100, D127); GPU
       (--dry-run-dev --ids ID ...: the same path on the dev set, never a final set, no id needed)
   rq3_trained_arm.py contexts CONFIG SCORES_ROOT REPO_CACHE WORK OUT_ROOT [--models RUN_ID ...]
+                     [--retained-scores DIR] [--retained-root DIR]
                      [--untrained] [--shard I K] [--only ID ...] [--members ID ...]
-      contexts of the models whose scores exist (one parse per instance for all of them); CPU
+      contexts of the models whose scores exist (one parse per instance for all of them): the
+      retained scores of the final-sets job when they verify, else the encode stage's output under
+      SCORES_ROOT; each model's trained arm is RRF of the stored BM25 scores and its scores; CPU
   rq3_trained_arm.py verify-untrained CONFIG REPO_CACHE WORK STORED_CTX OUT [--n 30]
       rebuild stored instances with the untrained arms through the new path and compare bytes; CPU
   rq3_trained_arm.py analysis-plan SCORES_ROOT OUT.json --runs 0 1 2 [--models RUN_ID ...]
-      arm list, primary pair and estimates for ``rq3_driver.py analyse --plan``
+                     [--retained-scores DIR --retained-root DIR]
+      arm list, primary pair (RAW against the untrained rrf arm) and estimates for
+      ``rq3_driver.py analyse --plan``
 
 Implements ``docs/RQ3_PILOT.md`` ("Trained arms"). Logic lives in ``ril/evaluation/rq3_trained.py``,
 ``ril/assembly/rq3_trained_contexts.py`` and ``ril/agent/providers/trained_arms.py``.
@@ -44,12 +52,32 @@ def _print(obj: Any) -> None:
     sys.stdout.write(json.dumps(obj, indent=1, sort_keys=True, default=str) + "\n")
 
 
+def _retained_scores_root(retained_root: str, given: str | None) -> str:
+    from ril.evaluation import score_retention as sr
+
+    return given or sr.default_scores_root(retained_root)
+
+
 def cmd_plan(a: argparse.Namespace) -> int:
     from ril.evaluation import rq3_trained as rt
+    from ril.evaluation import score_retention as sr
 
     models = rt.models_from_root(a.retained_root, a.only)
+    root = _retained_scores_root(a.retained_root, a.retained_scores)
+    kept: dict[str, str] = {}
+    if os.path.isdir(root):  # the subset is read only to verify scores that exist
+        kept = sr.usable_models(
+            root, [(m.run_id, m.model_sha256) for m in models], rt.read_subset_ids(a.subset)
+        )
     _print(
-        rt.plan_jobs(models, order=a.order, cap=a.cap, spent=a.spent, per_model=a.cost_per_model)
+        rt.plan_jobs(
+            models,
+            order=a.order,
+            cap=a.cap,
+            spent=a.spent,
+            per_model=a.cost_per_model,
+            retained=kept,
+        )
     )
     return 0
 
@@ -117,37 +145,82 @@ def _members(cfg: dict[str, Any], subset: str | None, ids: list[str] | None = No
     return sorted(ids) if ids else read_subset_ids(subset or cfg["subset"])
 
 
-def _model_targets(scores_root: str, run_ids: list[str] | None) -> list[Any]:
+def _resolve_models(a: argparse.Namespace, ids: list[str]) -> tuple[list[dict[str, Any]], Any]:
+    """The models to build and where each one's scores come from.
+
+    Candidates are the models named in ``--models`` or, by default, every model with finished
+    encode output or a retained-scores record. Retained scores are used when they verify (and
+    match the manifest when ``--retained-root`` is given); the encode output is the fallback. A
+    model with neither is refused, not skipped.
+    """
+    from ril.evaluation import rq3_trained as rt
+
+    retained_scores = getattr(a, "retained_scores", None)
+    retained_root = getattr(a, "retained_root", None)
+    if retained_root and not retained_scores:
+        retained_scores = _retained_scores_root(retained_root, None)
+    manifest_sha: dict[str, str] = {}
+    folders: dict[str, Any] = {}
+    if retained_root:
+        for m in rt.models_from_root(retained_root):
+            manifest_sha[m.run_id] = m.model_sha256
+            folders[m.run_id] = m
+    run_ids = a.models or sorted(
+        set(rt.encoded_run_ids(a.scores_root)) | set(rt.retained_run_ids(retained_scores))
+    )
+    out: list[dict[str, Any]] = []
+    for rid in run_ids:
+        src = rt.resolve_scores(
+            rid,
+            ids,
+            encode_root=a.scores_root,
+            retained_scores=retained_scores,
+            model_sha256=manifest_sha.get(rid),
+        )
+        if src is None:
+            raise rt.TrainedArmsRefused(
+                f"no usable scores for {rid!r}: no verified retained scores under "
+                f"{retained_scores!r} and no finished encode output under {a.scores_root!r}"
+            )
+        out.append({**src, "retained_model": folders.get(rid)})
+    return out, retained_scores
+
+
+def _model_targets(
+    a: argparse.Namespace, ids: list[str], rrf_k: int
+) -> tuple[list[Any], list[dict[str, Any]]]:
     from ril.assembly.rq3_trained_contexts import trained_target
     from ril.evaluation import rq3_trained as rt
 
-    if run_ids is None:
-        run_ids = sorted(
-            n
-            for n in os.listdir(scores_root)
-            if os.path.isfile(os.path.join(scores_root, n, rt.DONE_NAME))
-        )
-    out = []
-    for rid in run_ids:
-        if not os.path.isfile(os.path.join(scores_root, rid, rt.DONE_NAME)):
-            raise rt.TrainedArmsRefused(f"no finished scores for {rid!r} under {scores_root}")
-        out.append(trained_target(rid, rt.arm_name(rid), rt.scores_dir(scores_root, rid)))
-    return out
+    sources, _ = _resolve_models(a, ids)
+    targets = [
+        trained_target(str(s["run_id"]), rt.arm_name(str(s["run_id"])), str(s["dir"]), rrf_k)
+        for s in sources
+    ]
+    return targets, sources
 
 
 def cmd_contexts(a: argparse.Namespace) -> int:
     from ril.assembly import rq3_trained_contexts as tc
+    from ril.evaluation import rq3_trained as rt
 
     cfg = _read_cfg(a.config)
     spec = tc.spec_from_config(cfg)
-    targets = _model_targets(a.scores_root, a.models)
+    members = _members(cfg, a.subset, a.members)
+    targets, sources = _model_targets(a, members, spec.rrf_k)
     if a.untrained:
         targets = [tc.untrained_target(cfg, spec), *targets]
     if not targets:
         sys.stderr.write("refused: no model with finished scores and no --untrained\n")
         return 3
+    for src in sources:  # which scores each model's contexts were built from (traceability)
+        rec = {k: v for k, v in src.items() if k != "retained_model"}
+        rec["rrf_k"] = spec.rrf_k
+        rt.write_json_atomic(
+            os.path.join(a.out_root, str(src["run_id"]), "scores_source.json"), rec
+        )
     res = tc.run_build_targets(
-        _members(cfg, a.subset, a.members),
+        members,
         tc.groups_from_config(cfg),
         os.path.expanduser(a.repo_cache),
         a.work,
@@ -198,15 +271,20 @@ def cmd_analysis_plan(a: argparse.Namespace) -> int:
     from ril.agent.providers import trained_arms as ta
     from ril.evaluation import rq3_trained as rt
 
-    run_ids = a.models or sorted(
-        n
-        for n in os.listdir(a.scores_root)
-        if os.path.isfile(os.path.join(a.scores_root, n, rt.DONE_NAME))
-    )
-    records = [
-        json.loads(Path(a.scores_root, rid, rt.MODEL_RECORD).read_text(encoding="utf-8"))
-        for rid in run_ids
-    ]
+    ids = rt.read_subset_ids(a.subset)
+    sources, _ = _resolve_models(a, ids)
+    records: list[dict[str, Any]] = []
+    for src in sources:
+        rid = str(src["run_id"])
+        model_json = Path(a.scores_root, rid, rt.MODEL_RECORD)
+        if src["source"] == "encoded" and model_json.is_file():
+            records.append(json.loads(model_json.read_text(encoding="utf-8")))
+        elif src["retained_model"] is not None:
+            records.append(rt.model_record(src["retained_model"], src))
+        else:
+            raise rt.TrainedArmsRefused(
+                f"{rid}: the retained scores carry no cell or seed; give --retained-root"
+            )
     plan = ta.build_plan(ta.arms_from_records(records), a.runs, seed=a.seed)
     Path(a.out).write_text(json.dumps(plan, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     _print({"arms": plan["arms"], "primary": plan["primary"], "estimates": len(plan["estimates"])})
@@ -220,7 +298,11 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("plan")
     p.add_argument("--retained-root", required=True)
     p.add_argument("--only", nargs="*")
-    p.add_argument("--order", default="protocol", choices=["protocol", "primary_first"])
+    p.add_argument(
+        "--order", default="pair_seed100", choices=["pair_seed100", "protocol", "primary_first"]
+    )
+    p.add_argument("--retained-scores", help="default: <retained-root>/exec377_scores")
+    p.add_argument("--subset", default="results/rq3_exec/executable_instances_v1.json")
     p.add_argument("--cap", type=float, default=6.0)
     p.add_argument("--spent", type=float, default=0.377)
     p.add_argument("--cost-per-model", type=float, default=0.68)
@@ -248,6 +330,8 @@ def main(argv: list[str] | None = None) -> int:
     for name in ("config", "scores_root", "repo_cache", "work", "out_root"):
         p.add_argument(name)
     p.add_argument("--models", nargs="*")
+    p.add_argument("--retained-scores", help="scores kept by the final-sets job (verified first)")
+    p.add_argument("--retained-root", help="retained models: checks the checkpoint hash of scores")
     p.add_argument("--untrained", action="store_true")
     p.add_argument("--shard", nargs=2, type=int, default=[0, 1])
     p.add_argument("--only", nargs="*")
@@ -267,6 +351,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("out")
     p.add_argument("--runs", nargs="+", type=int, required=True)
     p.add_argument("--models", nargs="*")
+    p.add_argument("--retained-scores")
+    p.add_argument("--retained-root")
+    p.add_argument("--subset", default="results/rq3_exec/executable_instances_v1.json")
     p.set_defaults(fn=cmd_analysis_plan)
 
     for sp in sub.choices.values():

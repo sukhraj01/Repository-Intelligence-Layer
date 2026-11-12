@@ -320,8 +320,8 @@ def test_a_pass_parses_each_instance_once_for_all_targets_and_resumes(
 ) -> None:
     groups, calls = _world(tmp_path, monkeypatch)
     targets = [
-        tc.trained_target("m1", "tr_m1", _model_scores(tmp_path, "s1", False)),
-        tc.trained_target("m2", "tr_m2", _model_scores(tmp_path, "s2", False)),
+        tc.trained_target("m1", "tr_m1", _model_scores(tmp_path, "s1", False), SPEC.rrf_k),
+        tc.trained_target("m2", "tr_m2", _model_scores(tmp_path, "s2", False), SPEC.rrf_k),
     ]
     kw: dict[str, Any] = {"load_units": _loader(calls)}
     res = tc.run_build_targets(
@@ -341,7 +341,7 @@ def test_trained_targets_do_not_need_the_stored_untrained_scores(
     groups, calls = _world(tmp_path, monkeypatch)
     for f in (tmp_path / "dense").iterdir():
         f.unlink()  # the account that builds trained contexts may hold only the caches
-    t = tc.trained_target("m1", "tr_m1", _model_scores(tmp_path, "s1", False))
+    t = tc.trained_target("m1", "tr_m1", _model_scores(tmp_path, "s1", False), SPEC.rrf_k)
     res = tc.run_build_targets(
         list(fx.INSTANCES), groups, "rc", "wk", str(tmp_path / "ctx"), [t], SPEC,
         load_units=_loader(calls),
@@ -353,7 +353,7 @@ def test_same_model_hash_gives_the_same_contexts(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     groups, calls = _world(tmp_path, monkeypatch)
-    t = tc.trained_target("m1", "tr_m1", _model_scores(tmp_path, "s1", False))
+    t = tc.trained_target("m1", "tr_m1", _model_scores(tmp_path, "s1", False), SPEC.rrf_k)
     for out in ("a", "b"):
         tc.run_build_targets(
             list(fx.INSTANCES), groups, "rc", "wk", str(tmp_path / out), [t], SPEC,
@@ -373,7 +373,7 @@ def test_a_model_without_a_score_file_is_listed_not_skipped_silently(
     os.remove(os.path.join(scores, f"{fx.INSTANCES[1]}.npz"))
     res = tc.run_build_targets(
         list(fx.INSTANCES), groups, "rc", "wk", str(tmp_path / "ctx"),
-        [tc.trained_target("m1", "tr_m1", scores)], SPEC, load_units=_loader(calls),
+        [tc.trained_target("m1", "tr_m1", scores, SPEC.rrf_k)], SPEC, load_units=_loader(calls),
     )  # fmt: skip
     assert res["counts"]["m1"] == {"built": 2, "reused": 0, "failed": 1}
     assert res["failures"] == [{"instance": fx.INSTANCES[1], "target": "m1", "reason": "no_scores"}]
@@ -394,7 +394,7 @@ def test_dry_run_encode_retrieve_assemble_pseudonymise_restore(
     targets = [
         tc.untrained_target(cfg, SPEC),
         tc.trained_target(
-            fx.RUN_ID, row_["arm"], rt.scores_dir(str(tmp_path / "scores"), fx.RUN_ID)
+            fx.RUN_ID, row_["arm"], rt.scores_dir(str(tmp_path / "scores"), fx.RUN_ID), SPEC.rrf_k
         ),
     ]
     res = tc.run_build_targets(
@@ -410,7 +410,7 @@ def test_dry_run_encode_retrieve_assemble_pseudonymise_restore(
     out_t, out_u = str(tmp_path / "prep_t"), str(tmp_path / "prep_u")
     got = ta.prepare_trained(str(tmp_path / "ctx" / fx.RUN_ID), row_["arm"], issues, 100000, out_t)
     assert got["written"] == 3 and not got["rejected"] and not got["skipped"]
-    base = ta.prepare_trained(str(tmp_path / "ctx" / "untrained"), "dense", issues, 100000, out_u)
+    base = ta.prepare_trained(str(tmp_path / "ctx" / "untrained"), "rrf", issues, 100000, out_u)
     assert base["written"] == 3
     items = load_items(out_t) + load_items(out_u)
     # the address in a unit text is replaced before the screen and restored for the reply
@@ -423,12 +423,12 @@ def test_dry_run_encode_retrieve_assemble_pseudonymise_restore(
     assert check_prefix_identity(items)["identical"] is True  # same text before the excerpts
 
 
-def test_a_model_with_the_untrained_scores_gives_the_untrained_arms_prompts(
+def test_a_model_with_the_untrained_scores_gives_the_untrained_rrf_arms_contexts_and_prompts(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     groups, calls = _world(tmp_path, monkeypatch)
     cfg = {"dense_key": "dense_L2", "arms": ["bm25", "dense", "rrf"]}
-    same = tc.trained_target("same", "tr_same", _model_scores(tmp_path, "s_same", True))
+    same = tc.trained_target("same", "tr_same", _model_scores(tmp_path, "s_same", True), SPEC.rrf_k)
     tc.run_build_targets(
         list(fx.INSTANCES), groups, "rc", "wk", str(tmp_path / "ctx"),
         [tc.untrained_target(cfg, SPEC), same], SPEC, load_units=_loader(calls),
@@ -438,7 +438,7 @@ def test_a_model_with_the_untrained_scores_gives_the_untrained_arms_prompts(
         str(tmp_path / "ctx" / "same"), "tr_same", issues, 100000, str(tmp_path / "p1")
     )
     ta.prepare_trained(
-        str(tmp_path / "ctx" / "untrained"), "dense", issues, 100000, str(tmp_path / "p2")
+        str(tmp_path / "ctx" / "untrained"), "rrf", issues, 100000, str(tmp_path / "p2")
     )
     a = {r["instance_id"]: r for r in load_items(tmp_path / "p1")}
     b = {r["instance_id"]: r for r in load_items(tmp_path / "p2")}
@@ -446,7 +446,7 @@ def test_a_model_with_the_untrained_scores_gives_the_untrained_arms_prompts(
     for iid in a:
         assert (
             a[iid]["prompt"] == b[iid]["prompt"]
-        )  # only the encoder differs, and here it does not
+        )  # only the dense component differs, and here it does not
         assert a[iid]["context_sha256"] == b[iid]["context_sha256"]
 
 
@@ -464,10 +464,10 @@ def _arms(seeds: tuple[int, ...] = (100, 101)) -> list[ta.TrainedArm]:
 
 def test_plan_names_one_primary_pair_and_estimates_for_the_rest() -> None:
     plan = ta.build_plan(_arms(), [0, 1, 2])
-    assert plan["arms"][0] == "dense" and len(plan["arms"]) == 7
-    assert plan["primary"] == ["tr_mined_raw_u100_s100", "dense"] and plan["primary_seed"] == 100
+    assert plan["arms"][0] == "rrf" and len(plan["arms"]) == 7
+    assert plan["primary"] == ["tr_mined_raw_u100_s100", "rrf"] and plan["primary_seed"] == 100
     est = {tuple(p) for p in plan["estimates"]}
-    assert ("tr_mined_raw_u100_s101", "dense") in est
+    assert ("tr_mined_raw_u100_s101", "rrf") in est
     assert ("tr_mined_filter_bm25_u100_s100", "tr_mined_raw_u100_s100") in est
     assert ("tr_mined_filter_bm25_u100_s101", "tr_mined_raw_u100_s101") in est
     assert ("tr_mined_weight_u100_s101", "tr_mined_raw_u100_s101") in est
@@ -489,7 +489,7 @@ def test_the_analysis_runs_the_trained_plan_on_synthetic_rows() -> None:
     raw, filt, weight = (a.arm for a in arms)
     rows = []
     for i in range(40):
-        for arm, p in (("dense", 0.2), (raw, 0.5), (filt, 0.7), (weight, 0.5)):
+        for arm, p in (("rrf", 0.2), (raw, 0.5), (filt, 0.7), (weight, 0.5)):
             for run in (0, 1):
                 ok = ((i * 7 + run * 3 + len(arm)) % 10) / 10 < p
                 rows.append(row(f"i{i}", arm, run, "resolved" if ok else "executed_unresolved"))
@@ -500,7 +500,7 @@ def test_the_analysis_runs_the_trained_plan_on_synthetic_rows() -> None:
     contrasts = tables["contrasts"]
     exact = [c for c in contrasts if c["reading"] == "exact"]
     primary = [c for c in exact if c["role"] == "primary"]
-    assert len(primary) == 1 and (primary[0]["first"], primary[0]["second"]) == (raw, "dense")
+    assert len(primary) == 1 and (primary[0]["first"], primary[0]["second"]) == (raw, "rrf")
     assert primary[0]["difference"] > 0 if "difference" in primary[0] else True
     assert {c["role"] for c in exact} == {"primary", "estimate"} and len(exact) == 1 + len(
         plan.estimates
@@ -512,5 +512,5 @@ def test_the_driver_cli_reads_a_plan_file(tmp_path: Path) -> None:
     path = tmp_path / "plan.json"
     path.write_text(json.dumps(ta.build_plan(_arms((100,)), [0])), encoding="utf-8")
     plan = ta.read_plan(str(path))
-    assert plan.primary == ("tr_mined_raw_u100_s100", "dense") and plan.runs == (0,)
+    assert plan.primary == ("tr_mined_raw_u100_s100", "rrf") and plan.runs == (0,)
     assert isinstance(retention.MODEL_SUBDIR, str)

@@ -5,14 +5,16 @@ keyed by an arm name; a trained arm is one more name (``tr_<run id>``, see
 ``ril.evaluation.rq3_trained``), with its own contexts directory and its own prepared directory
 (the driver's ``run`` takes one prepared directory per arm), so nothing in the driver changes.
 
-Two things are fixed here, both ``provisional`` until the lead rules on them (recorded as open
-lines of ``E-RQ3-TRAINED-ARMS``):
+Two things are fixed here (``provisional: ADR-007``; the form of the arm was settled by the
+lead's answer to Q74, D152, ``E-RQ3-SCORE-RETENTION``):
 
 * **one arm per retained model**, so every (cell, seed) is its own arm; seeds are never averaged
   into one arm silently;
 * **the contrasts of D113 carried to the trained arms**: the primary contrast stays one named
-  pair, RAW (at the primary seed) against the untrained encoder (the arm ``dense`` of
-  E-RQ3-CONTEXTS), with the paired bootstrap and sign-flip of ``ril.analysis.rq3_results``; every
+  pair, RAW (at the primary seed) against the untrained encoder in the same fusion (the arm
+  ``rrf`` of E-RQ3-CONTEXTS: RRF of BM25 and the untrained dense scores, the frozen RQ3
+  configuration; a trained arm replaces only the dense component, D152), with the paired
+  bootstrap and sign-flip of ``ril.analysis.rq3_results``; every
   other pair (the other seeds of RAW against the untrained encoder, FILTER-BM25 against the
   untrained encoder and against RAW of the same seed, the remaining cells against RAW of the same
   seed) is an estimate with an interval and no test. The primary seed is the smallest seed for
@@ -32,8 +34,10 @@ from typing import Any
 
 from ril.analysis.rq3_results import Plan
 
-UNTRAINED_ARM = "dense"
-"""The untrained encoder alone (arm of E-RQ3-CONTEXTS), the baseline of the primary contrast."""
+UNTRAINED_ARM = "rrf"
+"""The untrained encoder fused with BM25 (arm of E-RQ3-CONTEXTS), the baseline of the primary
+contrast. A trained arm is built the same way with the model's scores (D152, Q74); the dense-only
+arm ``dense`` is not the comparator because it has another fusion structure."""
 RAW_CELL = "mined_raw"
 FILTER_CELL = "mined_filter_bm25"
 PLAN_VERSION = "rq3-trained-plan/v1"
@@ -113,7 +117,8 @@ def build_plan(
             unique.append(pair)
     return {
         "version": PLAN_VERSION,
-        "provisional": "D113, D121 for trained arms; primary seed = smallest RAW seed",
+        "provisional": "D113, D121 for trained arms; primary seed = smallest RAW seed; D152",
+        "arm_form": "RRF of BM25 and the model dense scores, as the untrained arm rrf",
         "arms": [untrained, *[a.arm for a in arms]],
         "primary": list(primary),
         "estimates": [list(p) for p in unique],
