@@ -18,6 +18,8 @@
 # node-local space first. Memory: encoding and scoring only (no training cache), 16 GB as the evaluation jobs of the
 # earlier waves. Time: 0.178 GPU-hours measured for the eight, 0.377 measured for the 341 built instances, up to 0.292
 # projected for the 36 earlier ones (the whole six-folder store is encoded unless restricted): about 0.85 per model.
+# The per-instance scores of the executable 377 are kept in $RETAIN_DIR/exec377_scores (checkpoint hash and SHA-256 in a record; DEV-042;
+# pass --no-retain-scores to the script to turn it off; the eight repositories are not kept).
 # Not submitted by scripts/rq2_submit.py: the engineer submits it after the dev analysis, one job per seed (its retained models; D141):
 #   sbatch --export=ALL,ONLY=<run id:run id:...>,FOLLOWS=<dev-analysis id>,RIL_COMMIT=<hash>,RETAIN_DIR=<abs dir> scripts/ada/rq2f_final_sets.sbatch
 set -euo pipefail
