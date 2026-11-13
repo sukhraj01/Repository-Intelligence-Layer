@@ -1,0 +1,106 @@
+{
+ "budget_defaulted": false,
+ "budget_usd": 45.0,
+ "candidates": [
+  {
+   "answer_tokens": 54199,
+   "apply_failed": 10,
+   "arm_run_usd": 4.348287405,
+   "below_floor": false,
+   "cache_hit_fraction": 0.7570172316048992,
+   "cached_price_per_m": 0.075,
+   "calls": 67,
+   "calls_answered": 67,
+   "complete": true,
+   "config_sha256": "0fe87a17bf1b41873ebedb03c09adcab2a030ce3d7eb3e8159a189da280be46a",
+   "exec_error_rows": 0,
+   "executed_unresolved": 22,
+   "expected_n": 50,
+   "in_tie_band": true,
+   "input_tokens": 594991,
+   "model": "gemini-3.8-flash",
+   "n": 50,
+   "output_tokens": 58302,
+   "over_budget": false,
+   "passes": true,
+   "price_as_of": "2026-11-12",
+   "prompt_tokens": 594991,
+   "provider": "gemini",
+   "rate": 0.34,
+   "rate_hi": 0.47846431458517147,
+   "rate_lo": 0.2243676963506106,
+   "resolved": 17,
+   "runs_per_arm": 3,
+   "selected": true,
+   "slice_cost_usd": 0.66487575,
+   "stopped": "complete",
+   "study_uncached_usd": 52.179448859999994,
+   "study_usd": 36.27248677199999,
+   "thinking_config": {
+    "thinkingLevel": "low"
+   },
+   "thinking_tokens": 4103,
+   "thought_tokens": 4103,
+   "truncated_calls": 8,
+   "truncation_rate": 0.11940298507462686,
+   "unusable": 1
+  }
+ ],
+ "chosen": "gemini-3.8-flash",
+ "confirmatory_n": 327,
+ "evidence_class": "exploratory, 50 held-out instances (D111, D155)",
+ "floor": 0.15,
+ "limitations": [
+  "single-provider limitation: only one provider was run (the second provider's billing was unavailable); the model is a fixed instrument and the claim concerns the retrievers"
+ ],
+ "n": 50,
+ "not_run": [
+  "gemini-3.5-flash-lite: not run, not available at the time",
+  "second provider's models: not run, not available at the time"
+ ],
+ "note": "the highest resolved count among the candidates that pass",
+ "power_context": {
+  "mdd_points": [
+   {
+    "kappa": 1.0,
+    "mdd_points": 7.51,
+    "runs": 1
+   },
+   {
+    "kappa": 1.0,
+    "mdd_points": 6.99,
+    "runs": 2
+   },
+   {
+    "kappa": 1.0,
+    "mdd_points": 6.14,
+    "runs": 3
+   },
+   {
+    "kappa": 4.0,
+    "mdd_points": 9.65,
+    "runs": 1
+   },
+   {
+    "kappa": 4.0,
+    "mdd_points": 8.76,
+    "runs": 2
+   },
+   {
+    "kappa": 4.0,
+    "mdd_points": 7.67,
+    "runs": 3
+   }
+  ],
+  "nearest_grid_rate": 0.3,
+  "outside_grid": true,
+  "rate": 0.34
+ },
+ "rate": 0.34,
+ "rule": "D155",
+ "single_candidate": true,
+ "status": "selected",
+ "study_arm_runs": 12,
+ "study_usd": 36.27248677199999,
+ "tie_instances": 2
+}

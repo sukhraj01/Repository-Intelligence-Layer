@@ -275,3 +275,5 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-13,A,74023,RQ2POSTLAUNCH,"RQ2 final, injected seed 101 RESUBMITTED: landed on a node with a broken CUDA device, no training",u22,4,1,00:00:52,0.01,FAILED
 2026-11-13,A,74358,RQ2POSTLAUNCH,"RQ2 final, injected seed 101 RESUBMITTED a second time with the known-bad nodes excluded",u22,4,1,02:55:30,2.92,COMPLETED
 2026-11-13,A,73583,RQ2POSTLAUNCH,"RQ2 final, injected seed 102 (final record of the launch row)",u22,4,1,03:23:48,3.4,COMPLETED
+2026-11-12,A,74534,RQ3MODELCHECK,"RQ3 model check, first run (provider-default thinking; probe of 7 pairs and 12 of 50 rows, stopped on the first cap): superseded configuration",u22,4,0,02:36:47,0.0,COMPLETED
+2026-11-13,A,75316,RQ3MODELCHECK,"RQ3 model check re-run, thinking level low: cache probe (9 pairs) and the 50 held-out instances, run tag think-low",u22,4,0,00:19:06,0.0,COMPLETED
