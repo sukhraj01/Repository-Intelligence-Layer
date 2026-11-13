@@ -278,3 +278,5 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-13,C,75319,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 100, five retained mined models, follows E-RQ2-DEV-ANALYSIS, commit 64549ba",u22,4,1,01:29:25,1.49,FAILED KeyError dense_L3 in executable-377 evaluation (code defect, chain stopped)
 2026-11-13,C,75320,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 75319",u22,4,1,00:11:20,0.19,CANCELLED by submitter after 75319 failed on a deterministic defect
 2026-11-13,C,75321,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 75320",u22,4,1,00:00:00,0.0,CANCELLED before start (same reason)
+2026-11-12,A,74534,RQ3MODELCHECK,"RQ3 model check, first run (provider-default thinking; probe of 7 pairs and 12 of 50 rows, stopped on the first cap): superseded configuration",u22,4,0,02:36:47,0.0,COMPLETED
+2026-11-13,A,75316,RQ3MODELCHECK,"RQ3 model check re-run, thinking level low: cache probe (9 pairs) and the 50 held-out instances, run tag think-low",u22,4,0,00:19:06,0.0,COMPLETED
