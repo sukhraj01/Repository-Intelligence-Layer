@@ -265,3 +265,13 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-12,A,73581,RQ2LAUNCH,"RQ2 final, injected family seed 100 (nine arms), commit c2a8db6; running when recorded (12:13 IST, 3 of 9 arms done, no CUDA or memory error, MaxRSS 7.8 GB); GPU-hours added on completion",u22,9,1,00:57:00,0.0,RUNNING when recorded
 2026-11-12,A,73582,RQ2LAUNCH,"RQ2 final, injected family seed 101, waits on 73581 (dependency)",u22,9,1,00:00:00,0.0,PENDING when recorded
 2026-11-12,A,73583,RQ2LAUNCH,"RQ2 final, injected family seed 102, waits on 73582 (dependency)",u22,9,1,00:00:00,0.0,PENDING when recorded
+2026-11-13,C,73578,RQ2POSTLAUNCH,"RQ2 final, mined seed 100 (final record of the launch row)",u22,4,1,01:57:28,1.96,COMPLETED
+2026-11-13,C,73579,RQ2POSTLAUNCH,"RQ2 final, mined seed 101 (final record): failed at the CUDA gate on a node whose torch cannot start CUDA, no training",u22,4,1,00:02:44,0.05,FAILED
+2026-11-13,C,73580,RQ2POSTLAUNCH,"RQ2 final, mined seed 102 (final record): same node fault, no training",u22,4,1,00:02:22,0.04,FAILED
+2026-11-13,C,73833,RQ2POSTLAUNCH,"RQ2 final, mined seed 101 RESUBMITTED after node CUDA fault (same runs, seed, commit; known-bad nodes excluded)",u22,4,1,01:45:40,1.76,COMPLETED
+2026-11-13,C,73834,RQ2POSTLAUNCH,"RQ2 final, mined seed 102 RESUBMITTED after node CUDA fault (same runs, seed, commit; known-bad nodes excluded)",u22,4,1,02:20:42,2.35,COMPLETED
+2026-11-13,A,73581,RQ2POSTLAUNCH,"RQ2 final, injected seed 100 (final record of the launch row)",u22,4,1,03:19:55,3.33,COMPLETED
+2026-11-13,A,73582,RQ2POSTLAUNCH,"RQ2 final, injected seed 101 (final record): CUDA out of memory on a node whose GPU has 10 GiB (the 2080ti feature on a 3080), partial arms only",u22,4,1,00:20:06,0.33,FAILED
+2026-11-13,A,74023,RQ2POSTLAUNCH,"RQ2 final, injected seed 101 RESUBMITTED: landed on a node with a broken CUDA device, no training",u22,4,1,00:00:52,0.01,FAILED
+2026-11-13,A,74358,RQ2POSTLAUNCH,"RQ2 final, injected seed 101 RESUBMITTED a second time with the known-bad nodes excluded",u22,4,1,02:55:30,2.92,COMPLETED
+2026-11-13,A,73583,RQ2POSTLAUNCH,"RQ2 final, injected seed 102 (final record of the launch row)",u22,4,1,03:23:48,3.4,COMPLETED
