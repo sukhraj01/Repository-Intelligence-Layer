@@ -338,8 +338,8 @@ def add_l3_query_store(cache_dir: str, prep_dir: str) -> Record:
     member's L2 row, and only when the cache shows the two levels were scored on the same text
     (``scores_L3`` equals ``scores_L2``); otherwise the call raises, since the text cannot be
     taken from L2. Existing L2 stores are read and left unchanged; the L3 files are rewritten
-    whole, so a rerun gives the same files. Implements ``docs/experiments/B.md`` E-RQ2-FINAL
-    (scoring-defect deviation).
+    whole, so a rerun gives the same files. Implements ``docs/experiments/B.md`` E-RQ2-SCORING-FIX
+    (DEV-043).
     """
     l2_rows: dict[str, str] = {}
     for path in sorted(glob.glob(os.path.join(prep_dir, "queries", f"L2__{DATASET}__*.jsonl"))):
