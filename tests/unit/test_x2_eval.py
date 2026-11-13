@@ -120,3 +120,21 @@ def test_paired_rows_and_rules() -> None:
     assert select_cut(long, "t1024")["selected"] == 1024
     long[1]["d_q_hi"] = -0.1
     assert select_cut(long, "t1024")["selected"] == 512
+
+
+def test_a_level_without_gold_arrays_is_skipped_and_the_labelled_level_is_kept() -> None:
+    """Built-part members that carry an L2 query but no labels (no ``gold_L2_*``) are not
+    evaluated; the same call on a labelled member is unchanged."""
+    arrays, meta, dense = _instance()
+    cfg = {"roles": ["test"], "first": {"variants": ["enc__t512"], "rrf_ks": [60]}}
+    spec = spec_from_config({"roles": ["dev"], "first": cfg["first"]})
+    labelled, _ = evaluate_instance(arrays, meta, spec, dense)
+    assert list(labelled["levels"]) == ["L2"]
+    bare = {k: v for k, v in arrays.items() if not k.startswith("gold_")}
+    info, out = evaluate_instance(bare, meta, spec, dense)
+    assert info["levels"] == {} and len(out["keys"]) == 0
+    meta3 = {**meta, "levels": ["L2", "L3"]}
+    two = {**arrays, "scores_L3": arrays["scores_L2"]}
+    dense3 = {"enc__t512": {**dense["enc__t512"], "dense_L3": dense["enc__t512"]["dense_L2"]}}
+    info3, _ = evaluate_instance(two, meta3, spec, dense3)
+    assert list(info3["levels"]) == ["L2"]  # L3 has no gold arrays here: skipped, L2 kept
