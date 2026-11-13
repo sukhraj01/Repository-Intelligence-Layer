@@ -1,0 +1,209 @@
+{
+ "any_of_3": 147,
+ "calibration": {
+  "kappa_with_s_zero": 0.1405312217507495,
+  "mu": 0.399592252803262,
+  "s_for_kappa": {
+   "1.0": 0.8057426421632239,
+   "4.0": 0.8809416673781085
+  },
+  "target_pooled_agreement": 0.9408766564729868
+ },
+ "instances": 327,
+ "mean_resolved_rate": 0.399592252803262,
+ "pairs": {
+  "0-1": {
+   "agree": 304,
+   "agreement": 0.9297,
+   "cohen_kappa": 0.853,
+   "differ": 23,
+   "resolved_in_both": 119
+  },
+  "0-2": {
+   "agree": 299,
+   "agreement": 0.9144,
+   "cohen_kappa": 0.822,
+   "differ": 28,
+   "resolved_in_both": 118
+  },
+  "1-2": {
+   "agree": 320,
+   "agreement": 0.9786,
+   "cohen_kappa": 0.955,
+   "differ": 7,
+   "resolved_in_both": 126
+  }
+ },
+ "pooled_agreement": 0.9408766564729868,
+ "pooled_agreement_counts": [
+  923,
+  981
+ ],
+ "power_run": {
+  "permutations": 2000,
+  "seed": 0,
+  "sims": 500
+ },
+ "resolved_in_1": 20,
+ "resolved_in_2": 9,
+ "resolved_in_3": 118,
+ "resolved_in_none": 180,
+ "resolved_in_some": 29,
+ "settings": {
+  "first_attempt_equal_counts": {
+   "prompt_sha256": {
+    "0-1": 327,
+    "0-2": 327,
+    "1-2": 327
+   },
+   "request_sha256": {
+    "0-1": 327,
+    "0-2": 327,
+    "1-2": 327
+   },
+   "response_sha256": {
+    "0-1": 82,
+    "0-2": 111,
+    "1-2": 294
+   }
+  },
+  "instances_in_call_log": 327,
+  "per_repeat": {
+   "0": {
+    "cached_share_of_prompt_tokens": 0.189,
+    "calls": 421,
+    "finish_reasons": {
+     "MAX_TOKENS": 60,
+     "RECITATION": 3,
+     "STOP": 358
+    },
+    "first_attempts": 327,
+    "first_attempts_with_cached_tokens": 0,
+    "mean_latency_s": 9.4,
+    "retries": 0,
+    "thought_tokens": 76672
+   },
+   "1": {
+    "cached_share_of_prompt_tokens": 0.687,
+    "calls": 447,
+    "finish_reasons": {
+     "MALFORMED_FUNCTION_CALL": 1,
+     "MAX_TOKENS": 79,
+     "RECITATION": 5,
+     "STOP": 362
+    },
+    "first_attempts": 327,
+    "first_attempts_with_cached_tokens": 300,
+    "mean_latency_s": 11.0,
+    "retries": 1,
+    "thought_tokens": 67557
+   },
+   "2": {
+    "cached_share_of_prompt_tokens": 0.632,
+    "calls": 426,
+    "finish_reasons": {
+     "MALFORMED_FUNCTION_CALL": 1,
+     "MAX_TOKENS": 62,
+     "RECITATION": 3,
+     "STOP": 360
+    },
+    "first_attempts": 327,
+    "first_attempts_with_cached_tokens": 274,
+    "mean_latency_s": 10.0,
+    "retries": 0,
+    "thought_tokens": 60119
+   }
+  },
+  "repeats_adjacent_in_order_per_instance": true,
+  "values_per_repeat": {
+   "arm": {
+    "0": [
+     "rrf"
+    ],
+    "1": [
+     "rrf"
+    ],
+    "2": [
+     "rrf"
+    ]
+   },
+   "budget": {
+    "0": [
+     "8000"
+    ],
+    "1": [
+     "8000"
+    ],
+    "2": [
+     "8000"
+    ]
+   },
+   "date_pacific": {
+    "0": [
+     "2026-11-13"
+    ],
+    "1": [
+     "2026-11-13"
+    ],
+    "2": [
+     "2026-11-13"
+    ]
+   },
+   "first_stage": {
+    "0": [
+     "rrf"
+    ],
+    "1": [
+     "rrf"
+    ],
+    "2": [
+     "rrf"
+    ]
+   },
+   "model": {
+    "0": [
+     "gemini-3.8-flash"
+    ],
+    "1": [
+     "gemini-3.8-flash"
+    ],
+    "2": [
+     "gemini-3.8-flash"
+    ]
+   },
+   "seed": {
+    "0": [
+     "0"
+    ],
+    "1": [
+     "0"
+    ],
+    "2": [
+     "0"
+    ]
+   },
+   "temperature": {
+    "0": [
+     "0.0"
+    ],
+    "1": [
+     "0.0"
+    ],
+    "2": [
+     "0.0"
+    ]
+   },
+   "template_version": {
+    "0": [
+     "rq3-pilot-prompt/v1"
+    ],
+    "1": [
+     "rq3-pilot-prompt/v1"
+    ],
+    "2": [
+     "rq3-pilot-prompt/v1"
+    ]
+   }
+  }
+ }
+}

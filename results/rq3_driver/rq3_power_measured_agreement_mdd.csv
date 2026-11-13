@@ -1,0 +1,73 @@
+n,scenario,s,rate,kappa,runs,mdd_points,grid_max_points
+327,assumed edit agreement,0.635,0.1,1.0,1,5.48,10.0
+327,assumed edit agreement,0.635,0.1,1.0,2,4.91,10.0
+327,assumed edit agreement,0.635,0.1,1.0,3,4.44,10.0
+327,assumed edit agreement,0.635,0.1,4.0,1,7.06,10.0
+327,assumed edit agreement,0.635,0.1,4.0,2,6.05,10.0
+327,assumed edit agreement,0.635,0.1,4.0,3,5.53,10.0
+327,assumed edit agreement,0.635,0.2,1.0,1,7.23,10.0
+327,assumed edit agreement,0.635,0.2,1.0,2,5.76,10.0
+327,assumed edit agreement,0.635,0.2,1.0,3,5.57,10.0
+327,assumed edit agreement,0.635,0.2,4.0,1,8.65,10.0
+327,assumed edit agreement,0.635,0.2,4.0,2,7.66,10.0
+327,assumed edit agreement,0.635,0.2,4.0,3,7.14,10.0
+327,assumed edit agreement,0.635,0.3,1.0,1,7.51,10.0
+327,assumed edit agreement,0.635,0.3,1.0,2,6.99,10.0
+327,assumed edit agreement,0.635,0.3,1.0,3,6.14,10.0
+327,assumed edit agreement,0.635,0.3,4.0,1,9.65,10.0
+327,assumed edit agreement,0.635,0.3,4.0,2,8.76,10.0
+327,assumed edit agreement,0.635,0.3,4.0,3,7.67,10.0
+327,assumed edit agreement,0.635,0.4,1.0,1,8.18,10.0
+327,assumed edit agreement,0.635,0.4,1.0,2,7.12,10.0
+327,assumed edit agreement,0.635,0.4,1.0,3,6.79,10.0
+327,assumed edit agreement,0.635,0.4,4.0,1,9.75,10.0
+327,assumed edit agreement,0.635,0.4,4.0,2,9.0,10.0
+327,assumed edit agreement,0.635,0.4,4.0,3,8.49,10.0
+327,calibrated to measured agreement,0.8057,0.1,1.0,1,5.48,10.0
+327,calibrated to measured agreement,0.8057,0.1,1.0,2,5.16,10.0
+327,calibrated to measured agreement,0.8057,0.1,1.0,3,4.88,10.0
+327,calibrated to measured agreement,0.8057,0.2,1.0,1,7.09,10.0
+327,calibrated to measured agreement,0.8057,0.2,1.0,2,6.41,10.0
+327,calibrated to measured agreement,0.8057,0.2,1.0,3,5.88,10.0
+327,calibrated to measured agreement,0.8057,0.3,1.0,1,7.66,10.0
+327,calibrated to measured agreement,0.8057,0.3,1.0,2,7.09,10.0
+327,calibrated to measured agreement,0.8057,0.3,1.0,3,7.07,10.0
+327,calibrated to measured agreement,0.8057,0.4,1.0,1,7.88,10.0
+327,calibrated to measured agreement,0.8057,0.4,1.0,2,7.65,10.0
+327,calibrated to measured agreement,0.8057,0.4,1.0,3,7.33,10.0
+327,calibrated to measured agreement,0.8809,0.1,4.0,1,6.99,10.0
+327,calibrated to measured agreement,0.8809,0.1,4.0,2,6.51,10.0
+327,calibrated to measured agreement,0.8809,0.1,4.0,3,6.22,10.0
+327,calibrated to measured agreement,0.8809,0.2,4.0,1,8.84,10.0
+327,calibrated to measured agreement,0.8809,0.2,4.0,2,8.06,10.0
+327,calibrated to measured agreement,0.8809,0.2,4.0,3,7.96,10.0
+327,calibrated to measured agreement,0.8809,0.3,4.0,1,,10.0
+327,calibrated to measured agreement,0.8809,0.3,4.0,2,9.29,10.0
+327,calibrated to measured agreement,0.8809,0.3,4.0,3,9.0,10.0
+327,calibrated to measured agreement,0.8809,0.4,4.0,1,,10.0
+327,calibrated to measured agreement,0.8809,0.4,4.0,2,9.63,10.0
+327,calibrated to measured agreement,0.8809,0.4,4.0,3,9.37,10.0
+327,measured agreement used directly,0.9409,0.1,1.0,1,5.48,10.0
+327,measured agreement used directly,0.9409,0.1,1.0,2,5.38,10.0
+327,measured agreement used directly,0.9409,0.1,1.0,3,5.24,10.0
+327,measured agreement used directly,0.9409,0.1,4.0,1,7.06,10.0
+327,measured agreement used directly,0.9409,0.1,4.0,2,6.58,10.0
+327,measured agreement used directly,0.9409,0.1,4.0,3,6.53,10.0
+327,measured agreement used directly,0.9409,0.2,1.0,1,7.23,10.0
+327,measured agreement used directly,0.9409,0.2,1.0,2,6.16,10.0
+327,measured agreement used directly,0.9409,0.2,1.0,3,6.75,10.0
+327,measured agreement used directly,0.9409,0.2,4.0,1,8.65,10.0
+327,measured agreement used directly,0.9409,0.2,4.0,2,8.38,10.0
+327,measured agreement used directly,0.9409,0.2,4.0,3,8.38,10.0
+327,measured agreement used directly,0.9409,0.3,1.0,1,7.51,10.0
+327,measured agreement used directly,0.9409,0.3,1.0,2,7.44,10.0
+327,measured agreement used directly,0.9409,0.3,1.0,3,7.23,10.0
+327,measured agreement used directly,0.9409,0.3,4.0,1,9.65,10.0
+327,measured agreement used directly,0.9409,0.3,4.0,2,9.35,10.0
+327,measured agreement used directly,0.9409,0.3,4.0,3,9.02,10.0
+327,measured agreement used directly,0.9409,0.4,1.0,1,8.18,10.0
+327,measured agreement used directly,0.9409,0.4,1.0,2,7.91,10.0
+327,measured agreement used directly,0.9409,0.4,1.0,3,7.59,10.0
+327,measured agreement used directly,0.9409,0.4,4.0,1,9.75,10.0
+327,measured agreement used directly,0.9409,0.4,4.0,2,9.58,10.0
+327,measured agreement used directly,0.9409,0.4,4.0,3,9.85,10.0
