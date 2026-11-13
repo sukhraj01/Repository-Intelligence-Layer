@@ -178,6 +178,10 @@ class DriverConfig:
     adjacent_repeats: bool = False
     env_retries: int = ENV_RETRIES
     env_backoff_s: float = ENV_BACKOFF_S
+    max_unusable_share: float | None = None
+    """Stop the run cleanly when more than this share of the final replies of the units finished
+    in this session are unusable, once ``unusable_min_units`` of them exist (D163)."""
+    unusable_min_units: int = 50
     meta: Mapping[str, Any] = field(default_factory=dict)
 
 
@@ -416,6 +420,7 @@ def drive(
             summary.written += 1
 
     futures: list[Future[None]] = []
+    seen = bad = 0
     with ThreadPoolExecutor(max_workers=max(1, cfg.workers)) as pool:
         for unit, item in plan_units(items, cfg.runs, cfg.run_indices, cfg.adjacent_repeats):
             if unit in done:
@@ -429,6 +434,15 @@ def drive(
             if reply is None:
                 summary.not_available += 1
                 continue
+            seen += 1
+            bad += 0 if reply.usable else 1
+            if (
+                cfg.max_unusable_share is not None
+                and seen >= cfg.unusable_min_units
+                and bad / seen > cfg.max_unusable_share
+            ):
+                summary.stopped = "unusable_share"
+                break
             if cfg.workers <= 1:
                 work(unit, item, reply)
             else:

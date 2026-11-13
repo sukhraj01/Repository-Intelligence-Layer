@@ -9,8 +9,10 @@ of a call is its input estimated at ``CHARS_PER_TOKEN_FLOOR`` characters per tok
 
 from __future__ import annotations
 
+import fcntl
 import json
 import math
+import os
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -107,9 +109,117 @@ def contents_chars(contents: Sequence[Mapping[str, Any]]) -> int:
     return sum(len(str(p.get("text", ""))) for c in contents for p in c.get("parts", []))
 
 
+class SharedSpend:
+    """One total guard that several arm jobs read and update (atomic, on a shared file system).
+
+    The ledger is a JSON file holding ``committed`` (dollars billed by every arm so far) and
+    ``reserved`` (the worst case of each call in flight, by owner). Every read-modify-write holds
+    an exclusive ``flock`` on a lock file next to the ledger and replaces the ledger by a rename,
+    so two jobs can never both pass a check that only one of them fits under. A call is checked
+    against ``committed + sum(reserved) + its worst case``; its reservation is replaced by the
+    billed cost when the call returns and dropped if it fails. ``cap_usd`` is fixed when the ledger
+    is created and cannot be raised by a job (D114, D163). A job that restarts clears its own
+    reservations first (a crash leaves none that count).
+    """
+
+    def __init__(self, path: str | Path, owner: str, cap_usd: float | None = None) -> None:
+        self.path = Path(path)
+        self.owner = owner
+        self.lock_path = self.path.with_name(self.path.name + ".lock")
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with self._locked() as state:
+            if state is None:
+                if cap_usd is None or not math.isfinite(cap_usd) or cap_usd <= 0:
+                    raise ValueError("a new shared ledger needs a positive cap")
+                self._write(
+                    {"cap_usd": float(cap_usd), "committed": 0.0, "reserved": {}, "by_owner": {}}
+                )
+            elif cap_usd is not None and abs(float(state["cap_usd"]) - cap_usd) > 1e-9:
+                raise ValueError(
+                    f"the shared ledger's cap is {state['cap_usd']}, not {cap_usd}; "
+                    "a job cannot change it"
+                )
+            self._clear_own_reservation()
+
+    def _read(self) -> dict[str, Any] | None:
+        if not self.path.exists():
+            return None
+        data: dict[str, Any] = json.loads(self.path.read_text(encoding="utf-8"))
+        return data
+
+    def _write(self, state: Mapping[str, Any]) -> None:
+        tmp = self.path.with_name(self.path.name + f".tmp{os.getpid()}")
+        tmp.write_text(json.dumps(state, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        with tmp.open("rb") as fh:
+            os.fsync(fh.fileno())
+        os.replace(tmp, self.path)
+
+    def _locked(self) -> _Locked:
+        return _Locked(self)
+
+    def _clear_own_reservation(self) -> None:
+        state = self._read()
+        if state is not None and self.owner in state["reserved"]:
+            state["reserved"].pop(self.owner)
+            self._write(state)
+
+    def reserve(self, bound: float) -> None:
+        """Hold ``bound`` dollars for one call or raise ``SpendCapReached`` when it does not fit."""
+        with self._locked() as state:
+            assert state is not None
+            held = sum(float(v) for v in state["reserved"].values())
+            if float(state["committed"]) + held + bound > float(state["cap_usd"]):
+                raise SpendCapReached(
+                    f"shared total: committed ${state['committed']:.4f}, in flight ${held:.4f}, "
+                    f"the next call may cost up to ${bound:.4f}, shared cap ${state['cap_usd']:.2f}"
+                )
+            state["reserved"][self.owner] = float(state["reserved"].get(self.owner, 0.0)) + bound
+            self._write(state)
+
+    def settle(self, bound: float, billed: float) -> None:
+        """Replace one call's reservation ``bound`` by the cost ``billed`` (0 when it failed)."""
+        with self._locked() as state:
+            assert state is not None
+            left = max(0.0, float(state["reserved"].get(self.owner, 0.0)) - bound)
+            if left > 1e-12:
+                state["reserved"][self.owner] = left
+            else:
+                state["reserved"].pop(self.owner, None)
+            state["committed"] = float(state["committed"]) + billed
+            by = state.setdefault("by_owner", {})
+            by[self.owner] = float(by.get(self.owner, 0.0)) + billed
+            self._write(state)
+
+    def snapshot(self) -> dict[str, Any]:
+        with self._locked() as state:
+            assert state is not None
+            return dict(state)
+
+
+class _Locked:
+    """Context manager: exclusive lock on the ledger's lock file, yields the current state."""
+
+    def __init__(self, ledger: SharedSpend) -> None:
+        self.ledger = ledger
+        self._fh: Any = None
+
+    def __enter__(self) -> dict[str, Any] | None:
+        self._fh = self.ledger.lock_path.open("a")
+        fcntl.flock(self._fh, fcntl.LOCK_EX)
+        return self.ledger._read()
+
+    def __exit__(self, *exc: object) -> None:
+        fcntl.flock(self._fh, fcntl.LOCK_UN)
+        self._fh.close()
+
+
 @dataclass
 class SpendGuard:
-    """Running cost against a cap; ``spent`` starts from the cost of calls already logged."""
+    """Running cost against a cap; ``spent`` starts from the cost of calls already logged.
+
+    With ``shared`` the guard also reserves each call's worst case in the shared total ledger and
+    settles it with the billed cost, so several jobs together stay under one total. Calls already
+    in a resumed run's log are not added to the shared ledger (they were added when they ran)."""
 
     cap_usd: float
     price: Price
@@ -117,7 +227,9 @@ class SpendGuard:
     spent: float = 0.0
     calls: int = 0
     refused: int = 0
+    shared: SharedSpend | None = None
     _unbilled: int = field(default=0, repr=False)
+    _held: list[float] = field(default_factory=list, repr=False)
 
     def __post_init__(self) -> None:
         if not math.isfinite(self.cap_usd) or self.cap_usd <= 0:
@@ -135,13 +247,29 @@ class SpendGuard:
                 f"spent ${self.spent:.4f}, the next call may cost up to ${bound:.4f}, "
                 f"cap ${self.cap_usd:.2f}"
             )
+        if self.shared is not None:
+            try:
+                self.shared.reserve(bound)
+            except SpendCapReached:
+                self.refused += 1
+                raise
+            self._held.append(bound)
 
     def record(self, res: CallResult) -> None:
         self.calls += 1
+        billed = 0.0
         if res.input_tokens or res.output_tokens:
-            self.spent += self.price.cost(res.input_tokens, res.output_tokens, res.cached_tokens)
+            billed = self.price.cost(res.input_tokens, res.output_tokens, res.cached_tokens)
+            self.spent += billed
         else:
             self._unbilled += 1
+        if self.shared is not None and self._held:
+            self.shared.settle(self._held.pop(), billed)
+
+    def abandon(self) -> None:
+        """Release the reservation of a call that raised before it was billed."""
+        if self.shared is not None and self._held:
+            self.shared.settle(self._held.pop(), 0.0)
 
     def add_logged(self, rows: Iterable[Mapping[str, Any]]) -> None:
         """Count the cost of calls already in a call log (a resumed run)."""
@@ -162,7 +290,11 @@ class GuardedClient:
         self, contents: Sequence[Mapping[str, Any]], *, wait_for_daily: bool = False
     ) -> CallResult:
         self.guard.before(contents)
-        res: CallResult = self.inner.generate(contents, wait_for_daily=wait_for_daily)
+        try:
+            res: CallResult = self.inner.generate(contents, wait_for_daily=wait_for_daily)
+        except BaseException:
+            self.guard.abandon()
+            raise
         self.guard.record(res)
         return res
 

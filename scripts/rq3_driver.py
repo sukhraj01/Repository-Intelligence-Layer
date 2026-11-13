@@ -236,7 +236,7 @@ def _live_client(
         MessagesConfig,
         connection_from_entry,
     )
-    from ril.agent.providers.spend import GuardedClient, SpendGuard
+    from ril.agent.providers.spend import GuardedClient, SharedSpend, SpendGuard
 
     limits = load_limits(args.limits, model=args.model)
     try:
@@ -275,6 +275,12 @@ def _live_client(
             limiter,
         )
     guard = SpendGuard(args.cap_usd, price, args.max_output_tokens)
+    if getattr(args, "shared_ledger", None):
+        guard.shared = SharedSpend(
+            args.shared_ledger,
+            owner=f"{args.arm}_runs" + "-".join(str(i) for i in _run_indices(args)),
+            cap_usd=getattr(args, "shared_cap_usd", None),
+        )
     if call_log is not None:
         guard.add_logged(call_log.rows())
     for extra in getattr(args, "count_spent", None) or []:
@@ -345,6 +351,8 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         "adjacent_repeats": bool(getattr(args, "adjacent_repeats", False)),
         "instances": len(ids),
         "cap_usd": getattr(args, "cap_usd", None),
+        "shared_ledger": bool(getattr(args, "shared_ledger", None)),
+        "max_unusable_share": getattr(args, "max_unusable_share", None),
         "prices_as_of": price.as_of,
         "prices_verified": price.verified,
         "thinking_config": thinking if thinking is not None else "provider default (none sent)",
@@ -372,6 +380,7 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         adjacent_repeats=bool(getattr(args, "adjacent_repeats", False)),
         mode="live" if live else "logged",
         workers=args.workers,
+        max_unusable_share=getattr(args, "max_unusable_share", None),
         meta=meta,
     )
     summary = drive(items, args.out_dir, source, executor, readers, cfg, price)
@@ -903,6 +912,20 @@ def main(argv: list[str] | None = None) -> int:
                 help="default: the limits entry's provider, else from the model name",
             )
             p.add_argument("--wait-for-daily", action="store_true")
+            p.add_argument(
+                "--shared-ledger",
+                help="JSON ledger shared by several arm jobs: one total no job can exceed (D163)",
+            )
+            p.add_argument(
+                "--shared-cap-usd",
+                type=float,
+                help="the ledger's total cap; required to create it, must equal it afterwards",
+            )
+            p.add_argument(
+                "--max-unusable-share",
+                type=float,
+                help="stop cleanly when more than this share of final replies is unusable",
+            )
             p.add_argument(
                 "--count-spent",
                 nargs="+",
