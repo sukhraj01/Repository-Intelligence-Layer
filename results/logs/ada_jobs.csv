@@ -283,6 +283,9 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-13,C,76241,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed) RESUBMITTED after the L3 query-store fix (DEV-043), seed 100, five retained mined models, finished parts reused, commit 0553a70",u22,4,1,00:00:08,0.0,FAILED at start: retain path passed unexpanded (my submit command), no scoring ran; resubmitted as 76323
 2026-11-13,C,76242,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, resubmitted (DEV-043), waits on 76241 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start (chain resubmitted as 76324)
 2026-11-13,C,76243,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, resubmitted (DEV-043), waits on 76242 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start (chain resubmitted as 76325)
-2026-11-13,C,76323,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 100, second resubmission after the L3 fix (DEV-043), commit 0553a70",u22,4,1,00:00:00,0.0,PENDING when recorded
-2026-11-13,C,76324,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76323 (afterok)",u22,4,1,00:00:00,0.0,PENDING when recorded
-2026-11-13,C,76325,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 76324 (afterok)",u22,4,1,00:00:00,0.0,PENDING when recorded
+2026-11-13,C,76323,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 100, second resubmission after the L3 fix (DEV-043), commit 0553a70",u22,4,1,00:40:35,0.68,FAILED KeyError gold_L2_units on a member without labels (fixed in 1d616dc); resubmitted as 76429
+2026-11-13,C,76324,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76323 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start (chain resubmitted as 76430)
+2026-11-13,C,76325,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 76324 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start (chain resubmitted as 76431)
+2026-11-13,C,76429,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 100, third submission after the L3 store and gold-skip fixes (DEV-043), commit 1d616dc",u22,4,1,00:00:00,0.0,PENDING when recorded
+2026-11-13,C,76430,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76429 (afterok)",u22,4,1,00:00:00,0.0,PENDING when recorded
+2026-11-13,C,76431,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 76430 (afterok)",u22,4,1,00:00:00,0.0,PENDING when recorded
