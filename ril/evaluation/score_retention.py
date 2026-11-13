@@ -36,6 +36,9 @@ SET_NAME = "exec377"
 """The only set whose scores are retained."""
 DENSE_KEY = "dense_L2"
 """Key of the unit scores in a score file (L3 text equals L2 text for every member, D108)."""
+DENSE_KEY_L3 = "dense_L3"
+"""Key of the L3 unit scores. A member the folder labels at L3 carries it next to ``dense_L2``;
+the record counts them so that a store written without the key is seen (DEV-038: 224 L3)."""
 SCORES_SUBDIR = "dense_scores"
 PARTS_SUBDIR = "parts"
 RECORD_NAME = "scores_record.json"
@@ -98,6 +101,11 @@ def _write_json_atomic(path: str, data: Mapping[str, Any]) -> None:
 def _has_key(path: str) -> bool:
     with np.load(path, allow_pickle=False) as d:
         return DENSE_KEY in d.files
+
+
+def _has_l3(path: str) -> bool:
+    with np.load(path, allow_pickle=False) as d:
+        return DENSE_KEY_L3 in d.files
 
 
 def retain_part(
@@ -203,11 +211,15 @@ def write_record(
             files[name.removesuffix(".npz")] = sha256_file(os.path.join(dest, name))
     missing = sorted(set(ids) - set(files))
     extra = sorted(set(files) - set(ids))
+    l3 = sorted(i for i in files if _has_l3(os.path.join(dest, f"{i}.npz")))
     rec: Record = {
         "version": SCORE_RETENTION_VERSION,
         "run_id": run_id,
         "set": SET_NAME,
         "dense_key": DENSE_KEY,
+        "dense_keys": [DENSE_KEY, DENSE_KEY_L3],
+        "l3_instances": len(l3),
+        "l3_ids": l3,
         "model_sha256": model_sha256,
         "config_hash": config_hash,
         "follows_dev_analysis": follows,
@@ -240,11 +252,13 @@ def verify(
     ids: Sequence[str],
     *,
     model_sha256: str | None = None,
+    expected_l3: int | None = None,
 ) -> list[str]:
     """Problems with a model's retained scores (empty list: usable for the context pass).
 
     Checks the record exists and is complete for ``ids``, that it names the model by checkpoint
-    hash (when ``model_sha256`` is given), and that every file hashes to the record.
+    hash (when ``model_sha256`` is given), that every file hashes to the record, and (when
+    ``expected_l3`` is given) that exactly that many members carry ``dense_L3``.
     """
     rec = read_record(scores_root, run_id)
     if rec is None:
@@ -256,6 +270,10 @@ def verify(
     missing = sorted(set(ids) - set(files))
     if missing:
         problems.append(f"{len(missing)} instances missing from the record (first: {missing[0]})")
+    if expected_l3 is not None and rec.get("l3_instances") != expected_l3:
+        problems.append(
+            f"{rec.get('l3_instances')} members carry {DENSE_KEY_L3}, expected {expected_l3}"
+        )
     if digest(files) != rec.get("scores_sha256"):
         problems.append("record digest differs from its file list")
     directory = scores_dir(scores_root, run_id)

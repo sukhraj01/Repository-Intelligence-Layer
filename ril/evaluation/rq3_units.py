@@ -33,7 +33,13 @@ from ril.evaluation.chunk_unit_pilot import (
     read_qrels,
 )
 from ril.evaluation.e1_run import _query_texts, config_hash, folder_path, load_config, params_of
-from ril.evaluation.e3_prepare import cache_current, prepare_hash, prepare_instance, write_cache
+from ril.evaluation.e3_prepare import (
+    cache_current,
+    prepare_hash,
+    prepare_instance,
+    read_cache,
+    write_cache,
+)
 from ril.evaluation.unit_retrieval import analyse_units
 from ril.evaluation.x2_dense import (
     VectorStore,
@@ -322,6 +328,46 @@ def prepare_query_store(out_dir: str, prep_dir: str) -> Record:
     return {"queries": {f: len(r) for f, r in sorted(by_folder.items())}}
 
 
+def add_l3_query_store(cache_dir: str, prep_dir: str) -> Record:
+    """Write the L3 query stores of the members whose cache has an L3 level.
+
+    The query stores of :func:`prepare_query_store` hold level L2 only, while a cache built with
+    ``levels: [L2, L3]`` lists L3 for the members the folder labels at that level; without an L3
+    store the dense stage skips that level and the evaluation fails on the missing
+    ``dense_L3`` (a member's L3 text equals its L2 text, D108). Each L3 row takes the text of the
+    member's L2 row, and only when the cache shows the two levels were scored on the same text
+    (``scores_L3`` equals ``scores_L2``); otherwise the call raises, since the text cannot be
+    taken from L2. Existing L2 stores are read and left unchanged; the L3 files are rewritten
+    whole, so a rerun gives the same files. Implements ``docs/experiments/B.md`` E-RQ2-FINAL
+    (scoring-defect deviation).
+    """
+    l2_rows: dict[str, str] = {}
+    for path in sorted(glob.glob(os.path.join(prep_dir, "queries", f"L2__{DATASET}__*.jsonl"))):
+        l2_rows.update(read_store([path]))
+    by_folder: dict[str, dict[str, str]] = {}
+    for path in sorted(glob.glob(os.path.join(cache_dir, "*.npz"))):
+        if path.endswith(".tmp.npz"):
+            continue
+        arrays, meta = read_cache(path)
+        if "L3" not in meta.get("levels", []):
+            continue
+        folder, instance = str(meta["folder"]), str(meta["instance"])
+        key2 = query_key("L2", DATASET, folder, instance)
+        if key2 not in l2_rows:
+            raise ValueError(f"{instance}: no L2 query text in the store")
+        if not np.array_equal(arrays["scores_L3"], arrays["scores_L2"]):
+            raise ValueError(f"{instance}: the L3 text is not the L2 text; it needs its own store")
+        by_folder.setdefault(folder, {})[query_key("L3", DATASET, folder, instance)] = l2_rows[key2]
+    for folder, rows in sorted(by_folder.items()):
+        store = os.path.join(prep_dir, "queries", f"L3__{DATASET}__{folder}.jsonl")
+        os.makedirs(os.path.dirname(store), exist_ok=True)
+        with open(f"{store}.tmp", "w", encoding="utf-8") as handle:
+            for key in sorted(rows):
+                handle.write(json.dumps({"h": key, "t": rows[key]}) + "\n")
+        os.replace(f"{store}.tmp", store)
+    return {"queries_l3": {f: len(r) for f, r in sorted(by_folder.items())}}
+
+
 # --------------------------------------------------------------------------- counts and the rule
 
 
@@ -431,6 +477,7 @@ def store_texts(prep_dir: str) -> int:
 
 
 __all__ = [
+    "add_l3_query_store",
     "RQ3_UNITS_VERSION",
     "build_inputs",
     "distinct_counts",
