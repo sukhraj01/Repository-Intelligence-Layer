@@ -114,3 +114,29 @@ def test_the_run_stops_when_more_than_a_tenth_of_replies_is_unusable(tmp_path: P
     ok = StoredReplies({(f"i{k}", "a", 0): (bad if k % 20 == 0 else good) for k in range(n)})
     s2 = drive(its, tmp_path / "o2", ok, Exec(result()), reader_for, cfg)
     assert s2.stopped == "complete" and s2.written == n
+
+
+def test_every_arm_has_the_selected_configuration_hash() -> None:
+    """The pinned configuration of the model check (hash 0fe87a17bf1b...) is reproduced by the
+    driver's hash input for any arm, because the arm field is the fixed comparator name."""
+    import importlib.util
+
+    from ril.agent.providers.model_check import run_config_sha256
+    from ril.agent.providers.patch_format import TEMPLATE_VERSION
+
+    script = Path(__file__).resolve().parents[2] / "scripts" / "rq3_driver.py"
+    spec = importlib.util.spec_from_file_location("rq3_driver_hash", script)
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    cfg = {
+        "provider": "gemini",
+        "model": "gemini-3.8-flash",
+        "temperature": 0.0,
+        "thinking": {"thinkingLevel": "low"},
+        "max_output_tokens": 4096,
+        "max_reasks": 2,
+        "template_version": TEMPLATE_VERSION,
+        "arm": mod.CONFIG_HASH_ARM,
+    }
+    assert run_config_sha256(cfg).startswith("0fe87a17bf1b41873ebedb03c09adcab")

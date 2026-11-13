@@ -47,6 +47,10 @@ log = get_logger("rq3_driver")
 ROOT = Path(__file__).resolve().parents[1]
 LIMITS_FILE = ROOT / "configs" / "agent" / "gemini_limits.yaml"
 PRICES_FILE = ROOT / "configs" / "agent" / "prices.yaml"
+CONFIG_HASH_ARM = "rrf"
+"""The arm field of the pinned configuration's hash. The arm is a label of the prompts, not a
+setting of the run, and the selected hash was computed with this name; using it for every arm keeps one hash
+for the whole study (the arm itself is recorded beside it in ``meta.json``)."""
 EMAIL_DIGESTS = ROOT / "configs" / "agent" / "prompt_email_digests.txt"
 
 
@@ -367,13 +371,21 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
                 "max_output_tokens": getattr(args, "max_output_tokens", None),
                 "max_reasks": run_cfg.max_reasks,
                 "template_version": TEMPLATE_VERSION,
-                "arm": args.arm,
+                "arm": CONFIG_HASH_ARM,
             }
         ),
         "exec_config_hash_latest": hash_latest,
         "exec_config_hash_era": hash_era,
         "seed": args.seed,
     }
+    expect = getattr(args, "expect_config_sha256", None)
+    if expect and not str(meta["config_sha256"]).startswith(expect):
+        log.error(
+            "configuration hash %s does not start with the selected %s: no call made",
+            str(meta["config_sha256"])[:12],
+            expect,
+        )
+        return 2
     cfg = DriverConfig(
         model=args.model,
         run_indices=_run_indices(args),
@@ -920,6 +932,10 @@ def main(argv: list[str] | None = None) -> int:
                 "--shared-cap-usd",
                 type=float,
                 help="the ledger's total cap; required to create it, must equal it afterwards",
+            )
+            p.add_argument(
+                "--expect-config-sha256",
+                help="refuse to start unless the configuration hash starts with this",
             )
             p.add_argument(
                 "--max-unusable-share",
