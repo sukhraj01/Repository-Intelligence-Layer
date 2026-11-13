@@ -377,3 +377,12 @@ engineer sign-off — it is a design decision.
 - Impact: none on any RQ2 number; disk on the account that scores, at most about 108 MB per model and under 2 GB for 18 models (upper bound from the largest snapshot, not measured; the first job's size replaces it). The RQ3 encode stage remains as a fallback for a model whose scores are missing, within the cap.
 - Reversible: yes (`--no-retain-scores`; the scores can be re-encoded at the stated cost).
 - Related: D100, D127, D129, D142, D152, `docs/experiments/B.md` E-RQ3-SCORE-RETENTION
+
+## DEV-043 — The built parts of the executable 377 get L3 query stores, and the retained scores record the L3 count   (2026-11-13 · status: accepted (D161))
+- Master / plan say: DEV-038 scores the executable 377 at 320 L2 and 224 L3 queries; DEV-042 keeps the per-instance scores of those 377.
+- We do: the query stores of the two built parts (337 and the four xarray instances) held level L2 only, so the dense stage wrote no `dense_L3` for the members the folder labels at L3 and the first sealed scoring job stopped on that key. A step (`ril.evaluation.rq3_units.add_l3_query_store`, run at the start of the scoring job) writes the L3 stores from the member's L2 text, only where the cache shows the two levels were scored on the same text (`scores_L3` equal to `scores_L2`, D108); it raises otherwise. The retention record gains `dense_keys`, `l3_instances` and `l3_ids`, and the check for usable scores can require an expected L3 count.
+- Why: root cause is the query store of the built parts (written when the subset was built, before the retention change); the retention change only inherited the same L2-only assumption and would have accepted score files without L3. The stored36 part already had L3 stores through the CORE-Bench query files.
+- Impact: none on what is measured: the L3 text is the L2 text, so the L3 queries are the same 224 and are encoded as separate texts like in the stored36 part. The eight-repository results and the stored36 part of `rq2f_mined_curriculum__s100__399c565e` finished before the fix and are reused through their done markers, not rescored; only parts without a done marker run. Cost: a few hundred more query texts to encode per model.
+- Reversible: yes (the L3 files are additive and can be removed; nothing else changes).
+- Related: DEV-038, DEV-042, D108, D127, D152, D161, `ril/evaluation/rq3_units.py`, `ril/evaluation/score_retention.py`, `tests/unit/test_l3_query_store.py`, `docs/experiments/B.md` E-RQ2-SCORING-FIX
+
