@@ -49,8 +49,8 @@ LIMITS_FILE = ROOT / "configs" / "agent" / "gemini_limits.yaml"
 PRICES_FILE = ROOT / "configs" / "agent" / "prices.yaml"
 CONFIG_HASH_ARM = "rrf"
 """The arm field of the pinned configuration's hash. The arm is a label of the prompts, not a
-setting of the run, and the selected hash was computed with this name; using it for every arm keeps one hash
-for the whole study (the arm itself is recorded beside it in ``meta.json``)."""
+setting of the run, and the selected hash was computed with this name; using it for every arm keeps
+one hash for the whole study (the arm itself is recorded beside it in ``meta.json``)."""
 EMAIL_DIGESTS = ROOT / "configs" / "agent" / "prompt_email_digests.txt"
 
 
