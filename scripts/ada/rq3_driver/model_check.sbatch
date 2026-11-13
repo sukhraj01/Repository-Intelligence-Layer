@@ -14,7 +14,8 @@
 # Required environment: MODEL, CAP_USD, LIMITS (file with the billed-tier limits of MODEL), PREPARED
 # (prepared directory of prepare.sbatch), UV_BIN_DIR (directory of the uv binary). Optional: ARM (rrf),
 # THINKING (JSON for thinkingConfig), PROBE (default 1: run the cache probe first, D158; 0 skips it and the
-# projection is then uncached), PROBE_CAP_USD (default 0.5; the probe's cost counts against CAP_USD of the check).
+# projection is then uncached), RUN_TAG (suffix of the output directory; a new configuration gets a new tag so the
+# earlier rows stay as they are, D159), PROBE_CAP_USD (default 0.5; the probe's cost counts against CAP_USD of the check).
 set -u
 W=$HOME/ril_rq3_driver
 X=$HOME/ril_rq3_exec
@@ -22,7 +23,7 @@ PY=$HOME/ril_e/venv_ril310/bin/python
 : "${MODEL:?}" "${CAP_USD:?}" "${LIMITS:?}" "${PREPARED:?}"
 ARM=${ARM:-rrf}
 LOCAL=${TMPDIR:-/tmp}/ril_rq3_driver_${SLURM_JOB_ID}
-RUN=$W/out/check_${MODEL}_${ARM}
+RUN=$W/out/check_${MODEL}_${ARM}${RUN_TAG:+_$RUN_TAG}
 mkdir -p "$LOCAL/work" "$LOCAL/cache" "$LOCAL/mirrors" "$RUN"
 export PATH="${UV_BIN_DIR:?directory that holds the uv binary}:$PATH"
 THINK=()

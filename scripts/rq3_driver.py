@@ -752,7 +752,19 @@ def cmd_model_check_select(args: argparse.Namespace) -> int:
             if probe_path.exists()
             else None
         )
-        summaries.append(summarise(name, rows, meta, spec.models[name], spec, args.expected_n, hit))
+        calls_path = run / "calls.jsonl"
+        calls = (
+            [
+                json.loads(line)
+                for line in calls_path.read_text(encoding="utf-8").splitlines()
+                if line
+            ]
+            if calls_path.exists()
+            else None
+        )
+        summaries.append(
+            summarise(name, rows, meta, spec.models[name], spec, args.expected_n, hit, calls)
+        )
     result = select_model(summaries, spec.budget_usd, single_provider=spec.single_provider)
     result["budget_defaulted"] = spec.budget_defaulted
     result["study_arm_runs"] = spec.arm_runs

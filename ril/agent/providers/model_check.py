@@ -269,6 +269,30 @@ def project_study_cost(
     return arms * (first + (spec.runs_per_arm - 1) * repeat)
 
 
+def call_stats(calls: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Tokens and truncation over the answered calls of a run's call log (D159).
+
+    Only calls with an HTTP 200 reply count. ``output_tokens`` in the log already includes the
+    thinking tokens, so the answer tokens are the difference. A call is truncated when the
+    provider reports ``MAX_TOKENS`` as its finish reason (the output allowance, thinking
+    included, ran out)."""
+    answered = [
+        c for c in calls if c.get("kind") == "reply" and int(c.get("http_status", 0)) == 200
+    ]
+    prompt = sum(int(c["input_tokens"]) for c in answered)
+    out = sum(int(c["output_tokens"]) for c in answered)
+    thought = sum(int(c.get("thought_tokens", 0)) for c in answered)
+    truncated = sum(1 for c in answered if c.get("finish_reason") == "MAX_TOKENS")
+    return {
+        "calls_answered": len(answered),
+        "truncated_calls": truncated,
+        "truncation_rate": truncated / len(answered) if answered else 0.0,
+        "prompt_tokens": prompt,
+        "thinking_tokens": thought,
+        "answer_tokens": out - thought,
+    }
+
+
 def summarise(
     model: str,
     rows: Sequence[Mapping[str, Any]],
@@ -277,6 +301,7 @@ def summarise(
     spec: CheckSpec,
     expected_n: int = SLICE_N,
     cache_hit_fraction: float | None = None,
+    calls: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Counts, tokens, realised cost and the projections of one candidate from its result rows.
 
@@ -298,7 +323,9 @@ def summarise(
         price, inp, out, n, spec, cache_hit_fraction if check.price.cached_input_per_m else None
     )
     lo, hi = wilson(resolved, n)
+    stats = call_stats(calls) if calls is not None else {}
     return {
+        **stats,
         "model": model,
         "provider": check.provider,
         "n": n,
@@ -467,6 +494,16 @@ def render_table(result: Mapping[str, Any]) -> str:
             f"{r['unusable']:>5}/{r['n']:<4}{r['arm_run_usd']:>11.2f}{r['study_usd']:>10.2f}  "
             + ", ".join(flags)
         )
+    for r in result["candidates"]:
+        if "truncation_rate" in r:
+            lines.append(
+                f"{r['model']}: tokens prompt {r['prompt_tokens']}, "
+                f"thinking {r['thinking_tokens']}, "
+                f"answer {r['answer_tokens']}; truncated at the output limit "
+                f"{r['truncated_calls']}/{r['calls_answered']} calls "
+                f"({r['truncation_rate']:.1%}); "
+                f"thinking {r['thinking_config']}"
+            )
     lines.append(
         f"budget B = {result['budget_usd']:.2f} USD, floor {result['floor']:.0%}, tie band "
         f"{result['tie_instances']} instances; status: {result['status']}; "
