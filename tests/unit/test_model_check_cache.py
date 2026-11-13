@@ -403,3 +403,41 @@ def test_select_command_reads_the_probe_and_a_single_candidate_file_validates(
     got = json.loads(out.read_text())
     assert got["chosen"] == "gemini-3.8-flash" and got["limitations"]
     assert "cache hit 90%" in capsys.readouterr().out
+
+
+def test_call_stats_splits_tokens_and_counts_truncation() -> None:
+    from ril.agent.providers.model_check import call_stats
+
+    calls = [
+        {
+            "kind": "reply",
+            "http_status": 200,
+            "input_tokens": 100,
+            "output_tokens": 50,
+            "thought_tokens": 30,
+            "finish_reason": "STOP",
+        },
+        {
+            "kind": "reply",
+            "http_status": 200,
+            "input_tokens": 120,
+            "output_tokens": 4092,
+            "thought_tokens": 4000,
+            "finish_reason": "MAX_TOKENS",
+        },
+        {
+            "kind": "reply",
+            "http_status": 429,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "thought_tokens": 0,
+            "finish_reason": "",
+        },
+    ]
+    s = call_stats(calls)
+    assert s["calls_answered"] == 2
+    assert s["truncated_calls"] == 1 and s["truncation_rate"] == 0.5
+    assert s["prompt_tokens"] == 220
+    assert s["thinking_tokens"] == 4030
+    assert s["answer_tokens"] == (50 + 4092) - 4030
+    assert call_stats([])["truncation_rate"] == 0.0
