@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering\small
+\caption{Confirmatory contrasts of the final look with one seed left out. Evidence class: \emph{measured, exploratory}. Estimate in points and Holm-adjusted p in brackets; an asterisk marks a rejection. The registered three-seed analysis is the reported one; the three columns to its right leave seed 100, 101 or 102 out and are an exploratory sensitivity, one family of three looks without multiplicity adjustment, outside the registered tables. The seed columns are the per-seed estimates. Entry \entry{E-RQ2-SENS-SEED101}.}
+\label{tab:rq2_final_leave_seed}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}}
+\toprule
+Set & Level, metric & Contrast & Per-seed estimates & Registered & Without seed 100 & Without seed 101 & Without seed 102 \\
+\midrule
+Eight repositories & L2 nDCG@10 & Filter (BM25) minus Raw & $-$0.84 / $-$0.44 / +0.88 & $-$0.14 (1.00) & +0.22 (1.00) & +0.02 (1.00) & $-$0.64 (0.62) \\
+Eight repositories & L2 nDCG@10 & Filter (BM25) minus subsample & $-$0.34 / $-$0.44 / +0.72 & $-$0.02 (1.00) & +0.14 (1.00) & +0.19 (1.00) & $-$0.39 (0.62) \\
+Executable subset & L2 nDCG@10 & Filter (BM25) minus Raw & $-$0.12 / +1.81 / +0.75 & +0.82 (0.15) & +1.28 (0.052) & +0.32 (1.00) & +0.85 (0.12) \\
+Executable subset & L2 nDCG@10 & Filter (BM25) minus subsample & +0.83 / +0.43 / $-$0.47 & +0.26 (1.00) & $-$0.02 (1.00) & +0.18 (1.00) & +0.63 (0.89) \\
+Executable subset & L3 Recall@100 & Filter (BM25) minus Raw & $-$0.45 / +0.51 / +1.95 & +0.67 (0.15) & +1.23 (0.33) & +0.75 (0.039)* & +0.03 (1.00) \\
+Executable subset & L3 Recall@100 & Filter (BM25) minus subsample & $-$0.47 / +0.31 / +0.23 & +0.02 (1.00) & +0.27 (1.00) & $-$0.12 (1.00) & $-$0.08 (1.00) \\
+\bottomrule
+\end{tabular}
+\end{table*}

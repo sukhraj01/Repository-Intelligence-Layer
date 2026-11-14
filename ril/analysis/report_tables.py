@@ -1688,6 +1688,73 @@ def rq2_final_exploratory(root: Path) -> Table:
     )
 
 
+def rq2_final_leave_seed(root: Path) -> Table:
+    """Confirmatory contrasts of the final look with each seed left out in turn.
+
+    Implements ``docs/experiments/B.md`` "E-RQ2-SENS-SEED101" and its addendum: exploratory, the
+    same module and defaults on the stored rows with one seed removed; the registered three-seed
+    result is the one reported and the other three columns are read beside it.
+    """
+    tr = Trace()
+    rows = [
+        r
+        for r in _csv(root, "results/tables/rq2_final_leave_one_seed_out.csv", tr)
+        if r["family"] == "confirmatory"
+    ]
+    out: list[list[str]] = []
+    for r in rows:
+        a, b = r["contrast"].split(" minus ")
+        per = [tr.num(x, 2, True) for x in r["per_seed"].split(" / ")]
+        cells = [
+            tr.lit(_SET_NAMES[r["set"]]),
+            tr.label(f"{r['level']} {_METRICS[r['metric']]}"),
+            tr.lit(_CELL_NAMES["mined_" + a] + " minus " + _CELL_NAMES["mined_" + b]),
+            " / ".join(per),
+        ]
+        for key in ("registered", "no100", "no101", "no102"):
+            flag = "*" if r[f"{key}_rej"] == "True" else ""
+            p = float(r[f"{key}_p"])
+            cells.append(
+                f"{tr.num(r[f'{key}_d'], 2, True)} ({tr.num(p, 2 if p >= 0.1 else (3 if p >= 0.001 else 4))}){flag}"
+            )
+        out.append(cells)
+    facts = (
+        "Estimate in points and Holm-adjusted p in brackets; an asterisk marks a rejection. "
+        "The registered three-seed analysis is the reported one; the three columns to its right "
+        "leave seed 100, 101 or 102 out and are an exploratory sensitivity, one family of three "
+        "looks without multiplicity adjustment, outside the registered tables. The seed columns "
+        "are the per-seed estimates"
+    )
+    return Table(
+        name="rq2_final_leave_seed",
+        title="Confirmatory contrasts of the final look with one seed left out",
+        evidence="measured, exploratory",
+        facts=facts,
+        entries=["E-RQ2-SENS-SEED101"],
+        colspec=_L(0.12)
+        + _L(0.09)
+        + _L(0.15)
+        + _L(0.14)
+        + _R(0.09)
+        + _R(0.09)
+        + _R(0.09)
+        + _R(0.09),
+        header=[
+            tr.lit("Set"),
+            tr.lit("Level, metric"),
+            tr.lit("Contrast"),
+            tr.lit("Per-seed estimates"),
+            tr.lit("Registered"),
+            tr.lit("Without seed ") + tr.count("100"),
+            tr.lit("Without seed ") + tr.count("101"),
+            tr.lit("Without seed ") + tr.count("102"),
+        ],
+        rows=out,
+        trace=tr,
+        wide=True,
+    )
+
+
 BUILDERS = (
     bm25_repro,
     dense_fusion,
@@ -1704,6 +1771,7 @@ BUILDERS = (
     rq3_cost,
     rq2_final_confirmatory,
     rq2_final_exploratory,
+    rq2_final_leave_seed,
     rq3_power_small,
     graph_recovery,
     graph_storage,
