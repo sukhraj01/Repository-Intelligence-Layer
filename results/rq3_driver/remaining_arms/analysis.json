@@ -1,0 +1,14 @@
+{
+ "confirmatory": 327,
+ "tables": [
+  "apply_failure_classes",
+  "arms",
+  "contrasts",
+  "discordance",
+  "exec_errors",
+  "missing",
+  "outcomes",
+  "outcomes_by_repository",
+  "repository"
+ ]
+}

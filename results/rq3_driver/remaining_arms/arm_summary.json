@@ -1,0 +1,129 @@
+{
+ "arms": [
+  {
+   "apply_failed": 216,
+   "arm": "rrf",
+   "cache_share_all": 0.5091124337530354,
+   "cache_share_repeats_after_first": 0.6604255965112195,
+   "calls": 1294,
+   "calls_at_output_limit": 201,
+   "cost_usd": 9.8755,
+   "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 2,
+    "MAX_TOKENS": 201,
+    "RECITATION": 11,
+    "STOP": 1080
+   },
+   "follow_up_calls": 313,
+   "repeat_sd_points": 0.7696059567044589,
+   "resolved": 392,
+   "resolved_fraction_by_repeat": [
+    0.40672782874617736,
+    0.39143730886850153,
+    0.40061162079510704
+   ],
+   "rows": 981,
+   "truncation_share": 0.1553323029366306,
+   "unusable": 25,
+   "unusable_share": 0.0254841997961264
+  },
+  {
+   "apply_failed": 191,
+   "arm": "tr_mined_raw_u100_s100",
+   "cache_share_all": 0.5104713743225605,
+   "cache_share_repeats_after_first": 0.679330912356874,
+   "calls": 1230,
+   "calls_at_output_limit": 169,
+   "cost_usd": 8.9307,
+   "finish_reasons": {
+    "MAX_TOKENS": 169,
+    "RECITATION": 8,
+    "STOP": 1053
+   },
+   "follow_up_calls": 249,
+   "repeat_sd_points": 0.7696059567044614,
+   "resolved": 416,
+   "resolved_fraction_by_repeat": [
+    0.43119266055045874,
+    0.42507645259938837,
+    0.41590214067278286
+   ],
+   "rows": 981,
+   "truncation_share": 0.13739837398373983,
+   "unusable": 20,
+   "unusable_share": 0.020387359836901122
+  },
+  {
+   "apply_failed": 183,
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "cache_share_all": 0.511996306526917,
+   "cache_share_repeats_after_first": 0.6778053280405167,
+   "calls": 1236,
+   "calls_at_output_limit": 175,
+   "cost_usd": 9.1166,
+   "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 2,
+    "MAX_TOKENS": 175,
+    "RECITATION": 11,
+    "STOP": 1048
+   },
+   "follow_up_calls": 255,
+   "repeat_sd_points": 0.5296791460455282,
+   "resolved": 408,
+   "resolved_fraction_by_repeat": [
+    0.42201834862385323,
+    0.41284403669724773,
+    0.41284403669724773
+   ],
+   "rows": 981,
+   "truncation_share": 0.14158576051779936,
+   "unusable": 20,
+   "unusable_share": 0.020387359836901122
+  },
+  {
+   "apply_failed": 196,
+   "arm": "tr_mined_sub_u100_s100",
+   "cache_share_all": 0.5167970317735617,
+   "cache_share_repeats_after_first": 0.6867306829182347,
+   "calls": 1238,
+   "calls_at_output_limit": 173,
+   "cost_usd": 8.9742,
+   "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 1,
+    "MAX_TOKENS": 173,
+    "RECITATION": 10,
+    "STOP": 1054
+   },
+   "follow_up_calls": 257,
+   "repeat_sd_points": 1.1577794792661116,
+   "resolved": 385,
+   "resolved_fraction_by_repeat": [
+    0.37920489296636084,
+    0.40061162079510704,
+    0.39755351681957185
+   ],
+   "rows": 981,
+   "truncation_share": 0.13974151857835218,
+   "unusable": 20,
+   "unusable_share": 0.020387359836901122
+  }
+ ],
+ "input_sha256": {
+  "arms": "17c20634024e3d2a9d07dc155419cf3a39b7b5ae9f32f81402497e546462a54d",
+  "contrasts": "da78e4e7c67036268f7de10f9aa48a06c050cd758a3236ac4d635812426aa395",
+  "heldout": "5234213725aa0c66dab0cf6f3096ae4645882ca7a60ff1fec39cc9738c0936ea",
+  "ledger": "c40e4a595f44fcb508a94b35010c0c568af42d995f65c89850f9c1090e69ec8e",
+  "plan": "a2f648d848c66cea365c096ccfd1e4045fd380b5ccd5c9ee7351ccb533aee469",
+  "rrf:calls": "4e6b77a06e193ce97d244c9a374adec023245b512d7304524a46399b1566f46d",
+  "rrf:results": "a67d30ba53ef7fb8d1d7791f7c22886e00ea6880e8bbffcd0609186fe5435610",
+  "subset": "e740622187ca469839809fe6e55444d2487ec74f806d8fa163ad2a85bc81f5aa",
+  "tr_mined_filter_bm25_u100_s100:calls": "2ddcdba9640950b650b772f53301fe6dc5db79599b01125272561205235d8c69",
+  "tr_mined_filter_bm25_u100_s100:results": "786f729f528806760c90c326a456e5b1c7d5395a5bfb6448ad537ed694ce5d0e",
+  "tr_mined_raw_u100_s100:calls": "9508cd64f302b0844463ef2e95c0bea4dff315700e89a18c1c090184e8b4c0bb",
+  "tr_mined_raw_u100_s100:results": "4679139360ec77f2d42fba29398cacda708e53ffc065d87bad38921f50d27173",
+  "tr_mined_sub_u100_s100:calls": "f5173e8655a99e8724cb8b37e6b7dd8800f53acd4a0968c2a82c37f66d7b7b10",
+  "tr_mined_sub_u100_s100:results": "55806ee84bf81188f5d562cbe6f9f5bfe5d34c6b396fde2eea427e213f6e00ea"
+ },
+ "total_cost_usd": 36.897,
+ "version": "rq3-agent-summary/v1"
+}

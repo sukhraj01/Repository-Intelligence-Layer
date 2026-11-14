@@ -278,3 +278,11 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-12,A,74534,RQ3MODELCHECK,"RQ3 model check, first run (provider-default thinking; probe of 7 pairs and 12 of 50 rows, stopped on the first cap): superseded configuration",u22,4,0,02:36:47,0.0,COMPLETED
 2026-11-13,A,75316,RQ3MODELCHECK,"RQ3 model check re-run, thinking level low: cache probe (9 pairs) and the 50 held-out instances, run tag think-low",u22,4,0,00:19:06,0.0,COMPLETED
 2026-11-13,A,76222,RQ3UNTRAINEDRUNS,"RQ3 graded runs, untrained rrf arm at 8,000, 327 confirmatory instances x 3 adjacent repeats, gemini-3.8-flash thinking low, cap 11.33 USD, spent 9.875 USD",u22,4,0,06:04:08,0.0,COMPLETED
+2026-11-14,A,77416,RQ3TRAINEDCTX,"RQ3 contexts of the three seed-100 trained arms with the untrained-equality check; failed at start (subset file path), no call",u22,4,0,00:02:01,0.0,FAILED
+2026-11-14,A,77750,RQ3TRAINEDCTX,"RQ3 contexts, same; untrained equality 30 of 30 passed, then three of four shards failed (shared temporary file name)",u22,4,0,01:27:58,0.0,FAILED
+2026-11-14,A,77893,RQ3TRAINEDCTX,"RQ3 contexts of RAW, FILTER-BM25 and subsample (seed 100), retained scores: 377 of 377 per model",u22,4,0,01:17:21,0.0,COMPLETED
+2026-11-14,A,78233,RQ3TRAINEDPREP,"RQ3 prompts of the three trained arms at 8,000 tokens: 377 of 377 per arm, 0 rejected",u22,2,0,00:00:35,0.0,COMPLETED
+2026-11-14,A,78235,RQ3TRAINEDRUNS,"RQ3 arm jobs 78235 to 78237 failed at start (prepared directory path), no call",u22,2,0,00:00:00,0.0,COMPLETED
+2026-11-14,A,78244,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm RAW (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 8.931 USD",u22,2,0,05:38:11,0.0,COMPLETED
+2026-11-14,A,78245,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm FILTER-BM25 (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 9.117 USD",u22,2,0,05:38:12,0.0,COMPLETED
+2026-11-14,A,78246,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm size-matched subsample (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 8.974 USD",u22,2,0,04:14:00,0.0,COMPLETED
