@@ -9,7 +9,10 @@ Each paper gets `knowledge/papers/<slug>.md` whose first lines read
 `read: full — N pages incl. appendices, PDF vK, method, date` (or `read: NOT READ (reason)`), then; a note that left part of its document unread says so in the header
 instead: `read: in full except <part> (pp. A to B); <what was read of it> was read — N pages ...` (a plain
 `read: full` above a skipped part, or a number cited from the skipped pages, fails the check), then:
-what it established; what it did *not* establish; numbers we may quote (with table/page/figure; each
+A **web source** (no PDF) is admitted only through an archive capture: the capture is stored unmodified under `data/raw/web/<slug>/` with its extracted text and a `provenance.json`, and the note's first line reads
+`read: web capture — N characters of extracted text, archive capture of DATE, capture SHA-256 H, extracted-text SHA-256 H, read DATE`;
+`scripts/check_paper_note.py NOTE EXTRACTED.txt` confirms the length and the hash and re-finds every number of the table in the text, and a report that cites such a note says it is an archived capture.
+Then: what it established; what it did *not* establish; numbers we may quote (with table/page/figure; each
 is re-found in the extracted text by `scripts/check_paper_note.py`); method details we need
 (hyperparameters, data construction); how it relates to RQ1/RQ2/RQ3; discrepancies (with the master
 document, with other papers, internal); and a table of the claims that were checked
@@ -91,6 +94,6 @@ Sixth reading pass (2026-11-12; report citations and related-work refresh; queri
 | Skip the Compressor — Yang et al. 2026 | 2610.21073 | Fixed-budget, test-graded comparison of context methods; patch-sample noise | full, 24 pp, v1, 2026-11-12 | `skip-the-compressor-2610.21073.md` |
 | UTBoost — Yu et al. | 2506.09289 (ACL 2025) | Weak tests and log-parser defects on the human-validated subset; description of the subset | full, 13 pp, v1, 2026-11-12 | `utboost-2506.09289.md` |
 | Contrastive confidence regularization — Wang et al. | 2401.00165 (AAAI 2024) | Loss-level handling of false negatives; assumes no false positives | full, 14 pp, v2, 2026-11-12 | `contrastive-confidence-reg-2401.00165.md` |
-| Introducing SWE-bench Verified (web announcement, 13 Aug 2024) | none (web page) | Source of the subset's construction; not citable under the paper rule | NOT READ as a paper (archived capture read in full; no PDF) | `swe-bench-verified-announcement-2024.md` |
+| Introducing SWE-bench Verified (web announcement, 13 Aug 2024) | none (web page) | Source of the subset's construction; cited as a web source through its archive capture | web capture, 24,422 characters, capture of 2024-12-31, read 2026-11-14 (no PDF) | `swe-bench-verified-announcement-2024.md` |
 
 Full citations: `docs/11_references.md` (identifiers, titles, first authors and years audited against arXiv and Crossref on 2026-10-23; corrections and the list of mismatches in `docs/DEVIATIONS.md`, DEV-011).

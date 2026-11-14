@@ -14,6 +14,7 @@ format); used by ``scripts/check_paper_note.py``.
 
 from __future__ import annotations
 
+import hashlib
 import re
 import subprocess
 from dataclasses import dataclass, field
@@ -34,6 +35,15 @@ SKIP_MARKERS = re.compile(
     r"depth caveat|not read line by line|\b(?:was|were) (?:filtered out|skipped)\b|\bskipped\b"
     r"|\bpages? \d+(?:\s*[–-]\s*\d+)? (?:was|were) not read",
     re.IGNORECASE,
+)
+# A web source (no PDF): the whole text of an archived capture was read. The header names the length
+# and SHA-256 of the extracted text that was read and the SHA-256 of the stored capture, so that a
+# later reader can fetch the capture again and compare (README of knowledge/papers).
+READ_WEB = re.compile(
+    r"^read: web capture — (?P<chars>\d+) characters of extracted text, "
+    r"archive capture of (?P<capture>\d{4}-\d{2}-\d{2}), "
+    r"capture SHA-256 (?P<cap_sha>[0-9a-f]{64}), extracted-text SHA-256 (?P<txt_sha>[0-9a-f]{64}), "
+    r"read (?P<date>\d{4}-\d{2}-\d{2})\s*$"
 )
 READ_NONE = re.compile(r"^read: NOT READ \((?P<reason>.+)\)\s*$")
 NUMBER = re.compile(r"(?<![\w.])\d[\d,]*(?:\.\d+)?")
@@ -139,6 +149,9 @@ def check_note(note: str, text: str) -> NoteReport:
     m_none = READ_NONE.match(first)
     m_full = READ_FULL.match(first)
     m_part = READ_PARTIAL.match(first)
+    m_web = READ_WEB.match(first)
+    if m_web:
+        return _check_web(note, text, m_web, rows)
     if m_none:
         data_rows = [r for r in (rows or []) if not _is_header_or_rule(r)]
         if data_rows:
@@ -147,8 +160,9 @@ def check_note(note: str, text: str) -> NoteReport:
     if not (m_full or m_part):
         rep.errors.append(
             "first line is not 'read: full — N pages incl. appendices, PDF vK, method, date', "
-            "'read: in full except <part> (pp. A to B); <what was read> was read — N pages ...' "
-            "or 'read: NOT READ (reason)'"
+            "'read: in full except <part> (pp. A to B); <what was read> was read — N pages ...', "
+            "'read: web capture — N characters of extracted text, archive capture of DATE, "
+            "capture SHA-256 H, extracted-text SHA-256 H, read DATE' or 'read: NOT READ (reason)'"
         )
         return rep
     skipped: range | None = None
@@ -216,6 +230,27 @@ def check_note(note: str, text: str) -> NoteReport:
             if not number_present(n, scope):
                 loc = f"on page(s) {refs}" if refs else "anywhere"
                 rep.errors.append(f"number {n} not found {loc}: {cells[0][:50]}")
+    return rep
+
+
+def _check_web(note: str, text: str, m: re.Match[str], rows: list[str] | None) -> NoteReport:
+    """A web-capture note: the extracted text must be the one the header describes."""
+    rep = NoteReport()
+    if len(text) != int(m.group("chars")):
+        rep.errors.append(f"note declares {m.group('chars')} characters, text has {len(text)}")
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    if digest != m.group("txt_sha"):
+        rep.errors.append("SHA-256 of the extracted text differs from the header")
+    for row in rows or []:
+        if _is_rule(row):
+            continue
+        cells = _cells(row)
+        if "value" in row.lower() and "where" in row.lower():
+            continue
+        for n in NUMBER.findall(cells[1] if len(cells) > 1 else ""):
+            rep.checked_numbers += 1
+            if not number_present(n.rstrip(","), text):
+                rep.errors.append(f"number {n} not found in the capture: {cells[0][:50]}")
     return rep
 
 

@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering\small
+\caption{Confirmatory contrasts of the final look: Filter (BM25) against Raw and against the size-matched subsample. Evidence class: \emph{measured}. Cluster-robust t interval over repositories, unadjusted, with the repository bootstrap beside it; the Holm-adjusted p within the family on each evaluation set decides, and a contrast is rejected when it is below 0.05. Estimates in points. The interval of the executable subset at Level~3 rests on a few repositories. Mined cells, three seeds, 100 updates, retained models scored once. Entry \entry{E-RQ2-FINAL}.}
+\label{tab:rq2_final_confirmatory}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.06\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}}
+\toprule
+Set & Level, metric & Contrast & Estimate & t interval & Bootstrap & Holm p & Rejected \\
+\midrule
+Eight repositories & L2 nDCG@10 & Filter (BM25) minus Raw & $-$0.14 & [$-$1.50, 1.22] & [$-$1.09, 1.12] & 1.00 & no \\
+Eight repositories & L2 nDCG@10 & Filter (BM25) minus subsample & $-$0.02 & [$-$1.01, 0.97] & [$-$0.72, 0.89] & 1.00 & no \\
+Executable subset & L2 nDCG@10 & Filter (BM25) minus Raw & +0.82 & [0.06, 1.57] & [$-$1.27, 1.27] & 0.15 & no \\
+Executable subset & L2 nDCG@10 & Filter (BM25) minus subsample & +0.26 & [$-$0.60, 1.12] & [$-$0.51, 1.23] & 1.00 & no \\
+Executable subset & L3 Recall@100 & Filter (BM25) minus Raw & +0.67 & [0.00, 1.34] & [$-$1.23, 1.01] & 0.15 & no \\
+Executable subset & L3 Recall@100 & Filter (BM25) minus subsample & +0.02 & [$-$0.65, 0.70] & [$-$2.02, 0.33] & 1.00 & no \\
+\bottomrule
+\end{tabular}
+\end{table*}
