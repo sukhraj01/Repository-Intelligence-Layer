@@ -1714,12 +1714,12 @@ def rq2_final_leave_seed(root: Path) -> Table:
         for key in ("registered", "no100", "no101", "no102"):
             flag = "*" if r[f"{key}_rej"] == "True" else ""
             p = float(r[f"{key}_p"])
-            cells.append(
-                f"{tr.num(r[f'{key}_d'], 2, True)} ({tr.num(p, 2 if p >= 0.1 else (3 if p >= 0.001 else 4))}){flag}"
-            )
+            nd_p = 2 if p >= 0.1 else (3 if p >= 0.001 else 4)
+            cells.append(f"{tr.num(r[f'{key}_d'], 2, True)} ({tr.num(p, nd_p)}){flag}")
         out.append(cells)
     facts = (
-        "Estimate in points and Holm-adjusted p in brackets; an asterisk marks a rejection. "
+        "Estimate in points and Holm-adjusted p in brackets; an asterisk marks a rejection; "
+        "queries of the eight repositories and of the executable instances. "
         "The registered three-seed analysis is the reported one; the three columns to its right "
         "leave seed 100, 101 or 102 out and are an exploratory sensitivity, one family of three "
         "looks without multiplicity adjustment, outside the registered tables. The seed columns "
