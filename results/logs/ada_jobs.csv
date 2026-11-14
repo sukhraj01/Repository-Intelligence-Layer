@@ -302,3 +302,9 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-14,A,78244,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm RAW (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 8.931 USD",u22,2,0,05:38:11,0.0,COMPLETED
 2026-11-14,A,78245,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm FILTER-BM25 (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 9.117 USD",u22,2,0,05:38:12,0.0,COMPLETED
 2026-11-14,A,78246,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm size-matched subsample (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 8.974 USD",u22,2,0,04:14:00,0.0,COMPLETED
+2026-11-14,A,80030,RQ3ORACLE,"oracle arm build (CPU): gold files, contexts 377 of 377, prepare; strict leak gate failed on pre-existing text",u22,4,0,02:21:44,0.0,FAILED (strict leakage gate; contexts and prompts complete)
+2026-11-14,A,80386,RQ3ORACLE,"strict leak check of the untrained prompts as a baseline (CPU)",u22,4,0,00:00:12,0.0,COMPLETED
+2026-11-14,A,80397,RQ3ORACLE,"differential leak gate: oracle 0 findings in 377 prompts, untrained 0 in 1131 (CPU)",u22,4,0,00:21:23,0.0,COMPLETED
+2026-11-14,A,80457,RQ3ORACLE,"oracle run refused: expected hash 0fe87a17bf12 did not match the recorded hash; no call made",u22,4,0,00:00:01,0.0,COMPLETED (refused by the guard)
+2026-11-14,A,80484,RQ3ORACLE,"oracle calibration arm at 8,000, 327 x 2 adjacent repeats, cap 8.5 USD, spent 5.717 USD",u22,4,0,02:14:31,0.0,OUT_OF_MEMORY event after the driver logged complete (654 rows)
+2026-11-15,A,80658,RQ3ORACLE,"context file lists of the four registered arms for the retrieval-versus-reasoning view (CPU)",u22,4,0,00:00:07,0.0,COMPLETED

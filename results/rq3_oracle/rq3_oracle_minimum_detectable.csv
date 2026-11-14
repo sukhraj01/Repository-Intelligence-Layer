@@ -1,0 +1,13 @@
+n,scenario,s,rate,kappa,runs,mdd_points,grid_max_points
+327,assumed edit agreement,0.635,0.4,1.0,2,7.12,10.0
+327,assumed edit agreement,0.635,0.4,1.0,3,6.79,10.0
+327,assumed edit agreement,0.635,0.4,4.0,2,9.0,10.0
+327,assumed edit agreement,0.635,0.4,4.0,3,8.49,10.0
+327,calibrated to measured agreement,0.8057,0.4,1.0,2,7.65,10.0
+327,calibrated to measured agreement,0.8057,0.4,1.0,3,7.33,10.0
+327,calibrated to measured agreement,0.8809,0.4,4.0,2,9.63,10.0
+327,calibrated to measured agreement,0.8809,0.4,4.0,3,9.37,10.0
+327,measured agreement used directly,0.9409,0.4,1.0,2,7.91,10.0
+327,measured agreement used directly,0.9409,0.4,1.0,3,7.59,10.0
+327,measured agreement used directly,0.9409,0.4,4.0,2,9.58,10.0
+327,measured agreement used directly,0.9409,0.4,4.0,3,9.85,10.0

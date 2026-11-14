@@ -1,0 +1,41 @@
+{
+ "adjacent_repeats": true,
+ "arm": "oracle",
+ "cap_usd": 8.5,
+ "config_sha256": "0fe87a17bf1b41873ebedb03c09adcab2a030ce3d7eb3e8159a189da280be46a",
+ "driver": "rq3-driver/v1",
+ "exec_config_hash_era": "d0b60e932726401d",
+ "exec_config_hash_latest": "791e76c76923b543",
+ "guard_spent_usd": 5.716793,
+ "instances": 327,
+ "max_output_tokens": 4096,
+ "max_unusable_share": 0.1,
+ "mode": "live",
+ "model": "gemini-3.8-flash",
+ "prices_as_of": "2026-11-12",
+ "prices_verified": true,
+ "projection": {
+  "cap_usd": 8.5,
+  "cost_first_n_usd": 0.75108,
+  "exceeds_cap": false,
+  "first_n": 40,
+  "projected_usd": 6.140082,
+  "total_instances": 327
+ },
+ "provider": "gemini",
+ "realised_cost_usd": 5.716793,
+ "run_index": null,
+ "run_indices": [
+  0,
+  1
+ ],
+ "runs": 1,
+ "schedule": "adjacent_repeats",
+ "seed": 0,
+ "shared_ledger": true,
+ "stopped": "complete",
+ "thinking_config": {
+  "thinkingLevel": "low"
+ },
+ "written_this_session": 654
+}

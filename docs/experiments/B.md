@@ -2140,7 +2140,7 @@ Any-of-3 reading (secondary, exploratory, D121), difference in points: RAW minus
 
 ## E-RQ3-ORACLE: resolved rate when the context is guaranteed to contain the gold-patch files (positive control). Exploratory, stated before any call, 2026-11-14 (decision D168)
 
-Status: **designed and committed before any provider call; not yet run.** Evidence class: reasoned (design); the measurement follows in this entry.
+Status: **done 2026-11-15 (D168): run once as written, 654 graded rows, 5.717 USD; exploratory, descriptive.** Evidence class: measured (job 80484, account A, config hash `0fe87a17bf1b`, seed 0, results under `results/rq3_driver/oracle_runs/`, analysis under `results/rq3_oracle/`).
 
 **Why.** The registered RQ3 contrasts found no difference between arms that differ in retriever supervision (E-RQ3-AGENT). A null among arms is hard to read without knowing how much the scaffold can gain from retrieval at all. This arm is a positive control: it measures how many resolved-fraction points the scaffold gains when the assembled context contains, by construction, the files the gold patch modifies, that is, the headroom retrieval can buy. The null among the registered arms is then read against it. It is not a retriever and not part of the registered analysis.
 
@@ -2156,4 +2156,49 @@ Status: **designed and committed before any provider call; not yet run.** Eviden
 
 **Analysis (exploratory, descriptive).** Resolved fraction per repeat and mean; unusable and truncation rates; cost and tokens. Contrasts as estimates by the registered method (paired difference of the mean resolved fraction per instance, paired bootstrap interval, sign-flip permutation p): oracle minus untrained and oracle minus RAW, no adjustment, no decision. Retrieval-versus-reasoning view from the stored coverage rows: resolved fraction of the oracle arm among the instances where the context of the other arms contained none of the gold files. The minimum detectable difference from E-RQ3-RUN-AGREEMENT is stated beside the estimates, with the two caveats that k is 2 here against 3 in the other arms and that adjacent repeats are not independent runs.
 
-**Design lines added while building** (none changes what is measured): see the record below.
+**Design lines added while building** (none changes what is measured).
+- *Gold files* are the old paths of the `diff --git` blocks of the gold patch (a created file has no pre-patch content and is counted; 1 instance). The candidate list is the gold-file units followed by the rrf top 200, so a block's rank is its position in that list.
+- *Leakage check, final form (differential).* Composition: diff and hunk header lines of the gold or test patch; runs of three consecutive added lines (at least 40 characters); full FAIL_TO_PASS and PASS_TO_PASS identifiers; run on the restored prompt, context part only, digests reported, never text. The first (strict) form flagged 238 matches in 60 of 377 oracle prompts and 1,371 matches in 339 of 1,131 untrained prompts: text that already stood in the repository (existing tests are the PASS_TO_PASS set; patches re-add lines already present). A strict check cannot tell a leak from that, so the gate became differential: a match counts only when its text is absent from the base-commit version of the file whose block holds it (read with `git show` at the instance's base commit), and every non-blank context line must come from that file (`not_prepatch`; truncation markers excepted). Result: 0 findings in 377 oracle prompts (238 matches all pre-existing) and 0 in the 1,131 untrained prompts (1,371 pre-existing). The strict report is kept beside the final one. The check is a tripwire on the pre-patch snapshot, not a proof about the model: the context cannot hold patch text because it is built from a checkout with no patch applied.
+- *Projection stop* is evaluated at the first instance boundary after 40 instances are logged (projected 6.14 USD from 0.751 USD for 40 instances, under the cap; no stop).
+- *Insufficient balance:* a 429 naming prepayment or depleted credits stops the run as an insufficient balance; the generic quota text does not. Not triggered.
+
+### Results (exploratory; descriptive; nothing adjusted, nothing decided)
+
+**Run.** Job 80484 (account A, 2 h 14 min), stopped `complete`: 654 rows (327 instances x 2 adjacent repeats), 0 errors, 14 unusable (2.1%), 100 of 756 calls at the output limit (13.2%), 5.717 USD (projected 6.14), 6.80M input / 0.69M output / 2.90M cached tokens (cache share 73% on the second repeat). Slurm records an out-of-memory kill event after the driver had logged completion (peak 8.39 GB of the 8 GB request, as the other arms at 7.5 to 8.4 GB); `no_test_output` rows are 9 of 654 (1.4%) against 1.2 to 1.6% in the other arms, so no effect on grading is visible.
+
+**Resolved fraction (327 confirmatory instances, exact reading; interval = percentile bootstrap of the instance means).**
+
+| Arm | Repeats | Resolved fraction | 95% interval | By repeat |
+|---|---|---|---|---|
+| Oracle | 2 | 45.11% | [39.91, 50.15] | 44.65 / 45.57 |
+| Untrained rrf | 3 | 39.96% | [34.96, 45.06] | 40.67 / 39.14 / 40.06 |
+| RAW | 3 | 42.41% | [37.51, 47.60] | 43.12 / 42.51 / 41.59 |
+| FILTER-BM25 | 3 | 41.59% | [36.39, 46.69] | 42.20 / 41.28 / 41.28 |
+| Subsample | 3 | 39.25% | [34.35, 44.24] | 37.92 / 40.06 / 39.76 |
+
+The tolerant reading gives the same numbers for every arm.
+
+**Contrasts (oracle minus arm; paired difference of the mean resolved fraction per instance, paired bootstrap interval, sign-flip permutation p; unadjusted; N = 327).**
+
+| Contrast | k form | Difference (points) | 95% interval | p |
+|---|---|---|---|---|
+| Oracle minus untrained | own k (2 vs 3) | +5.15 | [+0.61, +9.73] | 0.035 |
+| Oracle minus untrained | matched k (2 vs 2) | +5.20 | [+0.61, +9.79] | 0.038 |
+| Oracle minus RAW | own k (2 vs 3) | +2.70 | [-1.98, +7.49] | 0.277 |
+| Oracle minus RAW | matched k (2 vs 2) | +2.29 | [-2.29, +7.03] | 0.372 |
+
+FILTER-BM25 (+3.52, [-1.12, +8.46], p 0.153) and the subsample (+5.86, [+1.22, +10.75], p 0.017) are in `rq3_oracle_contrasts.csv`; they are not a selected contrast. Eight rows in all, none adjusted for multiplicity.
+
+**Gold files in the oracle context (the 327).** The gold files were cut or partly left out of the 8,000-token budget in 208 instances (units cut in 113, a unit left out in 174; 246 of the 377 in all): the oracle arm is guaranteed to hold the files that the gold patch modifies only as far as the budget allows, so it is a calibration of headroom, not a ceiling on what any context could give. One instance's patch creates a file with no pre-patch content, one modified file has no parsed unit.
+
+**What the registered arms' contexts held.** No gold-patch file in the context: untrained 59, RAW 48, FILTER-BM25 51, subsample 50 of 327; every gold file in the context: 250, 256, 255, 257.
+
+**Retrieval versus reasoning.** Among the 37 instances where the untrained and RAW contexts held none of the gold files, the oracle arm resolved 28.4% against 3.6% (untrained) and 5.4% (RAW): +24.8 points [+12.6, +38.3] and +23.0 [+11.7, +35.6]. Among the 34 where all four registered arms missed every gold file: oracle 27.9%, the four arms 3.9 to 7.8%. These sets are chosen on a retrieval outcome, so the difference there says what a guaranteed gold file is worth when retrieval failed; it does not estimate the average effect.
+
+**Minimum detectable difference** (E-RQ3-RUN-AGREEMENT, N = 327, rate 40%, kappa 1): k = 2 (this arm) 7.12 assumed, 7.65 calibrated, 7.91 measured points; k = 3 (the registered arms) 6.79, 7.33, 7.59; at kappa 4, 9.0 / 9.63 / 9.58 for k = 2. The oracle-minus-untrained difference (+5.2) is below all of these, so a difference of that size is not reliably detectable at this sample size and the interval, which lies just above zero, is one of eight unadjusted estimates.
+
+**What this shows and does not show.** The direction stated beforehand held: the oracle arm resolved more than the untrained arm (45.1% against 40.0%), and not distinguishably more than RAW. Putting the gold files first gains about 5 points over the untrained context and about 2.5 over RAW (interval including zero), so the measured headroom from supplying the gold files is about twice the largest gap between registered arms (RAW minus untrained +2.45), and on the instances where the registered arms held no gold file the oracle arm resolves about a quarter more instances (28% against 4 to 8%). It does not show that better retrieval would produce an effect of that size for a trained retriever (the oracle is not a retriever), does not rank retrievers, and does not support a claim about the registered contrasts, which stay not distinguishable from zero. k is 2 against 3, and adjacent repeats are not independent runs, so the repeat noise is understated for this arm; the matched-k contrasts are the sensitivity for that. Absolute resolved rates are not capability claims.
+
+**Spend.** 5.717 USD (ledger and guard equal: 5.717; cap 8.5 USD, never reached). Total **44.304 USD of 50; 5.696 USD of the 11.413 authorised remain.** Shared ledger: 32.738 committed against the 38.4 cap.
+
+**Dead ends and incidents.** (1) The first strict leakage check failed on matches that already stood in the repository; replaced by the differential gate above (no loosening of what counts as a leak: text absent from the pre-patch file). (2) Run job 80457 refused to start: the expected hash in the brief (`0fe87a17bf12`) was a transcription slip for the recorded `0fe87a17bf1b`; no call was made and the ledger was unchanged; resubmitted once as job 80484 with the full 64-character hash (`0fe87a17bf1b41873ebedb03c09adcab2a030ce3d7eb3e8159a189da280be46a`) that every registered arm's result file carries. (3) A foreground poll of a long job timed out into the background; waits use notifications. (4) `ruff format .` at repository level touched unrelated files (reverted); only the files of the task are formatted. Not done: other contexts or budgets for the oracle, more repeats, any arm added after seeing this one.
