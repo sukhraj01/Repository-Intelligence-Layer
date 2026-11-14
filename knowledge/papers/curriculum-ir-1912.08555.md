@@ -1,6 +1,8 @@
-read: full — 15 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 15, extracted 15, none blank); no appendix (pp.13-15 are references); Figures 3-5 are plots, read through captions and text, 2026-10-29
+read: full — 15 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 15, extracted 15, none blank); no appendix (pp.13-15 are references); Figures 3-5 are plots, read through captions and text; re-read in full from the stored PDF (SHA-256 43c92e0be77a3048459893199339828a2718c11b810c308362b46b61a809520d), first read 2026-10-29, 2026-11-14
 
 # Curriculum Learning Strategies for IR — Penha and Hauff (arXiv 1912.08555v1, ECIR 2020), "An Empirical Study on Conversation Response Ranking"
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 13 to 15) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v1 (18 Dec 2019), 15 pages (body pp.1-12, references pp.13-15). A cross-encoder (BERT) re-ranker for conversation response ranking on two datasets; it is not a first-stage retriever and not code. Included because it is the one study found that compares several difficulty definitions and several pacing schedules against a no-curriculum baseline with five seeds and paired tests.
 

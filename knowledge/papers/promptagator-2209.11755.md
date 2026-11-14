@@ -1,6 +1,8 @@
-read: full — 21 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 21, extracted 21, none blank); appendix tables and the pipeline figure read, 2026-10-29
+read: full — 21 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 21, extracted 21, none blank); appendix tables and the pipeline figure read; re-read in full from the stored PDF (SHA-256 c2dec45d0b2d4c9393a5e8f51a52628897e511960a253d9dcfc00348fae93457), first read 2026-10-29, 2026-11-14
 
 # Promptagator — Dai, Zhao, Ma, Luan and colleagues (arXiv 2209.11755v1, ICLR 2023), "Few-shot Dense Retrieval From 8 Examples"
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 10 to 16) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v1 (23 Sep 2022), 21 pages (body pp.1-10, references pp.11-16, appendices A-D pp.17-21: prompt templates, pipeline figure, generated-query statistics, author contributions). Text retrieval from a large instruction-tuned language model's synthetic queries (the model is a 137B-parameter instruction-tuned checkpoint). Included for one design: a round-trip filter whose judge is a retriever trained on the same noisy data.
 

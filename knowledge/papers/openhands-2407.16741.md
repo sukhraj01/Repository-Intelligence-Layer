@@ -1,6 +1,8 @@
-read: full — 38 pages incl. appendices, PDF v3, pdftotext -layout (poppler), 2026-11-08
+read: full — 38 pages incl. appendices, PDF v3, pdftotext -layout (poppler); re-read in full from the stored PDF (SHA-256 5d802255c4a58104a06147ba736fee09569faf3c26f251e5e9b7eff5d7662c14), first read 2026-11-08, 2026-11-14
 
 # OpenHands — Wang, Li, Song, Xu, Tang, Zhuge, et al., Neubig (arXiv 2407.16741v3, 18 Apr 2025; ICLR 2025)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 11 to 17) was checked for the entries the text cites rather than read entry by entry.
 
 Source: https://arxiv.org/abs/2407.16741, PDF https://arxiv.org/pdf/2407.16741v3 (v3 is the latest version; v1 and v2 have 39 pages and
 were not used), retrieved 2026-11-08. The PDF has 38 pages (body pp.1-10, references pp.11-16, appendix A-K pp.17-38); the

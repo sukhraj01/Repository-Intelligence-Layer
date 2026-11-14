@@ -1,6 +1,8 @@
-read: full — 7 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 7, extracted 7, none blank); no appendix, 2026-10-29
+read: full — 7 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 7, extracted 7, none blank); no appendix; re-read in full from the stored PDF (SHA-256 c2d647ec2aba00007db34cb8b8bc7f7e0ea031ffe1bdf96a065339fadee33d45), first read 2026-10-29, 2026-11-14
 
 # When Fine-Tuning Fails — Pande, Kumar and Damle (arXiv 2506.18535v1, June 2025), "Lessons from MS MARCO Passage Ranking"
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (p. 7) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v1 (23 Jun 2025), 7 pages (body pp.1-6, references p.7). A student-team study of fine-tuning one small general-purpose sentence encoder on MS MARCO. Included for topic (iv): it is the only item found that reports what happens when a small encoder that is already strong on the task is fine-tuned with a standard recipe, and it should be weighed as a low-evidence source (see below).
 
