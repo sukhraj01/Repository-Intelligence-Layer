@@ -398,3 +398,11 @@ engineer sign-off — it is a design decision.
 - Stored output: `results/rq2_final/final/final_analysis_summary.json` (sha256 `36bd3aa9e62a...`), the rows and the runs table are untouched. The regenerated `results/tables/rq2_final_contrasts.csv` replaces the first version, which is in the history of commit `3a560fb`.
 - Reversible: not applicable (a transcription correction).
 - Related: DEV-040, `docs/experiments/B.md` E-RQ2-FINAL, `ril/analysis/rq2_final_table.py`, `tests/unit/test_rq2_final_table.py`
+
+## DEV-045 — The dense-teacher measurement and the FILTER-SweRankEmbed-Small cell are not run   (2026-11-14 · status: accepted (D164))
+- Master / protocol say: D125 and D153: the conditional cell runs when the dense-teacher measurement is at most 6.0 GPU-hours (projected 2.48), as three single-arm jobs under a separate authorization.
+- We do: neither the measurement nor the cell is run. The 42 planned runs of the launch are complete; the three FILTER-SweRankEmbed-Small mined runs of the 45 registered are not part of this launch.
+- Why: Block 3 stands at 40.14 of 46.7 GPU-hours with 6.56 left (E-RQ2-FINAL); the measured cost of the sealed scoring was above its projection, and the confirmatory family does not depend on the cell. Evidence class: measured (spend), reasoned (the choice).
+- Impact: **lost:** the comparison of the BM25 teacher with a dense teacher on the mined set; the report states that this exploratory cell was not run. **Gained:** 6.56 GPU-hours of margin. K-rank from the dense teacher stays unused on the mined set.
+- Reversible: yes while budget remains (single-arm jobs; the cell table is unchanged).
+- Related: D125, D153, D164, `docs/experiments/B.md` E-RQ2-FINAL
