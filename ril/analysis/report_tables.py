@@ -1131,6 +1131,251 @@ def rq3_cost(root: Path) -> Table:
     )
 
 
+AGENT_BASE = "results/rq3_driver"
+AGENT_ARMS = (
+    ("rrf", "Untrained", "untrained_runs/gemini-3.8-flash/rrf_runs0-2", ""),
+    (
+        "tr_mined_raw_u100_s100",
+        "Raw",
+        "trained_runs/gemini-3.8-flash/tr_mined_raw_u100_s100_runs0-2",
+        "results/",
+    ),
+    (
+        "tr_mined_filter_bm25_u100_s100",
+        "Filter (BM25 teacher)",
+        "trained_runs/gemini-3.8-flash/tr_mined_filter_bm25_u100_s100_runs0-2",
+        "results/",
+    ),
+    (
+        "tr_mined_sub_u100_s100",
+        "Size-matched subsample",
+        "trained_runs/gemini-3.8-flash/tr_mined_sub_u100_s100_runs0-2",
+        "results/",
+    ),
+)
+
+
+def _jsonl(root: Path, rel: str, tr: Trace) -> list[dict[str, object]]:
+    tr.sources.add(rel)
+    with open(root / rel, encoding="utf-8") as handle:
+        return [json.loads(line) for line in handle if line.strip()]
+
+
+def _agent_paths(base: str, sub: str) -> tuple[str, str, str]:
+    """Result rows, call log and metadata of one arm (the untrained arm keeps a flat layout)."""
+    d = f"{AGENT_BASE}/{base}"
+    if sub:
+        return f"{d}/results/results.jsonl", f"{d}/log/calls.jsonl", f"{d}/results/meta.json"
+    return f"{d}/results.jsonl", f"{d}/calls.jsonl", f"{d}/meta.json"
+
+
+def rq3_agent(root: Path) -> Table:
+    """Resolved fraction, unusable and truncated replies and cost of the four graded arms.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-AGENT": arm rows from the stored analysis table,
+    per-repeat shares, unusable replies and calls at the output limit from the stored result and
+    call logs, cost from each run's metadata (the spend guard's total).
+    """
+    tr = Trace()
+    arms = _csv(root, f"{AGENT_BASE}/remaining_arms/rq3_results_arms.csv", tr)
+    out: list[list[str]] = []
+    for key, label, base, sub in AGENT_ARMS:
+        res_p, call_p, meta_p = _agent_paths(base, sub)
+        res = _jsonl(root, res_p, tr)
+        calls = _jsonl(root, call_p, tr)
+        meta = _json(root, meta_p, tr)
+        a = _pick(arms, arm=key, reading="exact")
+        n = len(res)
+        resolved = sum(1 for r in res if r["resolved"])
+        runs = sorted({int(str(r["run"])) for r in res})
+        per = []
+        for k in runs:
+            rs = [r for r in res if int(str(r["run"])) == k]
+            per.append(tr.num(100 * sum(1 for r in rs if r["resolved"]) / len(rs), 1))
+        unusable = sum(1 for r in res if not r["usable"])
+        cut = sum(1 for c in calls if c["finish_reason"] == "MAX_TOKENS")
+        out.append(
+            [
+                tr.lit(label),
+                f"{tr.count(resolved)} / {tr.count(n)}",
+                f"{tr.num(100 * float(a['resolved_score']), 2)} "
+                f"{tr.interval(100 * float(a['ci_low']), 100 * float(a['ci_high']))}",
+                " / ".join(per),
+                tr.num(100 * float(a["any_of_k_share"]), 1),
+                f"{tr.count(unusable)} ({tr.num(100 * unusable / n, 2)})",
+                f"{tr.count(cut)} / {tr.count(len(calls))} ({tr.num(100 * cut / len(calls), 1)})",
+                tr.num(float(str(meta["realised_cost_usd"])), 3),
+            ]
+        )
+    facts = (
+        "Each arm is graded on the "
+        f"{tr.count(_pick(arms, arm='rrf', reading='exact')['instances'])} confirmatory "
+        "instances with three adjacent repeats (the held-out slice is excluded); the interval is a "
+        "bootstrap over instances, the repeats of an instance are not independent "
+        "runs, and each trained arm is one model from one training seed. "
+        "The unusable column counts final replies with no usable edit set after the follow-ups; "
+        "the limit column counts calls that ended at the output limit of the configuration. "
+        "The any-of-three share is secondary and exploratory. Cost in USD at the prices of the run"
+    )
+    return Table(
+        name="rq3_agent",
+        title="Graded runs of the four arms: resolved fraction, unusable replies, truncation, cost",
+        evidence="measured, pre-registered analysis",
+        facts=facts,
+        entries=["E-RQ3-AGENT", "E-RQ3-UNTRAINED-RUNS"],
+        colspec=_L(0.15)
+        + _R(0.08)
+        + _R(0.15)
+        + _R(0.13)
+        + _R(0.07)
+        + _R(0.09)
+        + _R(0.12)
+        + _R(0.07),
+        wide=True,
+        header=[
+            tr.lit("Arm"),
+            tr.lit("Resolved"),
+            tr.lit("Mean (%) and interval"),
+            tr.lit("By repeat (%)"),
+            tr.lit("Any of three (%)"),
+            tr.lit("Unusable (%)"),
+            tr.lit("Calls at limit (%)"),
+            tr.lit("Cost (USD)"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_agent_contrasts(root: Path) -> Table:
+    """Paired contrasts of the graded arms as the analysis plan registered them.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-AGENT": difference of the mean resolved fraction
+    in points, paired bootstrap interval, sign-flip p for the primary contrast only, and the
+    any-of-three difference as the secondary reading, all read from the stored contrast table.
+    """
+    tr = Trace()
+    rows_in = _csv(root, f"{AGENT_BASE}/remaining_arms/rq3_results_contrasts.csv", tr)
+    names = {k: lab for k, lab, _, _ in AGENT_ARMS}
+    out: list[list[str]] = []
+    for r in rows_in:
+        if r["reading"] != "exact":
+            continue
+        role = tr.lit("primary") if r["role"] == "primary" else tr.lit("estimate")
+        out.append(
+            [
+                f"{tr.lit(names[r['first']])} {tr.lit('minus')} {tr.lit(names[r['second']])}",
+                role,
+                tr.num(100 * float(r["difference"]), 2, True),
+                tr.interval(100 * float(r["ci_low"]), 100 * float(r["ci_high"]), 2),
+                tr.num(r["p_permutation"], 3) if r["p_permutation"] else "--",
+                tr.num(100 * float(r["any_of_k_difference"]), 2, True),
+                tr.interval(
+                    100 * float(r["any_of_k_ci_low"]), 100 * float(r["any_of_k_ci_high"]), 2
+                ),
+            ]
+        )
+    n = tr.count(rows_in[0]["n_pairs"])
+    facts = (
+        f"Paired over the {n} confirmatory instances, difference of the mean resolved fraction in "
+        "points; the interval is a paired bootstrap, the p value a sign-flip permutation test "
+        "and is run for the primary contrast only; the any-of-three columns are the secondary "
+        "exploratory reading. Intervals are not adjusted for the number of contrasts"
+    )
+    return Table(
+        name="rq3_agent_contrasts",
+        title="Paired contrasts between the graded arms",
+        evidence="measured, pre-registered analysis",
+        facts=facts,
+        entries=["E-RQ3-AGENT"],
+        colspec=_L(0.28) + _L(0.08) + _R(0.09) + _R(0.15) + _R(0.05) + _R(0.09) + _R(0.15),
+        wide=True,
+        header=[
+            tr.lit("Contrast"),
+            tr.lit("Role"),
+            tr.lit("Difference"),
+            tr.lit("Interval"),
+            tr.lit("p"),
+            tr.lit("Any of three"),
+            tr.lit("Interval"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_budget(root: Path) -> Table:
+    """Tokens, calls and cost of the RQ3 model check and of the four graded arms.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-AGENT" (spend against the authorisation): tokens
+    are summed from the stored call logs; the model check is read from its stored record; the
+    cost of each arm is its run metadata's total.
+    """
+    tr = Trace()
+    chk = _json(root, f"{AGENT_BASE}/model_check_think-low/model_check_multi.json", tr)
+    cands = chk["candidates"]
+    assert isinstance(cands, list) and len(cands) == 1
+    c = cands[0]
+    out: list[list[str]] = []
+    total = 0.0
+    out.append(
+        [
+            tr.lit("Model check (held-out instances)"),
+            tr.count(c["calls"]),
+            tr.num(int(c["prompt_tokens"]) / 1000, 0),
+            tr.num((int(c["output_tokens"]) - int(c["thinking_tokens"])) / 1000, 0),
+            tr.num(int(c["thinking_tokens"]) / 1000, 0),
+            "--",
+        ]
+    )
+    for _key, label, base, sub in AGENT_ARMS:
+        _, call_p, meta_p = _agent_paths(base, sub)
+        calls = _jsonl(root, call_p, tr)
+        meta = _json(root, meta_p, tr)
+        cost = float(str(meta["realised_cost_usd"]))
+        total += cost
+        think = sum(int(str(x["thought_tokens"])) for x in calls)
+        out.append(
+            [
+                tr.lit(label) + tr.lit(", three repeats"),
+                tr.count(len(calls)),
+                tr.num(sum(int(str(x["input_tokens"])) for x in calls) / 1000, 0),
+                tr.num((sum(int(str(x["output_tokens"])) for x in calls) - think) / 1000, 0),
+                tr.num(think / 1000, 0),
+                tr.num(cost, 3),
+            ]
+        )
+    out.append(RULE)
+    out.append([tr.lit("Four arms"), "", "", "", "", tr.num(total, 3)])
+    facts = (
+        f"The model check ran on the {tr.count(c['n'])} held-out instances. "
+        "Tokens of every answered call in thousands, from the stored call logs (the model "
+        "check from its stored record; output tokens split into answer and thinking tokens). "
+        "The cost of the model check is not in the table because its total includes a superseded "
+        "first configuration and a cache probe whose logs are not stored; the four arms sum to "
+        f"{tr.num(total, 3)} USD"
+    )
+    return Table(
+        name="rq3_budget",
+        title="Calls, tokens and cost of the model check and the graded arms",
+        evidence="measured",
+        facts=facts,
+        entries=["E-RQ3-MODEL-CHECK-RESULT", "E-RQ3-UNTRAINED-RUNS", "E-RQ3-AGENT"],
+        colspec=_L(0.36) + _R(0.09) + _R(0.11) + _R(0.11) + _R(0.11) + _R(0.10),
+        wide=True,
+        header=[
+            tr.lit("Run"),
+            tr.lit("Calls"),
+            tr.lit("Prompt (k)"),
+            tr.lit("Answer (k)"),
+            tr.lit("Thinking (k)"),
+            tr.lit("Cost (USD)"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
 def rq3_power_small(root: Path) -> Table:
     """Power of a 4-point difference and the size of the test, from the stored simulation rows.
 
@@ -1769,6 +2014,9 @@ BUILDERS = (
     rq3_power,
     rq3_power_measured,
     rq3_cost,
+    rq3_agent,
+    rq3_agent_contrasts,
+    rq3_budget,
     rq2_final_confirmatory,
     rq2_final_exploratory,
     rq2_final_leave_seed,
