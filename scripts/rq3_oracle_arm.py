@@ -60,7 +60,15 @@ def _subset_ids(path: str) -> list[str]:
 def _table(parquet: str, ids: set[str]) -> list[dict[str, Any]]:
     import pyarrow.parquet as pq
 
-    cols = ["instance_id", "patch", "test_patch", "FAIL_TO_PASS", "PASS_TO_PASS"]
+    cols = [
+        "instance_id",
+        "repo",
+        "base_commit",
+        "patch",
+        "test_patch",
+        "FAIL_TO_PASS",
+        "PASS_TO_PASS",
+    ]
     rows = pq.read_table(parquet, columns=cols).to_pylist()
     return [r for r in rows if str(r["instance_id"]) in ids]
 
@@ -129,6 +137,31 @@ def cmd_contexts(a: argparse.Namespace) -> int:
     return 0 if not res["failures"] else 2
 
 
+def _base_text_factory(repo_cache: str, rows: dict[str, dict[str, Any]]) -> Any:
+    """``instance -> (file -> text at the base commit or None)``, read with ``git show``."""
+    import subprocess
+
+    def for_instance(iid: str) -> Any:
+        r = rows[iid]
+        git_dir = os.path.join(repo_cache, str(r["repo"]).replace("/", "__") + ".git")
+        base = str(r["base_commit"])
+        memo: dict[str, str | None] = {}
+
+        def text(path: str) -> str | None:
+            if path not in memo:
+                out = subprocess.run(
+                    ["git", "--git-dir", git_dir, "show", f"{base}:{path}"],
+                    capture_output=True,
+                    check=False,
+                )
+                memo[path] = out.stdout.decode("utf-8", "replace") if out.returncode == 0 else None
+            return memo[path]
+
+        return text
+
+    return for_instance
+
+
 def cmd_leak_check(a: argparse.Namespace) -> int:
     from ril.agent.providers.oracle_leak import (
         GoldTexts,
@@ -145,15 +178,20 @@ def cmd_leak_check(a: argparse.Namespace) -> int:
             sys.stderr.write(f"refused: {len(wrong)} items are not arm {a.expect_arm}\n")
             return 3
     ids = {str(i["instance_id"]) for i in items}
+    table = _table(os.path.expanduser(a.parquet), ids)
+    rows_by_id = {str(r["instance_id"]): r for r in table}
     gold = {
         str(r["instance_id"]): GoldTexts(
             str(r["patch"]),
             str(r["test_patch"]),
             tuple(parse_test_list(r["FAIL_TO_PASS"]) + parse_test_list(r["PASS_TO_PASS"])),
         )
-        for r in _table(os.path.expanduser(a.parquet), ids)
+        for r in table
     }
-    report = check_items(items, gold)
+    base_text = None
+    if a.repo_cache:
+        base_text = _base_text_factory(a.repo_cache, rows_by_id)
+    report = check_items(items, gold, base_text)
     Path(a.report).parent.mkdir(parents=True, exist_ok=True)
     Path(a.report).write_text(report_json(report), encoding="utf-8")
     _print({k: v for k, v in report.items() if k != "rows"})
@@ -300,6 +338,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("parquet")
     p.add_argument("report")
     p.add_argument("--expect-arm")
+    p.add_argument("--repo-cache")
     p.set_defaults(fn=cmd_leak_check)
 
     p = sub.add_parser("context-files")

@@ -17,6 +17,7 @@ from ril.agent.providers.oracle_leak import (
     added_windows,
     check_items,
     check_prompt,
+    check_prompt_detail,
     full_test_ids,
     header_lines,
     parse_test_list,
@@ -254,6 +255,40 @@ def test_check_items_fails_on_a_finding_and_on_unknown_gold() -> None:
         check_items(items, {"i1": GOLD})
 
 
+def test_differential_mode_separates_preexisting_text_from_foreign_text() -> None:
+    body = (
+        "    new_value = compute_new_value(keep, flag=True)\n"
+        "    other_value = something_else_entirely(new_value)\n"
+        "    return finish_the_computation(other_value)\n"
+    )
+    ctx = "### x.py:1-3 function g (rank 1)\n" + body
+    on_disk = {"x.py": body}
+    # the same lines stood in the file before the patch: a coincidence, not a leak
+    found, pre = check_prompt_detail(_prompt(ctx), GOLD, on_disk.get)
+    assert found == [] and pre >= 1
+    # the lines are not in the base-commit file: foreign text in the context
+    found, _ = check_prompt_detail(_prompt(ctx), GOLD, {"x.py": "def g():\n    pass\n"}.get)
+    kinds = {f["kind"] for f in found}
+    assert kinds == {"added_run", "not_prepatch"}
+    # a block whose file cannot be read at the base commit is not accepted as pre-patch text
+    found, _ = check_prompt_detail(_prompt(ctx), GOLD, {}.get)
+    assert {f["kind"] for f in found} >= {"not_prepatch"}
+
+
+def test_differential_mode_keeps_truncation_marker_and_test_ids() -> None:
+    tid = "tests/test_core.py::test_new_behaviour_of_the_core_function"
+    ctx = (
+        "### t.py:1-3 function h (rank 1)\ndef h():\n    # "
+        + tid
+        + "\n# ... truncated, 4 more lines"
+    )
+    base = {"t.py": "def h():\n    # " + tid + "\n"}
+    found, pre = check_prompt_detail(_prompt(ctx), GOLD, base.get)
+    assert found == [] and pre == 1
+    found, _ = check_prompt_detail(_prompt(ctx), GOLD, {"t.py": "def h():\n"}.get)
+    assert {f["kind"] for f in found} >= {"test_id", "not_prepatch"}
+
+
 # ------------------------------------------------------------------ spend
 
 PRICE = Price("m", 1.0, 2.0, True, "t", 0.1)
@@ -285,7 +320,9 @@ def test_projection_uses_only_the_first_instances() -> None:
 
 
 def test_depleted_credit_message_is_a_stop_but_the_quota_text_is_not() -> None:
-    assert _credits_depleted("Your prepayment credits are depleted. Please add credit to your account")
+    assert _credits_depleted(
+        "Your prepayment credits are depleted. Please add credit to your account"
+    )
     assert not _credits_depleted(
         "You exceeded your current quota, check your plan and billing details"
     )

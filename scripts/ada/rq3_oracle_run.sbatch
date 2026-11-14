@@ -18,7 +18,7 @@ set -u
 REPORT=$PREPARED/oracle_leak_report.json
 PY=$HOME/ril_e/venv_ril310/bin/python
 [ -f "$REPORT" ] || { echo "no leakage report in $PREPARED: no call made"; exit 7; }
-"$PY" -I -c "import json,sys; r=json.load(open(sys.argv[1])); sys.exit(0 if r['clean'] and r['prompts_checked']==377 else 1)" "$REPORT" \
+"$PY" -I -c "import json,sys; r=json.load(open(sys.argv[1])); sys.exit(0 if r['clean'] and r['prompts_checked']==377 and r['mode']=='differential' else 1)" "$REPORT" \
   || { echo "leakage report is not clean for all 377 prompts: no call made"; exit 7; }
 export ARM=oracle
 exec bash "$HOME/ril_rq3_driver/code/scripts/ada/rq3_driver/arm_run.sbatch"

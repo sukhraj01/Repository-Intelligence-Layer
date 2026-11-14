@@ -23,7 +23,7 @@ import hashlib
 import json
 import re
 from collections import Counter
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -107,27 +107,95 @@ def context_of(prompt: str) -> str:
     return prompt.partition(EXCERPT_MARK + "\n\n")[2]
 
 
-def check_prompt(prompt: str, gold: GoldTexts) -> list[dict[str, str]]:
-    """Findings of one prompt: ``[{"kind", "digest"}]``; empty when clean."""
+_BLOCK_HEAD = re.compile(r"^### (.+?):\d+-\d+ ")
+_TRUNC = re.compile(r"^# \.\.\. truncated, \d+ more lines$")
+
+
+def split_blocks(ctx: str) -> list[tuple[str, list[str]]]:
+    """``[(file, body lines)]`` of the assembled context (blocks start at a ``### `` header)."""
+    blocks: list[tuple[str, list[str]]] = []
+    for ln in ctx.split("\n"):
+        head = _BLOCK_HEAD.match(ln)
+        if head:
+            blocks.append((head.group(1), []))
+        elif blocks:
+            blocks[-1][1].append(ln)
+    return blocks
+
+
+def _nonblank_norm(lines: Iterable[str]) -> str:
+    return "\n".join(n for n in (_norm(ln) for ln in lines) if n)
+
+
+def check_prompt(
+    prompt: str, gold: GoldTexts, base_text: Callable[[str], str | None] | None = None
+) -> list[dict[str, str]]:
+    """Findings of one prompt: ``[{"kind", "digest"}]``; empty when clean.
+
+    Without ``base_text`` every match is a finding. With it (``file -> text of the file at the
+    instance's base commit``), a match counts only when its text is absent from the base-commit
+    text of the file whose block holds it: text that already stood in the file before the patch is
+    not patch text. Every block line must also come from that file (``not_prepatch``).
+    """
+    return check_prompt_detail(prompt, gold, base_text)[0]
+
+
+def check_prompt_detail(
+    prompt: str, gold: GoldTexts, base_text: Callable[[str], str | None] | None = None
+) -> tuple[list[dict[str, str]], int]:
+    """``(findings, matches that already stood in the base-commit file)``."""
     ctx = context_of(prompt)
     findings: list[dict[str, str]] = []
-    ctx_lines = {ln.rstrip() for ln in ctx.splitlines()}
-    for which, patch in (("gold", gold.gold_patch), ("test", gold.test_patch)):
-        for ln in header_lines(patch):
-            if ln in ctx_lines:
-                findings.append({"kind": "patch_header", "source": which, "digest": _digest(ln)})
-    nonblank = "\n".join(n for n in (_norm(ln) for ln in ctx.splitlines()) if n)
-    for which, patch in (("gold", gold.gold_patch), ("test", gold.test_patch)):
-        seen: set[str] = set()
-        for w in added_windows(patch):
-            if w in nonblank and w not in seen:
-                seen.add(w)
-                findings.append({"kind": "added_run", "source": which, "digest": _digest(w)})
+    pre = 0
+    if base_text is None:
+        blocks = [("", ctx.split("\n"))]
+    else:
+        blocks = split_blocks(ctx)
     ids, _ = full_test_ids(gold.test_ids)
-    for t in ids:
-        if t in ctx:
-            findings.append({"kind": "test_id", "source": "tests", "digest": _digest(t)})
-    return findings
+    seen: set[tuple[str, str]] = set()
+
+    def note(kind: str, source: str, text: str, in_base: bool) -> None:
+        nonlocal pre
+        key = (kind, _digest(text))
+        if key in seen:
+            return
+        seen.add(key)
+        if in_base:
+            pre += 1
+        else:
+            findings.append({"kind": kind, "source": source, "digest": key[1]})
+
+    for file, body in blocks:
+        base = base_text(file) if base_text is not None and file else None
+        if base_text is not None:
+            base_lines = {ln.rstrip() for ln in (base or "").splitlines()}
+            base_norm = _nonblank_norm((base or "").splitlines())
+            base_set = {_norm(ln) for ln in (base or "").splitlines()}
+            for ln in body:
+                n = _norm(ln)
+                if n and not _TRUNC.match(ln.strip()) and n not in base_set:
+                    key = ("not_prepatch", _digest(n))
+                    if key not in seen:
+                        seen.add(key)
+                        findings.append(
+                            {"kind": "not_prepatch", "source": "context", "digest": key[1]}
+                        )
+        else:
+            base_lines, base_norm, base = set(), "", ""
+        lines = {ln.rstrip() for ln in body}
+        nb = _nonblank_norm(body)
+        text = "\n".join(body)
+        for which, patch in (("gold", gold.gold_patch), ("test", gold.test_patch)):
+            for ln in header_lines(patch):
+                if ln in lines:
+                    note("patch_header", which, ln, ln in base_lines)
+            for w in added_windows(patch):
+                if w in nb:
+                    note("added_run", which, w, w in base_norm)
+        for t in ids:
+            if t in text:
+                note("test_id", "tests", t, t in (base or ""))
+    return findings, pre
 
 
 def short_test_name_count(prompt: str, gold: GoldTexts) -> int:
@@ -138,7 +206,9 @@ def short_test_name_count(prompt: str, gold: GoldTexts) -> int:
 
 
 def check_items(
-    items: Sequence[Mapping[str, Any]], gold: Mapping[str, GoldTexts], restore: Any = None
+    items: Sequence[Mapping[str, Any]],
+    gold: Mapping[str, GoldTexts],
+    base_text: Callable[[str], Callable[[str], str | None]] | None = None,
 ) -> dict[str, Any]:
     """Check every prepared item (``load_items`` rows with ``prompt`` and optional ``restore``).
 
@@ -150,12 +220,16 @@ def check_items(
     rows: list[dict[str, Any]] = []
     by_kind: Counter[str] = Counter()
     short_total = 0
+    preexisting_total = 0
     for it in items:
         iid = str(it["instance_id"])
         if iid not in gold:
             raise ValueError(f"no gold texts for {iid}: the check cannot pass an unchecked prompt")
         prompt = restore_text(str(it["prompt"]), it.get("restore"))
-        found = check_prompt(prompt, gold[iid])
+        found, pre = check_prompt_detail(
+            prompt, gold[iid], None if base_text is None else base_text(iid)
+        )
+        preexisting_total += pre
         short = short_test_name_count(prompt, gold[iid])
         short_total += short
         for f in found:
@@ -177,6 +251,8 @@ def check_items(
         "prompts_with_findings": sum(1 for r in rows if r["findings"]),
         "by_kind": dict(sorted(by_kind.items())),
         "short_test_names_total": short_total,
+        "preexisting_matches": preexisting_total,
+        "mode": "strict" if base_text is None else "differential",
         "clean": not any(r["findings"] for r in rows),
         "rows": rows,
     }
