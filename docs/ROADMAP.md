@@ -123,6 +123,7 @@ still complete and defensible.
 ## Weeks 13–16 — All
 
 - [x] Report pass 4 (2026-11-12, E-REPORT-DRAFT-4, D156, D157): power slot (run-noise table rerun, reproduced byte for byte; power of 4 points), the benchmark-subset citation, related-work refresh (three papers read in full, nine existing notes cited), launch status, two mismatches fixed, source-file check; 16 open slots, all waiting for runs or readers
+- [x] Report pass 5 (2026-11-14, E-REPORT-DRAFT-5, D164): RQ2 confirmatory and exploratory contrasts, the one look's denominators, calibrated power, limitations, tokens and cost of the graded runs, web-source capture rule; 5 open slots, all waiting for the RQ3 agent runs
 - [ ] Analysis, error breakdown, report, presentation
 - [x] Final report skeleton (`reports/final/final_report.tex`: every section, generated tables from stored results by `scripts/report_tables.py`, every empty slot a `\todo` naming its experiment entry) and the evidence-gap map (`docs/REPORT_GAPS.md`); the slots fill as the confirmatory contrasts and the agent runs finish
 

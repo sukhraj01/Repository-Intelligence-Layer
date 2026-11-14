@@ -36,8 +36,10 @@ Chaitanya Shah\\ \small 2025202033}
 \maketitle
 \vspace{-0.4in}
 
-\todo{Abstract: written after the confirmatory contrasts and the agent runs are in; fills from
-\entry{E-RQ2-FILTER}, \entry{E-RQ2-CTRL-SUBRAW}, \entry{E-RQ3-AGENT}.}
+\noindent\textbf{Abstract.} We study whether the way a code retriever's training pairs are handled changes how well it retrieves, and whether any such change reaches a coding agent's resolved rate.
+Under matched optimization budgets, three seeds and one fixed retrieval stack, filtering mined pull-request pairs with a BM25 teacher did not separate from raw pairs or from a size-matched random subsample on the eight evaluation repositories or on the executable subset of 377 instances of a human-validated benchmark: no confirmatory contrast is rejected, and
+the two contrasts against raw pairs on the executable subset whose unadjusted interval reaches zero are inconclusive. % E-RQ2-FINAL docs/experiments/B.md; DEV-044
+An agent-level result is not reported here. \todo{Abstract sentence on the resolved rate: \entry{E-RQ3-AGENT}.}
 
 % Numbers in the prose of this file carry the experiment entry and the stored file they were read
 % from in a comment on the same line; scripts/check_report.py enforces it.
@@ -84,7 +86,7 @@ we compare them under one protocol with the agent held fixed. The scope is Pytho
 resolved rates are not statements about agent capability, because benchmark contamination raises them
 identically across arms. As of this draft, the apparatus is built and measured, the training arms
 have been piloted, the final runs of RQ2 have been trained and scored, and the untrained arm of RQ3 has been graded as a description of one arm;
-\emph{no confirmatory contrast of RQ2 and no resolved-rate contrast between arms is reported here}; the sections
+\emph{no confirmatory contrast of RQ2 is rejected and no resolved-rate contrast between arms is reported}; the sections
 below say for each claim whether it is measured, exploratory only, not run or blocked, in the
 words of the project's evidence map.
 
@@ -106,8 +108,8 @@ and to its entry in the experiment registry; none is a claim about a retriever t
   population and its power (Section~\ref{sec:rq3}, Tables~\ref{tab:rq3_subset}, \ref{tab:rq3_power}).
 \end{itemize}
 Every pilot result in this report is labelled \emph{exploratory} in its caption and is outside the
-pre-registered contrasts of Section~\ref{sec:rq2}. \todo{Contributions on the confirmatory contrasts
-and on resolved rate: \entry{E-RQ2-FILTER}, \entry{E-RQ3-AGENT}.}
+pre-registered contrasts of Section~\ref{sec:rq2}. The confirmatory comparison of RQ2 is reported in Section~\ref{sec:rq2}: a null result at this sample size, with its intervals and the retrieval-level reading only.
+\todo{Contribution on the resolved rate: \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
 \section{Background}
@@ -452,7 +454,7 @@ The one look was taken once, on the 15 retained models, after the development an
 320 Level~2 queries carry labels and 316 enter the rows, and 224 Level~3 queries enter, which makes 717 query rows per model and 10,755 rows in all. % E-RQ2-FINAL docs/experiments/B.md; E-EVAL-REPOS-BUILD; DEV-038
 The rule that leaves a query out is the stored one: the pinned reading (\texttt{units\_all\_nomod}, no module-residual positives) leaves out a query that has no positive under it, two of the eight repositories' 179 and four of the 320, and it was not changed after the look;
 counting those queries would be a reading change and needs a decision of its own. % E-RQ2-FINAL docs/experiments/B.md
-The contrast table of the look is not reported in this draft until the recomputation of its intervals is recorded (Section~\ref{sec:rq2}).
+The contrasts of the look are reported in Section~\ref{sec:rq2}.
 
 \input{generated/eval_stores}
 
@@ -690,12 +692,24 @@ For the same reason the audit's place on the dose-response curve is open and the
 
 \subsection{Confirmatory contrasts}
 
-\todo{\textsc{Filter} (BM25) minus \textsc{Raw} on the mined set, both levels, three seeds, adjusted
-and unadjusted intervals, verdict by the rules above: \entry{E-RQ2-FILTER}, \entry{E-RQ2-RAW}.}
-\todo{\textsc{Filter} (BM25) minus the size-matched subsample, same layout, with the distinct-example
-counts of every cell: \entry{E-RQ2-CTRL-SUBRAW}.}
-\todo{Exploratory arms (second teacher, \textsc{Weight}, \textsc{Curriculum}) and the dose-response
-at fresh draws: \entry{E-RQ2-WEIGHT}, \entry{E-RQ2-CURRICULUM}.}
+The retained models of the five mined cells were scored once on the eight repositories and on the executable subset (Section~\ref{sec:setup}). Table~\ref{tab:rq2_final_confirmatory} gives the two confirmatory contrasts, each at its primary metric. The decision interval is the unadjusted cluster-robust $t$ interval, with the repository bootstrap beside it, and the Holm-adjusted $p$ within the family decides (DEV-040).
+\textbf{No confirmatory contrast is rejected, and none is distinguishable from no effect at this sample size:} every Holm-adjusted $p$ is 0.15 or higher. % E-RQ2-FINAL docs/experiments/B.md; results/tables/rq2_final_contrasts.csv
+Two contrasts need a plain reading. Against \textsc{Raw} on the executable subset, \textsc{Filter} is +0.82 points of nDCG@10 at Level~2 and +0.67 points of Recall@100 at Level~3; the unadjusted $t$ intervals ([0.06, 1.57] and [0.00, 1.34]) just reach zero from above, the Holm-adjusted $p$ of both is 0.15, and the repository bootstrap beside them straddles zero ([$-$1.27, 1.27] and [$-$1.23, 1.01]).
+These two contrasts are inconclusive, not effects. % E-RQ2-FINAL docs/experiments/B.md; DEV-044; results/tables/rq2_final_contrasts.csv
+What the unadjusted $t$ intervals exclude: against the size-matched subsample, a gain of \textsc{Filter} above 1.12 points of nDCG@10 at Level~2 and above 0.70 points of Recall@100 at Level~3 on the executable subset, and above 0.97 points of nDCG@10 on the eight repositories; against \textsc{Raw} on the eight repositories, a gain above 1.22 points at Level~2. % results/tables/rq2_final_contrasts.csv E-RQ2-FINAL
+Arm means of nDCG@10 at Level~2 on the executable subset over three seeds are 19.09 (\textsc{Raw}), 19.91 (\textsc{Filter}), 19.65 (subsample), 19.11 (\textsc{Weight}) and 18.64 (\textsc{Curriculum}), with a seed standard deviation of 0.4 to 0.8 points. % E-RQ2-FINAL docs/experiments/B.md
+The development analysis agrees: no confirmatory contrast was rejected there either. % E-RQ2-DEV-ANALYSIS docs/experiments/B.md
+The statement is about retrieval at matched budgets and three seeds; the retrieval-versus-resolution question belongs to RQ3.
+
+\input{generated/rq2_final_confirmatory}
+
+Table~\ref{tab:rq2_final_exploratory} gives the 12 exploratory decisions (\textsc{Weight} and \textsc{Curriculum} against \textsc{Raw} and the subsample); no claim is attached to them. Three are rejected after the Holm step, all with \textsc{Curriculum} lower: against the subsample at Level~2 nDCG@10 ($-$1.01) and at Level~3 Recall@100 ($-$1.08), and against \textsc{Raw} at Level~3 Recall@100 ($-$0.43), all on the executable subset. % E-RQ2-FINAL docs/experiments/B.md; results/tables/rq2_final_contrasts.csv
+\textsc{Weight} is not distinguishable from \textsc{Raw} anywhere; \textsc{Weight} minus the subsample at Level~3 Recall@100 ($-$0.85) is rejected by the bootstrap but not by the $t$ interval, which is the decision rule, so it is not a rejection (adjusted $p$ 0.074). % E-RQ2-FINAL docs/experiments/B.md; DEV-040
+On the eight repositories \textsc{Curriculum} is lower on Recall@100 by 5.31 points against \textsc{Raw} and 2.77 against the subsample, with no decision attached to that metric there. % E-RQ2-FINAL docs/experiments/B.md
+These exploratory readings rest on eight or ten repositories behind the $t$ interval, and the second-teacher cell was not run.
+
+\input{generated/rq2_final_exploratory}
+
 The mined set the cells train on is the one of Table~\ref{tab:mined_full}. Filtering with the BM25 teacher at $K=20$ keeps 3,885 of the 5,789 primary directories (67.1\%, repository-clustered interval 64.0 to 70.0 over 991 repositories) and 11,380 of the 35,804 positives; the pilot's keep rate (59.5\%) lay outside that interval,
 so the pilot understated the pool. % E-MINE-FULL-RESULT D147 results/mining/full/non_test/filter_size.json
 A pool of 3,885 exceeds the 3,200 examples that 100 updates visit, so the update rule gives $N=100$ for every arm, with passes of 0.82 for \textsc{Filter} and the subsample and 0.55 for \textsc{Raw}, and no arm repeats an example. % D147 D140 E-MINE-FULL-RESULT
@@ -923,9 +937,8 @@ are built and measured on a pilot, and the assembly stage and the executable eva
 (Tables~\ref{tab:bm25_repro}--\ref{tab:rq3_power}). Each
 of these is exploratory, on development repositories unless the caption says Verified-six, and none is a
 confirmatory result. The confirmatory question, whether \textsc{Filter} with the BM25 teacher
-beats \textsc{Raw} and the size-matched subsample on unfiltered pairs at matched budgets, and the
-resolved-rate question, are not answered in this draft. \todo{Conclusion of the confirmatory contrasts, stated
-with its bound and its verdict, null or not: \entry{E-RQ2-FILTER}, \entry{E-RQ3-AGENT}.}
+beats \textsc{Raw} and the size-matched subsample on unfiltered pairs at matched budgets, is answered at retrieval level as a null result at this sample size: no contrast is rejected, and the two contrasts against \textsc{Raw} on the executable subset are inconclusive (Section~\ref{sec:rq2}).
+The resolved-rate question is not answered in this draft. \todo{Conclusion on the resolved rate, stated with its bound and its verdict, null or not: \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
 \begin{thebibliography}{99}\small

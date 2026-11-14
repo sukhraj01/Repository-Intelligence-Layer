@@ -181,7 +181,8 @@ def _web_head(text: str, chars: int | None = None) -> str:
 
     digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
     return (
-        f"read: web capture — {len(text) if chars is None else chars} characters of extracted text, "
+        f"read: web capture — {len(text) if chars is None else chars} characters of "
+        "extracted text, "
         f"archive capture of 2024-12-31, capture SHA-256 {'a' * 64}, "
         f"extracted-text SHA-256 {digest}, read 2026-11-14\n\n"
     )

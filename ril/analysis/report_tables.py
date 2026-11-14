@@ -910,7 +910,9 @@ def rq3_power(root: Path) -> Table:
     )
     return Table(
         name="rq3_power",
-        title="Minimum detectable resolved-rate difference with run-to-run noise, earlier assumption",
+        title=(
+            "Minimum detectable resolved-rate difference with run-to-run noise, earlier assumption"
+        ),
         evidence="reasoned, exploratory (assumed inputs)",
         facts=facts,
         entries=["E-RQ3-DRIVER"],
@@ -976,7 +978,8 @@ def rq3_power_measured(root: Path) -> Table:
     cal = _csv_cal(agr)
     facts = (
         f"Same simulation as the earlier table, {tr.count('327')} confirmatory instances, power "
-        f"{tr.num('0.8', 1)}, {tr.count(_power_sims(agr))} simulated datasets per cell, with the repeat "
+        f"{tr.num('0.8', 1)}, {tr.count(_power_sims(agr))} simulated datasets per cell, "
+        "with the repeat "
         "probability of a later run calibrated so that the simulated pooled pairwise agreement "
         f"equals the {tr.num(float(str(agr['pooled_agreement'])) * 100, 2)} percent measured over "
         f"three adjacent repeats of the untrained arm ({tr.count(agr['instances'])} instances; "
@@ -985,14 +988,15 @@ def rq3_power_measured(root: Path) -> Table:
         f"{tr.num(cal['1.0'], 3)} at heterogeneity {tr.num('1', 0)} and {tr.num(cal['4.0'], 3)} at "
         f"{tr.num('4', 0)}. Columns: three runs with the earlier repeat probability, calibrated, "
         "and the measured agreement used directly as an upper bound on run dependence, then one "
-        "run (calibrated). The symbol $>$ marks a value beyond the grid. The adjacent repeats were sent "
+        "run (calibrated). The symbol $>$ marks a value beyond the grid. "
+        "The adjacent repeats were sent "
         "back to back and the later two were largely served from the provider's cache, so they "
         "are not independent runs. Unit: percentage points of resolved rate"
     )
     return Table(
         name="rq3_power_measured",
         title="Minimum detectable resolved-rate difference, calibrated to the graded runs",
-        evidence="reasoned from measured agreement, exploratory",
+        evidence="reasoned, from measured agreement, exploratory",
         facts=facts,
         entries=["E-RQ3-RUN-AGREEMENT", "E-RQ3-UNTRAINED-RUNS"],
         colspec=_R(0.10) + _R(0.14) + _R(0.14) + _R(0.14) + _R(0.14) + _R(0.14),
@@ -1044,7 +1048,9 @@ def rq3_cost(root: Path) -> Table:
     assert isinstance(cands, list) and len(cands) == 1
     c = cands[0]
 
-    def row(label: str, n: int, prompt: int, cached: int, think: int, out: int, cut: int) -> list[str]:
+    def row(
+        label: str, n: int, prompt: int, cached: int, think: int, out: int, cut: int
+    ) -> list[str]:
         return [
             label,
             tr.count(n),
@@ -1096,7 +1102,8 @@ def rq3_cost(root: Path) -> Table:
         "for it. The provider counted a median of "
         f"{tr.count(median_first)} prompt tokens ({tr.count(first[0])} to {tr.count(first[-1])}) "
         f"for the first call of each of the {tr.count(len(first))} instances at an assembly "
-        f"budget of {tr.count(calls[0]['budget'])} approximate tokens; the prompt holds the issue and the instructions "
+        f"budget of {tr.count(calls[0]['budget'])} approximate tokens; the prompt holds the "
+        "issue and the instructions "
         "besides the context. The realised cost of the arm is "
         f"{tr.num(float(str(meta['realised_cost_usd'])), 3)} USD at prices read on "
         f"{tr.label(str(meta['prices_as_of']))}, and the projected cost of the twelve arm-runs of "
@@ -1576,6 +1583,111 @@ def mined_quarantine(root: Path) -> Table:
     )
 
 
+_CELL_NAMES = {
+    "mined_filter_bm25": "Filter (BM25)",
+    "mined_raw": "Raw",
+    "mined_sub": "subsample",
+    "mined_weight": "Weight",
+    "mined_curriculum": "Curriculum",
+}
+_SET_NAMES = {"eight": "Eight repositories", "exec377": "Executable subset"}
+_METRICS = {"ndcg10": "nDCG@10", "recall100": "Recall@100"}
+
+
+def _t_bounds(tr: Trace, text: str) -> str:
+    """An interval stored as ``[lo, hi]`` text, re-rendered through the trace."""
+    lo, hi = (float(x) for x in text.strip("[]").split(","))
+    return tr.interval(lo, hi, 2)
+
+
+def _rq2_final(root: Path, family: str, name: str, title: str, note: str) -> Table:
+    """Final-analysis contrasts of the mined cells, read from the stored contrast table.
+
+    Implements ``docs/experiments/B.md`` "E-RQ2-FINAL" (corrected, DEV-044): the decision interval
+    is the unadjusted cluster-robust t interval over repositories, the percentile bootstrap is
+    beside it, and the Holm-adjusted p is the decision. Points of nDCG@10 or Recall@100.
+    """
+    tr = Trace()
+    rel = "results/tables/rq2_final_contrasts.csv"
+    rows = [r for r in _csv(root, rel, tr) if r["primary"] == "True"]
+    if family == "confirmatory":
+        rows = [r for r in rows if r["family"] == "confirmatory"]
+    else:
+        rows = [r for r in rows if r["family"] != "confirmatory"]
+    out: list[list[str]] = []
+    for r in rows:
+        a, b = r["contrast"].split(" - ")
+        p = float(r["holm_p_adjusted"])
+        out.append(
+            [
+                tr.lit(_SET_NAMES[r["eval_set"]]),
+                tr.label(f"{r['level']} {_METRICS[r['metric']]}"),
+                tr.lit(_CELL_NAMES[a] + " minus " + _CELL_NAMES[b]),
+                tr.num(r["estimate"], 2, True),
+                _t_bounds(tr, r["t_interval"]),
+                _t_bounds(tr, r["bootstrap_interval"]),
+                tr.num(p, 2 if p >= 0.01 else 4),
+                tr.lit("yes" if r["holm_rejected"] == "True" else "no"),
+            ]
+        )
+    facts = (
+        "Cluster-robust t interval over repositories, unadjusted, with the repository bootstrap "
+        "beside it; the Holm-adjusted p within the family on each evaluation set decides, and "
+        f"a contrast is rejected when it is below {tr.num('0.05', 2)}. Estimates in points. "
+        "The interval of the executable subset at Level~3 rests on a few repositories"
+    )
+    return Table(
+        name=name,
+        title=title,
+        evidence="measured" if family == "confirmatory" else "measured, exploratory",
+        facts=facts,
+        notes=note,
+        entries=["E-RQ2-FINAL"],
+        colspec=_L(0.13)
+        + _L(0.09)
+        + _L(0.18)
+        + _R(0.07)
+        + _R(0.12)
+        + _R(0.12)
+        + _R(0.06)
+        + _R(0.07),
+        header=[
+            tr.lit("Set"),
+            tr.lit("Level, metric"),
+            tr.lit("Contrast"),
+            tr.lit("Estimate"),
+            tr.lit("t interval"),
+            tr.lit("Bootstrap"),
+            tr.lit("Holm p"),
+            tr.lit("Rejected"),
+        ],
+        rows=out,
+        trace=tr,
+        wide=True,
+    )
+
+
+def rq2_final_confirmatory(root: Path) -> Table:
+    return _rq2_final(
+        root,
+        "confirmatory",
+        "rq2_final_confirmatory",
+        "Confirmatory contrasts of the final look: Filter (BM25) against Raw and against "
+        "the size-matched subsample",
+        "Mined cells, three seeds, 100 updates, retained models scored once",
+    )
+
+
+def rq2_final_exploratory(root: Path) -> Table:
+    return _rq2_final(
+        root,
+        "exploratory",
+        "rq2_final_exploratory",
+        "Exploratory contrasts of the final look (Weight and Curriculum); no claim is attached",
+        "Mined cells, three seeds, Holm decisions only",
+    )
+
+
 BUILDERS = (
     bm25_repro,
     dense_fusion,
@@ -1590,6 +1702,8 @@ BUILDERS = (
     rq3_power,
     rq3_power_measured,
     rq3_cost,
+    rq2_final_confirmatory,
+    rq2_final_exploratory,
     rq3_power_small,
     graph_recovery,
     graph_storage,

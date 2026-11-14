@@ -119,6 +119,7 @@ def test_captions_state_evidence_class_n_and_entry() -> None:
             "eval_stores",
             "mined_full",
             "mined_quarantine",
+            "rq2_final_confirmatory",
         ):
             assert "exploratory" in t.evidence, t.name
 
