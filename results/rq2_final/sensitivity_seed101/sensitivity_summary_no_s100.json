@@ -1,0 +1,4750 @@
+{
+ "alpha": 0.05,
+ "analysis_hash": "a732e2d15383a9e661f347b7c7acfceaab943b45c864b9ab2abb3d83898da1b1",
+ "assumptions": [
+  "Holm family = the contrasts of one family on one evaluation set, both levels (m counts the contrasts that exist on that set); sets are never pooled",
+  "families follow section 4 with D69 applied: confirmatory (FILTER-BM25 against RAW and against the subsample), then SweRankEmbed-Small, then WEIGHT and CURRICULUM, then the injected calibration cells; all but the first are exploratory",
+  "the interval a verdict is read from is the Holm-adjusted cluster-robust t interval of the contrast's own family (D136); the uncorrected t interval and the percentile bootstrap intervals are reported beside it",
+  "the L3 leave-largest-repository-out check (rule 3) compares the sign of the point estimate",
+  "arms separate (D80, rule 7) iff FILTER-BM25 against RAW is positive on every final set that has both levels, and at least one does; exploratory contrasts never decide the fallback",
+  "the indistinguishable flag (rule 4) is |difference| below the pooled seed SD of the two cells"
+ ],
+ "bootstrap_seed": 0,
+ "calibration_sanity": [],
+ "cells": [
+  {
+   "cell": "mined_curriculum",
+   "ci": [
+    10.463349,
+    21.257557
+   ],
+   "ci_boot": [
+    12.421469,
+    23.454081
+   ],
+   "ci_cluster": [
+    12.421469,
+    23.454081
+   ],
+   "ci_query": [
+    12.545083,
+    19.339482
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 15.860453,
+   "metric": "ndcg10",
+   "per_seed": [
+    16.133059,
+    15.587847
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.385523,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_curriculum",
+   "ci": [
+    25.649634,
+    44.686227
+   ],
+   "ci_boot": [
+    29.655517,
+    47.012904
+   ],
+   "ci_cluster": [
+    29.655517,
+    47.012904
+   ],
+   "ci_query": [
+    30.208782,
+    40.032792
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 35.167931,
+   "metric": "recall100",
+   "per_seed": [
+    34.356903,
+    35.978958
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 1.146966,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "ci": [
+    11.950298,
+    22.812151
+   ],
+   "ci_boot": [
+    13.935982,
+    24.686277
+   ],
+   "ci_cluster": [
+    13.935982,
+    24.686277
+   ],
+   "ci_query": [
+    13.971967,
+    20.923402
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 17.381225,
+   "metric": "ndcg10",
+   "per_seed": [
+    16.815255,
+    17.947195
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.800403,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "ci": [
+    26.827258,
+    47.757269
+   ],
+   "ci_boot": [
+    31.257506,
+    50.075644
+   ],
+   "ci_cluster": [
+    31.257506,
+    50.075644
+   ],
+   "ci_query": [
+    32.263039,
+    42.229804
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 37.292264,
+   "metric": "recall100",
+   "per_seed": [
+    34.859931,
+    39.724597
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 3.439838,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_raw",
+   "ci": [
+    11.655432,
+    22.671256
+   ],
+   "ci_boot": [
+    13.41327,
+    24.744684
+   ],
+   "ci_cluster": [
+    13.41327,
+    24.744684
+   ],
+   "ci_query": [
+    13.797093,
+    20.620277
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 17.163344,
+   "metric": "ndcg10",
+   "per_seed": [
+    17.254672,
+    17.072016
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.129157,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_raw",
+   "ci": [
+    34.128229,
+    47.908053
+   ],
+   "ci_boot": [
+    36.014052,
+    49.875919
+   ],
+   "ci_cluster": [
+    36.014052,
+    49.875919
+   ],
+   "ci_query": [
+    35.776568,
+    46.062697
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 41.018141,
+   "metric": "recall100",
+   "per_seed": [
+    41.344434,
+    40.691847
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.461448,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_sub",
+   "ci": [
+    11.863504,
+    22.617802
+   ],
+   "ci_boot": [
+    13.643405,
+    24.556682
+   ],
+   "ci_cluster": [
+    13.643405,
+    24.556682
+   ],
+   "ci_query": [
+    13.878154,
+    20.814799
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 17.240653,
+   "metric": "ndcg10",
+   "per_seed": [
+    17.250888,
+    17.230418
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.014475,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_sub",
+   "ci": [
+    28.498033,
+    46.985713
+   ],
+   "ci_boot": [
+    32.15223,
+    49.117178
+   ],
+   "ci_cluster": [
+    32.15223,
+    49.117178
+   ],
+   "ci_query": [
+    32.605529,
+    42.961259
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 37.741873,
+   "metric": "recall100",
+   "per_seed": [
+    36.660006,
+    38.82374
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 1.529991,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_weight",
+   "ci": [
+    11.503135,
+    22.51368
+   ],
+   "ci_boot": [
+    13.474241,
+    24.592796
+   ],
+   "ci_cluster": [
+    13.474241,
+    24.592796
+   ],
+   "ci_query": [
+    13.628517,
+    20.521644
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 17.008408,
+   "metric": "ndcg10",
+   "per_seed": [
+    17.04806,
+    16.968755
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.056077,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_weight",
+   "ci": [
+    31.038865,
+    47.010064
+   ],
+   "ci_boot": [
+    33.915637,
+    49.235632
+   ],
+   "ci_cluster": [
+    33.915637,
+    49.235632
+   ],
+   "ci_query": [
+    33.855808,
+    43.918789
+   ],
+   "eval_set": "eight",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 39.024465,
+   "metric": "recall100",
+   "per_seed": [
+    39.122667,
+    38.926263
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 177,
+   "repos": 8,
+   "seed_sd": 0.138878,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_curriculum",
+   "ci": [
+    13.134524,
+    23.745027
+   ],
+   "ci_boot": [
+    13.937233,
+    24.453503
+   ],
+   "ci_cluster": [
+    13.937233,
+    24.453503
+   ],
+   "ci_query": [
+    15.709423,
+    21.201648
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 18.439775,
+   "metric": "ndcg10",
+   "per_seed": [
+    18.234233,
+    18.645318
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.290681,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_curriculum",
+   "ci": [
+    40.847735,
+    53.262757
+   ],
+   "ci_boot": [
+    43.630486,
+    55.743663
+   ],
+   "ci_cluster": [
+    43.630486,
+    55.743663
+   ],
+   "ci_query": [
+    42.978068,
+    51.112966
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 47.055246,
+   "metric": "recall100",
+   "per_seed": [
+    47.391359,
+    46.719133
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.475336,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "ci": [
+    14.264399,
+    25.833664
+   ],
+   "ci_boot": [
+    14.366693,
+    26.601753
+   ],
+   "ci_cluster": [
+    14.366693,
+    26.601753
+   ],
+   "ci_query": [
+    17.270517,
+    22.873507
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 20.049031,
+   "metric": "ndcg10",
+   "per_seed": [
+    20.321233,
+    19.77683
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.384951,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "ci": [
+    43.643098,
+    54.357483
+   ],
+   "ci_boot": [
+    45.904862,
+    57.091776
+   ],
+   "ci_cluster": [
+    45.904862,
+    57.091776
+   ],
+   "ci_query": [
+    44.91039,
+    53.083791
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 49.000291,
+   "metric": "recall100",
+   "per_seed": [
+    48.721078,
+    49.279503
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.394867,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_raw",
+   "ci": [
+    13.022829,
+    24.511214
+   ],
+   "ci_boot": [
+    14.811762,
+    25.220456
+   ],
+   "ci_cluster": [
+    14.811762,
+    25.220456
+   ],
+   "ci_query": [
+    16.058039,
+    21.507191
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 18.767022,
+   "metric": "ndcg10",
+   "per_seed": [
+    18.50903,
+    19.025013
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.364855,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_raw",
+   "ci": [
+    40.583634,
+    54.236738
+   ],
+   "ci_boot": [
+    43.883587,
+    57.593352
+   ],
+   "ci_cluster": [
+    43.883587,
+    57.593352
+   ],
+   "ci_query": [
+    43.34132,
+    51.521919
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 47.410186,
+   "metric": "recall100",
+   "per_seed": [
+    47.303925,
+    47.516447
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.150276,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_sub",
+   "ci": [
+    14.942628,
+    25.198993
+   ],
+   "ci_boot": [
+    14.609587,
+    25.848211
+   ],
+   "ci_cluster": [
+    14.609587,
+    25.848211
+   ],
+   "ci_query": [
+    17.25269,
+    22.919409
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 20.070811,
+   "metric": "ndcg10",
+   "per_seed": [
+    19.894974,
+    20.246647
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.248671,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_sub",
+   "ci": [
+    42.493162,
+    54.960567
+   ],
+   "ci_boot": [
+    45.440479,
+    57.345562
+   ],
+   "ci_cluster": [
+    45.440479,
+    57.345562
+   ],
+   "ci_query": [
+    44.700567,
+    52.824691
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 48.726865,
+   "metric": "recall100",
+   "per_seed": [
+    48.626995,
+    48.826734
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.141237,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_weight",
+   "ci": [
+    13.184343,
+    24.481943
+   ],
+   "ci_boot": [
+    14.503126,
+    25.255557
+   ],
+   "ci_cluster": [
+    14.503126,
+    25.255557
+   ],
+   "ci_query": [
+    16.113705,
+    21.633671
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 18.833143,
+   "metric": "ndcg10",
+   "per_seed": [
+    18.779513,
+    18.886772
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.075844,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_weight",
+   "ci": [
+    41.032978,
+    54.227474
+   ],
+   "ci_boot": [
+    44.147291,
+    57.023039
+   ],
+   "ci_cluster": [
+    44.147291,
+    57.023039
+   ],
+   "ci_query": [
+    43.639792,
+    51.632424
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L2",
+   "mean": 47.630226,
+   "metric": "recall100",
+   "per_seed": [
+    47.935382,
+    47.325069
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 316,
+   "repos": 10,
+   "seed_sd": 0.431556,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_curriculum",
+   "ci": [
+    38.26456,
+    44.458993
+   ],
+   "ci_boot": [
+    37.138563,
+    45.358061
+   ],
+   "ci_cluster": [
+    37.138563,
+    45.358061
+   ],
+   "ci_query": [
+    37.492288,
+    44.920593
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 41.361776,
+   "metric": "ndcg10",
+   "per_seed": [
+    40.895766,
+    41.827787
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.659038,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_curriculum",
+   "ci": [
+    27.165823,
+    39.078447
+   ],
+   "ci_boot": [
+    30.311566,
+    39.637995
+   ],
+   "ci_cluster": [
+    30.311566,
+    39.637995
+   ],
+   "ci_query": [
+    30.063627,
+    36.209806
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 33.122135,
+   "metric": "recall100",
+   "per_seed": [
+    33.232079,
+    33.01219
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.155485,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "ci": [
+    40.557996,
+    47.999632
+   ],
+   "ci_boot": [
+    39.481435,
+    46.561919
+   ],
+   "ci_cluster": [
+    39.481435,
+    46.561919
+   ],
+   "ci_query": [
+    40.508617,
+    47.85181
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 44.278814,
+   "metric": "ndcg10",
+   "per_seed": [
+    44.143388,
+    44.41424
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.191521,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_filter_bm25",
+   "ci": [
+    29.48751,
+    39.814557
+   ],
+   "ci_boot": [
+    32.135048,
+    40.90046
+   ],
+   "ci_cluster": [
+    32.135048,
+    40.90046
+   ],
+   "ci_query": [
+    31.606249,
+    37.72787
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 34.651033,
+   "metric": "recall100",
+   "per_seed": [
+    34.550142,
+    34.751925
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.142683,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_raw",
+   "ci": [
+    38.315034,
+    45.074329
+   ],
+   "ci_boot": [
+    37.592487,
+    45.358921
+   ],
+   "ci_cluster": [
+    37.592487,
+    45.358921
+   ],
+   "ci_query": [
+    37.94934,
+    45.097362
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 41.694682,
+   "metric": "ndcg10",
+   "per_seed": [
+    42.521725,
+    40.867638
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 1.169616,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_raw",
+   "ci": [
+    26.891638,
+    39.947699
+   ],
+   "ci_boot": [
+    30.347871,
+    40.640502
+   ],
+   "ci_cluster": [
+    30.347871,
+    40.640502
+   ],
+   "ci_query": [
+    30.514703,
+    36.413517
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 33.419669,
+   "metric": "recall100",
+   "per_seed": [
+    34.037768,
+    32.801569
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.874124,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_sub",
+   "ci": [
+    39.585638,
+    47.486228
+   ],
+   "ci_boot": [
+    38.36538,
+    46.048273
+   ],
+   "ci_cluster": [
+    38.36538,
+    46.048273
+   ],
+   "ci_query": [
+    39.835845,
+    46.903953
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 43.535933,
+   "metric": "ndcg10",
+   "per_seed": [
+    42.766374,
+    44.305492
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 1.088321,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_sub",
+   "ci": [
+    28.482516,
+    40.277537
+   ],
+   "ci_boot": [
+    31.602531,
+    41.244356
+   ],
+   "ci_cluster": [
+    31.602531,
+    41.244356
+   ],
+   "ci_query": [
+    31.431161,
+    37.377315
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 34.380027,
+   "metric": "recall100",
+   "per_seed": [
+    34.236084,
+    34.523969
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.203565,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_weight",
+   "ci": [
+    38.674014,
+    44.569739
+   ],
+   "ci_boot": [
+    37.954712,
+    45.28368
+   ],
+   "ci_cluster": [
+    37.954712,
+    45.28368
+   ],
+   "ci_query": [
+    37.87428,
+    45.066047
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 41.621876,
+   "metric": "ndcg10",
+   "per_seed": [
+    42.550964,
+    40.692788
+   ],
+   "positives_total": null,
+   "primary": false,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 1.313929,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  {
+   "cell": "mined_weight",
+   "ci": [
+    26.518687,
+    39.915969
+   ],
+   "ci_boot": [
+    30.089748,
+    40.29318
+   ],
+   "ci_cluster": [
+    30.089748,
+    40.29318
+   ],
+   "ci_query": [
+    30.244953,
+    36.231046
+   ],
+   "eval_set": "exec377",
+   "interval": "repository-clustered",
+   "level": "L3",
+   "mean": 33.217328,
+   "metric": "recall100",
+   "per_seed": [
+    33.661735,
+    32.772921
+   ],
+   "positives_total": null,
+   "primary": true,
+   "queries": 224,
+   "repos": 9,
+   "seed_sd": 0.628487,
+   "seeds": [
+    101,
+    102
+   ]
+  }
+ ],
+ "claims": [
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_curriculum - mined_raw",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_curriculum - mined_raw",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": false,
+    "L3": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds",
+    "L3": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_curriculum - mined_sub",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": true
+   },
+   "levels": {
+    "L2": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_curriculum - mined_sub",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": true,
+    "L3": true
+   },
+   "levels": {
+    "L2": "estimate-with-bounds",
+    "L3": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "inconclusive",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "eight",
+   "family": "confirmatory",
+   "harmful": {
+    "L2": false
+   },
+   "levels": {
+    "L2": "inconclusive"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "inconclusive",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": {
+    "L2": false,
+    "L3": false
+   },
+   "levels": {
+    "L2": "inconclusive",
+    "L3": "inconclusive"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "eight",
+   "family": "confirmatory",
+   "harmful": {
+    "L2": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "inconclusive",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": {
+    "L2": false,
+    "L3": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds",
+    "L3": "inconclusive"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_weight - mined_raw",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_weight - mined_raw",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": false,
+    "L3": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds",
+    "L3": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_weight - mined_sub",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds"
+   },
+   "reasons": []
+  },
+  {
+   "claim": "estimate-with-bounds",
+   "contrast": "mined_weight - mined_sub",
+   "dev_same_sign_both_levels": false,
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": {
+    "L2": false,
+    "L3": false
+   },
+   "levels": {
+    "L2": "estimate-with-bounds",
+    "L3": "estimate-with-bounds"
+   },
+   "reasons": []
+  }
+ ],
+ "contrasts": [
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -1.053391,
+    1.733999
+   ],
+   "ci_cluster": [
+    -1.053391,
+    1.733999
+   ],
+   "ci_query": [
+    -0.749415,
+    1.15789
+   ],
+   "ci_uncorrected": [
+    -1.507235,
+    1.942997
+   ],
+   "class": "inconclusive",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "d": 0.217881,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "confirmatory",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.025,
+    "boot": {
+     "alpha_step": 0.025,
+     "ci": [
+      -1.227782,
+      1.911938
+     ],
+     "m": 2,
+     "p_adjusted": 1.0,
+     "rank": 2,
+     "rejected": false
+    },
+    "ci": [
+     -1.854954,
+     2.290716
+    ],
+    "ci_boot": [
+     -1.227782,
+     1.911938
+    ],
+    "m": 2,
+    "p_adjusted": 1.0,
+    "rank": 2,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.445503,
+     3.204967
+    ],
+    "ci_boot": [
+     -1.550366,
+     2.10878
+    ],
+    "d": 0.879732,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.797601,
+   "p_t": 0.773878,
+   "per_seed": [
+    {
+     "d": -0.439417,
+     "seed": 101.0
+    },
+    {
+     "d": 0.875179,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 177,
+   "reference": "mined_raw",
+   "repos": 8,
+   "se": 0.729552,
+   "seed_sd_arm": 0.800403,
+   "seed_sd_of_difference": 0.929559,
+   "seed_sd_reference": 0.129157,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -6.90132,
+    1.300337
+   ],
+   "ci_cluster": [
+    -6.90132,
+    1.300337
+   ],
+   "ci_query": [
+    -5.872331,
+    -1.769633
+   ],
+   "ci_uncorrected": [
+    -9.732534,
+    2.28078
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "d": -3.725877,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "confirmatory",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.445503,
+     3.204967
+    ],
+    "ci_boot": [
+     -1.550366,
+     2.10878
+    ],
+    "d": 0.879732,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.373813,
+   "p_t": 0.185876,
+   "per_seed": [
+    {
+     "d": -6.484503,
+     "seed": 101.0
+    },
+    {
+     "d": -0.967251,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 177,
+   "reference": "mined_raw",
+   "repos": 8,
+   "se": 2.540216,
+   "seed_sd_arm": 3.439838,
+   "seed_sd_of_difference": 3.901287,
+   "seed_sd_reference": 0.461448,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -0.525327,
+    1.102899
+   ],
+   "ci_cluster": [
+    -0.525327,
+    1.102899
+   ],
+   "ci_query": [
+    -0.647626,
+    0.846325
+   ],
+   "ci_uncorrected": [
+    -0.906594,
+    1.187737
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "d": 0.140572,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "confirmatory",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.025,
+    "boot": {
+     "alpha_step": 0.025,
+     "ci": [
+      -0.626203,
+      1.154465
+     ],
+     "m": 2,
+     "p_adjusted": 1.0,
+     "rank": 1,
+     "rejected": false
+    },
+    "ci": [
+     -1.117663,
+     1.398807
+    ],
+    "ci_boot": [
+     -0.626203,
+     1.154465
+    ],
+    "m": 2,
+    "p_adjusted": 1.0,
+    "rank": 1,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.686554,
+     1.866767
+    ],
+    "ci_boot": [
+     -0.704609,
+     1.309046
+    ],
+    "d": 0.590107,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.776612,
+   "p_t": 0.760178,
+   "per_seed": [
+    {
+     "d": -0.435633,
+     "seed": 101.0
+    },
+    {
+     "d": 0.716777,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 177,
+   "reference": "mined_sub",
+   "repos": 8,
+   "se": 0.442846,
+   "seed_sd_arm": 0.800403,
+   "seed_sd_of_difference": 0.814877,
+   "seed_sd_reference": 0.014475,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -1.440879,
+    1.619449
+   ],
+   "ci_cluster": [
+    -1.440879,
+    1.619449
+   ],
+   "ci_query": [
+    -2.082376,
+    1.130367
+   ],
+   "ci_uncorrected": [
+    -2.200925,
+    1.301705
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "d": -0.44961,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "confirmatory",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.686554,
+     1.866767
+    ],
+    "ci_boot": [
+     -0.704609,
+     1.309046
+    ],
+    "d": 0.590107,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.617691,
+   "p_t": 0.562974,
+   "per_seed": [
+    {
+     "d": -1.800076,
+     "seed": 101.0
+    },
+    {
+     "d": 0.900856,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 177,
+   "reference": "mined_sub",
+   "repos": 8,
+   "se": 0.740631,
+   "seed_sd_arm": 3.439838,
+   "seed_sd_of_difference": 1.909847,
+   "seed_sd_reference": 1.529991,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -0.63567,
+    0.531854
+   ],
+   "ci_cluster": [
+    -0.63567,
+    0.531854
+   ],
+   "ci_query": [
+    -0.693846,
+    0.34342
+   ],
+   "ci_uncorrected": [
+    -0.898313,
+    0.58844
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_raw",
+   "d": -0.154936,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.016667,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -0.8088,
+      0.611226
+     ],
+     "m": 4,
+     "p_adjusted": 0.68066,
+     "rank": 4,
+     "rejected": false
+    },
+    "ci": [
+     -1.138158,
+     0.828285
+    ],
+    "ci_boot": [
+     -0.8088,
+     0.611226
+    ],
+    "m": 4,
+    "p_adjusted": 0.637207,
+    "rank": 4,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.620984,
+     1.022567
+    ],
+    "ci_boot": [
+     -0.680462,
+     0.619689
+    ],
+    "d": 0.200792,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.68066,
+   "p_t": 0.637207,
+   "per_seed": [
+    {
+     "d": -0.206612,
+     "seed": 101.0
+    },
+    {
+     "d": -0.103261,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 177,
+   "reference": "mined_raw",
+   "repos": 8,
+   "se": 0.314374,
+   "seed_sd_arm": 0.056077,
+   "seed_sd_of_difference": 0.07308,
+   "seed_sd_reference": 0.129157,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -3.229288,
+    -0.28261
+   ],
+   "ci_cluster": [
+    -3.229288,
+    -0.28261
+   ],
+   "ci_query": [
+    -3.138871,
+    -1.009008
+   ],
+   "ci_uncorrected": [
+    -4.267483,
+    0.280131
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_raw",
+   "d": -1.993676,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.620984,
+     1.022567
+    ],
+    "ci_boot": [
+     -0.680462,
+     0.619689
+    ],
+    "d": 0.200792,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.001,
+   "p_t": 0.076841,
+   "per_seed": [
+    {
+     "d": -2.221767,
+     "seed": 101.0
+    },
+    {
+     "d": -1.765584,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 177,
+   "reference": "mined_raw",
+   "repos": 8,
+   "se": 0.961593,
+   "seed_sd_arm": 0.138878,
+   "seed_sd_of_difference": 0.32257,
+   "seed_sd_reference": 0.461448,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -0.38034,
+    0.215197
+   ],
+   "ci_cluster": [
+    -0.38034,
+    0.215197
+   ],
+   "ci_query": [
+    -0.855967,
+    0.35793
+   ],
+   "ci_uncorrected": [
+    -0.530535,
+    0.066044
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_sub",
+   "d": -0.232245,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.016667,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -0.398259,
+      0.425882
+     ],
+     "m": 4,
+     "p_adjusted": 0.505747,
+     "rank": 3,
+     "rejected": false
+    },
+    "ci": [
+     -0.626776,
+     0.162285
+    ],
+    "ci_boot": [
+     -0.398259,
+     0.425882
+    ],
+    "m": 4,
+    "p_adjusted": 0.216349,
+    "rank": 3,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.544326,
+     0.366659
+    ],
+    "ci_boot": [
+     -0.337879,
+     0.432063
+    ],
+    "d": -0.088834,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.252874,
+   "p_t": 0.108174,
+   "per_seed": [
+    {
+     "d": -0.202828,
+     "seed": 101.0
+    },
+    {
+     "d": -0.261663,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 177,
+   "reference": "mined_sub",
+   "repos": 8,
+   "se": 0.126147,
+   "seed_sd_arm": 0.056077,
+   "seed_sd_of_difference": 0.041602,
+   "seed_sd_reference": 0.014475,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -2.124897,
+    3.067922
+   ],
+   "ci_cluster": [
+    -2.124897,
+    3.067922
+   ],
+   "ci_query": [
+    -0.21484,
+    2.781331
+   ],
+   "ci_uncorrected": [
+    -1.903571,
+    4.468755
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_sub",
+   "d": 1.282592,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.544326,
+     0.366659
+    ],
+    "ci_boot": [
+     -0.337879,
+     0.432063
+    ],
+    "d": -0.088834,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.441779,
+   "p_t": 0.37286,
+   "per_seed": [
+    {
+     "d": 2.46266,
+     "seed": 101.0
+    },
+    {
+     "d": 0.102523,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 177,
+   "reference": "mined_sub",
+   "repos": 8,
+   "se": 1.347429,
+   "seed_sd_arm": 0.138878,
+   "seed_sd_of_difference": 1.668869,
+   "seed_sd_reference": 1.529991,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -2.730518,
+    0.047473
+   ],
+   "ci_cluster": [
+    -2.730518,
+    0.047473
+   ],
+   "ci_query": [
+    -2.318552,
+    -0.379099
+   ],
+   "ci_uncorrected": [
+    -2.677209,
+    0.071426
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_raw",
+   "d": -1.302891,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.016667,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -3.568392,
+      0.452971
+     ],
+     "m": 4,
+     "p_adjusted": 0.176912,
+     "rank": 2,
+     "rejected": false
+    },
+    "ci": [
+     -3.120622,
+     0.514839
+    ],
+    "ci_boot": [
+     -3.568392,
+     0.452971
+    ],
+    "m": 4,
+    "p_adjusted": 0.179774,
+    "rank": 2,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -3.516649,
+     1.415167
+    ],
+    "ci_boot": [
+     -3.54895,
+     0.384464
+    ],
+    "d": -1.050741,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.058971,
+   "p_t": 0.059925,
+   "per_seed": [
+    {
+     "d": -1.121613,
+     "seed": 101.0
+    },
+    {
+     "d": -1.484169,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 177,
+   "reference": "mined_raw",
+   "repos": 8,
+   "se": 0.581199,
+   "seed_sd_arm": 0.385523,
+   "seed_sd_of_difference": 0.256366,
+   "seed_sd_reference": 0.129157,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -8.470516,
+    -1.397306
+   ],
+   "ci_cluster": [
+    -8.470516,
+    -1.397306
+   ],
+   "ci_query": [
+    -7.963006,
+    -4.054121
+   ],
+   "ci_uncorrected": [
+    -10.873276,
+    -0.827144
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_raw",
+   "d": -5.85021,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -3.516649,
+     1.415167
+    ],
+    "ci_boot": [
+     -3.54895,
+     0.384464
+    ],
+    "d": -1.050741,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.001,
+   "p_t": 0.02834,
+   "per_seed": [
+    {
+     "d": -6.987531,
+     "seed": 101.0
+    },
+    {
+     "d": -4.712889,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 177,
+   "reference": "mined_raw",
+   "repos": 8,
+   "se": 2.124256,
+   "seed_sd_arm": 1.146966,
+   "seed_sd_of_difference": 1.608414,
+   "seed_sd_reference": 0.461448,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -2.458673,
+    -0.375745
+   ],
+   "ci_cluster": [
+    -2.458673,
+    -0.375745
+   ],
+   "ci_query": [
+    -2.157093,
+    -0.661412
+   ],
+   "ci_uncorrected": [
+    -2.349574,
+    -0.410826
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_sub",
+   "d": -1.3802,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": true,
+   "holm": {
+    "alpha_step": 0.0125,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -2.907346,
+      0.02728
+     ],
+     "m": 4,
+     "p_adjusted": 0.05997,
+     "rank": 1,
+     "rejected": false
+    },
+    "ci": [
+     -2.747499,
+     -0.012901
+    ],
+    "ci_boot": [
+     -2.907346,
+     0.02728
+    ],
+    "m": 4,
+    "p_adjusted": 0.047892,
+    "rank": 1,
+    "rejected": true
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -3.187549,
+     0.506817
+    ],
+    "ci_boot": [
+     -2.969105,
+     0.165978
+    ],
+    "d": -1.340366,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.014993,
+   "p_t": 0.011973,
+   "per_seed": [
+    {
+     "d": -1.117829,
+     "seed": 101.0
+    },
+    {
+     "d": -1.642571,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 177,
+   "reference": "mined_sub",
+   "repos": 8,
+   "se": 0.409948,
+   "seed_sd_arm": 0.385523,
+   "seed_sd_of_difference": 0.371048,
+   "seed_sd_reference": 0.014475,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -3.431734,
+    -1.490685
+   ],
+   "ci_cluster": [
+    -3.431734,
+    -1.490685
+   ],
+   "ci_query": [
+    -4.343818,
+    -0.919114
+   ],
+   "ci_uncorrected": [
+    -3.5308,
+    -1.617085
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_sub",
+   "d": -2.573942,
+   "delta": 1.5,
+   "df": 7,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "eight",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -3.187549,
+     0.506817
+    ],
+    "ci_boot": [
+     -2.969105,
+     0.165978
+    ],
+    "d": -1.340366,
+    "interval": "repository-clustered",
+    "left_out": "aws-cloudformation/cfn-lint",
+    "queries": 97,
+    "repos": 7
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.001,
+   "p_t": 0.000381,
+   "per_seed": [
+    {
+     "d": -2.303103,
+     "seed": 101.0
+    },
+    {
+     "d": -2.844782,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 177,
+   "reference": "mined_sub",
+   "repos": 8,
+   "se": 0.404655,
+   "seed_sd_arm": 1.146966,
+   "seed_sd_of_difference": 0.383025,
+   "seed_sd_reference": 1.529991,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -1.301202,
+    1.754399
+   ],
+   "ci_cluster": [
+    -1.301202,
+    1.754399
+   ],
+   "ci_query": [
+    0.542187,
+    2.052794
+   ],
+   "ci_uncorrected": [
+    0.342315,
+    2.221704
+   ],
+   "class": "inconclusive",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "d": 1.28201,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.0125,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -2.016473,
+      1.840889
+     ],
+     "m": 4,
+     "p_adjusted": 0.751624,
+     "rank": 1,
+     "rejected": false
+    },
+    "ci": [
+     -0.010265,
+     2.574285
+    ],
+    "ci_boot": [
+     -2.016473,
+     1.840889
+    ],
+    "m": 4,
+    "p_adjusted": 0.052034,
+    "rank": 1,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.43776,
+     2.903354
+    ],
+    "ci_boot": [
+     -2.129519,
+     1.798037
+    ],
+    "d": 0.732797,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.187906,
+   "p_t": 0.013009,
+   "per_seed": [
+    {
+     "d": 1.812203,
+     "seed": 101.0
+    },
+    {
+     "d": 0.751817,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 316,
+   "reference": "mined_raw",
+   "repos": 10,
+   "se": 0.415398,
+   "seed_sd_arm": 0.384951,
+   "seed_sd_of_difference": 0.749806,
+   "seed_sd_reference": 0.364855,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -1.451615,
+    2.434169
+   ],
+   "ci_cluster": [
+    -1.451615,
+    2.434169
+   ],
+   "ci_query": [
+    -0.161193,
+    3.385776
+   ],
+   "ci_uncorrected": [
+    -0.150543,
+    3.330753
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "d": 1.590105,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.43776,
+     2.903354
+    ],
+    "ci_boot": [
+     -2.129519,
+     1.798037
+    ],
+    "d": 0.732797,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.325837,
+   "p_t": 0.068752,
+   "per_seed": [
+    {
+     "d": 1.417153,
+     "seed": 101.0
+    },
+    {
+     "d": 1.763056,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 316,
+   "reference": "mined_raw",
+   "repos": 10,
+   "se": 0.769464,
+   "seed_sd_arm": 0.394867,
+   "seed_sd_of_difference": 0.24459,
+   "seed_sd_reference": 0.150276,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -0.467266,
+    0.750841
+   ],
+   "ci_cluster": [
+    -0.467266,
+    0.750841
+   ],
+   "ci_query": [
+    -0.635531,
+    0.603193
+   ],
+   "ci_uncorrected": [
+    -0.713747,
+    0.670189
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "d": -0.021779,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.0125,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -0.602791,
+      0.820239
+     ],
+     "m": 4,
+     "p_adjusted": 1.0,
+     "rank": 4,
+     "rejected": false
+    },
+    "ci": [
+     -0.973379,
+     0.92982
+    ],
+    "ci_boot": [
+     -0.602791,
+     0.820239
+    ],
+    "m": 4,
+    "p_adjusted": 1.0,
+    "rank": 4,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.411773,
+     1.246761
+    ],
+    "ci_boot": [
+     -0.678805,
+     0.809089
+    ],
+    "d": 0.417494,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.897551,
+   "p_t": 0.944796,
+   "per_seed": [
+    {
+     "d": 0.426259,
+     "seed": 101.0
+    },
+    {
+     "d": -0.469817,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 316,
+   "reference": "mined_sub",
+   "repos": 10,
+   "se": 0.305889,
+   "seed_sd_arm": 0.384951,
+   "seed_sd_of_difference": 0.633622,
+   "seed_sd_reference": 0.248671,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -1.690037,
+    0.989139
+   ],
+   "ci_cluster": [
+    -1.690037,
+    0.989139
+   ],
+   "ci_query": [
+    -0.946582,
+    1.476587
+   ],
+   "ci_uncorrected": [
+    -0.981033,
+    1.527885
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "d": 0.273426,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.411773,
+     1.246761
+    ],
+    "ci_boot": [
+     -0.678805,
+     0.809089
+    ],
+    "d": 0.417494,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.71964,
+   "p_t": 0.633771,
+   "per_seed": [
+    {
+     "d": 0.094083,
+     "seed": 101.0
+    },
+    {
+     "d": 0.452769,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 316,
+   "reference": "mined_sub",
+   "repos": 10,
+   "se": 0.554541,
+   "seed_sd_arm": 0.394867,
+   "seed_sd_of_difference": 0.253629,
+   "seed_sd_reference": 0.141237,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -0.659845,
+    0.193765
+   ],
+   "ci_cluster": [
+    -0.659845,
+    0.193765
+   ],
+   "ci_query": [
+    -0.337935,
+    0.481315
+   ],
+   "ci_uncorrected": [
+    -0.214108,
+    0.34635
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_raw",
+   "d": 0.066121,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.008333,
+    "boot": {
+     "alpha_step": 0.01,
+     "ci": [
+      -0.915347,
+      0.209055
+     ],
+     "m": 8,
+     "p_adjusted": 0.691654,
+     "rank": 8,
+     "rejected": false
+    },
+    "ci": [
+     -0.350626,
+     0.482868
+    ],
+    "ci_boot": [
+     -0.915347,
+     0.209055
+    ],
+    "m": 8,
+    "p_adjusted": 0.967102,
+    "rank": 8,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.683383,
+     0.376098
+    ],
+    "ci_boot": [
+     -0.947119,
+     0.10385
+    ],
+    "d": -0.153642,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.691654,
+   "p_t": 0.606434,
+   "per_seed": [
+    {
+     "d": 0.270483,
+     "seed": 101.0
+    },
+    {
+     "d": -0.138241,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 316,
+   "reference": "mined_raw",
+   "repos": 10,
+   "se": 0.123877,
+   "seed_sd_arm": 0.075844,
+   "seed_sd_of_difference": 0.289012,
+   "seed_sd_reference": 0.364855,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -0.883565,
+    0.471931
+   ],
+   "ci_cluster": [
+    -0.883565,
+    0.471931
+   ],
+   "ci_query": [
+    -0.655428,
+    1.106098
+   ],
+   "ci_uncorrected": [
+    -0.221611,
+    0.661691
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_raw",
+   "d": 0.22004,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.683383,
+     0.376098
+    ],
+    "ci_boot": [
+     -0.947119,
+     0.10385
+    ],
+    "d": -0.153642,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.417791,
+   "p_t": 0.288871,
+   "per_seed": [
+    {
+     "d": 0.631458,
+     "seed": 101.0
+    },
+    {
+     "d": -0.191378,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 316,
+   "reference": "mined_raw",
+   "repos": 10,
+   "se": 0.195234,
+   "seed_sd_arm": 0.431556,
+   "seed_sd_of_difference": 0.581833,
+   "seed_sd_reference": 0.150276,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -1.673351,
+    0.321028
+   ],
+   "ci_cluster": [
+    -1.673351,
+    0.321028
+   ],
+   "ci_query": [
+    -1.847429,
+    -0.657849
+   ],
+   "ci_uncorrected": [
+    -2.123188,
+    -0.352148
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_sub",
+   "d": -1.237668,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.008333,
+    "boot": {
+     "alpha_step": 0.01,
+     "ci": [
+      -1.737825,
+      0.812061
+     ],
+     "m": 8,
+     "p_adjusted": 0.487756,
+     "rank": 5,
+     "rejected": false
+    },
+    "ci": [
+     -2.554583,
+     0.079247
+    ],
+    "ci_boot": [
+     -1.737825,
+     0.812061
+    ],
+    "m": 8,
+    "p_adjusted": 0.069106,
+    "rank": 3,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.405459,
+     0.467568
+    ],
+    "ci_boot": [
+     -1.021383,
+     0.773869
+    ],
+    "d": -0.468945,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.121939,
+   "p_t": 0.011518,
+   "per_seed": [
+    {
+     "d": -1.115461,
+     "seed": 101.0
+    },
+    {
+     "d": -1.359875,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 316,
+   "reference": "mined_sub",
+   "repos": 10,
+   "se": 0.391449,
+   "seed_sd_arm": 0.075844,
+   "seed_sd_of_difference": 0.172827,
+   "seed_sd_reference": 0.248671,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -1.525566,
+    0.279006
+   ],
+   "ci_cluster": [
+    -1.525566,
+    0.279006
+   ],
+   "ci_query": [
+    -2.496228,
+    0.2793
+   ],
+   "ci_uncorrected": [
+    -1.698653,
+    -0.494625
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_sub",
+   "d": -1.096639,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.405459,
+     0.467568
+    ],
+    "ci_boot": [
+     -1.021383,
+     0.773869
+    ],
+    "d": -0.468945,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.077961,
+   "p_t": 0.002595,
+   "per_seed": [
+    {
+     "d": -0.691612,
+     "seed": 101.0
+    },
+    {
+     "d": -1.501665,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 316,
+   "reference": "mined_sub",
+   "repos": 10,
+   "se": 0.266124,
+   "seed_sd_arm": 0.431556,
+   "seed_sd_of_difference": 0.572794,
+   "seed_sd_reference": 0.141237,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -1.877868,
+    0.149106
+   ],
+   "ci_cluster": [
+    -1.877868,
+    0.149106
+   ],
+   "ci_query": [
+    -0.965048,
+    0.302255
+   ],
+   "ci_uncorrected": [
+    -1.104898,
+    0.450406
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_raw",
+   "d": -0.327246,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.008333,
+    "boot": {
+     "alpha_step": 0.01,
+     "ci": [
+      -2.626776,
+      0.358252
+     ],
+     "m": 8,
+     "p_adjusted": 0.596702,
+     "rank": 6,
+     "rejected": false
+    },
+    "ci": [
+     -1.483744,
+     0.829251
+    ],
+    "ci_boot": [
+     -2.626776,
+     0.358252
+    ],
+    "m": 8,
+    "p_adjusted": 0.967102,
+    "rank": 7,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.118423,
+     0.354292
+    ],
+    "ci_boot": [
+     -2.531639,
+     0.208055
+    ],
+    "d": -0.882065,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.198901,
+   "p_t": 0.365988,
+   "per_seed": [
+    {
+     "d": -0.274797,
+     "seed": 101.0
+    },
+    {
+     "d": -0.379696,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 316,
+   "reference": "mined_raw",
+   "repos": 10,
+   "se": 0.343766,
+   "seed_sd_arm": 0.290681,
+   "seed_sd_of_difference": 0.074175,
+   "seed_sd_reference": 0.364855,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -3.299883,
+    0.240958
+   ],
+   "ci_cluster": [
+    -3.299883,
+    0.240958
+   ],
+   "ci_query": [
+    -1.633634,
+    1.15037
+   ],
+   "ci_uncorrected": [
+    -1.532023,
+    0.822144
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_raw",
+   "d": -0.35494,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.118423,
+     0.354292
+    ],
+    "ci_boot": [
+     -2.531639,
+     0.208055
+    ],
+    "d": -0.882065,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.362819,
+   "p_t": 0.512325,
+   "per_seed": [
+    {
+     "d": 0.087435,
+     "seed": 101.0
+    },
+    {
+     "d": -0.797315,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 316,
+   "reference": "mined_raw",
+   "repos": 10,
+   "se": 0.520337,
+   "seed_sd_arm": 0.475336,
+   "seed_sd_of_difference": 0.625612,
+   "seed_sd_reference": 0.150276,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -1.867648,
+    -0.445875
+   ],
+   "ci_cluster": [
+    -1.867648,
+    -0.445875
+   ],
+   "ci_query": [
+    -2.305076,
+    -1.000768
+   ],
+   "ci_uncorrected": [
+    -2.15697,
+    -1.105101
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_sub",
+   "d": -1.631035,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": true,
+   "holm": {
+    "alpha_step": 0.007143,
+    "boot": {
+     "alpha_step": 0.00625,
+     "ci": [
+      -1.907732,
+      -0.205521
+     ],
+     "m": 8,
+     "p_adjusted": 0.007996,
+     "rank": 1,
+     "rejected": true
+    },
+    "ci": [
+     -2.43583,
+     -0.826241
+    ],
+    "ci_boot": [
+     -1.907732,
+     -0.205521
+    ],
+    "m": 8,
+    "p_adjusted": 0.000435,
+    "rank": 2,
+    "rejected": true
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.059295,
+     -0.335441
+    ],
+    "ci_boot": [
+     -1.646446,
+     -0.288735
+    ],
+    "d": -1.197368,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.001,
+   "p_t": 6.2e-05,
+   "per_seed": [
+    {
+     "d": -1.660741,
+     "seed": 101.0
+    },
+    {
+     "d": -1.60133,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 316,
+   "reference": "mined_sub",
+   "repos": 10,
+   "se": 0.232493,
+   "seed_sd_arm": 0.290681,
+   "seed_sd_of_difference": 0.04201,
+   "seed_sd_reference": 0.248671,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -3.194844,
+    -0.874933
+   ],
+   "ci_cluster": [
+    -3.194844,
+    -0.874933
+   ],
+   "ci_query": [
+    -3.108276,
+    -0.224333
+   ],
+   "ci_uncorrected": [
+    -2.390186,
+    -0.953051
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_sub",
+   "d": -1.671619,
+   "delta": 1.5,
+   "df": 9,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.059295,
+     -0.335441
+    ],
+    "ci_boot": [
+     -1.646446,
+     -0.288735
+    ],
+    "d": -1.197368,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 134,
+    "repos": 9
+   },
+   "level": "L2",
+   "metric": "recall100",
+   "p_bootstrap": 0.010995,
+   "p_t": 0.000519,
+   "per_seed": [
+    {
+     "d": -1.235635,
+     "seed": 101.0
+    },
+    {
+     "d": -2.107602,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 316,
+   "reference": "mined_sub",
+   "repos": 10,
+   "se": 0.317647,
+   "seed_sd_arm": 0.475336,
+   "seed_sd_of_difference": 0.616574,
+   "seed_sd_reference": 0.141237,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    0.433174,
+    2.94206
+   ],
+   "ci_cluster": [
+    0.433174,
+    2.94206
+   ],
+   "ci_query": [
+    1.62499,
+    3.626999
+   ],
+   "ci_uncorrected": [
+    1.747987,
+    3.420278
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "d": 2.584132,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.698446,
+     1.307629
+    ],
+    "ci_boot": [
+     -2.495771,
+     0.711672
+    ],
+    "d": -0.195408,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.023988,
+   "p_t": 9.9e-05,
+   "per_seed": [
+    {
+     "d": 1.621663,
+     "seed": 101.0
+    },
+    {
+     "d": 3.546601,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 224,
+   "reference": "mined_raw",
+   "repos": 9,
+   "se": 0.362595,
+   "seed_sd_arm": 0.191521,
+   "seed_sd_of_difference": 1.361137,
+   "seed_sd_reference": 1.169616,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -1.765617,
+    1.954534
+   ],
+   "ci_cluster": [
+    -1.765617,
+    1.954534
+   ],
+   "ci_query": [
+    0.618214,
+    1.861659
+   ],
+   "ci_uncorrected": [
+    -0.352387,
+    2.815117
+   ],
+   "class": "inconclusive",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_raw",
+   "d": 1.231365,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.0125,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -2.449297,
+      2.061251
+     ],
+     "m": 4,
+     "p_adjusted": 1.0,
+     "rank": 2,
+     "rejected": false
+    },
+    "ci": [
+     -0.970469,
+     3.433199
+    ],
+    "ci_boot": [
+     -2.449297,
+     2.061251
+    ],
+    "m": 4,
+    "p_adjusted": 0.332236,
+    "rank": 2,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.698446,
+     1.307629
+    ],
+    "ci_boot": [
+     -2.495771,
+     0.711672
+    ],
+    "d": -0.195408,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "recall100",
+   "p_bootstrap": 0.41979,
+   "p_t": 0.110745,
+   "per_seed": [
+    {
+     "d": 0.512374,
+     "seed": 101.0
+    },
+    {
+     "d": 1.950356,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 224,
+   "reference": "mined_raw",
+   "repos": 9,
+   "se": 0.686795,
+   "seed_sd_arm": 0.142683,
+   "seed_sd_of_difference": 1.016807,
+   "seed_sd_reference": 0.874124,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    0.249862,
+    1.450606
+   ],
+   "ci_cluster": [
+    0.249862,
+    1.450606
+   ],
+   "ci_query": [
+    -0.041094,
+    1.52187
+   ],
+   "ci_uncorrected": [
+    0.363793,
+    1.121969
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "d": 0.742881,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.29056,
+     1.07676
+    ],
+    "ci_boot": [
+     -3.150953,
+     0.152274
+    ],
+    "d": -0.6069,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.028986,
+   "p_t": 0.001953,
+   "per_seed": [
+    {
+     "d": 1.377015,
+     "seed": 101.0
+    },
+    {
+     "d": 0.108747,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 224,
+   "reference": "mined_sub",
+   "repos": 9,
+   "se": 0.164392,
+   "seed_sd_arm": 0.191521,
+   "seed_sd_of_difference": 0.8968,
+   "seed_sd_reference": 1.088321,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_filter_bm25",
+   "ci_boot_uncorrected": [
+    -2.168946,
+    0.731896
+   ],
+   "ci_cluster": [
+    -2.168946,
+    0.731896
+   ],
+   "ci_query": [
+    -0.307435,
+    0.861245
+   ],
+   "ci_uncorrected": [
+    -0.77818,
+    1.320194
+   ],
+   "class": "inconclusive",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_filter_bm25 - mined_sub",
+   "d": 0.271007,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "confirmatory",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.0125,
+    "boot": {
+     "alpha_step": 0.0125,
+     "ci": [
+      -3.035787,
+      0.79042
+     ],
+     "m": 4,
+     "p_adjusted": 1.0,
+     "rank": 3,
+     "rejected": false
+    },
+    "ci": [
+     -1.18764,
+     1.729654
+    ],
+    "ci_boot": [
+     -3.035787,
+     0.79042
+    ],
+    "m": 4,
+    "p_adjusted": 1.0,
+    "rank": 3,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.29056,
+     1.07676
+    ],
+    "ci_boot": [
+     -3.150953,
+     0.152274
+    ],
+    "d": -0.6069,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "recall100",
+   "p_bootstrap": 0.689655,
+   "p_t": 0.567877,
+   "per_seed": [
+    {
+     "d": 0.314057,
+     "seed": 101.0
+    },
+    {
+     "d": 0.227957,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 224,
+   "reference": "mined_sub",
+   "repos": 9,
+   "se": 0.45498,
+   "seed_sd_arm": 0.142683,
+   "seed_sd_of_difference": 0.060882,
+   "seed_sd_reference": 0.203565,
+   "status": "confirmatory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -0.450521,
+    0.528846
+   ],
+   "ci_cluster": [
+    -0.450521,
+    0.528846
+   ],
+   "ci_query": [
+    -0.525734,
+    0.362557
+   ],
+   "ci_uncorrected": [
+    -0.615392,
+    0.469782
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_raw",
+   "d": -0.072805,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.855782,
+     0.584627
+    ],
+    "ci_boot": [
+     -1.206548,
+     0.196318
+    ],
+    "d": -0.135578,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.817591,
+   "p_t": 0.764905,
+   "per_seed": [
+    {
+     "d": 0.029239,
+     "seed": 101.0
+    },
+    {
+     "d": -0.17485,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 224,
+   "reference": "mined_raw",
+   "repos": 9,
+   "se": 0.235293,
+   "seed_sd_arm": 1.313929,
+   "seed_sd_of_difference": 0.144313,
+   "seed_sd_reference": 1.169616,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -0.829495,
+    0.124369
+   ],
+   "ci_cluster": [
+    -0.829495,
+    0.124369
+   ],
+   "ci_query": [
+    -0.504554,
+    0.151593
+   ],
+   "ci_uncorrected": [
+    -0.517393,
+    0.112711
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_raw",
+   "d": -0.202341,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.008333,
+    "boot": {
+     "alpha_step": 0.01,
+     "ci": [
+      -1.388278,
+      0.180453
+     ],
+     "m": 8,
+     "p_adjusted": 0.596702,
+     "rank": 7,
+     "rejected": false
+    },
+    "ci": [
+     -0.677634,
+     0.272953
+    ],
+    "ci_boot": [
+     -1.388278,
+     0.180453
+    ],
+    "m": 8,
+    "p_adjusted": 0.707505,
+    "rank": 5,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -0.855782,
+     0.584627
+    ],
+    "ci_boot": [
+     -1.206548,
+     0.196318
+    ],
+    "d": -0.135578,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "recall100",
+   "p_bootstrap": 0.216892,
+   "p_t": 0.176876,
+   "per_seed": [
+    {
+     "d": -0.376033,
+     "seed": 101.0
+    },
+    {
+     "d": -0.028649,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 224,
+   "reference": "mined_raw",
+   "repos": 9,
+   "se": 0.136623,
+   "seed_sd_arm": 0.628487,
+   "seed_sd_of_difference": 0.245638,
+   "seed_sd_reference": 0.874124,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -2.517206,
+    0.543374
+   ],
+   "ci_cluster": [
+    -2.517206,
+    0.543374
+   ],
+   "ci_query": [
+    -2.657463,
+    -1.202664
+   ],
+   "ci_uncorrected": [
+    -3.253924,
+    -0.57419
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_sub",
+   "d": -1.914057,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.54478,
+     0.450641
+    ],
+    "ci_boot": [
+     -1.900422,
+     -0.025418
+    ],
+    "d": -0.547069,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.095952,
+   "p_t": 0.010953,
+   "per_seed": [
+    {
+     "d": -0.215409,
+     "seed": 101.0
+    },
+    {
+     "d": -3.612704,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 224,
+   "reference": "mined_sub",
+   "repos": 9,
+   "se": 0.581034,
+   "seed_sd_arm": 1.313929,
+   "seed_sd_of_difference": 2.40225,
+   "seed_sd_reference": 1.088321,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_weight",
+   "ci_boot_uncorrected": [
+    -1.651838,
+    -0.15137
+   ],
+   "ci_cluster": [
+    -1.651838,
+    -0.15137
+   ],
+   "ci_query": [
+    -1.591274,
+    -0.700277
+   ],
+   "ci_uncorrected": [
+    -2.060652,
+    -0.264746
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_weight - mined_sub",
+   "d": -1.162699,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.008333,
+    "boot": {
+     "alpha_step": 0.008333,
+     "ci": [
+      -1.990162,
+      -0.034155
+     ],
+     "m": 8,
+     "p_adjusted": 0.041979,
+     "rank": 3,
+     "rejected": true
+    },
+    "ci": [
+     -2.517367,
+     0.191969
+    ],
+    "ci_boot": [
+     -1.990162,
+     -0.034155
+    ],
+    "m": 8,
+    "p_adjusted": 0.087215,
+    "rank": 4,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.54478,
+     0.450641
+    ],
+    "ci_boot": [
+     -1.900422,
+     -0.025418
+    ],
+    "d": -0.547069,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "recall100",
+   "p_bootstrap": 0.006997,
+   "p_t": 0.017443,
+   "per_seed": [
+    {
+     "d": -0.574349,
+     "seed": 101.0
+    },
+    {
+     "d": -1.751048,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 224,
+   "reference": "mined_sub",
+   "repos": 9,
+   "se": 0.389398,
+   "seed_sd_arm": 0.628487,
+   "seed_sd_of_difference": 0.832052,
+   "seed_sd_reference": 0.203565,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -1.441581,
+    0.66862
+   ],
+   "ci_cluster": [
+    -1.441581,
+    0.66862
+   ],
+   "ci_query": [
+    -1.069212,
+    0.411252
+   ],
+   "ci_uncorrected": [
+    -1.091362,
+    0.425551
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_raw",
+   "d": -0.332906,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.637736,
+     -0.158335
+    ],
+    "ci_boot": [
+     -2.162628,
+     -0.551607
+    ],
+    "d": -0.898036,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.436782,
+   "p_t": 0.34109,
+   "per_seed": [
+    {
+     "d": -1.625959,
+     "seed": 101.0
+    },
+    {
+     "d": 0.960148,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 224,
+   "reference": "mined_raw",
+   "repos": 9,
+   "se": 0.328905,
+   "seed_sd_arm": 0.659038,
+   "seed_sd_of_difference": 1.828654,
+   "seed_sd_reference": 1.169616,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -1.681449,
+    -0.000112
+   ],
+   "ci_cluster": [
+    -1.681449,
+    -0.000112
+   ],
+   "ci_query": [
+    -0.806016,
+    0.20491
+   ],
+   "ci_uncorrected": [
+    -0.948058,
+    0.352991
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_raw",
+   "d": -0.297534,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": false,
+   "holm": {
+    "alpha_step": 0.008333,
+    "boot": {
+     "alpha_step": 0.01,
+     "ci": [
+      -2.223072,
+      0.047041
+     ],
+     "m": 8,
+     "p_adjusted": 0.254873,
+     "rank": 4,
+     "rejected": false
+    },
+    "ci": [
+     -1.278927,
+     0.683859
+    ],
+    "ci_boot": [
+     -2.223072,
+     0.047041
+    ],
+    "m": 8,
+    "p_adjusted": 0.967102,
+    "rank": 6,
+    "rejected": false
+   },
+   "indistinguishable_within_seed_sd": true,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -1.637736,
+     -0.158335
+    ],
+    "ci_boot": [
+     -2.162628,
+     -0.551607
+    ],
+    "d": -0.898036,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "recall100",
+   "p_bootstrap": 0.050975,
+   "p_t": 0.322367,
+   "per_seed": [
+    {
+     "d": -0.805688,
+     "seed": 101.0
+    },
+    {
+     "d": 0.210621,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 224,
+   "reference": "mined_raw",
+   "repos": 9,
+   "se": 0.2821,
+   "seed_sd_arm": 0.155485,
+   "seed_sd_of_difference": 0.718639,
+   "seed_sd_reference": 0.874124,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -2.831309,
+    0.243538
+   ],
+   "ci_cluster": [
+    -2.831309,
+    0.243538
+   ],
+   "ci_query": [
+    -3.123728,
+    -1.320838
+   ],
+   "ci_uncorrected": [
+    -3.573652,
+    -0.774661
+   ],
+   "class": null,
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_sub",
+   "d": -2.174157,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": null,
+   "holm": null,
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.239532,
+     -0.379523
+    ],
+    "ci_boot": [
+     -2.559707,
+     -0.871577
+    ],
+    "d": -1.309527,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "ndcg10",
+   "p_bootstrap": 0.070965,
+   "p_t": 0.007163,
+   "per_seed": [
+    {
+     "d": -1.870608,
+     "seed": 101.0
+    },
+    {
+     "d": -2.477706,
+     "seed": 102.0
+    }
+   ],
+   "primary": false,
+   "queries": 224,
+   "reference": "mined_sub",
+   "repos": 9,
+   "se": 0.606892,
+   "seed_sd_arm": 0.659038,
+   "seed_sd_of_difference": 0.429283,
+   "seed_sd_reference": 1.088321,
+   "status": "exploratory"
+  },
+  {
+   "arm": "mined_curriculum",
+   "ci_boot_uncorrected": [
+    -2.218884,
+    -0.942954
+   ],
+   "ci_cluster": [
+    -2.218884,
+    -0.942954
+   ],
+   "ci_query": [
+    -1.835209,
+    -0.719424
+   ],
+   "ci_uncorrected": [
+    -1.605912,
+    -0.909871
+   ],
+   "class": "estimate-with-bounds",
+   "clustering": "cluster-robust t over repositories, per-query mean over seeds, paired on the query; percentile bootstrap of whole repositories beside",
+   "contrast": "mined_curriculum - mined_sub",
+   "d": -1.257892,
+   "delta": 1.5,
+   "df": 8,
+   "distinct_directories_arm": [
+    3232,
+    3232
+   ],
+   "distinct_directories_reference": [
+    3232,
+    3232
+   ],
+   "eval_set": "exec377",
+   "family": "exploratory_secondary",
+   "harmful": true,
+   "holm": {
+    "alpha_step": 0.00625,
+    "boot": {
+     "alpha_step": 0.007143,
+     "ci": [
+      -2.79144,
+      -0.836643
+     ],
+     "m": 8,
+     "p_adjusted": 0.007996,
+     "rank": 2,
+     "rejected": true
+    },
+    "ci": [
+     -1.812757,
+     -0.703027
+    ],
+    "ci_boot": [
+     -2.79144,
+     -0.836643
+    ],
+    "m": 8,
+    "p_adjusted": 0.00026,
+    "rank": 1,
+    "rejected": true
+   },
+   "indistinguishable_within_seed_sd": false,
+   "interval": "repository-clustered",
+   "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+   "leave_largest_repo_out": {
+    "ci": [
+     -2.239532,
+     -0.379523
+    ],
+    "ci_boot": [
+     -2.559707,
+     -0.871577
+    ],
+    "d": -1.309527,
+    "interval": "repository-clustered",
+    "left_out": "django/django",
+    "queries": 90,
+    "repos": 8
+   },
+   "level": "L3",
+   "metric": "recall100",
+   "p_bootstrap": 0.001,
+   "p_t": 3.2e-05,
+   "per_seed": [
+    {
+     "d": -1.004005,
+     "seed": 101.0
+    },
+    {
+     "d": -1.511779,
+     "seed": 102.0
+    }
+   ],
+   "primary": true,
+   "queries": 224,
+   "reference": "mined_sub",
+   "repos": 9,
+   "se": 0.150919,
+   "seed_sd_arm": 0.155485,
+   "seed_sd_of_difference": 0.35905,
+   "seed_sd_reference": 0.203565,
+   "status": "exploratory"
+  }
+ ],
+ "delta": 1.5,
+ "dev_analysis_entry": "E-RQ2-DEV-ANALYSIS",
+ "diagnostics": {
+  "mined_curriculum": {
+   "below_common_distinct": false,
+   "config_hashes": {
+    "101": "f4609d7bca6f7767d589d150f6364683c87f406b452c6625329b6980018fbef5",
+    "102": "8c70f0e263a0aa4c3fe644874d97ecfa68488519450a4ed172b50152576fb1b2"
+   },
+   "distinct_directories_seen": [
+    3232,
+    3232
+   ],
+   "distinct_max": 3232,
+   "distinct_min": 3232,
+   "examples_seen": [
+    3232,
+    3232
+   ],
+   "optimizer_updates": [
+    100
+   ],
+   "pool_examples": [
+    5789
+   ],
+   "repeats_examples": false,
+   "runs": 2,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  "mined_filter_bm25": {
+   "below_common_distinct": false,
+   "config_hashes": {
+    "101": "68f9a1e695e6a94208985afda52cee4beeb96379e204cd4f8ee98f9693ebf6c4",
+    "102": "9e09f20356bb710a5408c51ac54fe066604295ece0141eab643333969287f58b"
+   },
+   "distinct_directories_seen": [
+    3232,
+    3232
+   ],
+   "distinct_max": 3232,
+   "distinct_min": 3232,
+   "examples_seen": [
+    3232,
+    3232
+   ],
+   "optimizer_updates": [
+    100
+   ],
+   "pool_examples": [
+    3885
+   ],
+   "repeats_examples": false,
+   "runs": 2,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  "mined_raw": {
+   "below_common_distinct": false,
+   "config_hashes": {
+    "101": "701006e6c67fdf547de5335494070e760386227cee365f8c13d0f597317cce44",
+    "102": "ebf4478c35c41a3264c7bdffb00fe0ed06aee35e46603603568a805d07c547e6"
+   },
+   "distinct_directories_seen": [
+    3232,
+    3232
+   ],
+   "distinct_max": 3232,
+   "distinct_min": 3232,
+   "examples_seen": [
+    3232,
+    3232
+   ],
+   "optimizer_updates": [
+    100
+   ],
+   "pool_examples": [
+    5789
+   ],
+   "repeats_examples": false,
+   "runs": 2,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  "mined_sub": {
+   "below_common_distinct": false,
+   "config_hashes": {
+    "101": "206cb2bcd4bfebf99e78772337de0c113eac1d3e8a2ec2e9eafdbfcc82320a27",
+    "102": "fb5ace6dec922fc7cdaad23395b661fa88c5376452de2f8ccd18e469540a2e87"
+   },
+   "distinct_directories_seen": [
+    3232,
+    3232
+   ],
+   "distinct_max": 3232,
+   "distinct_min": 3232,
+   "examples_seen": [
+    3232,
+    3232
+   ],
+   "optimizer_updates": [
+    100
+   ],
+   "pool_examples": [
+    3885
+   ],
+   "repeats_examples": false,
+   "runs": 2,
+   "seeds": [
+    101,
+    102
+   ]
+  },
+  "mined_weight": {
+   "below_common_distinct": false,
+   "config_hashes": {
+    "101": "6d790b20325ae838ed47cbd9f5a44c99e8544c37e89e63f4d8ae841935729b07",
+    "102": "2cf1514370ba39dd7b57e7df8248740329ef0fef0021c1bf48a323f6b84f7854"
+   },
+   "distinct_directories_seen": [
+    3232,
+    3232
+   ],
+   "distinct_max": 3232,
+   "distinct_min": 3232,
+   "examples_seen": [
+    3232,
+    3232
+   ],
+   "optimizer_updates": [
+    100
+   ],
+   "pool_examples": [
+    5789
+   ],
+   "repeats_examples": false,
+   "runs": 2,
+   "seeds": [
+    101,
+    102
+   ]
+  }
+ },
+ "dose_response": [],
+ "draws": 2000,
+ "eval_sets": [
+  "eight",
+  "exec377"
+ ],
+ "fallback": {
+  "fallback_declared": true,
+  "rq3_primary_contrast": "RAW against the untrained encoder (labelled: does training help, not does supervision quality help; D80)",
+  "rule": "arms separate iff the confirmatory FILTER-BM25 - RAW contrast is positive (both levels, dev sign, leave-out) on every final set with both levels",
+  "separates": false,
+  "sets_considered": [
+   "exec377"
+  ]
+ },
+ "inputs": [
+  {
+   "path": "results/rq2_final/sensitivity_seed101/rows_no_s100.csv",
+   "sha256": "d42b3d73e562db5c2b0306ae8c27d0d87a0ca0f2bd244cc3fdafba68ae9687ae"
+  },
+  {
+   "path": "results/rq2_final/sensitivity_seed101/runs_no_s100.csv",
+   "sha256": "e1c3a8e1ee23d1213716ca65211018b7834cef013cf82de9c1c99f34fc4f71d5"
+  }
+ ],
+ "interval_rule": "decisions: cluster-robust t interval over repositories (R - 1 degrees of freedom; every query its own cluster below three repositories); beside it, in every table, the percentile bootstrap over whole repositories (D17)",
+ "queries_dropped_by_intersection": {
+  "eight/L2": 0,
+  "exec377/L2": 0,
+  "exec377/L3": 0
+ },
+ "source_kind": "pilot",
+ "version": "rq2-final-analysis/v2"
+}
