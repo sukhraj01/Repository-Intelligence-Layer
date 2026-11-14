@@ -33,7 +33,7 @@ import os
 import re
 import threading
 import time
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -169,6 +169,52 @@ class StoredReplies:
 
 
 @dataclass(frozen=True)
+class Projection:
+    """Projected-cost stop: after ``first_n`` instances are in the call log, the cost of those
+    instances times ``total / first_n`` is compared with ``cap_usd``; above it the run stops.
+
+    ``rows`` returns the call-log rows (each with ``instance_id`` and token counts); ``price``
+    turns them into dollars. Evaluated once per session, at the first instance boundary at which
+    ``first_n`` instances are logged (so a resumed run is checked again before its next call).
+    """
+
+    first_n: int
+    total: int
+    cap_usd: float
+    price: Price
+    rows: Callable[[], Iterable[Mapping[str, Any]]]
+
+
+def project_cost(proj: Projection) -> dict[str, Any] | None:
+    """The projection record, or ``None`` while fewer than ``first_n`` instances are logged."""
+    rows = list(proj.rows())
+    order: list[str] = []
+    for r in rows:
+        iid = str(r["instance_id"])
+        if iid not in order:
+            order.append(iid)
+    if len(order) < proj.first_n:
+        return None
+    first = set(order[: proj.first_n])
+    cost = sum(
+        proj.price.cost(
+            int(r["input_tokens"]), int(r["output_tokens"]), int(r.get("cached_tokens", 0))
+        )
+        for r in rows
+        if str(r["instance_id"]) in first
+    )
+    projected = cost / proj.first_n * proj.total
+    return {
+        "first_n": proj.first_n,
+        "total_instances": proj.total,
+        "cost_first_n_usd": round(cost, 6),
+        "projected_usd": round(projected, 6),
+        "cap_usd": proj.cap_usd,
+        "exceeds_cap": projected > proj.cap_usd,
+    }
+
+
+@dataclass(frozen=True)
 class DriverConfig:
     model: str
     runs: int = 1
@@ -182,6 +228,8 @@ class DriverConfig:
     """Stop the run cleanly when more than this share of the final replies of the units finished
     in this session are unusable, once ``unusable_min_units`` of them exist (D167)."""
     unusable_min_units: int = 50
+    projection: Projection | None = None
+    """Stop cleanly when the cost projected from the first instances exceeds the cap."""
     meta: Mapping[str, Any] = field(default_factory=dict)
 
 
@@ -373,6 +421,7 @@ class DriveSummary:
     not_available: int = 0
     stopped: str = "complete"
     errors: list[str] = field(default_factory=list)
+    projection: dict[str, Any] | None = None
 
 
 def drive(
@@ -421,8 +470,15 @@ def drive(
 
     futures: list[Future[None]] = []
     seen = bad = 0
+    current: str | None = None
     with ThreadPoolExecutor(max_workers=max(1, cfg.workers)) as pool:
         for unit, item in plan_units(items, cfg.runs, cfg.run_indices, cfg.adjacent_repeats):
+            if cfg.projection is not None and summary.projection is None and unit[0] != current:
+                summary.projection = project_cost(cfg.projection)
+                if summary.projection is not None and summary.projection["exceeds_cap"]:
+                    summary.stopped = "projected_cost"
+                    break
+            current = unit[0]
             if unit in done:
                 summary.skipped += 1
                 continue
@@ -460,6 +516,7 @@ def drive(
                 "run_indices": list(cfg.run_indices) if cfg.run_indices is not None else None,
                 "schedule": "adjacent_repeats" if cfg.adjacent_repeats else "run_major",
                 "stopped": summary.stopped,
+                "projection": summary.projection,
                 "written_this_session": summary.written,
             },
             indent=1,
