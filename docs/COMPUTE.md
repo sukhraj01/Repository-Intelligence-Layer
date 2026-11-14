@@ -108,6 +108,8 @@ compare against the quota (Open question Q6). Earlier projects saw `$HOME` at ~2
 **Network**
 - Outbound downloads from Ada were heavily throttled in earlier projects: PyPI ~0.1–0.4 MB/s, a Stanford mirror 15–50 KB/s, an S3 bucket ~18 KB/s. A 116 MB fetch took roughly an hour elsewhere. Assume multi-hour fetches for large corpora and design for resumability. Hugging Face throughput from Ada is **unknown** — probing it is the first step of the held-out repository job (`specs/held_out_repos.md`).
 
+- **GPU requests name memory or card type, not only a feature (ruled 2026-11-14, D164; RQ2 final seed 101 on account A).** The `2080ti` feature was reported by a node whose card is an RTX 3080 with 10 GiB, and a job stopped with a CUDA out-of-memory there; other jobs landed on an RTX 4070. Future requests should state a card type or a memory floor (`--gres` with a type, or a node constraint that fixes the memory) and the job should record the card in its hardware file, as the RQ2 jobs already do. Existing job scripts are unchanged.
+
 ## Memory-estimation discipline
 
 Before running any step at a new scale for the first time: measure per-unit memory on a small sample,
