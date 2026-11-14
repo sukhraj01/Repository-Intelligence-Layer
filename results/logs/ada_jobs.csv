@@ -290,7 +290,7 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-13,C,76430,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76429 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start
 2026-11-13,C,76431,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 76430 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start
 2026-11-13,A,76222,RQ3UNTRAINEDRUNS,"RQ3 graded runs, untrained rrf arm at 8,000, 327 confirmatory instances x 3 adjacent repeats, gemini-3.8-flash thinking low, cap 11.33 USD, spent 9.875 USD",u22,4,0,06:04:08,0.0,COMPLETED
-2026-11-13,C,76962,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 100, fourth submission after the empty-part fix and a clean CPU dry run (DEV-043 addendum), commit 372f66a",u22,4,1,00:00:00,0.0,PENDING when recorded
-2026-11-13,C,76963,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76962 (afterok)",u22,4,1,00:00:00,0.0,PENDING when recorded
+2026-11-13,C,76962,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 100, fourth submission after the empty-part fix and a clean CPU dry run (DEV-043 addendum), commit 372f66a",u22,4,1,05:34:08,5.57,COMPLETED
+2026-11-13,C,76963,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76962 (afterok)",u22,4,1,06:51:20,6.86,COMPLETED
 2026-11-13,C,76964,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 76963 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start (seed 102 moved to account A as 77128; dependency cleared earlier)
-2026-11-14,A,77128,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 102, five retained mined models copied from C and verified by SHA-256, commit 372f66a, own folder on A",u22,4,1,00:00:00,0.0,PENDING when recorded
+2026-11-14,A,77128,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 102, five retained mined models copied from C and verified by SHA-256, commit 372f66a, own folder on A",u22,4,1,06:51:49,6.86,COMPLETED

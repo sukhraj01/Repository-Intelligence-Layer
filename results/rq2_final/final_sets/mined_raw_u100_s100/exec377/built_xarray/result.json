@@ -1,0 +1,52 @@
+{
+ "baselines": [],
+ "deliberate_test": "RQ2 final: executable 377 of Verified, scored once after the dev analysis; follows E-RQ2-DEV-ANALYSIS",
+ "headline": [],
+ "label_manifest": {
+  "labelled": 0,
+  "levels": {},
+  "members": 4
+ },
+ "provisional": "provisional: ADR-006 (rrf k, cut)",
+ "roles": [
+  "test"
+ ],
+ "rrf_k": 60,
+ "stores_encoded": [
+  {
+   "cut_at_max_tokens": 3,
+   "encoded_now": 4,
+   "seconds_now": 0.11,
+   "share_cut": 0.75,
+   "store": "queries__L2__SWE-bench_Verified__pydata__xarray",
+   "taken_from_shorter_cut": 0,
+   "texts": 4,
+   "texts_per_s_now": 36.39,
+   "tokens_fed": 1796
+  },
+  {
+   "cut_at_max_tokens": 1209,
+   "encoded_now": 6689,
+   "seconds_now": 73.58,
+   "share_cut": 0.1807,
+   "store": "units__pydata__xarray",
+   "taken_from_shorter_cut": 0,
+   "texts": 6689,
+   "texts_per_s_now": 90.9,
+   "tokens_fed": 1606138
+  }
+ ],
+ "unit_queries": 0,
+ "units_scored": {
+  "missing_store": [],
+  "scored": 4
+ },
+ "variant": "mined_raw_u100_s100__exec377__built_xarray",
+ "version": "checkpoint-eval/v1",
+ "x2_eval": {
+  "evaluated": 4,
+  "no_dense": 0,
+  "reused": 0,
+  "skipped_role": 0
+ }
+}

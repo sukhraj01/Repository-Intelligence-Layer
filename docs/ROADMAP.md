@@ -133,7 +133,7 @@ still complete and defensible.
 | 3 | Parser running on a real repository; ten CodeUnits and the edge-recovery percentage | [x] (reported under four definitions; ADR-012) |
 | 6 | Baseline encoder trained; a natural-language query returning the right function | [ ] |
 | 9 | RQ1 ablation table with the latency column | [ ] |
-| 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [ ] |
+| 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [x] |
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
 
 > Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).
