@@ -1,0 +1,15 @@
+\begin{table*}[t]
+\centering\small
+\caption{Graded runs of the four arms: resolved fraction, unusable replies, truncation, cost. Evidence class: \emph{measured, pre-registered analysis}. Each arm is graded on the 327 confirmatory instances with three adjacent repeats (the held-out slice is excluded); the interval is a bootstrap over instances, the repeats of an instance are not independent runs, and each trained arm is one model from one training seed. The unusable column counts final replies with no usable edit set after the follow-ups; the limit column counts calls that ended at the output limit of the configuration. The any-of-three share is secondary and exploratory. Cost in USD at the prices of the run. Entry \entry{E-RQ3-AGENT}, \entry{E-RQ3-UNTRAINED-RUNS}.}
+\label{tab:rq3_agent}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedleft\arraybackslash}p{0.08\linewidth}>{\raggedleft\arraybackslash}p{0.15\linewidth}>{\raggedleft\arraybackslash}p{0.13\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}}
+\toprule
+Arm & Resolved & Mean (\%) and interval & By repeat (\%) & Any of three (\%) & Unusable (\%) & Calls at limit (\%) & Cost (USD) \\
+\midrule
+Untrained & 392 / 981 & 39.96 [35.0, 45.1] & 40.7 / 39.1 / 40.1 & 45.0 & 25 (2.55) & 201 / 1294 (15.5) & 9.875 \\
+Raw & 416 / 981 & 42.41 [37.3, 47.7] & 43.1 / 42.5 / 41.6 & 48.6 & 20 (2.04) & 169 / 1230 (13.7) & 8.931 \\
+Filter (BM25 teacher) & 408 / 981 & 41.59 [36.6, 46.9] & 42.2 / 41.3 / 41.3 & 46.5 & 20 (2.04) & 175 / 1236 (14.2) & 9.117 \\
+Size-matched subsample & 385 / 981 & 39.25 [34.1, 44.2] & 37.9 / 40.1 / 39.8 & 45.0 & 20 (2.04) & 173 / 1238 (14.0) & 8.974 \\
+\bottomrule
+\end{tabular}
+\end{table*}
