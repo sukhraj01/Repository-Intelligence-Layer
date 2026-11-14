@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering\small
+\caption{Calls, tokens and cost of the model check and the graded arms. Evidence class: \emph{measured}. The model check ran on the 50 held-out instances. Tokens of every answered call in thousands, from the stored call logs (the model check from its stored record; output tokens split into answer and thinking tokens). The cost of the model check is not in the table because its total includes a superseded first configuration and a cache probe whose logs are not stored; the four arms sum to 36.897 USD. Entry \entry{E-RQ3-MODEL-CHECK-RESULT}, \entry{E-RQ3-UNTRAINED-RUNS}, \entry{E-RQ3-AGENT}.}
+\label{tab:rq3_budget}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.11\linewidth}>{\raggedleft\arraybackslash}p{0.11\linewidth}>{\raggedleft\arraybackslash}p{0.11\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}}
+\toprule
+Run & Calls & Prompt (k) & Answer (k) & Thinking (k) & Cost (USD) \\
+\midrule
+Model check (held-out instances) & 67 & 595 & 54 & 4 & -- \\
+Untrained, three repeats & 1294 & 11777 & 1153 & 204 & 9.875 \\
+Raw, three repeats & 1230 & 11171 & 1050 & 124 & 8.931 \\
+Filter (BM25 teacher), three repeats & 1236 & 11228 & 1031 & 189 & 9.117 \\
+Size-matched subsample, three repeats & 1238 & 11230 & 999 & 193 & 8.974 \\
+\midrule
+Four arms &  &  &  &  & 36.897 \\
+\bottomrule
+\end{tabular}
+\end{table*}
