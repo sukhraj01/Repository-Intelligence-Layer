@@ -1,6 +1,8 @@
-read: full — 24 pages incl. appendices, PDF v1, pdftotext -layout (poppler), 2026-11-12
+read: full — 24 pages incl. appendices, PDF v1, pdftotext -layout (poppler); re-read in full from the stored PDF (SHA-256 5b798557d73f31cbdb40b8e6bd67bb0c9117517941fbd0dd5df7a6ac5ad5a3be), first read 2026-11-12, 2026-11-14
 
 # Skip the Compressor: Coding Agents Fix More Issues When They Pick Whole Files — Yang, Chatterjee, Udupi, Ramavarapu and Zhai (arXiv 2610.21073v1, 15 Oct 2026)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 9 to 11) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v1, 24 pages (body 9 pages with limitations and ethics statement, references pp. 9-11, appendices A to I pp. 11-24). arXiv holds only v1. The extracted text has 24 pages and no blank page. Every page was read, including Tables 1-18, Figures 1-6 (values read from the captions and the extracted labels) and the algorithm listings. Literature-scan source for the refresh of 2026-11-12 (topic: repository context for coding agents at a fixed token budget, graded by the benchmark's tests).
 

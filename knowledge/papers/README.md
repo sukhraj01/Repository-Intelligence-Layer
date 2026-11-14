@@ -32,7 +32,7 @@ document, with other papers, internal); and a table of the claims that were chec
 | CoSIL — Jiang et al. 2025 | 2503.22424 (ASE 2025) | Graph as agent tool, training-free | full, 17 pp, v3, 2026-10-17 | `cosil-2503.22424.md` |
 | Agent Retrieval Bench — Qin et al. 2026 | 2607.24882 | File-level context retrieval; complementarity of signals | full, 29 pp, v1, 2026-10-17 | `agent-retrieval-bench-2607.24882.md` |
 | Agentless — Xia et al. 2024 | 2407.01489 | Candidate agent scaffold (ADR-007) | full, 25 pp, v2, 2026-11-08 | `agentless-2407.01489.md` |
-| SWE-agent — Yang et al. 2024 | 2405.15793 (NeurIPS 2024) | Alternative scaffold | in full except the numbered source listings inside the appendix trajectories (pp. 45 to 116), 118 pp, v3, 2026-11-08 | `swe-agent-2405.15793.md` |
+| SWE-agent — Yang et al. 2024 | 2405.15793 (NeurIPS 2024) | Alternative scaffold | in full except the numbered source-code listing lines inside the appendix trajectories (pp. 72 to 116), 118 pp, v3, re-read 2026-11-14 | `swe-agent-2405.15793.md` |
 | OpenHands — Wang et al. 2025 | 2407.16741 (ICLR 2025) | Alternative scaffold | full, 38 pp, v3, 2026-11-08 | `openhands-2407.16741.md` |
 | CodeRAG-Bench — Wang et al. 2024 | 2406.14497 | Related framing | ? | — |
 | SweRank+ — Gangi Reddy et al. 2025 | 2512.20482 | Multilingual extension of the training data; training-data table | full, 11 pp, v1, 2026-10-17 | `swerank-plus-2512.20482.md` |
@@ -42,6 +42,12 @@ document, with other papers, internal); and a table of the claims that were chec
 | ARISE — 2026 | 2605.03117 | Repository graph with data-flow edges; call-resolution policy | full, 13 pp, v2, 2026-10-17 | `arise-2605.03117.md` |
 | PyCG — Salis et al. 2021 | 2103.00587 (ICSE 2021) | Call-graph precision/recall on Python; basis for the edge-recovery definition | full, 12 pp, v1, 2026-10-17 | `pycg-2103.00587.md` |
 | Jarvis — Huang et al. 2023 | 2305.05949 (ICSE 2023) | Later Python call-graph generator; comparison point | full, 12 pp, v5, 2026-10-17 | `jarvis-2305.05949.md` |
+
+Re-read of 2026-11-14: sixteen notes that had no extracted text on the working machine (Agentless, SWE-agent, OpenHands, CCR, NPC, CL-DRD,
+Penha and Hauff, ADAM, Promptagator, GloFND, self-distillation with adaptive margins, the MS MARCO fine-tuning study, MM-IssueLoc, ARHN, UTBoost, Skip the
+Compressor) were checked against freshly fetched copies of the same PDF versions (page counts equal, no blank page, every number of each
+table found again) and the whole text was read page by page; each header now carries the PDF SHA-256. Reference-list pages were checked for the
+entries the text cites. Sentences of the report that cite these papers were compared with the text (`docs/experiments/B.md` E-REPORT-DRAFT-6).
 
 Literature scan (third reading pass; queries and the full candidate list are in `LANDSCAPE.md`):
 
@@ -77,7 +83,7 @@ Fifth reading pass (2026-10-29; supervision quality: noisy or weighted supervisi
 | ARHN — Choi et al. 2026 | 2604.11092 | Rank-relative-to-the-positive edit of mined negatives | full, 10 pp, v1, 2026-10-29 | `arhn-2604.11092.md` |
 | GloFND — Balmaseda et al. 2025 | 2502.20612 (ICML 2025) | Self-judged false-negative detector needs a warm-up (images) | full, 18 pp, v2, 2026-10-29 | `glofnd-2502.20612.md` |
 | D-SCL — Long et al. 2023 | 2311.16481 | Mislabelled positives are easy positives (images) | full, 16 pp, v1, 2026-10-29 | `debiased-scl-2311.16481.md` |
-| MM-IssueLoc — Zhan et al. 2026 | 2607.15205 | Issue retriever, file-then-function schedule, same-repository negatives | full, 22 pp, v1, 2026-10-29 | `mm-issueloc-2607.15205.md` |
+| MM-IssueLoc — Zhan et al. 2026 | 2607.15205 | Issue retriever, file-then-function schedule, same-repository negatives | in full except the example figures and prompt templates of the appendix (pp. 15 to 22), 22 pp, v1, re-read 2026-11-14 | `mm-issueloc-2607.15205.md` |
 | Uncertainty-aware code search — Liu et al. | AAAI 2025 (no arXiv version) | Not a confidence weighting; hard-negative selection | full, 9 pp, proceedings copy, 2026-10-29 | `uncertainty-aware-code-search-aaai2025.md` |
 | Noisy Pair Corrector — Zhang et al. 2023 | 2311.03798 (Findings of EMNLP 2023) | Loss-based detection of mismatched pairs, warm-up, code and text | full, 13 pp, v1, 2026-10-29 | `npc-2311.03798.md` |
 | ADAM — Tao et al. | 2212.10192 | Teacher-confidence shrinking subset | full, 13 pp, v2, 2026-10-29 | `adam-2212.10192.md` |

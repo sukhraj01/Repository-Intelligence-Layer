@@ -177,8 +177,9 @@ points (six of 500 instances) from one run per configuration and without an inte
 ~\cite{codegrep}. % paper_reported: knowledge/papers/codegrep-2608.05886.md
 A line-level exploration benchmark finds, across 14 explorers, a Pearson correlation of 0.926 between Recall@100 and the downstream
 resolve rate, a correlation between systems that does not isolate a retriever~\cite{sweexplore}. % paper_reported: knowledge/papers/swe-explore-2606.07297.md Table 4, pp.7-8
-At a fixed per-issue token budget on 300 recent issues graded by the benchmark's tests, showing a few whole files verbatim resolved
-6.3 to 12.7 points more than three prompt compressors and three retrievers: the retrievers often showed no file to edit, and the compressors
+At a fixed per-issue token budget on 300 recent issues graded by the benchmark's tests, showing a few whole files verbatim (chosen by the model under test) resolved
+6.3 points more than the best of three prompt compressors and 9.3 to 12.7 points more than the best of three retrievers, with two models; a
+trained retriever of whole functions came within two points. The retrievers often showed no file to edit, and the compressors
 altered the text a patch must quote~\cite{skipcompressor}. % paper_reported: knowledge/papers/skip-the-compressor-2610.21073.md Table 1, p.4; Sec. 4.1, p.6
 The same paper measures a second patch sample flipping 8.7 to 18.9\% of outcomes, which is the scale of noise a one-run comparison of
 retrievers has to clear. % paper_reported: knowledge/papers/skip-the-compressor-2610.21073.md Limitations, p.9
@@ -199,12 +200,12 @@ against a same-file control, which these systems do not report.
 \paragraph{Agent scaffolds and the repair stage.} Agentless has no tool loop: it localizes in stages, samples candidate
 edits in a search-and-replace format, and selects among them by running regression tests and a generated reproduction test.
 Majority vote alone resolves 77 of 300 Lite instances and the full selection 96~\cite{agentless}. % knowledge/papers/agentless-2407.01489.md Sec. 3, pp.5-9; Table 4, p.14; Table 1, p.10
-Every cell of its tables is one run, and a later reproduction of the same pipeline resolved 86 of 300 against the published
+Its tables report no repeated runs, and a later reproduction of the same pipeline resolved 86 of 300 against the published
 96~\cite{cosil}. % knowledge/papers/agentless-2407.01489.md Sec. 4, p.9 (no variance reported); knowledge/papers/cosil-2503.22424.md Table IX, p.10
 SWE-agent and OpenHands instead give a model a shell and an interface of commands and let it act in a loop~\cite{sweagent,openhands};
 shell and lexical search stay available in both, so a separately trained retriever would compete with the agent's own search and could not
 be the only thing that changes (our inference). % knowledge/papers/swe-agent-2405.15793.md Sec. 3, pp.3-4; knowledge/papers/openhands-2407.16741.md Sec. 2.2-2.3, pp.4-5
-Their loops cost about 1.6 and 1.7 dollars per Lite instance, SWE-agent's figure counting resolved instances only. % knowledge/papers/swe-agent-2405.15793.md Table 1, p.6; knowledge/papers/openhands-2407.16741.md Table 4, p.8 and p.19
+Their loops cost about 1.7 dollars per Lite instance (1.67 for SWE-agent with one closed-source model, counted over resolved instances only; 1.72 for OpenHands with another, averaging not stated). % knowledge/papers/swe-agent-2405.15793.md Table 1, p.6; knowledge/papers/openhands-2407.16741.md Table 4, p.8 and p.19
 Two papers swap the localization stage under a fixed Agentless repair stage and read the resolved rate. LocAgent's gain of close to 15
 points of function Acc@5 comes with 1.6 points of Pass@1, one run per row~\cite{locagent}. % knowledge/papers/locagent-2503.09089.md Sec. 5.8, Table 8, p.11
 CoSIL's four localizers span 17.33 to 21.67\% on Lite, 14 of 300 instances, about the size of the gap between two runs of the repair stage itself
@@ -219,13 +220,14 @@ of negatives~\cite{rethinking}; synthetic data with a staged curriculum~\cite{co
 negatives and pruning in text retrieval~\cite{rlhn}; a rank-relative-to-the-positive edit of mined
 negatives~\cite{arhn}; loss-based detection of mismatched pairs~\cite{npc}; negative selection with
 false-negative removal~\cite{nvretriever}; filtering the training pairs of a code retriever~\cite{map4cs};
-and a study of which negative sources transfer~\cite{hardneg}. Curriculum and self-paced selection for
-retrieval distillation~\cite{cldrd,penha,adam}.
+and a study of which negative sources transfer~\cite{hardneg}. Curriculum learning for retrieval
+distillation~\cite{cldrd}, self-paced selection of distillation examples~\cite{adam}, and curriculum strategies for
+conversation response ranking~\cite{penha}.
 A confidence regularizer on the contrastive loss, with a sieve that drops hard negatives the regularized model scores high, improves two text
 retrievers, and its guarantee assumes the data hold no false positives~\cite{ccr}; % paper_reported: knowledge/papers/contrastive-confidence-reg-2401.00165.md Theorem 2, p.5; Table 1, p.6
-a round-trip filter judged by a retriever trained on the same synthetic data helped on 8 of 11 text datasets and hurt the two smallest~\cite{promptagator};
-a detector of false negatives that is the model being trained needs a warm-up (image data)~\cite{glofnd};
-using the encoder's own similarity as the training target peaked after about half of the data~\cite{selfdistill};
+a round-trip filter judged by a retriever trained on the same synthetic data helped on 8 of 11 text datasets and hurt others, among them the two with the fewest generated queries~\cite{promptagator};
+a detector of false negatives that is the model being trained needs a warm-up (image and image-text data)~\cite{glofnd};
+using the encoder's own similarity as the training target (adaptive margins) peaked after about half of the data~\cite{selfdistill};
 fine-tuning an encoder that was already trained on the target data fell below the unmodified encoder~\cite{finetuningfails};
 and a file-then-function training schedule gave higher function-level accuracy in one run per cell~\cite{mmissueloc}.
 % knowledge/papers/promptagator-2209.11755.md Sec. 4.3, p.7; glofnd-2502.20612.md Sec. 4.3, p.8; self-distillation-margins-2407.21515.md Sec. 5.2-5.3, p.5; finetuning-fails-msmarco-2506.18535.md Table I, p.3; mm-issueloc-2607.15205.md Table 12, p.12
@@ -712,7 +714,7 @@ These exploratory readings rest on eight or ten repositories behind the $t$ inte
 
 \paragraph{Sensitivity to the seed average (exploratory).} Five of the fifteen mined models, those of seed 101, trained on a different GPU model than the other ten. The registered analysis is unchanged and is the one reported. As an exploratory check outside the registered tables, the same analysis was repeated on the stored rows with each seed left out in turn (Table~\ref{tab:rq2_final_leave_seed}).
 Without seed 101 one confirmatory contrast is rejected after the Holm step: \textsc{Filter} against \textsc{Raw} at Level~3 Recall@100 on the executable subset (+0.75 points, adjusted $p$ 0.039). It is not rejected without seed 100 (+1.23, $p$ 0.33) or without seed 102 (+0.03, $p$ 1.00), and the registered estimate is +0.67 with $p$ 0.15. % E-RQ2-SENS-SEED101 docs/experiments/B.md; results/tables/rq2_final_leave_one_seed_out.csv
-The contrast is therefore not stable to which seeds are averaged, and a rejection under one of three subsets is not evidence of an effect; its positive estimate rests on seed 102 (per-seed estimates $-$0.45, +0.51 and +1.95), and the intervals carry query and repository sampling but not retraining variance (DEV-040). The other five confirmatory contrasts are rejected in no subset. % E-RQ2-SENS-SEED101 docs/experiments/B.md; DEV-040
+The contrast is therefore not stable to which seeds are averaged: across the three leave-one-seed-out choices its estimate runs from +0.03 to +1.23 points and its adjusted $p$ from 0.039 to 1.00, and that spread is the finding, not any one subset. A rejection under one of three subsets is not evidence of an effect; its positive estimate rests on seed 102 (per-seed estimates $-$0.45, +0.51 and +1.95), and the intervals carry query and repository sampling but not retraining variance (DEV-040). The other five confirmatory contrasts are rejected in no subset. % E-RQ2-SENS-SEED101 docs/experiments/B.md; DEV-040
 The \textsc{Curriculum} minus subsample contrast at Level~3 Recall@100 is lower in the registered analysis and in all three subsets, and the other two registered \textsc{Curriculum} rejections do not hold in every subset. The sensitivity does not show that the GPU model of seed 101 mattered: seed 101's own estimate is not an outlier on the contrast that changed. % E-RQ2-SENS-SEED101 docs/experiments/B.md
 
 \input{generated/rq2_final_leave_seed}

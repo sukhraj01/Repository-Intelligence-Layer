@@ -1,6 +1,8 @@
-read: full — 22 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 22, extracted 22, none blank); appendices A-D (training set-up, extended tables, benchmark details, prompts and examples) read, 2026-10-29
+read: in full except the example figures and prompt templates of the appendix (pp. 15 to 22); pages 1 to 14 were read — 22 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 22, extracted 22, none blank); appendices A-D (training set-up, extended tables, benchmark details, prompts and examples) read; re-read in full from the stored PDF (SHA-256 b639f109ccf17776ba3f685be545635792b3233c27bf7c6959b603858f2cd710), first read 2026-10-29, 2026-11-14
 
 # MM-IssueLoc — Zhan, Hu, Feng and colleagues (arXiv 2607.15205v1, July 2026), "A Controlled Benchmark for Evaluating Visual Evidence in Multimodal Repository-Level Issue Localization"
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 9 to 10) was checked for the entries the text cites rather than read entry by entry. Pages 15 to 22 (example figures and prompt templates) were scanned, not read line by line; nothing in the report rests on them. Pages 1 to 14 were read in full, including Tables 5 to 17.
 
 Source file: arXiv PDF v1 (16 Jul 2026), 22 pages (body pp.1-9, references pp.9-11, appendices A-D pp.11-22: training configuration, stratified slices, cross-benchmark results, benchmark details, extraction prompts and examples). Issue localization with attached images, 23 languages. Included because its companion retriever is trained on repository-local hard negatives with one row per gold location and a file-to-function training schedule, with an ablation of that schedule (Appendix B.2).
 

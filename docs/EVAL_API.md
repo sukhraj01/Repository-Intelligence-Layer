@@ -295,7 +295,7 @@ The five scaffold papers (Agentless v2, SWE-agent v3, OpenHands v3, LocAgent v2,
 read in full and have checked notes in `knowledge/papers/` (`agentless-2407.01489.md`,
 `swe-agent-2405.15793.md`, `openhands-2407.16741.md`, `locagent-2503.09089.md`,
 `cosil-2503.22424.md`); the SWE-agent note excepts only the numbered source listings inside its
-appendix trajectories (pp. 45 to 116), and nothing below rests on them. The scaffold the study
+appendix trajectories (pp. 72 to 116; pages 45 to 71 were read in full on 2026-11-14), and nothing below rests on them. The scaffold the study
 uses is called **retrieval-supplied one-shot repair**: one repair call at temperature 0, a fixed
 edit format, up to two follow-ups after an unusable reply, no candidate selection. "Agentless"
 names that paper's pipeline only. The table lists what each paper does and does not describe. An

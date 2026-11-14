@@ -1,6 +1,8 @@
-read: full — 5 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 5, extracted 5, none blank); Table 1 and Figure 2 (page 4) rendered and looked at; there is no appendix, 2026-10-29
+read: full — 5 pages incl. appendices, PDF v1, pdftotext -layout (poppler), page counts equal (pdfinfo 5, extracted 5, none blank); Table 1 and Figure 2 (page 4) rendered and looked at; there is no appendix; re-read in full from the stored PDF (SHA-256 2217eb3c81c596876582075a873bea892c37041d797c87348eb6444788da12cc), first read 2026-10-29, 2026-11-14
 
 # CL-DRD — Zeng, Zamani and Vinay (arXiv 2204.13679v1, SIGIR 2022 short paper), "Curriculum Learning for Dense Retrieval Distillation"
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 5 (reference list)) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v1 (28 Apr 2022), 5 pages (body pp.1-4 with the references starting on p.4 and ending on p.5). Text passage retrieval distilled from a cross-encoder. Note on identifiers: a search-listing parse in this session first paired this title with 2204.01458, which is an unrelated image-retrieval paper; the PDF at 2204.13679 is the paper described here. The 2204.01458 PDF was fetched, read as far as its title page and abstract, found off topic and dropped.
 

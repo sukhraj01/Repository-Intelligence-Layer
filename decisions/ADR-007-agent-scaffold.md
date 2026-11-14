@@ -135,3 +135,4 @@ candidate model resolves under 5% there, the scaffold, not only the model, is th
 
 **Conditions to revisit.** If the lead wants the dense component's effect alone, a dense-only trained arm is one more `Arm` in the same builder (no new stage), with the untrained `dense` arm as its comparator.
 
+**Addendum (2026-11-14).** The SWE-agent note's exception is narrowed: pages 45 to 71 of its appendix trajectories were read in full on a re-read of the stored PDF, and only the numbered source-code listing lines of pages 72 to 116 remain unread; nothing in the project rests on them. The Agentless and OpenHands notes were re-read in full as well, with no change to the rulings above.

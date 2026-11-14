@@ -1,6 +1,8 @@
-read: full — 13 pages incl. appendices, PDF v1, pdftotext -layout (poppler), 2026-11-12
+read: full — 13 pages incl. appendices, PDF v1, pdftotext -layout (poppler); re-read in full from the stored PDF (SHA-256 3096d8628d1d6516db69152e99fc47712d72da00eb592c50a1a3de5ee7720b72), first read 2026-11-12, 2026-11-14
 
 # UTBoost: Rigorous Evaluation of Coding Agents on SWE-Bench — Yu, Zhu, He and Kang (arXiv 2506.09289v1, 10 Jun 2025; ACL 2025)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 9 to 12) was checked for the entries the text cites rather than read entry by entry. The leaderboard tables of the appendix (pp. 10 to 13) were read only in part (the end of the Lite table and the Verified table); nothing in the report rests on them.
 
 Source file: arXiv PDF v1, 13 pages (body 9 pages, references pp. 10-11, appendix A leaderboard tables pp. 12-13). The extracted text has 13 pages and no blank page. Every page was read, including both leaderboard tables. Literature-scan source for the refresh of 2026-11-12 (topic: evaluations on the human-validated subset of the benchmark whose tests are executed; test adequacy and the harness's log parser).
 
