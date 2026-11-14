@@ -294,3 +294,11 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-13,C,76963,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 101, waits on 76962 (afterok)",u22,4,1,06:51:20,6.86,COMPLETED
 2026-11-13,C,76964,RQ2POSTLAUNCH,"RQ2 final-sets scoring, seed 102, waits on 76963 (afterok)",u22,4,1,00:00:00,0.0,CANCELLED before start (seed 102 moved to account A as 77128; dependency cleared earlier)
 2026-11-14,A,77128,RQ2POSTLAUNCH,"RQ2 final-sets scoring (sealed), seed 102, five retained mined models copied from C and verified by SHA-256, commit 372f66a, own folder on A",u22,4,1,06:51:49,6.86,COMPLETED
+2026-11-14,A,77416,RQ3TRAINEDCTX,"RQ3 contexts of the three seed-100 trained arms with the untrained-equality check; failed at start (subset file path), no call",u22,4,0,00:02:01,0.0,FAILED
+2026-11-14,A,77750,RQ3TRAINEDCTX,"RQ3 contexts, same; untrained equality 30 of 30 passed, then three of four shards failed (shared temporary file name)",u22,4,0,01:27:58,0.0,FAILED
+2026-11-14,A,77893,RQ3TRAINEDCTX,"RQ3 contexts of RAW, FILTER-BM25 and subsample (seed 100), retained scores: 377 of 377 per model",u22,4,0,01:17:21,0.0,COMPLETED
+2026-11-14,A,78233,RQ3TRAINEDPREP,"RQ3 prompts of the three trained arms at 8,000 tokens: 377 of 377 per arm, 0 rejected",u22,2,0,00:00:35,0.0,COMPLETED
+2026-11-14,A,78235,RQ3TRAINEDRUNS,"RQ3 arm jobs 78235 to 78237 failed at start (prepared directory path), no call",u22,2,0,00:00:00,0.0,COMPLETED
+2026-11-14,A,78244,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm RAW (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 8.931 USD",u22,2,0,05:38:11,0.0,COMPLETED
+2026-11-14,A,78245,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm FILTER-BM25 (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 9.117 USD",u22,2,0,05:38:12,0.0,COMPLETED
+2026-11-14,A,78246,RQ3TRAINEDRUNS,"RQ3 graded runs, trained arm size-matched subsample (seed 100) at 8,000, 327 x 3 adjacent repeats, cap 12 USD, spent 8.974 USD",u22,2,0,04:14:00,0.0,COMPLETED

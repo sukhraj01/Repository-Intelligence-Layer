@@ -1,0 +1,9 @@
+arm,class,runs
+rrf,apply_failed:multiple_matches,16
+rrf,apply_failed:no_match,200
+tr_mined_filter_bm25_u100_s100,apply_failed:multiple_matches,7
+tr_mined_filter_bm25_u100_s100,apply_failed:no_match,176
+tr_mined_raw_u100_s100,apply_failed:multiple_matches,17
+tr_mined_raw_u100_s100,apply_failed:no_match,174
+tr_mined_sub_u100_s100,apply_failed:multiple_matches,10
+tr_mined_sub_u100_s100,apply_failed:no_match,186

@@ -1,0 +1,68 @@
+{
+ "arm_form": "RRF of BM25 and the model dense scores, as the untrained arm rrf",
+ "arms": [
+  "rrf",
+  "tr_mined_raw_u100_s100",
+  "tr_mined_filter_bm25_u100_s100",
+  "tr_mined_sub_u100_s100"
+ ],
+ "estimates": [
+  [
+   "tr_mined_filter_bm25_u100_s100",
+   "rrf"
+  ],
+  [
+   "tr_mined_filter_bm25_u100_s100",
+   "tr_mined_raw_u100_s100"
+  ],
+  [
+   "tr_mined_sub_u100_s100",
+   "rrf"
+  ],
+  [
+   "tr_mined_sub_u100_s100",
+   "tr_mined_raw_u100_s100"
+  ],
+  [
+   "tr_mined_filter_bm25_u100_s100",
+   "tr_mined_sub_u100_s100"
+  ]
+ ],
+ "models": [
+  {
+   "arm": "tr_mined_raw_u100_s100",
+   "cell": "mined_raw",
+   "run_id": "mined_raw_u100_s100",
+   "seed": 100,
+   "sha256": "ef49af4c68baaf65b4526b6eb11e5ed33e9bd4dc59ca41e37da2f093ae2f916f"
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "cell": "mined_filter_bm25",
+   "run_id": "mined_filter_bm25_u100_s100",
+   "seed": 100,
+   "sha256": "f022b48653eb929ed2f6320a4f2577aa489bf27e56bb2bdbeeacecda7d534954"
+  },
+  {
+   "arm": "tr_mined_sub_u100_s100",
+   "cell": "mined_sub",
+   "run_id": "mined_sub_u100_s100",
+   "seed": 100,
+   "sha256": "ffe0a864d80d2ef8fdefead7662623feb211faa1a59c540be243b3507cdafc07"
+  }
+ ],
+ "note": "the last estimate (FILTER-BM25 minus the size-matched subsample, RQ2's second confirmatory pair) is added to the generated plan before any contrast was computed",
+ "primary": [
+  "tr_mined_raw_u100_s100",
+  "rrf"
+ ],
+ "primary_seed": 100,
+ "provisional": "D113, D121 for trained arms; primary seed = smallest RAW seed; D152",
+ "runs": [
+  0,
+  1,
+  2
+ ],
+ "seed": 0,
+ "version": "rq3-trained-plan/v1"
+}

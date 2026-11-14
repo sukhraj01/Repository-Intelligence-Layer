@@ -156,7 +156,7 @@ and a different latency profile. Which one is in the frozen configuration is ADR
 - **Latency profile.** Dominated by LLM rounds, not by graph lookups: LocAgent reports 6 rounds and
   0.05 dollars per instance for the 7B model and 9 rounds and 0.09 for the 32B (`locagent-2503.09089.md`,
   Table 5, p.9). A traversal call is a local lookup; the quantity that matters is resolved rate per
-  agent wall-clock (`docs/EXPERIMENTS.md`, E-RQ3-AGENT), which the harness would attribute per tool
+  agent wall-clock (`docs/experiments/B.md`, E-RQ3-AGENT), which the harness would attribute per tool
   call. Not measured.
 - **Constraint (reasoned).** RQ3 holds the agent fixed and varies the retriever. A graph *tool* changes
   the agent's action space, so it is a different comparison from RQ3 as written; as a variant it needs

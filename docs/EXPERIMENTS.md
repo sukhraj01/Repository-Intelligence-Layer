@@ -123,7 +123,7 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-RQ2-CTRL-SUBRAW | lead | `docs/EXPERIMENTS.md` | planned |  |
 | E-RQ2-SEC-QQ | lead | `docs/EXPERIMENTS.md` | planned |  |
 | E-RQ2-SEC-POSNEG | lead | `docs/EXPERIMENTS.md` | planned |  |
-| E-RQ3-AGENT | lead | `docs/EXPERIMENTS.md` | planned |  |
+| E-RQ3-AGENT | lead | `docs/experiments/B.md` | done 2026-11-14 (D167): three trained arms at seed 100 against the untrained arm; primary contrast not distinguishable from zero; 27.02 USD |
 | A1-PILOT | A | `docs/experiments/A.md` | done | 2026-10-31 |
 | A2a | A | `docs/experiments/A.md` | done | 2026-10-31 |
 
@@ -170,7 +170,6 @@ The lead adds the row for a new entry at merge time (the pull request text carri
 | E-RQ2-CTRL-SUBRAW | RQ2 | RAW subsampled to FILTER's pool size, equal updates | as above | 3 | separates "less data seen more often" from quality | planned |
 | E-RQ2-SEC-QQ | RQ2 (secondary) | best arm at 100/80/60/40% of pool | as above | 3 | quantity–quality curve (replicates SweRank §5.3.1 at repo level) | planned — only if core completes |
 | E-RQ2-SEC-POSNEG | RQ2 (ablation) | degrade positive side vs negative side | as above | 3 | positive- vs negative-quality effect | planned — only if core completes |
-| E-RQ3-AGENT | RQ3 | retriever = RAW / FILTER / WEIGHT / CURRICULUM | agent scaffold, base LLM, temperature, seed, instances | 1 per instance (paired) | resolved rate + CI; McNemar; retrieval-vs-reasoning breakdown; resolved rate per agent wall-clock | planned — gated on week-12 go/no-go |
 
 ## E-GRAPH-REACH (exploratory pilot, done 2026-10-17)
 

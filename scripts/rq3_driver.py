@@ -47,6 +47,10 @@ log = get_logger("rq3_driver")
 ROOT = Path(__file__).resolve().parents[1]
 LIMITS_FILE = ROOT / "configs" / "agent" / "gemini_limits.yaml"
 PRICES_FILE = ROOT / "configs" / "agent" / "prices.yaml"
+CONFIG_HASH_ARM = "rrf"
+"""The arm field of the pinned configuration's hash. The arm is a label of the prompts, not a
+setting of the run, and the selected hash was computed with this name; using it for every arm keeps
+one hash for the whole study (the arm itself is recorded beside it in ``meta.json``)."""
 EMAIL_DIGESTS = ROOT / "configs" / "agent" / "prompt_email_digests.txt"
 
 
@@ -236,7 +240,7 @@ def _live_client(
         MessagesConfig,
         connection_from_entry,
     )
-    from ril.agent.providers.spend import GuardedClient, SpendGuard
+    from ril.agent.providers.spend import GuardedClient, SharedSpend, SpendGuard
 
     limits = load_limits(args.limits, model=args.model)
     try:
@@ -275,6 +279,12 @@ def _live_client(
             limiter,
         )
     guard = SpendGuard(args.cap_usd, price, args.max_output_tokens)
+    if getattr(args, "shared_ledger", None):
+        guard.shared = SharedSpend(
+            args.shared_ledger,
+            owner=f"{args.arm}_runs" + "-".join(str(i) for i in _run_indices(args)),
+            cap_usd=getattr(args, "shared_cap_usd", None),
+        )
     if call_log is not None:
         guard.add_logged(call_log.rows())
     for extra in getattr(args, "count_spent", None) or []:
@@ -345,6 +355,8 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         "adjacent_repeats": bool(getattr(args, "adjacent_repeats", False)),
         "instances": len(ids),
         "cap_usd": getattr(args, "cap_usd", None),
+        "shared_ledger": bool(getattr(args, "shared_ledger", None)),
+        "max_unusable_share": getattr(args, "max_unusable_share", None),
         "prices_as_of": price.as_of,
         "prices_verified": price.verified,
         "thinking_config": thinking if thinking is not None else "provider default (none sent)",
@@ -359,19 +371,28 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
                 "max_output_tokens": getattr(args, "max_output_tokens", None),
                 "max_reasks": run_cfg.max_reasks,
                 "template_version": TEMPLATE_VERSION,
-                "arm": args.arm,
+                "arm": CONFIG_HASH_ARM,
             }
         ),
         "exec_config_hash_latest": hash_latest,
         "exec_config_hash_era": hash_era,
         "seed": args.seed,
     }
+    expect = getattr(args, "expect_config_sha256", None)
+    if expect and not str(meta["config_sha256"]).startswith(expect):
+        log.error(
+            "configuration hash %s does not start with the selected %s: no call made",
+            str(meta["config_sha256"])[:12],
+            expect,
+        )
+        return 2
     cfg = DriverConfig(
         model=args.model,
         run_indices=_run_indices(args),
         adjacent_repeats=bool(getattr(args, "adjacent_repeats", False)),
         mode="live" if live else "logged",
         workers=args.workers,
+        max_unusable_share=getattr(args, "max_unusable_share", None),
         meta=meta,
     )
     summary = drive(items, args.out_dir, source, executor, readers, cfg, price)
@@ -903,6 +924,24 @@ def main(argv: list[str] | None = None) -> int:
                 help="default: the limits entry's provider, else from the model name",
             )
             p.add_argument("--wait-for-daily", action="store_true")
+            p.add_argument(
+                "--shared-ledger",
+                help="JSON ledger shared by several arm jobs: one total no job can exceed (D167)",
+            )
+            p.add_argument(
+                "--shared-cap-usd",
+                type=float,
+                help="the ledger's total cap; required to create it, must equal it afterwards",
+            )
+            p.add_argument(
+                "--expect-config-sha256",
+                help="refuse to start unless the configuration hash starts with this",
+            )
+            p.add_argument(
+                "--max-unusable-share",
+                type=float,
+                help="stop cleanly when more than this share of final replies is unusable",
+            )
             p.add_argument(
                 "--count-spent",
                 nargs="+",

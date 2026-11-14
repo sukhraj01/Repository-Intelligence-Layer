@@ -395,10 +395,11 @@ def model_record(model: RetainedModel, source: Mapping[str, Any]) -> Record:
 
 def write_json_atomic(path: str, data: Mapping[str, Any]) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(f"{path}.tmp", "w", encoding="utf-8") as handle:
+    tmp = f"{path}.{os.getpid()}.tmp"  # one name per process: shards write the same file
+    with open(tmp, "w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=1, sort_keys=True, default=str)
         handle.write("\n")
-    os.replace(f"{path}.tmp", path)
+    os.replace(tmp, path)
 
 
 def encode_model(
