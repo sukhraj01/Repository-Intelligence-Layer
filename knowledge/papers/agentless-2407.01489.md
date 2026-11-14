@@ -1,6 +1,8 @@
-read: full — 25 pages incl. appendices, PDF v2, pdftotext -layout (poppler), 2026-11-08
+read: full — 25 pages incl. appendices, PDF v2, pdftotext -layout (poppler); re-read in full from the stored PDF (SHA-256 1675c2dcd5ecaef47e8a4356062f60be642cee82e1bbacb044c9d047dce4c856), first read 2026-11-08, 2026-11-14
 
 # Agentless — Xia, Deng, Dunn, Zhang (arXiv 2407.01489v2, 29 Oct 2024)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 19 to 25) was checked for the entries the text cites rather than read entry by entry.
 
 Source: https://arxiv.org/abs/2407.01489, PDF https://arxiv.org/pdf/2407.01489v2 (v2 is the latest version; v1 has 17 pages and is
 not used), retrieved 2026-11-08. The PDF has 25 pages (body 19 pages, references pp.19-25, no appendix); the extracted text has

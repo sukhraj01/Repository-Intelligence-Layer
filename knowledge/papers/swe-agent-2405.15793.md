@@ -1,6 +1,8 @@
-read: in full except the numbered source-code listings inside the appendix trajectories (pp. 45 to 116); every agent turn, error message, patch and summary was read — 118 pages incl. appendices, PDF v3, pdftotext -layout (poppler), 2026-11-08
+read: in full except the numbered source-code listing lines inside the appendix trajectories (pp. 72 to 116); pages 45 to 71 and every agent turn, error message, patch and summary of pages 72 to 116 were read — 118 pages incl. appendices, PDF v3, pdftotext -layout (poppler); re-read in full from the stored PDF (SHA-256 d171e0693060b910ceb2cddd0fd4bc7cae302005d42d0d8059bfdbe056c3adba), first read 2026-11-08, 2026-11-14
 
 # SWE-agent — Yang, Jimenez, Wettig, Lieret, Yao, Narasimhan, Press (arXiv 2405.15793v3, 11 Nov 2024; NeurIPS 2024)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 10 to 15) was checked for the entries the text cites rather than read entry by entry. Pages 45 to 71 (the first two trajectories, with their source listings) were read in full; of pages 72 to 116 (the other two trajectories) every agent turn, error message, observation, patch and summary was read, and the numbered source-code listing lines were not. Nothing in the report rests on those listing lines.
 
 Source: https://arxiv.org/abs/2405.15793, PDF https://arxiv.org/pdf/2405.15793v3 (v3 is the latest version; v1 has 25 pages and v2
 118 pages, neither used), retrieved 2026-11-08. The PDF has 118 pages (body pp.1-10, references pp.10-15, appendix pp.16-118);

@@ -118,7 +118,7 @@ class SharedSpend:
     so two jobs can never both pass a check that only one of them fits under. A call is checked
     against ``committed + sum(reserved) + its worst case``; its reservation is replaced by the
     billed cost when the call returns and dropped if it fails. ``cap_usd`` is fixed when the ledger
-    is created and cannot be raised by a job (D114, D163). A job that restarts clears its own
+    is created and cannot be raised by a job (D114, D167). A job that restarts clears its own
     reservations first (a crash leaves none that count).
     """
 

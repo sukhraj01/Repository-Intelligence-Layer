@@ -1,0 +1,38 @@
+{
+ "commit": "372f66a",
+ "config_hash": "6d790b20325ae838ed47cbd9f5a44c99e8544c37e89e63f4d8ae841935729b07",
+ "dev_record_sha256": "c609a5ca65e781ce9ac0aa4909410559521678cd705d9bcad1e48338f6e65458",
+ "folder": "rq2f_mined_weight__s101__6d790b20",
+ "follows_dev_analysis": "E-RQ2-DEV-ANALYSIS",
+ "gate": {
+  "capability": [
+   7,
+   5
+  ],
+  "cuda": "12.1",
+  "device": "NVIDIA GeForce RTX 2080 Ti",
+  "matmul_max_abs_error": 0.0001220703125,
+  "torch": "2.4.1+cu121"
+ },
+ "model_sha256": "736ee5137dbd3e3585d20def474c4f51e4c8152f894e33846503e99f827e770a",
+ "part": "built_xarray",
+ "queries": 0,
+ "result_dir": "$HOME/ril_rq2f/results/rq2_final/final_sets/mined_weight_u100_s101/exec377/built_xarray",
+ "retained_scores": {
+  "complete": true,
+  "dir": "$HOME/ril_rq2f/retained_final/exec377_scores/mined_weight_u100_s101/dense_scores",
+  "part": "built_xarray",
+  "part_digest": "c863abc8d7d75233c7b27cea58a63b09d0a77c7c34d60c9dd21a865ffc06926b",
+  "part_instances": 4,
+  "record_sha256": "acba282ff9ff92d6a6dcc30fd4cdc8328bf97ea8f36d57ea8dbdf89723dd1e13",
+  "retained_instances": 377,
+  "scores_sha256": "f5793b243bb1f6dc63bf890b256f832850684bf57aed172c90595e0639792ba9"
+ },
+ "roles": [
+  "test"
+ ],
+ "run_id": "mined_weight_u100_s101",
+ "seconds": 73.8,
+ "set": "exec377",
+ "version": "final-sets/v1"
+}

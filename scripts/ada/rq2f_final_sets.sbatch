@@ -43,6 +43,11 @@ export RIL_COMMIT
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv > "out/nvidia_${SLURM_JOB_ID}.txt" || true
 { echo "host=$(hostname)"; echo "ril_commit=$RIL_COMMIT"; echo "run_id=$ONLY"; echo "follows=$FOLLOWS"; df -h "${TMPDIR:-/tmp}" "$HOME" | tail -2; } \
   > "out/env_final_${SLURM_JOB_ID}.txt"
+# The built parts stored query texts at L2 only; the L3 stores (same text, checked against the caches) are added here, idempotently,
+# so that the dense stage writes dense_L3 for the members labelled at L3 (DEV-043).
+for part in ril_rq3u ril_rq3u_x; do
+  "$PY" scripts/rq3_units.py prep-l3-queries "$HOME/$part/e3_cache" "$HOME/$part/prep" --seed 0
+done
 "$PY" scripts/rq2_final_sets.py run --retained-root "$RETAIN_DIR" --only ${ONLY//:/ } \
   --follows-dev-analysis "$FOLLOWS" --dev-record "$W/results/rq2_final/dev_analysis_record.json" \
   --out "$W/results/rq2_final/final_sets" --home "$HOME" --work "$CK" --device cuda \

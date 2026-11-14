@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Summarise the graded RQ3 arms from stored files (thin wrapper, D163).
+"""Summarise the graded RQ3 arms from stored files (thin wrapper, D167).
 
 rq3_agent_summary.py OUT.json --arm NAME RESULTS.jsonl CALLS.jsonl [--arm ...] --runs 0 1 2
                      [--input LABEL PATH ...]

@@ -1,8 +1,8 @@
-read: NOT READ (the source is a web announcement with no PDF, so the reading rule's page-count and number checks cannot be applied; the whole text of an archived capture was read, and the note below lists only what that text states, as a web source, not as a checked paper)
+read: web capture — 24422 characters of extracted text, archive capture of 2024-12-31, capture SHA-256 dcafd11646b7a9f47d1d58d20332ae9afebe907001f0642a515d04b237593389, extracted-text SHA-256 8804d1c17b0f106fb3853a06abb9b3d7d701d3ca3b029f5d24e33e89c5183a9c, read 2026-11-14
 
 # Introducing SWE-bench Verified — Chowdhury, Aung, Shern, Jaffe, Sherburn, Starace, Mays, Dias, Aljubeh, Glaese, Jimenez, Yang, Liu and Madry (web announcement, 13 August 2024)
 
-Source: the announcement page of the company that ran the annotation. The live page answered HTTP 403 to every fetch tool on 2026-11-12; the Internet Archive capture of 31 December 2024 (`web.archive.org/web/20241231052539/https://openai.com/index/introducing-swe-bench-verified/`, HTML 360,254 bytes, extracted text 24,942 characters, SHA-256 of the extracted text `7a70b258be81ff1d5e4dfa778e5ceb63057ce459403b4199a384184fac158085`) was read from title to the footnotes, including the annotation rubric summary, all four result charts as extracted, the limitations section, the data links and the author list. No PDF exists; the page declares no version. This note is therefore not accepted by `scripts/check_paper_note.py` as a read paper and carries no "numbers we may quote" table. A claim below is a statement of the page, nothing re-derived.
+Source: the announcement page of the company that ran the annotation. The live page answered HTTP 403 to every fetch tool on 2026-11-12, so the source is the Internet Archive capture of 2024-12-31 (`web.archive.org/web/20241231052539id_/https://openai.com/index/introducing-swe-bench-verified/`). **Capture rule for a web source:** the capture is stored unmodified under `data/raw/web/swe-bench-verified-announcement-2024/capture.html` (352,484 bytes, SHA-256 in the header; the folder is untracked like all raw data and holds a `provenance.json` with the URL, capture date and fetch date), its extracted text beside it (`capture_extracted.txt`, scripts and styles removed, tags replaced by line breaks, entities unescaped, blank lines dropped, no trailing newline; length and SHA-256 in the header), and the header form is the one `ril/util/paper_note.py` checks (`scripts/check_paper_note.py NOTE EXTRACTED.txt` confirms the length and the hash and re-finds every number of the table below). The capture was read from title to the footnotes on 2026-11-12 (first extraction: 24,942 characters, SHA-256 `7a70b258be81ff1d5e4dfa778e5ceb63057ce459403b4199a384184fac158085`, a different extraction of the archive's wrapped page) and fetched again on 2026-11-14 in its unmodified form; every claim below was found again in that text. No PDF exists and the page declares no version. A claim below is a statement of the page, nothing re-derived; the page is a web announcement, not a reviewed paper.
 
 ## What the page states (claims relied on)
 
@@ -22,6 +22,19 @@ Source: the announcement page of the company that ran the annotation. The live p
 - The 500 are not a random sample of the benchmark, and the resolved rate on them is not an estimate of the rate on the original set.
 - Annotator agreement beyond the three-label ensemble: no agreement statistic is given.
 - The page describes the annotation of tests as a judgement of coverage by humans; a later study found test-insufficient instances among the 500 (`utboost-2506.09289.md`, 26 of 500 by its own method).
+
+## Numbers we may quote
+
+| Claim | Value | Where |
+|---|---|---|
+| samples in the released subset | 500 | section SWE-bench Verified |
+| annotators | 93 | section Our Approach |
+| samples annotated | 1,699 | section Our Approach |
+| annotations per sample | 3 | section Our Approach |
+| flagged as underspecified | 38.3% | section Annotation Results |
+| flagged for tests that may reject valid solutions | 61.1% | section Annotation Results |
+| filtered out in all | 68.3% | section Annotation Results |
+| severity at which a criterion filters a sample | 2 | section Dataset construction |
 
 ## Relation to RQ1 / RQ2 / RQ3
 

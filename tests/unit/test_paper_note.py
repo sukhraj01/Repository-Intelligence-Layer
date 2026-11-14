@@ -171,3 +171,33 @@ def test_repository_notes_never_hide_a_skipped_part() -> None:
         first = next((ln for ln in note.splitlines() if ln.strip()), "")
         if READ_FULL.match(first):
             assert not SKIP_MARKERS.search(note), path.name
+
+
+WEB_TEXT = "Announcement. 93 annotators labelled 1,699 samples and kept 500."
+
+
+def _web_head(text: str, chars: int | None = None) -> str:
+    import hashlib
+
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return (
+        f"read: web capture — {len(text) if chars is None else chars} characters of "
+        "extracted text, "
+        f"archive capture of 2024-12-31, capture SHA-256 {'a' * 64}, "
+        f"extracted-text SHA-256 {digest}, read 2026-11-14\n\n"
+    )
+
+
+def test_web_capture_header_passes_and_finds_numbers() -> None:
+    note = _note("| annotators | 93 | section A |\n| kept | 500 | section A |", _web_head(WEB_TEXT))
+    rep = check_note(note, WEB_TEXT)
+    assert rep.ok and rep.checked_numbers == 2
+
+
+def test_web_capture_hash_length_and_numbers_are_checked() -> None:
+    note = _note("| annotators | 93 | section A |", _web_head(WEB_TEXT))
+    assert any("SHA-256" in e for e in check_note(note, WEB_TEXT + " ").errors)
+    short = _note("| annotators | 93 | section A |", _web_head(WEB_TEXT, chars=10))
+    assert any("characters" in e for e in check_note(short, WEB_TEXT).errors)
+    bad = _note("| annotators | 94 | section A |", _web_head(WEB_TEXT))
+    assert any("number 94" in e for e in check_note(bad, WEB_TEXT).errors)

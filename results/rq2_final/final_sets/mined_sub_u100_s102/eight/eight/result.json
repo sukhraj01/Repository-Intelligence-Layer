@@ -1,0 +1,275 @@
+{
+ "baselines": [],
+ "deliberate_test": "RQ2 final: the eight evaluation repositories, scored once after the dev analysis; follows E-RQ2-DEV-ANALYSIS",
+ "headline": [
+  {
+   "c_hi": 21.1,
+   "c_lo": 11.9,
+   "group": "test",
+   "level": "L2",
+   "metric": "ndcg10",
+   "name": "bm25",
+   "q_hi": 17.77,
+   "q_lo": 11.39,
+   "queries": 177,
+   "reading": "units_all_nomod",
+   "ref": "",
+   "repos": 8,
+   "value": 14.51
+  },
+  {
+   "c_hi": 24.53,
+   "c_lo": 13.56,
+   "d": 2.72,
+   "d_c_hi": 6.31,
+   "d_c_lo": -3.24,
+   "d_q_hi": 5.5,
+   "d_q_lo": -0.11,
+   "group": "test",
+   "level": "L2",
+   "metric": "ndcg10",
+   "name": "dense:mined_sub_u100_s102__eight__eight",
+   "q_hi": 20.8,
+   "q_lo": 13.88,
+   "queries": 177,
+   "reading": "units_all_nomod",
+   "ref": "bm25",
+   "repos": 8,
+   "value": 17.23
+  },
+  {
+   "c_hi": 28.08,
+   "c_lo": 16.28,
+   "d": 5.27,
+   "d_c_hi": 8.41,
+   "d_c_lo": 2.22,
+   "d_q_hi": 7.4,
+   "d_q_lo": 2.96,
+   "group": "test",
+   "level": "L2",
+   "metric": "ndcg10",
+   "name": "rrf:mined_sub_u100_s102__eight__eight",
+   "q_hi": 23.35,
+   "q_lo": 16.33,
+   "queries": 177,
+   "reading": "units_all_nomod",
+   "ref": "bm25",
+   "repos": 8,
+   "value": 19.78
+  }
+ ],
+ "label_manifest": {
+  "labelled": 179,
+  "levels": {
+   "L2": 179
+  },
+  "members": 179
+ },
+ "provisional": "provisional: ADR-006 (rrf k, cut)",
+ "roles": [
+  "test"
+ ],
+ "rrf_k": 60,
+ "stores_encoded": [
+  {
+   "cut_at_max_tokens": 0,
+   "encoded_now": 1,
+   "seconds_now": 0.02,
+   "share_cut": 0.0,
+   "store": "queries__L2__SWE-Bench-plus-plus__IBM__mcp",
+   "taken_from_shorter_cut": 0,
+   "texts": 1,
+   "texts_per_s_now": 42.78,
+   "tokens_fed": 310
+  },
+  {
+   "cut_at_max_tokens": 4,
+   "encoded_now": 8,
+   "seconds_now": 0.16,
+   "share_cut": 0.5,
+   "store": "queries__L2__SWE-bench-Live__IBM__mcp",
+   "taken_from_shorter_cut": 0,
+   "texts": 8,
+   "texts_per_s_now": 49.5,
+   "tokens_fed": 2777
+  },
+  {
+   "cut_at_max_tokens": 3,
+   "encoded_now": 5,
+   "seconds_now": 0.1,
+   "share_cut": 0.6,
+   "store": "queries__L2__SWE-bench-Live__Pyomo__pyomo",
+   "taken_from_shorter_cut": 0,
+   "texts": 5,
+   "texts_per_s_now": 49.02,
+   "tokens_fed": 2171
+  },
+  {
+   "cut_at_max_tokens": 32,
+   "encoded_now": 83,
+   "seconds_now": 1.43,
+   "share_cut": 0.3855,
+   "store": "queries__L2__SWE-bench-Live__aws",
+   "taken_from_shorter_cut": 0,
+   "texts": 83,
+   "texts_per_s_now": 58.16,
+   "tokens_fed": 34343
+  },
+  {
+   "cut_at_max_tokens": 7,
+   "encoded_now": 22,
+   "seconds_now": 0.37,
+   "share_cut": 0.3182,
+   "store": "queries__L2__SWE-bench-Live__jlowin__fastmcp",
+   "taken_from_shorter_cut": 0,
+   "texts": 22,
+   "texts_per_s_now": 59.61,
+   "tokens_fed": 7703
+  },
+  {
+   "cut_at_max_tokens": 5,
+   "encoded_now": 11,
+   "seconds_now": 0.27,
+   "share_cut": 0.4545,
+   "store": "queries__L2__SWE-bench-Live__jupyterlab__jupyter",
+   "taken_from_shorter_cut": 0,
+   "texts": 11,
+   "texts_per_s_now": 41.37,
+   "tokens_fed": 4598
+  },
+  {
+   "cut_at_max_tokens": 20,
+   "encoded_now": 33,
+   "seconds_now": 0.71,
+   "share_cut": 0.6061,
+   "store": "queries__L2__SWE-bench-Live__pdm",
+   "taken_from_shorter_cut": 0,
+   "texts": 33,
+   "texts_per_s_now": 46.62,
+   "tokens_fed": 14053
+  },
+  {
+   "cut_at_max_tokens": 4,
+   "encoded_now": 5,
+   "seconds_now": 0.09,
+   "share_cut": 0.8,
+   "store": "queries__L2__SWE-bench-Live__psf__black",
+   "taken_from_shorter_cut": 0,
+   "texts": 5,
+   "texts_per_s_now": 53.94,
+   "tokens_fed": 2190
+  },
+  {
+   "cut_at_max_tokens": 16,
+   "encoded_now": 56,
+   "seconds_now": 0.94,
+   "share_cut": 0.2857,
+   "store": "queries__L2__SWE-bench-Live__python",
+   "taken_from_shorter_cut": 0,
+   "texts": 56,
+   "texts_per_s_now": 59.38,
+   "tokens_fed": 19833
+  },
+  {
+   "cut_at_max_tokens": 2551,
+   "encoded_now": 7754,
+   "seconds_now": 236.48,
+   "share_cut": 0.329,
+   "store": "units__aws-cloudformation__cfn-lint",
+   "taken_from_shorter_cut": 0,
+   "texts": 7754,
+   "texts_per_s_now": 32.79,
+   "tokens_fed": 2087160
+  },
+  {
+   "cut_at_max_tokens": 2403,
+   "encoded_now": 10902,
+   "seconds_now": 123.76,
+   "share_cut": 0.2204,
+   "store": "units__ibm__mcp-context-forge",
+   "taken_from_shorter_cut": 0,
+   "texts": 10902,
+   "texts_per_s_now": 88.09,
+   "tokens_fed": 2938861
+  },
+  {
+   "cut_at_max_tokens": 1533,
+   "encoded_now": 9871,
+   "seconds_now": 89.28,
+   "share_cut": 0.1553,
+   "store": "units__jlowin__fastmcp",
+   "taken_from_shorter_cut": 0,
+   "texts": 9871,
+   "texts_per_s_now": 110.57,
+   "tokens_fed": 2217628
+  },
+  {
+   "cut_at_max_tokens": 206,
+   "encoded_now": 1580,
+   "seconds_now": 13.88,
+   "share_cut": 0.1304,
+   "store": "units__jupyterlab__jupyter_ai",
+   "taken_from_shorter_cut": 0,
+   "texts": 1580,
+   "texts_per_s_now": 113.81,
+   "tokens_fed": 325226
+  },
+  {
+   "cut_at_max_tokens": 785,
+   "encoded_now": 5057,
+   "seconds_now": 46.83,
+   "share_cut": 0.1552,
+   "store": "units__pdm-project__pdm",
+   "taken_from_shorter_cut": 0,
+   "texts": 5057,
+   "texts_per_s_now": 107.99,
+   "tokens_fed": 1110546
+  },
+  {
+   "cut_at_max_tokens": 203,
+   "encoded_now": 2415,
+   "seconds_now": 24.0,
+   "share_cut": 0.0841,
+   "store": "units__psf__black",
+   "taken_from_shorter_cut": 0,
+   "texts": 2415,
+   "texts_per_s_now": 100.61,
+   "tokens_fed": 339959
+  },
+  {
+   "cut_at_max_tokens": 4658,
+   "encoded_now": 28881,
+   "seconds_now": 260.12,
+   "share_cut": 0.1613,
+   "store": "units__pyomo__pyomo",
+   "taken_from_shorter_cut": 0,
+   "texts": 28881,
+   "texts_per_s_now": 111.03,
+   "tokens_fed": 6132765
+  },
+  {
+   "cut_at_max_tokens": 1261,
+   "encoded_now": 3501,
+   "seconds_now": 50.36,
+   "share_cut": 0.3602,
+   "store": "units__python-control__python-control",
+   "taken_from_shorter_cut": 0,
+   "texts": 3501,
+   "texts_per_s_now": 69.52,
+   "tokens_fed": 1144214
+  }
+ ],
+ "unit_queries": 179,
+ "units_scored": {
+  "missing_store": [],
+  "scored": 179
+ },
+ "variant": "mined_sub_u100_s102__eight__eight",
+ "version": "checkpoint-eval/v1",
+ "x2_eval": {
+  "evaluated": 179,
+  "no_dense": 0,
+  "reused": 0,
+  "skipped_role": 0
+ }
+}

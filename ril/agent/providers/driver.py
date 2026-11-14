@@ -180,7 +180,7 @@ class DriverConfig:
     env_backoff_s: float = ENV_BACKOFF_S
     max_unusable_share: float | None = None
     """Stop the run cleanly when more than this share of the final replies of the units finished
-    in this session are unusable, once ``unusable_min_units`` of them exist (D163)."""
+    in this session are unusable, once ``unusable_min_units`` of them exist (D167)."""
     unusable_min_units: int = 50
     meta: Mapping[str, Any] = field(default_factory=dict)
 

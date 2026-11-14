@@ -1,6 +1,8 @@
-read: full — 14 pages incl. appendices, PDF v2, pdftotext -layout (poppler), 2026-11-12
+read: full — 14 pages incl. appendices, PDF v2, pdftotext -layout (poppler); re-read in full from the stored PDF (SHA-256 46d0fc3197d4fc4a8934f267ccb185f515d7340b3bab00f5ab99741b1ffffd61), first read 2026-11-12, 2026-11-14
 
 # Mitigating the Impact of False Negatives in Dense Retrieval with Contrastive Confidence Regularization — Wang, Zhang and Nguyen (arXiv 2401.00165v2, 13 Jan 2024; AAAI 2024)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 8 to 10) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v2, 14 pages (body 7 pages, references pp. 8-9, appendix A and proofs pp. 10-14). The extracted text has 14 pages and no blank page. Every page was read, including Tables 1-6, the proofs and the code listing. Literature-scan source for the refresh of 2026-11-12 (topic: loss-level handling of false negatives; it was the closest unread paper on a loss-level weight named in the earlier landscape).
 

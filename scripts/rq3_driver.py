@@ -926,7 +926,7 @@ def main(argv: list[str] | None = None) -> int:
             p.add_argument("--wait-for-daily", action="store_true")
             p.add_argument(
                 "--shared-ledger",
-                help="JSON ledger shared by several arm jobs: one total no job can exceed (D163)",
+                help="JSON ledger shared by several arm jobs: one total no job can exceed (D167)",
             )
             p.add_argument(
                 "--shared-cap-usd",

@@ -2,7 +2,7 @@
 
 Reads stored result and call files only (no call, no cluster). Every input file is listed with
 its SHA-256 so each figure traces to a file. Implements ``docs/RQ3_PILOT.md`` (analysis plan,
-D113, D121, D163); the contrasts themselves come from ``ril.analysis.rq3_results``.
+D113, D121, D167); the contrasts themselves come from ``ril.analysis.rq3_results``.
 """
 
 from __future__ import annotations

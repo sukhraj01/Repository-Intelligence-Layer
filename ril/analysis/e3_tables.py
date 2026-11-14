@@ -61,8 +61,13 @@ class EvalTable:
         return out
 
 
-def load_eval_dir(path: str) -> EvalTable:
-    """Read every evaluation file under ``path``; all must share one key layout."""
+def load_eval_dir(path: str, *, allow_empty: bool = False) -> EvalTable:
+    """Read every evaluation file under ``path``; all must share one key layout.
+
+    An empty directory raises, for every caller. ``allow_empty`` is an explicit opt-in used only
+    by the final-sets scoring, and only for a part whose label manifest shows no labelled member
+    (``ril.evaluation.label_manifest``, DEV-043); it then returns a table with no rows.
+    """
     keys: list[str] | None = None
     aux_keys: list[str] | None = None
     rows: list[Record] = []
@@ -94,6 +99,15 @@ def load_eval_dir(path: str) -> EvalTable:
             blocks.append(arrays[f"metrics_{level}"])
             aux_blocks.append(arrays[f"aux_{level}"])
     if keys is None or aux_keys is None:
+        if allow_empty:
+            return EvalTable(
+                [],
+                {},
+                [],
+                np.zeros((0, 0, len(COLUMN))),
+                [],
+                np.zeros((0, 0, 1 + len(READINGS))),
+            )
         raise ValueError(f"no evaluation files under {path}")
     return EvalTable(
         keys,

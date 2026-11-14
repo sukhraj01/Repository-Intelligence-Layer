@@ -1,4 +1,4 @@
-"""Shared total spend guard and the unusable-share stop (D163): no job can exceed the total."""
+"""Shared total spend guard and the unusable-share stop (D167): no job can exceed the total."""
 
 from __future__ import annotations
 

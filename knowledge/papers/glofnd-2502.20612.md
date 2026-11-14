@@ -1,6 +1,8 @@
-read: full — 18 pages incl. appendices, PDF v2, pdftotext -layout (poppler), page counts equal (pdfinfo 18, extracted 18, none blank); proof and tables of the appendix read, 2026-10-29
+read: full — 18 pages incl. appendices, PDF v2, pdftotext -layout (poppler), page counts equal (pdfinfo 18, extracted 18, none blank); proof and tables of the appendix read; re-read in full from the stored PDF (SHA-256 8fdfb702fdb7c86ee307cf50ee2c7b3760410f12ffee3250387039406f3b0db7), first read 2026-10-29, 2026-11-14
 
 # GloFND — Balmaseda, Wang, Lin and Yang (arXiv 2502.20612v2, ICML 2025), "Discovering Global False Negatives On the Fly for Self-supervised Contrastive Learning"
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 10 to 12) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v2 (25 Jun 2025), 18 pages (body pp.1-9, references pp.10-13, appendices A-D pp.13-17 with the proof of Lemma 3.1, the bimodal extension, intuition for alpha, set-up details, significance tests, a SimCLR run and a CLIP fine-tuning run). Image and image-text pretraining; no text or code retrieval. Read for the one feature that bears on the project: a false-negative detector that is the encoder being trained.
 

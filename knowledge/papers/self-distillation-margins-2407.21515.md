@@ -1,6 +1,8 @@
-read: full — 11 pages incl. appendices, PDF v2, pdftotext -layout (poppler), page counts equal (pdfinfo 11, extracted 11, none blank); no appendix (pages 10-11 are references); Figures 3-6 are plots read through their captions and the text, 2026-10-29
+read: full — 11 pages incl. appendices, PDF v2, pdftotext -layout (poppler), page counts equal (pdfinfo 11, extracted 11, none blank); no appendix (pages 10-11 are references); Figures 3-6 are plots read through their captions and the text; re-read in full from the stored PDF (SHA-256 295857bef30227615c48c1c3b4ca8cf1834c10429fa41bff65b6464b04336100), first read 2026-10-29, 2026-11-14
 
 # Self-distillation with adaptive relevance margins — Gienapp, Deckers, Potthast and Scells (arXiv 2407.21515v2, ICTIR 2025)
+
+Re-read 2026-11-14 from the stored PDF: body and appendices read page by page; the reference list (pp. 9 to 11) was checked for the entries the text cites rather than read entry by entry.
 
 Source file: arXiv PDF v2 (20 Jun 2025), 11 pages (body pp.1-9, references pp.9-11, no appendix). Text passage retrieval on MS MARCO. Included for two things: a supervision signal that is the encoder's own pretrained similarity (an explicit self-teacher), and a learning curve in triplets seen.
 

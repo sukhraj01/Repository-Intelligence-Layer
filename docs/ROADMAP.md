@@ -123,6 +123,8 @@ still complete and defensible.
 ## Weeks 13–16 — All
 
 - [x] Report pass 4 (2026-11-12, E-REPORT-DRAFT-4, D156, D157): power slot (run-noise table rerun, reproduced byte for byte; power of 4 points), the benchmark-subset citation, related-work refresh (three papers read in full, nine existing notes cited), launch status, two mismatches fixed, source-file check; 16 open slots, all waiting for runs or readers
+- [x] Report pass 5 (2026-11-14, E-REPORT-DRAFT-5, D165): RQ2 confirmatory and exploratory contrasts, the one look's denominators, calibrated power, limitations, tokens and cost of the graded runs, web-source capture rule; 5 open slots, all waiting for the RQ3 agent runs
+- [x] Report pass 6 (2026-11-14, E-REPORT-DRAFT-6, D166): sixteen cited papers without stored text read in full, seven sentences corrected, seed-sensitivity table verified against the stored summaries; 5 open slots, all waiting for the RQ3 agent runs
 - [ ] Analysis, error breakdown, report, presentation
 - [x] Final report skeleton (`reports/final/final_report.tex`: every section, generated tables from stored results by `scripts/report_tables.py`, every empty slot a `\todo` naming its experiment entry) and the evidence-gap map (`docs/REPORT_GAPS.md`); the slots fill as the confirmatory contrasts and the agent runs finish
 
@@ -133,7 +135,7 @@ still complete and defensible.
 | 3 | Parser running on a real repository; ten CodeUnits and the edge-recovery percentage | [x] (reported under four definitions; ADR-012) |
 | 6 | Baseline encoder trained; a natural-language query returning the right function | [ ] |
 | 9 | RQ1 ablation table with the latency column | [ ] |
-| 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [ ] |
+| 12 | Four RQ2 arms, three seeds each, with the budget-accounting table | [x] |
 | 14 | RQ3 resolved rates with CIs and the retrieval-vs-reasoning failure breakdown | [ ] |
 
 > Cost statement for the RQ2 runs (rewritten 2026-10-31): the 20,000-update plan is no longer the working assumption (it was reasoned, not measured). Measured: the RAW encoder reaches its gain by 100 updates and stays flat to 2,000 (E-PILOT-CURVE); a run of 100 updates with its dev-subset evaluation costs about 0.25 GPU-hours and one of 1,000 updates about 0.9 (E-PILOT-ARMS). The working assumption for the arms is 100 to 1,000 updates with at least 3 seeds per arm, about 0.25 to 0.9 GPU-hours per run; whether a larger pool is needed first is the engineer's question (ADR-002 addendum 2026-10-31).
@@ -156,4 +158,4 @@ still complete and defensible.
 - [x] Retention against the test role of the eight and where the mined cells train decided (D124, D129): the 18 mined models retained on C, the eight and the executable 377 scored once from them after the dev analysis, mined cells on C and injected cells on A (eight repositories and built parts of the 377 copied to C, verified)
 - [ ] Return of the pilot label sheets from two readers who are not the lead; decide pilot sample or new draw
 - [x] RQ3 graded runs of the untrained arm (2026-11-13, D161, E-RQ3-UNTRAINED-RUNS): arm rrf at 8,000, 327 confirmatory instances, three adjacent repeats, gemini-3.8-flash thinking low; resolved 133 / 128 / 131, unusable 25 of 981, cost 9.875 USD (projection 9.068), descriptive only; 11.565 of 50 USD spent in all
-- [x] RQ3 graded runs of the three trained arms (RAW, FILTER-BM25, size-matched subsample; seed 100) and the pre-registered analysis (2026-11-14, D163, E-RQ3-AGENT; `results/rq3_driver/remaining_arms/`): primary contrast RAW minus untrained +2.45 points [-0.82, +5.91], not distinguishable from zero; 27.02 USD, 38.59 of 50 USD spent in all; shared spend ledger and unusable-share stop added to the arm runner
+- [x] RQ3 graded runs of the three trained arms (RAW, FILTER-BM25, size-matched subsample; seed 100) and the pre-registered analysis (2026-11-14, D167, E-RQ3-AGENT; `results/rq3_driver/remaining_arms/`): primary contrast RAW minus untrained +2.45 points [-0.82, +5.91], not distinguishable from zero; 27.02 USD, 38.59 of 50 USD spent in all; shared spend ledger and unusable-share stop added to the arm runner

@@ -119,6 +119,7 @@ def test_captions_state_evidence_class_n_and_entry() -> None:
             "eval_stores",
             "mined_full",
             "mined_quarantine",
+            "rq2_final_confirmatory",
         ):
             assert "exploratory" in t.evidence, t.name
 
@@ -173,6 +174,9 @@ def test_citations_resolve_to_notes_read_in_full() -> None:
         if first.startswith("read: in full except"):
             # a partly read note may be cited only if the report states the exception
             assert "numbered source listings" in text, slug
+        elif first.startswith("read: web capture"):
+            # a web source may be cited only if the report says it is an archived capture
+            assert "archived capture" in text, slug
         else:
             assert first.startswith("read: full"), slug
 

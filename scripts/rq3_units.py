@@ -30,7 +30,16 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
         "stage",
-        choices=["inputs", "prepare", "prep-units", "prep-queries", "count", "score", "check"],
+        choices=[
+            "inputs",
+            "prepare",
+            "prep-units",
+            "prep-queries",
+            "prep-l3-queries",
+            "count",
+            "score",
+            "check",
+        ],
     )
     ap.add_argument("paths", nargs="+")
     ap.add_argument("--shard", nargs=2, type=int, default=[0, 1])
@@ -77,6 +86,12 @@ def main() -> int:
         out, prep = args.paths
         res = ru.prepare_query_store(out, prep)
         Path(prep, "prep_queries.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
+        return 0
+    if args.stage == "prep-l3-queries":
+        cache, prep = args.paths
+        res = ru.add_l3_query_store(cache, prep)
+        Path(prep, "prep_queries_l3.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
+        log.info("%s", json.dumps(res))
         return 0
     if args.stage == "count":
         prep, out_json = args.paths
