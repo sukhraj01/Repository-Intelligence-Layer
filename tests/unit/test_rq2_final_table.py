@@ -13,7 +13,8 @@ _C = {
     "queries": 177,
     "d": -0.136,
     "df": 7,
-    "ci_cluster": [-1.09, 1.12],
+    "ci_cluster": [-1.0, 1.0],
+    "ci_uncorrected": [-1.5, 1.22],
     "ci_boot_uncorrected": [-1.0, 1.0],
     "class": "inconclusive",
     "primary": True,
@@ -30,5 +31,7 @@ def test_table_reads_summary_without_recomputing(tmp_path: Path) -> None:
     assert write_table(src, out) == 2
     lines = out.read_text().splitlines()
     assert lines[0].split(",") == COLUMNS
-    assert "-0.14" in lines[1] and "[-1.09, +1.12]" in lines[1]
+    row = lines[1]
+    assert "-0.14" in row and "[-1.50, +1.22]" in row  # the t interval, centred on the estimate
+    assert "[-1.00, +1.00]" in row  # the bootstrap beside it
     assert lines[2].count(",,") >= 1  # no decision for a contrast outside the family

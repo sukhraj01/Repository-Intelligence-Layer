@@ -4,6 +4,8 @@ Implements docs/RQ2_PROTOCOL.md section 4 and DEV-040: one row per contrast with
 points, the decision interval (cluster-robust t), the repository bootstrap beside it, the
 Holm-adjusted decision where the contrast is in the decision family, and the hash of the summary.
 Nothing is recomputed here; every figure is read from the summary the analysis module wrote.
+The unadjusted cluster-robust t interval is ``ci_uncorrected`` (centred on the estimate);
+``ci_cluster`` in the summary equals the percentile bootstrap and is not used (DEV-044).
 """
 
 from __future__ import annotations
@@ -59,7 +61,7 @@ def table_rows(summary: dict[str, Any], summary_sha256: str) -> list[dict[str, A
                 "queries": c["queries"],
                 "estimate": f"{c['d']:+.2f}",
                 "t_interval_df": c["df"],
-                "t_interval": _interval(c["ci_cluster"]),
+                "t_interval": _interval(c["ci_uncorrected"]),
                 "bootstrap_interval": _interval(c["ci_boot_uncorrected"]),
                 "holm_t_interval": _interval(holm.get("ci")),
                 "holm_p_adjusted": holm.get("p_adjusted", ""),
