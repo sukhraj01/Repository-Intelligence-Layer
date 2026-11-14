@@ -903,14 +903,14 @@ def rq3_power(root: Path) -> Table:
     facts = (
         f"Simulation of the primary paired contrast on {tr.count('327')} confirmatory instances, "
         f"power {tr.num('0.8', 1)}, {tr.count(str(asm['sims']))} simulated datasets per cell. "
-        "The baseline resolved rate and the "
-        "instance-heterogeneity parameter are assumptions, since no resolved rate exists; only the "
-        "run-to-run agreement of repeated replies is measured in the pilot. The unit is "
-        "percentage points of resolved rate"
+        "This is the earlier assumption, made before any graded run: the baseline resolved rate "
+        "and the instance-heterogeneity parameter were assumed, and the repeat probability of a "
+        "later run is the pilot's share of identical reply texts. The calibrated table that uses "
+        "the graded runs follows it. The unit is percentage points of resolved rate"
     )
     return Table(
         name="rq3_power",
-        title="Minimum detectable resolved-rate difference with run-to-run noise",
+        title="Minimum detectable resolved-rate difference with run-to-run noise, earlier assumption",
         evidence="reasoned, exploratory (assumed inputs)",
         facts=facts,
         entries=["E-RQ3-DRIVER"],
@@ -921,6 +921,203 @@ def rq3_power(root: Path) -> Table:
             tr.lit("One run"),
             tr.lit("Two runs"),
             tr.lit("Three runs"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_power_measured(root: Path) -> Table:
+    """Minimum detectable difference with the repeat probability calibrated to graded runs.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-RUN-AGREEMENT" (D162): the same simulation as
+    ``rq3_power``, with the repeat probability fixed so that the model reproduces the pooled
+    pairwise agreement measured over three adjacent repeats of the untrained arm, and a row at
+    the measured resolved rate. Both the assumed and the calibrated values are shown.
+    """
+    tr = Trace()
+    mdd = _csv(root, "results/rq3_driver/rq3_power_measured_agreement_mdd.csv", tr)
+    agr = _json(root, "results/rq3_driver/rq3_run_agreement.json", tr)
+    scen = {
+        "old": "assumed edit agreement",
+        "cal": "calibrated to measured agreement",
+        "dir": "measured agreement used directly",
+    }
+    grid_max = float(mdd[0]["grid_max_points"])
+
+    def cell(rate: str, kappa: str, runs: str, key: str) -> str:
+        r = [
+            x
+            for x in mdd
+            if x["n"] == "327"
+            and x["scenario"] == scen[key]
+            and x["rate"] == rate
+            and x["kappa"] == kappa
+            and x["runs"] == runs
+        ]
+        if len(r) != 1:
+            raise KeyError(f"{len(r)} rows match {rate} {kappa} {runs} {key}")
+        v = r[0]["mdd_points"]
+        return tr.num(v, 1) if v else "$>$" + tr.num(grid_max, 0)
+
+    out: list[list[str]] = []
+    for rate in ("0.1", "0.2", "0.3", "0.4"):
+        for kappa in ("1.0", "4.0"):
+            out.append(
+                [
+                    tr.num(float(rate) * 100, 0),
+                    tr.num(kappa, 0),
+                    cell(rate, kappa, "3", "old"),
+                    cell(rate, kappa, "3", "cal"),
+                    cell(rate, kappa, "3", "dir"),
+                    cell(rate, kappa, "1", "cal"),
+                ]
+            )
+    cal = _csv_cal(agr)
+    facts = (
+        f"Same simulation as the earlier table, {tr.count('327')} confirmatory instances, power "
+        f"{tr.num('0.8', 1)}, {tr.count(_power_sims(agr))} simulated datasets per cell, with the repeat "
+        "probability of a later run calibrated so that the simulated pooled pairwise agreement "
+        f"equals the {tr.num(float(str(agr['pooled_agreement'])) * 100, 2)} percent measured over "
+        f"three adjacent repeats of the untrained arm ({tr.count(agr['instances'])} instances; "
+        f"measured resolved rate {tr.num(float(str(agr['mean_resolved_rate'])) * 100, 2)} percent, "
+        f"the {tr.count('40')} percent row); the calibrated value is "
+        f"{tr.num(cal['1.0'], 3)} at heterogeneity {tr.num('1', 0)} and {tr.num(cal['4.0'], 3)} at "
+        f"{tr.num('4', 0)}. Columns: three runs with the earlier repeat probability, calibrated, "
+        "and the measured agreement used directly as an upper bound on run dependence, then one "
+        "run (calibrated). The symbol $>$ marks a value beyond the grid. The adjacent repeats were sent "
+        "back to back and the later two were largely served from the provider's cache, so they "
+        "are not independent runs. Unit: percentage points of resolved rate"
+    )
+    return Table(
+        name="rq3_power_measured",
+        title="Minimum detectable resolved-rate difference, calibrated to the graded runs",
+        evidence="reasoned from measured agreement, exploratory",
+        facts=facts,
+        entries=["E-RQ3-RUN-AGREEMENT", "E-RQ3-UNTRAINED-RUNS"],
+        colspec=_R(0.10) + _R(0.14) + _R(0.14) + _R(0.14) + _R(0.14) + _R(0.14),
+        wide=True,
+        header=[
+            tr.lit("Rate (%)"),
+            tr.lit("Heterogeneity"),
+            tr.lit("Earlier, three"),
+            tr.lit("Calibrated, three"),
+            tr.lit("Direct, three"),
+            tr.lit("Calibrated, one"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def _power_sims(agr: dict[str, object]) -> object:
+    run = agr["power_run"]
+    assert isinstance(run, dict)
+    return run["sims"]
+
+
+def _csv_cal(agr: dict[str, object]) -> dict[str, float]:
+    """The calibrated repeat probability per heterogeneity value, from the agreement record."""
+    cal = agr["calibration"]
+    assert isinstance(cal, dict)
+    s = cal["s_for_kappa"]
+    assert isinstance(s, dict)
+    return {str(k): float(v) for k, v in s.items()}
+
+
+def rq3_cost(root: Path) -> Table:
+    """Tokens and truncation of the model check and of the graded runs of the untrained arm.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-MODEL-CHECK-RESULT" and "E-RQ3-UNTRAINED-RUNS":
+    tokens are summed from the stored call logs per repeat; the model check is read from the
+    stored check record; the realised cost of the arm is the spend guard's total in its metadata.
+    Descriptive only: no contrast between arms is made here.
+    """
+    tr = Trace()
+    base = "results/rq3_driver/untrained_runs/gemini-3.8-flash/rrf_runs0-2"
+    tr.sources.add(f"{base}/calls.jsonl")
+    with open(root / base / "calls.jsonl", encoding="utf-8") as handle:
+        calls = [json.loads(line) for line in handle if line.strip()]
+    meta = _json(root, f"{base}/meta.json", tr)
+    chk = _json(root, "results/rq3_driver/model_check_think-low/model_check_multi.json", tr)
+    cands = chk["candidates"]
+    assert isinstance(cands, list) and len(cands) == 1
+    c = cands[0]
+
+    def row(label: str, n: int, prompt: int, cached: int, think: int, out: int, cut: int) -> list[str]:
+        return [
+            label,
+            tr.count(n),
+            tr.num(prompt / 1000, 0),
+            tr.num(100 * cached / prompt, 1) if cached >= 0 else "--",
+            tr.num((out - think) / 1000, 0),
+            tr.num(think / 1000, 0),
+            f"{tr.count(cut)} ({tr.num(100 * cut / n, 1)})",
+        ]
+
+    out: list[list[str]] = [
+        row(
+            tr.lit("Model check, ") + tr.count(c["n"]) + tr.lit(" instances, one run"),
+            int(c["calls"]),
+            int(c["prompt_tokens"]),
+            -1,
+            int(c["thinking_tokens"]),
+            int(c["output_tokens"]),
+            int(c["truncated_calls"]),
+        )
+    ]
+    tot = [0, 0, 0, 0, 0, 0]
+    for k in sorted({int(x["run_index"]) for x in calls}):
+        rs = [x for x in calls if int(x["run_index"]) == k]
+        v = [
+            len(rs),
+            sum(int(x["input_tokens"]) for x in rs),
+            sum(int(x["cached_tokens"]) for x in rs),
+            sum(int(x["thought_tokens"]) for x in rs),
+            sum(int(x["output_tokens"]) for x in rs),
+            sum(1 for x in rs if x["finish_reason"] == "MAX_TOKENS"),
+        ]
+        tot = [a + b for a, b in zip(tot, v, strict=True)]
+        out.append(row(tr.lit("Untrained arm, repeat ") + tr.count(k), *v))
+    out.append(RULE)
+    out.append(row(tr.lit("Untrained arm, all repeats"), *tot))
+    first = sorted(
+        int(x["input_tokens"]) for x in calls if int(x["attempt"]) == 0 and int(x["run_index"]) == 0
+    )
+    median_first = first[len(first) // 2]
+    facts = (
+        "Tokens of every answered call, in thousands, from the stored call logs (output tokens "
+        "split into answer and thinking tokens); the model check ran at thinking level low on the "
+        f"{tr.count(c['n'])} held-out instances, the graded runs on the "
+        f"{tr.count(meta['instances'])} confirmatory instances with three adjacent repeats. "
+        f"The output limit is {tr.count(meta['max_output_tokens'])} tokens; the last column is "
+        "the number of calls that ended at it (share in percent). The cache column is the share of "
+        "prompt tokens served from the provider's cache; the model check has no per-call field "
+        "for it. The provider counted a median of "
+        f"{tr.count(median_first)} prompt tokens ({tr.count(first[0])} to {tr.count(first[-1])}) "
+        f"for the first call of each of the {tr.count(len(first))} instances at an assembly "
+        f"budget of {tr.count(calls[0]['budget'])} approximate tokens; the prompt holds the issue and the instructions "
+        "besides the context. The realised cost of the arm is "
+        f"{tr.num(float(str(meta['realised_cost_usd'])), 3)} USD at prices read on "
+        f"{tr.label(str(meta['prices_as_of']))}, and the projected cost of the twelve arm-runs of "
+        f"the study is {tr.num(float(str(c['study_usd'])), 2)} USD. Descriptive only"
+    )
+    return Table(
+        name="rq3_cost",
+        title="Tokens and truncation of the model check and the graded runs of the untrained arm",
+        evidence="measured, exploratory",
+        facts=facts,
+        entries=["E-RQ3-MODEL-CHECK-RESULT", "E-RQ3-UNTRAINED-RUNS"],
+        colspec=_L(0.27) + _R(0.07) + _R(0.10) + _R(0.09) + _R(0.10) + _R(0.10) + _R(0.12),
+        wide=True,
+        header=[
+            tr.lit("Run"),
+            tr.lit("Calls"),
+            tr.lit("Prompt (k)"),
+            tr.lit("Cached (%)"),
+            tr.lit("Answer (k)"),
+            tr.lit("Thinking (k)"),
+            tr.lit("At limit (%)"),
         ],
         rows=out,
         trace=tr,
@@ -1391,6 +1588,8 @@ BUILDERS = (
     contamination,
     rq3_subset,
     rq3_power,
+    rq3_power_measured,
+    rq3_cost,
     rq3_power_small,
     graph_recovery,
     graph_storage,

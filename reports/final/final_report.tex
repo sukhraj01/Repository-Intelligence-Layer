@@ -83,7 +83,8 @@ comparison, not an intervention: filtering, weighting and curriculum each exist 
 we compare them under one protocol with the agent held fixed. The scope is Python only. Absolute
 resolved rates are not statements about agent capability, because benchmark contamination raises them
 identically across arms. As of this draft, the apparatus is built and measured, the training arms
-have been piloted, and \emph{no resolved rate and no confirmatory contrast exists}; the sections
+have been piloted, the final runs of RQ2 have been trained and scored, and the untrained arm of RQ3 has been graded as a description of one arm;
+\emph{no confirmatory contrast of RQ2 and no resolved-rate contrast between arms is reported here}; the sections
 below say for each claim whether it is measured, exploratory only, not run or blocked, in the
 words of the project's evidence map.
 
@@ -138,12 +139,16 @@ length of the context, the size of the edit and the issue content, so a retrieva
 resolved rate are different quantities~\cite{swebench}. The human-validated subset of 500 instances
 used as the final test here was released separately, and the paper we read in full does not describe
 it. % E-RQ3-EXEC results/rq3_exec/repo_table.csv (500 instances)
+The release is a web announcement of August 2024. It is cited through an archived capture of 31 December 2024, because the live page could not be
+retrieved; the capture, its SHA-256 and the date of reading are recorded in the project's note on it, and the whole text of the capture was read.
+It states that 93 Python developers annotated 1,699 random samples of the original test set, each labelled three times with the highest-severity label kept,
+and that a sample was dropped when either of two criteria (an underspecified issue text; tests that may reject valid solutions) was labelled at least 2 on a scale from 0 to 3, or another
+major issue was flagged, which the announcement itself calls likely to be overzealous~\cite{verifiedannouncement}. % web capture: knowledge/papers/swe-bench-verified-announcement-2024.md, sections Our Approach, Dataset construction, Annotation Results
+It also states that the 500 retained samples are not a uniform sample of the original test set, since as many samples as possible of the two hardest difficulty buckets were included. % web capture: knowledge/papers/swe-bench-verified-announcement-2024.md, section Dataset construction
 A later study, which read the release, describes it as 500 instances that 93 professional developers verified to have
 appropriately scoped tests and well-specified issue texts~\cite{utboost}; % paper_reported: knowledge/papers/utboost-2506.09289.md Sec. 2, p.3
-the release itself is a web announcement, which the reading rule for papers does not cover, so it is not cited here (open point in the
-project's literature notes).
-The same study added tests to the benchmark and found 26 of the 500 instances whose tests accepted patches that do not fix the issue, and found
-that the harness's log parser had mislabelled the stored test lists of 54.2\% of them. % paper_reported: knowledge/papers/utboost-2506.09289.md Sec. 4.2, p.6; Sec. 4.3, p.7
+the same study added tests to the benchmark and found 26 of the 500 instances whose tests accepted patches that do not fix the issue, and found
+that an improved log parser changed the stored test lists of 54.2\% of the 500 instances. % paper_reported: knowledge/papers/utboost-2506.09289.md Sec. 4.2, p.6; Sec. 4.3, p.7
 Because the same instances carry retrieval labels and executable tests, retrieval quality and
 resolved rate can be paired per instance, which is what makes RQ3 a paired design.
 
@@ -151,7 +156,7 @@ resolved rate can be paired per instance, which is what makes RQ3 a paired desig
 \section{Related work}
 \label{sec:related}
 
-Only papers read in full are cited; each has a note in the project's reading log. One reading has a stated exception: of SWE-agent's
+Only papers read in full are cited, with one web announcement cited through an archived capture that was read in full; each has a note in the project's reading log. One reading has a stated exception: of SWE-agent's
 appendix trajectories every agent turn, error message and patch was read, but not the numbered source listings inside them, and nothing below rests on those. % knowledge/papers/swe-agent-2405.15793.md header
 
 \paragraph{Retrievers for issue localization and the benchmarks.} SWE-bench defines the resolved-rate
@@ -326,7 +331,7 @@ Every rate is reported three ways (unresolved answers excluded, counted as not w
 unresolved, not adjudicated. Sampling is stratified by the BM25 cell only, because dense-teacher ranks exist for too few sampled pairs
 (111 of 400) to fill a cell. % E-LABEL-AUDIT-SHEET docs/experiments/B.md
 Nobody has read a pair, so there is no noise rate, agreement or findability figure.
-\todo{Audited noise rate, reader agreement and the precision of the filter's drops: \entry{E-LABEL-AUDIT-SHEET}.}
+The audited noise rate, the readers' agreement and the precision of the filter's drops are not measured: the readings have not been done, so the filter's drops are described by their K-rank only and the report carries no audited rate. Entry \entry{E-LABEL-AUDIT-SHEET} stays open.
 
 \paragraph{Contamination.} Pretraining exposure is measured, not argued. Functions at the base commits of the Verified
 instances were matched by syntax-tree hash against the documents of all 240 shards of a public code-retrieval training corpus
@@ -393,7 +398,7 @@ counted in approximate tokens, not the agent model's tokenizer (against one embe
 the approximation counts 1.22 times as many tokens on a 200-unit sample, but three counts returned by the
 hosted agent model matched it, ratio 1.00, so the ratio of the final model is not known); % E-ASSEMBLY docs/experiments/B.md; E-RQ3-PILOT-PREP smoke test
 the cap was chosen on development only; there is no expansion option and no cached token count.
-\todo{Budget in the agent model's tokens: set once the final model is chosen, \entry{E-RQ3-AGENT}.}
+The model is now chosen, and its own prompt counts are in Table~\ref{tab:rq3_cost}; the budgets of the contexts stay in approximate tokens and no conversion of the stored contexts was made (\entry{E-RQ3-UNTRAINED-RUNS}).
 
 \paragraph{Latency harness.} Every commit that touches the query path appends a row of per-stage
 latency (query encode, BM25, dense search, graph expansion, fusion, rerank, assemble, end to end) at
@@ -407,7 +412,7 @@ and the recency prior 2.04 ms. % E-LAT-STAGES E-FREEZE-AND-LATENCY results/laten
 Query encoding is therefore the largest single stage of the dense path, and assembly and then fusion the largest of the lexical path, and the cheap stages are far below them.
 The rows come from different machines and commits, so no end-to-end percentile of a dense pipeline exists; the ladder of Section~\ref{sec:rq1} reports path sums of stage p50 values instead, with their caveats, and the stored end-to-end row is lexical retrieval plus assembly only.
 Fusion could be made cheaper by selecting instead of sorting, but that changes how ties break and is not done here. The reranker has no row, and the frozen settings are recorded per consumer, not as one snapshot (D148, D149). % E-FREEZE-AND-LATENCY docs/experiments/B.md
-\todo{Latency of the reranker (not built, ADR-009 open) and one end-to-end row of a dense pipeline on one machine: \entry{E-LAT-STAGES}.}
+The reranker has no latency row because it is not built (ADR-009 open), and no end-to-end row of a dense pipeline on one machine exists, because the dense stages were timed on the cluster and the lexical stages locally and no entry has timed them together (\entry{E-LAT-STAGES}).
 
 \input{generated/latency_stages}
 
@@ -435,15 +440,19 @@ They add Level~2
 only; the Level~3 claim is stated on the repositories that have Level~3 labels (three
 development and the twelve Verified folders, ten of which have an executable instance). % E-EVAL-REPOS-BUILD docs/RQ2_PROTOCOL.md threat 11
 The stores of the eight are built (Table~\ref{tab:eval_stores}): 179 Level~2 queries, 59,417 distinct unit texts in the full class form, and 0.178 GPU-hours to encode them once with the working encoder,
-measured; nothing has been evaluated on them. % E-EVAL-REPOS-BUILD results/tables/eval_repo_build_measured.csv
+measured; nothing had been evaluated on them when the stores were built, and the one look is described below. % E-EVAL-REPOS-BUILD results/tables/eval_repo_build_measured.csv
 The look at Verified is taken on the executable subset of 377 instances (320 Level~2 and 224 Level~3 queries), which is also the population of RQ3, so one encoding pass per retained checkpoint serves both;
 matplotlib and scikit-learn have no executable instance and drop out, and the minimum detectable difference grows by about 16\% (the square root of 432 over 320 and of 302 over 224, reasoned). % DEV-038 D127
 A result on the subset does not carry to the excluded instances.
 Sealed order (decision D100): the eight and the 377 are read once, and only with the identifier of the finished development analysis; one guard in code is called by the analysis, by the scoring of the
 final sets and by the converter to analysis rows, and a test fails if any of them stops calling it. % D100 E-RQ2-ANALYSIS docs/experiments/B.md
-The models these two sets are scored from are retained: the 18 mined-set models on the mined-set account, in half precision, scored after the development analysis; injected-noise models are scored on
-development inside their jobs and are not retained. % D129 D142 docs/RQ2_LAUNCH_PLAN.md section 11.1
-\todo{Results of the one look on the eight repositories and on the executable subset, after the development analysis: \entry{E-RQ2-FILTER}.}
+The models these two sets are scored from are retained, in half precision, and were scored after the development analysis; injected-noise models are scored on
+development inside their jobs and are not retained. The launch scope was 15 retained mined-set models (five cells, three seeds); the plan's 18 included the three of the dense-teacher cell, which was not run. % D129 D142 D153 docs/RQ2_LAUNCH_PLAN.md section 11.1; E-RQ2-FINAL docs/experiments/B.md
+The one look was taken once, on the 15 retained models, after the development analysis. Its denominators: on the eight repositories 179 Level~2 queries were scored and 177 enter the rows; on the executable subset
+320 Level~2 queries carry labels and 316 enter the rows, and 224 Level~3 queries enter, which makes 717 query rows per model and 10,755 rows in all. % E-RQ2-FINAL docs/experiments/B.md; E-EVAL-REPOS-BUILD; DEV-038
+The rule that leaves a query out is the stored one: the pinned reading (\texttt{units\_all\_nomod}, no module-residual positives) leaves out a query that has no positive under it, two of the eight repositories' 179 and four of the 320, and it was not changed after the look;
+counting those queries would be a reading change and needs a decision of its own. % E-RQ2-FINAL docs/experiments/B.md
+The contrast table of the look is not reported in this draft until the recomputation of its intervals is recorded (Section~\ref{sec:rq2}).
 
 \input{generated/eval_stores}
 
@@ -548,8 +557,7 @@ The third development Level~3 repository (ansible) has no dense scores, so Level
 
 \paragraph{Open graph question.} Typed edges that leave a file are tested against the control in
 Tables~\ref{tab:graph_role} and~\ref{tab:rq1_ladder_pairs}; whether training-time structure or an agent-tool role adds anything is
-unmeasured. \todo{Stacked expansion at the same budget on Verified-six and on the third
-development Level~3 repository (it has no dense scores yet): \entry{E-GRAPH-L3}.}
+unmeasured. The stacked expansion was run on the development set only; it was not run on the six Verified projects or on the third development repository, which has no dense scores, because that needs an encoding pass of about 0.3 to 0.5 GPU-hours (reasoned) that no entry has run (\entry{E-GRAPH-L3}). % docs/REPORT_GAPS.md row 9
 
 % =============================================================================================
 \section{RQ2: supervision under matched budgets}
@@ -592,21 +600,25 @@ final run (O1 to O15); the ones that shape the claim are:
 
 \paragraph{Final-run design.} The design of record has 45 runs at three seeds (100 to 102) for each of 15 cells, in two families (Table~\ref{tab:final_cells}). % docs/RQ2_LAUNCH_PLAN.md section 11.2
 The mined family has three confirmatory cells (\textsc{Raw}, \textsc{Filter} with the BM25 teacher, and the size-matched subsample), two exploratory cells (\textsc{Weight} and
-\textsc{Curriculum}, BM25 teacher) and one exploratory cell that exists only if a full-store pass of the dense teacher costs at most 6.0 GPU-hours (\textsc{Filter} with SweRankEmbed-Small, D125).
+\textsc{Curriculum}, BM25 teacher) and one exploratory cell that exists only if a full-store pass of the dense teacher costs at most 6.0 GPU-hours (\textsc{Filter} with SweRankEmbed-Small, D125), which was not run.
 The injected-noise family has the six cells at noise rate 0.4, a clean \textsc{Raw} cell at rate 0 and \textsc{Raw} and \textsc{Filter} (BM25) at rate 0.1, so the dose-response has three points and stays
 exploratory (D137, D138). % D125 D137 D138 docs/RQ2_LAUNCH_PLAN.md section 11
 The mined cells run on one cluster account and the injected cells on another, one GPU job per account and seed running its arms in a fixed interleaved order with the confirmatory pair first, so
 that a job that dies leaves complete pairs. % D124 D141 docs/RQ2_LAUNCH_PLAN.md section 11.3
-The measured cost is 34.34 GPU-hours against a block cap of 46.7 (40.74 with the conditional cell); this includes scoring the eight repositories and the executable subset once from the retained models. % docs/RQ2_LAUNCH_PLAN.md section 11.2 (measured unit costs; the totals are arithmetic)
+The planned cost was 34.34 GPU-hours against a block cap of 46.7 (40.74 with the conditional cell), from measured unit costs; this includes scoring the eight repositories and the executable subset once from the retained models. % docs/RQ2_LAUNCH_PLAN.md section 11.2 (measured unit costs; the totals are arithmetic)
 The submit script refuses to run without a preflight that was passed on the same commit and without an update count computed from a prepared store.
 Launch status, design and state only: the 45 configurations were registered on both accounts under one cell-table digest (\texttt{f441e765}), the leakage and torch tests passed
 (41 of 41) on the launch commit, and six jobs, three per account with the seeds chained, were submitted on 2026-11-12 with $F=3{,}885$ and $N=100$ updates; the dense-teacher cell
-passed its cost rule (projected 2.48 GPU-hours against the 6.0 limit) and runs after the confirmatory arms under its own authorisation. % E-RQ2-LAUNCH docs/experiments/B.md; results/rq2_launch/registration.json
-At the time of writing nothing of the final set has been analysed, and the report states no result of it.
+passed its cost rule (projected 2.48 GPU-hours against the 6.0 limit) at launch, but was left outside the launch (D153) and was not run. % E-RQ2-LAUNCH docs/experiments/B.md; results/rq2_launch/registration.json; E-RQ2-DEV-ANALYSIS
+Status after the runs: 42 of the 45 registered runs finished and passed the completion check (the 15 mined and the 27 injected-noise runs; the three of the dense-teacher cell were not run), and the development analysis was run once. % E-RQ2-DEV-ANALYSIS docs/experiments/B.md
+Six of the 42 runs did not train on the requested GPU model (the five mined cells of seed 101 on one model and the injected \textsc{Raw} run of seed 101 on another); the effect of the GPU model was not measured and no run was repeated (Section~\ref{sec:threats}). % E-RQ2-DEV-ANALYSIS docs/experiments/B.md
+The retained models were then scored once on the eight repositories and the executable subset, after three defects on the scoring path were found and fixed without any sealed result being scored twice, and the final analysis was run once. % E-RQ2-FINAL E-RQ2-SCORING-FIX docs/experiments/B.md
+The block spent 40.14 of its 46.7 GPU-hours, 3.12 of them on scoring attempts that failed before a result; scoring cost 1.29 GPU-hours per model on average against 0.858 projected, and the difference was not investigated.
+The dense-teacher measurement and the second-teacher cell are not run, because the 6.56 GPU-hours left no longer fit them with margin; whether to spend them is left to a decision of the team. % E-RQ2-FINAL docs/experiments/B.md
 
 \begin{table}[t]
 \centering\small
-\caption{The 45 runs of the final design: cells, role and number of runs (three seeds each). Evidence class: \emph{reasoned} (a plan; nothing has been trained for a result). Entry \entry{E-RQ2-FINAL-CELLS}.} % docs/RQ2_LAUNCH_PLAN.md section 11.2
+\caption{The 45 runs of the final design: cells, role and number of runs (three seeds each). Evidence class: \emph{reasoned} (the plan; the runs it describes are reported in the text). The conditional cell was not run (Section~\ref{sec:rq2}). Entry \entry{E-RQ2-FINAL-CELLS}.} % docs/RQ2_LAUNCH_PLAN.md section 11.2
 \label{tab:final_cells}
 \begin{tabular}{@{}p{0.34\linewidth}p{0.40\linewidth}r@{}}
 \toprule
@@ -662,7 +674,7 @@ no supervision cell is above \textsc{Raw} or the size-matched subsample beyond s
 Two cautions are part of the result. The published pool looks
 pre-selected by one retriever, so \textsc{Raw} on it is not raw; and injected noise is a proxy whose
 transfer to real noise is open (a second kind of noise failed its pre-registered sanity check).
-\todo{Sibling-noise decision and its two further seeds: \entry{E-PILOT-NOISE-SIB}.}
+The decision on a stronger sibling-noise test, with two further seeds of about 1.5 GPU-hours, has not been taken, so whether injected noise transfers to plausible noise stays open (\entry{E-PILOT-NOISE-SIB}). % docs/REPORT_GAPS.md row 10
 
 \input{generated/noise_dose_response}
 \input{generated/mined_vs_pool_ranks}
@@ -674,7 +686,7 @@ The audit's design, sample and scoring are in Section~\ref{sec:data}. Its role i
 curve (is its harmful-noise rate near the injected rates or far below), to measure how much of that noise a K-rank filter can find, and to
 decide whether sibling-kind noise needs a stronger test. If the audit cannot be done the report states the K-rank profile of the mined set as a proxy
 for findable noise and does not test the prediction that the filter's gain rises with the audited rate.
-\todo{Audited noise rate and reader agreement: \entry{E-LABEL-AUDIT-SHEET}.}
+For the same reason the audit's place on the dose-response curve is open and the prediction that the filter's gain rises with the audited rate is not tested here (\entry{E-LABEL-AUDIT-SHEET}).
 
 \subsection{Confirmatory contrasts}
 
@@ -689,8 +701,7 @@ so the pilot understated the pool. % E-MINE-FULL-RESULT D147 results/mining/full
 A pool of 3,885 exceeds the 3,200 examples that 100 updates visit, so the update rule gives $N=100$ for every arm, with passes of 0.82 for \textsc{Filter} and the subsample and 0.55 for \textsc{Raw}, and no arm repeats an example. % D147 D140 E-MINE-FULL-RESULT
 The sensitivity reading's pool is 3,320, which also leaves $N=100$. % D147 results/mining/full/pool_aligned/filter_size.json
 The pool of the second teacher's filter is unmeasured. % E-MINE-FULL-RESULT docs/experiments/B.md
-\todo{Longer-schedule sensitivity cells and the quantity--quality curve if the core completes:
-\entry{E-RQ2-SEC-QQ}.}
+The longer-schedule sensitivity cells and the quantity--quality curve were not run: the mined pool is too small for a longer schedule without repeating examples (DEV-039; \entry{E-RQ2-SEC-QQ}).
 
 % =============================================================================================
 \section{RQ3: from retrieval to resolved rate}
@@ -746,12 +757,15 @@ fused list (17.0\% against 8.5\%), largely where the gold unit is absent from th
 Repeating a unit at temperature 0 gives the same reply text in 63\% of pairs, so run-to-run noise is real and enters the power. % E-RQ3-PILOT-RESULT docs/RQ3_PILOT.md D109
 Edits applied in 276 of 400 units under the exact rule, and the tolerant reading rescued none of the 73 that failed; the failing blocks quote
 text found nowhere in the file. % E-RQ3-PATCHAPPLY docs/RQ3_PILOT.md D110
-Nothing was graded: there is no resolved rate of any arm, and the dev instances had no executable environment.
+The pilot graded nothing, because the development instances had no executable environment; the graded runs on the executable subset are described below.
 
 \paragraph{Analysis plan and power.} The unit of analysis is the instance. A model check on a slice of 50 of the 377, drawn by seed and
 stratified by repository, chooses the model by a rule written beforehand and fixed in code: of four candidates from two providers, discard those whose projected study cost
 exceeds the budget or whose resolved rate on the slice is below 15\%, take the highest resolved count, and among candidates within two instances of it the cheaper;
 if none passes, nothing is chosen and the table is reported; the slice is excluded from every confirmatory analysis, leaving 327. % E-RQ3-MODEL-CHECK-PLAN docs/RQ3_PILOT.md D111, D155 (amends D112)
+The rule was written for four candidates from two providers. One candidate of one provider was run, because the second provider's billing was unavailable and the weaker candidate was dropped, so
+the selection is trivial and the single provider and single model are a stated limitation, not a result. At the lowest thinking level the model accepts, the check resolved 17 of the 50 instances (34.0\%, Wilson interval 22.4 to 47.8),
+passed the floor of 15\% and the budget, and selected the model \texttt{gemini-3.8-flash}; the check is exploratory, on the slice that is excluded from the confirmatory analysis, and is not a statement of agent capability. % E-RQ3-MODEL-CHECK-RESULT docs/experiments/B.md; results/rq3_driver/model_check_think-low/model_check_multi.json
 Each arm is run $k$ times ($k=3$ if the spend allows, otherwise 2) and an instance's score is the fraction of its runs that resolve. The primary contrast is
 the paired difference in mean score with a paired bootstrap interval over instances (10,000 resamples) and a paired sign-flip test (10,000 flips); every other
 contrast is an estimate with an interval and no test, so one test is run and no multiplicity correction is needed. Both patch readings and
@@ -761,26 +775,44 @@ paired difference of that share with an interval and no test; it needs no furthe
 primary contrast. % docs/RQ3_PILOT.md D121; ril/analysis/rq3_results.py
 A spend guard stops the driver before a call whose worst case could pass a cap that must be given on the command line, counts the cost already in the call log when a run resumes, and records
 the cap and the realised cost; the provider-side hard cap is the second layer. % D114 docs/RQ3_PILOT.md
-Table~\ref{tab:rq3_power} gives the minimum detectable difference by simulation, with the run-to-run agreement taken from the pilot and the baseline rate
-and the instance heterogeneity assumed. At 327 instances it lies between 4.4 and 9.7 points, and a difference of 4 points or less is not
-detectable in any cell of the grid; % E-RQ3-DRIVER results/rq3_driver/rq3_power_run_noise_mdd.csv
-a third run buys about one to two points, and the instance count matters more. The published fixed-agent retrieval swap is also small
-(1.2 points). % paper_reported: knowledge/papers/codegrep-2608.05886.md
+Two power tables are shown, because the inputs changed once a run had been graded. Table~\ref{tab:rq3_power} is the earlier assumption, made before any graded run: the repeat probability of a later run is the pilot's
+share of identical reply texts and the baseline rate and the instance heterogeneity are assumed. At 327 instances it lies between 4.4 and 9.7 points for one to three runs and rates of 10 to 30\%, and a difference of 4 points or less is not
+detectable in any cell of the grid. % E-RQ3-DRIVER results/rq3_driver/rq3_power_run_noise_mdd.csv
+Table~\ref{tab:rq3_power_measured} keeps the simulation and replaces two of its inputs with what the graded runs of the untrained arm measured. The arm was graded three times on the 327 instances and resolved 133, 128 and 131 of them, a mean of 39.96\%, which is the baseline rate;
+resolved status agreed between two repeats for 92.97\%, 91.44\% and 97.86\% of the instances, 94.09\% pooled, and 118 instances were resolved in all three repeats, 29 in some and 180 in none. % E-RQ3-UNTRAINED-RUNS E-RQ3-RUN-AGREEMENT results/rq3_driver/rq3_run_agreement.json
+The repeat probability is calibrated so that the simulation reproduces the pooled agreement (0.806 and 0.881 at the two heterogeneity values), and the measured agreement used directly is shown as an upper bound on run dependence. % E-RQ3-RUN-AGREEMENT docs/experiments/B.md
+At three runs and 327 instances the minimum detectable difference is then 4.9 to 9.0 points over rates of 10 to 30\% (4.4 to 7.7 under the earlier assumption) and 7.3 to 9.4 points at the measured rate of 40\% (6.8 to 8.5 earlier); % E-RQ3-RUN-AGREEMENT results/rq3_driver/rq3_power_measured_agreement_mdd.csv
+a third run buys about 0.6 to 1.2 points over one run, against 1.0 to 2.0 earlier, and a difference of 4 points or less stays undetectable in every cell. % E-RQ3-RUN-AGREEMENT docs/experiments/B.md
+The three repeats of an instance were sent back to back, and the second and third were largely served from the provider's cache (66.0\% of their prompt tokens), so adjacent cached repeats are not independent runs and the gain of a third run is smaller than three independent runs would give. % E-RQ3-UNTRAINED-RUNS E-RQ3-RUN-AGREEMENT docs/experiments/B.md
+What the calibration leaves open: the pooled agreement identifies the repeat probability and the heterogeneity only jointly, and without any repetition it would imply a heterogeneity near 0.14, outside the grid, which was not simulated, so the detectable difference at the measured heterogeneity is not known;
+the calibration treats the three repeat positions as exchangeable, which the data do not support (the first repeat is the only uncached one and agrees less with the others); and the effect size and the independence of arms stay assumptions. % E-RQ3-RUN-AGREEMENT docs/experiments/B.md
+The published fixed-agent retrieval swap is also small (1.2 points). % paper_reported: knowledge/papers/codegrep-2608.05886.md
 So the resolved-rate comparison may be reportable only as an estimate with an interval, and the report will state a null as a bound.
 
 \input{generated/rq3_power}
+\input{generated/rq3_power_measured}
 
 \paragraph{Fallback and status.} If the arms do not separate under the rule
 above, RQ3 contrasts \textsc{Raw} against the untrained encoder and is labelled as measuring
 ``does training help'', not ``does supervision quality help''; the arms of RQ2 enter RQ3 only as estimates with intervals, and which of them have contexts depends on the confirmatory contrasts of RQ2. % docs/RQ2_PROTOCOL.md section 6, D113, D139
-The scaffold is accepted provisionally (D113, D121); the model, $k$ and the spend cap are not decided (the screen policy is, D120), and no model has been called on an executable instance. The trained arms need
-their contexts built from the retained models, and until those exist only the three first-stage arms have contexts.
-\todo{Agent runs, resolved rate with
+The scaffold is accepted provisionally (D113, D121); the model is the one selected above at the lowest accepted thinking level, with an output limit of 4,096 tokens and temperature 0, and the screen policy is fixed (D120).
+Each arm is run $k=3$ times with the repeats of an instance sent back to back. At the time of writing only the untrained rank-fusion arm has been graded, three times on the 327 instances, and only as a description of that arm; the other first-stage arms and the trained arms have not been graded,
+and the trained arms need contexts built from the retained models. % E-RQ3-UNTRAINED-RUNS E-RQ3-MODEL-CHECK-RESULT docs/experiments/B.md
+\todo{Agent runs of the other arms, resolved rate with
 interval, paired tests, failure breakdown and resolved rate per agent wall-clock: \entry{E-RQ3-AGENT}.}
-The power of a four-point difference is below the target in every cell of the grid (Table~\ref{tab:rq3_power_small}); the size of the test stays near its nominal level.
-The simulation is seeded and stored, and rerunning it reproduces both tables byte for byte (project entry \entry{E-POWER}). A power table built from
-the discordance and the run-to-run spread of graded runs replaces the assumed inputs once graded runs exist; none do.
+The power of a four-point difference is below the target in every cell of the earlier grid (Table~\ref{tab:rq3_power_small}); the size of the test stays near its nominal level.
+The simulation is seeded and stored, and rerunning it reproduces the earlier tables byte for byte (project entry \entry{E-POWER}); the calibrated table was produced by the same code with the measured repeat probability.
+It is rerun once more arms are graded.
 \input{generated/rq3_power_small}
+
+\paragraph{Tokens and cost of the graded runs (descriptive).} The model check at the low thinking level used 594,991 prompt tokens, 4,103 thinking tokens and 54,199 answer tokens in 67 calls on the 50 held-out instances, and 8 of those calls (11.9\%) ended at the output limit; the check, with its cache probe and a superseded
+first configuration at the provider's default thinking (about 96\% of its output tokens were thinking), cost 1.690 USD. % E-RQ3-MODEL-CHECK-RESULT docs/experiments/B.md
+The three graded repeats of the untrained arm on the 327 instances cost 9.875 USD against a projected 9.068 (8.9\% more): 11,776,766 prompt tokens, 50.9\% of them served from the cache (18.9\% in the first repeat, which is the only uncached one, 66.0\% in the other two, against 75.7\% measured in the check's probe),
+and 1,357,335 output tokens, of which 15.1\% were thinking. % E-RQ3-UNTRAINED-RUNS docs/experiments/B.md
+A call can end at the output limit: 201 of the arm's 1,294 calls (15.5\%) did, 14.3, 17.7 and 14.6\% in the three repeats, and 29 of its 981 final replies (3.0\%), while 25 replies (2.55\%) remained unusable after the follow-ups. % E-RQ3-UNTRAINED-RUNS results/rq3_driver/untrained_runs/gemini-3.8-flash/rrf_runs0-2/meta.json
+The two runs together cost 11.565 USD of an authorised 50; the other three arms are projected at about 30 USD at this cost (three times 9.875 USD, a projection from one arm, not a measurement). % E-RQ3-UNTRAINED-RUNS docs/experiments/B.md
+Cost is in USD at the prices read on 2026-11-12. The provider's own prompt counts are in the caption of Table~\ref{tab:rq3_cost}; the prompt holds the issue and the instructions besides the context, so they do not isolate a tokenizer ratio, and the assembly budget stays in approximate tokens. % E-RQ3-UNTRAINED-RUNS results/rq3_driver/untrained_runs/gemini-3.8-flash/rrf_runs0-2/meta.json
+\input{generated/rq3_cost}
 
 % =============================================================================================
 \section{Threats to validity and limitations}
@@ -817,14 +849,20 @@ T12 & Executable-subset skew: more than half of the instances come from one proj
 T13 & Quarantine in the mined set: pull requests with Python~2 files, non-ASCII identifiers or a fetch time-out are dropped, not sampled at random (\entry{E-MINE-PILOT}, \entry{E-MINE-FULL-RESULT}); in the full run 123 of 10,000 attempts (1.2\%) were quarantined and none to a time-out & Quarantined counts and reasons are reported with the set (Table~\ref{tab:mined_quarantine}); a share above a stated limit halts the run; the drop is a stated limit of the set, with no gradient by repository size \\ % E-MINE-FULL-RESULT results/mining/full/yield_report.json
 T14 & The overlap audit covers 26 of 605 held-out repositories, and misses renamed or edited copies (\entry{E-OVERLAP-AUDIT}) & Stated with the counts; the contamination scan is a separate measurement; extension to more repositories is open \\
 T15 & Difficulty and transfer: the mined set holds more pairs the lexical teacher cannot find than the pool does, RAW's gain on it differs from its gain on the pool, and the pilot's development instances have an easier context mix than the executable subset (\entry{E-MINED-PILOT}, \entry{E-RQ3-PATCHAPPLY}) & Both sets are reported beside each other; pilot rates of unusable replies and applied edits are not carried to the executable subset \\
-T16 & Power: between 4.4 and 9.7 points at 327 instances, from assumed baseline rate and heterogeneity (\entry{E-RQ3-DRIVER}); the label audit and the confirmatory runs have no result yet & A null is reported as a bound, never as no effect; the power table is rerun from graded runs \\
-T17 & Model limits: the pilot model ran on a free tier with a daily request cap, 22.5\% unusable first replies, and terms that let the provider read inputs, so only public text is sent and inputs are pseudonymised before a screen (\entry{E-RQ3-PSEUDONYMISE}); the final model is undecided and a weak one may leave the resolved rate near zero (\entry{E-RQ3-PILOT-RESULT}, \entry{E-RQ3-DRIVER}) & The model-choice rule and its floor are fixed in advance; the retrieval-side readings carry the weight if the floor is not met; a placeholder can in principle change a model's reading of a traceback, equally for every arm, and the restoration check exercised 1,126 excerpt lines, not model behaviour \\
+T16 & Power: between 4.9 and 9.0 points at three runs and 327 instances over baseline rates of 10 to 30\% and 7.3 to 9.4 at the measured 40\% (earlier assumption 4.4 to 7.7), from a repeat probability calibrated to one arm's three adjacent cached repeats and an assumed heterogeneity (\entry{E-RQ3-RUN-AGREEMENT}, \entry{E-RQ3-DRIVER}); adjacent cached repeats are not independent runs; no resolved-rate contrast has been run & A null is reported as a bound, never as no effect; both power tables are shown; the table is rerun when more arms are graded \\
+T17 & Model limits: one provider and one model (\texttt{gemini-3.8-flash}), chosen by a rule written for four candidates from two providers of which one was run (\entry{E-RQ3-MODEL-CHECK-RESULT}); thinking fixed at the lowest accepted level; an output limit of 4,096 tokens that 11.9\% of the check's calls and 15.5\% of the untrained arm's calls reached (\entry{E-RQ3-UNTRAINED-RUNS}); the provider may read inputs, so only public text is sent and inputs are pseudonymised before a screen (\entry{E-RQ3-PSEUDONYMISE}); the pilot model had 22.5\% unusable first replies (\entry{E-RQ3-PILOT-RESULT}) & The retriever contrast is read for this model only; the model is a fixed instrument and the claim concerns the retrievers; a different limit or thinking level would change the cost and could change which replies are cut, and was not tested; a placeholder can in principle change a model's reading of a traceback, equally for every arm, and the restoration check exercised 1,126 excerpt lines, not model behaviour \\
 T18 & Label approximation: a patch-derived location is an approximation of where an issue is fixed, and no pair of the mined set has been read (\entry{E-LABEL-AUDIT-SHEET}) & The audit's rates are reported three ways and as judgements of readers, not as ground truth \\
 T19 & Analysis rule changed after the protocol: the decision interval became a cluster-robust $t$ interval after a simulation showed the registered bootstrap rejecting at 0.10 to 0.19 against 0.05 (\entry{E-RQ2-ANALYSIS}) & The change was made before any final row existed and is a recorded deviation; the bootstrap is reported beside it; the simulation uses synthetic rows and does not carry to the real variance components \\
 T20 & Sealed order is procedural for some sets: injected-noise controls are scored on development inside their jobs, and the guard that keeps the eight and the executable subset unread until the development analysis is code, not a physical seal (\entry{E-RQ2-FINAL-CELLS}) & One guard in code is called by every reader and a test fails if one stops calling it; the final-set rows record the analysis identifier \\
 T21 & Recency prior and graph expansion cell tuned on the development set they are then read on, so the development gains of the ladder are optimistic (\entry{E-RECENCY}, \entry{E-RQ1-LADDER}) & Neither is in any frozen record; the typed rung is read against controls on the same set and is not a gain; the recency prior waits for one look after the configuration is fixed \\
 T22 & Latency from two machines: dense stages on a GPU node, lexical, fusion and expansion on a laptop CPU, with one stage counted twice in two rungs, so a path sum is not an end-to-end percentile (\entry{E-FREEZE-AND-LATENCY}) & The path is stated as a sum of stage p50 values with the caveats; every row carries its host and cache state; no end-to-end claim is made for a dense pipeline \\
 T23 & Unit-level BM25 variants were evaluated on texts rebuilt for the development instances only; the Verified instances and the executable subset were not rebuilt (\entry{E-FREEZE-AND-LATENCY}) & The rule was fixed before the run and the control had to reproduce the stored scores bit for bit on every level; no variant is frozen; the result is read as exploratory \\
+T24 & Training hardware: six of the 42 training runs did not use the requested GPU model (the five mined cells of seed 101, and the injected \textsc{Raw} run of seed 101), and the effect of the GPU model on a run was not measured (\entry{E-RQ2-DEV-ANALYSIS}) & Within a seed the mined cells share one GPU model, so their paired contrasts are not affected by it; the injected \textsc{Raw} of seed 101 is the reference of every injected contrast and sits on another model than the cells it is compared with; a limitation only, no run repeated; the GPU model is stored with every run \\
+T25 & Queries without positives: the pinned reading leaves out a query that has no positive under it, two of 179 on the eight repositories and four of 320 at Level~2 on the executable subset (\entry{E-RQ2-FINAL}) & The rule is the stored one and was not changed after the look; the counts are reported; counting such queries would be a reading change that needs its own decision \\
+T26 & Test lists: the executor's named tests for the 377 instances were not compared with the corrected annotations of a later study that found tests accepting wrong patches in 26 of 500 instances and changed the stored test lists of 54.2\% (\entry{E-RQ3-EXEC}, \entry{E-REPORT-DRAFT-4}) & The executor runs the named tests itself and a reference patch must pass all of them in two agreeing runs; the comparison is a CPU check that was not made; results are stated for these test lists only \\
+T27 & Contamination exposure of the benchmark: it is built from public repositories, its announcement states that large models are likely to be contaminated on its tasks, and 13.7\% of probed base-commit functions occur in one public corpus (\entry{E-CONTAM-SCAN}) & Absolute resolved rates are not capability claims and the exposure is the same for every arm; the exposure of the agent's model itself was not measured \\
+T28 & Repair stage: one-shot repair from the assembled context, with no candidate selection and no agent loop, so a retriever is not compared with an agent's own search and absolute rates are not comparable with published ones (\entry{E-RQ3-PATCHAPPLY}) & The claim is scoped to one-shot repair without candidate selection (paragraph on scaffold sensitivity below) \\
+T29 & Second teacher: the dense-teacher cell of the mined set was not run (\entry{E-RQ2-FINAL}) & The confirmatory contrasts use the BM25 teacher; the injected-noise family carries the second teacher's cell \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -835,8 +873,8 @@ is for Python.
 \paragraph{Scaffold sensitivity.} The retriever contrast is measured under one repair stage that is weaker than the published ones: selection by executed
 tests is the largest component of the pipeline whose edit format we use, 77 of 300 resolved by majority vote alone against 96 with the tests. % knowledge/papers/agentless-2407.01489.md Table 4, p.14
 A retriever difference may be smaller or larger under a stronger stage, and nothing here measures which. The published swaps of a localizer under a fixed repair stage show
-small resolved-rate gains for large localization gains (1.6 points of Pass@1 for close to 15 points of Acc@5), a size that the power of this study (4.4 to 9.7 points at 327 instances)
-would not detect. % knowledge/papers/locagent-2503.09089.md Table 8, p.11; E-RQ3-DRIVER results/rq3_driver/rq3_power_run_noise_mdd.csv
+small resolved-rate gains for large localization gains (1.6 points of Pass@1 for close to 15 points of Acc@5), a size that the power of this study (4.9 to 9.0 points at three runs and 327 instances, over rates of 10 to 30\%)
+would not detect. % knowledge/papers/locagent-2503.09089.md Table 8, p.11; E-RQ3-RUN-AGREEMENT results/rq3_driver/rq3_power_measured_agreement_mdd.csv
 We scope the claim to one-shot repair without candidate selection, do not read absolute rates as capability, and report the any-of-$k$ share only as a labelled exploratory reading.
 
 \paragraph{Model non-determinism.} Temperature 0 does not make a hosted model repeat itself. In our pilot the same edits came back in 63\% of repeated usable pairs. % E-RQ3-PILOT-RESULT docs/RQ3_PILOT.md D109
@@ -845,7 +883,10 @@ are resolved by some run, and a reproduction of a sampled pipeline differs from 
 We repeat each arm $k$ times, take the instance as the unit, enter the run-to-run noise into the power, and store the model string and date in every call row; a hosted model can change, so a later
 rerun need not reproduce a stored one.
 
-\todo{Threats that the agent runs add beyond these two (repository contamination of the agent's model, measured effects): \entry{E-RQ3-AGENT}.}
+\paragraph{Limits of the graded runs.} The graded runs share one provider, one model, the lowest thinking level the model accepts and an output limit of 4,096 tokens; 15.5\% of the untrained arm's calls ended at that limit (14.3, 17.7 and 14.6\% by repeat) and 29 of its 981 final replies (3.0\%), so some edits may have been cut off, equally for every arm that uses the same limit. % E-RQ3-UNTRAINED-RUNS docs/experiments/B.md
+The limit is part of the configuration, a higher one would change the cost, and it was not tested. % E-RQ3-MODEL-CHECK-RESULT docs/experiments/B.md
+The repeats of an instance were sent back to back, so later repeats were largely served from the provider's cache and are not independent runs; the first repeat was the only uncached one and its agreement with the others is lower than theirs with each other, a confound of position and cache state for which no cause is claimed. % E-RQ3-RUN-AGREEMENT docs/experiments/B.md
+\todo{Threats that the agent runs of the other arms add beyond these (repository contamination of the agent's model, measured effects): \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
 \section{Reproducibility}
@@ -875,7 +916,7 @@ which is why they are stored. Latency and throughput are specific to the stated 
 % =============================================================================================
 \section{Conclusion}
 
-What is measured so far is the apparatus and the pilots: the published BM25 rows are reproduced,
+What is reported so far is the apparatus and the pilots, with the final runs of RQ2 trained and scored and the untrained arm of RQ3 graded as a description: the published BM25 rows are reproduced,
 the zero-shot signals and fusion are measured, the graph is compared with a same-file control, the
 supervision arms are compared under injected noise at matched updates, the mined set and the overlap audit
 are built and measured on a pilot, and the assembly stage and the executable evaluation are built and measured once
@@ -883,7 +924,7 @@ are built and measured on a pilot, and the assembly stage and the executable eva
 of these is exploratory, on development repositories unless the caption says Verified-six, and none is a
 confirmatory result. The confirmatory question, whether \textsc{Filter} with the BM25 teacher
 beats \textsc{Raw} and the size-matched subsample on unfiltered pairs at matched budgets, and the
-resolved-rate question, are not answered here. \todo{Conclusion of the confirmatory contrasts, stated
+resolved-rate question, are not answered in this draft. \todo{Conclusion of the confirmatory contrasts, stated
 with its bound and its verdict, null or not: \entry{E-RQ2-FILTER}, \entry{E-RQ3-AGENT}.}
 
 % =============================================================================================
@@ -954,6 +995,8 @@ Zeng, Zamani and Vinay. Curriculum learning for dense retrieval distillation. SI
 Penha and Hauff. Curriculum learning strategies for IR. ECIR 2020 (arXiv 1912.08555).
 \bibitem{adam} % note: adam-2212.10192
 Tao et al. Dense retrieval distillation with adaptive dark examples (arXiv 2212.10192).
+\bibitem{verifiedannouncement} % note: swe-bench-verified-announcement-2024
+Chowdhury, Aung, Shern, Jaffe, Sherburn, Starace, Mays, Dias, Aljubeh, Glaese, Jimenez, Yang, Liu and Madry. Introducing SWE-bench Verified. Web announcement, 13 August 2024; read in full through the Internet Archive capture of 31 December 2024 (capture SHA-256 dcafd116\ldots{}).
 \bibitem{utboost} % note: utboost-2506.09289
 Yu, Zhu, He and Kang. UTBoost: rigorous evaluation of coding agents on SWE-Bench. ACL 2025 (arXiv 2506.09289).
 \bibitem{skipcompressor} % note: skip-the-compressor-2610.21073

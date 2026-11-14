@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering\small
+\caption{Tokens and truncation of the model check and the graded runs of the untrained arm. Evidence class: \emph{measured, exploratory}. Tokens of every answered call, in thousands, from the stored call logs (output tokens split into answer and thinking tokens); the model check ran at thinking level low on the 50 held-out instances, the graded runs on the 327 confirmatory instances with three adjacent repeats. The output limit is 4096 tokens; the last column is the number of calls that ended at it (share in percent). The cache column is the share of prompt tokens served from the provider's cache; the model check has no per-call field for it. The provider counted a median of 8315 prompt tokens (6246 to 12640) for the first call of each of the 327 instances at an assembly budget of 8000 approximate tokens; the prompt holds the issue and the instructions besides the context. The realised cost of the arm is 9.875 USD at prices read on 2026-11-12, and the projected cost of the twelve arm-runs of the study is 36.27 USD. Descriptive only. Entry \entry{E-RQ3-MODEL-CHECK-RESULT}, \entry{E-RQ3-UNTRAINED-RUNS}.}
+\label{tab:rq3_cost}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}}
+\toprule
+Run & Calls & Prompt (k) & Cached (\%) & Answer (k) & Thinking (k) & At limit (\%) \\
+\midrule
+Model check, 50 instances, one run & 67 & 595 & -- & 54 & 4 & 8 (11.9) \\
+Untrained arm, repeat 0 & 421 & 3779 & 18.9 & 346 & 77 & 60 (14.3) \\
+Untrained arm, repeat 1 & 447 & 4141 & 68.7 & 444 & 68 & 79 (17.7) \\
+Untrained arm, repeat 2 & 426 & 3857 & 63.2 & 362 & 60 & 62 (14.6) \\
+\midrule
+Untrained arm, all repeats & 1294 & 11777 & 50.9 & 1153 & 204 & 201 (15.5) \\
+\bottomrule
+\end{tabular}
+\end{table*}
