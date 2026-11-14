@@ -355,6 +355,8 @@ def evaluate_instance(
     info: Record = {"levels": {}}
     keys_ref: list[str] | None = None
     for level in meta["levels"]:
+        if f"gold_{level}_{READINGS[0]}" not in arrays:
+            continue  # a member the folder does not label at this level has queries but no gold
         golds = {r: arrays[f"gold_{level}_{r}"] for r in READINGS}
         if not any(len(g) for g in golds.values()):
             continue

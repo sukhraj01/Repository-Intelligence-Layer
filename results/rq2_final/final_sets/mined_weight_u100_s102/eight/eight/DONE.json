@@ -1,0 +1,28 @@
+{
+ "commit": "372f66a",
+ "config_hash": "2cf1514370ba39dd7b57e7df8248740329ef0fef0021c1bf48a323f6b84f7854",
+ "dev_record_sha256": "c609a5ca65e781ce9ac0aa4909410559521678cd705d9bcad1e48338f6e65458",
+ "folder": "rq2f_mined_weight__s102__2cf15143",
+ "follows_dev_analysis": "E-RQ2-DEV-ANALYSIS",
+ "gate": {
+  "capability": [
+   7,
+   5
+  ],
+  "cuda": "12.1",
+  "device": "NVIDIA GeForce RTX 2080 Ti",
+  "matmul_max_abs_error": 0.0001220703125,
+  "torch": "2.4.1+cu121"
+ },
+ "model_sha256": "a2691c453a08fadfb351f1428576e69a175164e38f9ed5bb8b4b024849347ac1",
+ "part": "eight",
+ "queries": 179,
+ "result_dir": "$HOME/ril_rq2f_s102/results/rq2_final/final_sets/mined_weight_u100_s102/eight/eight",
+ "roles": [
+  "test"
+ ],
+ "run_id": "mined_weight_u100_s102",
+ "seconds": 864.9,
+ "set": "eight",
+ "version": "final-sets/v1"
+}

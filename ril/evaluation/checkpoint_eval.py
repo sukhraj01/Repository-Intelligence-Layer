@@ -136,6 +136,8 @@ def eval_checkpoint(
     result_dir: str,
     baseline_enc_dirs: Mapping[str, str] | None = None,
     dense_root: str | None = None,
+    allow_empty: bool = False,
+    scores_ready: bool = False,
 ) -> Record:
     """Score ``encoder`` (a trained model with the ``DenseEncoder`` interface) and write the tables.
 
@@ -143,6 +145,11 @@ def eval_checkpoint(
     ``chunks`` (bool), ``seed``, optional ``baselines`` (variants whose unit scores exist under
     ``dense_root`` and whose encoded stores are in ``baseline_enc_dirs``), optional
     ``deliberate_test``. Resumable: every X2 stage skips finished pieces.
+
+    ``allow_empty`` lets a part with no evaluated query return zero rows (DEV-043); the caller
+    passes it only when the label manifest shows no labelled member. ``scores_ready`` skips the
+    encoding and the unit scoring because the unit scores already stand under the dense root
+    (the CPU dry run of the final-sets path writes stand-in scores; ``encoder`` may then be None).
     """
     variant = str(cfg["variant"])
     roles = [str(r) for r in cfg["roles"]]
@@ -153,26 +160,29 @@ def eval_checkpoint(
         raise ValueError("test repositories are evaluated only with a 'deliberate_test' label")
     enc_dir = os.path.join(work_dir, "enc", variant)
     droot = dense_root or os.path.join(work_dir, "dense")
-    stores = stores_for(e1_config, prep_dir, roles, bool(cfg["chunks"]))
-    encoded = [
-        encode_store(
-            encoder,
-            files,
-            name,
+    encoded: list[Any] = []
+    scored: Record = {}
+    if not scores_ready:
+        stores = stores_for(e1_config, prep_dir, roles, bool(cfg["chunks"]))
+        encoded = [
+            encode_store(
+                encoder,
+                files,
+                name,
+                enc_dir,
+                batch_size=int(cfg["batch_size"]),
+                is_query=name.startswith("queries__"),
+            )
+            for name, files in sorted(stores.items())
+        ]
+        scored = score_units(
+            prep_dir,
             enc_dir,
-            batch_size=int(cfg["batch_size"]),
-            is_query=name.startswith("queries__"),
+            os.path.join(droot, variant),
+            int(encoder.spec.max_tokens),
+            roles=set(roles),
+            forms=("full",),
         )
-        for name, files in sorted(stores.items())
-    ]
-    scored = score_units(
-        prep_dir,
-        enc_dir,
-        os.path.join(droot, variant),
-        int(encoder.spec.max_tokens),
-        roles=set(roles),
-        forms=("full",),
-    )
     first: Record = {"variants": [*baselines, variant]}
     if "test" in roles:
         first["rrf_k_of"] = {v: k for v in first["variants"]}
@@ -182,9 +192,9 @@ def eval_checkpoint(
         ecfg = {"roles": roles, "first": first}
     eval_dir = os.path.join(work_dir, "eval", variant)
     counts = run_x2_eval(ecfg, cache_dir, droot, eval_dir)
-    tab = load_eval_dir(eval_dir)
+    tab = load_eval_dir(eval_dir, allow_empty=allow_empty)
     urows: list[Record] = []
-    for group in roles:
+    for group in roles if tab.rows else []:
         urows += unit_rows(tab, group, _columns(variant, baselines, k), seed)
     out: Record = {
         "version": CHECKPOINT_EVAL_VERSION,
@@ -203,7 +213,7 @@ def eval_checkpoint(
     write_csv(os.path.join(result_dir, "unit_rows.csv"), urows)
     write_csv(
         os.path.join(result_dir, "query_rows.csv"),
-        query_rows(tab, _columns(variant, baselines, k), roles),
+        query_rows(tab, _columns(variant, baselines, k), roles) if tab.rows else [],
     )
     if cfg["chunks"]:
         enc_dirs = {variant: enc_dir, **dict(baseline_enc_dirs or {})}

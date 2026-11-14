@@ -68,6 +68,21 @@ def _install_fakes(monkeypatch: pytest.MonkeyPatch, members: dict[str, list[str]
     )
     monkeypatch.setattr(fs, "unpack_prep", lambda prep, dest: dest)
 
+    def fake_manifest(cache_dir: str, roles: Any) -> dict[str, Any]:
+        name = (
+            "stored36"
+            if "ril_t1" in cache_dir
+            else "built_xarray"
+            if "ril_rq3u_x" in cache_dir
+            else "eight"
+            if "ril_eval" in cache_dir
+            else "built337"
+        )
+        n = len(members.get(name, []))
+        return {"members": n, "labelled": n, "levels": {"L2": n} if n else {}, "unlabelled": []}
+
+    monkeypatch.setattr(fs, "label_manifest", fake_manifest)
+
 
 def _record(tmp_path: Path) -> dict[str, Any]:
     path = str(tmp_path / "dev_record.json")

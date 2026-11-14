@@ -29,6 +29,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from ril.evaluation import eval_sets, score_retention, sealed
+from ril.evaluation.label_manifest import label_manifest
 from ril.training import retention
 
 FINAL_SETS_VERSION = "final-sets/v1"
@@ -100,6 +101,20 @@ def load_dev_analysis_record(path: str, analysis_id: str | None, run_ids: Sequen
         raise FinalSetsRefused(f"runs not covered by the dev analysis: {missing}")
     rec["record_sha256"] = _sha256_file(path)
     return rec
+
+
+def check_label_counts(labels: Mapping[str, Any], evaluated: int, what: str) -> None:
+    """The evaluated queries of a part equal the labelled queries its manifest lists.
+
+    An empty part is accepted only because the manifest shows no labelled member
+    (``allow_empty`` in ``eval_checkpoint``); a part that has labels and evaluates fewer or more
+    queries than the manifest lists is refused (DEV-043).
+    """
+    expected = sum(int(v) for v in labels["levels"].values())
+    if evaluated != expected:
+        raise FinalSetsRefused(
+            f"{what}: {evaluated} queries evaluated, the label manifest lists {expected}"
+        )
 
 
 def retained_run_id(manifest: Mapping[str, Any]) -> str:
@@ -267,6 +282,7 @@ def evaluate_retained(
         if part.compressed_texts:
             tmp = tempfile.mkdtemp(prefix="ril_final_prep_", dir=work)
             prep = unpack_prep(part.prep, tmp)
+        manifest_labels = label_manifest(part.e3_cache, spec.roles)
         try:
             out = eval_checkpoint(
                 encoder,
@@ -286,10 +302,15 @@ def evaluate_retained(
                 data_root=part.data_root,
                 work_dir=os.path.join(work, "eval"),
                 result_dir=result_dir,
+                allow_empty=manifest_labels["labelled"] == 0,
             )
         finally:
             if tmp is not None:
                 shutil.rmtree(tmp, ignore_errors=True)
+        check_label_counts(
+            manifest_labels, int(out["unit_queries"]), f"{rid} {spec.name}/{part.part}"
+        )
+        out["label_manifest"] = {k: v for k, v in manifest_labels.items() if k != "unlabelled"}
         row = index_row(
             run_id=rid,
             folder=folder,

@@ -1,0 +1,13 @@
+group,level,reading,metric,name,queries,repos,value,q_lo,q_hi,c_lo,c_hi,ref,d,d_q_lo,d_q_hi,d_c_lo,d_c_hi
+test,L2,units_all_nomod,ndcg10,bm25,177,8,14.51,11.39,17.77,11.9,21.1,,,,,,
+test,L2,units_all_nomod,ndcg10,dense:mined_curriculum_u100_s100__eight__eight,177,8,17.17,13.72,20.77,13.77,24.73,bm25,2.66,-0.27,5.5,-2.6,6.13
+test,L2,units_all_nomod,ndcg10,rrf:mined_curriculum_u100_s100__eight__eight,177,8,19.61,16.02,23.27,15.92,28.17,bm25,5.11,2.81,7.33,2.93,8.43
+test,L2,units_all_nomod,recall100,bm25,177,8,41.67,36.54,46.69,36.72,52.78,,,,,,
+test,L2,units_all_nomod,recall100,dense:mined_curriculum_u100_s100__eight__eight,177,8,36.84,31.55,41.94,31.14,49.13,bm25,-4.83,-9.17,-0.64,-8.08,-1.16
+test,L2,units_all_nomod,recall100,rrf:mined_curriculum_u100_s100__eight__eight,177,8,43.45,38.41,48.68,37.85,54.34,bm25,1.78,-0.79,4.42,-2.21,3.81
+test,L2,units_all,ndcg10,bm25,179,8,14.28,11.24,17.44,11.41,21.39,,,,,,
+test,L2,units_all,ndcg10,dense:mined_curriculum_u100_s100__eight__eight,179,8,17.46,14.12,21.06,13.79,26.31,bm25,3.18,0.44,6.17,-1.68,7.09
+test,L2,units_all,ndcg10,rrf:mined_curriculum_u100_s100__eight__eight,179,8,19.47,15.94,22.94,15.11,29.07,bm25,5.19,2.94,7.49,2.91,9.07
+test,L2,units_all,recall100,bm25,179,8,40.99,35.74,45.91,35.93,52.37,,,,,,
+test,L2,units_all,recall100,dense:mined_curriculum_u100_s100__eight__eight,179,8,36.7,31.62,41.88,29.72,51.03,bm25,-4.28,-8.88,-0.0,-7.07,0.36
+test,L2,units_all,recall100,rrf:mined_curriculum_u100_s100__eight__eight,179,8,42.29,37.3,47.28,36.36,55.71,bm25,1.3,-1.79,4.32,-1.27,4.29

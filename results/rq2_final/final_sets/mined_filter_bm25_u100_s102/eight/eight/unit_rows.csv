@@ -1,0 +1,13 @@
+group,level,reading,metric,name,queries,repos,value,q_lo,q_hi,c_lo,c_hi,ref,d,d_q_lo,d_q_hi,d_c_lo,d_c_hi
+test,L2,units_all_nomod,ndcg10,bm25,177,8,14.51,11.39,17.77,11.9,21.1,,,,,,
+test,L2,units_all_nomod,ndcg10,dense:mined_filter_bm25_u100_s102__eight__eight,177,8,17.95,14.42,21.58,14.48,25.37,bm25,3.44,0.48,6.32,-1.82,6.88
+test,L2,units_all_nomod,ndcg10,rrf:mined_filter_bm25_u100_s102__eight__eight,177,8,20.03,16.5,23.61,16.56,27.66,bm25,5.53,3.27,7.7,3.2,7.98
+test,L2,units_all_nomod,recall100,bm25,177,8,41.67,36.54,46.69,36.72,52.78,,,,,,
+test,L2,units_all_nomod,recall100,dense:mined_filter_bm25_u100_s102__eight__eight,177,8,39.72,34.67,44.74,34.0,51.39,bm25,-1.95,-6.17,2.5,-5.33,1.13
+test,L2,units_all_nomod,recall100,rrf:mined_filter_bm25_u100_s102__eight__eight,177,8,45.18,39.96,50.13,39.64,56.55,bm25,3.51,1.23,6.05,1.32,6.45
+test,L2,units_all,ndcg10,bm25,179,8,14.28,11.24,17.44,11.41,21.39,,,,,,
+test,L2,units_all,ndcg10,dense:mined_filter_bm25_u100_s102__eight__eight,179,8,17.84,14.45,21.4,14.3,26.74,bm25,3.56,0.83,6.45,-1.42,7.35
+test,L2,units_all,ndcg10,rrf:mined_filter_bm25_u100_s102__eight__eight,179,8,19.74,16.32,23.15,15.71,28.23,bm25,5.46,3.3,7.67,3.22,8.57
+test,L2,units_all,recall100,bm25,179,8,40.99,35.74,45.91,35.93,52.37,,,,,,
+test,L2,units_all,recall100,dense:mined_filter_bm25_u100_s102__eight__eight,179,8,38.8,33.82,43.96,31.74,52.68,bm25,-2.19,-6.93,2.26,-5.16,2.35
+test,L2,units_all,recall100,rrf:mined_filter_bm25_u100_s102__eight__eight,179,8,43.71,38.57,48.7,36.93,57.48,bm25,2.72,-0.15,5.71,0.21,6.85
