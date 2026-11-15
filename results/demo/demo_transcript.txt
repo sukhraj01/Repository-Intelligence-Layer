@@ -1,0 +1,117 @@
+# retriever demo transcript (demo-retrieve/v1)
+# code commit: c9adc80
+# recorded: 2026-11-15, mode: dense stage on stored scores
+# machine: macOS-15.7.1-arm64-arm-64bit, arm64, 8 CPUs, 8 GiB memory
+# device: CPU only; no accelerator is used (the dense stage reads stored scores)
+# python: 3.11.14
+# instance: psf__requests-1142, stored-context check: identical
+instance  psf__requests-1142
+repo      psf/requests
+commit    22623bd8c265b78b161542663ee980738441c307
+chosen    fewest units of 50 held-out instances (581); ties by identifier
+issue text (first 600 characters):
+   requests.get is ALWAYS sending content length
+   Hi,
+
+   It seems like that request.get always adds 'content-length' header to the request.
+   I think that the right behavior is not to add this header automatically in GET requests or add
+   the possibility to not send it.
+
+   For example http://amazon.com returns 503 for every get request that contains 'content-length'
+   header.
+
+   Thanks,
+
+   Oren
+
+
+== 1. Parse the repository and build the typed graph  [0.46 s]
+   69 files, 581 units: 89 functions, 333 methods, 90 classes, 69 module remainders
+   edge type     resolved   ambiguous  unresolved    external     total
+   contain            590           0           0           0       590
+   import             199           2           0         230       431
+   invoke             543         137          25         698      1403
+   inherit             56           0           0          36        92
+   override            87           0           0           0        87
+
+== 2. BM25 over the units  [48.6 ms]
+   index build 0.05 s, one query 0.1 ms; top 10:
+   rank     score  file:line                              qualified name
+      1     32.69  requests/models.py:234                 PreparedRequest
+      2     26.43  ~quests/packages/urllib3/request.py:18 RequestMethods
+      3     25.76  requests/adapters.py:44                HTTPAdapter
+      4     25.65  test_requests.py:25                    RequestsTestCase
+      5     25.44  requests/adapters.py:149               HTTPAdapter.send
+      6     24.73  requests/api.py:17                     request
+      7     24.47  requests/auth.py:144                   HTTPDigestAuth.handle_401
+      8     23.97  requests/models.py:332                 PreparedRequest.prepare_body
+      9     23.31  requests/models.py:157                 Request
+     10     22.58  requests/models.py:432                 Response
+
+== 3. Dense scores of the untrained encoder  [0.0 ms]
+   CodeRankEmbed (revision 3c4b608, 512 tokens), not trained;
+   flat exact scores of all 581 units, stored (encoded on the cluster GPU);
+   no model is loaded on this machine. Device here: none (a table lookup). Top 10:
+   rank     score  file:line                              qualified name
+      1     0.448  requests/models.py:388                 PreparedRequest.prepare_content_length
+      2     0.371  test_requests.py:234                   RequestsTestCase.test_unicode_get
+      3     0.335  test_requests.py:76                    RequestsTestCase.test_HTTP_200_OK_GET_A~
+      4     0.296  test_requests.py:84                    RequestsTestCase.test_HTTP_302_ALLOW_RE~
+      5     0.283  requests/auth.py:144                   HTTPDigestAuth.handle_401
+      6     0.280  requests/models.py:1                   <module>
+      7     0.268  test_requests.py:100                   RequestsTestCase.test_HTTP_200_OK_GET_W~
+      8     0.262  test_requests.py:92                    RequestsTestCase.test_HTTP_200_OK_GET_W~
+      9     0.260  test_requests.py:255                   RequestsTestCase.test_custom_content_ty~
+     10     0.259  requests/__init__.py:1                 <module>
+
+== 4. Rank fusion and same-file expansion  [0.2 ms]
+   reciprocal rank fusion, k = 100, then same-file expansion of the top 5 (up to 50 units).
+   signal: the lists whose printed top 10 hold the unit; 'fusion' = neither alone.
+   rank  signal       file:line                              qualified name
+      1  bm25+dense   requests/auth.py:144                   HTTPDigestAuth.handle_401
+      2  bm25         requests/adapters.py:149               HTTPAdapter.send
+      3  dense        requests/models.py:388                 PreparedRequest.prepare_content_length
+      4  bm25         requests/adapters.py:44                HTTPAdapter
+      5  fusion       requests/utils.py:314                  get_unicode_from_response
+      6  same-file    requests/models.py:234                 PreparedRequest
+      7  same-file    requests/utils.py:379                  stream_untransfer
+      8  same-file    requests/models.py:157                 Request
+      9  same-file    requests/models.py:253                 PreparedRequest.__init__
+     10  same-file    requests/utils.py:268                  get_encoding_from_headers
+   ranks 1 to 5 are the fused top five (seeds); 6 to 10 are the best same-file units.
+   Expansion is off in the frozen configuration: the context below is built from the
+   fused list without it, the same list the experiments assembled.
+
+== 5. Context assembly under the token budget  [0.47 s]
+   budget 8000 tokens, unit cap 1000, tokenizer approx-words-v1; 200 candidates
+   included 35 units, skipped 165 (does_not_fit 165)
+   total 7992 tokens of 8000; first three block headers:
+     ### requests/__init__.py:1-71 module <module> (rank 9)
+     ### requests/adapters.py:44-221 class HTTPAdapter (rank 4)
+     ### requests/adapters.py:149-221 method HTTPAdapter.send (rank 2)
+   check against the stored context (arm rrf, budget 8000):
+     SHA-256 equals the stored record: yes (162c2ca9082fb303...)
+
+== 6. Gold: the functions the reference patch edits  [0.3 ms]
+   * requests/models.py::PreparedRequest   (0 removed, 2 added)
+     rank in:  BM25 1   dense 34   fused 7   with same-file expansion 6
+     in the assembled context: yes
+   * requests/models.py::PreparedRequest.prepare_content_length   (1 removed, 0 added)
+     rank in:  BM25 20   dense 1   fused 3   with same-file expansion 3
+     in the assembled context: yes
+   (a class with added lines only: the mapping gives lines added after a method's
+   last line to the class that holds the method)
+   best gold rank: BM25 1, dense 1, fused 3
+   inside the top 10 in: BM25, dense, fused; outside it in: none
+
+This is one illustrative instance chosen by a fixed rule (fewest units among the 50 held-out
+instances), not a measurement.
+
+# wall time per stage (seconds, from this run)
+#   parse and typed graph           0.4568
+#   BM25                            0.0486
+#   dense (stored scores)           0.0000
+#   fusion and same-file expansion  0.0002
+#   context assembly                0.4690
+#   gold lookup                     0.0003
+#   total of the stages             0.9749
