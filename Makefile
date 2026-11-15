@@ -17,7 +17,7 @@ BASE ?= main
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks review review-flags eval report-short
+.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks review review-flags eval report-short demo demo-record
 
 setup:
 	poetry env use $(PYTHON)
@@ -40,6 +40,12 @@ eval:
 # Ada only (needs `make setup-train`).
 test-all:
 	$(RUN) pytest tests -q -p no:xdist
+
+demo:
+	$(RUN) python scripts/demo_retrieve.py $(DEMO_ARGS)
+
+demo-record:
+	$(RUN) python scripts/demo_retrieve.py --color never --transcript results/demo/demo_transcript.txt
 
 report-short:
 	$(RUN) python -I scripts/check_report.py --short
