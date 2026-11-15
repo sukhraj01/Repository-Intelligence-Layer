@@ -35,10 +35,9 @@ PATCH_MIXED = """diff --git a/pkg/m.py b/pkg/m.py
 index 111..222 100644
 --- a/pkg/m.py
 +++ b/pkg/m.py
-@@ -1,2 +1,2 @@
+@@ -1 +1 @@
 -import os
 +import sys
- 
 diff --git a/pkg/new.py b/pkg/new.py
 new file mode 100644
 --- /dev/null
@@ -82,6 +81,9 @@ def test_missing_base_file_is_noted_not_guessed() -> None:
 def test_split_patch_statuses_and_summary() -> None:
     ch = split_patch(PATCH_MIXED)
     assert [c.status for c in ch] == ["modified", "added", "modified"]
-    rows = {"a": gold_units(PATCH_REMOVE, "o/r", _reader), "b": gold_units(PATCH_REMOVE, "o/r", lambda _p: None)}
+    rows = {
+        "a": gold_units(PATCH_REMOVE, "o/r", _reader),
+        "b": gold_units(PATCH_REMOVE, "o/r", lambda _p: None),
+    }
     s = summarise(rows, ["a", "b"])
     assert s["with_gold_unit"] == 1 and s["without_gold_unit"] == 1

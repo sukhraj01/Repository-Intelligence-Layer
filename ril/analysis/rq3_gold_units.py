@@ -88,9 +88,7 @@ def parse_units(repo_id: str, files: Mapping[str, str]) -> dict[str, list[CodeUn
     return by_file
 
 
-def gold_units(
-    patch: str, repo_id: str, read_base: ReadBase
-) -> dict[str, Any]:
+def gold_units(patch: str, repo_id: str, read_base: ReadBase) -> dict[str, Any]:
     """Gold unit ids of one reference patch and the reasons some files give none.
 
     ``read_base(path)`` returns the base-commit text of an old-side path or ``None``. The result
