@@ -1,0 +1,7 @@
+stage,repo,resolved,instances,fraction
+all,all,7,40,0.175
+all,astropy/astropy,2,13,0.15384615384615385
+all,django/django,5,27,0.18518518518518517
+s1,all,7,40,0.175
+s1,astropy/astropy,2,13,0.15384615384615385
+s1,django/django,5,27,0.18518518518518517

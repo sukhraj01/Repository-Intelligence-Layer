@@ -2265,6 +2265,73 @@ Four unadjusted estimates (eight rows with the tolerant reading, which is identi
 
 **Dead ends and incidents.** (1) Before the run: an empty context would have made every reply `path_not_in_context` (unusable); fixed by the arm-only `paths: null` above, covered by a test that shows both parser outcomes. (2) The projection stop ended the arm at 40 of 327; no cheaper variant (fewer instances chosen by a rule, a lower output limit, a different thinking level) was run, because the brief fixes the configuration and the cap. Not done: the remaining 287 instances (about 5.6 USD projected, above the remaining authorisation), a replay of the seven resolved replies against the issue texts, any arm added after seeing this one.
 
+### Addendum 2026-11-15 (decision D170): completion of the floor arm, written before any further provider call
+
+**Why.** Stage 1 stopped by its projected-cost rule after 40 of 327 instances (the first 40 by sorted id: 13 astropy, 27 of 198 django) and resolved 7 of 40 (17.5%), against a stated expectation of near zero. The lead decided to complete the arm as designed, so that the floor covers the whole confirmatory set. This remains an exploratory reference arm, outside the registered analysis. It is run to completion once; no further arm or stage is added afterwards.
+
+**Completion run (paid, k = 1).**
+- *Instances.* The 287 confirmatory instances not graded in stage 1; the held-out 50 are never graded. The arm is then 327 of 327. Stage 1 and the completion run are reported separately and pooled.
+- *Unchanged.* No retrieved code, the same template, model and settings, the same reply handling, k = 1, one job on account A, the same executor environment. The configuration hash is read from the stored stage-1 `meta.json` and passed to the run, never typed; the run refuses to start on a mismatch.
+- *Design line (tactical, no effect on what is measured).* The completion run writes to its own result directory with an instance list that excludes the 40 graded ones, so finished instances are never repeated and its call log, cost and projection belong to this stage alone. The stage-1 directory is read-only from here on. The alternative (resuming in the stage-1 directory) would count the stage-1 instances inside the first 60 of the projection and mix the two stages in one cost cap.
+- *Spend.* The written authorisation (`total_cap_usd` 52, raised by the lead) is read before the run; the run refuses to start below 51. 45.090 USD is spent; this stage is capped at 6.2 USD. The projected cost of the 287 from stage 1 is about 5.7 USD (0.786 / 40 x 287 = 5.64), so no stop is taken on a projection below the cap; the projection is made again from the first 60 instances of this stage (cost of those 60 x 287 / 60) and the run stops cleanly only if it exceeds 6.2 USD. Stop at more than 10% unusable final replies (from 50 units on). On an insufficient-balance error the run stops, the number of completed instances is recorded and reported, and nothing is retried.
+- *Shared ledger (tactical).* The existing shared ledger has a cap fixed at creation (38.4 USD, 33.525 committed), which cannot admit a further 6.2 USD. A copy of it is made with the committed amounts unchanged and the cap moved to 40.435 USD, which is 52 minus the 11.565 USD of earlier spend that the ledger does not hold (45.090 - 33.525), so the ledger cap and the written authorisation agree. The original file is kept untouched.
+- *Node fault.* Resubmit once with that node excluded; any other failure stops the stage and is reported.
+
+**No-call replay (descriptive).** From the stored replies of stage 1, and of the completion run once finished, with no provider call: for each resolved reply the repository, whether its quoted search text appears verbatim in the issue text, whether it appears in the base-commit file it edits, and how many of its edited lines are in the issue text; the same split for unresolved replies; resolved fraction by repository. A match with the base file is consistent with recall of the repository, or with the issue quoting the code; it does not establish memorisation. Issue texts are used only to compute these matches.
+
+**Analysis (exploratory).** Over the full 327 and for each stage separately: resolved fraction with an interval, per repository, unusable and truncation rates, cost and tokens; contrasts against the untrained arm (k = 3) and the oracle arm (k = 2) by the registered paired method, own k and matched k, unadjusted, no decision; the minimum detectable difference of E-RQ3-RUN-AGREEMENT at k = 1 and 327 instances. If the run stops short, only the completed instances are reported and nothing is extrapolated.
+
+### Results of the completion run (addendum 2026-11-15, decision D170; exploratory; descriptive; nothing adjusted, nothing decided)
+
+**The completion run stopped short.** Job 81110 (account A, 2 h 27 min, config hash `0fe87a17bf1b`, seed 0, results under `results/rq3_driver/floor_runs/gemini-3.8-flash/floor_stage2_runs0-0/`) graded **232 of the 287** planned instances and then stopped on an insufficient-balance error from the provider (`stopped: insufficient_balance`, 0 errors); nothing was retried, as specified. The 55 instances not run are the last in sorted id order and are all sympy (`results/rq3_floor/pooled/rq3_floor_instances.csv`). The arm therefore covers **272 of 327** confirmatory instances (stage 1: 40; completion run: 232), not 327 of 327, and no figure is extrapolated to the 55. The instances run are the first 272 by sorted id, not a random draw: all 198 django, all 13 astropy, 17 pytest, 16 xarray, 10 sympy, 9 sphinx, 3 requests, 3 pylint, 2 seaborn, 1 flask; the 327 hold 65 sympy, so sympy is 10 of 65 covered and every pooled figure is a reading of this subset. One further instance (sympy-13798) had a first reply logged and no final reply; it is not graded and its call (about 0.016 USD) is in the spend.
+
+**Spend.** Stage 2: 4.132 USD by the guard and the ledger (equal), against the 6.2 USD cap; 60-instance projection 5.51 USD (below the cap, no stop). Whole arm 4.918 USD. Total **49.222 USD of 52 authorised** (45.090 before this stage). The provider balance cannot be read from here; the run stopped when it was exhausted. Shared-ledger copy: 37.657 committed against its 40.435 cap.
+
+**Resolved fraction (exact reading; interval = percentile bootstrap of the instance means; the tolerant reading gives the same counts in both stages).**
+
+| Set | Instances | Resolved | Fraction | 95% interval |
+|---|---|---|---|---|
+| Stage 1 | 40 | 7 | 17.50% | [7.50, 30.00] |
+| Completion run (partial) | 232 | 39 | 16.81% | [12.07, 21.98] |
+| Pooled | 272 | 46 | 16.91% | [12.50, 21.32] |
+
+The completion-run rate (16.81%) does not differ from stage 1 (17.50%): the difference is 0.7 points with intervals that overlap almost entirely. Per repository (pooled, resolved of instances): django 40 of 198 (20.2%), astropy 2 of 13, xarray 2 of 16, pytest 1 of 17, flask 1 of 1, and 0 of 10 sympy, 0 of 9 sphinx, 0 of 3 requests, 0 of 3 pylint, 0 of 2 seaborn (`results/rq3_floor/replay_all/rq3_floor_replay_by_repo.csv`); django is 73% of the instances, so the pooled rate is mostly the django rate and small repositories have counts too small to read.
+
+Outcomes of the 232: resolved 39, applied but unresolved 20, apply failed 159, unusable 14 (6.0%; stage 1: 1 of 40, 2.5%; pooled 15 of 272, 5.5%, under the 10% stop). Calls at the 4,096-token output limit: 152 of 381 in the completion run (39.9%; stage 1 34 of 70, 48.6%); 17 of 232 final replies ended at the limit (stage 1: 6 of 40). Tokens, completion run: 379,363 input, 1,024,744 output of which 789,811 thought; stage 1: 110,017, 189,985 and 124,131.
+
+**Contrasts (other arm minus floor; paired difference of the mean resolved fraction per instance, paired bootstrap interval, sign-flip permutation p; unadjusted; no decision).** Pooled, N = 272 paired instances (`results/rq3_floor/pooled/rq3_floor_contrasts.csv`; the sign-flip p is 0.0001 in all four rows, the smallest value 10,000 flips can give):
+
+| Contrast | k form | Difference (points) | 95% interval |
+|---|---|---|---|
+| Untrained minus floor | own k (3 vs 1) | +25.00 | [+19.36, +30.51] |
+| Untrained minus floor | matched k (1 vs 1) | +25.37 | [+19.49, +31.25] |
+| Oracle minus floor | own k (2 vs 1) | +30.15 | [+23.90, +36.40] |
+| Oracle minus floor | matched k (1 vs 1) | +29.78 | [+23.53, +36.03] |
+
+Completion run alone (N = 232, `results/rq3_floor/stage2/`): untrained minus floor +27.16 [+21.12, +33.33] (matched k +27.59 [+21.12, +34.48]); oracle minus floor +31.25 [+24.57, +37.93] (matched k +30.17 [+23.28, +37.07]). Stage 1 alone is the table above (N = 40). On the 272 instances the untrained arm resolves 41.91% and the oracle arm 47.06%, against 16.91% for the floor (on the 232: 43.97%, 48.06%, 16.81%).
+
+**Minimum detectable difference.** From E-RQ3-RUN-AGREEMENT at N = 327 and a 40% rate, k = 1: 8.18 points (assumed and measured agreement, kappa 1; 9.75 at kappa 4; 7.88 in the calibrated scenario at kappa 1). The contrasts above are far larger than that, and N here is 272 rather than 327, so the bound is slightly optimistic; adjacent repeats are not independent runs and the floor has one repeat, so its repeat-to-repeat noise is not estimated.
+
+**What this shows and does not show.** With no retrieved code the model resolved about 17% of the 272 instances run, in both stages alike. That is not near zero, so the stated expectation did not hold, and it is well below the arms with retrieved code (+25 points against the untrained retriever, +30 against the oracle), so the harness does see a large difference between a context with code and one without. The data cannot separate memorised knowledge of the repositories from information carried by the issue text: a floor of this size is consistent with recall of the repository, with issues that quote the code, or both. Absolute rates are not agent-capability claims. The subset is not a random draw (73% django), the 55 instances not run are not represented, k = 1 is set against 3 and 2, and the arm is exploratory and outside the registered analysis.
+
+### No-call replay of the stored replies (descriptive; no provider call; jobs 81116 and 81425, account A, 4 and 14 minutes)
+
+Code `ril/analysis/rq3_floor_replay.py`, `scripts/rq3_floor_replay.py`; tables under `results/rq3_floor/replay_all/` (stage 1 alone: `replay_s1/`, equal to the stage-1 rows of the pooled run). Each reply's edit blocks are matched against the issue text shown to the model and against the base-commit file the block edits; issue texts were used only to compute these matches. "In issue" is verbatim; a second count collapses runs of whitespace. Edited lines are the inserted or replaced lines of a block (stripped, non-blank).
+
+| Replies (272) | Resolved (46) | Unresolved (226; 211 with edit blocks) |
+|---|---|---|
+| every SEARCH text in the issue, verbatim | 2 | 0 |
+| same, whitespace collapsed | 8 | 6 |
+| every SEARCH text in the base-commit file | 46 of 46 | 28 of 211 |
+| at least one SEARCH text in the base file | 46 of 46 | 41 of 211 |
+| edited lines found in the issue text | 57 of 155 (37%) | 90 of 830 (11%) |
+| edited lines of 10 or more characters found in the issue | 39 of 125 | 64 of 732 |
+
+By stage the pattern is the same (stage 1: resolved 7 of 7 with all SEARCH text in the base file, 2 verbatim in the issue; completion run: 39 of 39 and 0). So every resolved reply quoted code that exists in the base-commit file, and almost none quoted it from the issue verbatim; the unresolved replies mostly did not quote the base file correctly (159 of 232 completion-run instances fail to apply, 28 of 211 unresolved replies had all their SEARCH text in the file). A match with the base file is consistent with recall of the repository, or with the issue quoting the code in a form that differs from the verbatim text (8 of the 46 match once whitespace is collapsed); it does not establish memorisation, and the replay has no comparison set of code the model could not have seen. 57 of 155 edited lines of resolved replies also appear in the issue, which is what an issue that states the fix would give.
+
+### Incidents and dead ends (completion run)
+
+(1) Insufficient balance at 232 of 287: recorded, not retried; the brief's rule is to report what completed. (2) The shared ledger's cap could not admit 6.2 USD; a copy with the cap moved to 40.435 USD (52 minus the 11.565 USD held outside the ledger) was used and the original left untouched. (3) The first draft of the analysis script took one directory per arm; the pooled and stage-2 tables are built from a concatenation of the two stages' stored rows (pooled copy kept outside the repository; the stage directories are the sources). Not done: the 55 remaining instances (about 1.0 USD at the observed 0.0178 USD per instance) because the balance is exhausted; any further arm or stage, by the rule stated above.
 
 ## E-REPORT-FINAL: final report pass, RQ3 results, abstract, contributions, conclusion, last proofread. Writing, 2026-11-14 (decision D168)
 
