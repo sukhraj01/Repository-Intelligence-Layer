@@ -316,4 +316,4 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-15,A,81425,RQ3FLOOR,"floor arm no-call replay of the 272 stored replies (CPU)",u22,2,0,00:14:14,0.0,COMPLETED
 2026-11-15,A,82117,RQ3BREAKDOWN,"gold units of the executable instances for the failure breakdown (CPU); repository cache lacked five repositories, output discarded",u22,2,0,00:00:11,0.0,COMPLETED (unusable output)
 2026-11-15,A,82123,RQ3BREAKDOWN,"gold units, full clones of the missing repositories (CPU)",u22,2,0,01:00:05,0.0,TIMEOUT
-2026-11-15,A,82246,RQ3BREAKDOWN,"gold units, blobless clones (CPU); optional unit-level extra",u22,2,0,,0.0,SUBMITTED
+2026-11-15,A,82246,RQ3BREAKDOWN,"gold units, blobless clones (CPU); unit-level extra",u22,2,0,00:16:19,0.0,COMPLETED

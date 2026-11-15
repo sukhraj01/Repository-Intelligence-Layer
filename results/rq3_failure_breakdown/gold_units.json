@@ -1,0 +1,7827 @@
+{
+ "instances": {
+  "astropy__astropy-12907": {
+   "detail": {
+    "astropy/modeling/separable.py::_cstack": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "astropy/modeling/separable.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/modeling/separable.py::_cstack"
+   ]
+  },
+  "astropy__astropy-13033": {
+   "detail": {
+    "astropy/timeseries/core.py::BaseTimeSeries._check_required_columns": {
+     "inserted": 7,
+     "removed": 3
+    }
+   },
+   "files": [
+    "astropy/timeseries/core.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/timeseries/core.py::BaseTimeSeries._check_required_columns"
+   ]
+  },
+  "astropy__astropy-13236": {
+   "detail": {
+    "astropy/table/table.py::Table._convert_data_to_col": {
+     "inserted": 0,
+     "removed": 7
+    }
+   },
+   "files": [
+    "astropy/table/table.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/table/table.py::Table._convert_data_to_col"
+   ]
+  },
+  "astropy__astropy-13398": {
+   "detail": {
+    "astropy/coordinates/builtin_frames/__init__.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::cirs_to_itrs": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::itrs_to_cirs": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::itrs_to_tete": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::tete_to_itrs": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::tete_to_itrs_mat": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "astropy/coordinates/builtin_frames/itrs.py::<module>": {
+     "inserted": 12,
+     "removed": 2
+    },
+    "astropy/coordinates/builtin_frames/itrs.py::ITRS": {
+     "inserted": 29,
+     "removed": 2
+    }
+   },
+   "files": [
+    "astropy/coordinates/builtin_frames/__init__.py",
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py",
+    "astropy/coordinates/builtin_frames/itrs.py"
+   ],
+   "notes": {
+    "astropy/coordinates/builtin_frames/itrs_observed_transforms.py": "created"
+   },
+   "units": [
+    "astropy/coordinates/builtin_frames/__init__.py::<module>",
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::cirs_to_itrs",
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::itrs_to_cirs",
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::itrs_to_tete",
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::tete_to_itrs",
+    "astropy/coordinates/builtin_frames/intermediate_rotation_transforms.py::tete_to_itrs_mat",
+    "astropy/coordinates/builtin_frames/itrs.py::<module>",
+    "astropy/coordinates/builtin_frames/itrs.py::ITRS"
+   ]
+  },
+  "astropy__astropy-13453": {
+   "detail": {
+    "astropy/io/ascii/html.py::HTML.write": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "astropy/io/ascii/html.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/ascii/html.py::HTML.write"
+   ]
+  },
+  "astropy__astropy-13579": {
+   "detail": {
+    "astropy/wcs/wcsapi/wrappers/sliced_wcs.py::SlicedLowLevelWCS.world_to_pixel_values": {
+     "inserted": 2,
+     "removed": 1
+    }
+   },
+   "files": [
+    "astropy/wcs/wcsapi/wrappers/sliced_wcs.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/wcs/wcsapi/wrappers/sliced_wcs.py::SlicedLowLevelWCS.world_to_pixel_values"
+   ]
+  },
+  "astropy__astropy-13977": {
+   "detail": {
+    "astropy/units/quantity.py::Quantity.__array_ufunc__": {
+     "inserted": 0,
+     "removed": 39
+    }
+   },
+   "files": [
+    "astropy/units/quantity.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/units/quantity.py::Quantity.__array_ufunc__"
+   ]
+  },
+  "astropy__astropy-14182": {
+   "detail": {
+    "astropy/io/ascii/rst.py::RST": {
+     "inserted": 0,
+     "removed": 6
+    },
+    "astropy/io/ascii/rst.py::RST.__init__": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "astropy/io/ascii/rst.py::RST.write": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "astropy/io/ascii/rst.py::SimpleRSTData": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "astropy/io/ascii/rst.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/ascii/rst.py::RST",
+    "astropy/io/ascii/rst.py::RST.__init__",
+    "astropy/io/ascii/rst.py::RST.write",
+    "astropy/io/ascii/rst.py::SimpleRSTData"
+   ]
+  },
+  "astropy__astropy-14309": {
+   "detail": {
+    "astropy/io/fits/connect.py::is_fits": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "astropy/io/fits/connect.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/fits/connect.py::is_fits"
+   ]
+  },
+  "astropy__astropy-14365": {
+   "detail": {
+    "astropy/io/ascii/qdp.py::_get_tables_from_qdp_file": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "astropy/io/ascii/qdp.py::_line_type": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "astropy/io/ascii/qdp.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/ascii/qdp.py::_get_tables_from_qdp_file",
+    "astropy/io/ascii/qdp.py::_line_type"
+   ]
+  },
+  "astropy__astropy-14369": {
+   "detail": {
+    "astropy/units/format/cds.py::CDS._make_parser": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "astropy/units/format/cds_parsetab.py::<module>": {
+     "inserted": 0,
+     "removed": 30
+    }
+   },
+   "files": [
+    "astropy/units/format/cds.py",
+    "astropy/units/format/cds_parsetab.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/units/format/cds.py::CDS._make_parser",
+    "astropy/units/format/cds_parsetab.py::<module>"
+   ]
+  },
+  "astropy__astropy-14508": {
+   "detail": {
+    "astropy/io/fits/card.py::_format_float": {
+     "inserted": 2,
+     "removed": 19
+    }
+   },
+   "files": [
+    "astropy/io/fits/card.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/fits/card.py::_format_float"
+   ]
+  },
+  "astropy__astropy-14539": {
+   "detail": {
+    "astropy/io/fits/diff.py::TableDataDiff._diff": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "astropy/io/fits/diff.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/fits/diff.py::TableDataDiff._diff"
+   ]
+  },
+  "astropy__astropy-14598": {
+   "detail": {
+    "astropy/io/fits/card.py::Card": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "astropy/io/fits/card.py::Card._split": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "astropy/io/fits/card.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/io/fits/card.py::Card",
+    "astropy/io/fits/card.py::Card._split"
+   ]
+  },
+  "astropy__astropy-14995": {
+   "detail": {
+    "astropy/nddata/mixins/ndarithmetic.py::NDArithmeticMixin._arithmetic_mask": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "astropy/nddata/mixins/ndarithmetic.py"
+   ],
+   "notes": {},
+   "units": [
+    "astropy/nddata/mixins/ndarithmetic.py::NDArithmeticMixin._arithmetic_mask"
+   ]
+  },
+  "django__django-10554": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLCompiler.get_order_by": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py",
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {
+    "django/db/models/sql/query.py": "no_unit_hit"
+   },
+   "units": [
+    "django/db/models/sql/compiler.py::SQLCompiler.get_order_by"
+   ]
+  },
+  "django__django-10880": {
+   "detail": {
+    "django/db/models/aggregates.py::Aggregate.as_sql": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/aggregates.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/aggregates.py::Aggregate.as_sql"
+   ]
+  },
+  "django__django-10914": {
+   "detail": {
+    "django/conf/global_settings.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/conf/global_settings.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/conf/global_settings.py::<module>"
+   ]
+  },
+  "django__django-10973": {
+   "detail": {
+    "django/db/backends/postgresql/client.py::<module>": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/backends/postgresql/client.py::DatabaseClient.runshell_db": {
+     "inserted": 3,
+     "removed": 25
+    },
+    "django/db/backends/postgresql/client.py::_escape_pgpass": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/db/backends/postgresql/client.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/postgresql/client.py::<module>",
+    "django/db/backends/postgresql/client.py::DatabaseClient.runshell_db",
+    "django/db/backends/postgresql/client.py::_escape_pgpass"
+   ]
+  },
+  "django__django-10999": {
+   "detail": {
+    "django/utils/dateparse.py::<module>": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/utils/dateparse.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/dateparse.py::<module>"
+   ]
+  },
+  "django__django-11066": {
+   "detail": {
+    "django/contrib/contenttypes/management/__init__.py::RenameContentType._rename": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/contenttypes/management/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/contenttypes/management/__init__.py::RenameContentType._rename"
+   ]
+  },
+  "django__django-11087": {
+   "detail": {
+    "django/db/models/deletion.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/deletion.py::Collector.can_fast_delete": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/deletion.py::Collector.collect": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/deletion.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/deletion.py::<module>",
+    "django/db/models/deletion.py::Collector.can_fast_delete",
+    "django/db/models/deletion.py::Collector.collect"
+   ]
+  },
+  "django__django-11095": {
+   "detail": {
+    "django/contrib/admin/options.py::ModelAdmin.get_inline_instances": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::ModelAdmin.get_inline_instances"
+   ]
+  },
+  "django__django-11099": {
+   "detail": {
+    "django/contrib/auth/validators.py::ASCIIUsernameValidator": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/contrib/auth/validators.py::UnicodeUsernameValidator": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/auth/validators.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/validators.py::ASCIIUsernameValidator",
+    "django/contrib/auth/validators.py::UnicodeUsernameValidator"
+   ]
+  },
+  "django__django-11119": {
+   "detail": {
+    "django/template/engine.py::Engine.render_to_string": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/template/engine.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/template/engine.py::Engine.render_to_string"
+   ]
+  },
+  "django__django-11133": {
+   "detail": {
+    "django/http/response.py::HttpResponseBase.make_bytes": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/http/response.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/http/response.py::HttpResponseBase.make_bytes"
+   ]
+  },
+  "django__django-11138": {
+   "detail": {
+    "django/db/backends/mysql/operations.py::DatabaseOperations._convert_field_to_tz": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/oracle/operations.py::DatabaseOperations._convert_field_to_tz": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/backends/sqlite3/base.py::DatabaseWrapper.get_new_connection": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_cast_date": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_cast_time": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_extract": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_parse": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_trunc": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations._convert_tzname_to_sql": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_cast_date_sql": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_cast_time_sql": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_extract_sql": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_trunc_sql": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/backends/mysql/operations.py",
+    "django/db/backends/oracle/operations.py",
+    "django/db/backends/sqlite3/base.py",
+    "django/db/backends/sqlite3/operations.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/mysql/operations.py::DatabaseOperations._convert_field_to_tz",
+    "django/db/backends/oracle/operations.py::DatabaseOperations._convert_field_to_tz",
+    "django/db/backends/sqlite3/base.py::DatabaseWrapper.get_new_connection",
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_cast_date",
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_cast_time",
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_extract",
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_parse",
+    "django/db/backends/sqlite3/base.py::_sqlite_datetime_trunc",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations._convert_tzname_to_sql",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_cast_date_sql",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_cast_time_sql",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_extract_sql",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.datetime_trunc_sql"
+   ]
+  },
+  "django__django-11141": {
+   "detail": {
+    "django/db/migrations/loader.py::MigrationLoader.load_disk": {
+     "inserted": 4,
+     "removed": 6
+    }
+   },
+   "files": [
+    "django/db/migrations/loader.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/loader.py::MigrationLoader.load_disk"
+   ]
+  },
+  "django__django-11149": {
+   "detail": {
+    "django/contrib/admin/options.py::InlineModelAdmin.has_add_permission": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/contrib/admin/options.py::InlineModelAdmin.has_change_permission": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/contrib/admin/options.py::InlineModelAdmin.has_delete_permission": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/contrib/admin/options.py::InlineModelAdmin.has_view_permission": {
+     "inserted": 0,
+     "removed": 11
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::InlineModelAdmin.has_add_permission",
+    "django/contrib/admin/options.py::InlineModelAdmin.has_change_permission",
+    "django/contrib/admin/options.py::InlineModelAdmin.has_delete_permission",
+    "django/contrib/admin/options.py::InlineModelAdmin.has_view_permission"
+   ]
+  },
+  "django__django-11163": {
+   "detail": {
+    "django/forms/models.py::model_to_dict": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::model_to_dict"
+   ]
+  },
+  "django__django-11179": {
+   "detail": {
+    "django/db/models/deletion.py::Collector.delete": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/deletion.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/deletion.py::Collector.delete"
+   ]
+  },
+  "django__django-11206": {
+   "detail": {
+    "django/utils/numberformat.py::format": {
+     "inserted": 8,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/utils/numberformat.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/numberformat.py::format"
+   ]
+  },
+  "django__django-11211": {
+   "detail": {},
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {
+    "django/db/models/fields/__init__.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-11239": {
+   "detail": {
+    "django/db/backends/postgresql/client.py::DatabaseClient.runshell_db": {
+     "inserted": 12,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/backends/postgresql/client.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/postgresql/client.py::DatabaseClient.runshell_db"
+   ]
+  },
+  "django__django-11265": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.split_exclude": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/sql/query.py::Query.trim_start": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.split_exclude",
+    "django/db/models/sql/query.py::Query.trim_start"
+   ]
+  },
+  "django__django-11276": {
+   "detail": {
+    "django/utils/html.py::<module>": {
+     "inserted": 1,
+     "removed": 8
+    },
+    "django/utils/html.py::escape": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/utils/html.py::urlize": {
+     "inserted": 0,
+     "removed": 12
+    }
+   },
+   "files": [
+    "django/utils/html.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/html.py::<module>",
+    "django/utils/html.py::escape",
+    "django/utils/html.py::urlize"
+   ]
+  },
+  "django__django-11292": {
+   "detail": {
+    "django/core/management/base.py::BaseCommand": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/management/base.py::BaseCommand.create_parser": {
+     "inserted": 5,
+     "removed": 0
+    },
+    "django/core/management/base.py::BaseCommand.execute": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/management/base.py::DjangoHelpFormatter": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/management/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/base.py::BaseCommand",
+    "django/core/management/base.py::BaseCommand.create_parser",
+    "django/core/management/base.py::BaseCommand.execute",
+    "django/core/management/base.py::DjangoHelpFormatter"
+   ]
+  },
+  "django__django-11299": {
+   "detail": {
+    "django/db/models/sql/query.py::Query._add_q": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query._add_q"
+   ]
+  },
+  "django__django-11333": {
+   "detail": {
+    "django/urls/base.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/urls/base.py::clear_url_caches": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/urls/resolvers.py::get_resolver": {
+     "inserted": 5,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/urls/base.py",
+    "django/urls/resolvers.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/urls/base.py::<module>",
+    "django/urls/base.py::clear_url_caches",
+    "django/urls/resolvers.py::get_resolver"
+   ]
+  },
+  "django__django-11400": {
+   "detail": {
+    "django/contrib/admin/filters.py::RelatedFieldListFilter.field_choices": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/contrib/admin/filters.py::RelatedOnlyFieldListFilter.field_choices": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/__init__.py::Field.get_choices": {
+     "inserted": 3,
+     "removed": 2
+    },
+    "django/db/models/fields/reverse_related.py::ForeignObjectRel.get_choices": {
+     "inserted": 3,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/filters.py",
+    "django/db/models/fields/__init__.py",
+    "django/db/models/fields/reverse_related.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/filters.py::RelatedFieldListFilter.field_choices",
+    "django/contrib/admin/filters.py::RelatedOnlyFieldListFilter.field_choices",
+    "django/db/models/fields/__init__.py::Field.get_choices",
+    "django/db/models/fields/reverse_related.py::ForeignObjectRel.get_choices"
+   ]
+  },
+  "django__django-11433": {
+   "detail": {
+    "django/forms/models.py::construct_instance": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::construct_instance"
+   ]
+  },
+  "django__django-11451": {
+   "detail": {
+    "django/contrib/auth/backends.py::ModelBackend.authenticate": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/auth/backends.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/backends.py::ModelBackend.authenticate"
+   ]
+  },
+  "django__django-11477": {
+   "detail": {
+    "django/urls/resolvers.py::RegexPattern.match": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/urls/resolvers.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/urls/resolvers.py::RegexPattern.match"
+   ]
+  },
+  "django__django-11490": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLCompiler.get_combinator_sql": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLCompiler.get_combinator_sql"
+   ]
+  },
+  "django__django-11532": {
+   "detail": {
+    "django/core/mail/message.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/mail/message.py::sanitize_address": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/core/mail/utils.py::<module>": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/core/mail/utils.py::CachedDnsName.get_fqdn": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/core/validators.py::EmailValidator.__call__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::URLValidator.__call__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/utils/html.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/utils/html.py::smart_urlquote": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/utils/html.py::urlize": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/mail/message.py",
+    "django/core/mail/utils.py",
+    "django/core/validators.py",
+    "django/utils/encoding.py",
+    "django/utils/html.py"
+   ],
+   "notes": {
+    "django/utils/encoding.py": "no_unit_hit"
+   },
+   "units": [
+    "django/core/mail/message.py::<module>",
+    "django/core/mail/message.py::sanitize_address",
+    "django/core/mail/utils.py::<module>",
+    "django/core/mail/utils.py::CachedDnsName.get_fqdn",
+    "django/core/validators.py::<module>",
+    "django/core/validators.py::EmailValidator.__call__",
+    "django/core/validators.py::URLValidator.__call__",
+    "django/utils/html.py::<module>",
+    "django/utils/html.py::smart_urlquote",
+    "django/utils/html.py::urlize"
+   ]
+  },
+  "django__django-11551": {
+   "detail": {
+    "django/contrib/admin/checks.py::ModelAdminChecks": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/contrib/admin/checks.py::ModelAdminChecks._check_list_display_item": {
+     "inserted": 0,
+     "removed": 21
+    }
+   },
+   "files": [
+    "django/contrib/admin/checks.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/checks.py::ModelAdminChecks",
+    "django/contrib/admin/checks.py::ModelAdminChecks._check_list_display_item"
+   ]
+  },
+  "django__django-11555": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLCompiler.find_ordering_name": {
+     "inserted": 3,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLCompiler.find_ordering_name"
+   ]
+  },
+  "django__django-11603": {
+   "detail": {
+    "django/db/models/aggregates.py::Avg": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/aggregates.py::Sum": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/aggregates.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/aggregates.py::Avg",
+    "django/db/models/aggregates.py::Sum"
+   ]
+  },
+  "django__django-11728": {
+   "detail": {
+    "django/contrib/admindocs/utils.py::replace_named_groups": {
+     "inserted": 7,
+     "removed": 6
+    },
+    "django/contrib/admindocs/utils.py::replace_unnamed_groups": {
+     "inserted": 5,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/contrib/admindocs/utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admindocs/utils.py::replace_named_groups",
+    "django/contrib/admindocs/utils.py::replace_unnamed_groups"
+   ]
+  },
+  "django__django-11734": {
+   "detail": {
+    "django/db/models/fields/__init__.py::AutoFieldMixin": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/__init__.py::AutoFieldMixin.get_prep_value": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/fields/related_lookups.py::RelatedLookupMixin.get_prep_lookup": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/sql/query.py::Query.split_exclude": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py",
+    "django/db/models/fields/related_lookups.py",
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::AutoFieldMixin",
+    "django/db/models/fields/__init__.py::AutoFieldMixin.get_prep_value",
+    "django/db/models/fields/related_lookups.py::RelatedLookupMixin.get_prep_lookup",
+    "django/db/models/sql/query.py::Query.split_exclude"
+   ]
+  },
+  "django__django-11740": {
+   "detail": {
+    "django/db/migrations/autodetector.py::MigrationAutodetector.generate_altered_fields": {
+     "inserted": 2,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/autodetector.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/autodetector.py::MigrationAutodetector.generate_altered_fields"
+   ]
+  },
+  "django__django-11749": {
+   "detail": {
+    "django/core/management/__init__.py::call_command": {
+     "inserted": 5,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/management/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/__init__.py::call_command"
+   ]
+  },
+  "django__django-11790": {
+   "detail": {
+    "django/contrib/auth/forms.py::AuthenticationForm.__init__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/auth/forms.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/forms.py::AuthenticationForm.__init__"
+   ]
+  },
+  "django__django-11815": {
+   "detail": {
+    "django/db/migrations/serializer.py::EnumSerializer.serialize": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/migrations/serializer.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/serializer.py::EnumSerializer.serialize"
+   ]
+  },
+  "django__django-11820": {
+   "detail": {
+    "django/db/models/base.py::Model._check_ordering": {
+     "inserted": 2,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::Model._check_ordering"
+   ]
+  },
+  "django__django-11848": {
+   "detail": {
+    "django/utils/http.py::parse_http_date": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/utils/http.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/http.py::parse_http_date"
+   ]
+  },
+  "django__django-11880": {
+   "detail": {
+    "django/forms/fields.py::Field.__deepcopy__": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/forms/fields.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/fields.py::Field.__deepcopy__"
+   ]
+  },
+  "django__django-11885": {
+   "detail": {
+    "django/contrib/admin/utils.py::NestedObjects.related_objects": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/deletion.py::<module>": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/deletion.py::Collector": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/deletion.py::Collector.__init__": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/deletion.py::Collector.add": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/deletion.py::Collector.add_field_update": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/deletion.py::Collector.can_fast_delete": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/deletion.py::Collector.collect": {
+     "inserted": 0,
+     "removed": 37
+    },
+    "django/db/models/deletion.py::Collector.get_del_batches": {
+     "inserted": 1,
+     "removed": 2
+    },
+    "django/db/models/deletion.py::Collector.related_objects": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/contrib/admin/utils.py",
+    "django/db/models/deletion.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/utils.py::NestedObjects.related_objects",
+    "django/db/models/deletion.py::<module>",
+    "django/db/models/deletion.py::Collector",
+    "django/db/models/deletion.py::Collector.__init__",
+    "django/db/models/deletion.py::Collector.add",
+    "django/db/models/deletion.py::Collector.add_field_update",
+    "django/db/models/deletion.py::Collector.can_fast_delete",
+    "django/db/models/deletion.py::Collector.collect",
+    "django/db/models/deletion.py::Collector.get_del_batches",
+    "django/db/models/deletion.py::Collector.related_objects"
+   ]
+  },
+  "django__django-11951": {
+   "detail": {
+    "django/db/models/query.py::QuerySet._batched_insert": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::QuerySet._batched_insert"
+   ]
+  },
+  "django__django-11964": {
+   "detail": {
+    "django/db/models/enums.py::Choices": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/enums.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/enums.py::Choices"
+   ]
+  },
+  "django__django-11999": {
+   "detail": {
+    "django/db/models/fields/__init__.py::Field.contribute_to_class": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::Field.contribute_to_class"
+   ]
+  },
+  "django__django-12039": {
+   "detail": {
+    "django/db/backends/ddl_references.py::Columns.__str__": {
+     "inserted": 1,
+     "removed": 2
+    },
+    "django/db/backends/ddl_references.py::IndexColumns.__str__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/backends/ddl_references.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/ddl_references.py::Columns.__str__",
+    "django/db/backends/ddl_references.py::IndexColumns.__str__"
+   ]
+  },
+  "django__django-12050": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.resolve_lookup_value": {
+     "inserted": 0,
+     "removed": 15
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.resolve_lookup_value"
+   ]
+  },
+  "django__django-12125": {
+   "detail": {
+    "django/db/migrations/serializer.py::TypeSerializer.serialize": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/serializer.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/serializer.py::TypeSerializer.serialize"
+   ]
+  },
+  "django__django-12143": {
+   "detail": {
+    "django/contrib/admin/options.py::ModelAdmin._get_edited_object_pks": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::ModelAdmin._get_edited_object_pks"
+   ]
+  },
+  "django__django-12155": {
+   "detail": {
+    "django/contrib/admindocs/utils.py::<module>": {
+     "inserted": 1,
+     "removed": 2
+    },
+    "django/contrib/admindocs/utils.py::parse_docstring": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/contrib/admindocs/utils.py::trim_docstring": {
+     "inserted": 0,
+     "removed": 13
+    },
+    "django/contrib/admindocs/views.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/contrib/admindocs/views.py::ModelDetailView.get_context_data": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admindocs/utils.py",
+    "django/contrib/admindocs/views.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admindocs/utils.py::<module>",
+    "django/contrib/admindocs/utils.py::parse_docstring",
+    "django/contrib/admindocs/utils.py::trim_docstring",
+    "django/contrib/admindocs/views.py::<module>",
+    "django/contrib/admindocs/views.py::ModelDetailView.get_context_data"
+   ]
+  },
+  "django__django-12193": {
+   "detail": {
+    "django/forms/widgets.py::CheckboxInput.get_context": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/forms/widgets.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/widgets.py::CheckboxInput.get_context"
+   ]
+  },
+  "django__django-12209": {
+   "detail": {
+    "django/db/models/base.py::Model._save_table": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::Model._save_table"
+   ]
+  },
+  "django__django-12262": {
+   "detail": {
+    "django/template/library.py::parse_bits": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/template/library.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/template/library.py::parse_bits"
+   ]
+  },
+  "django__django-12273": {
+   "detail": {
+    "django/db/models/base.py::Model._set_pk_val": {
+     "inserted": 3,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::Model._set_pk_val"
+   ]
+  },
+  "django__django-12276": {
+   "detail": {
+    "django/forms/widgets.py::ClearableFileInput": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/widgets.py::ClearableFileInput.use_required_attribute": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/forms/widgets.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/widgets.py::ClearableFileInput",
+    "django/forms/widgets.py::ClearableFileInput.use_required_attribute"
+   ]
+  },
+  "django__django-12304": {
+   "detail": {
+    "django/db/models/enums.py::ChoicesMeta.__new__": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/enums.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/enums.py::ChoicesMeta.__new__"
+   ]
+  },
+  "django__django-12308": {
+   "detail": {
+    "django/contrib/admin/utils.py::display_for_field": {
+     "inserted": 5,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/admin/utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/utils.py::display_for_field"
+   ]
+  },
+  "django__django-12325": {
+   "detail": {
+    "django/db/models/base.py::ModelBase.__new__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/options.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/options.py::Options._prepare": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/db/models/base.py",
+    "django/db/models/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::ModelBase.__new__",
+    "django/db/models/options.py::<module>",
+    "django/db/models/options.py::Options._prepare"
+   ]
+  },
+  "django__django-12406": {
+   "detail": {
+    "django/db/models/fields/related.py::ForeignKey.formfield": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/forms/models.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/models.py::ModelChoiceField.__init__": {
+     "inserted": 7,
+     "removed": 6
+    }
+   },
+   "files": [
+    "django/db/models/fields/related.py",
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/related.py::ForeignKey.formfield",
+    "django/forms/models.py::<module>",
+    "django/forms/models.py::ModelChoiceField.__init__"
+   ]
+  },
+  "django__django-12419": {
+   "detail": {
+    "django/conf/global_settings.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/conf/global_settings.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/conf/global_settings.py::<module>"
+   ]
+  },
+  "django__django-12663": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.output_field": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.output_field"
+   ]
+  },
+  "django__django-12708": {
+   "detail": {
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor.alter_index_together": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/backends/base/schema.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor.alter_index_together"
+   ]
+  },
+  "django__django-12713": {
+   "detail": {
+    "django/contrib/admin/options.py::BaseModelAdmin.formfield_for_manytomany": {
+     "inserted": 0,
+     "removed": 11
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::BaseModelAdmin.formfield_for_manytomany"
+   ]
+  },
+  "django__django-12741": {
+   "detail": {
+    "django/core/management/commands/flush.py::Command.handle": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.execute_sql_flush": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/core/management/commands/flush.py",
+    "django/db/backends/base/operations.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/commands/flush.py::Command.handle",
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.execute_sql_flush"
+   ]
+  },
+  "django__django-12754": {
+   "detail": {
+    "django/db/migrations/autodetector.py::MigrationAutodetector.generate_created_models": {
+     "inserted": 10,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/migrations/autodetector.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/autodetector.py::MigrationAutodetector.generate_created_models"
+   ]
+  },
+  "django__django-12774": {
+   "detail": {
+    "django/db/models/query.py::QuerySet.in_bulk": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::QuerySet.in_bulk"
+   ]
+  },
+  "django__django-12858": {
+   "detail": {
+    "django/db/models/base.py::Model._check_ordering": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::Model._check_ordering"
+   ]
+  },
+  "django__django-12965": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLDeleteCompiler.single_alias": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLDeleteCompiler.single_alias"
+   ]
+  },
+  "django__django-13012": {
+   "detail": {},
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {
+    "django/db/models/expressions.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-13023": {
+   "detail": {
+    "django/db/models/fields/__init__.py::DecimalField.to_python": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::DecimalField.to_python"
+   ]
+  },
+  "django__django-13028": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.check_filterable": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.check_filterable"
+   ]
+  },
+  "django__django-13033": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLCompiler.find_ordering_name": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLCompiler.find_ordering_name"
+   ]
+  },
+  "django__django-13089": {
+   "detail": {
+    "django/core/cache/backends/db.py::DatabaseCache._cull": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/core/cache/backends/db.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/cache/backends/db.py::DatabaseCache._cull"
+   ]
+  },
+  "django__django-13109": {
+   "detail": {
+    "django/db/models/fields/related.py::ForeignKey.validate": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/related.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/related.py::ForeignKey.validate"
+   ]
+  },
+  "django__django-13112": {
+   "detail": {
+    "django/db/models/fields/related.py::ForeignObject.deconstruct": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/related.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/related.py::ForeignObject.deconstruct"
+   ]
+  },
+  "django__django-13121": {
+   "detail": {
+    "django/db/backends/base/operations.py::BaseDatabaseOperations": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.date_interval_sql": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/db/backends/mysql/operations.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/backends/mysql/operations.py::DatabaseOperations": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/backends/mysql/operations.py::DatabaseOperations.date_interval_sql": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/sqlite3/operations.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.date_interval_sql": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/expressions.py::<module>": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/expressions.py::Combinable._combine": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/db/models/expressions.py::CombinedExpression.as_sql": {
+     "inserted": 0,
+     "removed": 10
+    },
+    "django/db/models/expressions.py::DurationExpression.compile": {
+     "inserted": 0,
+     "removed": 9
+    },
+    "django/db/models/expressions.py::DurationValue": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/expressions.py::DurationValue.as_sql": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/db/backends/base/operations.py",
+    "django/db/backends/mysql/operations.py",
+    "django/db/backends/sqlite3/operations.py",
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/operations.py::BaseDatabaseOperations",
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.date_interval_sql",
+    "django/db/backends/mysql/operations.py::<module>",
+    "django/db/backends/mysql/operations.py::DatabaseOperations",
+    "django/db/backends/mysql/operations.py::DatabaseOperations.date_interval_sql",
+    "django/db/backends/sqlite3/operations.py::<module>",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations",
+    "django/db/backends/sqlite3/operations.py::DatabaseOperations.date_interval_sql",
+    "django/db/models/expressions.py::<module>",
+    "django/db/models/expressions.py::Combinable._combine",
+    "django/db/models/expressions.py::CombinedExpression.as_sql",
+    "django/db/models/expressions.py::DurationExpression.compile",
+    "django/db/models/expressions.py::DurationValue",
+    "django/db/models/expressions.py::DurationValue.as_sql"
+   ]
+  },
+  "django__django-13128": {
+   "detail": {
+    "django/db/models/expressions.py::CombinedExpression.as_sql": {
+     "inserted": 0,
+     "removed": 17
+    },
+    "django/db/models/expressions.py::CombinedExpression.resolve_expression": {
+     "inserted": 20,
+     "removed": 2
+    },
+    "django/db/models/expressions.py::DurationExpression.as_sql": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/expressions.py::CombinedExpression.as_sql",
+    "django/db/models/expressions.py::CombinedExpression.resolve_expression",
+    "django/db/models/expressions.py::DurationExpression.as_sql"
+   ]
+  },
+  "django__django-13158": {
+   "detail": {
+    "django/db/models/sql/query.py::Query": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/db/models/sql/query.py::Query.clone": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query",
+    "django/db/models/sql/query.py::Query.clone"
+   ]
+  },
+  "django__django-13195": {
+   "detail": {
+    "django/contrib/messages/storage/cookie.py::CookieStorage._update_cookie": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/contrib/sessions/middleware.py::SessionMiddleware.process_response": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/http/response.py::HttpResponseBase.delete_cookie": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/contrib/messages/storage/cookie.py",
+    "django/contrib/sessions/middleware.py",
+    "django/http/response.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/messages/storage/cookie.py::CookieStorage._update_cookie",
+    "django/contrib/sessions/middleware.py::SessionMiddleware.process_response",
+    "django/http/response.py::HttpResponseBase.delete_cookie"
+   ]
+  },
+  "django__django-13212": {
+   "detail": {
+    "django/core/validators.py::DecimalValidator.__call__": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/core/validators.py::EmailValidator.__call__": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/core/validators.py::FileExtensionValidator.__call__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::ProhibitNullCharactersValidator.__call__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::RegexValidator.__call__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::URLValidator.__call__": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/core/validators.py::validate_ipv46_address": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::validate_ipv4_address": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/validators.py::validate_ipv6_address": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/fields.py::DecimalField": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/fields.py::DecimalField.validate": {
+     "inserted": 0,
+     "removed": 6
+    }
+   },
+   "files": [
+    "django/core/validators.py",
+    "django/forms/fields.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/validators.py::DecimalValidator.__call__",
+    "django/core/validators.py::EmailValidator.__call__",
+    "django/core/validators.py::FileExtensionValidator.__call__",
+    "django/core/validators.py::ProhibitNullCharactersValidator.__call__",
+    "django/core/validators.py::RegexValidator.__call__",
+    "django/core/validators.py::URLValidator.__call__",
+    "django/core/validators.py::validate_ipv46_address",
+    "django/core/validators.py::validate_ipv4_address",
+    "django/core/validators.py::validate_ipv6_address",
+    "django/forms/fields.py::DecimalField",
+    "django/forms/fields.py::DecimalField.validate"
+   ]
+  },
+  "django__django-13279": {
+   "detail": {
+    "django/contrib/sessions/backends/base.py::SessionBase.encode": {
+     "inserted": 3,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/sessions/backends/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/sessions/backends/base.py::SessionBase.encode"
+   ]
+  },
+  "django__django-13297": {
+   "detail": {
+    "django/views/generic/base.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/views/generic/base.py::_wrap_url_kwargs_with_deprecation_warning": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/views/generic/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/views/generic/base.py::<module>",
+    "django/views/generic/base.py::_wrap_url_kwargs_with_deprecation_warning"
+   ]
+  },
+  "django__django-13315": {
+   "detail": {
+    "django/forms/models.py::apply_limit_choices_to_to_formfield": {
+     "inserted": 1,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::apply_limit_choices_to_to_formfield"
+   ]
+  },
+  "django__django-13343": {
+   "detail": {
+    "django/db/models/fields/files.py::FileField.__init__": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/db/models/fields/files.py::FileField.deconstruct": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/files.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/files.py::FileField.__init__",
+    "django/db/models/fields/files.py::FileField.deconstruct"
+   ]
+  },
+  "django__django-13344": {
+   "detail": {
+    "django/contrib/sessions/middleware.py::SessionMiddleware.__init__": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/middleware/cache.py::CacheMiddleware.__init__": {
+     "inserted": 3,
+     "removed": 11
+    },
+    "django/middleware/cache.py::FetchFromCacheMiddleware.__init__": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/middleware/cache.py::UpdateCacheMiddleware.__init__": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/middleware/security.py::SecurityMiddleware.__init__": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/contrib/sessions/middleware.py",
+    "django/middleware/cache.py",
+    "django/middleware/security.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/sessions/middleware.py::SessionMiddleware.__init__",
+    "django/middleware/cache.py::CacheMiddleware.__init__",
+    "django/middleware/cache.py::FetchFromCacheMiddleware.__init__",
+    "django/middleware/cache.py::UpdateCacheMiddleware.__init__",
+    "django/middleware/security.py::SecurityMiddleware.__init__"
+   ]
+  },
+  "django__django-13346": {
+   "detail": {
+    "django/db/models/fields/json.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/fields/json.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/json.py::<module>"
+   ]
+  },
+  "django__django-13363": {
+   "detail": {
+    "django/db/models/functions/datetime.py::TruncDate.as_sql": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/functions/datetime.py::TruncTime.as_sql": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/functions/datetime.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/functions/datetime.py::TruncDate.as_sql",
+    "django/db/models/functions/datetime.py::TruncTime.as_sql"
+   ]
+  },
+  "django__django-13401": {
+   "detail": {
+    "django/db/models/fields/__init__.py::Field.__eq__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/__init__.py::Field.__hash__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/__init__.py::Field.__lt__": {
+     "inserted": 1,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::Field.__eq__",
+    "django/db/models/fields/__init__.py::Field.__hash__",
+    "django/db/models/fields/__init__.py::Field.__lt__"
+   ]
+  },
+  "django__django-13406": {
+   "detail": {
+    "django/db/models/query.py::QuerySet.query#2": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::QuerySet.query#2"
+   ]
+  },
+  "django__django-13410": {
+   "detail": {
+    "django/core/files/locks.py::lock#2": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/core/files/locks.py::unlock#2": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/core/files/locks.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/files/locks.py::lock#2",
+    "django/core/files/locks.py::unlock#2"
+   ]
+  },
+  "django__django-13417": {
+   "detail": {
+    "django/db/models/query.py::QuerySet.ordered": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::QuerySet.ordered"
+   ]
+  },
+  "django__django-13449": {
+   "detail": {
+    "django/db/models/expressions.py::Window": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/expressions.py::Window"
+   ]
+  },
+  "django__django-13512": {
+   "detail": {
+    "django/contrib/admin/utils.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/contrib/admin/utils.py::display_for_field": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/fields.py::JSONField.prepare_value": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/utils.py",
+    "django/forms/fields.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/utils.py::<module>",
+    "django/contrib/admin/utils.py::display_for_field",
+    "django/forms/fields.py::JSONField.prepare_value"
+   ]
+  },
+  "django__django-13513": {
+   "detail": {
+    "django/views/debug.py::ExceptionReporter.get_traceback_frames": {
+     "inserted": 12,
+     "removed": 21
+    }
+   },
+   "files": [
+    "django/views/debug.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/views/debug.py::ExceptionReporter.get_traceback_frames"
+   ]
+  },
+  "django__django-13516": {
+   "detail": {},
+   "files": [
+    "django/core/management/base.py"
+   ],
+   "notes": {
+    "django/core/management/base.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-13551": {
+   "detail": {
+    "django/contrib/auth/tokens.py::PasswordResetTokenGenerator._make_hash_value": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/contrib/auth/tokens.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/tokens.py::PasswordResetTokenGenerator._make_hash_value"
+   ]
+  },
+  "django__django-13568": {
+   "detail": {
+    "django/contrib/auth/checks.py::check_user_model": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/auth/checks.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/checks.py::check_user_model"
+   ]
+  },
+  "django__django-13569": {
+   "detail": {},
+   "files": [
+    "django/db/models/functions/math.py"
+   ],
+   "notes": {
+    "django/db/models/functions/math.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-13590": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.resolve_lookup_value": {
+     "inserted": 4,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.resolve_lookup_value"
+   ]
+  },
+  "django__django-13658": {
+   "detail": {
+    "django/core/management/__init__.py::ManagementUtility.execute": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/management/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/__init__.py::ManagementUtility.execute"
+   ]
+  },
+  "django__django-13670": {
+   "detail": {
+    "django/utils/dateformat.py::DateFormat.y": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/utils/dateformat.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/dateformat.py::DateFormat.y"
+   ]
+  },
+  "django__django-13741": {
+   "detail": {
+    "django/contrib/auth/forms.py::<module>": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField.__init__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField.bound_data": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField.has_changed": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/contrib/auth/forms.py::UserChangeForm.clean_password": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/contrib/auth/forms.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/forms.py::<module>",
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField",
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField.__init__",
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField.bound_data",
+    "django/contrib/auth/forms.py::ReadOnlyPasswordHashField.has_changed",
+    "django/contrib/auth/forms.py::UserChangeForm.clean_password"
+   ]
+  },
+  "django__django-13786": {
+   "detail": {
+    "django/db/migrations/operations/models.py::CreateModel.reduce": {
+     "inserted": 4,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/operations/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/operations/models.py::CreateModel.reduce"
+   ]
+  },
+  "django__django-13794": {
+   "detail": {
+    "django/utils/functional.py::lazy": {
+     "inserted": 6,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/utils/functional.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/functional.py::lazy"
+   ]
+  },
+  "django__django-13807": {
+   "detail": {
+    "django/db/backends/sqlite3/base.py::DatabaseWrapper.check_constraints": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/backends/sqlite3/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/sqlite3/base.py::DatabaseWrapper.check_constraints"
+   ]
+  },
+  "django__django-13809": {
+   "detail": {
+    "django/core/management/commands/runserver.py::Command": {
+     "inserted": 4,
+     "removed": 0
+    },
+    "django/core/management/commands/runserver.py::Command.inner_run": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/core/management/commands/runserver.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/commands/runserver.py::Command",
+    "django/core/management/commands/runserver.py::Command.inner_run"
+   ]
+  },
+  "django__django-13810": {
+   "detail": {
+    "django/core/handlers/base.py::BaseHandler.load_middleware": {
+     "inserted": 2,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/core/handlers/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/handlers/base.py::BaseHandler.load_middleware"
+   ]
+  },
+  "django__django-13820": {
+   "detail": {
+    "django/db/migrations/loader.py::MigrationLoader.load_disk": {
+     "inserted": 9,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/db/migrations/loader.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/loader.py::MigrationLoader.load_disk"
+   ]
+  },
+  "django__django-13821": {
+   "detail": {
+    "django/db/backends/sqlite3/base.py::check_sqlite_version": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/backends/sqlite3/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/sqlite3/base.py::check_sqlite_version"
+   ]
+  },
+  "django__django-13837": {
+   "detail": {
+    "django/utils/autoreload.py::get_child_arguments": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/utils/autoreload.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/autoreload.py::get_child_arguments"
+   ]
+  },
+  "django__django-13925": {
+   "detail": {
+    "django/db/models/base.py::Model._check_default_pk": {
+     "inserted": 5,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::Model._check_default_pk"
+   ]
+  },
+  "django__django-13933": {
+   "detail": {
+    "django/forms/models.py::ModelChoiceField.to_python": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::ModelChoiceField.to_python"
+   ]
+  },
+  "django__django-13964": {
+   "detail": {
+    "django/db/models/base.py::Model._prepare_related_fields_for_save": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/base.py::Model._prepare_related_fields_for_save"
+   ]
+  },
+  "django__django-14007": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLInsertCompiler.execute_sql": {
+     "inserted": 1,
+     "removed": 6
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLInsertCompiler.execute_sql"
+   ]
+  },
+  "django__django-14011": {
+   "detail": {
+    "django/core/servers/basehttp.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/backends/sqlite3/features.py::DatabaseFeatures.django_test_skips": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/core/servers/basehttp.py",
+    "django/db/backends/sqlite3/features.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/servers/basehttp.py::<module>",
+    "django/db/backends/sqlite3/features.py::DatabaseFeatures.django_test_skips"
+   ]
+  },
+  "django__django-14017": {
+   "detail": {
+    "django/db/models/query_utils.py::Q._combine": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/query_utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query_utils.py::Q._combine"
+   ]
+  },
+  "django__django-14034": {
+   "detail": {
+    "django/forms/boundfield.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/boundfield.py::BoundField.build_widget_attrs": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/boundfield.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/boundfield.py::<module>",
+    "django/forms/boundfield.py::BoundField.build_widget_attrs"
+   ]
+  },
+  "django__django-14053": {
+   "detail": {
+    "django/contrib/staticfiles/storage.py::HashedFilesMixin": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "django/contrib/staticfiles/storage.py::HashedFilesMixin.post_process": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/contrib/staticfiles/storage.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/staticfiles/storage.py::HashedFilesMixin",
+    "django/contrib/staticfiles/storage.py::HashedFilesMixin.post_process"
+   ]
+  },
+  "django__django-14089": {
+   "detail": {},
+   "files": [
+    "django/utils/datastructures.py"
+   ],
+   "notes": {
+    "django/utils/datastructures.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-14122": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLCompiler.get_group_by": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLCompiler.get_group_by"
+   ]
+  },
+  "django__django-14140": {
+   "detail": {
+    "django/db/models/query_utils.py::Q.deconstruct": {
+     "inserted": 0,
+     "removed": 8
+    }
+   },
+   "files": [
+    "django/db/models/query_utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query_utils.py::Q.deconstruct"
+   ]
+  },
+  "django__django-14155": {
+   "detail": {
+    "django/urls/resolvers.py::ResolverMatch.__repr__": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/urls/resolvers.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/urls/resolvers.py::ResolverMatch.__repr__"
+   ]
+  },
+  "django__django-14170": {
+   "detail": {
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.year_lookup_bounds_for_date_field": {
+     "inserted": 1,
+     "removed": 3
+    },
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.year_lookup_bounds_for_datetime_field": {
+     "inserted": 1,
+     "removed": 3
+    },
+    "django/db/models/lookups.py::YearLookup.year_lookup_bounds": {
+     "inserted": 2,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/backends/base/operations.py",
+    "django/db/models/lookups.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.year_lookup_bounds_for_date_field",
+    "django/db/backends/base/operations.py::BaseDatabaseOperations.year_lookup_bounds_for_datetime_field",
+    "django/db/models/lookups.py::YearLookup.year_lookup_bounds"
+   ]
+  },
+  "django__django-14238": {
+   "detail": {
+    "django/db/models/fields/__init__.py::AutoFieldMeta.__subclasscheck__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::AutoFieldMeta.__subclasscheck__"
+   ]
+  },
+  "django__django-14311": {
+   "detail": {
+    "django/utils/autoreload.py::get_child_arguments": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/utils/autoreload.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/autoreload.py::get_child_arguments"
+   ]
+  },
+  "django__django-14315": {
+   "detail": {
+    "django/db/backends/base/client.py::BaseDatabaseClient.runshell": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/postgresql/client.py::DatabaseClient.settings_to_cmd_args_env": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/backends/base/client.py",
+    "django/db/backends/postgresql/client.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/client.py::BaseDatabaseClient.runshell",
+    "django/db/backends/postgresql/client.py::DatabaseClient.settings_to_cmd_args_env"
+   ]
+  },
+  "django__django-14349": {
+   "detail": {
+    "django/core/validators.py::URLValidator": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/core/validators.py::URLValidator.__call__": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/core/validators.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/validators.py::URLValidator",
+    "django/core/validators.py::URLValidator.__call__"
+   ]
+  },
+  "django__django-14351": {
+   "detail": {},
+   "files": [
+    "django/db/models/lookups.py"
+   ],
+   "notes": {
+    "django/db/models/lookups.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-14373": {
+   "detail": {
+    "django/utils/dateformat.py::DateFormat.Y": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/utils/dateformat.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/dateformat.py::DateFormat.Y"
+   ]
+  },
+  "django__django-14376": {
+   "detail": {
+    "django/db/backends/mysql/base.py::DatabaseWrapper.get_connection_params": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/backends/mysql/client.py::DatabaseClient.settings_to_cmd_args_env": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/backends/mysql/base.py",
+    "django/db/backends/mysql/client.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/mysql/base.py::DatabaseWrapper.get_connection_params",
+    "django/db/backends/mysql/client.py::DatabaseClient.settings_to_cmd_args_env"
+   ]
+  },
+  "django__django-14404": {
+   "detail": {
+    "django/contrib/admin/sites.py::AdminSite.catch_all_view": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/contrib/admin/sites.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/sites.py::AdminSite.catch_all_view"
+   ]
+  },
+  "django__django-14434": {
+   "detail": {
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._create_unique_sql": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/db/backends/base/schema.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._create_unique_sql"
+   ]
+  },
+  "django__django-14493": {
+   "detail": {
+    "django/contrib/staticfiles/storage.py::HashedFilesMixin.post_process": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/staticfiles/storage.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/staticfiles/storage.py::HashedFilesMixin.post_process"
+   ]
+  },
+  "django__django-14500": {
+   "detail": {
+    "django/db/migrations/executor.py::MigrationExecutor.unapply_migration": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/migrations/executor.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/executor.py::MigrationExecutor.unapply_migration"
+   ]
+  },
+  "django__django-14534": {
+   "detail": {
+    "django/forms/boundfield.py::BoundWidget.id_for_label": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/boundfield.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/boundfield.py::BoundWidget.id_for_label"
+   ]
+  },
+  "django__django-14539": {
+   "detail": {
+    "django/utils/html.py::urlize": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/utils/html.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/html.py::urlize"
+   ]
+  },
+  "django__django-14559": {
+   "detail": {
+    "django/db/models/query.py::QuerySet.bulk_update": {
+     "inserted": 1,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::QuerySet.bulk_update"
+   ]
+  },
+  "django__django-14580": {
+   "detail": {
+    "django/db/migrations/serializer.py::TypeSerializer.serialize": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/serializer.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/serializer.py::TypeSerializer.serialize"
+   ]
+  },
+  "django__django-14608": {
+   "detail": {
+    "django/forms/formsets.py::BaseFormSet.full_clean": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/forms/formsets.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/formsets.py::BaseFormSet.full_clean"
+   ]
+  },
+  "django__django-14631": {
+   "detail": {
+    "django/forms/boundfield.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/forms/boundfield.py::BoundField.data": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/forms.py::BaseForm": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/forms.py::BaseForm.__iter__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/forms/forms.py::BaseForm._clean_fields": {
+     "inserted": 0,
+     "removed": 7
+    },
+    "django/forms/forms.py::BaseForm._field_data_value": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/forms/forms.py::BaseForm._html_output": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/forms/forms.py::BaseForm.changed_data": {
+     "inserted": 0,
+     "removed": 21
+    }
+   },
+   "files": [
+    "django/forms/boundfield.py",
+    "django/forms/forms.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/boundfield.py::<module>",
+    "django/forms/boundfield.py::BoundField.data",
+    "django/forms/forms.py::BaseForm",
+    "django/forms/forms.py::BaseForm.__iter__",
+    "django/forms/forms.py::BaseForm._clean_fields",
+    "django/forms/forms.py::BaseForm._field_data_value",
+    "django/forms/forms.py::BaseForm._html_output",
+    "django/forms/forms.py::BaseForm.changed_data"
+   ]
+  },
+  "django__django-14672": {
+   "detail": {
+    "django/db/models/fields/reverse_related.py::ManyToManyRel.identity": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/reverse_related.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/reverse_related.py::ManyToManyRel.identity"
+   ]
+  },
+  "django__django-14725": {
+   "detail": {
+    "django/forms/models.py::BaseModelFormSet.save": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/forms/models.py::inlineformset_factory": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "django/forms/models.py::modelformset_factory": {
+     "inserted": 1,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::BaseModelFormSet.save",
+    "django/forms/models.py::inlineformset_factory",
+    "django/forms/models.py::modelformset_factory"
+   ]
+  },
+  "django__django-14752": {
+   "detail": {
+    "django/contrib/admin/views/autocomplete.py::AutocompleteJsonView.get": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/contrib/admin/views/autocomplete.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/views/autocomplete.py::AutocompleteJsonView.get"
+   ]
+  },
+  "django__django-14765": {
+   "detail": {
+    "django/db/migrations/state.py::ProjectState.__init__": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/migrations/state.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/state.py::ProjectState.__init__"
+   ]
+  },
+  "django__django-14771": {
+   "detail": {
+    "django/utils/autoreload.py::get_child_arguments": {
+     "inserted": 5,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/utils/autoreload.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/autoreload.py::get_child_arguments"
+   ]
+  },
+  "django__django-14787": {
+   "detail": {
+    "django/utils/decorators.py::_multi_decorate": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/utils/decorators.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/decorators.py::_multi_decorate"
+   ]
+  },
+  "django__django-14792": {
+   "detail": {
+    "django/utils/timezone.py::_get_timezone_name": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/utils/timezone.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/timezone.py::_get_timezone_name"
+   ]
+  },
+  "django__django-14855": {
+   "detail": {
+    "django/contrib/admin/helpers.py::AdminReadonlyField.get_admin_url": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/helpers.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/helpers.py::AdminReadonlyField.get_admin_url"
+   ]
+  },
+  "django__django-14915": {
+   "detail": {},
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {
+    "django/forms/models.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-14999": {
+   "detail": {
+    "django/db/migrations/operations/models.py::RenameModel.database_forwards": {
+     "inserted": 5,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/db/migrations/operations/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/operations/models.py::RenameModel.database_forwards"
+   ]
+  },
+  "django__django-15022": {
+   "detail": {
+    "django/contrib/admin/options.py::ModelAdmin.get_search_results": {
+     "inserted": 1,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::ModelAdmin.get_search_results"
+   ]
+  },
+  "django__django-15037": {
+   "detail": {
+    "django/core/management/commands/inspectdb.py::Command.handle_inspection": {
+     "inserted": 4,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/core/management/commands/inspectdb.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/commands/inspectdb.py::Command.handle_inspection"
+   ]
+  },
+  "django__django-15098": {
+   "detail": {
+    "django/utils/translation/trans_real.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/utils/translation/trans_real.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/translation/trans_real.py::<module>"
+   ]
+  },
+  "django__django-15104": {
+   "detail": {
+    "django/db/migrations/autodetector.py::MigrationAutodetector.only_relation_agnostic_fields": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/autodetector.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/autodetector.py::MigrationAutodetector.only_relation_agnostic_fields"
+   ]
+  },
+  "django__django-15127": {
+   "detail": {
+    "django/contrib/messages/apps.py::<module>": {
+     "inserted": 3,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/messages/apps.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/messages/apps.py::<module>"
+   ]
+  },
+  "django__django-15128": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.bump_prefix": {
+     "inserted": 1,
+     "removed": 5
+    },
+    "django/db/models/sql/query.py::Query.change_aliases": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "django/db/models/sql/query.py::Query.combine": {
+     "inserted": 9,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.bump_prefix",
+    "django/db/models/sql/query.py::Query.change_aliases",
+    "django/db/models/sql/query.py::Query.combine"
+   ]
+  },
+  "django__django-15161": {
+   "detail": {
+    "django/db/models/expressions.py::Case": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/expressions.py::ExpressionWrapper": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/expressions.py::Func": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/expressions.py::OrderBy": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/expressions.py::Value": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/expressions.py::When": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/expressions.py::Case",
+    "django/db/models/expressions.py::ExpressionWrapper",
+    "django/db/models/expressions.py::Func",
+    "django/db/models/expressions.py::OrderBy",
+    "django/db/models/expressions.py::Value",
+    "django/db/models/expressions.py::When"
+   ]
+  },
+  "django__django-15252": {
+   "detail": {
+    "django/db/migrations/executor.py::MigrationExecutor.migrate": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/migrations/executor.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/executor.py::MigrationExecutor.migrate"
+   ]
+  },
+  "django__django-15268": {
+   "detail": {
+    "django/db/migrations/operations/models.py::ModelOperation.reduce": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/operations/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/operations/models.py::ModelOperation.reduce"
+   ]
+  },
+  "django__django-15277": {
+   "detail": {
+    "django/db/models/fields/__init__.py::CharField.__init__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::CharField.__init__"
+   ]
+  },
+  "django__django-15278": {
+   "detail": {
+    "django/db/backends/sqlite3/schema.py::DatabaseSchemaEditor.add_field": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/db/backends/sqlite3/schema.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/sqlite3/schema.py::DatabaseSchemaEditor.add_field"
+   ]
+  },
+  "django__django-15280": {
+   "detail": {
+    "django/db/models/fields/related_descriptors.py::create_reverse_many_to_one_manager": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/fields/related_descriptors.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/related_descriptors.py::create_reverse_many_to_one_manager"
+   ]
+  },
+  "django__django-15315": {
+   "detail": {
+    "django/db/models/fields/__init__.py::Field.__hash__": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/__init__.py::Field.__hash__"
+   ]
+  },
+  "django__django-15368": {
+   "detail": {
+    "django/db/models/query.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/query.py::QuerySet.bulk_update": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::<module>",
+    "django/db/models/query.py::QuerySet.bulk_update"
+   ]
+  },
+  "django__django-15375": {
+   "detail": {
+    "django/db/models/aggregates.py::Aggregate.resolve_expression": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/aggregates.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/aggregates.py::Aggregate.resolve_expression"
+   ]
+  },
+  "django__django-15380": {
+   "detail": {
+    "django/db/migrations/autodetector.py::MigrationAutodetector.generate_renamed_fields": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/autodetector.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/autodetector.py::MigrationAutodetector.generate_renamed_fields"
+   ]
+  },
+  "django__django-15382": {
+   "detail": {
+    "django/db/models/expressions.py::Exists.as_sql": {
+     "inserted": 0,
+     "removed": 7
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/expressions.py::Exists.as_sql"
+   ]
+  },
+  "django__django-15467": {
+   "detail": {
+    "django/contrib/admin/options.py::BaseModelAdmin.formfield_for_foreignkey": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::BaseModelAdmin.formfield_for_foreignkey"
+   ]
+  },
+  "django__django-15499": {
+   "detail": {
+    "django/db/migrations/operations/models.py::CreateModel.reduce": {
+     "inserted": 13,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/migrations/operations/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/operations/models.py::CreateModel.reduce"
+   ]
+  },
+  "django__django-15503": {
+   "detail": {
+    "django/db/models/fields/json.py::HasKeyLookup.as_sql": {
+     "inserted": 0,
+     "removed": 7
+    },
+    "django/db/models/fields/json.py::KeyTransformExact.as_oracle": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/json.py::KeyTransformIsNull.as_oracle": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/json.py::KeyTransformIsNull.as_sqlite": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/fields/json.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/json.py::HasKeyLookup.as_sql",
+    "django/db/models/fields/json.py::KeyTransformExact.as_oracle",
+    "django/db/models/fields/json.py::KeyTransformIsNull.as_oracle",
+    "django/db/models/fields/json.py::KeyTransformIsNull.as_sqlite"
+   ]
+  },
+  "django__django-15525": {
+   "detail": {
+    "django/core/serializers/base.py::build_instance": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/serializers/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/serializers/base.py::build_instance"
+   ]
+  },
+  "django__django-15554": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.build_filter": {
+     "inserted": 5,
+     "removed": 0
+    },
+    "django/db/models/sql/query.py::Query.build_filtered_relation_q": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/sql/query.py::Query.join": {
+     "inserted": 3,
+     "removed": 6
+    },
+    "django/db/models/sql/query.py::Query.setup_joins": {
+     "inserted": 3,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.build_filter",
+    "django/db/models/sql/query.py::Query.build_filtered_relation_q",
+    "django/db/models/sql/query.py::Query.join",
+    "django/db/models/sql/query.py::Query.setup_joins"
+   ]
+  },
+  "django__django-15561": {
+   "detail": {
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._field_should_be_altered": {
+     "inserted": 1,
+     "removed": 15
+    },
+    "django/db/models/fields/__init__.py::Field": {
+     "inserted": 18,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/backends/base/schema.py",
+    "django/db/models/fields/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._field_should_be_altered",
+    "django/db/models/fields/__init__.py::Field"
+   ]
+  },
+  "django__django-15563": {
+   "detail": {
+    "django/db/models/sql/compiler.py::SQLUpdateCompiler.pre_sql_setup": {
+     "inserted": 3,
+     "removed": 2
+    },
+    "django/db/models/sql/subqueries.py::UpdateQuery.get_related_updates": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/compiler.py",
+    "django/db/models/sql/subqueries.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/compiler.py::SQLUpdateCompiler.pre_sql_setup",
+    "django/db/models/sql/subqueries.py::UpdateQuery.get_related_updates"
+   ]
+  },
+  "django__django-15569": {
+   "detail": {
+    "django/db/models/query_utils.py::RegisterLookupMixin._unregister_lookup": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/query_utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query_utils.py::RegisterLookupMixin._unregister_lookup"
+   ]
+  },
+  "django__django-15572": {
+   "detail": {
+    "django/template/autoreload.py::get_template_directories": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/template/autoreload.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/template/autoreload.py::get_template_directories"
+   ]
+  },
+  "django__django-15629": {
+   "detail": {
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._alter_field": {
+     "inserted": 2,
+     "removed": 6
+    },
+    "django/db/backends/oracle/features.py::DatabaseFeatures": {
+     "inserted": 4,
+     "removed": 0
+    },
+    "django/db/backends/sqlite3/schema.py::DatabaseSchemaEditor._alter_field": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/related.py::ForeignKey.db_parameters": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/backends/base/schema.py",
+    "django/db/backends/oracle/features.py",
+    "django/db/backends/sqlite3/schema.py",
+    "django/db/models/fields/related.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._alter_field",
+    "django/db/backends/oracle/features.py::DatabaseFeatures",
+    "django/db/backends/sqlite3/schema.py::DatabaseSchemaEditor._alter_field",
+    "django/db/models/fields/related.py::ForeignKey.db_parameters"
+   ]
+  },
+  "django__django-15695": {
+   "detail": {
+    "django/db/migrations/operations/models.py::RenameIndex.database_forwards": {
+     "inserted": 3,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/migrations/operations/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/operations/models.py::RenameIndex.database_forwards"
+   ]
+  },
+  "django__django-15731": {
+   "detail": {
+    "django/db/models/manager.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/manager.py::BaseManager._get_queryset_methods": {
+     "inserted": 1,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/manager.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/manager.py::<module>",
+    "django/db/models/manager.py::BaseManager._get_queryset_methods"
+   ]
+  },
+  "django__django-15732": {
+   "detail": {
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._create_unique_sql": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._delete_composed_index": {
+     "inserted": 11,
+     "removed": 0
+    },
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor.alter_unique_together": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/backends/base/schema.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._create_unique_sql",
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor._delete_composed_index",
+    "django/db/backends/base/schema.py::BaseDatabaseSchemaEditor.alter_unique_together"
+   ]
+  },
+  "django__django-15741": {
+   "detail": {
+    "django/utils/formats.py::get_format": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/utils/formats.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/formats.py::get_format"
+   ]
+  },
+  "django__django-15814": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.deferred_to_data": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.deferred_to_data"
+   ]
+  },
+  "django__django-15851": {
+   "detail": {
+    "django/db/backends/postgresql/client.py::DatabaseClient.settings_to_cmd_args_env": {
+     "inserted": 1,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/backends/postgresql/client.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/backends/postgresql/client.py::DatabaseClient.settings_to_cmd_args_env"
+   ]
+  },
+  "django__django-15863": {
+   "detail": {
+    "django/template/defaultfilters.py::floatformat": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/template/defaultfilters.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/template/defaultfilters.py::floatformat"
+   ]
+  },
+  "django__django-15916": {
+   "detail": {
+    "django/forms/models.py::ModelFormMetaclass.__new__": {
+     "inserted": 0,
+     "removed": 9
+    },
+    "django/forms/models.py::ModelFormOptions.__init__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/forms/models.py::modelform_factory": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::ModelFormMetaclass.__new__",
+    "django/forms/models.py::ModelFormOptions.__init__",
+    "django/forms/models.py::modelform_factory"
+   ]
+  },
+  "django__django-15930": {
+   "detail": {
+    "django/db/models/expressions.py::When.as_sql": {
+     "inserted": 5,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/expressions.py::When.as_sql"
+   ]
+  },
+  "django__django-15957": {
+   "detail": {
+    "django/db/models/fields/related_descriptors.py::<module>": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/fields/related_descriptors.py::create_forward_many_to_many_manager": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/fields/related_descriptors.py::create_reverse_many_to_one_manager": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/fields/related_descriptors.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/related_descriptors.py::<module>",
+    "django/db/models/fields/related_descriptors.py::create_forward_many_to_many_manager",
+    "django/db/models/fields/related_descriptors.py::create_reverse_many_to_one_manager"
+   ]
+  },
+  "django__django-15973": {
+   "detail": {
+    "django/db/migrations/autodetector.py::MigrationAutodetector._get_dependencies_for_foreign_key": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/autodetector.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/autodetector.py::MigrationAutodetector._get_dependencies_for_foreign_key"
+   ]
+  },
+  "django__django-15987": {
+   "detail": {
+    "django/core/management/commands/loaddata.py::Command.fixture_dirs": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/management/commands/loaddata.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/commands/loaddata.py::Command.fixture_dirs"
+   ]
+  },
+  "django__django-16032": {
+   "detail": {
+    "django/db/models/fields/related_lookups.py::RelatedIn.get_prep_lookup": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/sql/query.py::Query": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "django/db/models/sql/query.py::Query.has_select_fields": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/db/models/sql/query.py::Query.set_values": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/fields/related_lookups.py",
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/related_lookups.py::RelatedIn.get_prep_lookup",
+    "django/db/models/sql/query.py::Query",
+    "django/db/models/sql/query.py::Query.has_select_fields",
+    "django/db/models/sql/query.py::Query.set_values"
+   ]
+  },
+  "django__django-16082": {
+   "detail": {
+    "django/db/models/expressions.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/expressions.py::<module>"
+   ]
+  },
+  "django__django-16100": {
+   "detail": {
+    "django/contrib/admin/options.py::ModelAdmin.changelist_view": {
+     "inserted": 0,
+     "removed": 9
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::ModelAdmin.changelist_view"
+   ]
+  },
+  "django__django-16116": {
+   "detail": {
+    "django/core/management/commands/makemigrations.py::Command.add_arguments": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/management/commands/makemigrations.py::Command.handle": {
+     "inserted": 2,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/core/management/commands/makemigrations.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/commands/makemigrations.py::Command.add_arguments",
+    "django/core/management/commands/makemigrations.py::Command.handle"
+   ]
+  },
+  "django__django-16136": {
+   "detail": {
+    "django/views/generic/base.py::View.http_method_not_allowed": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/views/generic/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/views/generic/base.py::View.http_method_not_allowed"
+   ]
+  },
+  "django__django-16139": {
+   "detail": {
+    "django/contrib/auth/forms.py::UserChangeForm.__init__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/auth/forms.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/forms.py::UserChangeForm.__init__"
+   ]
+  },
+  "django__django-16145": {
+   "detail": {
+    "django/core/management/commands/runserver.py::Command.inner_run": {
+     "inserted": 7,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/management/commands/runserver.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/commands/runserver.py::Command.inner_run"
+   ]
+  },
+  "django__django-16255": {
+   "detail": {
+    "django/contrib/sitemaps/__init__.py::Sitemap.get_latest_lastmod": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/sitemaps/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/sitemaps/__init__.py::Sitemap.get_latest_lastmod"
+   ]
+  },
+  "django__django-16256": {
+   "detail": {
+    "django/contrib/contenttypes/fields.py::<module>": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/contrib/contenttypes/fields.py::create_generic_related_manager": {
+     "inserted": 15,
+     "removed": 0
+    },
+    "django/db/models/fields/related_descriptors.py::<module>": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/db/models/fields/related_descriptors.py::create_forward_many_to_many_manager": {
+     "inserted": 21,
+     "removed": 0
+    },
+    "django/db/models/fields/related_descriptors.py::create_reverse_many_to_one_manager": {
+     "inserted": 15,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/contenttypes/fields.py",
+    "django/db/models/fields/related_descriptors.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/contenttypes/fields.py::<module>",
+    "django/contrib/contenttypes/fields.py::create_generic_related_manager",
+    "django/db/models/fields/related_descriptors.py::<module>",
+    "django/db/models/fields/related_descriptors.py::create_forward_many_to_many_manager",
+    "django/db/models/fields/related_descriptors.py::create_reverse_many_to_one_manager"
+   ]
+  },
+  "django__django-16263": {
+   "detail": {
+    "django/db/models/query_utils.py::Q.resolve_expression": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/query_utils.py::refs_expression": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "django/db/models/sql/query.py::Query._add_q": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/db/models/sql/query.py::Query.build_filter": {
+     "inserted": 2,
+     "removed": 2
+    },
+    "django/db/models/sql/query.py::Query.get_aggregation": {
+     "inserted": 20,
+     "removed": 15
+    },
+    "django/db/models/sql/query.py::Query.solve_lookup_type": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/models/expressions.py",
+    "django/db/models/query_utils.py",
+    "django/db/models/sql/query.py",
+    "django/db/models/sql/where.py"
+   ],
+   "notes": {
+    "django/db/models/expressions.py": "no_unit_hit",
+    "django/db/models/sql/where.py": "no_unit_hit"
+   },
+   "units": [
+    "django/db/models/query_utils.py::Q.resolve_expression",
+    "django/db/models/query_utils.py::refs_expression",
+    "django/db/models/sql/query.py::Query._add_q",
+    "django/db/models/sql/query.py::Query.build_filter",
+    "django/db/models/sql/query.py::Query.get_aggregation",
+    "django/db/models/sql/query.py::Query.solve_lookup_type"
+   ]
+  },
+  "django__django-16315": {
+   "detail": {
+    "django/db/models/query.py::QuerySet._check_bulk_create_options": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "django/db/models/query.py::QuerySet.bulk_create": {
+     "inserted": 2,
+     "removed": 1
+    },
+    "django/db/models/sql/compiler.py::SQLInsertCompiler.as_sql": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/query.py",
+    "django/db/models/sql/compiler.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/query.py::QuerySet._check_bulk_create_options",
+    "django/db/models/query.py::QuerySet.bulk_create",
+    "django/db/models/sql/compiler.py::SQLInsertCompiler.as_sql"
+   ]
+  },
+  "django__django-16333": {
+   "detail": {
+    "django/contrib/auth/forms.py::UserCreationForm.save": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/auth/forms.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/forms.py::UserCreationForm.save"
+   ]
+  },
+  "django__django-16429": {
+   "detail": {
+    "django/utils/timesince.py::timesince": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/utils/timesince.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/utils/timesince.py::timesince"
+   ]
+  },
+  "django__django-16454": {
+   "detail": {
+    "django/core/management/base.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/core/management/base.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/management/base.py::<module>"
+   ]
+  },
+  "django__django-16485": {
+   "detail": {
+    "django/template/defaultfilters.py::floatformat": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/template/defaultfilters.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/template/defaultfilters.py::floatformat"
+   ]
+  },
+  "django__django-16493": {
+   "detail": {
+    "django/db/models/fields/files.py::FileField.deconstruct": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/db/models/fields/files.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/files.py::FileField.deconstruct"
+   ]
+  },
+  "django__django-16502": {
+   "detail": {
+    "django/core/servers/basehttp.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/core/servers/basehttp.py::ServerHandler.cleanup_headers": {
+     "inserted": 5,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/servers/basehttp.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/servers/basehttp.py::<module>",
+    "django/core/servers/basehttp.py::ServerHandler.cleanup_headers"
+   ]
+  },
+  "django__django-16527": {
+   "detail": {
+    "django/contrib/admin/templatetags/admin_modify.py::submit_row": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/templatetags/admin_modify.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/templatetags/admin_modify.py::submit_row"
+   ]
+  },
+  "django__django-16560": {
+   "detail": {
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.__eq__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.__init__": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.__repr__": {
+     "inserted": 5,
+     "removed": 1
+    },
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.validate": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/constraints.py::BaseConstraint": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "django/db/models/constraints.py::BaseConstraint.__init__": {
+     "inserted": 2,
+     "removed": 1
+    },
+    "django/db/models/constraints.py::BaseConstraint.deconstruct": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "django/db/models/constraints.py::CheckConstraint.__eq__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/constraints.py::CheckConstraint.__init__": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "django/db/models/constraints.py::CheckConstraint.__repr__": {
+     "inserted": 5,
+     "removed": 1
+    },
+    "django/db/models/constraints.py::CheckConstraint.validate": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/constraints.py::UniqueConstraint.__eq__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/constraints.py::UniqueConstraint.__init__": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "django/db/models/constraints.py::UniqueConstraint.__repr__": {
+     "inserted": 5,
+     "removed": 1
+    },
+    "django/db/models/constraints.py::UniqueConstraint.validate": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/contrib/postgres/constraints.py",
+    "django/db/models/constraints.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.__eq__",
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.__init__",
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.__repr__",
+    "django/contrib/postgres/constraints.py::ExclusionConstraint.validate",
+    "django/db/models/constraints.py::BaseConstraint",
+    "django/db/models/constraints.py::BaseConstraint.__init__",
+    "django/db/models/constraints.py::BaseConstraint.deconstruct",
+    "django/db/models/constraints.py::CheckConstraint.__eq__",
+    "django/db/models/constraints.py::CheckConstraint.__init__",
+    "django/db/models/constraints.py::CheckConstraint.__repr__",
+    "django/db/models/constraints.py::CheckConstraint.validate",
+    "django/db/models/constraints.py::UniqueConstraint.__eq__",
+    "django/db/models/constraints.py::UniqueConstraint.__init__",
+    "django/db/models/constraints.py::UniqueConstraint.__repr__",
+    "django/db/models/constraints.py::UniqueConstraint.validate"
+   ]
+  },
+  "django__django-16569": {
+   "detail": {
+    "django/forms/formsets.py::BaseFormSet.add_fields": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/formsets.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/formsets.py::BaseFormSet.add_fields"
+   ]
+  },
+  "django__django-16595": {
+   "detail": {
+    "django/db/migrations/operations/fields.py::AlterField.reduce": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "django/db/migrations/operations/fields.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/operations/fields.py::AlterField.reduce"
+   ]
+  },
+  "django__django-16612": {
+   "detail": {
+    "django/contrib/admin/sites.py::AdminSite.catch_all_view": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/contrib/admin/sites.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/sites.py::AdminSite.catch_all_view"
+   ]
+  },
+  "django__django-16631": {
+   "detail": {
+    "django/contrib/auth/__init__.py::get_user": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "django/contrib/auth/base_user.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/contrib/auth/base_user.py::AbstractBaseUser.get_session_auth_hash": {
+     "inserted": 8,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/contrib/auth/__init__.py",
+    "django/contrib/auth/base_user.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/auth/__init__.py::get_user",
+    "django/contrib/auth/base_user.py::<module>",
+    "django/contrib/auth/base_user.py::AbstractBaseUser.get_session_auth_hash"
+   ]
+  },
+  "django__django-16642": {
+   "detail": {
+    "django/http/response.py::FileResponse.set_headers": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/http/response.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/http/response.py::FileResponse.set_headers"
+   ]
+  },
+  "django__django-16661": {
+   "detail": {
+    "django/contrib/admin/options.py::BaseModelAdmin.lookup_allowed": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/contrib/admin/options.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/options.py::BaseModelAdmin.lookup_allowed"
+   ]
+  },
+  "django__django-16662": {
+   "detail": {
+    "django/db/migrations/writer.py::MigrationWriter.as_string": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/writer.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/writer.py::MigrationWriter.as_string"
+   ]
+  },
+  "django__django-16667": {
+   "detail": {
+    "django/forms/widgets.py::SelectDateWidget.value_from_datadict": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/forms/widgets.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/widgets.py::SelectDateWidget.value_from_datadict"
+   ]
+  },
+  "django__django-16801": {
+   "detail": {
+    "django/db/models/fields/files.py::ImageField.contribute_to_class": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/db/models/fields/files.py::ImageField.update_dimension_fields": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "django/db/models/fields/files.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/fields/files.py::ImageField.contribute_to_class",
+    "django/db/models/fields/files.py::ImageField.update_dimension_fields"
+   ]
+  },
+  "django__django-16819": {
+   "detail": {},
+   "files": [
+    "django/db/migrations/operations/models.py"
+   ],
+   "notes": {
+    "django/db/migrations/operations/models.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "django__django-16877": {
+   "detail": {
+    "django/template/defaultfilters.py::force_escape": {
+     "inserted": 10,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/template/defaultfilters.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/template/defaultfilters.py::force_escape"
+   ]
+  },
+  "django__django-16899": {
+   "detail": {
+    "django/contrib/admin/checks.py::BaseModelAdminChecks._check_readonly_fields_item": {
+     "inserted": 1,
+     "removed": 2
+    }
+   },
+   "files": [
+    "django/contrib/admin/checks.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/contrib/admin/checks.py::BaseModelAdminChecks._check_readonly_fields_item"
+   ]
+  },
+  "django__django-16901": {
+   "detail": {
+    "django/db/models/sql/where.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "django/db/models/sql/where.py::WhereNode.as_sql": {
+     "inserted": 2,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/models/sql/where.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/where.py::<module>",
+    "django/db/models/sql/where.py::WhereNode.as_sql"
+   ]
+  },
+  "django__django-16938": {
+   "detail": {
+    "django/core/serializers/python.py::Serializer.handle_m2m_field": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "django/core/serializers/xml_serializer.py::Serializer.handle_m2m_field": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/core/serializers/python.py",
+    "django/core/serializers/xml_serializer.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/core/serializers/python.py::Serializer.handle_m2m_field",
+    "django/core/serializers/xml_serializer.py::Serializer.handle_m2m_field"
+   ]
+  },
+  "django__django-16950": {
+   "detail": {
+    "django/forms/models.py::BaseInlineFormSet.add_fields": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/forms/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/forms/models.py::BaseInlineFormSet.add_fields"
+   ]
+  },
+  "django__django-17029": {
+   "detail": {
+    "django/apps/registry.py::Apps.clear_cache": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/apps/registry.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/apps/registry.py::Apps.clear_cache"
+   ]
+  },
+  "django__django-17084": {
+   "detail": {
+    "django/db/models/sql/query.py::Query.get_aggregation": {
+     "inserted": 6,
+     "removed": 0
+    }
+   },
+   "files": [
+    "django/db/models/sql/query.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/models/sql/query.py::Query.get_aggregation"
+   ]
+  },
+  "django__django-17087": {
+   "detail": {
+    "django/db/migrations/serializer.py::FunctionTypeSerializer.serialize": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "django/db/migrations/serializer.py"
+   ],
+   "notes": {},
+   "units": [
+    "django/db/migrations/serializer.py::FunctionTypeSerializer.serialize"
+   ]
+  },
+  "django__django-9296": {
+   "detail": {},
+   "files": [
+    "django/core/paginator.py"
+   ],
+   "notes": {
+    "django/core/paginator.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "mwaskom__seaborn-3069": {
+   "detail": {
+    "seaborn/_core/plot.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "seaborn/_core/plot.py::Plotter._finalize_figure": {
+     "inserted": 12,
+     "removed": 0
+    },
+    "seaborn/_core/plot.py::Plotter._setup_scales": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "seaborn/_core/plot.py"
+   ],
+   "notes": {},
+   "units": [
+    "seaborn/_core/plot.py::<module>",
+    "seaborn/_core/plot.py::Plotter._finalize_figure",
+    "seaborn/_core/plot.py::Plotter._setup_scales"
+   ]
+  },
+  "mwaskom__seaborn-3187": {
+   "detail": {
+    "seaborn/_core/scales.py::ContinuousBase._setup": {
+     "inserted": 8,
+     "removed": 0
+    },
+    "seaborn/utils.py::locator_to_legend_entries": {
+     "inserted": 4,
+     "removed": 0
+    }
+   },
+   "files": [
+    "seaborn/_core/scales.py",
+    "seaborn/utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "seaborn/_core/scales.py::ContinuousBase._setup",
+    "seaborn/utils.py::locator_to_legend_entries"
+   ]
+  },
+  "pallets__flask-5014": {
+   "detail": {
+    "src/flask/blueprints.py::Blueprint.__init__": {
+     "inserted": 3,
+     "removed": 0
+    }
+   },
+   "files": [
+    "src/flask/blueprints.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/flask/blueprints.py::Blueprint.__init__"
+   ]
+  },
+  "psf__requests-1142": {
+   "detail": {
+    "requests/models.py::PreparedRequest": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "requests/models.py::PreparedRequest.prepare_content_length": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "requests/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "requests/models.py::PreparedRequest",
+    "requests/models.py::PreparedRequest.prepare_content_length"
+   ]
+  },
+  "psf__requests-2931": {
+   "detail": {
+    "requests/models.py::PreparedRequest.prepare_url": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "requests/models.py::RequestEncodingMixin._encode_params": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "requests/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "requests/models.py::PreparedRequest.prepare_url",
+    "requests/models.py::RequestEncodingMixin._encode_params"
+   ]
+  },
+  "psf__requests-5414": {
+   "detail": {
+    "requests/models.py::PreparedRequest.prepare_url": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "requests/models.py"
+   ],
+   "notes": {},
+   "units": [
+    "requests/models.py::PreparedRequest.prepare_url"
+   ]
+  },
+  "psf__requests-6028": {
+   "detail": {
+    "requests/utils.py::prepend_scheme_if_needed": {
+     "inserted": 4,
+     "removed": 0
+    }
+   },
+   "files": [
+    "requests/utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "requests/utils.py::prepend_scheme_if_needed"
+   ]
+  },
+  "pydata__xarray-2905": {
+   "detail": {
+    "xarray/core/variable.py::as_compatible_data": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/variable.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/variable.py::as_compatible_data"
+   ]
+  },
+  "pydata__xarray-3095": {
+   "detail": {
+    "xarray/core/indexing.py::<module>": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.__array__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.__getitem__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.__init__": {
+     "inserted": 2,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.__repr__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.dtype": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.shape": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/indexing.py::PandasIndexAdapter.transpose": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "xarray/core/variable.py::IndexVariable.copy": {
+     "inserted": 0,
+     "removed": 8
+    }
+   },
+   "files": [
+    "xarray/core/indexing.py",
+    "xarray/core/variable.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/indexing.py::<module>",
+    "xarray/core/indexing.py::PandasIndexAdapter",
+    "xarray/core/indexing.py::PandasIndexAdapter.__array__",
+    "xarray/core/indexing.py::PandasIndexAdapter.__getitem__",
+    "xarray/core/indexing.py::PandasIndexAdapter.__init__",
+    "xarray/core/indexing.py::PandasIndexAdapter.__repr__",
+    "xarray/core/indexing.py::PandasIndexAdapter.dtype",
+    "xarray/core/indexing.py::PandasIndexAdapter.shape",
+    "xarray/core/indexing.py::PandasIndexAdapter.transpose",
+    "xarray/core/variable.py::IndexVariable.copy"
+   ]
+  },
+  "pydata__xarray-3151": {
+   "detail": {
+    "xarray/core/combine.py::combine_by_coords": {
+     "inserted": 0,
+     "removed": 8
+    }
+   },
+   "files": [
+    "xarray/core/combine.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/combine.py::combine_by_coords"
+   ]
+  },
+  "pydata__xarray-3677": {
+   "detail": {
+    "xarray/core/dataset.py::Dataset.merge": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "xarray/core/dataset.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/dataset.py::Dataset.merge"
+   ]
+  },
+  "pydata__xarray-3993": {
+   "detail": {
+    "xarray/core/dataarray.py::DataArray.integrate": {
+     "inserted": 3,
+     "removed": 7
+    },
+    "xarray/core/dataset.py::Dataset.integrate": {
+     "inserted": 0,
+     "removed": 6
+    }
+   },
+   "files": [
+    "xarray/core/dataarray.py",
+    "xarray/core/dataset.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/dataarray.py::DataArray.integrate",
+    "xarray/core/dataset.py::Dataset.integrate"
+   ]
+  },
+  "pydata__xarray-4075": {
+   "detail": {
+    "xarray/core/weighted.py::Weighted._sum_of_weights": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/weighted.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/weighted.py::Weighted._sum_of_weights"
+   ]
+  },
+  "pydata__xarray-4094": {
+   "detail": {
+    "xarray/core/dataarray.py::DataArray.to_unstacked_dataset": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/dataarray.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/dataarray.py::DataArray.to_unstacked_dataset"
+   ]
+  },
+  "pydata__xarray-4356": {
+   "detail": {
+    "xarray/core/nanops.py::_maybe_null_out": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "xarray/core/nanops.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/nanops.py::_maybe_null_out"
+   ]
+  },
+  "pydata__xarray-4629": {
+   "detail": {
+    "xarray/core/merge.py::merge_attrs": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/merge.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/merge.py::merge_attrs"
+   ]
+  },
+  "pydata__xarray-4687": {
+   "detail": {
+    "xarray/core/computation.py::where": {
+     "inserted": 11,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/computation.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/computation.py::where"
+   ]
+  },
+  "pydata__xarray-4966": {
+   "detail": {
+    "xarray/coding/variables.py::UnsignedIntegerCoder.decode": {
+     "inserted": 8,
+     "removed": 0
+    }
+   },
+   "files": [
+    "xarray/coding/variables.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/coding/variables.py::UnsignedIntegerCoder.decode"
+   ]
+  },
+  "pydata__xarray-6461": {
+   "detail": {
+    "xarray/core/computation.py::where": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "xarray/core/computation.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/computation.py::where"
+   ]
+  },
+  "pydata__xarray-6599": {
+   "detail": {
+    "xarray/core/computation.py::_ensure_numeric": {
+     "inserted": 3,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/computation.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/computation.py::_ensure_numeric"
+   ]
+  },
+  "pydata__xarray-6721": {
+   "detail": {
+    "xarray/core/common.py::get_chunksizes": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/common.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/common.py::get_chunksizes"
+   ]
+  },
+  "pydata__xarray-6744": {
+   "detail": {
+    "xarray/core/rolling.py::DataArrayRolling.__iter__": {
+     "inserted": 0,
+     "removed": 6
+    }
+   },
+   "files": [
+    "xarray/core/rolling.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/rolling.py::DataArrayRolling.__iter__"
+   ]
+  },
+  "pydata__xarray-7229": {
+   "detail": {
+    "xarray/core/computation.py::<module>": {
+     "inserted": 21,
+     "removed": 0
+    },
+    "xarray/core/computation.py::where": {
+     "inserted": 2,
+     "removed": 5
+    }
+   },
+   "files": [
+    "xarray/core/computation.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/computation.py::<module>",
+    "xarray/core/computation.py::where"
+   ]
+  },
+  "pydata__xarray-7233": {
+   "detail": {
+    "xarray/core/rolling.py::Coarsen.construct": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/rolling.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/rolling.py::Coarsen.construct"
+   ]
+  },
+  "pydata__xarray-7393": {
+   "detail": {
+    "xarray/core/indexing.py::PandasMultiIndexingAdapter.__array__": {
+     "inserted": 2,
+     "removed": 1
+    }
+   },
+   "files": [
+    "xarray/core/indexing.py"
+   ],
+   "notes": {},
+   "units": [
+    "xarray/core/indexing.py::PandasMultiIndexingAdapter.__array__"
+   ]
+  },
+  "pylint-dev__pylint-4551": {
+   "detail": {
+    "pylint/pyreverse/diagrams.py::ClassDiagram.class_names": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "pylint/pyreverse/inspector.py::Linker.handle_assignattr_type": {
+     "inserted": 0,
+     "removed": 6
+    },
+    "pylint/pyreverse/inspector.py::Linker.visit_assignname": {
+     "inserted": 0,
+     "removed": 17
+    },
+    "pylint/pyreverse/utils.py::<module>": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "pylint/pyreverse/writer.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "pylint/pyreverse/writer.py::DotWriter.get_values": {
+     "inserted": 4,
+     "removed": 2
+    }
+   },
+   "files": [
+    "pylint/pyreverse/diagrams.py",
+    "pylint/pyreverse/inspector.py",
+    "pylint/pyreverse/utils.py",
+    "pylint/pyreverse/writer.py"
+   ],
+   "notes": {},
+   "units": [
+    "pylint/pyreverse/diagrams.py::ClassDiagram.class_names",
+    "pylint/pyreverse/inspector.py::Linker.handle_assignattr_type",
+    "pylint/pyreverse/inspector.py::Linker.visit_assignname",
+    "pylint/pyreverse/utils.py::<module>",
+    "pylint/pyreverse/writer.py::<module>",
+    "pylint/pyreverse/writer.py::DotWriter.get_values"
+   ]
+  },
+  "pylint-dev__pylint-4661": {
+   "detail": {
+    "pylint/config/__init__.py::<module>": {
+     "inserted": 2,
+     "removed": 1
+    }
+   },
+   "files": [
+    "pylint/config/__init__.py"
+   ],
+   "notes": {
+    "setup.cfg": "not_python"
+   },
+   "units": [
+    "pylint/config/__init__.py::<module>"
+   ]
+  },
+  "pylint-dev__pylint-4970": {
+   "detail": {
+    "pylint/checkers/similar.py::Similar.run": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "pylint/checkers/similar.py"
+   ],
+   "notes": {},
+   "units": [
+    "pylint/checkers/similar.py::Similar.run"
+   ]
+  },
+  "pylint-dev__pylint-8898": {
+   "detail": {
+    "pylint/config/argument.py::_regexp_csv_transfomer": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "pylint/utils/__init__.py::<module>": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "pylint/utils/utils.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "pylint/config/argument.py",
+    "pylint/utils/__init__.py",
+    "pylint/utils/utils.py"
+   ],
+   "notes": {},
+   "units": [
+    "pylint/config/argument.py::_regexp_csv_transfomer",
+    "pylint/utils/__init__.py::<module>",
+    "pylint/utils/utils.py::<module>"
+   ]
+  },
+  "pytest-dev__pytest-10051": {
+   "detail": {
+    "src/_pytest/logging.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/logging.py::LogCaptureFixture.clear": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/logging.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/logging.py::<module>",
+    "src/_pytest/logging.py::LogCaptureFixture.clear"
+   ]
+  },
+  "pytest-dev__pytest-10081": {
+   "detail": {
+    "src/_pytest/unittest.py::TestCaseFunction.runtest": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/unittest.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/unittest.py::TestCaseFunction.runtest"
+   ]
+  },
+  "pytest-dev__pytest-10356": {
+   "detail": {
+    "src/_pytest/mark/structures.py::get_unpacked_marks": {
+     "inserted": 0,
+     "removed": 6
+    },
+    "src/_pytest/mark/structures.py::store_mark": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/mark/structures.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/mark/structures.py::get_unpacked_marks",
+    "src/_pytest/mark/structures.py::store_mark"
+   ]
+  },
+  "pytest-dev__pytest-5262": {
+   "detail": {},
+   "files": [
+    "src/_pytest/capture.py"
+   ],
+   "notes": {
+    "src/_pytest/capture.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "pytest-dev__pytest-5631": {
+   "detail": {
+    "src/_pytest/compat.py::num_mock_patch_args": {
+     "inserted": 0,
+     "removed": 7
+    }
+   },
+   "files": [
+    "src/_pytest/compat.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/compat.py::num_mock_patch_args"
+   ]
+  },
+  "pytest-dev__pytest-5787": {
+   "detail": {
+    "src/_pytest/reports.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "src/_pytest/reports.py::BaseReport._from_json": {
+     "inserted": 0,
+     "removed": 49
+    },
+    "src/_pytest/reports.py::BaseReport._to_json": {
+     "inserted": 0,
+     "removed": 40
+    }
+   },
+   "files": [
+    "src/_pytest/reports.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/reports.py::<module>",
+    "src/_pytest/reports.py::BaseReport._from_json",
+    "src/_pytest/reports.py::BaseReport._to_json"
+   ]
+  },
+  "pytest-dev__pytest-5809": {
+   "detail": {
+    "src/_pytest/pastebin.py::create_new_paste": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "src/_pytest/pastebin.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/pastebin.py::create_new_paste"
+   ]
+  },
+  "pytest-dev__pytest-5840": {
+   "detail": {
+    "src/_pytest/config/__init__.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/config/__init__.py::PytestPluginManager._getconftestmodules": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "src/_pytest/config/__init__.py::PytestPluginManager._importconftest": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "src/_pytest/config/__init__.py::PytestPluginManager._set_initial_conftests": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/pathlib.py::<module>": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "src/_pytest/pathlib.py::unique_path": {
+     "inserted": 0,
+     "removed": 7
+    }
+   },
+   "files": [
+    "src/_pytest/config/__init__.py",
+    "src/_pytest/pathlib.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/config/__init__.py::<module>",
+    "src/_pytest/config/__init__.py::PytestPluginManager._getconftestmodules",
+    "src/_pytest/config/__init__.py::PytestPluginManager._importconftest",
+    "src/_pytest/config/__init__.py::PytestPluginManager._set_initial_conftests",
+    "src/_pytest/pathlib.py::<module>",
+    "src/_pytest/pathlib.py::unique_path"
+   ]
+  },
+  "pytest-dev__pytest-6197": {
+   "detail": {
+    "src/_pytest/python.py::Module": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/python.py::Module.__init__": {
+     "inserted": 0,
+     "removed": 7
+    },
+    "src/_pytest/python.py::Package.collect": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/python.py::PyobjMixin": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "src/_pytest/python.py::PyobjMixin._mount_obj_if_needed": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "src/_pytest/python.py::PyobjMixin.obj": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "src/_pytest/python.py::PyobjMixin.obj#2": {
+     "inserted": 0,
+     "removed": 3
+    }
+   },
+   "files": [
+    "src/_pytest/python.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/python.py::Module",
+    "src/_pytest/python.py::Module.__init__",
+    "src/_pytest/python.py::Package.collect",
+    "src/_pytest/python.py::PyobjMixin",
+    "src/_pytest/python.py::PyobjMixin._mount_obj_if_needed",
+    "src/_pytest/python.py::PyobjMixin.obj",
+    "src/_pytest/python.py::PyobjMixin.obj#2"
+   ]
+  },
+  "pytest-dev__pytest-6202": {
+   "detail": {
+    "src/_pytest/python.py::PyobjMixin.getmodpath": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "src/_pytest/python.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/python.py::PyobjMixin.getmodpath"
+   ]
+  },
+  "pytest-dev__pytest-7205": {
+   "detail": {
+    "src/_pytest/setuponly.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "src/_pytest/setuponly.py::_show_fixture_action": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/setuponly.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/setuponly.py::<module>",
+    "src/_pytest/setuponly.py::_show_fixture_action"
+   ]
+  },
+  "pytest-dev__pytest-7236": {
+   "detail": {
+    "src/_pytest/unittest.py::TestCaseFunction.runtest": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/unittest.py::UnitTestCase.collect": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/unittest.py::_make_xunit_fixture": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/unittest.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/unittest.py::TestCaseFunction.runtest",
+    "src/_pytest/unittest.py::UnitTestCase.collect",
+    "src/_pytest/unittest.py::_make_xunit_fixture"
+   ]
+  },
+  "pytest-dev__pytest-7324": {
+   "detail": {
+    "src/_pytest/mark/expression.py::<module>": {
+     "inserted": 6,
+     "removed": 0
+    },
+    "src/_pytest/mark/expression.py::MatcherAdapter.__getitem__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/mark/expression.py::not_expr": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/mark/expression.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/mark/expression.py::<module>",
+    "src/_pytest/mark/expression.py::MatcherAdapter.__getitem__",
+    "src/_pytest/mark/expression.py::not_expr"
+   ]
+  },
+  "pytest-dev__pytest-7432": {
+   "detail": {
+    "src/_pytest/skipping.py::pytest_runtest_makereport": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/skipping.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/skipping.py::pytest_runtest_makereport"
+   ]
+  },
+  "pytest-dev__pytest-7490": {
+   "detail": {
+    "src/_pytest/skipping.py::<module>": {
+     "inserted": 5,
+     "removed": 0
+    },
+    "src/_pytest/skipping.py::pytest_runtest_call": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "src/_pytest/skipping.py::pytest_runtest_setup": {
+     "inserted": 1,
+     "removed": 7
+    }
+   },
+   "files": [
+    "src/_pytest/skipping.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/skipping.py::<module>",
+    "src/_pytest/skipping.py::pytest_runtest_call",
+    "src/_pytest/skipping.py::pytest_runtest_setup"
+   ]
+  },
+  "pytest-dev__pytest-7521": {
+   "detail": {
+    "src/_pytest/capture.py::FDCaptureBinary.__init__": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "src/_pytest/capture.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/capture.py::FDCaptureBinary.__init__"
+   ]
+  },
+  "pytest-dev__pytest-7571": {
+   "detail": {
+    "src/_pytest/logging.py::LogCaptureFixture.__init__": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "src/_pytest/logging.py::LogCaptureFixture._finalize": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "src/_pytest/logging.py::LogCaptureFixture.set_level": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "src/_pytest/logging.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/logging.py::LogCaptureFixture.__init__",
+    "src/_pytest/logging.py::LogCaptureFixture._finalize",
+    "src/_pytest/logging.py::LogCaptureFixture.set_level"
+   ]
+  },
+  "pytest-dev__pytest-7982": {
+   "detail": {
+    "src/_pytest/pathlib.py::visit": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/pathlib.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/pathlib.py::visit"
+   ]
+  },
+  "pytest-dev__pytest-8399": {
+   "detail": {
+    "src/_pytest/python.py::Class._inject_setup_class_fixture": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/python.py::Class._inject_setup_method_fixture": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/python.py::Module._inject_setup_function_fixture": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/python.py::Module._inject_setup_module_fixture": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "src/_pytest/unittest.py::_make_xunit_fixture": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "src/_pytest/python.py",
+    "src/_pytest/unittest.py"
+   ],
+   "notes": {},
+   "units": [
+    "src/_pytest/python.py::Class._inject_setup_class_fixture",
+    "src/_pytest/python.py::Class._inject_setup_method_fixture",
+    "src/_pytest/python.py::Module._inject_setup_function_fixture",
+    "src/_pytest/python.py::Module._inject_setup_module_fixture",
+    "src/_pytest/unittest.py::_make_xunit_fixture"
+   ]
+  },
+  "sphinx-doc__sphinx-7440": {
+   "detail": {
+    "sphinx/domains/std.py::StandardDomain": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/domains/std.py::make_glossary_term": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sphinx/domains/std.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/domains/std.py::StandardDomain",
+    "sphinx/domains/std.py::make_glossary_term"
+   ]
+  },
+  "sphinx-doc__sphinx-7590": {
+   "detail": {
+    "sphinx/domains/c.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/domains/c.py::DefinitionParser._parse_literal": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "sphinx/domains/cpp.py::<module>": {
+     "inserted": 3,
+     "removed": 1
+    },
+    "sphinx/domains/cpp.py::ASTCharLiteral.get_id": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "sphinx/domains/cpp.py::ASTIdentifier.describe_signature": {
+     "inserted": 13,
+     "removed": 2
+    },
+    "sphinx/domains/cpp.py::ASTNumberLiteral.get_id": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "sphinx/domains/cpp.py::DefinitionParser._parse_literal": {
+     "inserted": 9,
+     "removed": 9
+    },
+    "sphinx/util/cfamily.py::<module>": {
+     "inserted": 12,
+     "removed": 0
+    },
+    "sphinx/util/cfamily.py::verify_description_mode": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sphinx/domains/c.py",
+    "sphinx/domains/cpp.py",
+    "sphinx/util/cfamily.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/domains/c.py::<module>",
+    "sphinx/domains/c.py::DefinitionParser._parse_literal",
+    "sphinx/domains/cpp.py::<module>",
+    "sphinx/domains/cpp.py::ASTCharLiteral.get_id",
+    "sphinx/domains/cpp.py::ASTIdentifier.describe_signature",
+    "sphinx/domains/cpp.py::ASTNumberLiteral.get_id",
+    "sphinx/domains/cpp.py::DefinitionParser._parse_literal",
+    "sphinx/util/cfamily.py::<module>",
+    "sphinx/util/cfamily.py::verify_description_mode"
+   ]
+  },
+  "sphinx-doc__sphinx-7748": {
+   "detail": {
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin._find_signature": {
+     "inserted": 9,
+     "removed": 23
+    },
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin.format_signature": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin.get_doc": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sphinx/ext/autodoc/__init__.py::FunctionDocumenter.format_signature": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sphinx/ext/autodoc/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin",
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin._find_signature",
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin.format_signature",
+    "sphinx/ext/autodoc/__init__.py::DocstringSignatureMixin.get_doc",
+    "sphinx/ext/autodoc/__init__.py::FunctionDocumenter.format_signature"
+   ]
+  },
+  "sphinx-doc__sphinx-7889": {
+   "detail": {
+    "sphinx/ext/autodoc/mock.py::_MockObject.__getitem__": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sphinx/ext/autodoc/mock.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/ext/autodoc/mock.py::_MockObject.__getitem__"
+   ]
+  },
+  "sphinx-doc__sphinx-7910": {
+   "detail": {
+    "sphinx/ext/napoleon/__init__.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "sphinx/ext/napoleon/__init__.py::_skip_member": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sphinx/ext/napoleon/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/ext/napoleon/__init__.py::<module>",
+    "sphinx/ext/napoleon/__init__.py::_skip_member"
+   ]
+  },
+  "sphinx-doc__sphinx-7985": {
+   "detail": {
+    "sphinx/builders/linkcheck.py::<module>": {
+     "inserted": 2,
+     "removed": 0
+    },
+    "sphinx/builders/linkcheck.py::CheckExternalLinksBuilder.check_thread": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sphinx/builders/linkcheck.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/builders/linkcheck.py::<module>",
+    "sphinx/builders/linkcheck.py::CheckExternalLinksBuilder.check_thread"
+   ]
+  },
+  "sphinx-doc__sphinx-8035": {
+   "detail": {
+    "sphinx/ext/autodoc/__init__.py::ClassDocumenter": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/ext/autodoc/__init__.py::ClassDocumenter.__init__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/ext/autodoc/__init__.py::Documenter.filter_members": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "sphinx/ext/autodoc/__init__.py::ModuleDocumenter": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/ext/autodoc/__init__.py::ModuleDocumenter.__init__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/ext/autodoc/__init__.py::merge_special_members_option": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sphinx/ext/autodoc/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/ext/autodoc/__init__.py::ClassDocumenter",
+    "sphinx/ext/autodoc/__init__.py::ClassDocumenter.__init__",
+    "sphinx/ext/autodoc/__init__.py::Documenter.filter_members",
+    "sphinx/ext/autodoc/__init__.py::ModuleDocumenter",
+    "sphinx/ext/autodoc/__init__.py::ModuleDocumenter.__init__",
+    "sphinx/ext/autodoc/__init__.py::merge_special_members_option"
+   ]
+  },
+  "sphinx-doc__sphinx-8056": {
+   "detail": {
+    "sphinx/ext/napoleon/docstring.py::GoogleDocstring._consume_fields": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sphinx/ext/napoleon/docstring.py::GoogleDocstring._parse_parameters_section": {
+     "inserted": 3,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sphinx/ext/napoleon/docstring.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/ext/napoleon/docstring.py::GoogleDocstring._consume_fields",
+    "sphinx/ext/napoleon/docstring.py::GoogleDocstring._parse_parameters_section"
+   ]
+  },
+  "sphinx-doc__sphinx-8120": {
+   "detail": {
+    "sphinx/application.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/application.py::Sphinx._init_i18n": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/locale/__init__.py::init": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sphinx/application.py",
+    "sphinx/locale/__init__.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/application.py::<module>",
+    "sphinx/application.py::Sphinx._init_i18n",
+    "sphinx/locale/__init__.py::init"
+   ]
+  },
+  "sphinx-doc__sphinx-8265": {
+   "detail": {
+    "sphinx/pycode/ast.py::_UnparseVisitor.visit_Subscript": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sphinx/pycode/ast.py::_UnparseVisitor.visit_Tuple": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sphinx/pycode/ast.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/pycode/ast.py::_UnparseVisitor.visit_Subscript",
+    "sphinx/pycode/ast.py::_UnparseVisitor.visit_Tuple"
+   ]
+  },
+  "sphinx-doc__sphinx-8269": {
+   "detail": {
+    "sphinx/builders/linkcheck.py::CheckExternalLinksBuilder.check_thread": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sphinx/builders/linkcheck.py"
+   ],
+   "notes": {},
+   "units": [
+    "sphinx/builders/linkcheck.py::CheckExternalLinksBuilder.check_thread"
+   ]
+  },
+  "sympy__sympy-11618": {
+   "detail": {
+    "sympy/geometry/point.py::Point.distance": {
+     "inserted": 14,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/geometry/point.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/geometry/point.py::Point.distance"
+   ]
+  },
+  "sympy__sympy-12096": {
+   "detail": {
+    "sympy/core/function.py::Function._eval_evalf": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/function.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/function.py::Function._eval_evalf"
+   ]
+  },
+  "sympy__sympy-12419": {
+   "detail": {
+    "sympy/matrices/expressions/matexpr.py::<module>": {
+     "inserted": 1,
+     "removed": 1
+    },
+    "sympy/matrices/expressions/matexpr.py::Identity": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "sympy/matrices/expressions/matexpr.py::Identity._entry": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/matrices/expressions/matexpr.py::MatrixElement._eval_derivative": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/matrices/expressions/matexpr.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/matrices/expressions/matexpr.py::<module>",
+    "sympy/matrices/expressions/matexpr.py::Identity",
+    "sympy/matrices/expressions/matexpr.py::Identity._entry",
+    "sympy/matrices/expressions/matexpr.py::MatrixElement._eval_derivative"
+   ]
+  },
+  "sympy__sympy-12481": {
+   "detail": {
+    "sympy/combinatorics/permutations.py::Permutation.__new__": {
+     "inserted": 0,
+     "removed": 6
+    }
+   },
+   "files": [
+    "sympy/combinatorics/permutations.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/combinatorics/permutations.py::Permutation.__new__"
+   ]
+  },
+  "sympy__sympy-12489": {
+   "detail": {
+    "sympy/combinatorics/permutations.py::<module>": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "sympy/combinatorics/permutations.py::Permutation": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__iter__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__mul__": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__new__": {
+     "inserted": 0,
+     "removed": 8
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__pow__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__rmul__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__rxor__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.__sub__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation._af_new": {
+     "inserted": 0,
+     "removed": 5
+    },
+    "sympy/combinatorics/permutations.py::Permutation.commutes_with": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.from_inversion_vector": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/combinatorics/permutations.py::Permutation.get_precedence_matrix": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.josephus": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.mul_inv": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.next_trotterjohnson": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.random": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/combinatorics/permutations.py::Permutation.rank": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.rank_nonlex": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.rmul_with_af": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/combinatorics/permutations.py::Permutation.signature": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.transpositions": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.unrank_lex": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/combinatorics/permutations.py::Permutation.unrank_nonlex": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/combinatorics/permutations.py::Permutation.unrank_trotterjohnson": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/combinatorics/permutations.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/combinatorics/permutations.py::<module>",
+    "sympy/combinatorics/permutations.py::Permutation",
+    "sympy/combinatorics/permutations.py::Permutation.__iter__",
+    "sympy/combinatorics/permutations.py::Permutation.__mul__",
+    "sympy/combinatorics/permutations.py::Permutation.__new__",
+    "sympy/combinatorics/permutations.py::Permutation.__pow__",
+    "sympy/combinatorics/permutations.py::Permutation.__rmul__",
+    "sympy/combinatorics/permutations.py::Permutation.__rxor__",
+    "sympy/combinatorics/permutations.py::Permutation.__sub__",
+    "sympy/combinatorics/permutations.py::Permutation._af_new",
+    "sympy/combinatorics/permutations.py::Permutation.commutes_with",
+    "sympy/combinatorics/permutations.py::Permutation.from_inversion_vector",
+    "sympy/combinatorics/permutations.py::Permutation.get_precedence_matrix",
+    "sympy/combinatorics/permutations.py::Permutation.josephus",
+    "sympy/combinatorics/permutations.py::Permutation.mul_inv",
+    "sympy/combinatorics/permutations.py::Permutation.next_trotterjohnson",
+    "sympy/combinatorics/permutations.py::Permutation.random",
+    "sympy/combinatorics/permutations.py::Permutation.rank",
+    "sympy/combinatorics/permutations.py::Permutation.rank_nonlex",
+    "sympy/combinatorics/permutations.py::Permutation.rmul_with_af",
+    "sympy/combinatorics/permutations.py::Permutation.signature",
+    "sympy/combinatorics/permutations.py::Permutation.transpositions",
+    "sympy/combinatorics/permutations.py::Permutation.unrank_lex",
+    "sympy/combinatorics/permutations.py::Permutation.unrank_nonlex",
+    "sympy/combinatorics/permutations.py::Permutation.unrank_trotterjohnson"
+   ]
+  },
+  "sympy__sympy-13031": {
+   "detail": {
+    "sympy/matrices/sparse.py::MutableSparseMatrix.col_join": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/matrices/sparse.py::MutableSparseMatrix.row_join": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/matrices/sparse.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/matrices/sparse.py::MutableSparseMatrix.col_join",
+    "sympy/matrices/sparse.py::MutableSparseMatrix.row_join"
+   ]
+  },
+  "sympy__sympy-13091": {
+   "detail": {
+    "sympy/core/basic.py::Basic.__eq__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/basic.py::Basic.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/basic.py::Basic._has_matcher": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/exprtools.py::Factors.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/exprtools.py::Term.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Float.__eq__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Float.__ge__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Float.__gt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Float.__le__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Float.__lt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Float.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Integer.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::NumberSymbol.__eq__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::NumberSymbol.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Rational.__eq__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Rational.__ge__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Rational.__gt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Rational.__le__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Rational.__lt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/numbers.py::Rational.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/geometry/entity.py::GeometryEntity.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/optics/medium.py::Medium.__gt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/optics/medium.py::Medium.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/vector/dyadic.py::Dyadic.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/vector/frame.py::CoordinateSym.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/vector/vector.py::Vector.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/agca/modules.py::ModuleElement.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/domains/domain.py::Domain.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/domains/expressiondomain.py::ExpressionDomain": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/domains/pythonrational.py::PythonRational.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/domains/quotientring.py::QuotientRingElement.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/fields.py::FracElement.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/fields.py::FracField.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/monomials.py::Monomial.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::ANP.__ge__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::ANP.__gt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::ANP.__le__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::ANP.__lt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMF.__ge__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMF.__gt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMF.__le__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMF.__lt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMP.__ge__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMP.__gt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMP.__le__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMP.__lt__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMP.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polyclasses.py::DMP.eq": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polytools.py::GroebnerBasis.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polytools.py::Poly.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polytools.py::Poly.eq": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/rings.py::PolyElement.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/rings.py::PolyRing.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/rootoftools.py::ComplexRootOf._eval_Eq": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/tensor/array/ndim_array.py::NDimArray.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/utilities/enumerative.py::PartComponent.__ne__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/basic.py",
+    "sympy/core/exprtools.py",
+    "sympy/core/numbers.py",
+    "sympy/geometry/entity.py",
+    "sympy/physics/optics/medium.py",
+    "sympy/physics/vector/dyadic.py",
+    "sympy/physics/vector/frame.py",
+    "sympy/physics/vector/vector.py",
+    "sympy/polys/agca/modules.py",
+    "sympy/polys/domains/domain.py",
+    "sympy/polys/domains/expressiondomain.py",
+    "sympy/polys/domains/pythonrational.py",
+    "sympy/polys/domains/quotientring.py",
+    "sympy/polys/fields.py",
+    "sympy/polys/monomials.py",
+    "sympy/polys/polyclasses.py",
+    "sympy/polys/polytools.py",
+    "sympy/polys/rings.py",
+    "sympy/polys/rootoftools.py",
+    "sympy/tensor/array/ndim_array.py",
+    "sympy/utilities/enumerative.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/basic.py::Basic.__eq__",
+    "sympy/core/basic.py::Basic.__ne__",
+    "sympy/core/basic.py::Basic._has_matcher",
+    "sympy/core/exprtools.py::Factors.__ne__",
+    "sympy/core/exprtools.py::Term.__ne__",
+    "sympy/core/numbers.py::Float.__eq__",
+    "sympy/core/numbers.py::Float.__ge__",
+    "sympy/core/numbers.py::Float.__gt__",
+    "sympy/core/numbers.py::Float.__le__",
+    "sympy/core/numbers.py::Float.__lt__",
+    "sympy/core/numbers.py::Float.__ne__",
+    "sympy/core/numbers.py::Integer.__ne__",
+    "sympy/core/numbers.py::NumberSymbol.__eq__",
+    "sympy/core/numbers.py::NumberSymbol.__ne__",
+    "sympy/core/numbers.py::Rational.__eq__",
+    "sympy/core/numbers.py::Rational.__ge__",
+    "sympy/core/numbers.py::Rational.__gt__",
+    "sympy/core/numbers.py::Rational.__le__",
+    "sympy/core/numbers.py::Rational.__lt__",
+    "sympy/core/numbers.py::Rational.__ne__",
+    "sympy/geometry/entity.py::GeometryEntity.__ne__",
+    "sympy/physics/optics/medium.py::Medium.__gt__",
+    "sympy/physics/optics/medium.py::Medium.__ne__",
+    "sympy/physics/vector/dyadic.py::Dyadic.__ne__",
+    "sympy/physics/vector/frame.py::CoordinateSym.__ne__",
+    "sympy/physics/vector/vector.py::Vector.__ne__",
+    "sympy/polys/agca/modules.py::ModuleElement.__ne__",
+    "sympy/polys/domains/domain.py::Domain.__ne__",
+    "sympy/polys/domains/expressiondomain.py::ExpressionDomain",
+    "sympy/polys/domains/pythonrational.py::PythonRational.__ne__",
+    "sympy/polys/domains/quotientring.py::QuotientRingElement.__ne__",
+    "sympy/polys/fields.py::FracElement.__ne__",
+    "sympy/polys/fields.py::FracField.__ne__",
+    "sympy/polys/monomials.py::Monomial.__ne__",
+    "sympy/polys/polyclasses.py::ANP.__ge__",
+    "sympy/polys/polyclasses.py::ANP.__gt__",
+    "sympy/polys/polyclasses.py::ANP.__le__",
+    "sympy/polys/polyclasses.py::ANP.__lt__",
+    "sympy/polys/polyclasses.py::DMF.__ge__",
+    "sympy/polys/polyclasses.py::DMF.__gt__",
+    "sympy/polys/polyclasses.py::DMF.__le__",
+    "sympy/polys/polyclasses.py::DMF.__lt__",
+    "sympy/polys/polyclasses.py::DMP.__ge__",
+    "sympy/polys/polyclasses.py::DMP.__gt__",
+    "sympy/polys/polyclasses.py::DMP.__le__",
+    "sympy/polys/polyclasses.py::DMP.__lt__",
+    "sympy/polys/polyclasses.py::DMP.__ne__",
+    "sympy/polys/polyclasses.py::DMP.eq",
+    "sympy/polys/polytools.py::GroebnerBasis.__ne__",
+    "sympy/polys/polytools.py::Poly.__ne__",
+    "sympy/polys/polytools.py::Poly.eq",
+    "sympy/polys/rings.py::PolyElement.__ne__",
+    "sympy/polys/rings.py::PolyRing.__ne__",
+    "sympy/polys/rootoftools.py::ComplexRootOf._eval_Eq",
+    "sympy/tensor/array/ndim_array.py::NDimArray.__ne__",
+    "sympy/utilities/enumerative.py::PartComponent.__ne__"
+   ]
+  },
+  "sympy__sympy-13372": {
+   "detail": {
+    "sympy/core/evalf.py::evalf": {
+     "inserted": 4,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/core/evalf.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/evalf.py::evalf"
+   ]
+  },
+  "sympy__sympy-13480": {
+   "detail": {
+    "sympy/functions/elementary/hyperbolic.py::coth.eval": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/functions/elementary/hyperbolic.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/functions/elementary/hyperbolic.py::coth.eval"
+   ]
+  },
+  "sympy__sympy-13551": {
+   "detail": {
+    "sympy/concrete/products.py::Product._eval_product": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/concrete/products.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/concrete/products.py::Product._eval_product"
+   ]
+  },
+  "sympy__sympy-13615": {
+   "detail": {
+    "sympy/sets/sets.py::Set._complement": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/sets/sets.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/sets/sets.py::Set._complement"
+   ]
+  },
+  "sympy__sympy-13647": {
+   "detail": {
+    "sympy/matrices/common.py::MatrixShaping._eval_col_insert": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/matrices/common.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/matrices/common.py::MatrixShaping._eval_col_insert"
+   ]
+  },
+  "sympy__sympy-13757": {
+   "detail": {
+    "sympy/polys/polytools.py::Poly": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/polys/polytools.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/polytools.py::Poly"
+   ]
+  },
+  "sympy__sympy-13798": {
+   "detail": {
+    "sympy/printing/latex.py::LatexPrinter.__init__": {
+     "inserted": 0,
+     "removed": 6
+    }
+   },
+   "files": [
+    "sympy/printing/latex.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/latex.py::LatexPrinter.__init__"
+   ]
+  },
+  "sympy__sympy-13852": {
+   "detail": {
+    "sympy/functions/special/zeta_functions.py::<module>": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/functions/special/zeta_functions.py::polylog": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/functions/special/zeta_functions.py::polylog._eval_expand_func": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/functions/special/zeta_functions.py::polylog.eval": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/functions/special/zeta_functions.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/functions/special/zeta_functions.py::<module>",
+    "sympy/functions/special/zeta_functions.py::polylog",
+    "sympy/functions/special/zeta_functions.py::polylog._eval_expand_func",
+    "sympy/functions/special/zeta_functions.py::polylog.eval"
+   ]
+  },
+  "sympy__sympy-13877": {
+   "detail": {
+    "sympy/matrices/matrices.py::<module>": {
+     "inserted": 1,
+     "removed": 2
+    },
+    "sympy/matrices/matrices.py::MatrixDeterminant._eval_det_bareiss": {
+     "inserted": 0,
+     "removed": 10
+    },
+    "sympy/utilities/randtest.py::random_complex_number": {
+     "inserted": 3,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/matrices/matrices.py",
+    "sympy/utilities/randtest.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/matrices/matrices.py::<module>",
+    "sympy/matrices/matrices.py::MatrixDeterminant._eval_det_bareiss",
+    "sympy/utilities/randtest.py::random_complex_number"
+   ]
+  },
+  "sympy__sympy-13878": {
+   "detail": {
+    "sympy/stats/crv_types.py::<module>": {
+     "inserted": 10,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Arcsin": {
+     "inserted": 6,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::ChiSquaredDistribution._cdf": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Dagum": {
+     "inserted": 4,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Erlang": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::ExponentialDistribution._cdf": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Frechet": {
+     "inserted": 3,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::GammaInverse": {
+     "inserted": 4,
+     "removed": 0
+    },
+    "sympy/stats/crv_types.py::Kumaraswamy": {
+     "inserted": 4,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Laplace": {
+     "inserted": 4,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::LogNormalDistribution._cdf": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Logistic": {
+     "inserted": 3,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::Nakagami": {
+     "inserted": 5,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::StudentT": {
+     "inserted": 5,
+     "removed": 1
+    },
+    "sympy/stats/crv_types.py::UniformSum": {
+     "inserted": 12,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/stats/crv_types.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/stats/crv_types.py::<module>",
+    "sympy/stats/crv_types.py::Arcsin",
+    "sympy/stats/crv_types.py::ChiSquaredDistribution._cdf",
+    "sympy/stats/crv_types.py::Dagum",
+    "sympy/stats/crv_types.py::Erlang",
+    "sympy/stats/crv_types.py::ExponentialDistribution._cdf",
+    "sympy/stats/crv_types.py::Frechet",
+    "sympy/stats/crv_types.py::GammaInverse",
+    "sympy/stats/crv_types.py::Kumaraswamy",
+    "sympy/stats/crv_types.py::Laplace",
+    "sympy/stats/crv_types.py::LogNormalDistribution._cdf",
+    "sympy/stats/crv_types.py::Logistic",
+    "sympy/stats/crv_types.py::Nakagami",
+    "sympy/stats/crv_types.py::StudentT",
+    "sympy/stats/crv_types.py::UniformSum"
+   ]
+  },
+  "sympy__sympy-13974": {
+   "detail": {
+    "sympy/physics/quantum/tensorproduct.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "sympy/physics/quantum/tensorproduct.py::tensor_product_simp": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/quantum/tensorproduct.py::tensor_product_simp_Mul": {
+     "inserted": 3,
+     "removed": 7
+    }
+   },
+   "files": [
+    "sympy/physics/quantum/tensorproduct.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/quantum/tensorproduct.py::<module>",
+    "sympy/physics/quantum/tensorproduct.py::tensor_product_simp",
+    "sympy/physics/quantum/tensorproduct.py::tensor_product_simp_Mul"
+   ]
+  },
+  "sympy__sympy-14248": {
+   "detail": {
+    "sympy/printing/latex.py::LatexPrinter._print_MatAdd": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sympy/printing/latex.py::LatexPrinter._print_MatMul": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/printing/pretty/pretty.py::PrettyPrinter._print_MatAdd": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_MatAdd": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/printing/str.py::StrPrinter._print_MatMul": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/printing/latex.py",
+    "sympy/printing/pretty/pretty.py",
+    "sympy/printing/str.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/latex.py::LatexPrinter._print_MatAdd",
+    "sympy/printing/latex.py::LatexPrinter._print_MatMul",
+    "sympy/printing/pretty/pretty.py::PrettyPrinter._print_MatAdd",
+    "sympy/printing/str.py::StrPrinter._print_MatAdd",
+    "sympy/printing/str.py::StrPrinter._print_MatMul"
+   ]
+  },
+  "sympy__sympy-14531": {
+   "detail": {
+    "sympy/printing/str.py::StrPrinter._print_AppliedPredicate": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_ExprCondPair": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_FracField": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_Lambda": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/printing/str.py::StrPrinter._print_Limit": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/printing/str.py::StrPrinter._print_MatrixElement": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_Normal": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_Permutation": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "sympy/printing/str.py::StrPrinter._print_PermutationGroup": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_PolyRing": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_Relational": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/str.py::StrPrinter._print_Uniform": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/printing/str.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/str.py::StrPrinter._print_AppliedPredicate",
+    "sympy/printing/str.py::StrPrinter._print_ExprCondPair",
+    "sympy/printing/str.py::StrPrinter._print_FracField",
+    "sympy/printing/str.py::StrPrinter._print_Lambda",
+    "sympy/printing/str.py::StrPrinter._print_Limit",
+    "sympy/printing/str.py::StrPrinter._print_MatrixElement",
+    "sympy/printing/str.py::StrPrinter._print_Normal",
+    "sympy/printing/str.py::StrPrinter._print_Permutation",
+    "sympy/printing/str.py::StrPrinter._print_PermutationGroup",
+    "sympy/printing/str.py::StrPrinter._print_PolyRing",
+    "sympy/printing/str.py::StrPrinter._print_Relational",
+    "sympy/printing/str.py::StrPrinter._print_Uniform"
+   ]
+  },
+  "sympy__sympy-14711": {
+   "detail": {
+    "sympy/physics/vector/vector.py::Vector.__add__": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/physics/vector/vector.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/vector/vector.py::Vector.__add__"
+   ]
+  },
+  "sympy__sympy-14976": {
+   "detail": {},
+   "files": [
+    "sympy/printing/pycode.py"
+   ],
+   "notes": {
+    "sympy/printing/pycode.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "sympy__sympy-15017": {
+   "detail": {
+    "sympy/tensor/array/dense_ndim_array.py::ImmutableDenseNDimArray._new": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/tensor/array/dense_ndim_array.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/tensor/array/dense_ndim_array.py::ImmutableDenseNDimArray._new"
+   ]
+  },
+  "sympy__sympy-15345": {
+   "detail": {
+    "sympy/printing/mathematica.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/mathematica.py::MCodePrinter": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/printing/mathematica.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/mathematica.py::<module>",
+    "sympy/printing/mathematica.py::MCodePrinter"
+   ]
+  },
+  "sympy__sympy-15349": {
+   "detail": {
+    "sympy/algebras/quaternion.py::Quaternion.to_rotation_matrix": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/algebras/quaternion.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/algebras/quaternion.py::Quaternion.to_rotation_matrix"
+   ]
+  },
+  "sympy__sympy-15599": {
+   "detail": {
+    "sympy/core/mod.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/mod.py::Mod.eval": {
+     "inserted": 11,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/core/mod.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/mod.py::<module>",
+    "sympy/core/mod.py::Mod.eval"
+   ]
+  },
+  "sympy__sympy-15809": {
+   "detail": {
+    "sympy/functions/elementary/miscellaneous.py::MinMaxBase.__new__": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/functions/elementary/miscellaneous.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/functions/elementary/miscellaneous.py::MinMaxBase.__new__"
+   ]
+  },
+  "sympy__sympy-15875": {
+   "detail": {
+    "sympy/core/add.py::Add._eval_is_zero": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/add.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/add.py::Add._eval_is_zero"
+   ]
+  },
+  "sympy__sympy-15976": {
+   "detail": {
+    "sympy/printing/mathml.py::MathMLPresentationPrinter._print_Symbol": {
+     "inserted": 0,
+     "removed": 19
+    }
+   },
+   "files": [
+    "sympy/printing/mathml.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/mathml.py::MathMLPresentationPrinter._print_Symbol"
+   ]
+  },
+  "sympy__sympy-16450": {
+   "detail": {
+    "sympy/simplify/simplify.py::posify": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/simplify/simplify.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/simplify/simplify.py::posify"
+   ]
+  },
+  "sympy__sympy-16597": {
+   "detail": {
+    "sympy/assumptions/ask.py::get_known_facts": {
+     "inserted": 2,
+     "removed": 2
+    },
+    "sympy/assumptions/ask_generated.py::get_known_facts_cnf": {
+     "inserted": 4,
+     "removed": 3
+    },
+    "sympy/assumptions/ask_generated.py::get_known_facts_dict": {
+     "inserted": 0,
+     "removed": 15
+    },
+    "sympy/core/assumptions.py::<module>": {
+     "inserted": 0,
+     "removed": 4
+    },
+    "sympy/core/power.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/core/power.py::Pow._eval_is_rational": {
+     "inserted": 6,
+     "removed": 0
+    },
+    "sympy/printing/tree.py::print_tree": {
+     "inserted": 4,
+     "removed": 0
+    },
+    "sympy/tensor/indexed.py::Idx.__new__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/assumptions/ask.py",
+    "sympy/assumptions/ask_generated.py",
+    "sympy/core/assumptions.py",
+    "sympy/core/power.py",
+    "sympy/printing/tree.py",
+    "sympy/tensor/indexed.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/assumptions/ask.py::get_known_facts",
+    "sympy/assumptions/ask_generated.py::get_known_facts_cnf",
+    "sympy/assumptions/ask_generated.py::get_known_facts_dict",
+    "sympy/core/assumptions.py::<module>",
+    "sympy/core/power.py::<module>",
+    "sympy/core/power.py::Pow._eval_is_rational",
+    "sympy/printing/tree.py::print_tree",
+    "sympy/tensor/indexed.py::Idx.__new__"
+   ]
+  },
+  "sympy__sympy-16766": {
+   "detail": {},
+   "files": [
+    "sympy/printing/pycode.py"
+   ],
+   "notes": {
+    "sympy/printing/pycode.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "sympy__sympy-16792": {
+   "detail": {
+    "sympy/utilities/codegen.py::CodeGen.routine": {
+     "inserted": 5,
+     "removed": 5
+    }
+   },
+   "files": [
+    "sympy/utilities/codegen.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/utilities/codegen.py::CodeGen.routine"
+   ]
+  },
+  "sympy__sympy-16886": {
+   "detail": {
+    "sympy/crypto/crypto.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/crypto/crypto.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/crypto/crypto.py::<module>"
+   ]
+  },
+  "sympy__sympy-17139": {
+   "detail": {
+    "sympy/simplify/fu.py::_TR56": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/simplify/fu.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/simplify/fu.py::_TR56"
+   ]
+  },
+  "sympy__sympy-17318": {
+   "detail": {
+    "sympy/simplify/radsimp.py::rad_rationalize": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/simplify/radsimp.py::split_surds": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/simplify/sqrtdenest.py::_sqrt_match": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/simplify/radsimp.py",
+    "sympy/simplify/sqrtdenest.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/simplify/radsimp.py::rad_rationalize",
+    "sympy/simplify/radsimp.py::split_surds",
+    "sympy/simplify/sqrtdenest.py::_sqrt_match"
+   ]
+  },
+  "sympy__sympy-17630": {
+   "detail": {
+    "sympy/matrices/expressions/matexpr.py::get_postprocessor": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/matrices/expressions/matexpr.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/matrices/expressions/matexpr.py::get_postprocessor"
+   ]
+  },
+  "sympy__sympy-17655": {
+   "detail": {},
+   "files": [
+    "sympy/geometry/point.py"
+   ],
+   "notes": {
+    "sympy/geometry/point.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "sympy__sympy-18189": {
+   "detail": {
+    "sympy/solvers/diophantine.py::diophantine": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/solvers/diophantine.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/solvers/diophantine.py::diophantine"
+   ]
+  },
+  "sympy__sympy-18199": {
+   "detail": {
+    "sympy/ntheory/residue_ntheory.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    },
+    "sympy/ntheory/residue_ntheory.py::nthroot_mod": {
+     "inserted": 4,
+     "removed": 3
+    }
+   },
+   "files": [
+    "sympy/ntheory/residue_ntheory.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/ntheory/residue_ntheory.py::<module>",
+    "sympy/ntheory/residue_ntheory.py::nthroot_mod"
+   ]
+  },
+  "sympy__sympy-18211": {
+   "detail": {
+    "sympy/core/relational.py::Relational._eval_as_set": {
+     "inserted": 1,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/relational.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/relational.py::Relational._eval_as_set"
+   ]
+  },
+  "sympy__sympy-18698": {
+   "detail": {
+    "sympy/polys/polytools.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/polys/polytools.py::_symbolic_factor_list": {
+     "inserted": 3,
+     "removed": 4
+    }
+   },
+   "files": [
+    "sympy/polys/polytools.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/polytools.py::<module>",
+    "sympy/polys/polytools.py::_symbolic_factor_list"
+   ]
+  },
+  "sympy__sympy-18763": {
+   "detail": {
+    "sympy/printing/latex.py::LatexPrinter._print_Subs": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/printing/latex.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/latex.py::LatexPrinter._print_Subs"
+   ]
+  },
+  "sympy__sympy-19040": {
+   "detail": {
+    "sympy/polys/factortools.py::dmp_ext_factor": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/polys/factortools.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/factortools.py::dmp_ext_factor"
+   ]
+  },
+  "sympy__sympy-19346": {
+   "detail": {},
+   "files": [
+    "sympy/printing/repr.py"
+   ],
+   "notes": {
+    "sympy/printing/repr.py": "no_unit_hit"
+   },
+   "units": []
+  },
+  "sympy__sympy-19495": {
+   "detail": {
+    "sympy/sets/conditionset.py::ConditionSet": {
+     "inserted": 1,
+     "removed": 4
+    },
+    "sympy/sets/conditionset.py::ConditionSet._eval_subs": {
+     "inserted": 0,
+     "removed": 5
+    }
+   },
+   "files": [
+    "sympy/sets/conditionset.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/sets/conditionset.py::ConditionSet",
+    "sympy/sets/conditionset.py::ConditionSet._eval_subs"
+   ]
+  },
+  "sympy__sympy-19637": {
+   "detail": {
+    "sympy/core/sympify.py::kernS": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/sympify.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/sympify.py::kernS"
+   ]
+  },
+  "sympy__sympy-19783": {
+   "detail": {
+    "sympy/physics/quantum/dagger.py::<module>": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sympy/physics/quantum/operator.py::IdentityOperator.__mul__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/physics/quantum/dagger.py",
+    "sympy/physics/quantum/operator.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/quantum/dagger.py::<module>",
+    "sympy/physics/quantum/operator.py::IdentityOperator.__mul__"
+   ]
+  },
+  "sympy__sympy-19954": {
+   "detail": {
+    "sympy/combinatorics/perm_groups.py::PermutationGroup.minimal_blocks": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "sympy/combinatorics/perm_groups.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/combinatorics/perm_groups.py::PermutationGroup.minimal_blocks"
+   ]
+  },
+  "sympy__sympy-20154": {
+   "detail": {
+    "sympy/utilities/iterables.py::partitions": {
+     "inserted": 0,
+     "removed": 19
+    }
+   },
+   "files": [
+    "sympy/utilities/iterables.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/utilities/iterables.py::partitions"
+   ]
+  },
+  "sympy__sympy-20428": {
+   "detail": {
+    "sympy/polys/domains/expressiondomain.py::ExpressionDomain": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/polys/domains/expressiondomain.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/domains/expressiondomain.py::ExpressionDomain"
+   ]
+  },
+  "sympy__sympy-20438": {
+   "detail": {
+    "sympy/core/relational.py::Equality._eval_simplify": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "sympy/core/relational.py::Relational._eval_simplify": {
+     "inserted": 3,
+     "removed": 0
+    },
+    "sympy/sets/handlers/comparison.py::<module>": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sympy/sets/handlers/comparison.py::_eval_is_eq#4": {
+     "inserted": 0,
+     "removed": 3
+    },
+    "sympy/sets/handlers/comparison.py::_eval_is_eq#8": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/sets/handlers/issubset.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/relational.py",
+    "sympy/sets/handlers/comparison.py",
+    "sympy/sets/handlers/issubset.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/relational.py::Equality._eval_simplify",
+    "sympy/core/relational.py::Relational._eval_simplify",
+    "sympy/sets/handlers/comparison.py::<module>",
+    "sympy/sets/handlers/comparison.py::_eval_is_eq#4",
+    "sympy/sets/handlers/comparison.py::_eval_is_eq#8",
+    "sympy/sets/handlers/issubset.py::<module>"
+   ]
+  },
+  "sympy__sympy-20590": {
+   "detail": {
+    "sympy/core/_print_helpers.py::Printable": {
+     "inserted": 5,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/core/_print_helpers.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/_print_helpers.py::Printable"
+   ]
+  },
+  "sympy__sympy-20801": {
+   "detail": {
+    "sympy/core/numbers.py::Float.__eq__": {
+     "inserted": 2,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/core/numbers.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/numbers.py::Float.__eq__"
+   ]
+  },
+  "sympy__sympy-20916": {
+   "detail": {
+    "sympy/printing/conventions.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/conventions.py::split_super_sub": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/printing/conventions.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/conventions.py::<module>",
+    "sympy/printing/conventions.py::split_super_sub"
+   ]
+  },
+  "sympy__sympy-21379": {
+   "detail": {
+    "sympy/core/mod.py::Mod.eval": {
+     "inserted": 1,
+     "removed": 4
+    }
+   },
+   "files": [
+    "sympy/core/mod.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/mod.py::Mod.eval"
+   ]
+  },
+  "sympy__sympy-21596": {
+   "detail": {
+    "sympy/sets/handlers/intersection.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/sets/handlers/intersection.py::intersection_sets#12": {
+     "inserted": 13,
+     "removed": 15
+    }
+   },
+   "files": [
+    "sympy/sets/handlers/intersection.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/sets/handlers/intersection.py::<module>",
+    "sympy/sets/handlers/intersection.py::intersection_sets#12"
+   ]
+  },
+  "sympy__sympy-21612": {
+   "detail": {
+    "sympy/printing/str.py::StrPrinter._print_Mul": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/printing/str.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/str.py::StrPrinter._print_Mul"
+   ]
+  },
+  "sympy__sympy-21847": {
+   "detail": {
+    "sympy/polys/monomials.py::itermonomials": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/polys/monomials.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/monomials.py::itermonomials"
+   ]
+  },
+  "sympy__sympy-21930": {
+   "detail": {
+    "sympy/physics/secondquant.py::AntiSymmetricTensor._latex": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/secondquant.py::CreateBoson._latex": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/physics/secondquant.py::CreateFermion._latex": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/physics/secondquant.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/secondquant.py::AntiSymmetricTensor._latex",
+    "sympy/physics/secondquant.py::CreateBoson._latex",
+    "sympy/physics/secondquant.py::CreateFermion._latex"
+   ]
+  },
+  "sympy__sympy-22080": {
+   "detail": {
+    "sympy/printing/codeprinter.py::<module>": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/codeprinter.py::CodePrinter._print_Mul": {
+     "inserted": 0,
+     "removed": 1
+    },
+    "sympy/printing/precedence.py::<module>": {
+     "inserted": 1,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/printing/codeprinter.py",
+    "sympy/printing/precedence.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/codeprinter.py::<module>",
+    "sympy/printing/codeprinter.py::CodePrinter._print_Mul",
+    "sympy/printing/precedence.py::<module>"
+   ]
+  },
+  "sympy__sympy-22456": {
+   "detail": {
+    "sympy/codegen/ast.py::<module>": {
+     "inserted": 0,
+     "removed": 2
+    },
+    "sympy/codegen/ast.py::String": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/codegen/ast.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/codegen/ast.py::<module>",
+    "sympy/codegen/ast.py::String"
+   ]
+  },
+  "sympy__sympy-22714": {
+   "detail": {
+    "sympy/geometry/point.py::Point.__new__": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/geometry/point.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/geometry/point.py::Point.__new__"
+   ]
+  },
+  "sympy__sympy-22914": {
+   "detail": {
+    "sympy/printing/pycode.py::<module>": {
+     "inserted": 2,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/printing/pycode.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/printing/pycode.py::<module>"
+   ]
+  },
+  "sympy__sympy-23262": {
+   "detail": {
+    "sympy/utilities/lambdify.py::_recursive_to_string": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/utilities/lambdify.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/utilities/lambdify.py::_recursive_to_string"
+   ]
+  },
+  "sympy__sympy-23413": {
+   "detail": {
+    "sympy/polys/matrices/normalforms.py::_hermite_normal_form": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "sympy/polys/matrices/normalforms.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/matrices/normalforms.py::_hermite_normal_form"
+   ]
+  },
+  "sympy__sympy-23534": {
+   "detail": {
+    "sympy/core/symbol.py::symbols": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/core/symbol.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/symbol.py::symbols"
+   ]
+  },
+  "sympy__sympy-23824": {
+   "detail": {
+    "sympy/physics/hep/gamma_matrices.py::kahane_simplify": {
+     "inserted": 0,
+     "removed": 2
+    }
+   },
+   "files": [
+    "sympy/physics/hep/gamma_matrices.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/hep/gamma_matrices.py::kahane_simplify"
+   ]
+  },
+  "sympy__sympy-23950": {
+   "detail": {
+    "sympy/sets/contains.py::Contains.as_set": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/sets/contains.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/sets/contains.py::Contains.as_set"
+   ]
+  },
+  "sympy__sympy-24066": {
+   "detail": {
+    "sympy/physics/units/unitsystem.py::UnitSystem._collect_factor_and_dimension": {
+     "inserted": 0,
+     "removed": 4
+    }
+   },
+   "files": [
+    "sympy/physics/units/unitsystem.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/units/unitsystem.py::UnitSystem._collect_factor_and_dimension"
+   ]
+  },
+  "sympy__sympy-24213": {
+   "detail": {
+    "sympy/physics/units/unitsystem.py::UnitSystem._collect_factor_and_dimension": {
+     "inserted": 0,
+     "removed": 1
+    }
+   },
+   "files": [
+    "sympy/physics/units/unitsystem.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/physics/units/unitsystem.py::UnitSystem._collect_factor_and_dimension"
+   ]
+  },
+  "sympy__sympy-24443": {
+   "detail": {
+    "sympy/combinatorics/homomorphisms.py::_check_homomorphism": {
+     "inserted": 0,
+     "removed": 33
+    }
+   },
+   "files": [
+    "sympy/combinatorics/homomorphisms.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/combinatorics/homomorphisms.py::_check_homomorphism"
+   ]
+  },
+  "sympy__sympy-24539": {
+   "detail": {
+    "sympy/polys/rings.py::PolyElement.as_expr": {
+     "inserted": 5,
+     "removed": 3
+    }
+   },
+   "files": [
+    "sympy/polys/rings.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/polys/rings.py::PolyElement.as_expr"
+   ]
+  },
+  "sympy__sympy-24562": {
+   "detail": {
+    "sympy/core/numbers.py::Rational.__new__": {
+     "inserted": 1,
+     "removed": 3
+    }
+   },
+   "files": [
+    "sympy/core/numbers.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/core/numbers.py::Rational.__new__"
+   ]
+  },
+  "sympy__sympy-24661": {
+   "detail": {
+    "sympy/parsing/sympy_parser.py::EvaluateFalseTransformer": {
+     "inserted": 23,
+     "removed": 0
+    }
+   },
+   "files": [
+    "sympy/parsing/sympy_parser.py"
+   ],
+   "notes": {},
+   "units": [
+    "sympy/parsing/sympy_parser.py::EvaluateFalseTransformer"
+   ]
+  }
+ },
+ "source": "reference patch mapped onto base-commit units (ril.data_mining.mapping, D63)",
+ "summary": {
+  "file_notes": {
+   "created": 1,
+   "no_unit_hit": 18,
+   "not_python": 1
+  },
+  "instances": 377,
+  "with_gold_unit": 363,
+  "without_gold_unit": 14
+ },
+ "version": "rq3-gold-units/v1"
+}
