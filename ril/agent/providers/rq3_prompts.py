@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import Any
 
 from ril.agent.providers.calllog import sha256_text
+from ril.agent.providers.floor_arm import UNRESTRICTED_PATH_ARMS
 from ril.agent.providers.patch_format import TEMPLATE_VERSION, build_prompt
 from ril.agent.providers.pilot_run import PREPARED_VERSION
 from ril.agent.providers.pseudonymise import TRANSFORM_VERSION, pseudonymise, restore_text
@@ -193,7 +194,8 @@ def prepare_screened(
                 "approx_tokens_prompt": _TOKENS.count(prompt),
                 "approx_tokens_context_original": _TOKENS.count(context),
                 "approx_tokens_context": _TOKENS.count(_excerpts(prompt)),
-                "paths": sorted(set(row["files"])),
+                # an arm whose context shows no file has no path filter (E-RQ3-FLOOR, D169)
+                "paths": None if key[1] in UNRESTRICTED_PATH_ARMS else sorted(set(row["files"])),
                 "template_version": TEMPLATE_VERSION,
                 "prepared_version": PREPARED_VERSION,
             }
