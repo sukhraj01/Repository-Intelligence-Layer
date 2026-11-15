@@ -1,6 +1,9 @@
-"""Figures of the mid report, drawn from the logged runs (needs matplotlib; not a project dependency).
+"""Figures of the mid report, drawn from the logged runs.
 
-Usage: python reports/mid/make_figures.py   (from the repository root; writes reports/mid/fig_*.pdf/.png)
+Needs matplotlib, which is not a project dependency.
+
+Usage: python reports/mid/make_figures.py
+Run from the repository root; writes reports/mid/fig_*.pdf and fig_*.png.
 """
 
 from __future__ import annotations
@@ -44,7 +47,9 @@ def incremental_figure() -> None:
     for y, f, i, x in zip(ys, full, inc, speed, strict=True):
         ax.plot([i, f], [y, y], color=GRID, lw=2, zorder=1, solid_capstyle="round")
         ax.text(f * 1.18, y, f"{x:.1f}x", va="center", ha="left", color=INK, fontsize=7)
-    ax.scatter(full, ys, s=28, color=ORANGE, zorder=2, label="full rebuild", edgecolor="white", lw=1)
+    ax.scatter(
+        full, ys, s=28, color=ORANGE, zorder=2, label="full rebuild", edgecolor="white", lw=1
+    )
     ax.scatter(inc, ys, s=28, color=BLUE, zorder=3, label="incremental", edgecolor="white", lw=1)
     ax.set_xscale("log")
     ax.set_xlim(0.05, 100)

@@ -1,0 +1,2653 @@
+{
+ "by_kind": {},
+ "clean": true,
+ "findings": 0,
+ "instances": 377,
+ "mode": "differential",
+ "preexisting_matches": 449,
+ "prompts_checked": 377,
+ "prompts_with_findings": 0,
+ "rows": [
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-12907",
+   "prompt_sha256": "ee52a9619590bc8efcb8a2df498f9adedcc15f36c4e3bddb6f7947cbbf1f7b5e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-13033",
+   "prompt_sha256": "e653a5098ad59689029ad29e67c1a2b193633c9e7bcb8ea49fc347b4862aca7b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-13236",
+   "prompt_sha256": "8b1449b6b7e888079e4ce925da2b90e046b879c4bd86382c8052b6d88eb7a4bb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-13398",
+   "prompt_sha256": "6a56e05886e958cfc2e570e8e8d8f57a8fbdb46d37aeee901c4d5cd2ebe7ad5e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-13453",
+   "prompt_sha256": "6d302755fb7ba2f4e06f5b046881227b840b85b0dce68eed1714ba1150be0064",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-13579",
+   "prompt_sha256": "d1dcc26559350bfb14df6142322223f35e1794ced538e86d06d9b20505119e78",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-13977",
+   "prompt_sha256": "57163ed899b28e6b113bdf2399158b884fad4aee95e63f9bcceedc0c315965e4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14182",
+   "prompt_sha256": "41f83ed975e448b472842a562fc83510c2c20adca180180701d09b51a613afa8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14309",
+   "prompt_sha256": "5c64a1f35cbe9634049af8d2d8bddeac687829bdecde75704e9562efd197e30b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14365",
+   "prompt_sha256": "33c07c812627321f7372f69a1fa94427873add8c7d80e88684725f2a923eaff0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14369",
+   "prompt_sha256": "a8239b68dd5199ce8b3e36c65180c7c67104bb4abf6c921e5ba8aefe7a861872",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14508",
+   "prompt_sha256": "608c72a46cbdb2ccbbc6d0c0a36097508a1086dd43a6fd0f7ee28682cb3667de",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14539",
+   "prompt_sha256": "afc8eaf2f333c7b5c2186da979a0d2e9ebfe76f44cd468fd1ddae60b9bed519d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14598",
+   "prompt_sha256": "76dd91935a34f56273dfedbde12bfc7443a7f793346fdd2ce8d4bf55ba67c633",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "astropy__astropy-14995",
+   "prompt_sha256": "38d4f90880b09ad16608873ba91e88332e1ec2ff08d3cd123fdd410ee336e275",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-10554",
+   "prompt_sha256": "33c5343b4b74707780c9606c5cd43f28dca5414efba351b2e69fb6abcf666be4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-10880",
+   "prompt_sha256": "2c12e3b8b7ed739719edd7c6db7646561d87901ccc4faceb60a263882c652f36",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-10914",
+   "prompt_sha256": "794e3ffec72612ad852c21ba6b8fdfc504aeaa50c0287a2c65b9b6204e102fc0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-10973",
+   "prompt_sha256": "6609f184a604d22f0e7bc768ec0caca191c229fc416ab4a590620420abd86cbf",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-10999",
+   "prompt_sha256": "056fb00cf7bfae4b2118f93d7ae69267a771f38819d8e70390fef83fdf5349d0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11066",
+   "prompt_sha256": "7fba0db397c7e9bd6a603ba4b027e9e0301d856d3d327d3f528eca17d29f29f5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11087",
+   "prompt_sha256": "8db045d731e845dd2d3be0d5f22e015d1bb4103114a1fbea6ff9b5aa12d6ce98",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11095",
+   "prompt_sha256": "e5ba80c4fe523585b028095a5297ccb2dce49e753f0aae598f7cc2b91cb0fc58",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11099",
+   "prompt_sha256": "80a26209b8e999b87ddec0922f2f96aaeeb26dae71b6c7fa001e6dc4cb588ac0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11119",
+   "prompt_sha256": "49fc5c468ccf67943357883a04c02ec4dfc485aa9b2262ebeaf91df97ee88c21",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11133",
+   "prompt_sha256": "0ebc0b1e65f0353c1c78a9b09483e6f838b9ebf30bd1ef647cab8c3e544eca4e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11138",
+   "prompt_sha256": "c60f2c601226b3134efb52bf0da83fb2d441a6f4d5dc5e698dab4d60979bfe99",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11141",
+   "prompt_sha256": "24ca27cf50bae38e0c75be153f7dcaa5170afbad9dfac1923e2e912c13c3b7cd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11149",
+   "prompt_sha256": "1eb8c14f4a459619895c992df5eaf59810accb9dac3df938f7270b90e4316dc4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11163",
+   "prompt_sha256": "d6694ff45bc8ee928d38256d049be4dba2147af9897601c72e645fd76e80c444",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11179",
+   "prompt_sha256": "49e4e4764ec0eda2cef9c455ccfca9449dff4499c7c6bd594dec9af04b186cbb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11206",
+   "prompt_sha256": "503d20356fc1444862cfadbdd050a86bef463b34ab7acdf22b831b1db478741d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11211",
+   "prompt_sha256": "6bd98d447a4d987e0ebc3071bd5ebc145edc800e8b15dbb8e75b3ec41db3437f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11239",
+   "prompt_sha256": "f04c730fd7fd4deb538bb707fb437fbdac5cc2d2d33a248b63567af488abdec3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11265",
+   "prompt_sha256": "7d716e688e244fc946db1e857c3b262587db3f9792fcd6ddd58d7c8165e19937",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11276",
+   "prompt_sha256": "8b414e593657046ddbfa082f735e11d94943a9196363d914e3689b750897b967",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11292",
+   "prompt_sha256": "aa2e96afd8c0a7fab6647aa53b254c5bdb127abf01bc391dfeb67e4db933f12d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11299",
+   "prompt_sha256": "5af76bbecb74b3267542f805f5b85c65cbbdef61c5e26fac343cf8c4ca285320",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11333",
+   "prompt_sha256": "ce2c0e9591d03d102b4a704b43b07a1d4e9888899ab6f11037440055fab03766",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11400",
+   "prompt_sha256": "71bed951bb6ae4930b6977039e727f896b6b0ccd51aa11fed5c4b4c9e81969fd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11433",
+   "prompt_sha256": "a7036424dd625bb410ca68925e85fc578fa74d8b7db1bef43f28ee56bb3ac404",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11451",
+   "prompt_sha256": "ebecc7e1655edee8b1011b855ebb145b5527dcc60a3de4cd7de068a842ab2d31",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11477",
+   "prompt_sha256": "22abce8843fb7efc2212bfe9e19e8a65f65c0886794fb0c67ffd3d545773377e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11490",
+   "prompt_sha256": "1e8645a7f45bfbfd3386e82325ac9097f7d0212ef454b50346d0c6d8167de61f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11532",
+   "prompt_sha256": "3b27039577dc47afff2c1693bca9c733db10e8a9cdd4be479fcbccb1d1b540d5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11551",
+   "prompt_sha256": "12ad360af7e32a557cfc1b6a288e77d2350551e3b8d26b21a1112d90ace9c6d5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11555",
+   "prompt_sha256": "450d1d0b939be72fc3cfe44e2fac7145df9d1166572c6d121313e4c74bc58fb9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11603",
+   "prompt_sha256": "08dbb93e450d0208aec0a52a2b35ae3105b62b8316bd7fca129238bd79e8f75f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11728",
+   "prompt_sha256": "0abeaa2d1aec98f160fec56d213d629a99c1878e4a013eba28b8d702fbcdf53e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11734",
+   "prompt_sha256": "08402a6244c70351e3aee8d82c7096b5a75f208af33e48888ec8f605e319196a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11740",
+   "prompt_sha256": "51cff21b8719c17255a4ee866578ca0a1e644dcd0c97c1aa1d35d821f9998dd9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11749",
+   "prompt_sha256": "08e5c55ae373eaf3a48776a510ba1aa0bed6c2bcac84d76fd0d3c6430d22d433",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11790",
+   "prompt_sha256": "230b00d974d3a6ef6019fc1f6733f7d7c4bed2fa00dd97fe7ace819b4b4ac476",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11815",
+   "prompt_sha256": "d95bbf0dcc5a7823019f5e99071dd16e46575f5a5c925152342de8ff4b002a2c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11820",
+   "prompt_sha256": "c213f8bb943ba38de1eafe05c2847ddf29bcdf969b8f82270ff6ecfd773a2c0f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11848",
+   "prompt_sha256": "2afcc6a85a77ec70a2c7d37a917d582bf67684cb973213514be13657afbce563",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11880",
+   "prompt_sha256": "98f54716ca060e2eef299449db402f1afb63f8ae5f3b652da5911ca05a958997",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11885",
+   "prompt_sha256": "18252fab1431d9b72d51c9d13c151f906dfaf004fe66724d052983d0adc7af32",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11951",
+   "prompt_sha256": "874d44890a6fad5a7fe9263b70d75926599afe8e5bfe6e28708294217bd016d8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11964",
+   "prompt_sha256": "632e90e6608018675d7b563b7fc45ec00d8594a9eb30f3e2c0545ba9a670d19a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-11999",
+   "prompt_sha256": "dcde3816da16b0e57ee32f7bfedde41dd78dbf8e695df98450b8c4e8da692341",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12039",
+   "prompt_sha256": "769fe92c0cd064b926b844cf9dee5832cffb71adc9ca82b9a36ea433b7ef47a5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12050",
+   "prompt_sha256": "7ee13bf0966876cb04b472ab0890c7b518bb132487a0071ba5eb3b44d271d6df",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12125",
+   "prompt_sha256": "505b47e19bdb3150c92b71dc893771bb4d436b398743f0ae0ac734ca12ac4349",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12143",
+   "prompt_sha256": "d587ee9d7c6a6be04fab5210d5a3513fdf640f652afc8f587f7937a119e1a3c0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12155",
+   "prompt_sha256": "905426059a3156bad54d23acc1a050135284991afc40819b4c27a786d26872aa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12193",
+   "prompt_sha256": "be5af8528fd255f02b9e19130eca6dc590c869a03fda43b87de0f39794190382",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12209",
+   "prompt_sha256": "0f1f7f5b273486377a2f9a0e8650ec5aa9d1824cefaea0da3485644c89cf31c1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12262",
+   "prompt_sha256": "90cd83a10f65947976b99f8e059fd9dbaa207ac3a6ac0965f84f500e31e3afe3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12273",
+   "prompt_sha256": "b579b3218c34932ec96834a51c689c34c5fce2afcd424c1dd01f25b69706c05b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12276",
+   "prompt_sha256": "3ba8708f1ed8421542f360d1c174c0c353e7028f4043b3e1f7b535042bc1f7c8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12304",
+   "prompt_sha256": "db63bd63b1f4d64008a2001b19b4a648607d849bb22b6e94f1860fa0254a19b2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12308",
+   "prompt_sha256": "af3745f243d71ef27b05401c4d0b87f56b8de20cdf0c1d8c772985c1bcab7116",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12325",
+   "prompt_sha256": "5cb556968bce33c21d51a8dc688c986beb6d1e9e42e0289f34ece5263857b70b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12406",
+   "prompt_sha256": "96b9315808d5ab814c1668b863729198995b2306b684254de88d25b9b85b56ea",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12419",
+   "prompt_sha256": "0af95e458a937b81a57c1ca18829da5a10738ab8b89099a9e066cb90a5b629a9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12663",
+   "prompt_sha256": "d39de744f4cf67477cc1423845b3d6a31e20d02ac28ae384d8e2839c934509b9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12708",
+   "prompt_sha256": "f49e3b1b52dc97456e8da3e6c02f06cac1ba83c6f41f9540410f85411fe1e378",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12713",
+   "prompt_sha256": "60e8bce0892cc182b19d9e3ca6ca5c0a674d06ca592dd11487175b3feebc0d9e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12741",
+   "prompt_sha256": "32c3638cf34193f782f24da5f609d8acc53d9700f0c2f7205c9bd7ec022621c0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12754",
+   "prompt_sha256": "a75b08213842f90071184234f489076b823b34ce59a99fa7813fa1aee354909a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12774",
+   "prompt_sha256": "97d8c7feb4edb3219548c7f60c9d7bd48673b8fe1c4cf238e25133679522c461",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12858",
+   "prompt_sha256": "1a971fa00d367576954191e17d9ae26a118279afa544eb7a30ac471265306202",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-12965",
+   "prompt_sha256": "515baf81d44b5de43517a9d752a24342b967f9b8b113385ee210de7cc65b886f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13012",
+   "prompt_sha256": "3bdf5f0b8329fd578bef3f96f0e049cc122d90796d91ab411a2d46f2f6536c2c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13023",
+   "prompt_sha256": "8cf4ea39749853dad83a03686b9db500317eba5dc617ff4d1aa9c27361843cdf",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13028",
+   "prompt_sha256": "132f64e37b455b009efd39728066d66266af098aaa6cf9982513f47be10dda01",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13033",
+   "prompt_sha256": "6ce574f59d7b07f4a0d144148d1ab21b3b6c66e66271882f9d48b7ce19ffaea4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13089",
+   "prompt_sha256": "fe4c66f1acbf2ae1e5f38d4d7d104ed0b8b107cda8b5508c19587e87c69a6b2e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13109",
+   "prompt_sha256": "7eaffbf7d3da2a8b04a3dc3513e9953d133b7d0f0c7156e4f64f1886f3632cb1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13112",
+   "prompt_sha256": "e68b99d37c1d00b7da775945b28725f9687e200d4769ecb957949da992339bef",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13121",
+   "prompt_sha256": "744625968ebb2dfda6438187026360c8484de337b5d70a074d29b835ac941057",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13128",
+   "prompt_sha256": "eaa57f179a88802cec3719c15ce57baaaa99415989b0a63b4beed1cd5152f121",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13158",
+   "prompt_sha256": "c2666affad8b4ffd0db9f1e6e9f0e985563e5dfafb651ef7c83d9c46cc00b5b8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13195",
+   "prompt_sha256": "888e2ad827e3a7ac6fdfa530dce586c6b6822d901759def1dc29c76a0a785c55",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13212",
+   "prompt_sha256": "2380009ecc5a3c10efa2ccdd1108a43d1a1ee2876341b77ee72ad340dd67bf51",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13279",
+   "prompt_sha256": "d2a4638a48b632a74d661ab088f9e7b8450a164d024a0d7adf7475bf56614c76",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13297",
+   "prompt_sha256": "dac75a35190e0095a61491cc9d798f8af1da8e37e2a82849e456e6c35d676992",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13315",
+   "prompt_sha256": "9ee1189f8e8430004ced20352527f7c131b0d5f52532e242f7045d82970e3351",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13343",
+   "prompt_sha256": "f6a0081887a924e49a976ec9c8186c46c053f97ca2c52b1871825dde5acd04ed",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13344",
+   "prompt_sha256": "c38d0814e13776de082f6f9390e42a1dda634dcf8c047ad579734a589df39552",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13346",
+   "prompt_sha256": "2d6a7edcaa855019352a7047490535205fec297b6d48982a3b8b5cf0b92c7649",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13363",
+   "prompt_sha256": "08871ab4ecfb421ee27f2b9b9df6d3f4aab46b4b87b976c19ba4c046fbcec06b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13401",
+   "prompt_sha256": "45e6ced3d9b9d794bc90f1d9eb937dbe81740cc80546f988a3aaef3e6eadda0a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13406",
+   "prompt_sha256": "71e819434b86c812b91d270d1eac0a0c94d981dd5d91ef5d5569cfccb73b60e9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13410",
+   "prompt_sha256": "bd043ad4a5c1b7dd1a25fa8b8b5d660fd6821293c757cf3d07de9fe9f963be5b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13417",
+   "prompt_sha256": "5702ab52046a1038c967a1390123a976869e59e64faff201aec3a5402bbb93c3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13449",
+   "prompt_sha256": "696e89df1bec65bbf3424be4759791121a732785a115e19bdd93f140f5d0448b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13512",
+   "prompt_sha256": "caced7fdf35b76ffb64dd48e53c3b8f937fcdd7611db755c93b9fc2195c0b34b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13513",
+   "prompt_sha256": "672a5ee6e30eb5988778ac0934715f0fc41de9e69a89fd2e32a9f91114b72a13",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13516",
+   "prompt_sha256": "432b01a16b6b351f71aa583e601601eb0151aa40852d559a6bd7301c9dc9cbe2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13551",
+   "prompt_sha256": "0bfe767693ca09912f4faddef12107206007f9f03eb82ef5522f58e9541be742",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13568",
+   "prompt_sha256": "9ebe0be36e695ffba178f459e8d847c5444f9f907f104c013a6020237c2367e6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13569",
+   "prompt_sha256": "c62a3dc0211c3af6a6f95aca509b3205d48aff4e6f69e69c8b918e9ed6e739ba",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13590",
+   "prompt_sha256": "79aea272430114f5a840dfb0be1e4edaf2e77943ff62f30731bc839aa614ae18",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13658",
+   "prompt_sha256": "dcf78fe4a999f1779af9e7099621e742758f9c8da2f22a9279ea52051dc0924d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13670",
+   "prompt_sha256": "5312ef4bdab236a659a13d29eeb97748747dd48e9386de8e729ad1a5c13b5baf",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13741",
+   "prompt_sha256": "a94c4a630c0c1de061e1e01f63e665bbed62aadbaf5f7f25c8b2dd0d86d97ce0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13786",
+   "prompt_sha256": "8873e693d908b482a2ab9e1147b39f53714ec1fc8944918d2d5ab4192ea43eb7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13794",
+   "prompt_sha256": "9a14559d7e5fb38af34e481a087e725677c3a88ee3466f143f0710193bf9b1a5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13807",
+   "prompt_sha256": "abf5aeea3e8a07d081b19f4553daaae1c63041ee3ad56f22d96afe8d4804ea7e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13809",
+   "prompt_sha256": "50f18e366df806509253795c940953287445c023b0ac7e9bedc3a805d1439389",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13810",
+   "prompt_sha256": "618225aefa1450523805234875b0f6da053570cbf13dc20d82fa5e905b5cdcd9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13820",
+   "prompt_sha256": "c0115bd0f200634c019e16900f4a74d3dd7447616696800f9077de74beb0bd62",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13821",
+   "prompt_sha256": "bc3bf5a9c26c4da0c676aeeba6cfb2da16abba06552db82f6d78e3dccf4d1300",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13837",
+   "prompt_sha256": "8caf34e726cc23bb5f610f3edd61ccbdefd66408751056c5020ceb1a3243f3bc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13925",
+   "prompt_sha256": "1dc7413c1c34bfa50943a869ee6831994bed9d0851d319fe5dddb284ed9a873a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13933",
+   "prompt_sha256": "31b562846cf561b3fa12483e775b93d51f970a06e6fd827dba03f6361eb70394",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-13964",
+   "prompt_sha256": "4be4cf600e102cf22825123a5ce9738623d9d3adb8d015b9f88281664db42a02",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14007",
+   "prompt_sha256": "c7fdec98097b1323494589afd08c3d988b3791073ff8fe2e73535b14413954d6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14011",
+   "prompt_sha256": "5e80dd8bcafe85bb2f86607b6817a40d8c51438a3520d3f4f122134500af3bcc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14017",
+   "prompt_sha256": "df80daf4e1945c9bca05085c053158a3a619007d56b4a211d169275c2e536cc1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14034",
+   "prompt_sha256": "6e3352342b208a17426e757b6d27f29072eabf0c56e4535e9f065db9785d4a69",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14053",
+   "prompt_sha256": "a5f23f4d2c2f182209fbcc19d400318a97f91a3f290b033ebba055947d5b3606",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14089",
+   "prompt_sha256": "99107d302925c662c9474eb4a820dc3d4ba231051b0c987f6244ccfa97e5a032",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14122",
+   "prompt_sha256": "ebc85f6ae80b0bd8d7788ad3671e751414fcb8dfc1b6917a696e114742f3266a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14140",
+   "prompt_sha256": "a86b9b8f16f232d85d210357b650aa79d8ab82488ee465cfb746917aa2cc96e5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14155",
+   "prompt_sha256": "cc0bcc126045f35db5919a21b48258d003c08dcbfe8b93d53a7c1324da48d8cd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14170",
+   "prompt_sha256": "57826eddc86648a1ba136ab075542c6cfe6e5cb4516e7758f20ed48da89126bc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14238",
+   "prompt_sha256": "cee0b1535dd9dbb646b93bb0c992cc6e2baed32bdf139a2cf689fde957779acc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14311",
+   "prompt_sha256": "43465b7f137a2870c7151be5204225ef3654e221431b79cdfb417a0ef3f03268",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14315",
+   "prompt_sha256": "919d873a8d92d5c18b99a7feee3902abb43db7cfeaec16eaeb4aa597c5ca4c4c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14349",
+   "prompt_sha256": "f1e8952893676a205a3cb40f479410623d367b80abb22ca6f9543bbecb23c19d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14351",
+   "prompt_sha256": "0f803047cef5d5b98c59884bddae4d6b3ce99c425f3a3e2564a8569162a26eda",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14373",
+   "prompt_sha256": "33f56715b39aa7f9d109d8d9107b997deb0b8dd433fb34d5d63e21eaafc705ab",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14376",
+   "prompt_sha256": "af0607cf38c98bf562116c7793c0689c060aab9f94d50378b8b432b389015b9e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14404",
+   "prompt_sha256": "115d2eef93c93da8eb2f0f82e5894a7471b4274ed5760d7f37f8c939552007d6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14434",
+   "prompt_sha256": "e5b247d3b62707d52d72e74415b874fd82f2b8086d735d8832c5025c4defd914",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14493",
+   "prompt_sha256": "87fe991090f8fce692fd5533c5d3f52aaee640f15a05b2a1560628a4d974664c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14500",
+   "prompt_sha256": "cfff032f88bee8f3807ce02816f6d66548e3577ef8813f3207aa1866f525039b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14534",
+   "prompt_sha256": "b8f9c3d21351598fb2244f27e25427d4bc5d012e7970e05e209f7b47eb710dae",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14539",
+   "prompt_sha256": "a03299b1e529f38447d9f8724279f8dc7abb7e5ad28a383545b00eee8ef255a9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14559",
+   "prompt_sha256": "8b08ec2d58304c919deb64c230c000807f11b8642a74bbe54d7a64d52f723f72",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14580",
+   "prompt_sha256": "01d6ce7818c8c3dfa9c792df06dff2e5f31a1d9e70a9eda3864fe0e4fe3824c0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14608",
+   "prompt_sha256": "acb5c80caef9f1bcd6b7d281e13453c2cf4e7841ce992c7f8bcea5c72873799a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14631",
+   "prompt_sha256": "21f84b49fb7ac1a9aac0a24d2626264e1f5df44dacba5a1d68196fc36a9d56d6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14672",
+   "prompt_sha256": "96aaa4cf807c5ac7669dbb1f3833635d7834c966443852adef33c55fee365461",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14725",
+   "prompt_sha256": "4313c100a4b74b5255140ec103129dd36cd5c3a08683b26658e49830b4a37f7c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14752",
+   "prompt_sha256": "3b303545492b30d14f2821b5a425c857f3866ddd745680ac377743080020a75f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14765",
+   "prompt_sha256": "4198c1d4ccfeb4f5e4086f91422e88e136b8493c0dec3600b83fdf002a419128",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14771",
+   "prompt_sha256": "b569aceb6d5f7d80092dadeb4b1afbb3af9e415d630b5c9290f530a066a6a2c8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14787",
+   "prompt_sha256": "5806ee6f286adffdd287467b9efa884f1f887831e2acec3d878c9cc6a2f06535",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14792",
+   "prompt_sha256": "f41558855f155383d4c405c45ebd03cd507cce5aa22f6876d174d617bc3c1777",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14855",
+   "prompt_sha256": "a2ba4471c4336c06f742126a7104e2274629b6c24d54691410e906daba38a8d9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14915",
+   "prompt_sha256": "b49cc19788ce5d12ceb456cbca9c7e488902ad50130e79617f431c129a491861",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-14999",
+   "prompt_sha256": "2be0673934de22b01af4ef0cc3282fd6eb88b7ebfe34c21e2d3bd0f862621534",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15022",
+   "prompt_sha256": "bf573d5f794a188646d3b1e6c8a176c7a0aa3ed5a20a3ddcc12b16b323661d63",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15037",
+   "prompt_sha256": "10fffd61c8e9b0ec7bc9e26fbba23e3eeec47b507b20d0881cf56150d5f673e4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15098",
+   "prompt_sha256": "ffbfe20457344b579eb2faa8f7ea2a96a66b073aa11cffa65a4edfa0eea323ff",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15104",
+   "prompt_sha256": "e32450ff2a30d4532201670162797ec642ca4322e408cc7a3d38e8b0db87327a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15127",
+   "prompt_sha256": "b0a2f548f8c90029bf890483245cb013a17ae55091e40b599518d2148b2b9ba6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15128",
+   "prompt_sha256": "a9461e7ee2f7e5c44bb226a7db55b095d516c920a2df312152ac569c1a9ab21a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15161",
+   "prompt_sha256": "94d4bfb2e10958a2538db56beecacbf496c817ca476e5c37e13b6527cdbd7982",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15252",
+   "prompt_sha256": "e2156872d1cb34b8a8244773923b97117ccb48f9334e38fe9ad0fe57b2c0149e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15268",
+   "prompt_sha256": "193be81a0028f62ec535649f40d08833f8886ddc2682e802a2c1dede63c7faa1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15277",
+   "prompt_sha256": "bebdef01306fcd922450b2c5235fd255aec8ff2f7d5f34a406ff28403945651e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15278",
+   "prompt_sha256": "45ddaab9392494c8e08f1bb2910a8293589029c7034c422a71fb51a2e496ab54",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15280",
+   "prompt_sha256": "724df66ac6e66b87c9ad4e7cf1feee20e8d13f8e549742c8b7e22206312073aa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15315",
+   "prompt_sha256": "fbdfeecfabaee871e75a030aae3d10d5eda68652c961c396d651bd933b242f28",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15368",
+   "prompt_sha256": "f84af8149600c6f59484554bd53919a9a91d3766e69fd6ff1e19425397a49254",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15375",
+   "prompt_sha256": "a1c20d3abc06abe8f34cbd913225b75b2f834644933a87c733b22aacedfdd508",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15380",
+   "prompt_sha256": "79fa77b6fd9e1a88962466b878a25bff7487558e86dcd03b7752b250b1f02ae5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15382",
+   "prompt_sha256": "1032c6282bed585577aeae766028bc6a87cffb817a784601f93c59ecebc0539a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15467",
+   "prompt_sha256": "48b4b328379d8821da3ff46a10484ae4a88f1469003616219cb4415638f5878b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15499",
+   "prompt_sha256": "433361b8196f54d8dd845006bca345f377eec1ec707365d9e6bb98e19fcf082d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15503",
+   "prompt_sha256": "5f87b2ebb3e33f62201d2255ffca6b605303ad1ec4328661ba5583df0653fd54",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15525",
+   "prompt_sha256": "01b58ba0f9ea3d785ee25478b205ebc747cdc60b42ff2200c71c45b0e822ae6f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15554",
+   "prompt_sha256": "429112199adcaadf7b0dcd59ea553f46546e855c329bc146deef01cb26d5df73",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15561",
+   "prompt_sha256": "3f4a7bdf6ac45c4197e8664bd2216e6af1de0d013df6d494a0476a7dc378ff4d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15563",
+   "prompt_sha256": "9900f5e44372a781ed0bf1cbae3f1f406f5ca4cbf90c6c108a2678d9eb33a2c4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15569",
+   "prompt_sha256": "e9c70c68b869714cf7ab01150806e42f2f513e5a03e274a6c3bd2b02ae180dbb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15572",
+   "prompt_sha256": "61d7940293ebc544867199e0e980b357a779370df48a745f21346ccde1536c55",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15629",
+   "prompt_sha256": "d79827533a0f2ffb712e0f2344376baded2b319a42a5ab0e1fe99fdf2a1d7187",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15695",
+   "prompt_sha256": "236552e27ebd806ad402e3aa56b1c9a72c7bbe32c72ee796ede8b91c5f529085",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15731",
+   "prompt_sha256": "8b1cfab073abd13a5e7da1fed5ab64d78e0fdf57dd8979ec5b6b675c8846e7db",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15732",
+   "prompt_sha256": "745f22b187a513b0eb3221969cb206b050e1340ddc90a8138f8dfc441284fae0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15741",
+   "prompt_sha256": "679ecc3c0c1ad44b8d310d53743e897db27524898cfbb47dae139ee8f44efc04",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15814",
+   "prompt_sha256": "871c0d6494fca7181322de5e590ede4a3b5f5700169e61765eeee7ccc0383207",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15851",
+   "prompt_sha256": "1fd4f04342083512e05697f8def108a52d8836bfc86a6e19915c03ad08ced06c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15863",
+   "prompt_sha256": "e46c68f298b4b96702b2783b71bd8332e9e67f0f0ff0c9c53e89d59774e1f8a0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15916",
+   "prompt_sha256": "d862ed5b5c687d91415707ac017b3f489b935b91faf7245ca0442ae82b4c13c4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15930",
+   "prompt_sha256": "5d9fe2fe507dee62c061e02fe84346b993a653f3ce1b0590f3e2ede3d92a57cd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15957",
+   "prompt_sha256": "6e7ce6a9a82fa4dccf76c291a96895f757e70949b1b885d7339f704a4be8c7e1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15973",
+   "prompt_sha256": "db077e66949ab838cb1ed897f5d7917c9f562112944cee4f528f419f973eb177",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-15987",
+   "prompt_sha256": "ac4f55fef2b46af6fedaac73bee458d388bef14b895c43a5c0ddcacea7a2c384",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16032",
+   "prompt_sha256": "77b7f8be61b24767ef91e7f3699003a4e206ef5e19f38be59a3135c41cdcf679",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16082",
+   "prompt_sha256": "797779784e3bd7a2eae3951bafb3b9d70336c9ad67a30ad428ec397f81fcd9ee",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16100",
+   "prompt_sha256": "e101d475f37822b34ee19d6428c703deebab338d7a70cd8b468ed97884805a81",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16116",
+   "prompt_sha256": "c11e3cac6a1365c50e75c3c55526cc19993606aabdbbbd535c9735493dd8fd30",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16136",
+   "prompt_sha256": "b7d7f20907330b39519ca3f1e63de735597f343eedf6bfb5ca247ecc0537d468",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16139",
+   "prompt_sha256": "3963d3260dfb140f059cf6cf8fc500ed7bea6f951fbfb7c1c376ff24467fb94b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16145",
+   "prompt_sha256": "80df3add48422310f298ba415d750608e8e53990b4a920f40a7ec290d31ab158",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16255",
+   "prompt_sha256": "7b5c894fb7a98ee531114bed3c1280cdbe8bef826574d3a393d243ef0b22a214",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16256",
+   "prompt_sha256": "3703907f9b30ffc4c041e4dfe228f738702d8a664243abb9ee31eebeacfd278b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16263",
+   "prompt_sha256": "c232ad180e3fccbf06d85d283382abc54035479ef8884d15ded86d7df033ad25",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16315",
+   "prompt_sha256": "f2ed8bcd7e6e62c1e0f0debaa9b919b6adff9f4e0db1a3e643bf01b52d06a5e4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16333",
+   "prompt_sha256": "9a1db8769d58f9198aedf24a574a7bc743b9b5c8f2dac92052b174429e726d59",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16429",
+   "prompt_sha256": "f0de10fb4f31ea553f1eb131ac8f956fc57f655b1672b5353da4000b96b5dee9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16454",
+   "prompt_sha256": "ddd41d53abfa57006d67ec007382772b50d41787afce4d1a9dd5e15b12e5876a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16485",
+   "prompt_sha256": "a778ab4627bc6853c78c9bf779d4616a644f05ae8e6862172630bdd37b5ebd2f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16493",
+   "prompt_sha256": "c438298f8e66935027358a594745e07af2a1e508c245487aa4f1db06f11e5c29",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16502",
+   "prompt_sha256": "4798ef172ca85f30907d1d550c205803bd36d332fd348cc32dc994f3420b83c9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16527",
+   "prompt_sha256": "4bdab6ddaac3a0744a0b4dec414f6905581cafcb9cc43f3f61c16d4ca0d3bcb6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16560",
+   "prompt_sha256": "8af37abad77bd126936940ff7a15e9d19af2e7955152def0e56c205c1d5efa3d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16569",
+   "prompt_sha256": "654d740dfa4a063cca63b99717018f5e25bcdda98930554040395bd7155baf19",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16595",
+   "prompt_sha256": "c7c108cb135d2f9af7ee37bcd620dd0db543cd4eab5899190e179c76b5fe186b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16612",
+   "prompt_sha256": "a96d9baf114f220fde0e8c86a2cf57aff8848f7096d3d26a16a06e1d2b992b28",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16631",
+   "prompt_sha256": "0dc9e40b184bae775043b2ebaecb01d6b424f14c5396d58e2437c11e249a9937",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16642",
+   "prompt_sha256": "f117127106a2e50140089dd0453fa6522104d549401928156c9b284c99ff47d2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16661",
+   "prompt_sha256": "f5bd33e054564a0f72ec8016705629654aebf29204da3afdfead195b437d37ef",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16662",
+   "prompt_sha256": "58f6081c86b7fb14259b65cacb5b14b591947a383e1be9631aadd4c2a9012763",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16667",
+   "prompt_sha256": "d1040cde888e5c6363a390ad0ddd6803495e5231d0721772c2fb14cf67964bdd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16801",
+   "prompt_sha256": "203448fd62d282a3423c19fcdd93e95546765fc9fdbcd210cd94afe1d5cf0345",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16819",
+   "prompt_sha256": "ee2c0f51f1865569f1d151c4b9721d329e2bff86e966b8f1f8353a21625fbec8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16877",
+   "prompt_sha256": "902d25cba38ccb677419a2f3dcd6738f17bea587566e9db4bd71d6476c017e93",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16899",
+   "prompt_sha256": "6b3ca866ba38c4fda6e8abc166b7b7a1b5eb9526bd821e632beef48a47a2e80f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16901",
+   "prompt_sha256": "c3fcbf04539b1e10dee84a2bc7e05fc6182c00f10caaf4ab7191d8280f262803",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16938",
+   "prompt_sha256": "fc8464fe1c607da6ede3f7e14ebf950ebf2526066cc4e842bf5018fd032f43c0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-16950",
+   "prompt_sha256": "cf909e30c1e05993cc0dea70e828db7baaec2e6bca8f060175bbde40ddad845c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-17029",
+   "prompt_sha256": "0b8241fce1910093515e9a93889ce3b6ac248cf304911cece096836b8766b2cc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-17084",
+   "prompt_sha256": "c67203b71b4a06b519184fddccd53f54001e2d204fee34ca4f043fed71f65f4d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-17087",
+   "prompt_sha256": "5e7dfaa4c3f9ccc08f7e3a3bdd33b3e069d757125aa8027fc93754299090ca8a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "django__django-9296",
+   "prompt_sha256": "aa9e38d31ba0a2d3859c50bccf9c8f15f857a55e39f4e9959e012dc03ef3274f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "mwaskom__seaborn-3069",
+   "prompt_sha256": "b18e79255271cb74aba8c519896fce014f9ca4915e9a0b44f3f99cfdaa305d7c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "mwaskom__seaborn-3187",
+   "prompt_sha256": "ce4631082af65765b6c7acb6667c8e29f70e139038d345b281ea0ba807952919",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pallets__flask-5014",
+   "prompt_sha256": "0b377de0c8d4b698a32ac5795230d1e208ac47fe410982fe75bcaa0c334f65af",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "psf__requests-1142",
+   "prompt_sha256": "9341f4f5c65e0248a95f24a2e86d520157efa9208d64e6789518162919eb6f2c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "psf__requests-2931",
+   "prompt_sha256": "e222d82507822043c8c7f45c3774aafe91f503af30c5d433062292767f0b09ea",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "psf__requests-5414",
+   "prompt_sha256": "2be5677944a9739eecbba3cf9ea6d0734d74b6cee61c0f8eb17d82b3a013589f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "psf__requests-6028",
+   "prompt_sha256": "16c345fc4b4d12c6383467271a42e1d16304d7b1355eedc1a0f107df9d17bdeb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-2905",
+   "prompt_sha256": "359dc5ad07b5f90aa903e474075ecb9a620c1e420af887d6f48b9881559550da",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-3095",
+   "prompt_sha256": "98e32e7a04d4fa3e5a642ecb7bf40db4fdbf9da3538a95f88c012a5a2512b129",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-3151",
+   "prompt_sha256": "5e1797b1eec0cf5ed0a6c79835cede40c2f7c03ba89af6105c90c6b7ad9f98a1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-3677",
+   "prompt_sha256": "fac98cc54625c60dbeef2565acf8adab4e88ff7e552d02e9003d47f3e90563fe",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-3993",
+   "prompt_sha256": "294cbdd40883de1f7e8034f47653b923c28d17dec4645327f812f5f3aa396c66",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-4075",
+   "prompt_sha256": "a85060ad4d38c085ad91486f3e8d9a4102926033fcbca1fa920bedad10931f16",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-4094",
+   "prompt_sha256": "dafa936bed363e6f63c14e13cf510ff776d77a1a11f6a8dfc989cc6827279654",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-4356",
+   "prompt_sha256": "19d195c0355b94038f9c8fc767f5bb415a06cba384a1ce80326879b2afc300af",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-4629",
+   "prompt_sha256": "c2c04b300f355db9f8bb9026556037c68dda4f7b1e1278b05ae7edb6af2107ff",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-4687",
+   "prompt_sha256": "a764dc97e087cc0b6246a4a0df303ce334819620aa779fb3537430177a90bafb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-4966",
+   "prompt_sha256": "6f87091df06a575082997fd2bce68e48dba13eb514aa4bae46d2569f7352aa72",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-6461",
+   "prompt_sha256": "4f0d3e58a084a9dadf0bacc0e4761c5f6dca2c20bbd70f52bc9c61d37473ac85",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-6599",
+   "prompt_sha256": "f7d816bd94c03938c6b743e3b86201d296149359d92aa1f62ef5d59ad703647c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-6721",
+   "prompt_sha256": "f633662a459cb3131a63ee1bed78a6088a875a00cb76852b8a11651266f00fb4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-6744",
+   "prompt_sha256": "8df4898ba0066beaf1aea79de306436577df372e62f7042f07f1b1e1d3642187",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-7229",
+   "prompt_sha256": "132a4c62d8585777680e3e75132cec8034dfdb2f3bd2d0eca28abf9032cc954f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-7233",
+   "prompt_sha256": "6205336d4712512fee13eefb1e93f6f3b8a81dfbc7499ac560dec0f11d709ca4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pydata__xarray-7393",
+   "prompt_sha256": "055f65f6150676a439f4c3b3ee037a402d6f8d55c04ebd134dfa26f31e6ac848",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-4551",
+   "prompt_sha256": "44382cea58006d72c8e8d0f01c843277d1e766b5bc2251471b2658785ec6729b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-4661",
+   "prompt_sha256": "9cbfd3ec1963477530df7a3f741fa7851a52ad7358288b5cc95856f8b1388522",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-4970",
+   "prompt_sha256": "46aa67b4646658d395091cd796dd19ee930c42e1169ba7db2866aa456bb44076",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-8898",
+   "prompt_sha256": "779eb830dd522aad39b4f68e9bf894ccf6ea4943621f354e0fd6d39489c3f1e5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-10051",
+   "prompt_sha256": "8d6d8385cdac8d2b13ff5618fdff0d7305225c2624d0dda341573aa7b1f26dd4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-10081",
+   "prompt_sha256": "25c9149eec807c85f4b2f4967bd2856a94f0ef3e14b5c3059ec14c7e54e9141f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-10356",
+   "prompt_sha256": "bca42b6edf28425dccf75f09b0a4924d99a3d700967e2c150c855fb4c588a08e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5262",
+   "prompt_sha256": "73f7945100c62a94662a007a7428356fde45c05b06b121020c60d29401f07196",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5631",
+   "prompt_sha256": "7ffc0acc9958e33d1e04b92d7facad7046fa12bf946ce84e4cd7bfa6ce0ea838",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5787",
+   "prompt_sha256": "9d3f17562f0d164cc4cb1d3cf2b369dab61cf2b35a8ee247679f9cd5f46b54c1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5809",
+   "prompt_sha256": "8cf6b8dc4d2f6fa9e59265153f8748c1346c8d36d1d55a739a9d96edfb1829a6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5840",
+   "prompt_sha256": "8b1d63d52b44d4182c8c4deee5119a43650bbc78e1f4832be46029633e91ee8c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-6197",
+   "prompt_sha256": "b276038db239b493be1adbdd259408d62cc16d43c2dcc9100076467c4780127e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-6202",
+   "prompt_sha256": "ae38547b33c0077b39f1bf404184078212b2d6676a71eb03e217aa530a64fe7d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7205",
+   "prompt_sha256": "66a99901cdf1846979fc7bb55f2cd7404e77a994e46335893bcedf2a42b32bba",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7236",
+   "prompt_sha256": "dded1fff02274fb4ff7fa2383369e2b7398163312807a9ee3349239e13cb9954",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7324",
+   "prompt_sha256": "2a733b1e46166bdaba7f8ce8d6c06765d63a0547f3ec5c2e792335ec4cc38fc1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7432",
+   "prompt_sha256": "936e1f8e5d86d4391fec6cdc3b42a1908b8403393f6792315ed34e89e9960350",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7490",
+   "prompt_sha256": "6313af86593ca0f765cf368acc6baf97c94eb10683bb01404e290d2b216d5ee4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7521",
+   "prompt_sha256": "31e8a390537fb2ba02c74947b01b2bdf4795344ee7e14618380eb7e49c9d8e3b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7571",
+   "prompt_sha256": "824ed751c04eb31f6a8a65a972387a12a70c470c91154071d59f03e65594426b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7982",
+   "prompt_sha256": "2fddcff9659836314aa5b8c28008336b0183785a443329913274a02934c040d0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-8399",
+   "prompt_sha256": "3ba49e0c5b24b901470c38751f44b99c7f3bcb9e7f8b29169f3689b9d3c420a9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7440",
+   "prompt_sha256": "a5a99f6285f74f038bb0d1ea918d07c0c0f0b114cb44d75ff1e581d3af3e9eff",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7590",
+   "prompt_sha256": "094cfa01975a485c0c6ddbe56edbd389e784a07cdd7034b47293b461cf7f9bd9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7748",
+   "prompt_sha256": "9ee2cfb21ea864a8543ea68445101d6ec69a29d7e0ce8ea59f78af852c31a389",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7889",
+   "prompt_sha256": "00a4885417a2886800fe9f5da2be0ce7c4e30643b12480dbeeb97a36b894ae05",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7910",
+   "prompt_sha256": "ab0036416134b0d6b95fe46bb7b7f4c4db4b2d6d7ad44e7e6544760ea4644e5e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7985",
+   "prompt_sha256": "ef703ce08e6d7a2dced636a0d326e99434d19ad5231d328e8e1db0fb1ce0bc28",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8035",
+   "prompt_sha256": "5e04a71633a5d496b90186e87fa509b0f08b61e267f975666861e7ef063634f6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8056",
+   "prompt_sha256": "650ed4b46d8eec61ca0129a6ce925b2107035f9376a4c412cea72a106a31b50c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8120",
+   "prompt_sha256": "0e5e271d0d4fc7a3498f6e8e04051cd2f15480f7ef686d4cf6757be8513f8d7c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8265",
+   "prompt_sha256": "e7689ec7c832cc512c78e58657bf254bc82f28c9ef46d68c5fab1e3a72a6fabe",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8269",
+   "prompt_sha256": "c2ae052232b23aa2895223726acccf52f6aa0741e49be3665b1a28273e3e73dd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-11618",
+   "prompt_sha256": "7947e4a4c3ee9a7a5840bf6948788c5adb36dbc6543cad2b9533d136681d2fdd",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-12096",
+   "prompt_sha256": "217bbcde4a950a5c60d1efeca5b7ba48195e344501db389028ea5132657c7119",
+   "short_test_names": 3
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-12419",
+   "prompt_sha256": "3f4bad269e3684d4b3f92700367eaec987675ea8d318814801cb4ca896a4547c",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-12481",
+   "prompt_sha256": "cae496635a7000b73be6177c463ae9feb9353649da826f7b5e1d8e8eac7eb98b",
+   "short_test_names": 3
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-12489",
+   "prompt_sha256": "ca81e46f9119dc05c4341145ed86b72d2109a0925e3058f80eb551c116e9a9df",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13031",
+   "prompt_sha256": "3293d7c66751f98f9481fcd1ad43a5154d71f43385f6e7a23318e285436c9672",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13091",
+   "prompt_sha256": "afffb5c290fdc3e3967cffdb517fe36c97d4c32f8757d8ea85fbb1a93330c6ce",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13372",
+   "prompt_sha256": "c0229a49c6b6ec01186b859b03cb1bc5b6eacec5a829f33d9361459b96916b1d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13480",
+   "prompt_sha256": "5f94aca6f2a5540e28c775d337ff3e2160997dd85faae9bd0347027c7ab4ad2e",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13551",
+   "prompt_sha256": "e0683dec7d24d10de9345a2299d935f4df02d61ddd0895be0d4d71ccf54289a1",
+   "short_test_names": 6
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13615",
+   "prompt_sha256": "794e2c53bc9ef19822067333786d3728bb76b2bb6f020df8194c6bd9f2549c33",
+   "short_test_names": 11
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13647",
+   "prompt_sha256": "e1d1022337e38b90de468799edfa4dc577cca45a197329f91a3a8bd270375651",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13757",
+   "prompt_sha256": "baadbf2f9fe4ae1e06f0639e5b94470353c94a0d7059e5c79a249fbb57de032c",
+   "short_test_names": 11
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13798",
+   "prompt_sha256": "c71467c98d5628ce82475ddfaef4e75a22227b4a803e5c0944972b9fce67b18a",
+   "short_test_names": 9
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13852",
+   "prompt_sha256": "45da61c8c170bdcc4a64f0793b7cb9fd45f5a30b2549ec104fd33a5d2b81785b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13877",
+   "prompt_sha256": "d440c5e91308d15fa7a6e5b0ca47c41a44c7a8219f6d630cfcc1463fada75d0b",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13878",
+   "prompt_sha256": "cd84e504a66da0314aeb0fbd0814d4fd85f563ba9bf5df5f1991b840c50766aa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-13974",
+   "prompt_sha256": "f72d77717638deeeb6b02ee38f17c35e38129759114982568a8bf8535e2f8969",
+   "short_test_names": 4
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-14248",
+   "prompt_sha256": "406ffff5d3d3c16f902902127ac1ebd6a3250e799fea76ee6d7bbafcc5276159",
+   "short_test_names": 11
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-14531",
+   "prompt_sha256": "996b821ab0ebd56fda471ad6e2de66acd2a112dda10816f0946e84ae972d2d3e",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-14711",
+   "prompt_sha256": "5d67d371e6514fea32626e3b90339f41740acddee97cef327b52d66048ae6afa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-14976",
+   "prompt_sha256": "5eb48ccb82393aa92f35b8c054f19114b1dce86e6451b3b6ce5e2b5c53999cc5",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15017",
+   "prompt_sha256": "3f3af5bb81413a8b9c4c9a15203eb2f5595c254e227d43e75e87c8babe0fb27c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15345",
+   "prompt_sha256": "dced6dce93d14faa34779688634e983715c00d9e7852aeb48cbdbcdb13fbe98f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15349",
+   "prompt_sha256": "3aa1456605fda74bfa88a8a82e9199449ba745f68a33fffe6c08b7cf311981f9",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15599",
+   "prompt_sha256": "fd4c8f2d93a4ffa34adba8e20676c28b400edd8afe0dfb9603e0171e89ad6753",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15809",
+   "prompt_sha256": "232779b65c2ab706929f7310b2cb69741fd18d6cb8d62508e81a75c4ba0942cb",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15875",
+   "prompt_sha256": "2fad2b0cf603cf7a52a454f7cb60329b2c1784c0df4d92ab8127ed3fb163d498",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-15976",
+   "prompt_sha256": "f5d74544a73979f5de83c48b0c16bed36e9d5ac3495ff11e3c3965422d20bf1e",
+   "short_test_names": 5
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-16450",
+   "prompt_sha256": "0f90dfe953ff39d92526a4f629350b706e46ea0231da820b120122d3b35d4b69",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-16597",
+   "prompt_sha256": "a6298b2b144452ac3f8944efed50f84c6c03e6164cca79da46f065302fca9815",
+   "short_test_names": 4
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-16766",
+   "prompt_sha256": "2b87de69243e89bd34761470bda8253ea558018a10fbd698357ef0faf1758d00",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-16792",
+   "prompt_sha256": "6e67062f0e737f12b46d4502cbf533def64a3c8fc62e79a375ae7665ff655f6a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-16886",
+   "prompt_sha256": "e1c575d400bb3e4cbc2f179b61332d38451cd2e2223494cab15006ab39b6d248",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-17139",
+   "prompt_sha256": "e6890fc1e4ff0f006cd91e9e90aec9a69dbeb5c376ab4ed428264803d3a46b4d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-17318",
+   "prompt_sha256": "bf29913cb3cb5aa004369b958c89d2321592c053403b28e410f8feaebbbe05a3",
+   "short_test_names": 7
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-17630",
+   "prompt_sha256": "01dcf84d4b1a8ba9e66732eaa1e3da06bcc4365686a2013fe424b3b98844f5bd",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-17655",
+   "prompt_sha256": "0c05a00b3f661b38d1bd5fe87ebb2367bde00a283ac7e7ef42c3de360b1637d4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-18189",
+   "prompt_sha256": "c0ddbbe99b5460f8a360d4a211dae6186b5b05f13186365e641296b52bc556e8",
+   "short_test_names": 6
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-18199",
+   "prompt_sha256": "7bea673dfe4f7763a93fcc8b85062152a6297913f3760b2c2e85250a0f8fff20",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-18211",
+   "prompt_sha256": "d2325aacac40404888695a302caec5604ad0c34e25561133d652f65ad957ae3b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-18698",
+   "prompt_sha256": "1c60c09ced517081712c7497838d28c7edc7c0d1a4895fe403cd23ca6a0b4f68",
+   "short_test_names": 3
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-18763",
+   "prompt_sha256": "ab225ff48ddd9aa4ffc0ed28deb9227d14fa0d5605f0077473653fd94f946dd5",
+   "short_test_names": 13
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-19040",
+   "prompt_sha256": "9a6ef885fc1a07ada05e7f570c26e227c7f8c350db4102d8458f124d27c4e6e1",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-19346",
+   "prompt_sha256": "f558aa267dab5cbb56028dc1fd28ee0e4b28fb1eca80317b6c321e035258b8d1",
+   "short_test_names": 9
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-19495",
+   "prompt_sha256": "b9db64f1aa0a2acd9677ef4f01a323f3e32c8e7f3c9601c8e0ccd5ff044fcd79",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-19637",
+   "prompt_sha256": "a941e680480670ea60a3a81120b46555c2ecaf0f9899ed912425ec28f1940fa5",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-19783",
+   "prompt_sha256": "9e3ea2a3d677b06c1489d2decf174ad0d72566cb3c4c5e7e279fc27f3e2957fc",
+   "short_test_names": 3
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-19954",
+   "prompt_sha256": "e6967d4dd42c81c4bc3dc67b34ab26239bc5c25475b5db35815d3b237908e92b",
+   "short_test_names": 4
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-20154",
+   "prompt_sha256": "7d7cf31d86b07ff137cfa278bcfdad116f53ded9cec55488462204aa80b08818",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-20428",
+   "prompt_sha256": "2781c380c3e011a88a9649d30bdb43faf02abfa4c18df1a7ee300da99e0e3b5f",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-20438",
+   "prompt_sha256": "bdc73863c3da4ea8f09eb3eda5947dd34f5476bc598e08f58280f2a3478f6cfa",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-20590",
+   "prompt_sha256": "32ca3ae3110640dbe36bf30a27fdb2858f7b444fd6701b0906d97d25fc77a8b5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-20801",
+   "prompt_sha256": "685a87dd128d877e333f620462ed61cd7472772702e36e95cfc69e9c2c76955d",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-20916",
+   "prompt_sha256": "fd76f73ea2c3517c04ffca0eea222860c0d5c68f7f7f9b09577e9b01a66eddf1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-21379",
+   "prompt_sha256": "e10505e688f664cf5c864984e3bfd2cf9ed5ffefa86effd63bc0ce4f608c8381",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-21596",
+   "prompt_sha256": "d49eaf747355c0bf73447d9751061fc6706508bea4293db29e892f6fda93cae6",
+   "short_test_names": 9
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-21612",
+   "prompt_sha256": "d32280f972b88feadb1f6e62d7906d83ec6ab5c9eb75d6bf720eb4919924c225",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-21847",
+   "prompt_sha256": "60e2f421c11f1a5d68f4a9cbae39cb813327e6b65a91d65842f20e1fc6e57498",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-21930",
+   "prompt_sha256": "2e0c5099bf4381bc39e133c2da4358852f95f66d6bd6aeb120a547e366f0839f",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-22080",
+   "prompt_sha256": "c003f1e2cf1db2b8355ea150922a542b01d614f66fe6a5a22da2d4726e6a8ca2",
+   "short_test_names": 8
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-22456",
+   "prompt_sha256": "110b1da6e1d663a98bcd37ad1b6f04d078aa9684afc081f5d98ed9a725983613",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-22714",
+   "prompt_sha256": "52ebfad64b656349ba3d36d9662b41a242d077360a9f6f3e47df8c3dcb64b57c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-22914",
+   "prompt_sha256": "abefd702c3644bf816bb619de6b5448a7ecf45f5661a83372d4ee394d7325b04",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-23262",
+   "prompt_sha256": "314d5063643a961283853bc3da9acac31a24d48dc325e671ef7957cf996a16d6",
+   "short_test_names": 3
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-23413",
+   "prompt_sha256": "1fd9a26170f3909a1eef8eae1fff8b9bd1b6d9512e6a65456ad54b37571a69e3",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-23534",
+   "prompt_sha256": "f1c9c61c8a895017e3cb87ef3e34bbb6c51aea4c550a790ad3040be527d92844",
+   "short_test_names": 0
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-23824",
+   "prompt_sha256": "51b15b632dd534d3abf849ed8741a3c8a2c4c4141c01f703baa760db226f3aed",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-23950",
+   "prompt_sha256": "09383e05e381d2cc0b59760aefd6ee7d269e11b5f519e4454daeee10995d6a3c",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-24066",
+   "prompt_sha256": "b965ada73a2101e500d3912ddfecc55d98775b7bf9795eb1dbc669faf994ffc9",
+   "short_test_names": 4
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-24213",
+   "prompt_sha256": "76c62fd09b0cef789d3128d7b23ec28835ef879361449e9e00bc1bc2baaf0b14",
+   "short_test_names": 4
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-24443",
+   "prompt_sha256": "fa0ea794dd706c46cc0eb71e6962119725105ece443130197483a51dd937939e",
+   "short_test_names": 1
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-24539",
+   "prompt_sha256": "5d5616fbfd81866368224b6ebd66e973248cf99d76e6c3cbfc205a3ad9ff7096",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-24562",
+   "prompt_sha256": "6aad8b5ed967d09c08078f196653ec0bf32c33f8f279875e26b650a8bf21c703",
+   "short_test_names": 2
+  },
+  {
+   "arm": "tr_mined_filter_bm25_u100_s100",
+   "findings": [],
+   "instance_id": "sympy__sympy-24661",
+   "prompt_sha256": "0e2e82e9c44f01cc8faa6b371edc16c4042f13a830cf6c074cf788140981d28d",
+   "short_test_names": 5
+  }
+ ],
+ "short_test_names_total": 192,
+ "version": "rq3-oracle-leak/v1"
+}

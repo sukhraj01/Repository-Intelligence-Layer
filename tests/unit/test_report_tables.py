@@ -140,7 +140,7 @@ REPORT = ROOT / "reports" / "final" / "final_report.tex"
 
 # Entries whose run is in progress and whose registry row does not exist yet; the report holds a
 # marked slot for each. Remove an id here when its entry is registered and the slot is filled.
-PENDING_ENTRIES = {"E-RQ3-ORACLE"}
+PENDING_ENTRIES: set[str] = set()
 
 
 # Built with every report build and read from the stored tables, but not input: the second encoder
@@ -157,7 +157,6 @@ def test_report_inputs_every_fragment_and_every_slot_names_an_entry() -> None:
         assert f"\\input{{generated/{p.stem}}}" in text, p.name
     index = "\n".join(_read(ROOT / p) for p in INDEX_FILES)
     slots = re.findall(r"\\todo\{((?:[^{}]|\{[^{}]*\})*)\}", text)
-    assert slots
     named = [
         s
         for s in slots
