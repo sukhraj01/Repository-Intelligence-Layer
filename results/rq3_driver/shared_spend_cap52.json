@@ -1,0 +1,12 @@
+{
+ "by_owner": {
+  "floor_runs0": 4.918581750000001,
+  "oracle_runs0-1": 5.716792574999994,
+  "tr_mined_filter_bm25_u100_s100_runs0-1-2": 9.116610600000003,
+  "tr_mined_raw_u100_s100_runs0-1-2": 8.930693474999996,
+  "tr_mined_sub_u100_s100_runs0-1-2": 8.974168800000005
+ },
+ "cap_usd": 40.435,
+ "committed": 37.65684719999998,
+ "reserved": {}
+}

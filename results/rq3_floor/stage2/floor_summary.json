@@ -1,0 +1,97 @@
+{
+ "arms": {
+  "floor": {
+   "apply_failed": 159,
+   "arm": "floor",
+   "cache_share_all": 0.04213861156685268,
+   "cache_share_repeats_after_first": null,
+   "calls": 381,
+   "calls_at_output_limit": 152,
+   "cost_usd": 4.1165,
+   "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 4,
+    "MAX_TOKENS": 152,
+    "RECITATION": 9,
+    "STOP": 216
+   },
+   "follow_up_calls": 148,
+   "repeat_sd_points": null,
+   "resolved": 39,
+   "resolved_fraction_by_repeat": [
+    0.16810344827586207
+   ],
+   "rows": 232,
+   "truncation_share": 0.3989501312335958,
+   "unusable": 14,
+   "unusable_share": 0.0603448275862069
+  },
+  "oracle": {
+   "apply_failed": 128,
+   "arm": "oracle",
+   "cache_share_all": 0.4268571486588553,
+   "cache_share_repeats_after_first": 0.7307505887033504,
+   "calls": 756,
+   "calls_at_output_limit": 100,
+   "cost_usd": 5.7168,
+   "finish_reasons": {
+    "MAX_TOKENS": 100,
+    "RECITATION": 6,
+    "STOP": 650
+   },
+   "follow_up_calls": 102,
+   "repeat_sd_points": 0.6487218176023373,
+   "resolved": 295,
+   "resolved_fraction_by_repeat": [
+    0.44648318042813456,
+    0.45565749235474007
+   ],
+   "rows": 654,
+   "truncation_share": 0.13227513227513227,
+   "unusable": 14,
+   "unusable_share": 0.021406727828746176
+  },
+  "rrf": {
+   "apply_failed": 216,
+   "arm": "rrf",
+   "cache_share_all": 0.5091124337530354,
+   "cache_share_repeats_after_first": 0.6604255965112195,
+   "calls": 1294,
+   "calls_at_output_limit": 201,
+   "cost_usd": 9.8755,
+   "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 2,
+    "MAX_TOKENS": 201,
+    "RECITATION": 11,
+    "STOP": 1080
+   },
+   "follow_up_calls": 313,
+   "repeat_sd_points": 0.7696059567044589,
+   "resolved": 392,
+   "resolved_fraction_by_repeat": [
+    0.40672782874617736,
+    0.39143730886850153,
+    0.40061162079510704
+   ],
+   "rows": 981,
+   "truncation_share": 0.1553323029366306,
+   "unusable": 25,
+   "unusable_share": 0.0254841997961264
+  }
+ },
+ "confirmatory": 327,
+ "floor_covered": 232,
+ "runs": {
+  "floor": [
+   0
+  ],
+  "oracle": [
+   0,
+   1
+  ],
+  "rrf": [
+   0,
+   1,
+   2
+  ]
+ }
+}

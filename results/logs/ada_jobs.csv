@@ -311,3 +311,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-15,A,80706,RQ3ORACLE,"differential leak check of the prompts of the three trained arms: 0 findings in 377 prompts each (CPU)",u22,4,0,00:06:49,0.0,COMPLETED
 2026-11-15,A,80737,RQ3FLOOR,"floor arm prompts (377, empty context) and differential leak check (CPU)",u22,2,0,00:00:06,0.0,COMPLETED
 2026-11-15,A,80738,RQ3FLOOR,"floor reference arm at 8,000, 40 of 327 instances x 1 repeat, cap 2.5 USD, spent 0.786 USD, stopped by the projected-cost rule",u22,2,0,00:24:13,0.0,COMPLETED (stopped: projected_cost)
+2026-11-15,A,81110,RQ3FLOOR,"floor reference arm completion run at 8,000, 232 of 287 instances x 1 repeat, cap 6.2 USD, spent 4.132 USD, stopped by an insufficient-balance error",u22,2,0,02:26:51,0.0,COMPLETED (stopped: insufficient_balance)
+2026-11-15,A,81116,RQ3FLOOR,"floor arm no-call replay of the 40 stage-1 replies (CPU)",u22,2,0,00:03:56,0.0,COMPLETED
+2026-11-15,A,81425,RQ3FLOOR,"floor arm no-call replay of the 272 stored replies (CPU)",u22,2,0,00:14:14,0.0,COMPLETED
