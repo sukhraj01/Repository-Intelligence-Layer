@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\caption{RQ3 arms on the confirmatory instances. Evidence class: \emph{measured; four arms pre-registered, oracle and floor exploratory}. Resolved fraction of graded runs with the bootstrap interval over instances; $k$ is the number of adjacent repeats per instance and $N$ the instances graded of the confirmatory set; each trained arm is one model from one training seed; the floor row is the first instances by identifier, not a random draw, and adjacent repeats are not independent runs. Entry \entry{E-RQ3-AGENT}, \entry{E-RQ3-ORACLE}, \entry{E-RQ3-FLOOR}.}
+\label{tab:short_rq3}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.4\linewidth}>{\raggedleft\arraybackslash}p{0.05\linewidth}>{\raggedleft\arraybackslash}p{0.08\linewidth}>{\raggedleft\arraybackslash}p{0.3\linewidth}}
+\toprule
+Arm & $k$ & $N$ & Resolved (\%) [interval] \\
+\midrule
+Untrained & 3 & 327 & 39.96 [35.0, 45.1] \\
+Raw & 3 & 327 & 42.41 [37.3, 47.7] \\
+Filter (BM25 teacher) & 3 & 327 & 41.59 [36.6, 46.9] \\
+Size-matched subsample & 3 & 327 & 39.25 [34.1, 44.2] \\
+\midrule
+Oracle calibration, exploratory & 2 & 327 & 45.11 [39.9, 50.2] \\
+No-retrieval floor, exploratory & 1 & 272 & 16.91 [12.5, 21.3] \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,102 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\setlist{nosep,leftmargin=*}
+\setlength{\columnsep}{0.25in}
+\setlength{\textfloatsep}{6pt}
+\setlength{\floatsep}{6pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\parskip}{2pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{5pt}{2pt}{\normalfont\large\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{3pt}{-0.5em}{\normalfont\bfseries}}
+\makeatother
+% experiment entry id; hyphens may break
+\newcommand{\entry}[1]{{\ttfamily\hyphenchar\font=`\-\relax #1}}
+
+\title{\vspace{-0.65in}\textbf{Repository Intelligence Layer: Two-Page Report}\\[2pt]
+\large Does the quality of a retriever's training data reach coding-agent success?}
+\author{Sukhraj Singh\\ \small Roll number 2025202009 \quad M.Tech CSIS, IIIT Hyderabad}
+\date{\vspace{-14pt}}
+
+\begin{document}
+\maketitle
+\vspace{-0.3in}
+
+% Every line of prose that holds a number ends in a % comment naming the experiment entry and the
+% stored file the number was read from (scripts/check_report.py --short enforces it), and every
+% number must also stand in the full report (the same script checks that).
+
+\section{Problem and contribution}
+
+Coding agents work inside a fixed context window while a real repository is far larger, so something must decide which code the agent reads.
+The \emph{Repository Intelligence Layer} (RIL) is a repository-level retrieval layer for coding agents: given an issue, it returns a small ranked set of Python code units that fit a token budget.
+It combines a function-level index, lexical (BM25), dense and structural (typed code graph) signals, rank fusion and context assembly, and it is the apparatus, not the contribution.
+The contribution is a frozen, controlled evaluation: retrievers that differ only in how their training pairs are handled, one fixed agent, and a measurement of whether the difference survives to the resolved rate.
+\textbf{RQ1} asks which retrieval signals matter, with latency per stage; \textbf{RQ2} how supervision of the retriever affects retrieval under \emph{matched optimization budgets}; \textbf{RQ3} whether retrieval changes a coding agent's resolved rate.
+The scope is Python only, and the contribution is an empirical comparison, not an intervention.
+
+\section{Method}
+
+\paragraph{Retrieval ladder (RQ1).} Dense retrieval (CodeRankEmbed) is the base; BM25 is added by reciprocal rank fusion (RRF), then same-file expansion, then typed graph expansion, which is read against a size-matched same-file control.
+Queries are those of a repository-level retrieval benchmark: Level~2 (L2) localizes the code an issue's fix edits and Level~3 (L3) asks for broader context. nDCG@10 rewards placing relevant units early and Recall@100 asks whether they are reachable at all.
+All settings were chosen on development repositories only, so the ladder is exploratory.
+
+\paragraph{Training arms (RQ2).} Training pairs are mined from pull requests (the issue is the query, the edited functions are the positives) with no retriever in the loop and audited against held-out repositories.
+\textsc{Raw} uses every pair; \textsc{Filter} drops a pair whose positive a separately pretrained BM25 teacher ranks below $K=20$ (SweRank's K-rank); \textsc{Weight} down-weights by the same rank; \textsc{Curriculum} orders pairs easy to hard; a random subsample of \textsc{Raw} of the filtered size is the control. % docs/RQ2_PROTOCOL.md section 3
+Every arm trains the same encoder for the same 100 optimizer updates at three seeds, the retrieval stack is frozen across arms, and the retained models are scored once on eight evaluation repositories and on the executable subset. % E-RQ2-FINAL docs/RQ2_PROTOCOL.md section 3
+Two contrasts are confirmatory (\textsc{Filter} against \textsc{Raw} and against the subsample); everything else is exploratory.
+The decision interval is a cluster-robust $t$ interval inside a Holm step-down, adopted before any final row existed (DEV-040); one table field that had shown the bootstrap interval under the $t$ label was corrected and no decision changed (DEV-044).
+
+\paragraph{Agent evaluation (RQ3).} A fixed one-shot repair scaffold gives one hosted model the issue and the assembled context (8,000 tokens) at temperature 0; it answers with search-and-replace blocks that are applied and graded by running the tests. % docs/RQ3_PILOT.md D113 E-RQ3-AGENT
+The confirmatory set is 327 instances: the executable subset of 377 of the 500 instances of a human-validated benchmark (the reference patch passes every named test in two agreeing runs), less a slice of 50 used to choose the model. % E-RQ3-EXEC results/rq3_exec/repo_table.csv docs/RQ3_PILOT.md
+The pre-registered analysis has one primary contrast, \textsc{Raw} against the untrained retriever, a paired bootstrap and a sign-flip test, with three adjacent repeats per arm. % E-RQ3-DRIVER docs/RQ3_PILOT.md D113
+
+\section{RQ1: which signals matter}
+
+\input{generated/short_rq1}
+
+Table~\ref{tab:short_rq1} is on the development set only, and exploratory. Adding BM25 to the dense retriever by rank fusion gains $+5.8$ points of nDCG@10 at Level~2 and $+9.0$ of Recall@100 at Level~3, and same-file expansion adds $+12.2$ at Level~3 and $+1.8$ at Level~2. % E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+The typed graph does not beat the same-file control: $-$5.6 points of Recall@100 at Level~3 and $-$0.5 of nDCG@10 at Level~2 (interval including zero). % E-RQ1-LADDER results/tables/rq1_ladder_cre_compare.csv
+Median stage costs are 5.04 ms for fusion, 0.41 ms for same-file expansion and 1.14 ms for the stored-graph row, which includes a BM25 pass, against 18.34 ms for the dense path. % E-FREEZE-AND-LATENCY results/tables/rq1_ladder_latency.csv
+They were timed on different machines and are not an end-to-end percentile; the Level~3 intervals are query-level over two repositories, and the expansion settings were tuned on the same set, so the gains are optimistic. % E-RQ1-LADDER E-RECENCY docs/experiments/B.md
+
+\section{RQ2: supervision under matched budgets}
+
+The confirmatory result is a null at this sample size: no contrast is rejected, and every Holm-adjusted $p$ is 0.15 or higher. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
+The unadjusted $t$ intervals exclude a gain of \textsc{Filter} over the subsample above 1.12 points of nDCG@10 at Level~2 and 0.70 of Recall@100 at Level~3 on the executable subset (0.97 of nDCG@10 on the eight repositories), and over \textsc{Raw} above 1.22 points on the eight repositories. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
+Two contrasts against \textsc{Raw} on the executable subset, $+0.82$ points of nDCG@10 at Level~2 and $+0.67$ of Recall@100 at Level~3, have unadjusted intervals ([0.06, 1.57] and [0.00, 1.34]) that reach zero from above; their adjusted $p$ is 0.15 and the bootstrap straddles zero, so they are inconclusive, not effects. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv DEV-044
+One of them is rejected only when seed 101 is left out (adjusted $p$ 0.039); across the three leave-one-seed-out choices its estimate runs from $+0.03$ to $+1.23$ points and its $p$ from 0.039 to 1.00, a seed sensitivity and not a finding. % E-RQ2-SENS-SEED101 results/tables/rq2_final_leave_one_seed_out.csv
+In three exploratory contrasts, \textsc{Curriculum} is lower after the Holm step ($-$1.01, $-$1.08 and $-$0.43 points); \textsc{Weight} is not distinguishable from \textsc{Raw} anywhere. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
+
+\section{RQ3: resolved rate}
+
+\input{generated/short_rq3}
+
+Table~\ref{tab:short_rq3} gives the arms. The primary contrast, \textsc{Raw} against the untrained retriever, is $+2.45$ points (interval $-$0.82 to $+5.91$, sign-flip $p=0.177$) and is not distinguishable from zero. % E-RQ3-AGENT results/rq3_driver/remaining_arms/rq3_results_contrasts.csv
+The other arms do not separate either; the one interval that excludes zero (subsample below \textsc{Raw}, $-$3.16) is one of five unadjusted estimates and is not read as a finding. % E-RQ3-AGENT results/rq3_driver/remaining_arms/rq3_results_contrasts.csv
+The design could detect only about 7 to 9 points at the measured rate of 40\%, so this is a null with that bound, not evidence of no effect. % E-RQ3-RUN-AGREEMENT results/rq3_driver/rq3_power_measured_agreement_mdd.csv
+The exploratory oracle arm, stated before its run, puts the files that the gold patch modifies first in the context; it resolved 45.11\%, $+5.15$ points over the untrained arm (interval $+0.61$ to $+9.73$, unadjusted $p=0.035$, one of eight comparisons), an estimate below the 7.1 to 7.9 points it could detect and so probably inflated. % E-RQ3-ORACLE results/rq3_oracle/rq3_oracle_contrasts.csv
+The gold files were cut or partly left out in 208 of the 327 instances, so it is a calibration and not a ceiling. % E-RQ3-ORACLE docs/experiments/B.md
+The exploratory floor arm gave the model the issue text and an empty context and resolved 16.91\% of the 272 instances it reached, not near zero as expected, and 25.00 points below the untrained arm on the same instances (interval 19.36 to 30.51). % E-RQ3-FLOOR results/rq3_floor/pooled/rq3_floor_contrasts.csv
+Part of every resolved rate may therefore reflect prior knowledge of the repositories, which the data cannot separate from information in the issue text. % E-RQ3-FLOOR docs/experiments/B.md
+The plain reading is a null at this power: retrieved context matters a great deal (floor against untrained), while the supervision variants do not separate.
+
+\section{Limitations}
+
+The graded runs use one hosted model from one provider, one-shot repair with no candidate selection, and each trained arm is one model of one training seed. % E-RQ3-AGENT docs/experiments/B.md
+The output limit of 4,096 tokens was reached by 13.7 to 15.5\% of calls in every arm, so some edits may be cut off, equally for every arm. % E-RQ3-AGENT docs/experiments/B.md
+The benchmark's repositories are public and the exposure of the model was not measured, which the floor arm makes visible. % E-RQ3-FLOOR docs/experiments/B.md
+Six of the 42 training runs did not use the requested GPU model and its effect was not measured. % E-RQ2-DEV-ANALYSIS docs/experiments/B.md
+The floor arm covers 272 of the 327 instances (the 55 not run are all sympy, and 73\% of those run are django), and the executable subset is skewed toward one project. % E-RQ3-FLOOR results/rq3_floor/replay_all/rq3_floor_replay_by_repo.csv
+Adjacent repeats are not independent runs, and absolute resolved rates are not statements of agent capability.
+
+\paragraph{What the evidence supports.} Under matched budgets and one fixed retrieval stack, filtering mined pull-request pairs did not separate from raw pairs or a size-matched subsample in retrieval or in resolved rate, a null with its stated bound for Python, one model and one-shot repair, and not evidence that supervision has no effect.
+
+\end{document}
