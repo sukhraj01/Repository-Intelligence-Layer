@@ -3,7 +3,7 @@
 > Current truth only, replaced at the end of each block (at most 150 lines). Result rows are in
 > `results/ledger_a.md`; protocols and full tables in `docs/experiments/A.md` (sections A1-PILOT, A2a, A2c, A2b-PREP, A2b).
 
-**Last updated:** 2026-11-05 · branch `a/rq1-2` from `main` (A1-PILOT and A2a merged; A2c and A2b carried over from `a/rq1`) · block 1 nearly done (A2 done: parts a, b and c; A1 chunk-level dev selection done, fields and granularity open).
+**Last updated:** 2026-11-15 · branch `a/rq3-breakdown` from `main` · RQ3 retrieval-versus-reasoning breakdown added to both reports (stored rows only).
 
 ## Done
 
@@ -15,6 +15,7 @@
 | A2 (b) prep | Static breakdown of failed call sites by rule (no oracle needed) | done: 80% of ambiguous or unresolved sites are calls on a receiver of unknown type | A2b-PREP |
 | A2 (b) | Three resolver typing options (`ResolverOptions`: return inference, merged locals, parameter defaults), off by default; stored resolver byte-identical | **done**: static, combined +1,133 resolved sites over 5 repositories (+1.2%), unknown-receiver sites -4.3%, build +7.1% (within timing noise); dynamic on the flask suite trace, recall 48.3% to 49.2%, precision lower bound 61.8% to 62.0%, all 13 added pairs right by trace or source; the remaining failures are mostly attribute chains and parameters (inter-procedural typing) | A2b, `results/tables/a2b_summary.json` |
 | A1 (code) | Identifier splitting (`split_identifier`, `tokenize_code`, option to keep the whole identifier) and integer field weights (`field_tokens`) in `ril/retrieval/bm25_index.py`; the reference form is unchanged | done, tested | `tests/unit/test_bm25_index.py` |
+| RQ3 breakdown | Graded runs of the four registered arms split by gold-file coverage of each arm's context; cost per attempt; repository size (E-RQ3-BREAKDOWN) | **done**: 62.65 to 67.62% of failed runs had every gold file in the context; coverage gain of the trained retrievers explains about one point of resolved rate; 12,584 to 13,389 tokens per attempt | E-RQ3-BREAKDOWN, `results/rq3_breakdown/summary.json` |
 | A1 (dev, chunk level) | BM25 tokenizer then k1/b on the CORE-Bench dev folders (6 repositories, 680 queries), rule fixed before the run; own cluster account | **done**: regression control exact (E1 dev default, 23.8244); `split` +5.9 nDCG@10 over `ref`, clustered [+3.3, +8.2], every repository; k1 2.0 / b 0.75 +0.6 [+0.1, +1.0] (edge of grid); candidate `configs/candidates/bm25_A.yaml` | A1-DEV, `results/tables/a1_bm25_dev.csv` |
 | A1 (pilot) | Docstring-to-function retrieval on 5 local checkouts, docstrings removed from the index (exploratory) | done: splitting +8.9 MRR [+6.9, +10.5] clustered, name weight +13.1 [+10.3, +15.9]; query latency unchanged | A1-PILOT, `results/tables/a1_bm25_docstring_pilot.csv` |
 

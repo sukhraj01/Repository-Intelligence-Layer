@@ -13,6 +13,7 @@ Append-only log, entries by this workstream only. Rules, interpretation rules an
 | A2b-PREP | RQ1 ext. (apparatus) | none (census of invoke sites by status and resolver rule) | repositories, resolver | 0 | site counts per rule | done 2026-10-31 (section A2b-PREP) |
 | A2b | RQ1 ext. (apparatus) | resolver typing options (return inference, merged locals, parameter defaults, all three) | repositories, parse, stored resolver rules | 0 | invoke sites by status; unknown-receiver sites; build seconds; trace recall and precision on flask | done 2026-11-05 (section A2b) |
 | A1-DEV | RQ1 ext. (apparatus) | BM25 tokenizer (ref, split, split_noorig), then k1 x b on the chosen tokenizer; chunk level | dev folders of `configs/experiments/e1_bm25_dev3.yaml`, prefilter, metrics, stop list, stemmer | 0 | pooled nDCG@10 (protocol) with paired and clustered intervals; Recall@100; tokenise and build throughput; query p50/p95/p99 | chunk-level selection done 2026-11-05; fields and granularity open (section A1-DEV) |
+| E-RQ3-BREAKDOWN | RQ3 (exploratory, descriptive) | none: the stored graded runs of the four registered arms split by whether the arm's context held all, some or none of the files the gold patch modifies; tokens and cost per graded run; Python-code size of four checkouts | the rows of E-RQ3-AGENT, the context file lists and gold files of E-RQ3-ORACLE, the floor contrasts of E-RQ3-FLOOR; no model call | n/a | `results/rq3_breakdown/` (`breakdown.csv`, `attempt_cost.csv`, `repo_python_tokens.csv`, `summary.json`), `ril/analysis/rq3_breakdown.py`, `scripts/a_rq3_breakdown.py` | done 2026-11-15 (section E-RQ3-BREAKDOWN) |
 
 ## A1-PILOT: identifier splitting and field weights for BM25 on docstring-to-function retrieval, exploratory, done 2026-10-31
 
@@ -282,4 +283,45 @@ cells, run in a different job, give a p95 of about 6.7 to 7.0 ms for the same to
 between jobs are within node-to-node variation. Candidate setting: `configs/candidates/bm25_A.yaml` (`split`, k1 2.0,
 b 0.75), to the lead as a request (ADR-004). Open: field weights and unit-versus-chunk granularity (unit texts needed),
 then one reading of the Verified six with the single final setting.
+
+## E-RQ3-BREAKDOWN: retrieval versus reasoning in the graded agent runs, and the cost of a context, done 2026-11-15
+
+**Question.** The registered RQ3 contrasts are nulls at their power (E-RQ3-AGENT). Is that because the trained retrievers
+change little of what reaches the model, or because the model fails with the right files in front of it? And what does one
+attempt cost, in tokens and against the size of a repository? Exploratory and descriptive: stored rows only, no model call.
+
+**Method** (`ril/analysis/rq3_breakdown.py`, tests `tests/unit/test_rq3_breakdown.py`, script `scripts/a_rq3_breakdown.py`).
+For each of the four registered arms (untrained, RAW, FILTER-BM25, subsample; three adjacent repeats on the 327 confirmatory
+instances), every graded run is put in a class by the arm's own context file list (`results/rq3_oracle/files_*.json`):
+every file the gold patch modifies is in the context (`all`), some are (`some`), none is (`none`); gold files are those of
+`results/rq3_oracle/oracle_gold_files.json` (modified files only; one instance also creates a file, which no context can
+hold). Outcomes are the registered exact reading. The resolved-rate gain that a trained arm's coverage alone explains is the
+shift in instances per class times the untrained arm's resolved fraction in that class, over 327 (reasoned arithmetic on
+measured counts). Cost per graded run (one repeat of an instance with its follow-ups) sums prompt and output tokens (output
+includes thinking) and the realised cost. Repository size is the Python code of four local checkouts at their current heads
+(django a05e16a, pytest 0212785, flask 49943b5, requests 3c7baaa) counted by the assembly's approximate tokenizer; these are
+not the instances' base commits, so the shares are an order of magnitude only.
+
+**Result** (`results/rq3_breakdown/breakdown.csv`, `summary.json`, `attempt_cost.csv`, `repo_python_tokens.csv`):
+
+| arm | instances all / some / none | resolved share of runs: all / some / none | failed runs with all gold present | with none | coverage gain explained | observed difference | tokens per run | USD per run |
+|---|---|---|---|---|---|---|---|---|
+| untrained | 250 / 18 / 59 | 50.80 / 11.11 / 2.82 | 62.65% | 29.20% | - | - | 13,388.5 | 0.01007 |
+| RAW | 256 / 23 / 48 | 51.43 / 11.59 / 9.03 | 66.02% | 23.19% | +1.01 | +2.45 | 12,583.6 | 0.0091 |
+| FILTER-BM25 | 255 / 21 / 51 | 50.59 / 4.76 / 11.76 | 65.97% | 23.56% | +0.81 | +1.63 | 12,689.8 | 0.00929 |
+| subsample | 257 / 20 / 50 | 47.73 / 10.00 / 7.33 | 67.62% | 23.32% | +1.08 | -0.71 | 12,662.2 | 0.00915 |
+
+Repository size: django 5,329,686 approximate tokens of Python code (the 8,000-token context is 0.15% of it), pytest
+1,066,404 (0.75%), flask 170,275 (4.70%), requests 116,395 (6.87%). On the 272 instances of the floor arm the untrained
+context covers 82.93% of the distance between no context (16.91%) and the oracle arm (47.06%) (own repeats; from
+`results/rq3_floor/pooled/rq3_floor_contrasts.csv`).
+
+**Reading.** Evidence class: measured counts, reasoned arithmetic for the explained gain. Most failures (63 to 68% of failed
+runs) happen with every gold file in the context, and the resolved share given full coverage is about 48 to 51% in every arm;
+the trained retrievers add full coverage for only 5 to 7 of the 327 instances, worth about one point of resolved rate at the
+untrained conversion rates, far below the 7 to 9 points the design detects. The observed arm differences scatter around that
+point, which is what run and training noise would give. The classes are chosen on a retrieval outcome, so they describe where
+failures sit and are not a causal estimate per instance; the `none` class has 48 to 59 instances per arm, so its resolved shares
+are rough. One graded attempt costs about 12,600 to 13,400 tokens and about one US cent. No arm searched the repository
+itself, so this says nothing about cost against an agent's own exploration.
 
