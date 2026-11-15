@@ -2148,7 +2148,7 @@ def _pct_ci(tr: Trace, r: Row, nd: int = 1) -> str:
     )
 
 
-def rq3_breakdown_failures(root: Path) -> Table:
+def _breakdown_failures(root: Path, level: str, name: str, title: str, unit: str) -> Table:
     """Unresolved attempts and resolved rates by whether the context held the gold files.
 
     Implements ``docs/experiments/B.md`` "E-RQ3-FAILURE-BREAKDOWN" (file level): descriptive and
@@ -2159,28 +2159,30 @@ def rq3_breakdown_failures(root: Path) -> Table:
     b = _csv(root, f"{BREAKDOWN_BASE}/table_b_resolved_by_gold_status.csv", tr)
     out: list[list[str]] = []
     for key, label in BREAKDOWN_ARMS:
-        tot = _pick(a, arm=key, level="file", outcome_class="all_unresolved")
+        tot = _pick(a, arm=key, level=level, outcome_class="all_unresolved")
         cells = [
             tr.lit(label),
             tr.count(tot["n"]),
             tr.num(100 * float(tot["share_all_gold"]), 1),
         ]
         for st in ("all", "some", "none"):
-            r = _pick(b, arm=key, level="file", status=st)
+            r = _pick(b, arm=key, level=level, status=st)
             cells.append(f"{_pct_ci(tr, r)} ({tr.count(r['instances'])})")
         out.append(cells)
     facts = (
         "Attempts of the graded arms on the confirmatory instances (three adjacent repeats; the "
-        "oracle arm two). Gold files are the files the reference patch edits; a context holds all, "
-        "some or none of them. Columns: unresolved attempts, the share of them whose context held "
-        "all gold files, and the resolved percentage of attempts by gold status with a bootstrap "
+        f"oracle arm two). Gold {unit} are the {unit} the reference patch edits; a context holds "
+        "all, some or none of them (instances with no gold unit, a patch that only adds code, are "
+        "left out of the three groups). Columns: unresolved attempts, the share of them whose "
+        f"context held all gold {unit}, and the resolved percentage of attempts by gold status "
+        "with a bootstrap "
         "interval over instances and the number of instances in parentheses. Exploratory and "
         "descriptive: instances whose gold is easy to retrieve may also be easier to repair, so "
         "the conditional rates are not causal"
     )
     return Table(
-        name="rq3_breakdown_failures",
-        title="Failures and resolved rate by gold status of the context (file level)",
+        name=name,
+        title=title,
         evidence="measured, exploratory, descriptive",
         facts=facts,
         entries=["E-RQ3-FAILURE-BREAKDOWN"],
@@ -2189,7 +2191,7 @@ def rq3_breakdown_failures(root: Path) -> Table:
         header=[
             tr.lit("Arm"),
             tr.lit("Unresolved"),
-            tr.lit("All gold (%)"),
+            tr.lit(f"All gold {unit} (%)"),
             tr.lit("Resolved, all gold (%)"),
             tr.lit("Resolved, some (%)"),
             tr.lit("Resolved, none (%)"),
@@ -2199,7 +2201,29 @@ def rq3_breakdown_failures(root: Path) -> Table:
     )
 
 
-def rq3_breakdown_paired(root: Path) -> Table:
+def rq3_breakdown_failures(root: Path) -> Table:
+    """File level (primary)."""
+    return _breakdown_failures(
+        root,
+        "file",
+        "rq3_breakdown_failures",
+        "Failures and resolved rate by gold status of the context (file level)",
+        "files",
+    )
+
+
+def rq3_breakdown_failures_units(root: Path) -> Table:
+    """Unit level (extra): the units the reference patch edits, instances without one apart."""
+    return _breakdown_failures(
+        root,
+        "unit",
+        "rq3_breakdown_failures_units",
+        "Failures and resolved rate by gold status of the context (unit level, extra)",
+        "units",
+    )
+
+
+def _breakdown_paired(root: Path, level: str, name: str, title: str) -> Table:
     """Paired gold-presence counts against the untrained arm and the consistency check.
 
     Implements ``docs/experiments/B.md`` "E-RQ3-FAILURE-BREAKDOWN" (tables c and d, file level).
@@ -2217,9 +2241,9 @@ def rq3_breakdown_paired(root: Path) -> Table:
     out: list[list[str]] = []
     for key, label in names.items():
         meas = _pick(m, first=full[key], second="rrf", reading="exact")
-        chk = _pick(d, arm=key, level="file_status")
+        chk = _pick(d, arm=key, level=level)
         for view, vname in (("all", "all gold files"), ("any", "any gold file")):
-            r = _pick(c, arm=key, level="file_status", view=view)
+            r = _pick(c, arm=key, level=level, view=view)
             row = [
                 tr.lit(label),
                 tr.lit(vname),
@@ -2257,8 +2281,8 @@ def rq3_breakdown_paired(root: Path) -> Table:
         "Exploratory and descriptive"
     )
     return Table(
-        name="rq3_breakdown_paired",
-        title="Instances moved into or out of all-gold contexts, and a consistency check",
+        name=name,
+        title=title,
         evidence="measured, exploratory, descriptive",
         facts=facts,
         entries=["E-RQ3-FAILURE-BREAKDOWN"],
@@ -2285,6 +2309,26 @@ def rq3_breakdown_paired(root: Path) -> Table:
         ],
         rows=out,
         trace=tr,
+    )
+
+
+def rq3_breakdown_paired(root: Path) -> Table:
+    """File level (primary)."""
+    return _breakdown_paired(
+        root,
+        "file_status",
+        "rq3_breakdown_paired",
+        "Instances moved into or out of all-gold contexts, and a consistency check",
+    )
+
+
+def rq3_breakdown_paired_units(root: Path) -> Table:
+    """Unit level (extra)."""
+    return _breakdown_paired(
+        root,
+        "unit_status",
+        "rq3_breakdown_paired_units",
+        "Instances moved into or out of all-gold-unit contexts, and a consistency check (extra)",
     )
 
 
@@ -2433,6 +2477,8 @@ BUILDERS = (
     rq3_oracle_gap,
     rq3_breakdown_failures,
     rq3_breakdown_paired,
+    rq3_breakdown_failures_units,
+    rq3_breakdown_paired_units,
     rq3_efficiency,
     rq3_django,
     rq2_final_confirmatory,
