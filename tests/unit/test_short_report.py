@@ -62,9 +62,11 @@ def test_the_short_report_passes_its_checks() -> None:
         assert ref in labels
 
 
-def test_header_names_the_author_and_has_no_placeholder() -> None:
+def test_header_names_the_authors_and_has_no_placeholder() -> None:
     text = _read(SHORT)
     assert "Sukhraj Singh" in text and "2025202009" in text
+    assert "Neill Rawani" in text and "2025202027" in text
+    assert "Chaitanya Shah" in text and "2025202033" in text
     assert "M.Tech CSIS" in text and "IIIT Hyderabad" in text
     assert "http" not in text and "github" not in text.lower()
     assert "todo" not in text.lower() and "TBD" not in text
