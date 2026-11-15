@@ -279,8 +279,15 @@ def consistency_check(
     return out
 
 
-def efficiency(rows: Rows, arm: str, instances: Collection[str]) -> dict[str, Any]:
-    """Per-arm tokens, calls and cost from the result rows (sums over the calls of an attempt)."""
+def efficiency(
+    rows: Rows, arm: str, instances: Collection[str], seed: int = 0, resamples: int = RESAMPLES
+) -> dict[str, Any]:
+    """Per-arm tokens, calls and cost from the result rows (sums over the calls of an attempt).
+
+    Per-attempt means come with a percentile bootstrap interval over instances (the mean of each
+    instance's attempts is resampled), for the cost, the uncached prompt, the output tokens and the
+    calls.
+    """
     keep = set(instances)
     sel = [r for r in latest(rows) if str(r["arm"]) == arm and str(r["instance_id"]) in keep]
     n = len(sel)
@@ -289,9 +296,22 @@ def efficiency(rows: Rows, arm: str, instances: Collection[str]) -> dict[str, An
         return float(sum(float(r.get(key) or 0) for r in sel))
 
     inp, cached = total("input_tokens"), total("cached_tokens")
-    return {
+    ids = sorted({str(r["instance_id"]) for r in sel})
+    pos = {i: j for j, i in enumerate(ids)}
+
+    def per_instance(fn: Any) -> Arr:
+        acc = np.zeros(len(ids))
+        cnt = np.zeros(len(ids))
+        for r in sel:
+            j = pos[str(r["instance_id"])]
+            acc[j] += fn(r)
+            cnt[j] += 1
+        return acc / cnt
+
+    out: dict[str, Any] = {
         "arm": arm,
         "attempts": n,
+        "instances": len(ids),
         "prompt_tokens_per_attempt": inp / n,
         "cached_prompt_tokens_per_attempt": cached / n,
         "uncached_prompt_tokens_per_attempt": (inp - cached) / n,
@@ -304,6 +324,21 @@ def efficiency(rows: Rows, arm: str, instances: Collection[str]) -> dict[str, An
         "prompt_tokens_total": inp,
         "output_tokens_total": total("output_tokens"),
     }
+    series = {
+        "cost_usd": lambda r: float(r.get("cost_usd") or 0),
+        "uncached_prompt_tokens": lambda r: (
+            float(r.get("input_tokens") or 0) - float(r.get("cached_tokens") or 0)
+        ),
+        "output_tokens": lambda r: float(r.get("output_tokens") or 0),
+        "calls": lambda r: float(r.get("calls") or 0),
+    }
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, len(ids), size=(resamples, len(ids)))
+    for name, fn in series.items():
+        lo, hi = percentile_interval(per_instance(fn)[idx].mean(axis=1))
+        out[f"{name}_per_attempt_ci_low"] = lo
+        out[f"{name}_per_attempt_ci_high"] = hi
+    return out
 
 
 def gap_closed(u: Arr, f: Arr, o: Arr, seed: int, resamples: int = RESAMPLES) -> dict[str, Any]:

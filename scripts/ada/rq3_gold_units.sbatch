@@ -5,7 +5,7 @@
 #SBATCH --qos=low
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=4G
-#SBATCH --time=01:00:00
+#SBATCH --time=03:00:00
 #SBATCH --output=ril_rq3g/logs/%x_%j.out
 # CPU only, no model call, no GPU. Gold units (units edited by the reference patch) of the 377
 # executable instances for the failure breakdown (E-RQ3-FAILURE-BREAKDOWN). Reads the patch column
@@ -26,13 +26,13 @@ NODE_FREE=$(df -Pm "${TMPDIR:-/tmp}" | awk 'NR==2{print $4}')
 TMPW=$(mktemp -d "${TMPDIR:-/tmp}/ril_rq3g.XXXXXX")
 trap 'rm -rf "$TMPW"' EXIT
 # Bare repositories: the cached ones are linked, the others (django, sympy, pytest, sphinx, pylint)
-# are cloned to node-local disk as the oracle build does, and removed at exit.
+# are cloned without file contents (blob-less) to node-local disk; the contents of the few edited files are fetched on demand by git show, and removed at exit.
 mkdir -p "$TMPW/repo_cache"
 for repo in django/django sympy/sympy pytest-dev/pytest sphinx-doc/sphinx pylint-dev/pylint astropy/astropy \
   pydata/xarray psf/requests mwaskom/seaborn pallets/flask; do
   name=${repo/\//__}
   if [ -d "$E/repo_cache/$name.git" ]; then ln -s "$E/repo_cache/$name.git" "$TMPW/repo_cache/$name.git"
-  else git clone -q --bare "https://github.com/$repo.git" "$TMPW/repo_cache/$name.git"; fi
+  else git clone -q --bare --filter=blob:none "https://github.com/$repo.git" "$TMPW/repo_cache/$name.git"; fi
 done
 cd "$W"
 export PYTHONPATH="$W"

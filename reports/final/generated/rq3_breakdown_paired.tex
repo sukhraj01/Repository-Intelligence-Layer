@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering\small
+\caption{Instances moved into or out of all-gold contexts, and a consistency check. Evidence class: \emph{measured, exploratory, descriptive}. Instances whose context in the arm gains, loses or keeps the presence of gold files compared with the untrained arm (gross, both ways, then net), for the confirmatory instances; kept means present in both. The last three columns, on the all-gold rows only, are a consistency check and not an explanation: the net change in all-gold instances times the untrained arm's resolved rate difference between all-gold and other instances (with a bootstrap interval over instances), the same net times the all-gold rate alone, in points of the resolved fraction, beside the measured contrast and its interval. Exploratory and descriptive. Entry \entry{E-RQ3-FAILURE-BREAKDOWN}.}
+\label{tab:rq3_breakdown_paired}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.05\linewidth}>{\raggedleft\arraybackslash}p{0.05\linewidth}>{\raggedleft\arraybackslash}p{0.06\linewidth}>{\raggedleft\arraybackslash}p{0.05\linewidth}>{\raggedleft\arraybackslash}p{0.16\linewidth}>{\raggedleft\arraybackslash}p{0.08\linewidth}>{\raggedleft\arraybackslash}p{0.16\linewidth}}
+\toprule
+Arm against untrained & Presence of & Gain & Loss & Kept & Net & Check (difference form) & Check (all-gold rate) & Measured contrast \\
+\midrule
+Raw & all gold files & 17 & 11 & 239 & +6 & +0.84 [$-$0.59, 2.37] & +0.93 & +2.45 [$-$0.82, 5.91] \\
+Raw & any gold file & 22 & 11 & 257 & +11 & -- & -- & -- \\
+Filter (BM25 teacher) & all gold files & 17 & 12 & 238 & +5 & +0.70 [$-$0.73, 2.22] & +0.78 & +1.63 [$-$1.73, 4.99] \\
+Filter (BM25 teacher) & any gold file & 20 & 12 & 256 & +8 & -- & -- & -- \\
+Size-matched subsample & all gold files & 19 & 12 & 238 & +7 & +0.99 [$-$0.53, 2.64] & +1.09 & $-$0.71 [$-$4.18, 2.75] \\
+Size-matched subsample & any gold file & 21 & 12 & 256 & +9 & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table*}

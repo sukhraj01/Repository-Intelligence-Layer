@@ -83,7 +83,9 @@ def _ids(path: str) -> list[str]:
 def cmd_presence(a: argparse.Namespace) -> int:
     ids = _ids(a.ids)
     gold_files = json.loads(Path(a.gold_files).read_text(encoding="utf-8"))["instances"]
-    gold_units = json.loads(Path(a.gold_units).read_text(encoding="utf-8"))["instances"]
+    gold_units: dict[str, Any] = {}
+    if a.gold_units and Path(a.gold_units).exists():
+        gold_units = json.loads(Path(a.gold_units).read_text(encoding="utf-8"))["instances"]
     manifests: dict[str, dict[str, list[dict[str, Any]]]] = {}
     with tarfile.open(a.untrained_tar) as tf:
         got: dict[str, list[dict[str, Any]]] = {}
@@ -110,7 +112,7 @@ def cmd_presence(a: argparse.Namespace) -> int:
         for iid in ids:
             gf = gold_files[iid]["modified"]
             gpy = [f for f in gf if f.endswith(".py")]
-            gu = gold_units[iid]["units"]
+            gu = gold_units[iid]["units"] if gold_units else []
             p = fb.presence(per[iid], gf, gu)
             ppy = fb.presence(per[iid], gpy, gu)
             rows.append(
@@ -163,7 +165,9 @@ def cmd_analyse(a: argparse.Namespace) -> int:
     summary["attempts"] = {k: len(v) for k, v in att.items()}
     summary["exec_errors"] = sum(1 for x in flat if x["outcome_class"] == "exec_error")
 
-    levels = {"file": "file_status", "file_py": "file_status_py", "unit": "unit_status"}
+    levels = {"file": "file_status", "file_py": "file_status_py"}
+    if any(int(r["n_gold_units"]) > 0 for r in pres["rrf"].values()):
+        levels["unit"] = "unit_status"
     tab_a: list[dict[str, Any]] = []
     tab_a_floor: list[dict[str, Any]] = []
     tab_b: list[dict[str, Any]] = []
@@ -211,7 +215,7 @@ def cmd_analyse(a: argparse.Namespace) -> int:
     _write(out_dir / "table_d_consistency_check.csv", tab_d)
 
     eff = [
-        fb.efficiency(rows_by[k], ARM_NAME[k], ids)
+        fb.efficiency(rows_by[k], ARM_NAME[k], ids, seed + 51)
         for k in ("rrf", "raw", "filter", "sub", "oracle", "floor")
     ]
     for e, k in zip(eff, ("rrf", "raw", "filter", "sub", "oracle", "floor"), strict=True):
@@ -273,7 +277,11 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("presence")
     p.add_argument("--gold-files", default="results/rq3_oracle/oracle_gold_files.json")
-    p.add_argument("--gold-units", default="results/rq3_failure_breakdown/gold_units.json")
+    p.add_argument(
+        "--gold-units",
+        default="results/rq3_failure_breakdown/gold_units.json",
+        help="optional; without it the unit level is left out",
+    )
     p.add_argument("--ids", default=f"{D}/ids_confirmatory.txt")
     p.add_argument("--untrained-tar", required=True)
     p.add_argument("--trained", nargs="+", required=True, help="NAME=ARMKEY:DIR")
