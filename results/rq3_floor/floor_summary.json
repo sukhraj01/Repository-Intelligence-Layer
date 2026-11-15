@@ -1,0 +1,126 @@
+{
+ "arms": {
+  "floor": {
+   "apply_failed": 28,
+   "arm": "floor",
+   "cache_share_all": 0.11442777025368807,
+   "cache_share_repeats_after_first": null,
+   "calls": 70,
+   "calls_at_output_limit": 34,
+   "cost_usd": 0.7865,
+   "finish_reasons": {
+    "MAX_TOKENS": 34,
+    "STOP": 36
+   },
+   "follow_up_calls": 30,
+   "repeat_sd_points": null,
+   "resolved": 7,
+   "resolved_fraction_by_repeat": [
+    0.175
+   ],
+   "rows": 40,
+   "truncation_share": 0.4857142857142857,
+   "unusable": 1,
+   "unusable_share": 0.025
+  },
+  "oracle": {
+   "apply_failed": 128,
+   "arm": "oracle",
+   "cache_share_all": 0.4268571486588553,
+   "cache_share_repeats_after_first": 0.7307505887033504,
+   "calls": 756,
+   "calls_at_output_limit": 100,
+   "cost_usd": 5.7168,
+   "finish_reasons": {
+    "MAX_TOKENS": 100,
+    "RECITATION": 6,
+    "STOP": 650
+   },
+   "follow_up_calls": 102,
+   "repeat_sd_points": 0.6487218176023373,
+   "resolved": 295,
+   "resolved_fraction_by_repeat": [
+    0.44648318042813456,
+    0.45565749235474007
+   ],
+   "rows": 654,
+   "truncation_share": 0.13227513227513227,
+   "unusable": 14,
+   "unusable_share": 0.021406727828746176
+  },
+  "raw": {
+   "apply_failed": 191,
+   "arm": "raw",
+   "cache_share_all": 0.5104713743225605,
+   "cache_share_repeats_after_first": 0.679330912356874,
+   "calls": 1230,
+   "calls_at_output_limit": 169,
+   "cost_usd": 8.9307,
+   "finish_reasons": {
+    "MAX_TOKENS": 169,
+    "RECITATION": 8,
+    "STOP": 1053
+   },
+   "follow_up_calls": 249,
+   "repeat_sd_points": 0.7696059567044614,
+   "resolved": 416,
+   "resolved_fraction_by_repeat": [
+    0.43119266055045874,
+    0.42507645259938837,
+    0.41590214067278286
+   ],
+   "rows": 981,
+   "truncation_share": 0.13739837398373983,
+   "unusable": 20,
+   "unusable_share": 0.020387359836901122
+  },
+  "rrf": {
+   "apply_failed": 216,
+   "arm": "rrf",
+   "cache_share_all": 0.5091124337530354,
+   "cache_share_repeats_after_first": 0.6604255965112195,
+   "calls": 1294,
+   "calls_at_output_limit": 201,
+   "cost_usd": 9.8755,
+   "finish_reasons": {
+    "MALFORMED_FUNCTION_CALL": 2,
+    "MAX_TOKENS": 201,
+    "RECITATION": 11,
+    "STOP": 1080
+   },
+   "follow_up_calls": 313,
+   "repeat_sd_points": 0.7696059567044589,
+   "resolved": 392,
+   "resolved_fraction_by_repeat": [
+    0.40672782874617736,
+    0.39143730886850153,
+    0.40061162079510704
+   ],
+   "rows": 981,
+   "truncation_share": 0.1553323029366306,
+   "unusable": 25,
+   "unusable_share": 0.0254841997961264
+  }
+ },
+ "confirmatory": 327,
+ "floor_covered": 40,
+ "runs": {
+  "floor": [
+   0
+  ],
+  "oracle": [
+   0,
+   1
+  ],
+  "raw": [
+   0,
+   1,
+   2
+  ],
+  "rrf": [
+   0,
+   1,
+   2
+  ]
+ }
+}

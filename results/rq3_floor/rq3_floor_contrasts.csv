@@ -1,0 +1,9 @@
+first,second,k_form,reading,role,n_pairs,mean_a,mean_b,difference,ci_low,ci_high,p_permutation,any_of_k_difference,any_of_k_ci_low,any_of_k_ci_high
+rrf,floor,own k (3 vs 1),exact,exploratory_estimate,40,0.3,0.175,0.125,-0.008333333333333337,0.26666666666666666,0.12418758124187582,0.15,0.0,0.3
+rrf,floor,matched k (1 vs 1),exact,exploratory_estimate,40,0.3,0.175,0.125,-0.025,0.275,0.17538246175382463,0.125,-0.025,0.275
+oracle,floor,own k (2 vs 1),exact,exploratory_estimate,40,0.4125,0.175,0.2375,0.0875,0.3875,0.005699430056994301,0.3,0.15,0.45
+oracle,floor,matched k (1 vs 1),exact,exploratory_estimate,40,0.45,0.175,0.275,0.125,0.425,0.0033996600339966003,0.275,0.125,0.425
+rrf,floor,own k (3 vs 1),tolerant,exploratory_estimate,40,0.3,0.175,0.125,-0.008333333333333337,0.26666666666666666,,0.15,0.0,0.3
+rrf,floor,matched k (1 vs 1),tolerant,exploratory_estimate,40,0.3,0.175,0.125,-0.025,0.275,,0.125,-0.025,0.275
+oracle,floor,own k (2 vs 1),tolerant,exploratory_estimate,40,0.4125,0.175,0.2375,0.0875,0.3875,,0.3,0.15,0.45
+oracle,floor,matched k (1 vs 1),tolerant,exploratory_estimate,40,0.45,0.175,0.275,0.125,0.425,,0.275,0.125,0.425

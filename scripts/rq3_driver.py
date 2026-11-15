@@ -98,6 +98,7 @@ def cmd_heldout(args: argparse.Namespace) -> int:
 
 def cmd_prepare(args: argparse.Namespace) -> int:
     from ril.agent.providers.contexts import issues_from_core_bench
+    from ril.agent.providers.floor_arm import FLOOR_ARM, floor_rows
     from ril.agent.providers.holdout import split
     from ril.agent.providers.pilot_run import load_items
     from ril.agent.providers.rq3_prompts import (
@@ -122,9 +123,13 @@ def cmd_prepare(args: argparse.Namespace) -> int:
             "table and folder issue texts differ for %d instances", len(agreement["different"])
         )
         return 5
-    rows, skipped = rows_from_records(
-        os.path.expanduser(args.ctx_dir), issues, args.budget, args.arms, ids
-    )
+    if args.arms == [FLOOR_ARM]:  # no retrieved code: nothing to read from CTX_DIR (E-RQ3-FLOOR)
+        repos = {str(r["instance_id"]): str(r.get("repo", "")) for r in executable}
+        rows, skipped = floor_rows(issues, repos, ids, args.budget)
+    else:
+        rows, skipped = rows_from_records(
+            os.path.expanduser(args.ctx_dir), issues, args.budget, args.arms, ids
+        )
     out = Path(args.out_dir)
     n, rejected = prepare_screened(
         rows, out, load_allowed_digests(EMAIL_DIGESTS), _operator_emails()

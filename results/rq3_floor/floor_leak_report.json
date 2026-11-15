@@ -1,0 +1,2653 @@
+{
+ "by_kind": {},
+ "clean": true,
+ "findings": 0,
+ "instances": 377,
+ "mode": "differential",
+ "preexisting_matches": 0,
+ "prompts_checked": 377,
+ "prompts_with_findings": 0,
+ "rows": [
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-12907",
+   "prompt_sha256": "58c71829a340a80d8fdcc883dcc18031214da918d176c67a136a11eaa7b07a23",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-13033",
+   "prompt_sha256": "49a04b1a9296e7d888aff579b7fbf77385b87285225372aadf9a45e275311023",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-13236",
+   "prompt_sha256": "12f9aae25bdd77ecb3931e41e6c12806285f2fba11775af44496806bd7f0e346",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-13398",
+   "prompt_sha256": "8acd5dfa86d452ed8e2881ee6f29db9adc11f9421abb332f410a08f7b42c254d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-13453",
+   "prompt_sha256": "0ba94a6478eb0de3646482f5761fd6f5dbe7147f02c5104c0f100ea66888cd61",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-13579",
+   "prompt_sha256": "707b83cabb78c0a3d882dda1366ae2300344c52e2dad3553220c0b6d9e187465",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-13977",
+   "prompt_sha256": "14a3d42a2ba45818906aaed299cb7db828788620e764d8757faa65cc4f3b36e0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14182",
+   "prompt_sha256": "855d75bdb3f64cd62ceae29422e02623b7c978fd5351daad8f2b99b344f62d1b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14309",
+   "prompt_sha256": "7e37c751c696f564dded0efeb53093e4bc32fbe9fd73ab86d39f97a8bb8b2c65",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14365",
+   "prompt_sha256": "470d12d1379e68eeebbd6f528d4bf14f7caa72b646fc2c363550c57c40d0cd9a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14369",
+   "prompt_sha256": "b1216191e328df4565523795c3d3647c2d70771656b50c0b56ef17f15948ee03",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14508",
+   "prompt_sha256": "7d2773520d79205090a2e9926a25c95cf2a93a24b9d1a21e28fb72ab52207879",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14539",
+   "prompt_sha256": "3dae002d67ad3b2967250b7153e3fb0abe53549f2c245e0b8d6434c9b6740922",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14598",
+   "prompt_sha256": "7f03e85910bbbd1b92fb7337157d93d0950fc4739c9007c79e54a74e382d1281",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "astropy__astropy-14995",
+   "prompt_sha256": "eb8eb4d7362c4ad91e61cdc6f0103cf66271cd13e033ff44ee622bcc77454f1a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-10554",
+   "prompt_sha256": "9da0d7f9a23f485776afafd533490f6ca3021cf2274624b373a669233b3f606e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-10880",
+   "prompt_sha256": "4b642eefd9e19a070f2c4f768224baee3e9c7d916765ba0c6f85a22f17df16ab",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-10914",
+   "prompt_sha256": "11c01f2e8c88d8e9b4429ceb9a85514697ae506da60606ee56d91fc920bb061a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-10973",
+   "prompt_sha256": "1a26436fdd99a61245f1ce307a24359c3604536cd619222e5925ec70f2c49c05",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-10999",
+   "prompt_sha256": "608f5f30c3213704c3344ed4c736b8196da62d535dd64c99c074b336c1389f73",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11066",
+   "prompt_sha256": "ece3e71b2d41d2f8d37a343bd2f50a8f5b7866db11cf6f06bea1ce3363e3f7a8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11087",
+   "prompt_sha256": "5da1b205d05ac5d94528e0cabfb4960403e9dd0ca0186ce399d825d248e8b2a1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11095",
+   "prompt_sha256": "3918af0d3b10ce57f2d6011c7f90b70d4c5c8fb2b6012cb1002920eef9af3c2e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11099",
+   "prompt_sha256": "eeecfca7717baa2f0f95813df342f61c57e8a5188002dee60ba6e2bacf4c6517",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11119",
+   "prompt_sha256": "7d609d16e8be393693dad470cbe2856d7f9e8d2e4970ee6a507c50b915722ab9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11133",
+   "prompt_sha256": "fdae1999953bfc8c08ff1cc41660d124eca428cbee2148648f7fdc40aa018921",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11138",
+   "prompt_sha256": "0ffef4dee2cc29f87fa1fd43084458d39a5a131e54c99f501cea727cae098c7c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11141",
+   "prompt_sha256": "9947883d13ef2274479c97e4df8a6ccc7dc9f5bda4a0ad35026d8816fd9cc64e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11149",
+   "prompt_sha256": "f14a3f7e92555dee3c1d684afb3d47384eb2b93efb19e990238252df8e8bcd30",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11163",
+   "prompt_sha256": "144a203bed7b8f79d94ca5d95d7f23981562ca017fad823344f58511812a82e7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11179",
+   "prompt_sha256": "bf8ec67c034683e758b6acba6479cbf6ced498665d679e1317e6c895060021e0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11206",
+   "prompt_sha256": "c78f8706f419b522f019156568185c2fbe0bb6c8ce5649822d91305e36d4761c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11211",
+   "prompt_sha256": "38de5c605487710b581078828e75a27acb2236e83917723eb33d184a7f7224f1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11239",
+   "prompt_sha256": "286bbb89a4d6b2c3d40703cd5b367160aae0d16e07defa0b08d71a72433631ea",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11265",
+   "prompt_sha256": "c17ccc3fa8a754aa55c6ac79d863bfff6a55261669f5f508d652821b80333345",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11276",
+   "prompt_sha256": "84b56e211698854222e0ca26a8bf853e759645e2a82303106ba408a037aafe6d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11292",
+   "prompt_sha256": "6581da7b4251517b32d7c1c4486856538a307729ad8f52e04f84dfd5c7a01e26",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11299",
+   "prompt_sha256": "80710e62d72987ce59672fe0f2b5154cf62e880fb77b1c8aa3266a335d5e6c0e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11333",
+   "prompt_sha256": "aa68a8d79467776c96f24a0af18a5d07c643c87631d7bb57f26946fa23be2e96",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11400",
+   "prompt_sha256": "554ec6eb31c4dd63be733b3763be403c4391a37a30ef7c37fa02f0f1e17309c4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11433",
+   "prompt_sha256": "44d491386767eebcc12c275470787127d93672eb5edf5d9a5f88ef8c364a18e5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11451",
+   "prompt_sha256": "88dcb0cb88ab9f23bd9b2d2629dec9f6197889043273f0d00190005592823ba4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11477",
+   "prompt_sha256": "24abb4e11f896db8d56ddbf8fc8c65f0c5a0f507b992ac06a66b2a0efc0b058f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11490",
+   "prompt_sha256": "53948ad835baebe6db1a2022d2674fae4c91093bc2a796b79deb411a5323c817",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11532",
+   "prompt_sha256": "ee2b4060274c3c319699e38ef7e8bb788c34daf0ac9910ecf8df895b4bcb1dc1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11551",
+   "prompt_sha256": "1420c5d03cd6ed41ebd49665c09694e6bcf95590be12a8a11cb5726f8da9921f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11555",
+   "prompt_sha256": "4db72203554ba2706fabb287fe73f0fcfffcca5dade9b772c5cbebe33d7dcdf3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11603",
+   "prompt_sha256": "bb110340510bd365ac73379d1493706d00fc5ad403494e86b35b3c9d2841de83",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11728",
+   "prompt_sha256": "61dd6db5553e243960b2d64cd46aed9ef6267548249c575195bc6c35a1ea546e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11734",
+   "prompt_sha256": "7e5ad45aa8731cd5a24de3b32c0526e92ccc79b6c733dd22623565cad9df7fbb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11740",
+   "prompt_sha256": "c9305dc524d1e5887abd8ab78cd4b012369cd38015e3da7b8610861baac7eb08",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11749",
+   "prompt_sha256": "32a3982255c361adf13fe042515de1bf158fa57aa152062efde0dfd4c25da36c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11790",
+   "prompt_sha256": "0cd6a9ca610e4dd846bb609b84d464149c9faacc5e70aaf91d0c4d4f279fa858",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11815",
+   "prompt_sha256": "85cbf54c7092f6cb58d2fb2c7521e951c67efd981bdd3330322ceb49676893a5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11820",
+   "prompt_sha256": "6698df88dae5ac6c6dc28c4cac8a5e677d7384c5967e0d503c7b247923de9404",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11848",
+   "prompt_sha256": "984b8967e153122cbb7152325349771b4b77267b464e383aaa86c41ef73083d4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11880",
+   "prompt_sha256": "27c51b0da30ffffd3428794d17df722a67fc19316133f0ea68e737332adf8ef5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11885",
+   "prompt_sha256": "78e46ebeffceb015bd1a73478e5127ff0f2c0d32f25d0b7334caf3baa3faf27f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11951",
+   "prompt_sha256": "82236d7ac31bd308985e356903e42eadb115d645f4925643d9c1057b4b2fd72c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11964",
+   "prompt_sha256": "f61f77870c34e02c7297e0107d2a3d1aae49d68d9009009ea0818a233dcafa15",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-11999",
+   "prompt_sha256": "3e74e12a5bb897f655f94d24058a44f8bbef452018f0f53d05fb8e903428d8ba",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12039",
+   "prompt_sha256": "d132500469dd625e5c33684f8620f7eab7de3be3c3552fafd87b15d1b1a13434",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12050",
+   "prompt_sha256": "9ce0b831121b5f4e8fc7a8e65c1c14ac074d36eab000fef5628216a7507302c3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12125",
+   "prompt_sha256": "fe891b1518398e512d95a354f60115675ffc9e04e24601a2c304c6551d868d6b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12143",
+   "prompt_sha256": "3a6212bf92143f04d4cb84296499142693250034375c953d6be85e5636fbbd13",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12155",
+   "prompt_sha256": "c1bd5b3272c4faae47ad0683b4fd9706c2b78e5545cc5f0958dbce753a2cb6d1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12193",
+   "prompt_sha256": "4ac43c4c32ff502075fe5bd6081f3d619acc71c8c344d754e57aa780fd9ea161",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12209",
+   "prompt_sha256": "b954a206fea7aa88779d2b2b34218f1b8f6a66c2f5066dc3074fff327098ca98",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12262",
+   "prompt_sha256": "80ddd9e91583d8cfb9e18241a91bf370deef54782d6185fd420a04570ffa6d3b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12273",
+   "prompt_sha256": "58c30d2701f986a35def314de3f21a9f34f2a4d598d58227191467f3a0f9ffa1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12276",
+   "prompt_sha256": "e986a2e853f717f59a434ea5385e0763f1918a3246623deb8d912f09a72763f5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12304",
+   "prompt_sha256": "85a85a85b6ea2d00b7089e55fb1d89392bf08885dfb93e2eb0936ba31f2fddec",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12308",
+   "prompt_sha256": "9fcfc760659fd26fa1f41c91304942621c487cc27246c33c6a720af331c5e80f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12325",
+   "prompt_sha256": "e5334230ba700e8b693ac1b01f0ee2c6855d31c0a3eecb6110978fa19f3a79de",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12406",
+   "prompt_sha256": "2386f164ba858831be61a0e02fe0e8381291d9e4da5736013a6b94ff9281b613",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12419",
+   "prompt_sha256": "30a6e7b907763cb64aa380e6668b38bdfc7896a73d297cbe45b59af3fa59ca7f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12663",
+   "prompt_sha256": "b795a1dda6a1812967b82101cd3aa53879f205289263e8356594c2c7fdf4c48a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12708",
+   "prompt_sha256": "f856a47a50c0d188834ed07863d1a841dd4805fa7d8ea4cc216cfae6ce9997a9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12713",
+   "prompt_sha256": "b62914bbdb77a40bac568f61322e4661238177fae598a0db8d02b847292dae3c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12741",
+   "prompt_sha256": "d7f64e5d2931ea959416d31fe1c284ac5311d48294d59fadf4bda29f50381121",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12754",
+   "prompt_sha256": "818f1d784de1b7d6a21808498e20a8bd30e462dc173e90a7d7957578c14ac628",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12774",
+   "prompt_sha256": "b0f9afdedbda9a779b10e6b3f7c479fa63df569b9987981058211a1ff2aa14b2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12858",
+   "prompt_sha256": "0903b122771eaa33ff30899f349917428ac5fdd115f8811c6cbc2ccdbf6d9f68",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-12965",
+   "prompt_sha256": "21141c52acdeb72a16985145f64ff6f30e643c5329cab5c7923e0c22daa4f54f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13012",
+   "prompt_sha256": "82acae0e7a88487e392e9c6885f2781ebc8ea5453078888845464b169111c5bf",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13023",
+   "prompt_sha256": "1d800baefc539dddd64604fc9392a1585ccadb429c74b462b0039b67f134ff64",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13028",
+   "prompt_sha256": "0291ccc356e3c582fdb36e378e8860f66894f3d8208e133877074239fc8bf147",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13033",
+   "prompt_sha256": "17dbd4e963804beab3315219b8ae7b7544d2588555e24595f883413983402a8e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13089",
+   "prompt_sha256": "61ad6af4b603c39a5ef9edb051f750a3915e93cc803741df5315d06f17f06a8c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13109",
+   "prompt_sha256": "db62abd7c92915d1b1b09bb60fd1bfdc64098361fb25763a3ff4fc9f7966f81e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13112",
+   "prompt_sha256": "eb78b076014680237c57222929c3fb69d7e7e9d3f2f42c8f70351c940264df65",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13121",
+   "prompt_sha256": "af874322458490b558178c59d934d33d52de4476553c5d523beeca072113723c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13128",
+   "prompt_sha256": "edccb52fcacae23e328d93b55218d23c42d1edd44e3fae3ed1134a183e27de9f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13158",
+   "prompt_sha256": "84e72ee5b53f8601de6674a1046cf0992485875e0bc98350bb2e37dbbe76bed9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13195",
+   "prompt_sha256": "bede8d3d05f368cf2c0532cca77aa195b87ef1397fbf9a13997b565b2b813d7f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13212",
+   "prompt_sha256": "5a33bd7253f17f3ce10805eb165667b83554cace6e24bb3aa044ee7bed1f8c1c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13279",
+   "prompt_sha256": "df36bc55fa44bb8d6ab9408dadd6eb47b46bae69b6d21dd77fd7d21044c11719",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13297",
+   "prompt_sha256": "868130ebae60cf80fa8acad6847f325ec9a2642481e50f192aa3c4e709209b77",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13315",
+   "prompt_sha256": "c5be160a714dd2afda2c9f63d9d1815d1a6cdad508729b67c83fc86fcab5d323",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13343",
+   "prompt_sha256": "29a4cc6620a119007c4037371179c62ee934fc1b92c8daa5ffc624650d1df658",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13344",
+   "prompt_sha256": "0964cd57b13cbd4fb94352777fbfec07695e56a9e33d80ec01407f12dd10e0c0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13346",
+   "prompt_sha256": "8c6847700bf764963b54365b31dba1d2290d11a33d7807ae51a25dca36c04dff",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13363",
+   "prompt_sha256": "f860e5c78210539af8816488123137082b9b889388b066745dca082c84b70b54",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13401",
+   "prompt_sha256": "550fff55cedee0be0d0929bf1cf5bf760f0b888852ae6f0ab43253c071267330",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13406",
+   "prompt_sha256": "1c17c649198ae7efba448050955578acf26f21556076f54d9f8aa88c40191939",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13410",
+   "prompt_sha256": "bf89005c7f7accbae6cf3296255d6a9caef00dba3c77481d74b64b8fc798cad1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13417",
+   "prompt_sha256": "5bed8315bf90431832458428d3d649f7190364bd1370f2c571aa17237d1f3942",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13449",
+   "prompt_sha256": "92b4fc8734493d9c3b8c13a49799cb6a7131769255bd3d99daf9f49121f1d50f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13512",
+   "prompt_sha256": "2de799eb93e97bd3b772ca1fad59a26ff424274cde8dbc0651df0c70d86e3fc9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13513",
+   "prompt_sha256": "f7de06d3e0e67a3bd996ef95f711b14d761b58a2fcc0820b42ee5a346f08ab0d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13516",
+   "prompt_sha256": "7fdf81c48e226bcd77f1da335e4a3d644d4f7611f3e1c169bcb4afd25d87dd71",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13551",
+   "prompt_sha256": "3463d255dfe6d6768594ef7007da8cc7d78a31e2114adc8dd99dda4a8dbff445",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13568",
+   "prompt_sha256": "9648c49a275978e7ed9cac1268dcbfeee6dd777c5be042a31cedf9fd5cef6741",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13569",
+   "prompt_sha256": "e815c174ca677a3b777029cf8e0cf5907252e7dbe48ba1a946628aef64934a7c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13590",
+   "prompt_sha256": "ae8092a6484c4b25541317248f543e11ef5798447bc6689501865dabdd28ac41",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13658",
+   "prompt_sha256": "4a5551a86da97f6ca2d7a615e859c535c5b1e24f9adf9f7cdae8e5d3f5d6c7fd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13670",
+   "prompt_sha256": "74d1186896c5a8026f463d2c4ca574f631dd25f0909873048c4523c2bb58c43f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13741",
+   "prompt_sha256": "c39f3ba709e2ecc910495aa2b37573d52bf028e5cfaecf6dbbd9a3f1071758d3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13786",
+   "prompt_sha256": "0d17f6998567a5fa45a5a388681e6172c7cdd3ac83214f271dd0d747b34278f2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13794",
+   "prompt_sha256": "7c6825bf9b1c5a43d940b78358fbb1118c3f7e3bab31b1b4fe75cc142858a6ef",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13807",
+   "prompt_sha256": "7187d11b22e4fd4b124af1654a369fe05c4fba39a1de38f146c1b34d5afe68e7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13809",
+   "prompt_sha256": "19c2e79d469325e6f4da7b0d4c314d2ec826b309e7916f832a6f18701fcb9292",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13810",
+   "prompt_sha256": "1f97c2e9249d6c9710d84d5f132e620d1a375dc8062309d1ccaf1b67b09e1f1e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13820",
+   "prompt_sha256": "7f9201a28f731f389a248bb2db23a06211be5307b0794747aed2e64ddb6c003b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13821",
+   "prompt_sha256": "d1899f66ff6f73f5710eed75ec4b941ec6567791c4a35c2b62a00d2156526381",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13837",
+   "prompt_sha256": "92adfa458277646d18713f689e2566dfbb8067033a634b2480b8754b6c6d916d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13925",
+   "prompt_sha256": "ffe24325668df975417c513df2cbc2dddf618ebb9794352e324cc3ecb4627e0e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13933",
+   "prompt_sha256": "e50e762279c6debae692f839b36beec8fdcfb4de3410afc4b888a927a5cf74fc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-13964",
+   "prompt_sha256": "0029347871d7050d97b5ad2c5e3f3492157ca9365299da548341fc2026df998c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14007",
+   "prompt_sha256": "7f0493c4dbee53b1a112f631c40554df40e341f1723635b5d038899deacbce4a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14011",
+   "prompt_sha256": "37153060300de606124ca3abc9566fd3ac259d55423bc7e4843d26e27579e9f6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14017",
+   "prompt_sha256": "a1e3a23a6ef3f43412ca56a983a810f1234a660c3c5d7855b8374215b1db2cc0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14034",
+   "prompt_sha256": "338bc783dd838b23f0e2a0d0f6f13396c20d646b0b0702047937966d28383cfa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14053",
+   "prompt_sha256": "ad6bb6419cde261494b873fc173492f8aa95a3c0ca70857f0d3a1f4d2344533e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14089",
+   "prompt_sha256": "46c8a0df196bac9c20a38ad65d8747565462f8de8b87f6af41dc91fd8cec489b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14122",
+   "prompt_sha256": "569ced3e9b06380a099d70d37c26c6544b8d260e0ca93fa969812ff68bd97e7e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14140",
+   "prompt_sha256": "7f14570b06942473f8d5ff93d954bc7faf2d93fd32dff61f7f47c9d74d4177f4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14155",
+   "prompt_sha256": "a3f9bd2d2b0be7a62186fc78aa28a2fde5614ec78eacca4f479dd1524f089524",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14170",
+   "prompt_sha256": "79b0ba761ddc39a7f9eb7434ebb18e493b69ea417db8eccdcb5eadb52fd3e8b6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14238",
+   "prompt_sha256": "d833400ff009b18fb4ed43c4344f9fea92f586de30c4e91f5e059e267cb020aa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14311",
+   "prompt_sha256": "e98d2124243e036bb262c94f8f57bad6c475f3b82a9dc448914eb5d0fca4c17d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14315",
+   "prompt_sha256": "3c307806e04d68be940d4c153b91ebc2c0b2fe2e3ecc451ed57b5da907535e14",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14349",
+   "prompt_sha256": "69f7756d3de5d7010b42ca37138ab96c8b2975b2f26de56232d6c6df63adc0fc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14351",
+   "prompt_sha256": "5a2aa8aee901435834170e2e852d802edd6df81da189f821a202dbebe924f4bc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14373",
+   "prompt_sha256": "bc1e8a6d2d4ce89739dbf80afdcc3a636347430aee0cc36d83d84f873ef88317",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14376",
+   "prompt_sha256": "571daa1e92b7e59a5ed715a15f7f4ad4cffb6ab3425ea337dbfce73582ba8655",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14404",
+   "prompt_sha256": "5778870d5dc21f98f56beac7a5a5bd5b3b8c40db225eee3b3821db46a615eb54",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14434",
+   "prompt_sha256": "3bd49121f117d64a9ea7b9d1723946eb7a75577eae9b665999f9a0604ba0bdeb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14493",
+   "prompt_sha256": "44820e59f02497a97886ab43027e22f6155b855ee6453faea7783d83173d1b8d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14500",
+   "prompt_sha256": "6be18795075027de5428ee2d018b827cfc2b0de9202366fbb3daba03a1cb51f7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14534",
+   "prompt_sha256": "bf8a69853289696ad93b2d1538cd5f88b179cb156148cdf9fbdb8102684e3b0d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14539",
+   "prompt_sha256": "c464bd48f6591c366b857868a07f425ad091254cc0a32c0a116a3d9328a8ab28",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14559",
+   "prompt_sha256": "b74270dc03f144b84b51c345b637383761359db5c36d7fa4a1bf29cc6d9cb3b8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14580",
+   "prompt_sha256": "e8f56126428ce6924a4be0860144de64f87a188705a278783ca63fb7d117a195",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14608",
+   "prompt_sha256": "4c68aaf28bd3953283ed3fe0060af9e53a98be5bd6d772f2f7407a2af54db95e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14631",
+   "prompt_sha256": "fd2635b5ec94013a1013bd74aa47007af672488f6cfe7921973c647d24b496e6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14672",
+   "prompt_sha256": "12df72ea0dd845dc5e3e6037f8ed338a98640e2200c4f4545d6a6b11f7f0da17",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14725",
+   "prompt_sha256": "51e40e2f3f65f14ae7a6460f588bf4bc3e11e4b72bfbf38b4e87380bb0f25370",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14752",
+   "prompt_sha256": "800b9f3a712349f3f93e6d5e9f70e4b7fc1f9e4cb408fdc0cec70f6ef08f697b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14765",
+   "prompt_sha256": "b06339392068fd9fedacede8a310963c4c7ed22ebb10bad633fc74a0f85e4745",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14771",
+   "prompt_sha256": "d44b809d7beff0b3f4450bac06aa332c60a3876e94b128222975aa2c74599bf5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14787",
+   "prompt_sha256": "dd6c52f8c6a86995bad168c2ca626fa8df337d8041deda937b9c274520956a5b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14792",
+   "prompt_sha256": "a765e67bcb498d13e0b43efffe09d75c82728c0deb46b1135cd15351c0880d6e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14855",
+   "prompt_sha256": "a9a5badea7eee94449063ba1794aad52c968ea40a97cb3afdd197d406b6440c2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14915",
+   "prompt_sha256": "639e6a156ba4da76d3e775aa3e02f0f19284ed1cb785bea1bd4f1310328bf60b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-14999",
+   "prompt_sha256": "271a0377bd34f9eba5ddac5ad71e4527ea4e85be038ddcef69a2769f2d03cb87",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15022",
+   "prompt_sha256": "90f66f63c4bf9c2553020d74194ab71baa41025baa01be292364087371adb6da",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15037",
+   "prompt_sha256": "fa8e6ec5159834fb8320003ae28cdcb488cc5566232fb5714af551b61c213470",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15098",
+   "prompt_sha256": "f6df407481a98395a09f12c84d10157021a03cc53f03260d447226c5db6acafa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15104",
+   "prompt_sha256": "2c53a0cf1cb57a042eecb7a8da4128c6bd7cdfca018f1f69e59c984d35e240c2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15127",
+   "prompt_sha256": "4a3fca126683d2b8cc5c6fd03cea5b94f9917607469e11c5f916d79c40b177b5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15128",
+   "prompt_sha256": "046204b97132d22b830a4ce9e252a938e6ce858cf493729872499909857fba48",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15161",
+   "prompt_sha256": "d7942d0bd2a420d858fbc05450d26760ff03969c28d437c00c804d565cef02d3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15252",
+   "prompt_sha256": "a7e5ee8f6da7d1fb676624b26372789c011a62517913ff2f89b38a60e238ef5d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15268",
+   "prompt_sha256": "15a2ed6d1b81a0c1425750c069da8fcd0a1b7888f32a79b20fb6fb2ac7262823",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15277",
+   "prompt_sha256": "995ba996b3da8da4c009491f3d30229eb5c7b96cecb524c57918636549ebc622",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15278",
+   "prompt_sha256": "04c3883e6a0c0fa53ff6e405226899dbc0cf953bdf6bf608ac7bebbf42f77a28",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15280",
+   "prompt_sha256": "e4c7e88f1aa33a7d95df0ce5d5907df021b2c24f28d5b74f07160c74849628f5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15315",
+   "prompt_sha256": "18dc84c53346203da264eaeefb75fe5cb56f9b003a0280e2f72d5a1d7cbca52b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15368",
+   "prompt_sha256": "3da685d2fdc61458d6ddf81bfefe17376bf3f87d16f4df6847cee224483ad288",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15375",
+   "prompt_sha256": "777761c7704e2b8fcb3037f3283b2e864a3dac194fe20ec71dfb2c466750b257",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15380",
+   "prompt_sha256": "4ef194b4945f51aeff35f2cb41920b0f06036391bfdf4311e4c8f34fd9ed0cf5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15382",
+   "prompt_sha256": "4fc7585e0ed1b8d3fbf26dd60e7db095951266e218648c2a1bbc34c141ac6e86",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15467",
+   "prompt_sha256": "4db058c83464eb61e24060733dce3e10d94179132ed16a694627b97af9e46331",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15499",
+   "prompt_sha256": "f0fd9f2bf18af74f322b9794e5fda164a989a17232a57beb0c57dd481bac09a1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15503",
+   "prompt_sha256": "f77e3b175c865d5ba69f1bdb3c08d1b2d47b444834e46a31f164edbc4b6caee3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15525",
+   "prompt_sha256": "ffe9dcdb815fb04ae8f16ae3f430fe4be5ecf09399174deaf5f5a63c21140ad4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15554",
+   "prompt_sha256": "5affad5b7a0f2e9d55747b2d9e881b4582da5021ed09951b61b5095bcf0d3a7f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15561",
+   "prompt_sha256": "040fa72e1d3ea51355c1bc58bb9630ff4e2661f5e72e1a662c2dde5efdbc4f8c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15563",
+   "prompt_sha256": "3d7977440a89b48b4a24acc94c528fd23c407710c6a78b096dd6b8d0435e3d9e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15569",
+   "prompt_sha256": "ade95548d88f6b8c1d0d2b48c0bbf6fb610d42de95e8b7f5a2e06f0d7d2af075",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15572",
+   "prompt_sha256": "4c869508ffd769704932bb2dbff814b7a45ba72b314bfcbaae0cd4cadcf3b85a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15629",
+   "prompt_sha256": "c3d1723b4f5862639d2e53f95260fa8c62b8943cc61f51606817d79230a2234e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15695",
+   "prompt_sha256": "c311e080b8e32ccd062cff1b2ba20a3e114179d0182d94768bdce02cfd39d1bc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15731",
+   "prompt_sha256": "ec21d4c00b928bac86caee0d5fb6d318eaef792cd397040aca096bdb274c1ebd",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15732",
+   "prompt_sha256": "6b0cbc469a4f9bf4f9ab0c3e535a8852c222110243fa165c3f1a66ff746d92c4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15741",
+   "prompt_sha256": "03cb1180a6aa808eba730f0f72b735ea563fccb7f0fca7dfd1d04f52a0a37894",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15814",
+   "prompt_sha256": "d4685b4af1ce1864e959ace3ccedde347b761492381dddb5e3a41c0ec82aecc7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15851",
+   "prompt_sha256": "4226aebbb8e2a3bf5a6d9df266c6c3eec57e44ad38a3de8d97924ad06c6f6868",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15863",
+   "prompt_sha256": "a452b73aebd328ece5bdb53154a2c7d73730f10c6dd8697faecf2857568de694",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15916",
+   "prompt_sha256": "74e98502f5c3feb5f97e0d090d51faf8d8428930df2dd780178d5577054132bf",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15930",
+   "prompt_sha256": "cf4f6aac9b5f5d8d3edb6953734124f2b232541dad7a73aaf712e4ae3edc2f5a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15957",
+   "prompt_sha256": "d9332b45115ea96c174ddccd277b9d59c85ea174bc74af09652f213b0351c6be",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15973",
+   "prompt_sha256": "ca14acf7467ccd3bc7b1405992df97524f4ce0b457df8aaa46d00ff0a39eb571",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-15987",
+   "prompt_sha256": "488321dc382c2a084631530920887972a828c0b8952a8166ed4bba5765606746",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16032",
+   "prompt_sha256": "1ed37fa766fcbb2044092d8ceda702007601b71dce035c3f67a92fd015f53a55",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16082",
+   "prompt_sha256": "92092cb4f2fc4e480316301145d3646454684dec0cfa28d161225a18a49758b8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16100",
+   "prompt_sha256": "4635b57a57b42fde2a998542e5749693a429e96a2a73dea752e3d60b45700ca5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16116",
+   "prompt_sha256": "39857a52539508db32d5140472491b5f807e483f4ffac62d94c0fde495eeb353",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16136",
+   "prompt_sha256": "6a282af76e01ff18e9444ced09cd99838be0e08bbb2aa86083fea56014422e68",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16139",
+   "prompt_sha256": "f5cb302fd249fdca435d7efcf4a2b417500be4a9a494b8be66afb8602d7f3352",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16145",
+   "prompt_sha256": "81a8c855083856c29a3d4f8358e61aa46a9c4cf5ebe41c2c0fce0a009146dca4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16255",
+   "prompt_sha256": "87be17aad4b8bd8cd383dd120854ddc9ef400c7ef9666ecdc9c21d2c0969ce8c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16256",
+   "prompt_sha256": "d687ed7ff5e7bdd9ab5694a07c5007e01355779fabbc521df72c9b34f85291c4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16263",
+   "prompt_sha256": "a1be6af8500e522a364484591770775b16189a69d0210eda34a563fd0dbaba6a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16315",
+   "prompt_sha256": "1d34b5bffbfe8c43b07d5ea7356b58240effdea121495adab73212fa77ed7a0c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16333",
+   "prompt_sha256": "ff2ced71e5717678f618c27fb179dbeb311974d6a7222c7bde1fab9258b316d7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16429",
+   "prompt_sha256": "21bcdffc85da426e7e1f8673434a8fe3523ae37cd7ce0dee2f2449e5ccb4c9bb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16454",
+   "prompt_sha256": "8c76dc2b0c59cd6e509448c865b703b9637be2c1b5afedfc9c5c4d41f9f678a4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16485",
+   "prompt_sha256": "600b73548a6c99ebc378cb3a90ba7fb4ad8d128a833544a0f19f368ae64ac150",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16493",
+   "prompt_sha256": "4fbce532c3755d3483b452e424ccd17aa2ed06015fc823a036654286cf027e8f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16502",
+   "prompt_sha256": "3a8f72890c6fdf207a5d4178b4e7229f36f03ac6f4e0fce512b60aaa414d1c02",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16527",
+   "prompt_sha256": "ca44a8025f4f40d7821b197662aa04e0aa96003bc516e853b8205d9c2a4db217",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16560",
+   "prompt_sha256": "0aabb9abbed615ec572ac78c59fdd2f920c01bfc5fe624e252d276032233ccef",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16569",
+   "prompt_sha256": "bdfda368bb623b4c74aabfc00a84638809e356136db427fafed9ed9eaa870c9b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16595",
+   "prompt_sha256": "cf5e0c113bf51157befbfc533d3f7611af218463a3ad0b15ec13ef400016e63d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16612",
+   "prompt_sha256": "275ea533e283f05b8dcab95c09adf1ecc358b6c5099488453aaf5924654324ae",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16631",
+   "prompt_sha256": "b0c0b16eb746fe8166fff362ad0191b32ecdb4b0364889d2c56a85c572fea030",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16642",
+   "prompt_sha256": "8436baadb43ea577506e68dc4bc533ae1e08db47114f44d1b2bed784e9ea3ff9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16661",
+   "prompt_sha256": "f076ccaaff5f43a2040c197ce43a27dd1c70c9ee8446552e6903ecf5d14984d8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16662",
+   "prompt_sha256": "cc7a0cc12deb7428fab77fe1c5f11bd18f8854225e56eba9ab5bf2435510b77d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16667",
+   "prompt_sha256": "293a4b05dc6f29e7d83d13fdbdf414e6a0eb5747d8e7907909df18c6347b2e18",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16801",
+   "prompt_sha256": "46fb1e5803873b016cb5813a18643ef782add8d867b8fc7222a1745a2b98375f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16819",
+   "prompt_sha256": "b200084a979d97bae23bd93d75bd7267bb5953408a3c83b63f5687096ddce4e6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16877",
+   "prompt_sha256": "92dfc1973169306ff652fe68c5479e618e6eeb46f5ee73050d712cc8436b2d02",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16899",
+   "prompt_sha256": "e3318721c7027d7ddaabb6e09cb03b555e3be5b041ab8b6698e3a23d73f5550e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16901",
+   "prompt_sha256": "06231b432edf8193ee557b4c78f1c7e58a0597405621f3dcd0e6a627743922a3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16938",
+   "prompt_sha256": "7e1b474c667742c736f9ecaedbfea0da1a76be5071d4076f4ef6b2df498d07ab",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-16950",
+   "prompt_sha256": "9b1117ace52c5fc1f3814b4c6f75e20f8a9ac9d85fba707ef3d2fa7585b0a730",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-17029",
+   "prompt_sha256": "6a5ed2084175d6c505762c45b6da9fe3fbab643796c5771ca96a2e1eea07353e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-17084",
+   "prompt_sha256": "8e77b91d553cf1be3e054482d712f567d9ce1c2b8caa1dbe492f261775dd1a6c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-17087",
+   "prompt_sha256": "6dff89608a5ceb54da2643d8f61c081ccf12874326b9f483481c3b012ab77ae8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "django__django-9296",
+   "prompt_sha256": "67fcf860607263f68d8318abf940e8027c0a1f0d3f67edfe22b43db5a8065f3e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "mwaskom__seaborn-3069",
+   "prompt_sha256": "5a97be6c331ee0fc0f66d28e9d455441caca61836ed3e8a8b6d30c000bb0be0d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "mwaskom__seaborn-3187",
+   "prompt_sha256": "f0c58b3369766588a28732ccd3d221e348b286276f91024f6219ec98e0b2f3cc",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pallets__flask-5014",
+   "prompt_sha256": "db3d0e172496a7d625416feb5ac978d8ac30786c260c44f205bd6632fd9c4164",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "psf__requests-1142",
+   "prompt_sha256": "e6f0df488d7d72d6f362d6bbed92deaa98a65db1bdb241065b424329767fcfcb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "psf__requests-2931",
+   "prompt_sha256": "19228b61b38eebe804e304424496cf3d03b98fa785c7c5bc6247f273a42340ac",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "psf__requests-5414",
+   "prompt_sha256": "5eb461c6301a0d4ae382fe9e6068979fa626fa910bcad361620cc23996be46b1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "psf__requests-6028",
+   "prompt_sha256": "34c7c64b2ac8de20b3fa5afcef86c0d7468c01e0b107518df26dbf850232e9e2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-2905",
+   "prompt_sha256": "6c3464c5e16197cc370b5981e4278cafb34717c7870107923b184c1937578240",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-3095",
+   "prompt_sha256": "22da86621460a0d00d799b46522eef79d439d6af497b2fee457eb15caa7b4d95",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-3151",
+   "prompt_sha256": "1d86391d1337b7682f5285ea5384878afc3b10f51f3312ec0db5faa7bf5a5eae",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-3677",
+   "prompt_sha256": "3f7bdbc99d6962dc0a5764a3b14c3fff650b61c0bf7312f5b23f8cf2ff2915eb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-3993",
+   "prompt_sha256": "030a9cd53a4f5c960ae8c642ac402382527e1309e2acd813452c4030491a7535",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-4075",
+   "prompt_sha256": "7b99a8fd63baa19f81ff6e036d2ab70f20535a2d3652b455a81b817fdb3934d5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-4094",
+   "prompt_sha256": "88395a0365345d4e1eef67c63d57c05d5a405c5186298ce9d6e3dbebc2ba48a8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-4356",
+   "prompt_sha256": "1f675ae0c3d69eabdd9d487ba66d26b513721d26dd00c2be0154ad42342f3390",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-4629",
+   "prompt_sha256": "e20edac95bda2f77125cadb30820263cfac4b563dd89b1a462ac718211b1aa32",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-4687",
+   "prompt_sha256": "9d2c7ea03885b89c6cd55e1cb4eeadf43525323c2d35f4c5fa261175c7bc8df5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-4966",
+   "prompt_sha256": "20c2c969fa8e9bfc639ee4e299cc608310fe5cd66968aa36628222a6031af57d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-6461",
+   "prompt_sha256": "57945eb67a92518171307269bde411fcff354580f98068c4b0e1eed1d9d35090",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-6599",
+   "prompt_sha256": "6e7f8275fd9b939cc8c986685bb2aab0fcb07dd38701896eb77710b0bd749590",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-6721",
+   "prompt_sha256": "dc7a8b5d82a3d647f39d6418c30b73864882f195dcd4af6e0b19b45c80725b34",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-6744",
+   "prompt_sha256": "96cdf7e496c753884e29b96ed95b8d5b28e09107ca44021197da58df5cf3eaf5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-7229",
+   "prompt_sha256": "9795e9f633114cc8c6703d2a7272f2fcb16093d7f4de530d70072bb7f4527a98",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-7233",
+   "prompt_sha256": "1d9f0e8614ad5e64de8e630138be0e3c100e5a001249168e544467bc0091cb2c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pydata__xarray-7393",
+   "prompt_sha256": "0535efccdce310c51e61ecbfb89c9bcf189597de6316116e03b32a8eff293ef7",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-4551",
+   "prompt_sha256": "8fcc31d6a28501af505ef81c635e7d7a5517e677e2465364ae5b9dfad75aa5f3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-4661",
+   "prompt_sha256": "36d6481fee8d297957234ac0ed181691c8a4416f4fab424bf5ca08a25f740f0d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-4970",
+   "prompt_sha256": "b3236bef6e8504ac13c170992734f79c2e4644eafddd06704ce41b71c4f0032f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pylint-dev__pylint-8898",
+   "prompt_sha256": "61a06510a81b17a6659ffbcf9efb2affbc5165e5dbd055fa948d47645b3c30f2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-10051",
+   "prompt_sha256": "f6a5550d3d2a3e527bee5000a5691975bb490cbfd4c40ffecde25c80e25a1088",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-10081",
+   "prompt_sha256": "1e12979202840f75e73f5623043e6402109678e300276bdd62e2d5aa09dc71c0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-10356",
+   "prompt_sha256": "b99f4530734368cda2394526bb268acf16c871816021cedc1b456bddf36f478b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5262",
+   "prompt_sha256": "f37fe746734af4eb69cbb8d158bc2fb5d6897b6d162293217efaa5c6ae26ccf5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5631",
+   "prompt_sha256": "b47c6e907e0d66f769842386b7dff4b64503f19942af2c5403db9d62c07ee98d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5787",
+   "prompt_sha256": "bfab3da411a18d4cd8f3330aaec7666988de9e1a24ed3ad6d570679768e50cd1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5809",
+   "prompt_sha256": "596d561e6e9170effcfc665276f40aa504d2e2a145030c51815ae15bbfd057d5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-5840",
+   "prompt_sha256": "e954ee6e0a39fb47085db5294d545eec931b65becbe660d45868c3ff70fddc45",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-6197",
+   "prompt_sha256": "342ad0b1218272de74be2757f4448245fd1dd22c0476ef9a0e25d690d2214946",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-6202",
+   "prompt_sha256": "b040ebfb158434e4d5327555ede582d990627751ede442a68d6822bed2154846",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7205",
+   "prompt_sha256": "d2b21f44ec473a613639f2429966529bf5c9c89ad481e627c99508284bfae3e8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7236",
+   "prompt_sha256": "973686efb8f9f3ce699cb89e5441d971a89d1b433d9b651e7b29d96d0918d22f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7324",
+   "prompt_sha256": "1f1eb97c2b6a9d7baa9169af7f1cd6bf54594567d175d8545bcbb4bf6fed5bda",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7432",
+   "prompt_sha256": "1dfcc9c075c375e0543aea6ff953e5eb67260b637bfc0b3b42b4f828a0ce9275",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7490",
+   "prompt_sha256": "f04d9b5550e8e1cf8aa55f49ce439d0b6deea0cd804b496ebc090ec08be5e43e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7521",
+   "prompt_sha256": "3cd0dc1fcc37094f024dfca015ce1b333dd293d263a68084c15b123e4f588886",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7571",
+   "prompt_sha256": "71021221d249b8a99bce54725d5343f8f378073ac4c60d32a9d6a63c6b918e39",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-7982",
+   "prompt_sha256": "7b8a399016229109d4408ffd1a3fd70b335126449521598a9a0b51d8a64ac42e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "pytest-dev__pytest-8399",
+   "prompt_sha256": "b847cac581e9619a13ee6478a0aa4de95bc7868e1a2c1ca58fac9499d71c12f5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7440",
+   "prompt_sha256": "3c7cdb32b42b13d3a213ee37efd75bbab02a1710e43cec5f159b26a22710ba22",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7590",
+   "prompt_sha256": "5e757cbd39da2e88f9bab616d01584dbc9600317f6cf7f9a44c5080fa6fc7591",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7748",
+   "prompt_sha256": "bb71a8c9d32ae9874fff587a0374fd9634a73d9b03d6730b6e2364743223a032",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7889",
+   "prompt_sha256": "b09032d9fcdc46a62b344610c24d1c35cb6aaedd336a02b62c86c4c0e4189259",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7910",
+   "prompt_sha256": "a04dbcb74d4989332796a922c6210c01826ec74d8113ccc3043ac45661ac77c9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-7985",
+   "prompt_sha256": "a3340f8aef83f18d1bd57739afeb66fe8743a9f2d1718963ff5851b51db9cc7d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8035",
+   "prompt_sha256": "1039821eaf79e4884ab93129c815c6a9d1a61bc7899722d3b3fe3fd946b01429",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8056",
+   "prompt_sha256": "d805a8635e647a603bf18ee1955d3d317bbd8929b11a0f6a03ea66bf08d0fb6f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8120",
+   "prompt_sha256": "488a2c3e0a6479903892e7547bf24ed89b0eee6a0a66f3bbec26fa623601f01f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8265",
+   "prompt_sha256": "645ac71c7154f77fa13cfec1a69e52b5f4d2bfa34b2d4784692192fd4ad7aa7f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sphinx-doc__sphinx-8269",
+   "prompt_sha256": "983d056b2a113cbaa74bedad34bbec77c47e51690c384b13cf0c6efcb9ca18a1",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-11618",
+   "prompt_sha256": "fb3e8fb590157ef52e08e8052be84efaea5a033a8199982ad93f1973d58601b2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-12096",
+   "prompt_sha256": "7940b6df39849a07800c5a187388e22f8e38274ac827a6900e7bd10905329af4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-12419",
+   "prompt_sha256": "9563dfabfb9c66bc2bd9b4c49259bf0904dd4e31eb0802fc1f22ae362358515b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-12481",
+   "prompt_sha256": "6c41b337ea6221bd4611ebb3b3fa7d9425969401220de1516b1349462d887e6b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-12489",
+   "prompt_sha256": "c9260937452f48db21528eafcb715d2e9c527811eccc90ea46c310a821026e4e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13031",
+   "prompt_sha256": "6c9412f209e73b1c74737a4ce9f6daf320aefb9b896ddb5b97cafc052f89ef34",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13091",
+   "prompt_sha256": "4928c9f106eccc4a5e095ae5f92ade63b439944b6074d704a11349fafeddde8c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13372",
+   "prompt_sha256": "0c78819ecf4bfb5112c2b0f210cf0807815f2cf8b36d5c2e9406dbce90b7dbf6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13480",
+   "prompt_sha256": "96b7c9cb4734523ff4ddd0246ee7577238816eb6a6c6553615b392be235dc265",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13551",
+   "prompt_sha256": "d691a7552c981bfb8a55d7c732b096337e0dd22cbb009aa7fa04bf57a1bb8faa",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13615",
+   "prompt_sha256": "78e0aa8e38e04581e28eb50b2bb08d12da55582969498e3dc859293d14536109",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13647",
+   "prompt_sha256": "9600b808cda45ae9894330232f2badb45aca2385dea38586d04ab5d2356da352",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13757",
+   "prompt_sha256": "6fc1914e4ba727e8ddeea131d542c7b0354d66e9925ceefe885bce316c9030af",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13798",
+   "prompt_sha256": "c5b5ca67397a64afdbca54254d1d7b8f1b172f1e000ad2eef4221d3d745f9f61",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13852",
+   "prompt_sha256": "0afb68be96023232d849d9419f77d3baa1dd3bf0a6b7da044f25d8a848bf7945",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13877",
+   "prompt_sha256": "62f3af59506823452263f669341d93b55c24c08e48879aeb701be39cadcdeabe",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13878",
+   "prompt_sha256": "719b64b21a36460f587022fb38dfb0452cd192f4d506b0335d78eaf26dc59f55",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-13974",
+   "prompt_sha256": "0f9e3b5554ab609373da68d9dbe2d6afb77dc5b1283cc36954ebda8db43376cf",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-14248",
+   "prompt_sha256": "8f3375226f3346087e49b6686b3963592ecbe0c085b2588e124339f2892b94a3",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-14531",
+   "prompt_sha256": "7cca8095969070f5c8821cc6de99daea3b6afebd6538c0a9281a4abab2329a3e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-14711",
+   "prompt_sha256": "2cfa9eadbb3e06096c51277d7e2a7fe29346215d9215ade942a02aaa6b6b9086",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-14976",
+   "prompt_sha256": "000ea7d25ac96dc361069f9761f5f00c3b53e6e74409da7c38879108c3e1b51a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15017",
+   "prompt_sha256": "085d5e831c2133d542c856195b3f9c4bf80ffa242aec117ae68e8ba114984c27",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15345",
+   "prompt_sha256": "873436e615f2d9893f5525636c385424d471333da9288c53420b48fefd840a76",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15349",
+   "prompt_sha256": "d66b0be2312e5edaaa8cdde9a359052f8d3b4aa1bbd8d2fc8f916fca0c1d1e8f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15599",
+   "prompt_sha256": "e361f8e6df4ab4cff0fac25d770662d2d5ee211d1e1e0f31c7042bf401c22178",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15809",
+   "prompt_sha256": "50bbabe2eaafd859a8c11a4513a123f838c8558a00c7880c6a5761e9fbb05079",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15875",
+   "prompt_sha256": "373e47659f2c6bb53445e97df756f3685dbfe5324dcb761cb050f63a541d572c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-15976",
+   "prompt_sha256": "99ebd88f443bb71d890446dab41841f15b2c30f39fd245db2413c76943d066a6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-16450",
+   "prompt_sha256": "3e03930b75893eb25248f04c200d44d61f6358f5d27e97f043ea3a11a7f70f12",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-16597",
+   "prompt_sha256": "4978312df96fd105c05673277317c32351d183ca3e3322d61e579f83671af2b5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-16766",
+   "prompt_sha256": "dd8f1df2f9f362f1abfe08e874d19e3c00bed0a0b032bc2c21443dc4e0ebd65d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-16792",
+   "prompt_sha256": "ed76057ccfc99e988078938c4ddd1586abefe7f9878cfd56be2f11a15d09cfe0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-16886",
+   "prompt_sha256": "8ac9ba75ebae166b4d99ba059b3b1eb18ce272216b20211916d0f7211d571db0",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-17139",
+   "prompt_sha256": "cd16639313c292dec58943c96f7362a173c1f6494b408c7dad05c08077bac68e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-17318",
+   "prompt_sha256": "61004143582f133c2734faac4df02f1bb39a32c8c9af2ef38f10b402eb925294",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-17630",
+   "prompt_sha256": "1a4487f08c9f63f321564b161b457421492f1c17789965ba080387a358b3200f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-17655",
+   "prompt_sha256": "34fe1233c6e254835355042daea316cc80d8e055698118de02f985edf0c21a1a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-18189",
+   "prompt_sha256": "6871667ccde3ea6fe247fbc22d01589a12a50c5d6ee88ea87e72aa75ed062aec",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-18199",
+   "prompt_sha256": "f92f3de037d128ffb0771edffc096b140589e79c4fc7aed17ca5fa713e8c2b39",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-18211",
+   "prompt_sha256": "5841cfa9914c95609c11924f1f4db1e7ebe85c9ea20a84e2d45f0f90002e6ff4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-18698",
+   "prompt_sha256": "405202acb15dbd2aab980a07e26cd30e30f295ebfd19031a5c6794f41d26f22c",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-18763",
+   "prompt_sha256": "1fdfbb944085caac6204e010b4660e5351fdb3a018828b72649e412ce2f6fcc8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-19040",
+   "prompt_sha256": "d83fad97cfa0e1ac675e4c8ac214332c4c5993a187a5ee7e5c0c550727c07e41",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-19346",
+   "prompt_sha256": "e2abe6727a7eeffa2ff74eb7b63bc420d0d8bd8f31a730946dce512ce243d601",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-19495",
+   "prompt_sha256": "7e51e6d1bc0a070ea537f6870e0ac3f045e4f72b671ca36467641615c1f7df5f",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-19637",
+   "prompt_sha256": "7f9c166e428cd6081ac2c56a339bde58a35f3d4c83f697a907b4e35fe621ac8a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-19783",
+   "prompt_sha256": "47f48aa2d0c4602f61ce886c5c97915506facd62fdf82e6e8b1494649ad6ae70",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-19954",
+   "prompt_sha256": "41ebde4d717dedd51c3e4f445e5dc2a76a6101f9e6042e61f964e4aa01dad0cb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-20154",
+   "prompt_sha256": "fbc44a7f159fa930065ba7e9c97a991ee6abe61748276eea45ba179901974949",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-20428",
+   "prompt_sha256": "35fe959ad83a01c51dbfcb4f1ed8cf985fd2f18d27d357f23876e0b6124af321",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-20438",
+   "prompt_sha256": "8b988c54b527457a4ae0830ce71339c3b7202ffff02af19a017f1b24f4cef67e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-20590",
+   "prompt_sha256": "4f0ab23afa9a9fff78cff7704e2332460d1914d607314de78f974eb40080c189",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-20801",
+   "prompt_sha256": "6651dd5cd7280221ed862276e1e0461f64dc2e6ed3584d1bd5504c20ccd9e248",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-20916",
+   "prompt_sha256": "43b65f7271d86153562e84979f6983dd8dbb86245279818bddc71e777a93f461",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-21379",
+   "prompt_sha256": "f720e5e0d827e70c1d7121c2c74ba781fa7c823ada79753425031776602609f6",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-21596",
+   "prompt_sha256": "25f7ebe88c2555c0ae498c857a9ce976854907ae24c5431c78b074831b03c0a8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-21612",
+   "prompt_sha256": "58f1739012cfe6d01b9e832410fc023090f95ac05b15114240405d39f3c460b2",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-21847",
+   "prompt_sha256": "54b11875a8eae5d4a03b783e88493198637df32d4087450f3bccd21525cedb13",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-21930",
+   "prompt_sha256": "ef8e91eb876cf177849ae0c68ea37c2acae1c1dd537ed523707795ca2d823f1d",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-22080",
+   "prompt_sha256": "cffb76fde387692e68afc073e74d27857ba8d1584d5d7165e4a439da46befe33",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-22456",
+   "prompt_sha256": "09a40719bfb1b658feb6feb650e941e66eec9801ae8ed80a91c229aa4c71360b",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-22714",
+   "prompt_sha256": "9f30ab0f418564e81c822c104ac5fd83ef68d2b9fa282f80830fc7574186f3d8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-22914",
+   "prompt_sha256": "a70c7d1a68a9c4a043471f826bb3d648f54f3efc939d225d81c5031699001c48",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-23262",
+   "prompt_sha256": "31a5b406fd90a07d66258d152993a6e176526693a9aa0d9343c13a99ed86c55e",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-23413",
+   "prompt_sha256": "84a075e274c589867c21b63dd873df8a44f769698fab64185bf7dfe589b90e7a",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-23534",
+   "prompt_sha256": "b11f90168f60499b9dbeb1617c75bd70be6901384e26ed9722999b8a6ee7b020",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-23824",
+   "prompt_sha256": "ebbea77bf69ccd4efbe68248343a2d762212cdf8182e36d6e379fc95b00a43e9",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-23950",
+   "prompt_sha256": "d6694fee1904c401a6f3b283c70274ac2ac7dbbae7550877e4082993680a87b5",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-24066",
+   "prompt_sha256": "e7f936e5542f69bf2e842d8ea0ba9571312ce0a258127fbe93302cdb18b908eb",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-24213",
+   "prompt_sha256": "0852ed8da0e2ec944baaed921f37135d550cc1cfa0e33d8975763bcccae6afe8",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-24443",
+   "prompt_sha256": "17eed134224021938e29a9348b830c08a12a350ab677a1ede756102bb1d84be4",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-24539",
+   "prompt_sha256": "2ac39f2c53825dccb704b4dfeaf1e3d910da78485211197954b89b3b6074b963",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-24562",
+   "prompt_sha256": "e99777092220f71b646c7eb6f655529a6885f7c28e787082fd5a98e692169964",
+   "short_test_names": 0
+  },
+  {
+   "arm": "floor",
+   "findings": [],
+   "instance_id": "sympy__sympy-24661",
+   "prompt_sha256": "5a74a80f59a082b709109b9afc404ef16cee1aef31c91524cea747c9832789fe",
+   "short_test_names": 0
+  }
+ ],
+ "short_test_names_total": 0,
+ "version": "rq3-oracle-leak/v1"
+}
