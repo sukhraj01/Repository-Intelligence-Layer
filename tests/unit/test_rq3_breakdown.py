@@ -71,6 +71,19 @@ def test_attempt_cost_and_gap() -> None:
     assert bd.gap_closed(0.4, 0.1, 0.5) == pytest.approx(0.75)
 
 
+def test_attempt_cost_splits_cached_and_thought_tokens() -> None:
+    rows = [
+        _row("a", True, cached_tokens=40, thought_tokens=3),
+        _row("a", False, cached_tokens=10, thought_tokens=0),
+    ]
+    c = bd.attempt_cost(rows, ["a"])
+    assert c["cached_prompt_tokens"] == 50
+    assert c["uncached_prompt_tokens"] == c["prompt_tokens"] - 50
+    assert c["thought_tokens"] == 3
+    assert c["cached_share"] == pytest.approx(50 / c["prompt_tokens"])
+    assert bd.attempt_cost([], ["a"])["cached_share"] is None
+
+
 def test_python_tokens_skips_git_and_other_files(tmp_path: Path) -> None:
     (tmp_path / "pkg").mkdir()
     (tmp_path / "pkg" / "m.py").write_text("def f(x):\n    return x\n")

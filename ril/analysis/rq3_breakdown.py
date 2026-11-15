@@ -98,18 +98,28 @@ def expected_retrieval_gain(arm: Record, baseline: Record) -> Record:
 
 
 def attempt_cost(rows: Sequence[Record], instances: Sequence[str]) -> Record:
-    """Tokens and USD per graded run (one repeat of one instance, follow-ups included)."""
+    """Tokens and USD per graded run (one repeat of one instance, follow-ups included).
+
+    Prompt tokens are split into cached and uncached; thought tokens are the ones the provider
+    logged separately (as logged, they may or may not be inside ``output_tokens``).
+    """
     wanted = set(instances)
     sel = [r for r in rows if r["instance_id"] in wanted]
     prompt = sum(int(r["input_tokens"]) for r in sel)
     output = sum(int(r["output_tokens"]) for r in sel)
+    cached = sum(int(r.get("cached_tokens") or 0) for r in sel)
+    thought = sum(int(r.get("thought_tokens") or 0) for r in sel)
     usd = sum(float(r["cost_usd"]) for r in sel)
     n = len(sel)
     return {
         "runs": n,
         "calls": sum(int(r["calls"]) for r in sel),
         "prompt_tokens": prompt,
+        "cached_prompt_tokens": cached,
+        "uncached_prompt_tokens": prompt - cached,
         "output_tokens": output,
+        "thought_tokens": thought,
+        "cached_share": cached / prompt if prompt else None,
         "tokens_per_run": (prompt + output) / n if n else None,
         "usd": usd,
         "usd_per_run": usd / n if n else None,
