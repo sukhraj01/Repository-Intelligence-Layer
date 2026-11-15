@@ -1304,6 +1304,125 @@ def rq3_agent_contrasts(root: Path) -> Table:
     )
 
 
+ORACLE_BASE = "results/rq3_oracle"
+ORACLE_NAMES = {
+    "rrf": "Untrained",
+    "raw": "Raw",
+    "filter": "Filter (BM25 teacher)",
+    "sub": "Size-matched subsample",
+}
+
+
+def rq3_oracle(root: Path) -> Table:
+    """Exploratory oracle calibration arm against the four graded arms.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-ORACLE": the oracle arm's resolved fraction and each
+    own-k contrast (paired difference, paired bootstrap interval, sign-flip p), all read from the
+    stored tables; nothing is adjusted and the rows are estimates.
+    """
+    tr = Trace()
+    arms = _csv(root, f"{ORACLE_BASE}/rq3_oracle_arms.csv", tr)
+    cons = _csv(root, f"{ORACLE_BASE}/rq3_oracle_contrasts.csv", tr)
+    o = _pick(arms, arm="oracle", reading="exact")
+    out: list[list[str]] = []
+    for key, label in ORACLE_NAMES.items():
+        a = _pick(arms, arm=key, reading="exact")
+        c = _pick(cons, first="oracle", second=key, reading="exact", k_form="own k (2 vs 3)")
+        out.append(
+            [
+                tr.lit(label),
+                tr.count(a["runs_per_instance"]),
+                f"{tr.num(100 * float(a['resolved_score']), 2)}",
+                tr.num(100 * float(c["difference"]), 2, True),
+                tr.interval(100 * float(c["ci_low"]), 100 * float(c["ci_high"]), 2),
+                tr.num(c["p_permutation"], 3),
+            ]
+        )
+    facts = (
+        "Exploratory calibration arm, stated before the run: the context holds the pre-patch files "
+        "that the gold patch modifies, then the untrained ranking up to the budget. Its resolved "
+        f"fraction is {tr.num(100 * float(o['resolved_score']), 2)} percent "
+        f"{tr.interval(100 * float(o['ci_low']), 100 * float(o['ci_high']))} "
+        f"on {tr.count(o['instances'])} confirmatory instances with "
+        f"{tr.count(o['runs_per_instance'])} adjacent repeats; the other arms have three. "
+        "Contrasts are oracle minus the arm, paired over instances, unadjusted, one of eight "
+        "estimates (own and matched repeat counts); the p value is a sign-flip permutation test "
+        "and no decision rests on it"
+    )
+    return Table(
+        name="rq3_oracle",
+        title="Oracle calibration arm against the graded arms",
+        evidence="measured, exploratory",
+        facts=facts,
+        entries=["E-RQ3-ORACLE"],
+        colspec=_L(0.28) + _R(0.09) + _R(0.12) + _R(0.14) + _R(0.17) + _R(0.07),
+        wide=True,
+        header=[
+            tr.lit("Compared arm"),
+            tr.lit("Repeats"),
+            tr.lit("Arm (%)"),
+            tr.lit("Oracle minus arm"),
+            tr.lit("Interval"),
+            tr.lit("p"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_oracle_gap(root: Path) -> Table:
+    """Descriptive view on the instances where graded arms held no gold-patch file.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-ORACLE" (retrieval versus reasoning): the sets are
+    chosen on a retrieval outcome, so the rows are descriptive and say nothing about an average
+    effect.
+    """
+    tr = Trace()
+    rows_in = _csv(root, f"{ORACLE_BASE}/rq3_oracle_retrieval_vs_reasoning.csv", tr)
+    out: list[list[str]] = []
+    labels = {
+        "rrf+raw": "Untrained and raw held none",
+        "rrf+raw+filter+sub": "All four graded arms held none",
+    }
+    for r in rows_in:
+        out.append(
+            [
+                tr.lit(labels[r["arms_missing_all_gold"]]),
+                tr.count(r["instances"]),
+                tr.num(100 * float(r["oracle_resolved"]), 1),
+                tr.num(100 * float(r["rrf_resolved"]), 1),
+                tr.num(100 * float(r["raw_resolved"]), 1),
+                tr.num(100 * float(r["filter_resolved"]), 1),
+                tr.num(100 * float(r["sub_resolved"]), 1),
+            ]
+        )
+    facts = (
+        "Resolved fraction in percent on the confirmatory instances whose contexts in the named "
+        "arms held none of the gold-patch files. The sets are chosen on a retrieval outcome, so "
+        "the rows are descriptive and exploratory and are not an average effect of retrieval"
+    )
+    return Table(
+        name="rq3_oracle_gap",
+        title="Instances where the graded contexts held no gold-patch file",
+        evidence="measured, exploratory, descriptive",
+        facts=facts,
+        entries=["E-RQ3-ORACLE"],
+        colspec=_L(0.32) + _R(0.10) + _R(0.10) + _R(0.10) + _R(0.08) + _R(0.08) + _R(0.10),
+        wide=True,
+        header=[
+            tr.lit("Set"),
+            tr.lit("Instances"),
+            tr.lit("Oracle"),
+            tr.lit("Untrained"),
+            tr.lit("Raw"),
+            tr.lit("Filter"),
+            tr.lit("Subsample"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
 def rq3_budget(root: Path) -> Table:
     """Tokens, calls and cost of the RQ3 model check and of the four graded arms.
 
@@ -2017,6 +2136,8 @@ BUILDERS = (
     rq3_agent,
     rq3_agent_contrasts,
     rq3_budget,
+    rq3_oracle,
+    rq3_oracle_gap,
     rq2_final_confirmatory,
     rq2_final_exploratory,
     rq2_final_leave_seed,

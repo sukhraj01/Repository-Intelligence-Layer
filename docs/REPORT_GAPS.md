@@ -49,4 +49,4 @@ is a `\todo{...}` in the report naming the entry that fills it.
   forbidden formulations; the contribution is an empirical comparison.
 - If row 1 ends as a null, the report states it as a null with its bound (the protocol's decision rules), and row 4 reports the failure
   breakdown rather than a reframing.
-- Report slots as of E-REPORT-FINAL (2026-11-14): two remain, both for the exploratory oracle calibration arm (E-RQ3-ORACLE; abstract and RQ3 section); the lead ruled that they stay open until that entry exists. Every other slot is filled and `scripts/check_report.py` reports no finding.
+- Report slots as of E-REPORT-FINAL (2026-11-14): none remain: the two slots kept for the exploratory oracle calibration arm were filled on 2026-11-15 (E-REPORT-FINAL addendum) once E-RQ3-ORACLE existed; `scripts/check_report.py` reports no finding and no open slot.

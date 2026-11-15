@@ -1,0 +1,15 @@
+\begin{table*}[t]
+\centering\small
+\caption{Oracle calibration arm against the graded arms. Evidence class: \emph{measured, exploratory}. Exploratory calibration arm, stated before the run: the context holds the pre-patch files that the gold patch modifies, then the untrained ranking up to the budget. Its resolved fraction is 45.11 percent [39.9, 50.2] on 327 confirmatory instances with 2 adjacent repeats; the other arms have three. Contrasts are oracle minus the arm, paired over instances, unadjusted, one of eight estimates (own and matched repeat counts); the p value is a sign-flip permutation test and no decision rests on it. Entry \entry{E-RQ3-ORACLE}.}
+\label{tab:rq3_oracle}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedleft\arraybackslash}p{0.09\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.14\linewidth}>{\raggedleft\arraybackslash}p{0.17\linewidth}>{\raggedleft\arraybackslash}p{0.07\linewidth}}
+\toprule
+Compared arm & Repeats & Arm (\%) & Oracle minus arm & Interval & p \\
+\midrule
+Untrained & 3 & 39.96 & +5.15 & [0.61, 9.73] & 0.035 \\
+Raw & 3 & 42.41 & +2.70 & [$-$1.99, 7.49] & 0.277 \\
+Filter (BM25 teacher) & 3 & 41.59 & +3.52 & [$-$1.12, 8.46] & 0.153 \\
+Size-matched subsample & 3 & 39.25 & +5.86 & [1.22, 10.75] & 0.017 \\
+\bottomrule
+\end{tabular}
+\end{table*}
