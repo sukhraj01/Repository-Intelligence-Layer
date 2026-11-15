@@ -7,29 +7,45 @@ issue.
 
 ## Status
 
-The design is fixed (Master Project Document rev 16, 2026-10-11) and the apparatus runs. Current
-state, blockers and the next task are in `PROJECT_STATE.md`; every measured number is a row of
-`RESULTS.md` or `results/ledger_a.md` with its run log in `results/logs/`.
+The design is fixed (Master Project Document rev 16, 2026-10-11), the apparatus is built and the
+experiments have been run. Current state and open items are in `PROJECT_STATE.md`; every measured
+number is a row of `RESULTS.md` (or `results/ledger_a.md`) with its run log in `results/logs/`. The
+full report is `reports/final/final_report.tex`; a two-page version is `reports/short/short_report.tex`.
+To see the retrieval layer run on one real issue, use `make demo` (`docs/DEMO.md`).
 
-**Exists and runs** (all of it exploratory or measured on development repositories; nothing is frozen):
+**What exists**
 
-- Repository parser and a typed graph (contain, import, invoke, inherit, override; tests and
-  configures built but off by default) with a per-edge status, plus an incremental updater that
-  matches the full rebuild on 100 of 100 commits tested (`ril/parsing/`, `docs/ARCHITECTURE.md`).
-- BM25 (reference form, with identifier splitting and field weights as options) and a dense
-  encoder with a flat exact index; graph expansion, rank fusion and a recency prior as measurement
-  code (`ril/retrieval/`).
-- CORE-Bench loaders and metrics that reproduce the published BM25 rows (`ril/evaluation/`,
-  `RESULTS.md` rows `e1-*`).
-- The RQ2 training stack: pool reader, negative policies, the three arm hooks, budget accounting,
-  checkpoint evaluation (`ril/training/`).
-- Measured pilots, each registered in `docs/EXPERIMENTS.md`: graph signal and graph role, pool
-  filter state, contamination scan, encoder numbers, RQ3 power, and two arms pilots
-  (E-PILOT-ARMS, E-PILOT-ARMS2).
-- A latency and throughput harness with per-stage rows (`ril/bench/`, `results/latency/`).
+- Repository parser and typed graph (contain, import, invoke, inherit, override; tests and
+  configures built but off by default), with an incremental updater (`ril/parsing/`).
+- BM25, a dense encoder over a flat exact index, rank fusion, same-file and graph expansion, and a
+  recency prior (`ril/retrieval/`); context assembly under a token budget (`ril/assembly/`).
+- CORE-Bench loaders and metrics that reproduce the published BM25 rows, the RQ2 training stack
+  (pool reader, negative policies, the three arm hooks, budget accounting), the agent driver and
+  the executable evaluation of the 377-instance subset (`ril/evaluation/`, `ril/training/`,
+  `ril/agent/`).
+- A latency and throughput harness with a row for every stage (`ril/bench/`, `results/latency/`).
+- Frozen records for the evaluation and the contexts (`configs/frozen/`), guarded by a test.
 
-**Does not exist yet:** the frozen configuration (`configs/frozen/`), the four-arm RQ2 runs at
-three seeds, context assembly, and the agent runs for RQ3.
+**What was measured** (Python only; absolute resolved rates are not claims about agent capability)
+
+- **RQ1** (development repositories, exploratory): on a dense baseline, adding BM25 by rank fusion
+  raises Recall@100 by 8.9 points at Level 2 and 9.0 at Level 3; same-file expansion adds more at
+  Level 3 (+12.2, two repositories); the typed graph does not beat the same-file control (Recall@100
+  -5.6 at Level 3). Median cost per added stage: fusion 5.04 ms, same-file expansion 0.41 ms,
+  against 18.34 ms for the dense path (different machines; not an end-to-end percentile).
+- **RQ2** (matched optimization budgets, three seeds, one fixed stack): filtering mined pairs with a
+  BM25 teacher did not separate from raw pairs or from a size-matched random subsample, on the eight
+  evaluation repositories or on the 377 executable instances; no confirmatory contrast is rejected.
+  A null result, reported as one.
+- **RQ3** (327 confirmatory instances, one hosted model and one-shot repair held fixed, three
+  adjacent repeats): raw-pair training 42.41% resolved against 39.96% for the untrained retriever;
+  +2.45 points (-0.82 to +5.91), not distinguishable from zero. The filtered-pair and subsample arms
+  are not distinguishable either; each trained arm is one training seed and the design detects about
+  7 to 9 points, so this is a null with that bound, not evidence of no effect.
+- **Calibration arms** (exploratory, outside the registered analysis): gold-file contexts resolved
+  45.11% (+5.15 points over untrained, unadjusted, below the detectable difference and probably
+  inflated); an empty context resolved 16.91% of the 272 instances it reached, not near zero, so
+  part of every rate may be prior knowledge of the repositories.
 
 **Ownership.** Person A / B / C are named in `docs/ROADMAP.md`.
 
@@ -71,6 +87,7 @@ reports/          proposal + final (LaTeX)
 ril/
   config/ util/   parameters, paths; seed, logger, checks      parsing/    CodeUnit, parser, typed graph, updater
   retrieval/      BM25, dense encoder, graph expansion, recency   training/   pool, negatives, arm hooks, loss, runs
+  assembly/       context assembly under a token budget            agent/      driver and providers for the agent runs
   evaluation/     loaders, metrics, chunk mapping, power          bench/      latency and throughput harness
   analysis/       tables from results/ (reads results/ only)
 ```
@@ -78,6 +95,7 @@ ril/
 ## Where to start
 
 - **Current state and next task:** `PROJECT_STATE.md`, then `docs/ROADMAP.md`.
+- **Seeing it run:** `make demo` and `docs/DEMO.md` (one real issue, every stage printed).
 - **Understanding the research:** `docs/README.md` has the reading order. The full design lives in
   `docs/source/MASTER_PROJECT_DOCUMENT.md`.
 - **Deciding things:** `decisions/README.md` — ADR-001 to ADR-010 are the open decisions and are all `Proposed`; the evidence gathered so far is in their addenda.
