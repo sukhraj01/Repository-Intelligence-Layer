@@ -1,0 +1,13 @@
+arm,base,level,view,gains,losses,kept_present,kept_absent,no_gold,net,gross_moved,present_base,present_arm
+raw,rrf,file_status,all,17,11,239,60,0,6,28,250,256
+raw,rrf,file_status,any,22,11,257,37,0,11,33,268,279
+raw,rrf,file_status_py,all,17,11,240,59,0,6,28,251,257
+raw,rrf,file_status_py,any,22,11,257,37,0,11,33,268,279
+filter,rrf,file_status,all,17,12,238,60,0,5,29,250,255
+filter,rrf,file_status,any,20,12,256,39,0,8,32,268,276
+filter,rrf,file_status_py,all,17,12,239,59,0,5,29,251,256
+filter,rrf,file_status_py,any,20,12,256,39,0,8,32,268,276
+sub,rrf,file_status,all,19,12,238,58,0,7,31,250,257
+sub,rrf,file_status,any,21,12,256,38,0,9,33,268,277
+sub,rrf,file_status_py,all,19,12,239,57,0,7,31,251,258
+sub,rrf,file_status_py,any,21,12,256,38,0,9,33,268,277

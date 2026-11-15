@@ -314,3 +314,6 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-15,A,81110,RQ3FLOOR,"floor reference arm completion run at 8,000, 232 of 287 instances x 1 repeat, cap 6.2 USD, spent 4.132 USD, stopped by an insufficient-balance error",u22,2,0,02:26:51,0.0,COMPLETED (stopped: insufficient_balance)
 2026-11-15,A,81116,RQ3FLOOR,"floor arm no-call replay of the 40 stage-1 replies (CPU)",u22,2,0,00:03:56,0.0,COMPLETED
 2026-11-15,A,81425,RQ3FLOOR,"floor arm no-call replay of the 272 stored replies (CPU)",u22,2,0,00:14:14,0.0,COMPLETED
+2026-11-15,A,82117,RQ3BREAKDOWN,"gold units of the executable instances for the failure breakdown (CPU); repository cache lacked five repositories, output discarded",u22,2,0,00:00:11,0.0,COMPLETED (unusable output)
+2026-11-15,A,82123,RQ3BREAKDOWN,"gold units, full clones of the missing repositories (CPU)",u22,2,0,01:00:05,0.0,TIMEOUT
+2026-11-15,A,82246,RQ3BREAKDOWN,"gold units, blobless clones (CPU); optional unit-level extra",u22,2,0,,0.0,SUBMITTED

@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering\small
+\caption{Contrasts against the untrained arm, django against the rest. Evidence class: \emph{measured, exploratory}. Each arm minus the untrained arm, paired over instances, in points of the mean resolved fraction (three repeats), bootstrap interval over instances, unadjusted, on django and on all other repositories of the confirmatory set. Exploratory; no decision rests on it. Entry \entry{E-RQ3-FAILURE-BREAKDOWN}.}
+\label{tab:rq3_django}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedleft\arraybackslash}p{0.1\linewidth}>{\raggedleft\arraybackslash}p{0.12\linewidth}>{\raggedleft\arraybackslash}p{0.18\linewidth}}
+\toprule
+Slice & Contrast arm & Instances & Difference & Interval \\
+\midrule
+django & Raw & 198 & +2.36 & [$-$2.19, 7.24] \\
+django & Filter (BM25 teacher) & 198 & +1.35 & [$-$3.37, 6.23] \\
+django & Size-matched subsample & 198 & $-$2.36 & [$-$7.07, 2.53] \\
+other repositories & Raw & 129 & +2.58 & [$-$2.07, 7.49] \\
+other repositories & Filter (BM25 teacher) & 129 & +2.07 & [$-$2.58, 6.72] \\
+other repositories & Size-matched subsample & 129 & +1.81 & [$-$2.84, 6.72] \\
+\bottomrule
+\end{tabular}
+\end{table*}

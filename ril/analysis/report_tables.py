@@ -2119,6 +2119,299 @@ def rq2_final_leave_seed(root: Path) -> Table:
     )
 
 
+BREAKDOWN_BASE = "results/rq3_failure_breakdown"
+BREAKDOWN_ARMS = (
+    ("rrf", "Untrained"),
+    ("raw", "Raw"),
+    ("filter", "Filter (BM25 teacher)"),
+    ("sub", "Size-matched subsample"),
+    ("oracle", "Oracle (exploratory)"),
+)
+
+
+def _iv(tr: Trace, r: Row, lo: str, hi: str, nd: int, scale: float = 1.0) -> str:
+    """Interval of two columns of a stored row, optionally scaled (a share to percent)."""
+    return tr.interval(scale * float(r[lo]), scale * float(r[hi]), nd)
+
+
+def _est_iv(tr: Trace, r: Row, value: str, stem: str, nd: int, sign: bool = False) -> str:
+    """``value [low, high]`` from columns ``value``, ``<stem>_ci_low`` and ``<stem>_ci_high``."""
+    return f"{tr.num(r[value], nd, sign)} " + _iv(tr, r, f"{stem}_ci_low", f"{stem}_ci_high", nd)
+
+
+def _pct_ci(tr: Trace, r: Row, nd: int = 1) -> str:
+    if not r["rate"] or not r["ci_low"]:
+        return "--"
+    return (
+        f"{tr.num(100 * float(r['rate']), nd)} "
+        f"{tr.interval(100 * float(r['ci_low']), 100 * float(r['ci_high']), nd)}"
+    )
+
+
+def rq3_breakdown_failures(root: Path) -> Table:
+    """Unresolved attempts and resolved rates by whether the context held the gold files.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-FAILURE-BREAKDOWN" (file level): descriptive and
+    exploratory; the conditional rates are not causal.
+    """
+    tr = Trace()
+    a = _csv(root, f"{BREAKDOWN_BASE}/table_a_failures_by_gold_status.csv", tr)
+    b = _csv(root, f"{BREAKDOWN_BASE}/table_b_resolved_by_gold_status.csv", tr)
+    out: list[list[str]] = []
+    for key, label in BREAKDOWN_ARMS:
+        tot = _pick(a, arm=key, level="file", outcome_class="all_unresolved")
+        cells = [
+            tr.lit(label),
+            tr.count(tot["n"]),
+            tr.num(100 * float(tot["share_all_gold"]), 1),
+        ]
+        for st in ("all", "some", "none"):
+            r = _pick(b, arm=key, level="file", status=st)
+            cells.append(f"{_pct_ci(tr, r)} ({tr.count(r['instances'])})")
+        out.append(cells)
+    facts = (
+        "Attempts of the graded arms on the confirmatory instances (three adjacent repeats; the "
+        "oracle arm two). Gold files are the files the reference patch edits; a context holds all, "
+        "some or none of them. Columns: unresolved attempts, the share of them whose context held "
+        "all gold files, and the resolved percentage of attempts by gold status with a bootstrap "
+        "interval over instances and the number of instances in parentheses. Exploratory and "
+        "descriptive: instances whose gold is easy to retrieve may also be easier to repair, so "
+        "the conditional rates are not causal"
+    )
+    return Table(
+        name="rq3_breakdown_failures",
+        title="Failures and resolved rate by gold status of the context (file level)",
+        evidence="measured, exploratory, descriptive",
+        facts=facts,
+        entries=["E-RQ3-FAILURE-BREAKDOWN"],
+        colspec=_L(0.22) + _R(0.09) + _R(0.10) + _R(0.19) + _R(0.19) + _R(0.19),
+        wide=True,
+        header=[
+            tr.lit("Arm"),
+            tr.lit("Unresolved"),
+            tr.lit("All gold (%)"),
+            tr.lit("Resolved, all gold (%)"),
+            tr.lit("Resolved, some (%)"),
+            tr.lit("Resolved, none (%)"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_breakdown_paired(root: Path) -> Table:
+    """Paired gold-presence counts against the untrained arm and the consistency check.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-FAILURE-BREAKDOWN" (tables c and d, file level).
+    """
+    tr = Trace()
+    c = _csv(root, f"{BREAKDOWN_BASE}/table_c_paired_gold_counts.csv", tr)
+    d = _csv(root, f"{BREAKDOWN_BASE}/table_d_consistency_check.csv", tr)
+    m = _csv(root, f"{AGENT_BASE}/remaining_arms/rq3_results_contrasts.csv", tr)
+    names = {"raw": "Raw", "filter": "Filter (BM25 teacher)", "sub": "Size-matched subsample"}
+    full = {
+        "raw": "tr_mined_raw_u100_s100",
+        "filter": "tr_mined_filter_bm25_u100_s100",
+        "sub": "tr_mined_sub_u100_s100",
+    }
+    out: list[list[str]] = []
+    for key, label in names.items():
+        meas = _pick(m, first=full[key], second="rrf", reading="exact")
+        chk = _pick(d, arm=key, level="file_status")
+        for view, vname in (("all", "all gold files"), ("any", "any gold file")):
+            r = _pick(c, arm=key, level="file_status", view=view)
+            row = [
+                tr.lit(label),
+                tr.lit(vname),
+                tr.count(r["gains"]),
+                tr.count(r["losses"]),
+                tr.count(r["kept_present"]),
+                tr.num(r["net"], 0, True),
+            ]
+            if view == "all":
+                row += [
+                    tr.num(chk["predicted_effect_difference_points"], 2, True)
+                    + " "
+                    + _iv(
+                        tr,
+                        chk,
+                        "predicted_difference_ci_low_points",
+                        "predicted_difference_ci_high_points",
+                        2,
+                    ),
+                    tr.num(chk["predicted_effect_literal_points"], 2, True),
+                    f"{tr.num(100 * float(meas['difference']), 2, True)} "
+                    f"{tr.interval(100 * float(meas['ci_low']), 100 * float(meas['ci_high']), 2)}",
+                ]
+            else:
+                row += ["--", "--", "--"]
+            out.append(row)
+    facts = (
+        "Instances whose context in the arm gains, loses or keeps the presence of gold files "
+        "compared with the untrained arm (gross, both ways, then net), for the confirmatory "
+        "instances; kept means present in both. The last three columns, on the all-gold rows only, "
+        "are a consistency check and not an explanation: the net change in all-gold instances "
+        "times the untrained arm's resolved rate difference between all-gold and other instances "
+        "(with a bootstrap interval over instances), the same net times the all-gold rate alone, "
+        "in points of the resolved fraction, beside the measured contrast and its interval. "
+        "Exploratory and descriptive"
+    )
+    return Table(
+        name="rq3_breakdown_paired",
+        title="Instances moved into or out of all-gold contexts, and a consistency check",
+        evidence="measured, exploratory, descriptive",
+        facts=facts,
+        entries=["E-RQ3-FAILURE-BREAKDOWN"],
+        colspec=_L(0.17)
+        + _L(0.12)
+        + _R(0.05)
+        + _R(0.05)
+        + _R(0.06)
+        + _R(0.05)
+        + _R(0.16)
+        + _R(0.08)
+        + _R(0.16),
+        wide=True,
+        header=[
+            tr.lit("Arm against untrained"),
+            tr.lit("Presence of"),
+            tr.lit("Gain"),
+            tr.lit("Loss"),
+            tr.lit("Kept"),
+            tr.lit("Net"),
+            tr.lit("Check (difference form)"),
+            tr.lit("Check (all-gold rate)"),
+            tr.lit("Measured contrast"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_efficiency(root: Path) -> Table:
+    """Tokens, calls and cost per attempt of every arm, and the gap closed by the untrained arm.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-EFFICIENCY": sums over the calls of an attempt,
+    bootstrap intervals over instances, the oracle and floor arms exploratory.
+    """
+    tr = Trace()
+    e = _csv(root, f"{BREAKDOWN_BASE}/efficiency.csv", tr)
+    g = _csv(root, f"{BREAKDOWN_BASE}/gap_closed.csv", tr)[0]
+    labels = dict(BREAKDOWN_ARMS)
+    labels["floor"] = "Floor (exploratory)"
+    out: list[list[str]] = []
+    for r in e:
+        out.append(
+            [
+                tr.lit(labels[r["arm"]]),
+                tr.count(r["attempts"]),
+                tr.num(r["cached_prompt_tokens_per_attempt"], 0),
+                _est_iv(
+                    tr,
+                    r,
+                    "uncached_prompt_tokens_per_attempt",
+                    "uncached_prompt_tokens_per_attempt",
+                    0,
+                ),
+                _est_iv(tr, r, "output_tokens_per_attempt", "output_tokens_per_attempt", 0),
+                tr.num(r["thought_tokens_per_attempt"], 0),
+                _est_iv(tr, r, "calls_per_attempt", "calls_per_attempt", 2),
+                _est_iv(tr, r, "cost_usd_per_attempt", "cost_usd_per_attempt", 4),
+                tr.num(r["cost_usd_total"], 2),
+            ]
+        )
+    facts = (
+        "Per graded attempt (one repeat of one instance with its follow-up calls), means with a "
+        "bootstrap interval over instances; prompt tokens are split into cached and uncached, "
+        "output and thought tokens are as the provider logged them (thought tokens may be counted "
+        "inside the output). Totals are for all graded attempts of the arm. The oracle and floor "
+        "arms are exploratory and have two and one repeats. On the "
+        f"{tr.count(g['instances'])} instances the floor arm reached, the untrained arm closes "
+        f"{tr.num(100 * float(g['ratio']), 1)} percent "
+        f"{_iv(tr, g, 'ratio_ci_low', 'ratio_ci_high', 1, 100.0)} "
+        "of the distance from the floor to the oracle arm, "
+        f"{tr.num(g['numerator_points'], 1)} of {tr.num(g['denominator_points'], 1)} points "
+        f"(intervals {tr.interval(g['numerator_ci_low'], g['numerator_ci_high'], 1)} and "
+        f"{tr.interval(g['denominator_ci_low'], g['denominator_ci_high'], 1)}); the floor is not "
+        "zero and may reflect knowledge of public repositories, and the ratio is unstable when "
+        "the denominator interval is wide"
+    )
+    return Table(
+        name="rq3_efficiency",
+        title="Tokens and cost per graded attempt",
+        evidence="measured, exploratory",
+        facts=facts,
+        entries=["E-RQ3-EFFICIENCY"],
+        colspec=_L(0.16)
+        + _R(0.06)
+        + _R(0.08)
+        + _R(0.14)
+        + _R(0.14)
+        + _R(0.06)
+        + _R(0.12)
+        + _R(0.14)
+        + _R(0.06),
+        wide=True,
+        header=[
+            tr.lit("Arm"),
+            tr.lit("Attempts"),
+            tr.lit("Cached prompt"),
+            tr.lit("Uncached prompt"),
+            tr.lit("Output"),
+            tr.lit("Thought"),
+            tr.lit("Calls"),
+            tr.lit("USD per attempt"),
+            tr.lit("USD total"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
+def rq3_django(root: Path) -> Table:
+    """The three contrasts against the untrained arm on django and on the other repositories.
+
+    Implements ``docs/experiments/B.md`` "E-RQ3-FAILURE-BREAKDOWN" (django split, exploratory).
+    """
+    tr = Trace()
+    rows_in = _csv(root, f"{BREAKDOWN_BASE}/django_split.csv", tr)
+    names = {"raw": "Raw", "filter": "Filter (BM25 teacher)", "sub": "Size-matched subsample"}
+    out: list[list[str]] = []
+    for r in rows_in:
+        out.append(
+            [
+                tr.lit("django") if r["slice"] == "django/django" else tr.lit("other repositories"),
+                tr.lit(names[r["arm"]]),
+                tr.count(r["instances"]),
+                tr.num(100 * float(r["difference"]), 2, True),
+                tr.interval(100 * float(r["ci_low"]), 100 * float(r["ci_high"]), 2),
+            ]
+        )
+    facts = (
+        "Each arm minus the untrained arm, paired over instances, in points of the mean resolved "
+        "fraction (three repeats), bootstrap interval over instances, unadjusted, on django and "
+        "on all other repositories of the confirmatory set. Exploratory; no decision rests on it"
+    )
+    return Table(
+        name="rq3_django",
+        title="Contrasts against the untrained arm, django against the rest",
+        evidence="measured, exploratory",
+        facts=facts,
+        entries=["E-RQ3-FAILURE-BREAKDOWN"],
+        colspec=_L(0.22) + _L(0.28) + _R(0.10) + _R(0.12) + _R(0.18),
+        wide=True,
+        header=[
+            tr.lit("Slice"),
+            tr.lit("Contrast arm"),
+            tr.lit("Instances"),
+            tr.lit("Difference"),
+            tr.lit("Interval"),
+        ],
+        rows=out,
+        trace=tr,
+    )
+
+
 BUILDERS = (
     bm25_repro,
     dense_fusion,
@@ -2138,6 +2431,10 @@ BUILDERS = (
     rq3_budget,
     rq3_oracle,
     rq3_oracle_gap,
+    rq3_breakdown_failures,
+    rq3_breakdown_paired,
+    rq3_efficiency,
+    rq3_django,
     rq2_final_confirmatory,
     rq2_final_exploratory,
     rq2_final_leave_seed,

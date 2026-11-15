@@ -1,0 +1,19 @@
+{
+ "attempts": {
+  "filter": 981,
+  "floor": 272,
+  "oracle": 654,
+  "raw": 981,
+  "rrf": 981,
+  "sub": 981
+ },
+ "django_instances": 198,
+ "exec_errors": 0,
+ "files_without_modified_gold": 0,
+ "floor_instances": 272,
+ "instances": 327,
+ "instances_with_nonpython_gold_file": 1,
+ "resamples": 10000,
+ "seed": 0,
+ "without_gold_unit": 327
+}

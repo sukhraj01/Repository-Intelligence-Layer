@@ -1,0 +1,2 @@
+instances,untrained,floor,oracle,numerator_points,numerator_ci_low,numerator_ci_high,denominator_points,denominator_ci_low,denominator_ci_high,ratio,ratio_ci_low,ratio_ci_high,ratio_resamples_with_denominator_le_zero
+272,0.4227941176470588,0.16911764705882354,0.46691176470588236,25.36764705882353,19.485294117647058,31.61764705882353,29.77941176470588,23.52941176470588,36.029411764705884,0.8518518518518519,0.6790123456790124,1.0579752275025278,0

@@ -71,10 +71,9 @@ They were timed on different machines and are not an end-to-end percentile; the 
 \section{RQ2: supervision under matched budgets}
 
 The confirmatory result is a null at this sample size: no contrast is rejected, and every Holm-adjusted $p$ is 0.15 or higher. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
-The unadjusted $t$ intervals exclude a gain of \textsc{Filter} over the subsample above 1.12 points of nDCG@10 at Level~2 and 0.70 of Recall@100 at Level~3 on the executable subset (0.97 of nDCG@10 on the eight repositories), and over \textsc{Raw} above 1.22 points on the eight repositories. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
+The unadjusted $t$ intervals exclude a gain of \textsc{Filter} over the subsample above 1.12 points of nDCG@10 at Level~2 and 0.70 of Recall@100 at Level~3 on the executable subset, and over \textsc{Raw} above 1.22 points on the eight repositories. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
 Two contrasts against \textsc{Raw} on the executable subset, $+0.82$ points of nDCG@10 at Level~2 and $+0.67$ of Recall@100 at Level~3, have unadjusted intervals ([0.06, 1.57] and [0.00, 1.34]) that reach zero from above; their adjusted $p$ is 0.15 and the bootstrap straddles zero, so they are inconclusive, not effects. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv DEV-044
-One of them is rejected only when seed 101 is left out (adjusted $p$ 0.039); across the three leave-one-seed-out choices its estimate runs from $+0.03$ to $+1.23$ points and its $p$ from 0.039 to 1.00, a seed sensitivity and not a finding. % E-RQ2-SENS-SEED101 results/tables/rq2_final_leave_one_seed_out.csv
-In three exploratory contrasts, \textsc{Curriculum} is lower after the Holm step ($-$1.01, $-$1.08 and $-$0.43 points); \textsc{Weight} is not distinguishable from \textsc{Raw} anywhere. % E-RQ2-FINAL results/tables/rq2_final_contrasts.csv
+One is rejected only without seed 101: across the three leave-one-seed-out choices its estimate runs from $+0.03$ to $+1.23$ points, a seed sensitivity and not a finding. % E-RQ2-SENS-SEED101 results/tables/rq2_final_leave_one_seed_out.csv
 
 \section{RQ3: resolved rate}
 
@@ -82,22 +81,23 @@ In three exploratory contrasts, \textsc{Curriculum} is lower after the Holm step
 
 Table~\ref{tab:short_rq3} gives the arms. The primary contrast, \textsc{Raw} against the untrained retriever, is $+2.45$ points (interval $-$0.82 to $+5.91$, sign-flip $p=0.177$) and is not distinguishable from zero. % E-RQ3-AGENT results/rq3_driver/remaining_arms/rq3_results_contrasts.csv
 The other arms do not separate either; the one interval that excludes zero (subsample below \textsc{Raw}, $-$3.16) is one of five unadjusted estimates and is not read as a finding. % E-RQ3-AGENT results/rq3_driver/remaining_arms/rq3_results_contrasts.csv
-The design could detect only about 7 to 9 points at the measured rate of 40\%, so this is a null with that bound, not evidence of no effect. % E-RQ3-RUN-AGREEMENT results/rq3_driver/rq3_power_measured_agreement_mdd.csv
 The exploratory oracle arm, stated before its run, puts the files that the gold patch modifies first in the context; it resolved 45.11\%, $+5.15$ points over the untrained arm (interval $+0.61$ to $+9.73$, unadjusted $p=0.035$, one of eight comparisons), an estimate below the 7.1 to 7.9 points it could detect and so probably inflated. % E-RQ3-ORACLE results/rq3_oracle/rq3_oracle_contrasts.csv
 The gold files were cut or partly left out in 208 of the 327 instances, so it is a calibration and not a ceiling. % E-RQ3-ORACLE docs/experiments/B.md
 The exploratory floor arm gave the model the issue text and an empty context and resolved 16.91\% of the 272 instances it reached, not near zero as expected, and 25.00 points below the untrained arm on the same instances (interval 19.36 to 30.51). % E-RQ3-FLOOR results/rq3_floor/pooled/rq3_floor_contrasts.csv
 Part of every resolved rate may therefore reflect prior knowledge of the repositories, which the data cannot separate from information in the issue text. % E-RQ3-FLOOR docs/experiments/B.md
-The plain reading is a null at this power: retrieved context matters a great deal (floor against untrained), while the supervision variants do not separate.
+A descriptive breakdown (exploratory, not causal) finds all gold files in context for 62.65 to 67.62\% of unresolved attempts but 76.5 to 78.6\% of all attempts; the untrained arm resolved 50.80\% with all gold files in context and 2.82\% with none, and a trained retriever moves only 28 to 31 of 327 instances into or out of that state (net $+5$ to $+7$). % E-RQ3-FAILURE-BREAKDOWN results/rq3_failure_breakdown/table_a_failures_by_gold_status.csv results/rq3_failure_breakdown/table_c_paired_gold_counts.csv
+Attempts cost 0.0091 to 0.0101 USD; the untrained retriever closes 82.9\% (67.8 to 100.3) of the floor-to-oracle distance (exploratory, unstable). % E-RQ3-EFFICIENCY results/rq3_failure_breakdown/efficiency.csv results/rq3_failure_breakdown/gap_closed.csv
 
 \section{Limitations}
 
 The graded runs use one hosted model from one provider, one-shot repair with no candidate selection, and each trained arm is one model of one training seed. % E-RQ3-AGENT docs/experiments/B.md
 The output limit of 4,096 tokens was reached by 13.7 to 15.5\% of calls in every arm, so some edits may be cut off, equally for every arm. % E-RQ3-AGENT docs/experiments/B.md
-The benchmark's repositories are public and the exposure of the model was not measured, which the floor arm makes visible. % E-RQ3-FLOOR docs/experiments/B.md
 Six of the 42 training runs did not use the requested GPU model and its effect was not measured. % E-RQ2-DEV-ANALYSIS docs/experiments/B.md
 The floor arm covers 272 of the 327 instances (the 55 not run are all sympy, and 73\% of those run are django), and the executable subset is skewed toward one project. % E-RQ3-FLOOR results/rq3_floor/replay_all/rq3_floor_replay_by_repo.csv
+The repair step was fixed and no agent that searches the code itself was run, so efficiency against such agents is not measured; the breakdown is not causal. % E-RQ3-EFFICIENCY docs/experiments/B.md
 Adjacent repeats are not independent runs, and absolute resolved rates are not statements of agent capability.
 
-\paragraph{What the evidence supports.} Under matched budgets and one fixed retrieval stack, filtering mined pull-request pairs did not separate from raw pairs or a size-matched subsample in retrieval or in resolved rate, a null with its stated bound for Python, one model and one-shot repair, and not evidence that supervision has no effect.
+\paragraph{What the evidence supports.} Retrieved context matters: it takes the resolved fraction from the floor to the untrained arm by 25.0 points on the 272 instances the floor reached (exploratory; the floor is not zero). % E-RQ3-FLOOR results/rq3_floor/pooled/rq3_floor_contrasts.csv
+Under matched budgets and one fixed stack, filtering mined pairs did not separate from raw pairs or a size-matched subsample in retrieval or resolved rate: a null at about 7 to 9 points for Python, one model and one-shot repair, not evidence of no effect. % E-RQ3-RUN-AGREEMENT results/rq3_driver/rq3_power_measured_agreement_mdd.csv
 
 \end{document}
