@@ -1,0 +1,5 @@
+repo,commit,python_files,approx_tokens,pct_of_8000_budget
+django/django,a05e16a,2939,5329686,0.15
+pytest-dev/pytest,0212785,274,1066404,0.75
+pallets/flask,49943b5,83,170275,4.7
+psf/requests,3c7baaa,37,116395,6.87

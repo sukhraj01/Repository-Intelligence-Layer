@@ -1,0 +1,270 @@
+{
+ "arms": {
+  "filter_bm25": {
+   "classes": {
+    "all": {
+     "instances": 255,
+     "outcomes": {
+      "apply_failed": 150,
+      "executed_unresolved": 221,
+      "resolved": 387,
+      "unusable": 7
+     },
+     "resolved": 387,
+     "resolved_share": 0.5058823529411764,
+     "runs": 765
+    },
+    "none": {
+     "instances": 51,
+     "outcomes": {
+      "apply_failed": 13,
+      "executed_unresolved": 110,
+      "resolved": 18,
+      "unusable": 12
+     },
+     "resolved": 18,
+     "resolved_share": 0.11764705882352941,
+     "runs": 153
+    },
+    "some": {
+     "instances": 21,
+     "outcomes": {
+      "apply_failed": 20,
+      "executed_unresolved": 39,
+      "resolved": 3,
+      "unusable": 1
+     },
+     "resolved": 3,
+     "resolved_share": 0.047619047619047616,
+     "runs": 63
+    }
+   },
+   "failed_runs": 573,
+   "failed_share_all_gold_present": 0.6596858638743456,
+   "failed_share_no_gold_present": 0.2356020942408377,
+   "instances": 327,
+   "runs": 981
+  },
+  "raw": {
+   "classes": {
+    "all": {
+     "instances": 256,
+     "outcomes": {
+      "apply_failed": 156,
+      "executed_unresolved": 210,
+      "resolved": 395,
+      "unusable": 7
+     },
+     "resolved": 395,
+     "resolved_share": 0.5143229166666666,
+     "runs": 768
+    },
+    "none": {
+     "instances": 48,
+     "outcomes": {
+      "apply_failed": 18,
+      "executed_unresolved": 100,
+      "resolved": 13,
+      "unusable": 13
+     },
+     "resolved": 13,
+     "resolved_share": 0.09027777777777778,
+     "runs": 144
+    },
+    "some": {
+     "instances": 23,
+     "outcomes": {
+      "apply_failed": 17,
+      "executed_unresolved": 44,
+      "resolved": 8
+     },
+     "resolved": 8,
+     "resolved_share": 0.11594202898550725,
+     "runs": 69
+    }
+   },
+   "failed_runs": 565,
+   "failed_share_all_gold_present": 0.6601769911504425,
+   "failed_share_no_gold_present": 0.23185840707964603,
+   "instances": 327,
+   "runs": 981
+  },
+  "subsample": {
+   "classes": {
+    "all": {
+     "instances": 257,
+     "outcomes": {
+      "apply_failed": 167,
+      "executed_unresolved": 228,
+      "resolved": 368,
+      "unusable": 8
+     },
+     "resolved": 368,
+     "resolved_share": 0.4773022049286641,
+     "runs": 771
+    },
+    "none": {
+     "instances": 50,
+     "outcomes": {
+      "apply_failed": 15,
+      "executed_unresolved": 113,
+      "resolved": 11,
+      "unusable": 11
+     },
+     "resolved": 11,
+     "resolved_share": 0.07333333333333333,
+     "runs": 150
+    },
+    "some": {
+     "instances": 20,
+     "outcomes": {
+      "apply_failed": 14,
+      "executed_unresolved": 39,
+      "resolved": 6,
+      "unusable": 1
+     },
+     "resolved": 6,
+     "resolved_share": 0.1,
+     "runs": 60
+    }
+   },
+   "failed_runs": 596,
+   "failed_share_all_gold_present": 0.6761744966442953,
+   "failed_share_no_gold_present": 0.2332214765100671,
+   "instances": 327,
+   "runs": 981
+  },
+  "untrained": {
+   "classes": {
+    "all": {
+     "instances": 250,
+     "outcomes": {
+      "apply_failed": 181,
+      "executed_unresolved": 182,
+      "resolved": 381,
+      "unusable": 6
+     },
+     "resolved": 381,
+     "resolved_share": 0.508,
+     "runs": 750
+    },
+    "none": {
+     "instances": 59,
+     "outcomes": {
+      "apply_failed": 25,
+      "executed_unresolved": 128,
+      "resolved": 5,
+      "unusable": 19
+     },
+     "resolved": 5,
+     "resolved_share": 0.02824858757062147,
+     "runs": 177
+    },
+    "some": {
+     "instances": 18,
+     "outcomes": {
+      "apply_failed": 10,
+      "executed_unresolved": 38,
+      "resolved": 6
+     },
+     "resolved": 6,
+     "resolved_share": 0.1111111111111111,
+     "runs": 54
+    }
+   },
+   "failed_runs": 589,
+   "failed_share_all_gold_present": 0.6264855687606112,
+   "failed_share_no_gold_present": 0.2920203735144312,
+   "instances": 327,
+   "runs": 981
+  }
+ },
+ "attempt_cost": {
+  "filter_bm25": {
+   "calls": 1236,
+   "output_tokens": 1220212,
+   "prompt_tokens": 11228456,
+   "runs": 981,
+   "tokens_per_run": 12689.77370030581,
+   "usd": 9.116602999999994,
+   "usd_per_run": 0.009293173292558608
+  },
+  "raw": {
+   "calls": 1230,
+   "output_tokens": 1173792,
+   "prompt_tokens": 11170740,
+   "runs": 981,
+   "tokens_per_run": 12583.620795107034,
+   "usd": 8.930679000000017,
+   "usd_per_run": 0.00910364831804283
+  },
+  "subsample": {
+   "calls": 1238,
+   "output_tokens": 1191779,
+   "prompt_tokens": 11229871,
+   "runs": 981,
+   "tokens_per_run": 12662.232415902141,
+   "usd": 8.97418399999999,
+   "usd_per_run": 0.009147995922528024
+  },
+  "untrained": {
+   "calls": 1294,
+   "output_tokens": 1357335,
+   "prompt_tokens": 11776766,
+   "runs": 981,
+   "tokens_per_run": 13388.482161060143,
+   "usd": 9.875471000000019,
+   "usd_per_run": 0.010066739041794106
+  }
+ },
+ "expected_retrieval_gain": {
+  "filter_bm25": {
+   "baseline_resolved_share": {
+    "all": 0.508,
+    "none": 0.02824858757062147,
+    "some": 0.1111111111111111
+   },
+   "explained_gain_points": 0.8095855146080617,
+   "instance_shift": {
+    "all": 5,
+    "none": -8,
+    "some": 3
+   }
+  },
+  "raw": {
+   "baseline_resolved_share": {
+    "all": 0.508,
+    "none": 0.02824858757062147,
+    "some": 0.1111111111111111
+   },
+   "explained_gain_points": 1.0069789273023606,
+   "instance_shift": {
+    "all": 6,
+    "none": -11,
+    "some": 5
+   }
+  },
+  "subsample": {
+   "baseline_resolved_share": {
+    "all": 0.508,
+    "none": 0.02824858757062147,
+    "some": 0.1111111111111111
+   },
+   "explained_gain_points": 1.0776712336656358,
+   "instance_shift": {
+    "all": 7,
+    "none": -9,
+    "some": 2
+   }
+  }
+ },
+ "experiment": "E-RQ3-BREAKDOWN",
+ "floor_gap": {
+  "floor": 0.16911764705882354,
+  "instances": 272,
+  "oracle": 0.47058823529411764,
+  "share_closed_by_untrained_context": 0.8293,
+  "untrained": 0.41911764705882354
+ },
+ "instances": 327
+}

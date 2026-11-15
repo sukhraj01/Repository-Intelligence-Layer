@@ -1,0 +1,13 @@
+arm,gold_class,instances,runs,resolved,resolved_share,resolved,executed_unresolved,apply_failed,unusable,exec_error,failed_share_all_gold_present,failed_share_no_gold_present
+untrained,all,250,750,381,0.508,381,182,181,6,0,0.6265,0.292
+untrained,some,18,54,6,0.1111,6,38,10,0,0,0.6265,0.292
+untrained,none,59,177,5,0.0282,5,128,25,19,0,0.6265,0.292
+raw,all,256,768,395,0.5143,395,210,156,7,0,0.6602,0.2319
+raw,some,23,69,8,0.1159,8,44,17,0,0,0.6602,0.2319
+raw,none,48,144,13,0.0903,13,100,18,13,0,0.6602,0.2319
+filter_bm25,all,255,765,387,0.5059,387,221,150,7,0,0.6597,0.2356
+filter_bm25,some,21,63,3,0.0476,3,39,20,1,0,0.6597,0.2356
+filter_bm25,none,51,153,18,0.1176,18,110,13,12,0,0.6597,0.2356
+subsample,all,257,771,368,0.4773,368,228,167,8,0,0.6762,0.2332
+subsample,some,20,60,6,0.1,6,39,14,1,0,0.6762,0.2332
+subsample,none,50,150,11,0.0733,11,113,15,11,0,0.6762,0.2332
