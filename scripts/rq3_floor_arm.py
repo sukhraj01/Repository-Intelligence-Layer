@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -26,8 +25,16 @@ from ril.util.seed import set_seed  # noqa: E402
 log = get_logger("rq3_floor_arm")
 
 
+def _paths(d: str) -> tuple[str, str]:
+    """(results.jsonl, calls.jsonl) of an arm directory: nested (results/, log/) or flat."""
+    nested = Path(d) / "results" / "results.jsonl"
+    if nested.exists():
+        return str(nested), str(Path(d) / "log" / "calls.jsonl")
+    return str(Path(d) / "results.jsonl"), str(Path(d) / "calls.jsonl")
+
+
 def _rows(d: str) -> list[dict[str, Any]]:
-    p = Path(d) / "results" / "results.jsonl"
+    p = Path(_paths(d)[0])
     return [json.loads(x) for x in p.read_text(encoding="utf-8").splitlines() if x]
 
 
@@ -69,13 +76,29 @@ def cmd_analyse(a: argparse.Namespace) -> int:
         raise SystemExit(f"floor repeats are {runs['floor']}, expected (0,)")
     out = Path(a.out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    # a partial arm (a stop before the last instance) is analysed on the instances it covers
+    covered = {str(r["instance_id"]) for r in rows if r["arm"] == "floor"}
+    analysed = [i for i in conf if i in covered]
+    if len(analysed) != len(covered):
+        raise SystemExit("floor rows outside the confirmatory instances")
+
+    def arms(ids: list[str], label: str) -> list[dict[str, Any]]:
+        out_rows: list[dict[str, Any]] = []
+        for reading in ("exact", "tolerant"):
+            for r in ro.arm_rows(rows, ids, runs, reading, a.seed_analysis):
+                out_rows.append({"instance_set": label, **r})
+        return out_rows
+
     tables: dict[str, list[dict[str, Any]]] = {
-        "arms": ro.arm_rows(rows, conf, runs, "exact", a.seed_analysis)
-        + ro.arm_rows(rows, conf, runs, "tolerant", a.seed_analysis),
+        "arms": arms(analysed, f"floor-covered ({len(analysed)})")
+        + arms(conf, f"all confirmatory ({len(conf)})"),
         "contrasts": rf.floor_contrasts(
-            rows, conf, {k: v for k, v in runs.items() if k != "raw"}, seed=a.seed_analysis
+            rows, analysed, {k: v for k, v in runs.items() if k != "raw"}, seed=a.seed_analysis
         ),
     }
+    tables["instances"] = [
+        {"instance_id": i, "covered_by_floor": i in covered, "repo": i.split("__")[0]} for i in conf
+    ]
     if a.mdd:
         with open(a.mdd, encoding="utf-8") as h:
             tables["minimum_detectable"] = rf.mdd_for(list(csv.DictReader(h)), 0.4, (1, 2, 3))
@@ -84,15 +107,19 @@ def cmd_analyse(a: argparse.Namespace) -> int:
     summaries = {
         label: arm_summary(
             label,
-            os.path.join(d, "results", "results.jsonl"),
-            os.path.join(d, "log", "calls.jsonl"),
+            *_paths(d),
             runs[label],
         )
         for label, d in arm_dirs.items()
     }
     (out / "floor_summary.json").write_text(
         json.dumps(
-            {"confirmatory": len(conf), "arms": summaries, "runs": runs},
+            {
+                "confirmatory": len(conf),
+                "floor_covered": len(analysed),
+                "arms": summaries,
+                "runs": runs,
+            },
             indent=1,
             sort_keys=True,
             default=str,

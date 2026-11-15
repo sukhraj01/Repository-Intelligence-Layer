@@ -2206,7 +2206,7 @@ FILTER-BM25 (+3.52, [-1.12, +8.46], p 0.153) and the subsample (+5.86, [+1.22, +
 
 ## E-RQ3-FLOOR: resolved rate when the context holds no retrieved code (floor reference). Exploratory, stated before any call, 2026-11-15 (decision D169)
 
-Status: **stated; nothing has run.** Evidence class so far: reasoned only. Exploratory reference arm, not part of the registered analysis.
+Status: **run once as written 2026-11-15 (D169) and stopped by its own projection rule after 40 of 327 instances (0.786 USD); exploratory, descriptive, partial.** Evidence class: measured (job 80738, account A, config hash `0fe87a17bf1b`, seed 0, results under `results/rq3_driver/floor_runs/`, analysis under `results/rq3_floor/`). The stated expectation did not hold: the floor is not near zero.
 
 **Why.** The arms of E-RQ3-AGENT and the oracle of E-RQ3-ORACLE sit on a ladder: none, retrieved (untrained, RAW, FILTER-BM25, subsample), oracle. The bottom rung has not been measured. A no-retrieval arm gives the floor of that ladder and a positive control that the harness can see a large effect: if the floor is far below the untrained arm, the harness resolves differences of that size, so the null among the registered arms is not a blind harness.
 
@@ -2224,6 +2224,47 @@ Status: **stated; nothing has run.** Evidence class so far: reasoned only. Explo
 **Analysis (exploratory, descriptive).** Resolved fraction, unusable and truncation rates, cost and tokens. Contrasts as estimates by the registered method (paired difference of the mean resolved fraction per instance, paired bootstrap interval, sign-flip permutation p): untrained minus floor and oracle minus floor, no adjustment, no decision. Stated with them: k = 1 here against 3 (untrained) and 2 (oracle), so each is also given at matched k (repeat 0 of the other arm); adjacent repeats are not independent runs; the minimum detectable difference from E-RQ3-RUN-AGREEMENT. What the result shows and does not show is written after the run, whichever way it comes out.
 
 **Code.** `ril/agent/providers/floor_arm.py`, `ril/analysis/rq3_floor.py`, `scripts/rq3_floor_arm.py`, `scripts/ada/rq3_floor_*.sbatch`.
+
+**Design lines added while building** (none changes what is measured).
+- *Prompts.* 377 prompts, 0 rejected by the screen, the text before the excerpt heading byte-identical to the oracle arm's on 377 of 377 instances; the excerpt section is the heading followed by nothing. The differential leak check ran on all 377 and reports 0 findings (vacuous by construction: no context). Prepare job 80737 (CPU, 6 s).
+- *Path filter.* Items carry `paths: null` for this arm only (`UNRESTRICTED_PATH_ARMS`); the other arms' items are unchanged (tests).
+- *Order and coverage.* The driver runs instances in sorted id order, so the 40 instances the arm covers are not a random draw of the 327: 13 astropy and 27 django (the 327 hold 13 astropy and 198 django: all 13 astropy and 27 of 198 django are covered, nothing from the other eight repositories).
+
+### Results (exploratory; descriptive; nothing adjusted, nothing decided)
+
+**Run.** Job 80738 (account A, 24 min), stopped `projected_cost` at the first instance boundary after 40 instances: 40 rows (1 repeat), 0 errors, 70 calls (30 follow-ups after unusable first replies), 1 unusable final reply (2.5%), 34 of 70 calls at the 4,096-token output limit (48.6%, against 13.2% for the oracle arm), mean 2,714 output tokens and 1,773 thought tokens per call (as logged), cache share 11%. Cost 0.786 USD for 40 instances; projected 6.43 USD for 327 against the 2.5 USD cap, so the arm stopped as specified and was not resumed or shortened to fit. Ledger and guard agree (0.786 USD).
+
+**Resolved fraction (exact reading; interval = percentile bootstrap of the instance means; the tolerant reading gives the same counts).**
+
+| Arm | Instances | Repeats | Resolved fraction | 95% interval |
+|---|---|---|---|---|
+| Floor (no context) | 40 | 1 | 17.50% (7 of 40) | [7.50, 30.00] |
+| Untrained rrf, same 40 | 40 | 3 | 30.00% | [16.67, 44.17] |
+| Oracle, same 40 | 40 | 2 | 41.25% | [27.50, 56.25] |
+| RAW, same 40 | 40 | 3 | 26.67% | [13.33, 40.83] |
+| Untrained rrf, all 327 | 327 | 3 | 39.96% | [34.96, 45.06] |
+
+Outcomes of the 40: resolved 7, applied but unresolved 4, apply failed 28 (no match 27, several matches 1), unusable 1. The seven resolved are astropy-13236, astropy-14309, django-11095, django-11099, django-11179, django-11292, django-11451.
+
+**Contrasts (other arm minus floor; paired difference of the mean resolved fraction per instance, paired bootstrap interval, sign-flip permutation p; unadjusted; N = 40 paired instances).**
+
+| Contrast | k form | Difference (points) | 95% interval | p |
+|---|---|---|---|---|
+| Untrained minus floor | own k (3 vs 1) | +12.50 | [-0.83, +26.67] | 0.124 |
+| Untrained minus floor | matched k (1 vs 1) | +12.50 | [-2.50, +27.50] | 0.175 |
+| Oracle minus floor | own k (2 vs 1) | +23.75 | [+8.75, +38.75] | 0.0057 |
+| Oracle minus floor | matched k (1 vs 1) | +27.50 | [+12.50, +42.50] | 0.0034 |
+
+Four unadjusted estimates (eight rows with the tolerant reading, which is identical), no multiplicity claim and no decision.
+
+**Minimum detectable difference.** The stored table of E-RQ3-RUN-AGREEMENT is for N = 327 at a 40% rate: at k = 1 it is 8.18 points (assumed and measured agreement, kappa 1; blank in the calibrated scenario at kappa 4), at k = 2 7.12 to 7.91, at k = 3 6.79 to 7.59. It does not apply to 40 instances, where the detectable difference is larger; it was not recomputed. Caveats: k is 1 here against 2 and 3, and adjacent repeats are not independent runs, so the floor has no repeat-to-repeat noise estimate of its own (repeat SD not defined at k = 1).
+
+**What this shows and does not show.** The stated expectation (far below the untrained arm, near zero) did not hold: with no retrieved code the model resolved 7 of 40 instances (17.5%, interval 7.5 to 30.0), and the difference to the untrained arm on the same 40 (+12.5 points) has an interval that includes zero at both k forms, so on this sample the floor is neither shown to be far below the untrained arm nor shown to be level with it. The oracle arm is above the floor by +23.75 to +27.5 points with intervals that exclude zero, so the harness can see a difference of that size between a context holding the gold files and no context; it could not, at 40 instances, see the 12.5-point difference between the untrained context and none. The arm does not show why edits applied without a context (the result is not explained here; reading it needs the replies and the issue texts, which were not examined), does not cover the 287 instances it never reached (the 40 are the first by sorted id: astropy and django only), and does not support any claim about the registered contrasts, which stay not distinguishable from zero. Absolute resolved rates are not capability claims. The positive-control purpose of the arm is met for the oracle contrast only.
+
+**Spend.** 0.786 USD (guard and ledger equal; cap 2.5 USD, projection stop, never reached). Total **45.090 USD of 50; 4.910 USD of the 5.696 authorised remain** (the provider balance, about 4.9 USD by the lead's figure, cannot be read from here). Shared ledger: 33.525 committed against the 38.4 cap.
+
+**Dead ends and incidents.** (1) Before the run: an empty context would have made every reply `path_not_in_context` (unusable); fixed by the arm-only `paths: null` above, covered by a test that shows both parser outcomes. (2) The projection stop ended the arm at 40 of 327; no cheaper variant (fewer instances chosen by a rule, a lower output limit, a different thinking level) was run, because the brief fixes the configuration and the cap. Not done: the remaining 287 instances (about 5.6 USD projected, above the remaining authorisation), a replay of the seven resolved replies against the issue texts, any arm added after seeing this one.
+
 
 ## E-REPORT-FINAL: final report pass, RQ3 results, abstract, contributions, conclusion, last proofread. Writing, 2026-11-14 (decision D168)
 

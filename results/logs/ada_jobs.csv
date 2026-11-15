@@ -309,3 +309,5 @@ date,account,job_id,session,purpose,partition,cpus,gpus,elapsed,gpu_hours,state
 2026-11-14,A,80484,RQ3ORACLE,"oracle calibration arm at 8,000, 327 x 2 adjacent repeats, cap 8.5 USD, spent 5.717 USD",u22,4,0,02:14:31,0.0,OUT_OF_MEMORY event after the driver logged complete (654 rows)
 2026-11-15,A,80658,RQ3ORACLE,"context file lists of the four registered arms for the retrieval-versus-reasoning view (CPU)",u22,4,0,00:00:07,0.0,COMPLETED
 2026-11-15,A,80706,RQ3ORACLE,"differential leak check of the prompts of the three trained arms: 0 findings in 377 prompts each (CPU)",u22,4,0,00:06:49,0.0,COMPLETED
+2026-11-15,A,80737,RQ3FLOOR,"floor arm prompts (377, empty context) and differential leak check (CPU)",u22,2,0,00:00:06,0.0,COMPLETED
+2026-11-15,A,80738,RQ3FLOOR,"floor reference arm at 8,000, 40 of 327 instances x 1 repeat, cap 2.5 USD, spent 0.786 USD, stopped by the projected-cost rule",u22,2,0,00:24:13,0.0,COMPLETED (stopped: projected_cost)
