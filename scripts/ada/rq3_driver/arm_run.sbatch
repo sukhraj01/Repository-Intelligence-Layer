@@ -16,7 +16,7 @@
 # directory that holds the arm's prompts: the untrained set of prepare.sbatch for bm25, dense and rrf, or
 # $W/out/prepared_trained_b8000_<job>/<run id> of rq3_trained_prepare.sbatch for tr_<run id>), ARM, RUN_INDEX,
 # UV_BIN_DIR. Optional: SHARED_LEDGER and SHARED_CAP_USD (one total guard, a JSON file with a lock that every arm job
-# reads and updates atomically; the cap is fixed when the first job creates it), EXPECT_CONFIG_HASH (refuse to start unless the run configuration hash starts with it), MAX_UNUSABLE (stop cleanly when more than
+# reads and updates atomically; the cap is fixed when the first job creates it), EXPECT_CONFIG_HASH (refuse to start unless the run configuration hash starts with it), PROJECT_AFTER (stop cleanly when the cost projected from the first N instances exceeds CAP_USD, E-RQ3-ORACLE), MAX_UNUSABLE (stop cleanly when more than
 # this share of final replies is unusable, from 50 units on), RUN_INDICES (space-separated, e.g. "0 1 2": the k repeats of one prompt are sent back to
 # back, order instance, arm, run, so the provider's prompt cache can serve runs 2 to k, D158; replaces RUN_INDEX in
 # the call and is recorded in meta.json; the result dir is then ${ARM}_runs<first>-<last>),  INSTANCES (ids file, default the confirmatory list beside the prepared directory; the
@@ -46,11 +46,13 @@ EXPECT=()
 [ -n "${EXPECT_CONFIG_HASH:-}" ] && EXPECT=(--expect-config-sha256 "$EXPECT_CONFIG_HASH")
 UNUSABLE=()
 [ -n "${MAX_UNUSABLE:-}" ] && UNUSABLE=(--max-unusable-share "$MAX_UNUSABLE")
+PROJECT=()
+[ -n "${PROJECT_AFTER:-}" ] && PROJECT=(--project-after "$PROJECT_AFTER")
 THINK=()
 [ -n "${THINKING:-}" ] && THINK=(--thinking-config "$THINKING")
 "$PY" -I "$W/code/scripts/rq3_driver.py" run "$PREPARED" "$RUN/log" "$RUN/results" \
   --arm "$ARM" "${RUN_ARGS[@]}" --instances "$INSTANCES" --model "$MODEL" \
-  --cap-usd "$CAP_USD" --limits "$LIMITS" "${THINK[@]}" "${SHARED[@]}" "${UNUSABLE[@]}" "${EXPECT[@]}" \
+  --cap-usd "$CAP_USD" --limits "$LIMITS" "${THINK[@]}" "${SHARED[@]}" "${UNUSABLE[@]}" "${PROJECT[@]}" "${EXPECT[@]}" \
   --specs "$X/data/specs_v1.jsonl" --work-root "$LOCAL/work" --cache-root "$LOCAL/cache" \
   --mirror-dir "$LOCAL/mirrors" --local-mirrors "$HOME/ril_e/repo_cache" \
   --subset "$W/in/executable_instances_v1.json" --workers 2 --seed 0

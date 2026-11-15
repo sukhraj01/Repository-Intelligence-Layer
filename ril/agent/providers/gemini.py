@@ -169,6 +169,16 @@ class InsufficientBalance(ProviderError):
     A hard stop of the run, never retried; the driver ends cleanly and the log stays resumable."""
 
 
+def _credits_depleted(detail: str) -> bool:
+    """A 429 whose text says the prepaid credit is used up (a hard stop, not a rate limit).
+
+    The generic quota text ("check your plan and billing details") is a rate limit and does not
+    match: only a message naming prepayment credits counts.
+    """
+    text = detail.lower()
+    return "prepayment" in text or "credits are depleted" in text
+
+
 def canonical(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
@@ -283,6 +293,8 @@ class GeminiClient:
                     )
                 self.limiter.settle(grant, est)
                 detail = self._scrub(resp.body[:300])
+                if resp.status == 429 and _credits_depleted(detail):
+                    raise InsufficientBalance(resp.status, detail)
                 if resp.status == 429:
                     n429 += 1
                 elif resp.status >= 500:

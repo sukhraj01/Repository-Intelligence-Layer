@@ -386,6 +386,17 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
             expect,
         )
         return 2
+    projection = None
+    if live and getattr(args, "project_after", None):
+        from ril.agent.providers.driver import Projection
+
+        projection = Projection(
+            first_n=int(args.project_after),
+            total=len(ids),
+            cap_usd=float(args.project_cap_usd if args.project_cap_usd else args.cap_usd),
+            price=price,
+            rows=call_log.rows,
+        )
     cfg = DriverConfig(
         model=args.model,
         run_indices=_run_indices(args),
@@ -393,6 +404,7 @@ def cmd_run_or_grade(args: argparse.Namespace) -> int:
         mode="live" if live else "logged",
         workers=args.workers,
         max_unusable_share=getattr(args, "max_unusable_share", None),
+        projection=projection,
         meta=meta,
     )
     summary = drive(items, args.out_dir, source, executor, readers, cfg, price)
@@ -941,6 +953,16 @@ def main(argv: list[str] | None = None) -> int:
                 "--max-unusable-share",
                 type=float,
                 help="stop cleanly when more than this share of final replies is unusable",
+            )
+            p.add_argument(
+                "--project-after",
+                type=int,
+                help="stop cleanly when the cost projected from the first N instances exceeds it",
+            )
+            p.add_argument(
+                "--project-cap-usd",
+                type=float,
+                help="cap for the projection (default: --cap-usd)",
             )
             p.add_argument(
                 "--count-spent",
