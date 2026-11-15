@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 SOURCE_COMMENT = re.compile(
@@ -60,9 +61,10 @@ def _blank_balanced(text: str, opener: str) -> str:
 
 
 def _body(text: str) -> str:
-    """The prose of the report: after ``\\begin{document}``, before the bibliography."""
+    """The prose: after ``\\begin{document}``, before the bibliography (or the end)."""
     start = text.index("\\begin{document}")
-    end = text.index("\\begin{thebibliography}")
+    end = text.find("\\begin{thebibliography}")
+    end = text.index("\\end{document}") if end < 0 else end
     body = text[start:end]
     body = _blank_balanced(body, "\\todo{")
     return re.sub(
@@ -154,4 +156,73 @@ def missing_sources(text: str, root: Path) -> list[Finding]:
         for path in sorted(set(STORED_PATH.findall(parts[1]))):
             if not (root / path).exists():
                 findings.append(Finding(n, "source file not found", path))
+    return findings
+
+
+# ---------------------------------------------------------------------------------------------
+# The two-page report (reports/short): stricter source comments and a consistency check against
+# the full report. Implements docs/experiments/B.md E-REPORT-SHORT.
+
+_AMOUNT = re.compile(r"\d[\d,]*(?:\.\d+)?")
+_FRAGMENT_NOISE = re.compile(
+    r"\\label\{[^}]*\}|\\entry\{[^}]*\}|\\begin\{tabular\}\{.*\}|\\setlength\{[^}]*\}\{[^}]*\}"
+    r"|\\begin\{table\*?\}\[[^\]]*\]|\bR\d\b|\bp(?:50|95|99)\b"
+)
+
+
+def untraced_numbers_same_line(text: str) -> list[Finding]:
+    """Prose lines of a short report with a number and no source comment *on the same line*.
+
+    Stricter than ``untraced_numbers``: a comment does not close the lines above it, so every
+    sentence group that holds a number is one line ending in its own comment.
+    """
+    offset = text[: text.index("\\begin{document}")].count("\n")
+    findings: list[Finding] = []
+    for n, line in enumerate(_body(text).splitlines(), start=offset + 1):
+        code = NAMES.sub(" ", re.split(r"(?<!\\)%", line, maxsplit=1)[0])
+        if NUMBER.search(code) and not SOURCE_COMMENT.search(line):
+            findings.append(
+                Finding(n, "number without a source comment on its line", line.strip()[:90])
+            )
+    return findings
+
+
+def _amounts(text: str) -> list[str]:
+    """Numbers of a text with names, labels and markup removed; thousands commas dropped."""
+    out: list[str] = []
+    for raw in text.splitlines():
+        code = re.split(r"(?<!\\)%", raw, maxsplit=1)[0]
+        code = _FRAGMENT_NOISE.sub(" ", NAMES.sub(" ", code))
+        out += [m.replace(",", "") for m in _AMOUNT.findall(code)]
+    return out
+
+
+def _places(number: str) -> int:
+    return len(number.split(".")[1]) if "." in number else 0
+
+
+def _round_half_up(value: Decimal, places: int) -> Decimal:
+    return value.quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP)
+
+
+def numbers_missing_from_full(short_text: str, full_text: str) -> list[Finding]:
+    """Numbers of the short report that stand nowhere in the full report with the same value.
+
+    ``short_text`` and ``full_text`` are the report source followed by its generated fragments.
+    A number matches when the full text holds the same value, or a value with more decimals that
+    rounds to it (a table printed at one decimal where the full report prints two).
+    """
+    full: dict[Decimal, int] = {}
+    for a in _amounts(full_text):
+        full[Decimal(a)] = max(full.get(Decimal(a), 0), _places(a))
+    findings: list[Finding] = []
+    for n, raw in enumerate(short_text.splitlines(), start=1):
+        for a in _amounts(raw):
+            x = Decimal(a)
+            p = _places(a)
+            if x in full or any(
+                places > p and _round_half_up(y, p) == x for y, places in full.items()
+            ):
+                continue
+            findings.append(Finding(n, "number not in the full report", a))
     return findings

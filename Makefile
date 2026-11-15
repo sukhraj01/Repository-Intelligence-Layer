@@ -17,7 +17,7 @@ BASE ?= main
 export POETRY_VIRTUALENVS_IN_PROJECT = true
 RUN ?= poetry run
 
-.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks review review-flags eval
+.PHONY: setup setup-train test test-all lint format bench bench-check bench-graph hooks review review-flags eval report-short
 
 setup:
 	poetry env use $(PYTHON)
@@ -40,6 +40,10 @@ eval:
 # Ada only (needs `make setup-train`).
 test-all:
 	$(RUN) pytest tests -q -p no:xdist
+
+report-short:
+	$(RUN) python -I scripts/check_report.py --short
+	$(RUN) python -I scripts/build_short_report.py
 
 lint:
 	$(RUN) ruff check ril tests scripts

@@ -78,3 +78,4 @@ results/mining/handcheck_*.md
 
 # built report
 reports/final/*.pdf
+reports/short/*.pdf

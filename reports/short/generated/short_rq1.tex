@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\caption{RQ1 ladder with the latency of each added stage. Evidence class: \emph{measured on the development set, exploratory}. Development set only: 351 L2 queries in 5 repositories and 155 L3 queries in 2 repositories; encoder CodeRankEmbed; points with the cluster-robust t interval over repositories, $^q$ marks query level (fewer than three repositories); stage latency in ms (p50 / p95 / p99) at an index of 35860 units, the dense stages on a GPU node and the others on a laptop CPU, so the stages are not an end-to-end percentile. Entry \entry{E-RQ1-LADDER}, \entry{E-FREEZE-AND-LATENCY}.}
+\label{tab:short_rq1}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedleft\arraybackslash}p{0.15\linewidth}>{\raggedleft\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedleft\arraybackslash}p{0.2\linewidth}}
+\toprule
+Rung & L2 nDCG@10 & L3 Recall@100 & Stage & Latency (ms) \\
+\midrule
+R1 dense alone & 18.2 [10.0, 26.5] & 34.0 [30.5, 37.5]$^q$ & query encode & 18.069 / 19.284 / 22.145 \\
+ &  &  & dense search & 0.267 / 0.268 / 0.278 \\
+R2 plus BM25 (RRF) & 24.0 [12.2, 35.8] & 43.0 [39.4, 46.6]$^q$ & BM25 & 0.202 / 0.269 / 0.307 \\
+ &  &  & rank fusion & 5.044 / 5.359 / 5.564 \\
+R3 plus same-file expansion & 25.8 [12.5, 39.2] & 55.2 [50.9, 59.4]$^q$ & same-file expansion & 0.412 / 1.919 / 3.079 \\
+R4 plus typed graph & 25.3 [12.6, 38.0] & 48.2 [44.3, 52.0]$^q$ & graph expansion & 1.139 / 2.135 / 2.854 \\
+\midrule
+R4 minus the same-file control & $-$0.5 [$-$2.0, 0.9] & $-$5.6 [$-$8.0, $-$3.3]$^q$ &  &  \\
+\bottomrule
+\end{tabular}
+\end{table*}
